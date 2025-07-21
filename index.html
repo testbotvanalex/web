@@ -291,7 +291,26 @@
             font-size: 2rem; /* Grotere titel */
             font-weight: 800;
             color: var(--heading-color);
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.5rem; /* Aangepaste marge voor prijs */
+        }
+
+        .pricing-card .price {
+            font-size: 2.8rem; /* Grote en prominente prijs */
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 1rem; /* Ruimte tussen prijs en beschrijving */
+            display: flex;
+            align-items: baseline;
+            justify-content: center; /* Centreer de prijs */
+            width: 100%; /* Zorg ervoor dat het de volledige breedte inneemt voor centrering */
+        }
+
+        .pricing-card .price span {
+            font-size: 1.2rem; /* Kleiner voor "vanaf" */
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-left: 0.5rem;
+            align-self: flex-end; /* Lijn "vanaf" uit aan de onderkant van de prijs */
         }
 
         .pricing-card .pricing-text {
@@ -534,6 +553,7 @@
                     <!-- Kaart voor Basis project -->
                     <div class="pricing-card">
                         <h3>Basis Chatbot</h3>
+                        <p class="price">&euro;499 <span>(vanaf)</span></p>
                         <p class="pricing-text">Perfect voor eenvoudige automatisering van veelgestelde vragen of basisinformatie.</p>
                         <ul>
                             <li><span class="check-icon">&#10004;</span> Eén kernfunctionaliteit (bijv. FAQ)</li>
@@ -547,8 +567,9 @@
                     <!-- Kaart voor Standaard project (meest populair) -->
                     <div class="pricing-card popular">
                         <h3>Standaard Chatbot</h3>
-                        <p class="pricing-text">Onze meest gekozen optie voor interactieve bots met meerdere functies.</p>
+                        <p class="price">&euro;999 <span>(vanaf)</span></p>
                         <span class="popular-badge">Meest populair</span>
+                        <p class="pricing-text">Onze meest gekozen optie voor interactieve bots met meerdere functies.</p>
                         <ul>
                             <li><span class="check-icon">&#10004;</span> Meerdere geautomatiseerde taken</li>
                             <li><span class="check-icon">&#10004;</span> Integratie met twee platforms</li>
@@ -561,6 +582,7 @@
                     <!-- Kaart voor Premium project -->
                     <div class="pricing-card">
                         <h3>Premium Chatbot</h3>
+                        <p class="price">&euro;1999 <span>(vanaf)</span></p>
                         <p class="pricing-text">De ultieme oplossing voor complexe, geavanceerde AI-gestuurde conversaties.</p>
                         <ul>
                             <li><span class="check-icon">&#10004;</span> Geavanceerde AI & NLP integratie</li>
