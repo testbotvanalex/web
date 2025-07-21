@@ -19,6 +19,7 @@
             <nav class="nav">
                 <a href="#features">Kenmerken</a>
                 <a href="#pricing">Abonnementen</a>
+                <a href="#testimonials">Klantverhalen</a> <!-- Nieuwe navigatielink -->
                 <a href="#contact" class="btn btn-primary">Neem contact op</a>
             </nav>
         </div>
@@ -72,7 +73,7 @@
                     <!-- Kaart voor Basis abonnement -->
                     <div class="pricing-card">
                         <h3>Basis Abonnement</h3>
-                        <p class="price">&euro;49 <span>/maand</span></p>
+                        <p class="price">&euro;29 <span>/maand</span></p>
                         <p class="pricing-text">Ideaal voor kleine bedrijven die willen starten met basisautomatisering.</p>
                         <ul>
                             <li><span class="check-icon">&#10004;</span> Eén kernfunctionaliteit (bijv. FAQ)</li>
@@ -86,7 +87,7 @@
                     <!-- Kaart voor Standaard abonnement (meest populair) -->
                     <div class="pricing-card popular">
                         <h3>Standaard Abonnement</h3>
-                        <p class="price">&euro;199 <span>/maand</span></p>
+                        <p class="price">&euro;99 <span>/maand</span></p>
                         <span class="popular-badge">Meest populair</span>
                         <p class="pricing-text">Onze meest gekozen optie voor groeiende bedrijven met uitgebreidere behoeften.</p>
                         <ul>
@@ -101,7 +102,7 @@
                     <!-- Kaart voor Premium abonnement -->
                     <div class="pricing-card">
                         <h3>Premium Abonnement</h3>
-                        <p class="price">&euro;499 <span>/maand</span></p>
+                        <p class="price">&euro;299 <span>/maand</span></p>
                         <p class="pricing-text">De ultieme oplossing voor grote organisaties met complexe AI-vereisten.</p>
                         <ul>
                             <li><span class="check-icon">&#10004;</span> Geavanceerde AI & NLP integratie</li>
@@ -115,7 +116,29 @@
             </div>
         </section>
 
-        <!-- Sectie 4: Contact - Directe call-to-action -->
+        <!-- Sectie 4: Klantverhalen (Testimonials) -->
+        <section id="testimonials" class="testimonials-section">
+            <div class="container">
+                <h2 class="section-title">Wat onze klanten zeggen</h2>
+                <p class="section-subtitle">Echte verhalen van bedrijven die succes hebben geboekt met BotMatic.</p>
+                <div class="testimonial-grid">
+                    <div class="testimonial-card">
+                        <p class="quote">"De chatbot van BotMatic heeft onze klantenservice getransformeerd. Snelle antwoorden, tevreden klanten en wij besparen enorm veel tijd!"</p>
+                        <p class="author">- Sarah Jansen, Eigenaar Online Winkel</p>
+                    </div>
+                    <div class="testimonial-card">
+                        <p class="quote">"Vanaf dag één was de implementatie soepel en de ondersteuning fantastisch. Onze verkoop via WhatsApp is met 30% gestegen!"</p>
+                        <p class="author">- Mark de Vries, Marketing Manager</p>
+                    </div>
+                    <div class="testimonial-card">
+                        <p class="quote">"We hadden een complexe vraag, maar BotMatic leverde een perfecte maatwerkoplossing. De bot is nu onmisbaar voor onze interne processen."</p>
+                        <p class="author">- Lisa Bakker, HR Directeur</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sectie 5: Contact - Directe call-to-action -->
         <section id="contact" class="contact-section">
             <div class="container">
                 <h2 class="section-title">Klaar om de volgende stap te zetten?</h2>
@@ -133,9 +156,14 @@
                 <a href="#">Privacybeleid</a>
                 <a href="#">Algemene voorwaarden</a>
             </div>
-            <p class="copyright">&copy; 2025 BotMatic. Alle rechten voorbehouden.</p>
+            <p class="copyright">&copy; <span id="current-year"></span> BotMatic. Alle rechten voorbehouden.</p>
         </div>
     </footer>
+
+    <script>
+        // JavaScript om het huidige jaar dynamisch in te voegen in de footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
 
 </body>
 </html>
