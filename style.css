@@ -363,48 +363,50 @@ section {
     box-shadow: var(--shadow-light);
 }
 
-/* Nieuwe Testimonials Sectie Stijlen */
-.testimonials-section {
-    background-color: #fff; /* Witte achtergrond voor deze sectie */
+/* Nieuwe FAQ Sectie Stijlen */
+.faq-section {
+    background-color: var(--background-color); /* Achtergrondkleur voor FAQ */
     padding: 100px 0;
 }
 
-.testimonial-grid {
+.faq-grid {
     display: grid;
     grid-template-columns: 1fr; /* Standaard 1 kolom op mobiel */
-    gap: 2.5rem; /* Ruimte tussen testimonials */
+    gap: 2rem; /* Ruimte tussen FAQ items */
     margin-top: 4rem; /* Ruimte onder de sectie-ondertitel */
+    text-align: left; /* Tekst links uitlijnen in FAQ items */
 }
 
-.testimonial-card {
-    background-color: var(--background-color); /* Lichte achtergrond voor testimonial kaart */
+.faq-item {
+    background-color: var(--card-background); /* Witte achtergrond voor FAQ kaart */
     padding: 2.5rem;
     border-radius: 16px;
     box-shadow: var(--shadow-light);
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* Zorgt ervoor dat quote en auteur goed verdeeld zijn */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.testimonial-card .quote {
-    font-size: 1.15rem;
-    font-style: italic;
-    line-height: 1.8;
+.faq-item:hover {
+    transform: translateY(-5px); /* Subtiel hover effect */
+    box-shadow: var(--shadow-medium);
+}
+
+.faq-question {
+    font-size: 1.4rem; /* Grotere vraagtekst */
+    font-weight: 700;
+    color: var(--heading-color);
+    margin-bottom: 1rem;
+}
+
+.faq-answer {
+    font-size: 1.05rem;
     color: var(--text-color);
-    margin-bottom: 1.5rem;
-}
-
-.testimonial-card .author {
-    font-weight: 600;
-    color: var(--primary-color);
-    font-size: 1rem;
+    line-height: 1.7;
 }
 
 
 /* Contact Sectie */
 .contact-section {
-    background-color: var(--background-color);
+    background-color: #fff; /* Witte achtergrond voor contact sectie */
     padding: 100px 0;
 }
 
@@ -482,7 +484,7 @@ section {
         font-size: 1rem;
         margin-bottom: 3rem;
     }
-    .feature-card, .pricing-card, .testimonial-card { /* Ook testimonial-card aanpassen */
+    .feature-card, .pricing-card, .faq-item { /* Ook faq-item aanpassen */
         padding: 2rem;
     }
     .pricing-card.popular {
@@ -519,7 +521,7 @@ section {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .testimonial-grid { /* Twee kolommen op tablet */
+    .faq-grid { /* Twee kolommen op tablet */
         grid-template-columns: repeat(2, 1fr);
     }
 
@@ -542,7 +544,7 @@ section {
         grid-template-columns: repeat(3, 1fr);
     }
 
-    .testimonial-grid { /* Drie kolommen op desktop */
+    .faq-grid { /* Drie kolommen op desktop */
         grid-template-columns: repeat(3, 1fr);
     }
 
