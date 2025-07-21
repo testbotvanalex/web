@@ -17,7 +17,7 @@
         <div class="container">
             <a href="#" class="logo">BotMatic</a>
             <nav class="nav">
-                <a href="#what-is-chatbot">Wat is een Chatbot?</a> <!-- Nieuwe navigatielink -->
+                <a href="#what-is-chatbot">Wat is een Chatbot?</a>
                 <a href="#pricing">Abonnementen</a>
                 <a href="#contact" class="btn btn-primary">Neem contact op</a>
             </nav>
@@ -33,7 +33,7 @@
                 <p class="free-trial-hero">Start vandaag nog met een **2 weken gratis proefperiode!** Geen verplichtingen.</p>
                 <div class="hero-buttons">
                     <a href="#contact" class="btn btn-primary">Vraag een offerte aan</a>
-                    <a href="#what-is-chatbot" class="btn btn-secondary">Meer over chatbots</a> <!-- Aangepaste knop -->
+                    <a href="#what-is-chatbot" class="btn btn-secondary">Meer over chatbots</a>
                 </div>
             </div>
         </section>
@@ -74,10 +74,10 @@
                         <p class="price">&euro;29 <span>/maand</span></p>
                         <p class="pricing-text">Ideaal voor kleine bedrijven die willen starten met basisautomatisering.</p>
                         <ul>
-                            <li><span class="check-icon">&#10004;</span> Eén kernfunctionaliteit (bijv. FAQ)</li>
-                            <li><span class="check-icon">&#10004;</span> Integratie met één platform</li>
-                            <li><span class="check-icon">&#10004;</span> Standaard ondersteuning</li>
-                            <li><span class="check-icon">&#10004;</span> Tot 500 conversaties/maand</li>
+                            <li><span class="check-icon">&#10004;</span> **Snelle FAQ-antwoorden:** Automatiseer antwoorden op veelgestelde vragen.</li>
+                            <li><span class="check-icon">&#10004;</span> **Eenvoudige integratie:** Werk op één platform (bijv. WhatsApp of je website).</li>
+                            <li><span class="check-icon">&#10004;</span> **Basis ondersteuning:** Hulp bij opstart en primaire vragen.</li>
+                            <li><span class="check-icon">&#10004;</span> **Tot 500 gesprekken/maand:** Geschikt voor starters.</li>
                         </ul>
                         <a href="#contact" class="btn btn-tertiary">Abonnement kiezen</a>
                     </div>
@@ -89,10 +89,10 @@
                         <span class="popular-badge">Meest populair</span>
                         <p class="pricing-text">Onze meest gekozen optie voor groeiende bedrijven met uitgebreidere behoeften.</p>
                         <ul>
-                            <li><span class="check-icon">&#10004;</span> Meerdere geautomatiseerde taken</li>
-                            <li><span class="check-icon">&#10004;</span> Integratie met twee platforms</li>
-                            <li><span class="check-icon">&#10004;</span> Prioritaire ondersteuning & updates</li>
-                            <li><span class="check-icon">&#10004;</span> Tot 2.000 conversaties/maand</li>
+                            <li><span class="check-icon">&#10004;</span> **Meerdere taken automatiseren:** Bijv. afspraken boeken, leads kwalificeren, FAQ.</li>
+                            <li><span class="check-icon">&#10004;</span> **Integratie op 2 platforms:** Bereik klanten via WhatsApp én Telegram/Instagram.</li>
+                            <li><span class="check-icon">&#10004;</span> **Prioritaire ondersteuning & updates:** Snelle hulp en toegang tot nieuwe functies.</li>
+                            <li><span class="check-icon">&#10004;</span> **Tot 2.000 gesprekken/maand:** Ruimte voor groeiende interacties.</li>
                         </ul>
                         <a href="#contact" class="btn btn-tertiary">Abonnement kiezen</a>
                     </div>
@@ -103,10 +103,10 @@
                         <p class="price">&euro;299 <span>/maand</span></p>
                         <p class="pricing-text">De ultieme oplossing voor grote organisaties met complexe AI-vereisten.</p>
                         <ul>
-                            <li><span class="check-icon">&#10004;</span> Geavanceerde AI & NLP integratie</li>
-                            <li><span class="check-icon">&#10004;</span> Integratie met meerdere platforms & systemen</li>
-                            <li><span class="check-icon">&#10004;</span> Toegewijde projectmanager & support</li>
-                            <li><span class="check-icon">&#10004;</span> Onbeperkt aantal conversaties</li>
+                            <li><span class="check-icon">&#10004;</span> **Geavanceerde AI & NLP:** Begrijp complexe vragen en voer natuurlijke gesprekken.</li>
+                            <li><span class="check-icon">&#10004;</span> **Integratie met al je systemen:** Koppel met CRM, ERP, en meer.</li>
+                            <li><span class="check-icon">&#10004;</span> **Toegewijde projectmanager & support:** Persoonlijke begeleiding en 24/7 hulp.</li>
+                            <li><span class="check-icon">&#10004;</span> **Onbeperkt aantal gesprekken:** Schaal onbeperkt mee met jouw succes.</li>
                         </ul>
                         <a href="#contact" class="btn btn-tertiary">Abonnement kiezen</a>
                     </div>
@@ -169,7 +169,7 @@
 
             const formMessages = document.getElementById('form-messages');
             formMessages.textContent = 'Bericht wordt verzonden...';
-            formMessages.style.color = '#0066cc'; // Primaire kleur voor laden
+            formMessages.style.color = '#007bff'; // Primaire kleur voor laden
 
             const formData = new FormData(this);
             const data = {};
@@ -190,7 +190,7 @@
 
                 if (response.ok) {
                     formMessages.textContent = 'Bedankt! Je bericht is succesvol verzonden.';
-                    formMessages.style.color = '#28a745'; // Groen voor succes
+                    formMessages.style.color = '#218838'; // Groen voor succes
                     this.reset(); // Leeg de formuliervelden
                 } else {
                     formMessages.textContent = 'Er is een fout opgetreden bij het verzenden van je bericht. Probeer het later opnieuw.';
