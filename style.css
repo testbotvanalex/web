@@ -3,8 +3,8 @@
  * Hier worden de basiskleuren, lettertypes en schaduwen gedefinieerd voor consistentie.
  */
 :root {
-    --primary-color: #0066cc; /* Helderder blauw voor primaire acties en accenten */
-    --primary-hover-color: #004d99; /* Donkerder blauw voor hover-effecten */
+    --primary-color: #007bff; /* Een iets zachtere, standaard blauwtint */
+    --primary-hover-color: #0056b3; /* Donkerder blauw bij hover */
     --secondary-color: #6c757d; /* Grijs voor secundaire tekst en elementen */
     --secondary-hover-color: #5a6268; /* Donkerder grijs bij hover */
     --background-color: #f8f9fa; /* Lichtgrijze achtergrond voor secties */
@@ -12,7 +12,7 @@
     --text-color: #343a40; /* Donkerdere tekstkleur voor optimale leesbaarheid */
     --heading-color: #212529; /* Nog donkerder voor koppen, voor contrast */
     --border-color: #dee2e6; /* Lichtere randkleur voor subtiele scheidingen */
-    --populair-badge-color: #28a745; /* Levendig groen voor 'populair' badges en vinkjes */
+    --populair-badge-color: #218838; /* Een iets dieper, levendiger groen voor 'populair' badge en vinkjes */
     --font-family: 'Inter', sans-serif; /* Standaard lettertype */
     --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08); /* Lichte schaduw voor diepte */
     --shadow-medium: 0 8px 20px rgba(0, 0, 0, 0.12); /* Medium schaduw voor prominente elementen */
@@ -218,98 +218,57 @@ section {
     margin: 0 15px;
 }
 
-/* Features Sectie Stijlen */
-.features-section {
-    background-color: var(--background-color);
-}
-
-.features-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-    text-align: center;
-}
-
-.feature-card {
-    background-color: var(--card-background);
-    padding: 3rem;
-    border-radius: 16px;
-    box-shadow: var(--shadow-light);
-    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out; /* Vloeiendere overgang */
-}
-
-.feature-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-medium);
-}
-
-.feature-card h3 {
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    color: var(--heading-color);
-}
-
-.feature-card p {
-    font-size: 1.05rem;
-    color: var(--text-color);
-}
-
-/* How It Works Sectie Stijlen */
-.how-it-works-section {
+/* Nieuwe Wat is een Chatbot Sectie Stijlen */
+.what-is-chatbot-section {
     background-color: #fff; /* Witte achtergrond voor deze sectie */
     padding: 100px 0;
 }
 
-.steps-grid {
+.chatbot-benefits-grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* Standaard 1 kolom op mobiel */
     gap: 2.5rem;
     margin-top: 4rem;
-    text-align: center;
+    text-align: left; /* Tekst links uitlijnen in benefit kaarten */
 }
 
-.step-card {
-    background-color: var(--background-color); /* Lichte achtergrond voor stap kaart */
+.benefit-card {
+    background-color: var(--background-color); /* Lichte achtergrond voor benefit kaart */
     padding: 2.5rem;
     border-radius: 16px;
     box-shadow: var(--shadow-light);
     transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
-.step-card:hover {
+.benefit-card:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-medium);
 }
 
-.step-number {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--primary-color);
-    background-color: rgba(0, 102, 204, 0.1); /* Lichtblauwe achtergrond voor nummer */
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    border: 2px solid var(--primary-color);
-}
-
-.step-card h3 {
+.benefit-card h3 {
     font-size: 1.6rem;
     font-weight: 700;
     color: var(--heading-color);
     margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centreer de titel en icon op mobiel */
 }
 
-.step-card p {
+.benefit-card .icon {
+    font-size: 2rem; /* Groter icoon */
+    margin-right: 0.8rem;
+    color: var(--primary-color);
+}
+
+.benefit-card p {
     font-size: 1.05rem;
     color: var(--text-color);
+    line-height: 1.7;
+}
+
+.cta-bottom-section {
+    margin-top: 4rem; /* Ruimte boven de CTA knop */
 }
 
 
@@ -429,59 +388,19 @@ section {
     box-shadow: var(--shadow-light);
 }
 
-/* FAQ Sectie Stijlen */
-.faq-section {
-    background-color: #fff; /* Witte achtergrond voor deze sectie */
-    padding: 100px 0;
-}
-
-.faq-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    margin-top: 4rem;
-    text-align: left;
-}
-
-.faq-item {
-    background-color: var(--background-color); /* Lichte achtergrond voor FAQ kaart */
-    padding: 2.5rem;
-    border-radius: 16px;
-    box-shadow: var(--shadow-light);
-    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
-}
-
-.faq-item:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-medium);
-}
-
-.faq-question {
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--heading-color);
-    margin-bottom: 1rem;
-}
-
-.faq-answer {
-    font-size: 1.05rem;
-    color: var(--text-color);
-    line-height: 1.7;
-}
-
 /* Contact Sectie Stijlen (met Formulier en CTA) */
 .contact-section {
-    background-color: var(--background-color); /* Адаптированный фон для секции контактов */
+    background-color: #fff; /* Aangepaste achtergrond voor contact */
     padding: 100px 0;
 }
 
-.cta-block { /* Новый блок CTA */
+.cta-block { /* Nieuw CTA blok */
     background-color: var(--primary-color);
     color: #fff;
     padding: 3rem 2rem;
     border-radius: 16px;
     max-width: 800px;
-    margin: 0 auto 4rem; /* Отступ снизу, чтобы отделить от формы */
+    margin: 0 auto 4rem; /* Marge onderaan om te scheiden van het formulier */
     box-shadow: var(--shadow-medium);
     text-align: center;
 }
@@ -500,14 +419,14 @@ section {
 }
 
 .cta-block .btn-primary {
-    background-color: #fff; /* Белая кнопка на синем фоне */
+    background-color: #fff; /* Witte knop op blauwe achtergrond */
     color: var(--primary-color);
     border: 1px solid #fff;
-    box-shadow: none; /* Убрать тень, чтобы не конкурировать с блоком */
+    box-shadow: none; /* Schaduw verwijderen om niet te concurreren met het blok */
 }
 
 .cta-block .btn-primary:hover {
-    background-color: rgba(255, 255, 255, 0.9); /* Чуть прозрачнее при наведении */
+    background-color: rgba(255, 255, 255, 0.9); /* Iets transparanter bij hover */
     color: var(--primary-hover-color);
     transform: translateY(-2px);
     box-shadow: none;
@@ -520,8 +439,8 @@ section {
     padding: 2.5rem;
     background-color: var(--card-background);
     border-radius: 16px;
-    box-shadow: var(--shadow-medium); /* Более заметная тень для формы */
-    text-align: left; /* Выравнивание текста в форме по левому краю */
+    box-shadow: var(--shadow-medium); /* Prominentere schaduw voor het formulier */
+    text-align: left; /* Tekst in formulier links uitlijnen */
 }
 
 .form-group {
@@ -542,7 +461,7 @@ section {
     width: 100%;
     padding: 12px 15px;
     border: 1px solid var(--border-color);
-    border-radius: 8px; /* Слегка скругленные углы для полей ввода */
+    border-radius: 8px; /* Licht afgeronde hoeken voor inputvelden */
     font-family: var(--font-family);
     font-size: 1rem;
     color: var(--text-color);
@@ -553,20 +472,20 @@ section {
 .form-group input[type="email"]:focus,
 .form-group textarea:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.25); /* Фокусное кольцо */
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.25); /* Focus ring */
     outline: none;
 }
 
 .form-group textarea {
-    resize: vertical; /* Разрешить изменение размера только по вертикали */
+    resize: vertical; /* Alleen verticaal resizen toestaan */
     min-height: 120px;
 }
 
 .contact-form .btn-primary {
-    width: auto; /* Чтобы кнопка не занимала всю ширину, кроме как на мобильных устройствах */
+    width: auto; /* Zodat de knop niet de volledige breedte inneemt, tenzij op mobiel */
     padding: 14px 30px;
-    display: block; /* Сделать его блочным элементом, чтобы margin auto работал */
-    margin: 0 auto; /* Центрировать кнопку в форме */
+    display: block; /* Maak het een blok-element om margin auto te laten werken */
+    margin: 0 auto; /* Centreer de knop in het formulier */
 }
 
 
@@ -636,7 +555,7 @@ section {
         font-size: 1rem;
         margin-bottom: 3rem;
     }
-    .feature-card, .pricing-card, .faq-item, .step-card {
+    .benefit-card { /* Ook benefit-card aanpassen */
         padding: 2rem;
     }
     .pricing-card.popular {
@@ -648,7 +567,7 @@ section {
     .contact-form .btn-primary {
         width: 100%;
     }
-    .cta-block { /* Адаптация CTA для мобильных устройств */
+    .cta-block {
         padding: 2rem 1.5rem;
         margin-bottom: 2.5rem;
     }
@@ -681,19 +600,15 @@ section {
         font-size: 1.2rem;
     }
 
-    .features-grid {
+    .chatbot-benefits-grid { /* Twee kolommen op tablet */
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .how-it-works-section .steps-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .benefit-card h3 { /* Links uitlijnen op tablet */
+        justify-content: flex-start;
     }
 
     .pricing-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .faq-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 
@@ -708,19 +623,11 @@ section {
 }
 
 @media (min-width: 1024px) {
-    .features-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-
-    .how-it-works-section .steps-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-
-    .pricing-grid {
+    .chatbot-benefits-grid { /* Drie kolommen op desktop */
         grid-template-columns: repeat(3, 1fr);
     }
 
-    .faq-grid {
+    .pricing-grid {
         grid-template-columns: repeat(3, 1fr);
     }
 
