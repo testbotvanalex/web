@@ -1,64 +1,70 @@
-/* Globale Stijlen en Reset */
+/*
+ * Globale Stijlen en CSS Variabelen (Custom Properties)
+ * Hier worden de basiskleuren, lettertypes en schaduwen gedefinieerd voor consistentie.
+ */
 :root {
-    --primary-color: #0066cc; /* Helderder blauw (aangepast) */
-    --primary-hover-color: #004d99; /* Donkerder blauw bij hover */
-    --secondary-color: #6c757d; /* Grijs */
+    --primary-color: #0066cc; /* Helderder blauw voor primaire acties en accenten */
+    --primary-hover-color: #004d99; /* Donkerder blauw voor hover-effecten */
+    --secondary-color: #6c757d; /* Grijs voor secundaire tekst en elementen */
     --secondary-hover-color: #5a6268; /* Donkerder grijs bij hover */
-    --background-color: #f8f9fa; /* Lichtgrijze achtergrond */
-    --card-background: #ffffff; /* Witte kaart achtergrond */
-    --text-color: #343a40; /* Donkerdere tekstkleur voor betere leesbaarheid */
-    --heading-color: #212529; /* Nog donkerder voor koppen */
-    --border-color: #dee2e6; /* Lichtere randkleur */
-    --populair-badge-color: #28a745; /* Groen voor 'populair' badge */
-    --font-family: 'Inter', sans-serif;
-    --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08); /* Lichte schaduw */
-    --shadow-medium: 0 8px 20px rgba(0, 0, 0, 0.12); /* Medium schaduw */
+    --background-color: #f8f9fa; /* Lichtgrijze achtergrond voor secties */
+    --card-background: #ffffff; /* Witte achtergrond voor kaarten en panelen */
+    --text-color: #343a40; /* Donkerdere tekstkleur voor optimale leesbaarheid */
+    --heading-color: #212529; /* Nog donkerder voor koppen, voor contrast */
+    --border-color: #dee2e6; /* Lichtere randkleur voor subtiele scheidingen */
+    --populair-badge-color: #28a745; /* Levendig groen voor 'populair' badges en vinkjes */
+    --font-family: 'Inter', sans-serif; /* Standaard lettertype */
+    --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08); /* Lichte schaduw voor diepte */
+    --shadow-medium: 0 8px 20px rgba(0, 0, 0, 0.12); /* Medium schaduw voor prominente elementen */
 }
 
+/* Algemene Reset Regels */
 * {
-    box-sizing: border-box;
+    box-sizing: border-box; /* Zorgt ervoor dat padding en border binnen de breedte/hoogte vallen */
     margin: 0;
     padding: 0;
 }
 
 html {
-    scroll-behavior: smooth;
+    scroll-behavior: smooth; /* Zorgt voor een vloeiende scroll bij ankerlinks */
 }
 
 body {
     font-family: var(--font-family);
-    line-height: 1.7; /* Iets meer regelafstand voor leesbaarheid */
+    line-height: 1.7; /* Iets meer regelafstand voor betere leesbaarheid */
     color: var(--text-color);
     background-color: var(--background-color);
-    padding-top: 70px; /* Ruimte voor de vaste header */
+    padding-top: 70px; /* Ruimte voor de vaste header, voorkomt dat content onder de header verdwijnt */
 }
 
+/* Stijlen voor Links */
 a {
-    text-decoration: none;
+    text-decoration: none; /* Geen onderstreping standaard */
     color: var(--primary-color);
-    transition: color 0.3s ease;
+    transition: color 0.3s ease-in-out; /* Vloeiende overgang bij hover */
 }
 
 a:hover {
     color: var(--primary-hover-color);
 }
 
+/* Container voor maximale breedte en centrering */
 .container {
-    max-width: 1200px; /* Iets breder container */
-    margin: 0 auto;
-    padding: 0 20px; /* Meer padding aan de zijkanten */
+    max-width: 1200px; /* Maximale breedte van de content */
+    margin: 0 auto; /* Centreert de container horizontaal */
+    padding: 0 20px; /* Padding aan de zijkanten voor kleinere schermen */
 }
 
-/* Knoppen (Buttons) */
+/* Knoppen (Buttons) Stijlen */
 .btn {
-    display: inline-block;
-    padding: 14px 28px; /* Grotere knoppen */
-    border-radius: 50px;
-    font-weight: 700; /* Dikkere tekst */
+    display: inline-block; /* Zorgt ervoor dat padding en breedte werken */
+    padding: 14px 28px; /* Ruimte binnen de knop */
+    border-radius: 50px; /* Volledig afgeronde hoeken */
+    font-weight: 700; /* Dikkere tekst voor betere zichtbaarheid */
     text-align: center;
-    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-    white-space: nowrap;
-    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, transform 0.2s ease-out, box-shadow 0.3s ease-in-out; /* Vloeiende overgangen */
+    white-space: nowrap; /* Voorkomt dat tekst afbreekt op meerdere regels */
+    cursor: pointer; /* Geeft aan dat het klikbaar is */
     font-size: 1rem;
 }
 
@@ -71,14 +77,14 @@ a:hover {
 
 .btn-primary:hover {
     background-color: var(--primary-hover-color);
-    transform: translateY(-3px); /* Meer uitgesproken hover effect */
+    transform: translateY(-3px); /* Beweegt de knop iets omhoog bij hover */
     box-shadow: var(--shadow-medium);
 }
 
 .btn-secondary {
     background-color: transparent;
     color: var(--primary-color);
-    border: 2px solid var(--primary-color); /* Dikkere rand */
+    border: 2px solid var(--primary-color); /* Dikkere rand voor secundaire knop */
 }
 
 .btn-secondary:hover {
@@ -92,7 +98,7 @@ a:hover {
     background-color: var(--primary-color);
     color: #fff;
     border: 1px solid var(--primary-color);
-    width: 100%;
+    width: 100%; /* Neemt de volledige breedte van de ouder in */
     padding: 12px 20px; /* Iets kleinere padding voor de kaarten */
     font-size: 0.95rem;
 }
@@ -103,39 +109,40 @@ a:hover {
     box-shadow: var(--shadow-light);
 }
 
-/* Header */
+/* Header Stijlen */
 .header {
     background-color: #fff;
-    position: fixed;
+    position: fixed; /* Zorgt ervoor dat de header blijft staan tijdens scrollen */
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); /* Duidelijkere schaduw */
+    z-index: 1000; /* Zorgt ervoor dat de header boven andere elementen ligt */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); /* Duidelijkere schaduw voor diepte */
 }
 
 .header .container {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 18px 20px; /* Meer padding */
+    justify-content: space-between; /* Verdeelt items over de breedte */
+    align-items: center; /* Centreert items verticaal */
+    padding: 18px 20px;
 }
 
 .logo {
-    font-weight: 800; /* Extra dik */
+    font-weight: 800; /* Extra dik lettertype voor het logo */
     font-size: 1.8rem; /* Groter logo */
     color: var(--heading-color);
-    letter-spacing: -0.5px;
+    letter-spacing: -0.5px; /* Lichte aanpassing van de letterafstand */
 }
 
 .nav a {
-    margin-left: 1.5rem; /* Meer ruimte tussen nav-links */
+    margin-left: 1.5rem; /* Ruimte tussen navigatielinks */
     font-weight: 600;
     color: var(--text-color);
-    position: relative;
+    position: relative; /* Nodig voor het pseudo-element onderstreepje */
+    outline: none; /* Verbergt standaard focus-outline */
 }
 
-.nav a:not(.btn)::after { /* Onderstreepje bij hover */
+.nav a:not(.btn)::after { /* Onderstreepje bij hover voor niet-knop links */
     content: '';
     position: absolute;
     width: 0;
@@ -143,10 +150,11 @@ a:hover {
     bottom: -5px;
     left: 0;
     background-color: var(--primary-color);
-    transition: width 0.3s ease;
+    transition: width 0.3s ease-in-out;
 }
 
-.nav a:not(.btn):hover::after {
+.nav a:not(.btn):hover::after,
+.nav a:not(.btn):focus::after { /* Ook voor focus-state */
     width: 100%;
 }
 
@@ -154,14 +162,14 @@ a:hover {
     margin-left: 2rem;
 }
 
-/* Algemene sectie stijlen */
+/* Algemene Sectie Stijlen */
 section {
-    padding: 100px 0; /* Meer verticale padding */
+    padding: 100px 0; /* Royale verticale padding voor secties */
     text-align: center;
 }
 
 .section-title {
-    font-size: 3.2rem; /* Grotere titels */
+    font-size: 3.2rem; /* Grote, prominente titels */
     font-weight: 800;
     margin-bottom: 1.5rem;
     color: var(--heading-color);
@@ -169,48 +177,48 @@ section {
 }
 
 .section-subtitle {
-    font-size: 1.3rem; /* Grotere ondertitels */
+    font-size: 1.3rem; /* Grotere ondertitels voor betere leesbaarheid */
     max-width: 800px;
-    margin: 0 auto 5rem; /* Meer ruimte onder ondertitel */
+    margin: 0 auto 5rem; /* Ruime marge onder de ondertitel */
     color: var(--secondary-color);
 }
 
-/* Hero Sectie */
+/* Hero Sectie Stijlen */
 .hero-section {
-    padding: 120px 0; /* Nog meer padding */
+    padding: 120px 0;
     background: linear-gradient(135deg, #e0f2f7 0%, #ffffff 100%); /* Zachte gradiënt achtergrond */
     position: relative;
-    overflow: hidden; /* Zorgt ervoor dat eventuele achtergrond elementen niet buiten de sectie komen */
+    overflow: hidden;
 }
 
 .hero-section h1 {
-    font-size: 4.5rem; /* Indrukwekkende titel */
+    font-size: 4.5rem; /* Indrukwekkende, grote titel */
     font-weight: 800;
     color: var(--heading-color);
     line-height: 1.1;
     margin-bottom: 1.5rem;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Subtiele tekstschaduw */
 }
 
 .hero-section .subtitle {
-    font-size: 1.5rem; /* Grotere ondertitel */
+    font-size: 1.5rem;
     max-width: 700px;
-    margin: 0 auto 1.5rem; /* Aangepaste marge voor proefperiode tekst */
+    margin: 0 auto 1.5rem;
     color: var(--text-color);
 }
 
-.free-trial-hero { /* Nieuwe stijl voor proefperiode melding in hero */
+.free-trial-hero {
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--populair-badge-color); /* Gebruik de groene kleur voor extra opvallendheid */
-    margin-bottom: 2.5rem; /* Ruimte tussen proefperiode tekst en knoppen */
+    color: var(--populair-badge-color);
+    margin-bottom: 2.5rem;
 }
 
 .hero-buttons .btn {
-    margin: 0 15px; /* Meer ruimte tussen knoppen */
+    margin: 0 15px;
 }
 
-/* Features Sectie */
+/* Features Sectie Stijlen */
 .features-section {
     background-color: var(--background-color);
 }
@@ -218,25 +226,25 @@ section {
 .features-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2.5rem; /* Meer ruimte tussen kaarten */
-    text-align: center; /* Tekst in kaarten centreren */
+    gap: 2.5rem;
+    text-align: center;
 }
 
 .feature-card {
     background-color: var(--card-background);
-    padding: 3rem; /* Meer padding in kaarten */
-    border-radius: 16px; /* Meer afgeronde hoeken */
+    padding: 3rem;
+    border-radius: 16px;
     box-shadow: var(--shadow-light);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out; /* Vloeiendere overgang */
 }
 
 .feature-card:hover {
-    transform: translateY(-8px); /* Meer uitgesproken hover effect */
+    transform: translateY(-8px);
     box-shadow: var(--shadow-medium);
 }
 
 .feature-card h3 {
-    font-size: 1.8rem; /* Grotere feature titels */
+    font-size: 1.8rem;
     font-weight: 700;
     margin-bottom: 1rem;
     color: var(--heading-color);
@@ -247,41 +255,99 @@ section {
     color: var(--text-color);
 }
 
-/* Pricing Sectie */
+/* How It Works Sectie Stijlen */
+.how-it-works-section {
+    background-color: #fff; /* Witte achtergrond voor deze sectie */
+    padding: 100px 0;
+}
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    margin-top: 4rem;
+    text-align: center;
+}
+
+.step-card {
+    background-color: var(--background-color); /* Lichte achtergrond voor stap kaart */
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: var(--shadow-light);
+    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.step-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-medium);
+}
+
+.step-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    background-color: rgba(0, 102, 204, 0.1); /* Lichtblauwe achtergrond voor nummer */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border: 2px solid var(--primary-color);
+}
+
+.step-card h3 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--heading-color);
+    margin-bottom: 1rem;
+}
+
+.step-card p {
+    font-size: 1.05rem;
+    color: var(--text-color);
+}
+
+
+/* Pricing Sectie Stijlen */
 .pricing-section {
-    background-color: #fff;
+    background-color: var(--background-color); /* Aangepaste achtergrond voor pricing */
 }
 
 .pricing-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2.5rem; /* Meer ruimte tussen kaarten */
-    text-align: center; /* Tekst in kaarten centreren */
+    gap: 2.5rem;
+    text-align: center;
 }
 
-.free-trial-pricing { /* Nieuwe stijl voor proefperiode melding in pricing */
+.free-trial-pricing {
     font-size: 1.1rem;
     font-weight: 600;
     color: var(--populair-badge-color);
-    margin-bottom: 2.5rem; /* Ruimte tussen proefperiode tekst en pricing grid */
+    margin-bottom: 2.5rem;
 }
 
 .pricing-card {
     background-color: var(--card-background);
-    padding: 3rem 2.5rem; /* Meer padding */
+    padding: 3rem 2.5rem;
     border-radius: 16px;
-    border: 2px solid var(--border-color); /* Dikkere rand */
+    border: 2px solid var(--border-color);
     display: flex;
     flex-direction: column;
     align-items: center;
     position: relative;
     box-shadow: var(--shadow-light);
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease-out, border-color 0.3s ease-out, box-shadow 0.3s ease-out;
 }
 
 .pricing-card.popular {
-    border-color: var(--primary-color); /* Primaire kleur rand voor populair */
-    transform: scale(1.03); /* Iets minder schaal, subtieler */
+    border-color: var(--primary-color);
+    transform: scale(1.03);
     box-shadow: var(--shadow-medium);
 }
 
@@ -291,48 +357,48 @@ section {
 }
 
 .pricing-card h3 {
-    font-size: 2rem; /* Grotere titel */
+    font-size: 2rem;
     font-weight: 800;
     color: var(--heading-color);
-    margin-bottom: 0.5rem; /* Aangepaste marge voor prijs */
+    margin-bottom: 0.5rem;
 }
 
 .pricing-card .price {
-    font-size: 2.8rem; /* Grote en prominente prijs */
+    font-size: 2.8rem;
     font-weight: 800;
     color: var(--primary-color);
-    margin-bottom: 1rem; /* Ruimte tussen prijs en beschrijving */
+    margin-bottom: 1rem;
     display: flex;
     align-items: baseline;
-    justify-content: center; /* Centreer de prijs */
-    width: 100%; /* Zorg ervoor dat het de volledige breedte inneemt voor centrering */
+    justify-content: center;
+    width: 100%;
 }
 
 .pricing-card .price span {
-    font-size: 1.2rem; /* Kleiner voor "vanaf" */
+    font-size: 1.2rem;
     font-weight: 600;
     color: var(--secondary-color);
     margin-left: 0.5rem;
-    align-self: flex-end; /* Lijn "vanaf" uit aan de onderkant van de prijs */
+    align-self: flex-end;
 }
 
 .pricing-card .pricing-text {
     font-size: 1.1rem;
-    margin-bottom: 2rem; /* Meer ruimte */
+    margin-bottom: 2rem;
     color: var(--secondary-color);
 }
 
 .pricing-card ul {
     list-style: none;
     padding: 0;
-    margin-bottom: 2.5rem; /* Meer ruimte */
-    text-align: left; /* Lijst items links uitlijnen */
+    margin-bottom: 2.5rem;
+    text-align: left;
     flex-grow: 1;
-    width: 100%; /* Zorg ervoor dat de lijst de volle breedte inneemt */
+    width: 100%;
 }
 
 .pricing-card li {
-    padding: 0.75rem 0; /* Meer padding */
+    padding: 0.75rem 0;
     border-bottom: 1px solid var(--border-color);
     font-size: 1.05rem;
     display: flex;
@@ -340,58 +406,58 @@ section {
 }
 
 .pricing-card li:last-child {
-    border-bottom: none; /* Geen rand onder het laatste item */
+    border-bottom: none;
 }
 
 .check-icon {
     color: var(--populair-badge-color);
-    margin-right: 0.8rem; /* Meer ruimte */
-    font-size: 1.2rem; /* Groter vinkje */
+    margin-right: 0.8rem;
+    font-size: 1.2rem;
 }
 
 .popular-badge {
     background-color: var(--populair-badge-color);
     color: #fff;
-    font-size: 0.9rem; /* Grotere badge tekst */
+    font-size: 0.9rem;
     font-weight: 700;
-    padding: 6px 16px; /* Meer padding */
+    padding: 6px 16px;
     border-radius: 50px;
     position: absolute;
-    top: -20px; /* Hoger plaatsen */
+    top: -20px;
     left: 50%;
     transform: translateX(-50%);
     box-shadow: var(--shadow-light);
 }
 
-/* Nieuwe FAQ Sectie Stijlen */
+/* FAQ Sectie Stijlen */
 .faq-section {
-    background-color: var(--background-color); /* Achtergrondkleur voor FAQ */
+    background-color: #fff; /* Witte achtergrond voor deze sectie */
     padding: 100px 0;
 }
 
 .faq-grid {
     display: grid;
-    grid-template-columns: 1fr; /* Standaard 1 kolom op mobiel */
-    gap: 2rem; /* Ruimte tussen FAQ items */
-    margin-top: 4rem; /* Ruimte onder de sectie-ondertitel */
-    text-align: left; /* Tekst links uitlijnen in FAQ items */
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-top: 4rem;
+    text-align: left;
 }
 
 .faq-item {
-    background-color: var(--card-background); /* Witte achtergrond voor FAQ kaart */
+    background-color: var(--background-color); /* Lichte achtergrond voor FAQ kaart */
     padding: 2.5rem;
     border-radius: 16px;
     box-shadow: var(--shadow-light);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
 }
 
 .faq-item:hover {
-    transform: translateY(-5px); /* Subtiel hover effect */
+    transform: translateY(-5px);
     box-shadow: var(--shadow-medium);
 }
 
 .faq-question {
-    font-size: 1.4rem; /* Grotere vraagtekst */
+    font-size: 1.4rem;
     font-weight: 700;
     color: var(--heading-color);
     margin-bottom: 1rem;
@@ -403,38 +469,124 @@ section {
     line-height: 1.7;
 }
 
-
-/* Contact Sectie */
+/* Contact Sectie Stijlen (met Formulier en CTA) */
 .contact-section {
-    background-color: #fff; /* Witte achtergrond voor contact sectie */
+    background-color: var(--background-color); /* Адаптированный фон для секции контактов */
     padding: 100px 0;
 }
 
-.contact-section .section-title {
-    font-size: 3rem; /* Iets kleinere titel dan hero */
+.cta-block { /* Новый блок CTA */
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 3rem 2rem;
+    border-radius: 16px;
+    max-width: 800px;
+    margin: 0 auto 4rem; /* Отступ снизу, чтобы отделить от формы */
+    box-shadow: var(--shadow-medium);
+    text-align: center;
 }
 
-.contact-section .section-subtitle {
-    margin-bottom: 3.5rem;
+.cta-block h3 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    line-height: 1.2;
 }
 
-/* Footer */
+.cta-block p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.cta-block .btn-primary {
+    background-color: #fff; /* Белая кнопка на синем фоне */
+    color: var(--primary-color);
+    border: 1px solid #fff;
+    box-shadow: none; /* Убрать тень, чтобы не конкурировать с блоком */
+}
+
+.cta-block .btn-primary:hover {
+    background-color: rgba(255, 255, 255, 0.9); /* Чуть прозрачнее при наведении */
+    color: var(--primary-hover-color);
+    transform: translateY(-2px);
+    box-shadow: none;
+}
+
+
+.contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2.5rem;
+    background-color: var(--card-background);
+    border-radius: 16px;
+    box-shadow: var(--shadow-medium); /* Более заметная тень для формы */
+    text-align: left; /* Выравнивание текста в форме по левому краю */
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--heading-color);
+    margin-bottom: 0.5rem;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px; /* Слегка скругленные углы для полей ввода */
+    font-family: var(--font-family);
+    font-size: 1rem;
+    color: var(--text-color);
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.25); /* Фокусное кольцо */
+    outline: none;
+}
+
+.form-group textarea {
+    resize: vertical; /* Разрешить изменение размера только по вертикали */
+    min-height: 120px;
+}
+
+.contact-form .btn-primary {
+    width: auto; /* Чтобы кнопка не занимала всю ширину, кроме как на мобильных устройствах */
+    padding: 14px 30px;
+    display: block; /* Сделать его блочным элементом, чтобы margin auto работал */
+    margin: 0 auto; /* Центрировать кнопку в форме */
+}
+
+
+/* Footer Stijlen */
 .footer {
-    background-color: var(--heading-color); /* Donkere achtergrond */
-    color: #e9ecef; /* Lichtere tekst */
-    padding: 50px 0; /* Meer padding */
+    background-color: var(--heading-color);
+    color: #e9ecef;
+    padding: 50px 0;
     text-align: center;
     font-size: 0.95rem;
 }
 
 .footer-links {
-    margin-bottom: 1.5rem; /* Meer ruimte */
+    margin-bottom: 1.5rem;
 }
 
 .footer-links a {
     color: #e9ecef;
-    margin: 0 1.2rem; /* Meer ruimte tussen links */
-    transition: color 0.3s ease;
+    margin: 0 1.2rem;
+    transition: color 0.3s ease-in-out;
 }
 
 .footer-links a:hover {
@@ -446,13 +598,13 @@ section {
     opacity: 0.8;
 }
 
-/* Media Queries voor aanpassing op grotere schermen */
+/* Media Queries voor Responsiviteit */
 @media (max-width: 767px) {
     .header .nav {
-        display: none; /* Verberg nav op mobiel, tenzij er een hamburger menu is */
+        display: none;
     }
     .header .container {
-        justify-content: center; /* Centreer logo als nav verborgen is */
+        justify-content: center;
     }
     .hero-section h1 {
         font-size: 2.8rem;
@@ -474,7 +626,7 @@ section {
     }
     .hero-buttons .btn {
         margin: 0;
-        width: 80%; /* Knoppen nemen meer breedte in */
+        width: 80%;
         max-width: 300px;
     }
     .section-title {
@@ -484,11 +636,27 @@ section {
         font-size: 1rem;
         margin-bottom: 3rem;
     }
-    .feature-card, .pricing-card, .faq-item { /* Ook faq-item aanpassen */
+    .feature-card, .pricing-card, .faq-item, .step-card {
         padding: 2rem;
     }
     .pricing-card.popular {
-        transform: scale(1.0); /* Geen schaal op mobiel */
+        transform: scale(1.0);
+    }
+    .contact-form {
+        padding: 1.5rem;
+    }
+    .contact-form .btn-primary {
+        width: 100%;
+    }
+    .cta-block { /* Адаптация CTA для мобильных устройств */
+        padding: 2rem 1.5rem;
+        margin-bottom: 2.5rem;
+    }
+    .cta-block h3 {
+        font-size: 1.8rem;
+    }
+    .cta-block p {
+        font-size: 1rem;
     }
 }
 
@@ -502,18 +670,22 @@ section {
     }
 
     .hero-section .subtitle {
-        margin-bottom: 2rem; /* Iets meer marge op grotere schermen */
+        margin-bottom: 2rem;
     }
 
     .free-trial-hero {
-        font-size: 1.5rem; /* Groter op grotere schermen */
+        font-size: 1.5rem;
     }
 
     .free-trial-pricing {
-        font-size: 1.2rem; /* Groter op grotere schermen */
+        font-size: 1.2rem;
     }
 
     .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .how-it-works-section .steps-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 
@@ -521,7 +693,7 @@ section {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .faq-grid { /* Twee kolommen op tablet */
+    .faq-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 
@@ -540,16 +712,20 @@ section {
         grid-template-columns: repeat(4, 1fr);
     }
 
+    .how-it-works-section .steps-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
     .pricing-grid {
         grid-template-columns: repeat(3, 1fr);
     }
 
-    .faq-grid { /* Drie kolommen op desktop */
+    .faq-grid {
         grid-template-columns: repeat(3, 1fr);
     }
 
     .pricing-card.popular {
-        transform: scale(1.08); /* Iets meer schaal op desktop */
+        transform: scale(1.08);
     }
 }
 
