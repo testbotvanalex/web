@@ -31,10 +31,10 @@ html {
 
 body {
     font-family: var(--font-family);
-    line-height: 1.7; /* Iets meer regelafstand voor betere leesbaarheid */
+    line-height: 1.6; /* Iets minder regelafstand voor betere leesbaarheid */
     color: var(--text-color);
     background-color: var(--background-color);
-    padding-top: 70px; /* Ruimte voor de vaste header, voorkomt dat content onder de header verdwijnt */
+    padding-top: 65px; /* Ruimte voor de vaste header, voorkomt dat content onder de header verdwijnt */
 }
 
 /* Stijlen voor Links */
@@ -50,22 +50,22 @@ a:hover {
 
 /* Container voor maximale breedte en centrering */
 .container {
-    max-width: 1200px; /* Maximale breedte van de content */
+    max-width: 1100px; /* Iets smaller container */
     margin: 0 auto; /* Centreert de container horizontaal */
-    padding: 0 20px; /* Padding aan de zijkanten voor kleinere schermen */
+    padding: 0 15px; /* Iets minder padding aan de zijkanten voor kleinere schermen */
 }
 
 /* Knoppen (Buttons) Stijlen */
 .btn {
     display: inline-block; /* Zorgt ervoor dat padding en breedte werken */
-    padding: 14px 28px; /* Ruimte binnen de knop */
-    border-radius: 50px; /* Volledig afgeronde hoeken */
+    padding: 12px 25px; /* Iets kleinere knoppen */
+    border-radius: 40px; /* Iets minder afgeronde hoeken */
     font-weight: 700; /* Dikkere tekst voor betere zichtbaarheid */
     text-align: center;
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, transform 0.2s ease-out, box-shadow 0.3s ease-in-out; /* Vloeiende overgangen */
     white-space: nowrap; /* Voorkomt dat tekst afbreekt op meerdere regels */
     cursor: pointer; /* Geeft aan dat het klikbaar is */
-    font-size: 1rem;
+    font-size: 0.95rem; /* Iets kleiner font */
 }
 
 .btn-primary {
@@ -77,7 +77,7 @@ a:hover {
 
 .btn-primary:hover {
     background-color: var(--primary-hover-color);
-    transform: translateY(-3px); /* Beweegt de knop iets omhoog bij hover */
+    transform: translateY(-2px); /* Iets minder beweging bij hover */
     box-shadow: var(--shadow-medium);
 }
 
@@ -90,7 +90,7 @@ a:hover {
 .btn-secondary:hover {
     background-color: var(--primary-color);
     color: #fff;
-    transform: translateY(-3px);
+    transform: translateY(-2px);
     box-shadow: var(--shadow-medium);
 }
 
@@ -99,13 +99,13 @@ a:hover {
     color: #fff;
     border: 1px solid var(--primary-color);
     width: 100%; /* Neemt de volledige breedte van de ouder in */
-    padding: 12px 20px; /* Iets kleinere padding voor de kaarten */
-    font-size: 0.95rem;
+    padding: 10px 18px; /* Iets kleinere padding voor de kaarten */
+    font-size: 0.9rem; /* Iets kleiner font */
 }
 
 .btn-tertiary:hover {
     background-color: var(--primary-hover-color);
-    transform: translateY(-2px);
+    transform: translateY(-1px);
     box-shadow: var(--shadow-light);
 }
 
@@ -117,25 +117,25 @@ a:hover {
     left: 0;
     width: 100%;
     z-index: 1000; /* Zorgt ervoor dat de header boven andere elementen ligt */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); /* Duidelijkere schaduw voor diepte */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); /* Lichtere schaduw */
 }
 
 .header .container {
     display: flex;
     justify-content: space-between; /* Verdeelt items over de breedte */
     align-items: center; /* Centreert items verticaal */
-    padding: 18px 20px;
+    padding: 15px 15px; /* Iets minder padding */
 }
 
 .logo {
     font-weight: 800; /* Extra dik lettertype voor het logo */
-    font-size: 1.8rem; /* Groter logo */
+    font-size: 1.6rem; /* Iets kleiner logo */
     color: var(--heading-color);
     letter-spacing: -0.5px; /* Lichte aanpassing van de letterafstand */
 }
 
 .nav a {
-    margin-left: 1.5rem; /* Ruimte tussen navigatielinks */
+    margin-left: 1.2rem; /* Iets minder ruimte tussen nav-links */
     font-weight: 600;
     color: var(--text-color);
     position: relative; /* Nodig voor het pseudo-element onderstreepje */
@@ -147,7 +147,7 @@ a:hover {
     position: absolute;
     width: 0;
     height: 2px;
-    bottom: -5px;
+    bottom: -4px; /* Iets hoger plaatsen */
     left: 0;
     background-color: var(--primary-color);
     transition: width 0.3s ease-in-out;
@@ -159,33 +159,33 @@ a:hover {
 }
 
 .nav .btn-primary {
-    margin-left: 2rem;
+    margin-left: 1.5rem; /* Iets minder marge */
 }
 
 /* Algemene Sectie Stijlen */
 section {
-    padding: 80px 0; /* Iets minder verticale padding */
+    padding: 70px 0; /* Iets minder verticale padding */
     text-align: center;
 }
 
 .section-title {
-    font-size: 2.8rem; /* Aangepast: kleinere titel */
+    font-size: 2.5rem; /* Aangepast: nog kleinere titel */
     font-weight: 800;
-    margin-bottom: 1.2rem; /* Iets minder marge */
+    margin-bottom: 1rem; /* Iets minder marge */
     color: var(--heading-color);
     line-height: 1.2;
 }
 
 .section-subtitle {
-    font-size: 1.2rem; /* Aangepast: kleinere ondertitel */
-    max-width: 700px; /* Iets smaller */
-    margin: 0 auto 4rem; /* Iets minder marge onder ondertitel */
+    font-size: 1.1rem; /* Aangepast: nog kleinere ondertitel */
+    max-width: 650px; /* Iets smaller */
+    margin: 0 auto 3.5rem; /* Iets minder marge onder ondertitel */
     color: var(--secondary-color);
 }
 
 /* Hero Sectie Stijlen */
 .hero-section {
-    padding: 100px 0; /* Iets minder padding */
+    padding: 90px 0; /* Iets minder padding */
     /* Subtiel patroon toegevoegd aan de achtergrond */
     background: linear-gradient(135deg, #e0f2f7 0%, #ffffff 100%),
                 url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%239C92AC' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M0 0h30v30H0V0zm30 30h30v30H30V30z'/%3E%3C/g%3E%3C/svg%3E");
@@ -196,83 +196,83 @@ section {
 }
 
 .hero-section h1 {
-    font-size: 3.8rem; /* Aangepast: kleinere hero titel */
+    font-size: 3.2rem; /* Aangepast: nog kleinere hero titel */
     font-weight: 800;
     color: var(--heading-color);
     line-height: 1.1;
-    margin-bottom: 1.2rem; /* Iets minder marge */
+    margin-bottom: 1rem; /* Iets minder marge */
     text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Subtiele tekstschaduw */
 }
 
 .hero-section .subtitle {
-    font-size: 1.3rem; /* Aangepast: kleinere hero ondertitel */
-    max-width: 600px; /* Iets smaller */
-    margin: 0 auto 1.2rem; /* Iets minder marge */
+    font-size: 1.2rem; /* Aangepast: nog kleinere hero ondertitel */
+    max-width: 550px; /* Iets smaller */
+    margin: 0 auto 1rem; /* Iets minder marge */
     color: var(--text-color);
 }
 
 .free-trial-hero {
-    font-size: 1.1rem; /* Aangepast: kleinere proefperiode tekst */
+    font-size: 1rem; /* Aangepast: nog kleinere proefperiode tekst */
     font-weight: 700;
     color: var(--populair-badge-color);
-    margin-bottom: 2rem; /* Iets minder marge */
+    margin-bottom: 1.8rem; /* Iets minder marge */
 }
 
 .hero-buttons .btn {
-    margin: 0 10px; /* Iets minder ruimte tussen knoppen */
+    margin: 0 8px; /* Iets minder ruimte tussen knoppen */
 }
 
 /* Nieuwe Wat is een Chatbot Sectie Stijlen */
 .what-is-chatbot-section {
     background-color: #fff; /* Witte achtergrond voor deze sectie */
-    padding: 80px 0; /* Iets minder padding */
+    padding: 70px 0; /* Iets minder padding */
 }
 
 .chatbot-benefits-grid {
     display: grid;
     grid-template-columns: 1fr; /* Standaard 1 kolom op mobiel */
-    gap: 2rem; /* Iets minder ruimte */
-    margin-top: 3rem; /* Iets minder marge */
+    gap: 1.8rem; /* Iets minder ruimte */
+    margin-top: 2.5rem; /* Iets minder marge */
     text-align: left; /* Tekst links uitlijnen in benefit kaarten */
 }
 
 .benefit-card {
     background-color: var(--background-color); /* Lichte achtergrond voor benefit kaart */
-    padding: 2rem; /* Iets minder padding */
-    border-radius: 16px;
+    padding: 1.8rem; /* Iets minder padding */
+    border-radius: 14px; /* Iets minder afgerond */
     box-shadow: var(--shadow-light);
     transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
 }
 
 .benefit-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-4px); /* Iets minder beweging */
     box-shadow: var(--shadow-medium);
 }
 
 .benefit-card h3 {
-    font-size: 1.4rem; /* Aangepast: kleinere titel */
+    font-size: 1.3rem; /* Aangepast: nog kleinere titel */
     font-weight: 700;
     color: var(--heading-color);
-    margin-bottom: 0.8rem; /* Iets minder marge */
+    margin-bottom: 0.7rem; /* Iets minder marge */
     display: flex;
     align-items: center;
     justify-content: center; /* Centreer de titel en icon op mobiel */
 }
 
 .benefit-card .icon {
-    font-size: 1.8rem; /* Aangepast: kleiner icoon */
-    margin-right: 0.7rem; /* Iets minder marge */
+    font-size: 1.6rem; /* Aangepast: nog kleiner icoon */
+    margin-right: 0.6rem; /* Iets minder marge */
     color: var(--primary-color);
 }
 
 .benefit-card p {
-    font-size: 1rem; /* Aangepast: kleinere tekst */
+    font-size: 0.95rem; /* Aangepast: nog kleinere tekst */
     color: var(--text-color);
-    line-height: 1.6; /* Iets minder regelafstand */
+    line-height: 1.5; /* Iets minder regelafstand */
 }
 
 .cta-bottom-section {
-    margin-top: 3rem; /* Iets minder ruimte boven de CTA knop */
+    margin-top: 2.5rem; /* Iets minder ruimte boven de CTA knop */
 }
 
 
@@ -284,21 +284,21 @@ section {
 .pricing-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2rem; /* Iets minder ruimte */
+    gap: 1.8rem; /* Iets minder ruimte */
     text-align: center;
 }
 
 .free-trial-pricing {
-    font-size: 1rem; /* Aangepast: kleinere proefperiode tekst */
+    font-size: 0.95rem; /* Aangepast: nog kleinere proefperiode tekst */
     font-weight: 600;
     color: var(--populair-badge-color);
-    margin-bottom: 2rem; /* Iets minder marge */
+    margin-bottom: 1.8rem; /* Iets minder marge */
 }
 
 .pricing-card {
     background-color: var(--card-background);
-    padding: 2.5rem 2rem; /* Iets minder padding */
-    border-radius: 16px;
+    padding: 2.2rem 1.8rem; /* Iets minder padding */
+    border-radius: 14px;
     border: 2px solid var(--border-color);
     display: flex;
     flex-direction: column;
@@ -310,7 +310,7 @@ section {
 
 .pricing-card.popular {
     border-color: var(--primary-color);
-    transform: scale(1.02); /* Iets minder schaal */
+    transform: scale(1.01); /* Iets minder schaal */
     box-shadow: var(--shadow-medium);
 }
 
@@ -320,17 +320,17 @@ section {
 }
 
 .pricing-card h3 {
-    font-size: 1.8rem; /* Aangepast: kleinere titel */
+    font-size: 1.6rem; /* Aangepast: nog kleinere titel */
     font-weight: 800;
     color: var(--heading-color);
-    margin-bottom: 0.4rem; /* Iets minder marge */
+    margin-bottom: 0.3rem; /* Iets minder marge */
 }
 
 .pricing-card .price {
-    font-size: 2.4rem; /* Aangepast: kleinere prijs */
+    font-size: 2.2rem; /* Aangepast: nog kleinere prijs */
     font-weight: 800;
     color: var(--primary-color);
-    margin-bottom: 0.8rem; /* Iets minder marge */
+    margin-bottom: 0.7rem; /* Iets minder marge */
     display: flex;
     align-items: baseline;
     justify-content: center;
@@ -338,32 +338,32 @@ section {
 }
 
 .pricing-card .price span {
-    font-size: 1.1rem; /* Aangepast: kleiner "vanaf" */
+    font-size: 1rem; /* Aangepast: nog kleiner "vanaf" */
     font-weight: 600;
     color: var(--secondary-color);
-    margin-left: 0.4rem; /* Iets minder marge */
+    margin-left: 0.3rem; /* Iets minder marge */
     align-self: flex-end;
 }
 
 .pricing-card .pricing-text {
-    font-size: 1rem; /* Aangepast: kleinere tekst */
-    margin-bottom: 1.8rem; /* Iets minder marge */
+    font-size: 0.95rem; /* Aangepast: nog kleinere tekst */
+    margin-bottom: 1.6rem; /* Iets minder marge */
     color: var(--secondary-color);
 }
 
 .pricing-card ul {
     list-style: none;
     padding: 0;
-    margin-bottom: 2rem; /* Iets minder marge */
+    margin-bottom: 1.8rem; /* Iets minder marge */
     text-align: left;
     flex-grow: 1;
     width: 100%;
 }
 
 .pricing-card li {
-    padding: 0.6rem 0; /* Iets minder padding */
+    padding: 0.5rem 0; /* Iets minder padding */
     border-bottom: 1px solid var(--border-color);
-    font-size: 1rem; /* Aangepast: kleinere tekst */
+    font-size: 0.95rem; /* Aangepast: nog kleinere tekst */
     display: flex;
     align-items: center;
 }
@@ -374,19 +374,19 @@ section {
 
 .check-icon {
     color: var(--populair-badge-color);
-    margin-right: 0.7rem; /* Iets minder marge */
-    font-size: 1.1rem; /* Iets kleiner vinkje */
+    margin-right: 0.6rem; /* Iets minder marge */
+    font-size: 1rem; /* Iets kleiner vinkje */
 }
 
 .popular-badge {
     background-color: var(--populair-badge-color);
     color: #fff;
-    font-size: 0.85rem; /* Iets kleinere badge tekst */
+    font-size: 0.8rem; /* Iets kleinere badge tekst */
     font-weight: 700;
-    padding: 5px 14px; /* Iets minder padding */
-    border-radius: 50px;
+    padding: 4px 12px; /* Iets minder padding */
+    border-radius: 40px;
     position: absolute;
-    top: -18px; /* Iets hoger plaatsen */
+    top: -16px; /* Iets hoger plaatsen */
     left: 50%;
     transform: translateX(-50%);
     box-shadow: var(--shadow-light);
@@ -395,30 +395,30 @@ section {
 /* Contact Sectie Stijlen (met Formulier en CTA) */
 .contact-section {
     background-color: #fff; /* Aangepaste achtergrond voor contact */
-    padding: 80px 0; /* Iets minder padding */
+    padding: 70px 0; /* Iets minder padding */
 }
 
 .cta-block { /* Nieuw CTA blok */
     background-color: var(--primary-color);
     color: #fff;
-    padding: 2.5rem 1.8rem; /* Iets minder padding */
-    border-radius: 16px;
-    max-width: 700px; /* Iets smaller */
-    margin: 0 auto 3rem; /* Iets minder marge onderaan */
+    padding: 2.2rem 1.6rem; /* Iets minder padding */
+    border-radius: 14px;
+    max-width: 650px; /* Iets smaller */
+    margin: 0 auto 2.5rem; /* Iets minder marge onderaan */
     box-shadow: var(--shadow-medium);
     text-align: center;
 }
 
 .cta-block h3 {
-    font-size: 2rem; /* Aangepast: kleinere titel */
+    font-size: 1.8rem; /* Aangepast: nog kleinere titel */
     font-weight: 800;
-    margin-bottom: 0.8rem; /* Iets minder marge */
+    margin-bottom: 0.7rem; /* Iets minder marge */
     line-height: 1.2;
 }
 
 .cta-block p {
-    font-size: 1.1rem; /* Aangepast: kleinere tekst */
-    margin-bottom: 1.8rem; /* Iets minder marge */
+    font-size: 1rem; /* Aangepast: nog kleinere tekst */
+    margin-bottom: 1.6rem; /* Iets minder marge */
     opacity: 0.9;
 }
 
@@ -432,42 +432,42 @@ section {
 .cta-block .btn-primary:hover {
     background-color: rgba(255, 255, 255, 0.9); /* Iets transparanter bij hover */
     color: var(--primary-hover-color);
-    transform: translateY(-2px);
+    transform: translateY(-1px);
     box-shadow: none;
 }
 
 
 .contact-form {
-    max-width: 550px; /* Iets smaller */
+    max-width: 500px; /* Iets smaller */
     margin: 0 auto;
-    padding: 2.2rem; /* Iets minder padding */
+    padding: 2rem; /* Iets minder padding */
     background-color: var(--card-background);
-    border-radius: 16px;
+    border-radius: 14px;
     box-shadow: var(--shadow-medium); /* Prominentere schaduw voor het formulier */
     text-align: left; /* Tekst in formulier links uitlijnen */
 }
 
 .form-group {
-    margin-bottom: 1.2rem; /* Iets minder marge */
+    margin-bottom: 1rem; /* Iets minder marge */
 }
 
 .form-group label {
     display: block;
-    font-size: 0.95rem; /* Iets kleiner label */
+    font-size: 0.9rem; /* Iets kleiner label */
     font-weight: 600;
     color: var(--heading-color);
-    margin-bottom: 0.4rem; /* Iets minder marge */
+    margin-bottom: 0.3rem; /* Iets minder marge */
 }
 
 .form-group input[type="text"],
 .form-group input[type="email"],
 .form-group textarea {
     width: 100%;
-    padding: 10px 12px; /* Iets minder padding */
+    padding: 9px 10px; /* Iets minder padding */
     border: 1px solid var(--border-color);
-    border-radius: 8px; /* Licht afgeronde hoeken voor inputvelden */
+    border-radius: 7px; /* Iets minder afgerond */
     font-family: var(--font-family);
-    font-size: 0.95rem; /* Iets kleiner font */
+    font-size: 0.9rem; /* Iets kleiner font */
     color: var(--text-color);
     transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
@@ -476,20 +476,21 @@ section {
 .form-group input[type="email"]:focus,
 .form-group textarea:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.25); /* Focus ring */
+    box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2); /* Kleinere focus ring */
     outline: none;
 }
 
 .form-group textarea {
     resize: vertical; /* Alleen verticaal resizen toestaan */
-    min-height: 100px; /* Iets kleinere minimale hoogte */
+    min-height: 90px; /* Iets kleinere minimale hoogte */
 }
 
 .contact-form .btn-primary {
     width: auto; /* Zodat de knop niet de volledige breedte inneemt, tenzij op mobiel */
-    padding: 12px 25px; /* Iets minder padding */
+    padding: 10px 22px; /* Iets minder padding */
     display: block; /* Maak het een blok-element om margin auto te laten werken */
     margin: 0 auto; /* Centreer de knop in het formulier */
+    font-size: 0.9rem; /* Iets kleiner font */
 }
 
 
@@ -497,18 +498,18 @@ section {
 .footer {
     background-color: var(--heading-color);
     color: #e9ecef;
-    padding: 40px 0; /* Iets minder padding */
+    padding: 35px 0; /* Iets minder padding */
     text-align: center;
-    font-size: 0.9rem; /* Iets kleiner font */
+    font-size: 0.85rem; /* Iets kleiner font */
 }
 
 .footer-links {
-    margin-bottom: 1.2rem; /* Iets minder marge */
+    margin-bottom: 1rem; /* Iets minder marge */
 }
 
 .footer-links a {
     color: #e9ecef;
-    margin: 0 1rem; /* Iets minder ruimte tussen links */
+    margin: 0 0.8rem; /* Iets minder ruimte tussen links */
     transition: color 0.3s ease-in-out;
 }
 
@@ -517,7 +518,7 @@ section {
 }
 
 .copyright {
-    font-size: 0.8rem; /* Iets kleiner font */
+    font-size: 0.75rem; /* Iets kleiner font */
     opacity: 0.8;
 }
 
@@ -530,82 +531,82 @@ section {
         justify-content: center;
     }
     .hero-section h1 {
-        font-size: 2.4rem; /* Aangepast: kleinere titel op mobiel */
+        font-size: 2.2rem; /* Aangepast: kleinere titel op mobiel */
     }
     .hero-section .subtitle {
-        font-size: 1rem; /* Aangepast: kleinere ondertitel op mobiel */
+        font-size: 0.95rem; /* Aangepast: kleinere ondertitel op mobiel */
     }
     .free-trial-hero {
-        font-size: 0.9rem; /* Aangepast: kleinere tekst op mobiel */
-        margin-bottom: 1.2rem;
+        font-size: 0.85rem; /* Aangepast: kleinere tekst op mobiel */
+        margin-bottom: 1rem;
     }
     .free-trial-pricing {
-        font-size: 0.9rem; /* Aangepast: kleinere tekst op mobiel */
-        margin-bottom: 1.2rem;
+        font-size: 0.85rem; /* Aangepast: kleinere tekst op mobiel */
+        margin-bottom: 1rem;
     }
     .hero-buttons {
         flex-direction: column;
-        gap: 12px; /* Iets minder ruimte */
+        gap: 10px; /* Iets minder ruimte */
     }
     .hero-buttons .btn {
         margin: 0;
-        width: 90%; /* Knoppen nemen meer breedte in */
-        max-width: 280px; /* Iets smaller */
-        padding: 12px 20px; /* Iets minder padding */
-        font-size: 0.95rem; /* Iets kleiner font */
+        width: 95%; /* Knoppen nemen meer breedte in */
+        max-width: 250px; /* Iets smaller */
+        padding: 10px 18px; /* Iets minder padding */
+        font-size: 0.9rem; /* Iets kleiner font */
     }
     .section-title {
-        font-size: 2rem; /* Aangepast: kleinere titel op mobiel */
+        font-size: 1.8rem; /* Aangepast: kleinere titel op mobiel */
     }
     .section-subtitle {
-        font-size: 0.9rem; /* Aangepast: kleinere ondertitel op mobiel */
-        margin-bottom: 2.5rem; /* Iets minder marge */
+        font-size: 0.85rem; /* Aangepast: kleinere ondertitel op mobiel */
+        margin-bottom: 2rem; /* Iets minder marge */
     }
     .benefit-card, .pricing-card, .contact-form {
-        padding: 1.8rem; /* Iets minder padding op mobiel */
+        padding: 1.5rem; /* Iets minder padding op mobiel */
     }
     .pricing-card.popular {
         transform: scale(1.0);
     }
     .contact-form {
-        padding: 1.2rem; /* Nog minder padding op mobiel */
+        padding: 1rem; /* Nog minder padding op mobiel */
     }
     .contact-form .btn-primary {
         width: 100%;
-        padding: 10px 20px; /* Iets minder padding */
-        font-size: 0.9rem; /* Iets kleiner font */
+        padding: 9px 18px; /* Iets minder padding */
+        font-size: 0.85rem; /* Iets kleiner font */
     }
     .cta-block {
-        padding: 1.8rem 1.2rem; /* Iets minder padding op mobiel */
-        margin-bottom: 2rem; /* Iets minder marge */
+        padding: 1.5rem 1rem; /* Iets minder padding op mobiel */
+        margin-bottom: 1.8rem; /* Iets minder marge */
     }
     .cta-block h3 {
-        font-size: 1.6rem; /* Aangepast: kleinere titel op mobiel */
+        font-size: 1.4rem; /* Aangepast: kleinere titel op mobiel */
     }
     .cta-block p {
-        font-size: 0.95rem; /* Aangepast: kleinere tekst op mobiel */
+        font-size: 0.9rem; /* Aangepast: kleinere tekst op mobiel */
     }
 }
 
 @media (min-width: 768px) {
     .section-title {
-        font-size: 3rem; /* Aangepast: kleinere titel op tablet */
+        font-size: 2.5rem; /* Aangepast: kleinere titel op tablet */
     }
 
     .hero-section h1 {
-        font-size: 4rem; /* Aangepast: kleinere hero titel op tablet */
+        font-size: 3.5rem; /* Aangepast: kleinere hero titel op tablet */
     }
 
     .hero-section .subtitle {
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.2rem;
     }
 
     .free-trial-hero {
-        font-size: 1.2rem; /* Aangepast: kleinere tekst op tablet */
+        font-size: 1.1rem; /* Aangepast: kleinere tekst op tablet */
     }
 
     .free-trial-pricing {
-        font-size: 1.1rem; /* Aangepast: kleinere tekst op tablet */
+        font-size: 1rem; /* Aangepast: kleinere tekst op tablet */
     }
 
     .chatbot-benefits-grid {
@@ -640,15 +641,15 @@ section {
     }
 
     .pricing-card.popular {
-        transform: scale(1.05); /* Iets minder schaal op desktop */
+        transform: scale(1.03); /* Iets minder schaal op desktop */
     }
 }
 
 @media (min-width: 1200px) {
     .hero-section h1 {
-        font-size: 4.5rem; /* Aangepast: kleinere hero titel op grotere schermen */
+        font-size: 4rem; /* Aangepast: kleinere hero titel op grotere schermen */
     }
     .section-title {
-        font-size: 3.5rem; /* Aangepast: kleinere titel op grotere schermen */
+        font-size: 3rem; /* Aangepast: kleinere titel op grotere schermen */
     }
 }
