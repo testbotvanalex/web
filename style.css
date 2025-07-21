@@ -169,7 +169,7 @@ section {
 }
 
 .section-title {
-    font-size: 3.2rem; /* Grote, prominente titels */
+    font-size: 3.5rem; /* Grotere, prominente titels */
     font-weight: 800;
     margin-bottom: 1.5rem;
     color: var(--heading-color);
@@ -177,7 +177,7 @@ section {
 }
 
 .section-subtitle {
-    font-size: 1.3rem; /* Grotere ondertitels voor betere leesbaarheid */
+    font-size: 1.4rem; /* Grotere ondertitels voor betere leesbaarheid */
     max-width: 800px;
     margin: 0 auto 5rem; /* Ruime marge onder de ondertitel */
     color: var(--secondary-color);
@@ -186,7 +186,11 @@ section {
 /* Hero Sectie Stijlen */
 .hero-section {
     padding: 120px 0;
-    background: linear-gradient(135deg, #e0f2f7 0%, #ffffff 100%); /* Zachte gradiënt achtergrond */
+    /* Subtiel patroon toegevoegd aan de achtergrond */
+    background: linear-gradient(135deg, #e0f2f7 0%, #ffffff 100%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%239C92AC' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M0 0h30v30H0V0zm30 30h30v30H30V30z'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: cover, 30px 30px; /* Pas de grootte van het patroon aan */
+    background-blend-mode: overlay; /* Meng de gradiënt en het patroon */
     position: relative;
     overflow: hidden;
 }
