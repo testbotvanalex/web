@@ -99,10 +99,10 @@
                 <div class="cta-block">
                     <h3>Begin vandaag nog met jouw ideale chatbot!</h3>
                     <p>Profiteer van een **2-weken gratis proefperiode** en ontdek hoe BotMatic jouw bedrijf kan transformeren.</p>
-                    <a href="#contact" class="btn btn-primary">Связаться с нами</a>
+                    <a href="#contact" class="btn btn-primary">Neem contact op</a>
                 </div>
 
-                <form class="contact-form" action="#" method="POST">
+                <form class="contact-form" id="contactForm" action="#" method="POST">
                     <div class="form-group">
                         <label for="name">Naam:</label>
                         <input type="text" id="name" name="name" required placeholder="Je naam">
@@ -116,6 +116,7 @@
                         <textarea id="message" name="message" rows="6" required placeholder="Vertel ons over jouw chatbot-behoeften..."></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Verzend bericht</button>
+                    <div id="form-messages" style="margin-top: 20px; font-weight: bold;"></div>
                 </form>
 
             </div>
@@ -137,6 +138,46 @@
     <script>
         // JavaScript om het huidige jaar dynamisch in te voegen in de footer
         document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // JavaScript voor het afhandelen van formulierinzendingen
+        document.getElementById('contactForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Voorkom de standaard formulierinzending
+
+            const formMessages = document.getElementById('form-messages');
+            formMessages.textContent = 'Bericht wordt verzonden...';
+            formMessages.style.color = '#0066cc'; // Primaire kleur voor laden
+
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            try {
+                // Dit is een placeholder URL. Je moet deze vervangen door de URL van je eigen backend-script.
+                // Bijvoorbeeld: 'https://jouwserver.com/api/send-telegram-message'
+                const response = await fetch('/submit-form', { 
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    formMessages.textContent = 'Bedankt! Je bericht is succesvol verzonden.';
+                    formMessages.style.color = '#28a745'; // Groen voor succes
+                    this.reset(); // Leeg de formuliervelden
+                } else {
+                    formMessages.textContent = 'Er is een fout opgetreden bij het verzenden van je bericht. Probeer het later opnieuw.';
+                    formMessages.style.color = '#dc3545'; // Rood voor fout
+                }
+            } catch (error) {
+                console.error('Fout bij verzenden formulier:', error);
+                formMessages.textContent = 'Er is een netwerkfout opgetreden. Controleer je internetverbinding.';
+                formMessages.style.color = '#dc3545'; // Rood voor fout
+            }
+        });
     </script>
 
 </body>
