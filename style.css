@@ -1,7 +1,7 @@
 /* Globale Stijlen en Reset */
 :root {
-    --primary-color: #007bff; /* Helder blauw */
-    --primary-hover-color: #0056b3; /* Donkerder blauw bij hover */
+    --primary-color: #0066cc; /* Helderder blauw (aangepast) */
+    --primary-hover-color: #004d99; /* Donkerder blauw bij hover */
     --secondary-color: #6c757d; /* Grijs */
     --secondary-hover-color: #5a6268; /* Donkerder grijs bij hover */
     --background-color: #f8f9fa; /* Lichtgrijze achtergrond */
@@ -195,8 +195,15 @@ section {
 .hero-section .subtitle {
     font-size: 1.5rem; /* Grotere ondertitel */
     max-width: 700px;
-    margin: 0 auto 3.5rem;
+    margin: 0 auto 1.5rem; /* Aangepaste marge voor proefperiode tekst */
     color: var(--text-color);
+}
+
+.free-trial-hero { /* Nieuwe stijl voor proefperiode melding in hero */
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--populair-badge-color); /* Gebruik de groene kleur voor extra opvallendheid */
+    margin-bottom: 2.5rem; /* Ruimte tussen proefperiode tekst en knoppen */
 }
 
 .hero-buttons .btn {
@@ -250,6 +257,13 @@ section {
     grid-template-columns: 1fr;
     gap: 2.5rem; /* Meer ruimte tussen kaarten */
     text-align: center; /* Tekst in kaarten centreren */
+}
+
+.free-trial-pricing { /* Nieuwe stijl voor proefperiode melding in pricing */
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--populair-badge-color);
+    margin-bottom: 2.5rem; /* Ruimte tussen proefperiode tekst en pricing grid */
 }
 
 .pricing-card {
@@ -349,6 +363,45 @@ section {
     box-shadow: var(--shadow-light);
 }
 
+/* Nieuwe Testimonials Sectie Stijlen */
+.testimonials-section {
+    background-color: #fff; /* Witte achtergrond voor deze sectie */
+    padding: 100px 0;
+}
+
+.testimonial-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Standaard 1 kolom op mobiel */
+    gap: 2.5rem; /* Ruimte tussen testimonials */
+    margin-top: 4rem; /* Ruimte onder de sectie-ondertitel */
+}
+
+.testimonial-card {
+    background-color: var(--background-color); /* Lichte achtergrond voor testimonial kaart */
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: var(--shadow-light);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Zorgt ervoor dat quote en auteur goed verdeeld zijn */
+}
+
+.testimonial-card .quote {
+    font-size: 1.15rem;
+    font-style: italic;
+    line-height: 1.8;
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+}
+
+.testimonial-card .author {
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 1rem;
+}
+
+
 /* Contact Sectie */
 .contact-section {
     background-color: var(--background-color);
@@ -405,6 +458,14 @@ section {
     .hero-section .subtitle {
         font-size: 1.1rem;
     }
+    .free-trial-hero {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    .free-trial-pricing {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
     .hero-buttons {
         flex-direction: column;
         gap: 15px;
@@ -421,7 +482,7 @@ section {
         font-size: 1rem;
         margin-bottom: 3rem;
     }
-    .feature-card, .pricing-card {
+    .feature-card, .pricing-card, .testimonial-card { /* Ook testimonial-card aanpassen */
         padding: 2rem;
     }
     .pricing-card.popular {
@@ -438,11 +499,27 @@ section {
         font-size: 5rem;
     }
 
+    .hero-section .subtitle {
+        margin-bottom: 2rem; /* Iets meer marge op grotere schermen */
+    }
+
+    .free-trial-hero {
+        font-size: 1.5rem; /* Groter op grotere schermen */
+    }
+
+    .free-trial-pricing {
+        font-size: 1.2rem; /* Groter op grotere schermen */
+    }
+
     .features-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 
     .pricing-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .testimonial-grid { /* Twee kolommen op tablet */
         grid-template-columns: repeat(2, 1fr);
     }
 
@@ -462,6 +539,10 @@ section {
     }
 
     .pricing-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .testimonial-grid { /* Drie kolommen op desktop */
         grid-template-columns: repeat(3, 1fr);
     }
 
