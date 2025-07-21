@@ -1,177 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Botmatic - Landing Page</title>
-    <style>
-        :root {
-            --primary-color: #007BFF;
-            --secondary-color: #6C757D;
-            --background-color: #F8F9FA;
-            --text-color: #343A40;
-            --border-color: #DEE2E6;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            background-color: var(--background-color);
-            color: var(--text-color);
-        }
-        .container {
-            max-width: 960px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .header {
-            background: #fff;
-            padding: 20px;
-            text-align: center;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .header h1 {
-            margin: 0;
-            color: var(--primary-color);
-        }
-        .header p {
-            margin: 5px 0 0;
-            color: var(--secondary-color);
-        }
-        .navbar {
-            background-color: var(--primary-color);
-            overflow: hidden;
-            border-radius: 5px;
-            margin-top: 10px;
-            text-align: center;
-        }
-        .navbar a {
-            display: inline-block;
-            color: white;
-            text-align: center;
-            padding: 14px 20px;
-            text-decoration: none;
-            transition: background-color 0.3s;
-        }
-        .navbar a:hover {
-            background-color: #0056b3;
-        }
-        .content-section {
-            background: #fff;
-            padding: 40px;
-            margin-top: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .content-section h2 {
-            margin-top: 0;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .feature-item {
-            background: var(--background-color);
-            padding: 20px;
-            border-radius: 5px;
-            border: 1px solid var(--border-color);
-            text-align: center;
-        }
-        .feature-item h3 {
-            color: var(--primary-color);
-        }
-        .cta-button {
-            display: inline-block;
-            background-color: var(--primary-color);
-            color: white;
-            padding: 15px 30px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 1.2em;
-            margin-top: 20px;
-            transition: background-color 0.3s;
-        }
-        .cta-button:hover {
-            background-color: #0056b3;
-        }
-        .footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: 20px;
-            color: var(--secondary-color);
-            border-top: 1px solid var(--border-color);
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BotMatic – Custom AI Chatbots</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f3f4f6;
+      --text: #1f2937;
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    header {
+      text-align: center;
+      padding: 4rem 1rem;
+      background: var(--gradient);
+      color: white;
+      border-radius: var(--radius);
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      color: #e0e7ff;
+    }
+
+    nav {
+      margin-top: 2rem;
+      text-align: center;
+    }
+
+    nav a {
+      display: inline-block;
+      margin: 0 1rem;
+      text-decoration: none;
+      color: var(--primary-dark);
+      font-weight: 600;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    section {
+      background: white;
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-top: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary-dark);
+      border-bottom: 2px solid var(--primary);
+      display: inline-block;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .feature {
+      background: var(--bg);
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      border: 1px solid #e5e7eb;
+    }
+
+    .feature h3 {
+      color: var(--primary-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .cta-button {
+      display: inline-block;
+      margin-top: 1.5rem;
+      background: var(--gradient);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      font-weight: bold;
+      border: none;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: transform 0.2s ease;
+    }
+
+    .cta-button:hover {
+      transform: scale(1.05);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    @media (max-width: 640px) {
+      header h1 {
+        font-size: 2rem;
+      }
+
+      nav a {
+        display: block;
+        margin: 0.5rem 0;
+      }
+    }
+  </style>
 </head>
 <body>
 
-    <div class="container">
+  <div class="container">
 
-        <header class="header">
-            <h1>Botmatic</h1>
-            <p>Ваш персональный помощник на основе ИИ</p>
-        </header>
+    <header>
+      <h1>BotMatic</h1>
+      <p>Smart chatbots for WhatsApp, Telegram, and Instagram</p>
+      <a href="#contact" class="cta-button">Get Your Bot Now</a>
+    </header>
 
-        <nav class="navbar">
-            <a href="#about">О нас</a>
-            <a href="#features">Возможности</a>
-            <a href="#pricing">Тарифы</a>
-            <a href="#contact">Контакты</a>
-        </nav>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact">Contact</a>
+    </nav>
 
-        <main>
-            <section id="about" class="content-section">
-                <h2>О нас</h2>
-                <p>Botmatic — это передовая платформа на базе искусственного интеллекта, предназначенная для автоматизации рутинных задач, повышения производительности и улучшения взаимодействия с клиентами. Мы помогаем бизнесу и частным лицам оптимизировать рабочие процессы и сосредоточиться на самом важном.</p>
-                <a href="#features" class="cta-button">Узнать больше</a>
-            </section>
+    <section id="about">
+      <h2>About</h2>
+      <p>BotMatic helps businesses automate communication using custom AI-powered chatbots. We build bots for WhatsApp, Telegram, Instagram – tailored to your workflow, fast and easy to use.</p>
+    </section>
 
-            <section id="features" class="content-section">
-                <h2>Возможности</h2>
-                <div class="features-grid">
-                    <div class="feature-item">
-                        <h3>Автоматизация</h3>
-                        <p>Настраивайте автоматизированные ответы и рабочие процессы для экономии времени.</p>
-                    </div>
-                    <div class="feature-item">
-                        <h3>Интеграция</h3>
-                        <p>Легко интегрируйтесь с вашими любимыми приложениями и сервисами.</p>
-                    </div>
-                    <div class="feature-item">
-                        <h3>Аналитика</h3>
-                        <p>Получайте ценную информацию с помощью подробной аналитики и отчетов.</p>
-                    </div>
-                    <div class="feature-item">
-                        <h3>Поддержка 24/7</h3>
-                        <p>Наша команда поддержки всегда готова помочь вам.</p>
-                    </div>
-                </div>
-            </section>
+    <section id="features">
+      <h2>Features</h2>
+      <div class="features">
+        <div class="feature">
+          <h3>Automation</h3>
+          <p>Streamline responses and automate lead generation 24/7.</p>
+        </div>
+        <div class="feature">
+          <h3>Easy Integration</h3>
+          <p>Connect with your existing tools like CRM, forms, email, or calendars.</p>
+        </div>
+        <div class="feature">
+          <h3>Analytics</h3>
+          <p>Get clear reports on user engagement, conversion and retention.</p>
+        </div>
+        <div class="feature">
+          <h3>Multi-platform</h3>
+          <p>One bot – multiple platforms. Deploy to WhatsApp, Instagram, or Telegram.</p>
+        </div>
+      </div>
+    </section>
 
-            <section id="pricing" class="content-section">
-                <h2>Тарифы</h2>
-                <p>Мы предлагаем гибкие тарифные планы, подходящие как для индивидуальных пользователей, так и для крупных предприятий.</p>
-                <p>Для получения подробной информации о ценах, пожалуйста, свяжитесь с нами.</p>
-            </section>
+    <section id="pricing">
+      <h2>Pricing</h2>
+      <p>We offer flexible plans starting at €29/month. Custom pricing for agencies and resellers. Contact us to discuss your needs.</p>
+    </section>
 
-            <section id="contact" class="content-section">
-                <h2>Контакты</h2>
-                <p>Есть вопросы? Свяжитесь с нами по электронной почте: info@botmatic.com</p>
-                <p>Или подпишитесь на наши социальные сети, чтобы быть в курсе последних новостей.</p>
-            </section>
-        </main>
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>Have questions? Reach out via email: <a href="mailto:info@botmatic.com">info@botmatic.com</a></p>
+      <p>Or message us on Telegram or WhatsApp to get started instantly.</p>
+    </section>
 
-        <footer class="footer">
-            &copy; 2025 Botmatic. Все права защищены.
-        </footer>
+    <footer>
+      &copy; 2025 BotMatic. All rights reserved.
+    </footer>
 
-    </div>
+  </div>
 
 </body>
 </html>
