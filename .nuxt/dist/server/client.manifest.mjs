@@ -1,1 +1,0 @@
-export { default } from "file:///Users/botmatic/b2b/botmatic-console/node_modules/@nuxt/vite-builder/dist/runtime/client.manifest.mjs"
