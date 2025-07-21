@@ -18,8 +18,9 @@
             <a href="#" class="logo">BotMatic</a>
             <nav class="nav">
                 <a href="#features">Kenmerken</a>
+                <a href="#how-it-works">Hoe het werkt</a>
                 <a href="#pricing">Abonnementen</a>
-                <a href="#faq">FAQ</a> <!-- Nieuwe navigatielink voor FAQ -->
+                <a href="#faq">FAQ</a>
                 <a href="#contact" class="btn btn-primary">Neem contact op</a>
             </nav>
         </div>
@@ -65,7 +66,37 @@
             </div>
         </section>
 
-        <!-- Sectie 3: Pricing - Abonnementen en een oproep voor een offerte -->
+        <!-- Sectie 3: Hoe het werkt -->
+        <section id="how-it-works" class="how-it-works-section">
+            <div class="container">
+                <h2 class="section-title">Ons eenvoudige proces</h2>
+                <p class="section-subtitle">In een paar stappen naar jouw gepersonaliseerde chatbot.</p>
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3>Jouw behoeften in kaart</h3>
+                        <p>We starten met een vrijblijvend gesprek om jouw doelen, wensen en de specifieke taken voor de chatbot te bespreken.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3>Ontwikkeling op maat</h3>
+                        <p>Ons team bouwt de chatbot volledig op maat, inclusief functionaliteiten, integraties en een passende tone of voice.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3>Testen & Finetunen</h3>
+                        <p>Je krijgt toegang tot een testomgeving om de chatbot te ervaren. We finetunen op basis van jouw feedback voor de perfecte werking.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <h3>Lancering & Ondersteuning</h3>
+                        <p>Na goedkeuring lanceren we de chatbot op de gewenste platforms. Wij blijven beschikbaar voor ondersteuning en optimalisatie.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sectie 4: Pricing - Abonnementen en een oproep voor een offerte -->
         <section id="pricing" class="pricing-section">
             <div class="container">
                 <h2 class="section-title">Kies jouw perfecte abonnement.</h2>
@@ -118,7 +149,7 @@
             </div>
         </section>
 
-        <!-- Sectie 4: Veelgestelde Vragen (FAQ) -->
+        <!-- Sectie 5: Veelgestelde Vragen (FAQ) -->
         <section id="faq" class="faq-section">
             <div class="container">
                 <h2 class="section-title">Veelgestelde Vragen</h2>
@@ -144,12 +175,34 @@
             </div>
         </section>
 
-        <!-- Sectie 5: Contact - Directe call-to-action -->
+        <!-- Sectie 6: Contact - Directe call-to-action met formulier -->
         <section id="contact" class="contact-section">
             <div class="container">
                 <h2 class="section-title">Klaar om de volgende stap te zetten?</h2>
                 <p class="section-subtitle">Neem contact met ons op voor een vrijblijvend gesprek over jouw chatbot-behoeften.</p>
-                <a href="mailto:info@botmatic.com" class="btn btn-primary">Stuur ons een bericht</a>
+                
+                <div class="cta-block"> <!-- Новый блок CTA -->
+                    <h3>Begin vandaag nog met jouw ideale chatbot!</h3>
+                    <p>Profiteer van een **2-недельную бесплатную пробную версию** и узнайте, как BotMatic может трансформировать ваш бизнес.</p>
+                    <a href="#contact" class="btn btn-primary">Связаться с нами</a>
+                </div>
+
+                <form class="contact-form" action="#" method="POST">
+                    <div class="form-group">
+                        <label for="name">Naam:</label>
+                        <input type="text" id="name" name="name" required placeholder="Je naam">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-mailadres:</label>
+                        <input type="email" id="email" name="email" required placeholder="je.email@voorbeeld.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Bericht:</label>
+                        <textarea id="message" name="message" rows="6" required placeholder="Vertel ons over jouw chatbot-behoeften..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Verzend bericht</button>
+                </form>
+
             </div>
         </section>
     </main>
