@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://botmatic.be/sitemap.xml
