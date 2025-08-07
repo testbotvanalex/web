@@ -7,492 +7,20 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --color-primary: #4f46e5;
-      --color-primary-dark: #4338ca;
-      --color-accent: #10b981;
-      --color-bg: #f9fafb;
-      --color-text: #374151;
-      --color-muted: #6b7280;
-    }
-    html {
-      box-sizing: border-box;
-      font-size: 100%;
-      scroll-behavior: smooth;
-    }
-    *, *::before, *::after {
-      box-sizing: inherit;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      font-family: 'Inter', sans-serif;
-      line-height: 1.6;
-      color: var(--color-text);
-      background-color: var(--color-bg);
-      overflow-x: hidden; /* Prevent horizontal scroll from animations */
-    }
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-    img {
-      max-width: 100%;
-      display: block;
-    }
-    .container {
-      width: 90%;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    header {
-      background: #fff;
-      border-bottom: 1px solid #e5e7eb;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-    .header-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem 0;
-    }
-    .logo {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--color-primary);
-    }
-    .nav-wrapper {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-    .mobile-nav-toggle {
-        display: none;
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 0.5rem;
-    }
-    .mobile-nav-toggle .icon-bar {
-        display: block;
-        width: 25px;
-        height: 3px;
-        background-color: var(--color-text);
-        margin: 5px 0;
-        transition: all 0.3s;
-    }
-    .mobile-nav-toggle.active .icon-bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-    .mobile-nav-toggle.active .icon-bar:nth-child(2) { opacity: 0; }
-    .mobile-nav-toggle.active .icon-bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
-    nav {
-      display: none;
-      align-items: center;
-    }
-    nav a {
-      margin-left: 1rem;
-      font-weight: 600;
-      color: var(--color-text);
-      transition: color 0.3s;
-    }
-    nav a:hover { color: var(--color-primary); }
-    .lang-select {
-      padding: 0.3rem 0.5rem;
-      border-radius: 6px;
-      border: 1px solid #d1d5db;
-      background: #fff;
-      font-weight: 600;
-      color: var(--color-text);
-    }
-    .hero { padding: 4rem 0; }
-    .hero-inner {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3rem;
-    }
-    .hero-content {
-      max-width: 600px;
-      text-align: center;
-    }
-    .hero h1 {
-      font-size: 2rem;
-      font-weight: 800;
-      margin-bottom: 1rem;
-    }
-    .hero p {
-      font-size: 1.125rem;
-      color: var(--color-muted);
-      margin-bottom: 2rem;
-    }
-    .hero .btn-group {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      align-items: center;
-      justify-content: center;
-    }
-    .hero-image {
-      width: 100%;
-      max-width: 500px;
-    }
-    .hero-image img {
-      width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    }
-    .btn {
-      display: inline-block;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      font-weight: 600;
-      transition: all 0.3s;
-      border: 1px solid transparent;
-    }
-    .btn-primary {
-      background: var(--color-primary);
-      color: #fff;
-    }
-    .btn-primary:hover {
-      background: var(--color-primary-dark);
-      transform: translateY(-2px);
-    }
-    .btn-secondary {
-      background: #fff;
-      border-color: var(--color-primary);
-      color: var(--color-primary);
-    }
-    .btn-secondary:hover {
-      background: var(--color-primary);
-      color: #fff;
-      transform: translateY(-2px);
-    }
-    .for-who, .why-botmatic, .features, .pricing, .contact, .how-it-works, .faq {
-      padding: 4rem 0;
-      text-align: center;
-    }
-    .section-title {
-        font-size: 1.75rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-    }
-    .section-sub {
-        color: var(--color-muted);
-        margin-bottom: 3rem;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    .audience-grid, .why-botmatic .features-grid, .features-grid, .plans {
-      display: grid;
-      gap: 2rem;
-    }
-    .audience-card, .feature-card, .feature-item, .plan {
-      background: #fff;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      text-align: left;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .audience-card {
-        border: none;
-        font-family: inherit;
-        color: inherit;
-        width: 100%;
-    }
-    .audience-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-        cursor: pointer;
-    }
-    .feature-card:hover, .feature-item:hover, .plan:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-    }
-    .feature-card .icon {
-      background-color: #eef2ff;
-      color: var(--color-primary);
-      border-radius: 8px;
-      width: 48px;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1rem;
-    }
-    .feature-card .icon svg {
-        width: 24px;
-        height: 24px;
-    }
-    .feature-item h3, .audience-card h3, .feature-card h3 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-    .feature-item p, .audience-card p, .feature-card p {
-      color: var(--color-muted);
-      font-size: 0.95rem;
-    }
-    
-    /* How it works */
-    .how-it-works { background: #fff; }
-    .steps-container {
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-    }
-    .step {
-        background: var(--color-bg);
-        padding: 2rem;
-        border-radius: 12px;
-        text-align: left;
-        position: relative;
-    }
-    .step-number {
-        position: absolute;
-        top: -20px;
-        left: 2rem;
-        background: var(--color-primary);
-        color: #fff;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.25rem;
-        font-weight: 700;
-        border: 4px solid #fff;
-    }
-    .step h3 { font-size: 1.25rem; margin-top: 1rem; }
-    .step p { color: var(--color-muted); }
-
-    /* FAQ Section */
-    .faq-container {
-        max-width: 800px;
-        margin: 0 auto;
-        text-align: left;
-    }
-    .faq-item {
-        background: #fff;
-        border-radius: 8px;
-        margin-bottom: 1rem;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-    .faq-question {
-        width: 100%;
-        background: none;
-        border: none;
-        padding: 1.5rem;
-        font-size: 1.1rem;
-        font-weight: 600;
-        text-align: left;
-        cursor: pointer;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .faq-question::after {
-        content: '+';
-        font-size: 1.5rem;
-        color: var(--color-primary);
-        transition: transform 0.3s;
-    }
-    .faq-item.active .faq-question::after {
-        transform: rotate(45deg);
-    }
-    .faq-answer {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease-out, padding 0.3s ease-out;
-    }
-    .faq-answer p {
-        padding: 0 1.5rem 1.5rem;
-        color: var(--color-muted);
-    }
-    .faq-item.active .faq-answer {
-        max-height: 200px; /* Adjust as needed */
-    }
-
-    /* Plan Section */
-    .plan {
-      border: 2px solid transparent;
-      position: relative;
-      text-align: center;
-    }
-    .plan.popular { border-color: var(--color-primary); }
-    .plan.popular .badge {
-      position: absolute;
-      top: -15px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--color-primary);
-      color: #fff;
-      padding: 0.3rem 0.75rem;
-      border-radius: 9999px;
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
-    .plan h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .plan .price {
-      font-size: 2.25rem;
-      font-weight: 800;
-      color: var(--color-primary);
-      margin-bottom: 0.5rem;
-    }
-    .plan .price span { font-size: 1rem; color: var(--color-muted); font-weight: 400; }
-    .plan p.sub { font-size: 0.95rem; color: var(--color-muted); margin-bottom: 1.5rem; min-height: 50px; }
-    .plan ul { list-style: none; text-align: left; margin-bottom: 2rem; }
-    .plan ul li {
-      margin: 0.75rem 0;
-      padding-left: 2rem;
-      position: relative;
-      font-size: 0.95rem;
-      color: var(--color-text);
-    }
-    .plan ul li::before {
-      content: '✔';
-      position: absolute;
-      left: 0;
-      top: 0;
-      color: var(--color-accent);
-      font-size: 1.2rem;
-    }
-    .plan .btn { display: block; width: 100%; text-align: center; }
-    
-    /* Contact Section */
-    .contact { background: #fff; border-top: 1px solid #e5e7eb; }
-    .contact-form {
-      max-width: 600px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-    .contact-form label { text-align: left; font-weight: 600; margin-bottom: 0.25rem; display: block; }
-    .contact-form input, .contact-form textarea {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-family: 'Inter', sans-serif;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-    .contact-form input:focus, .contact-form textarea:focus {
-        outline: none;
-        border-color: var(--color-primary);
-        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-    }
-    .contact-form textarea { resize: vertical; min-height: 120px; }
-    .contact-form button { align-self: flex-start; }
-    #form-feedback {
-        padding: 1rem;
-        border-radius: 8px;
-        text-align: center;
-        margin-top: 1.5rem;
-        display: none;
-        background-color: #d1fae5;
-        color: #065f46;
-        font-weight: 600;
-    }
-    footer {
-      background: #374151;
-      padding: 2.5rem 0;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #d1d5db;
-    }
-    footer .footer-links { margin-bottom: 1rem; }
-    footer .footer-links a { margin: 0 0.75rem; color: #d1d5db; font-weight: 500; transition: color 0.3s; }
-    footer .footer-links a:hover { color: #fff; }
-    
-    /* Modal Styles */
-    .modal-overlay {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0, 0, 0, 0.6);
-        display: none; align-items: center; justify-content: center;
-        z-index: 1000; opacity: 0; transition: opacity 0.3s ease;
-    }
-    .modal-overlay.active { display: flex; opacity: 1; }
-    .modal-content {
-        background: #fff; padding: 2rem; border-radius: 12px;
-        width: 90%; max-width: 600px; max-height: 90vh;
-        overflow-y: auto; position: relative;
-        transform: translateY(-20px); transition: transform 0.3s ease;
-    }
-    .modal-overlay.active .modal-content { transform: translateY(0); }
-    .modal-close {
-        position: absolute; top: 1rem; right: 1rem; background: none;
-        border: none; font-size: 2rem; line-height: 1;
-        color: var(--color-muted); cursor: pointer;
-    }
-    #modal-title { font-size: 1.75rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-primary); }
-    #modal-body ul { list-style: none; padding: 0; }
-    #modal-body li { padding-left: 1.5rem; position: relative; margin-bottom: 0.75rem; }
-    #modal-body li::before {
-        content: '✓'; position: absolute; left: 0;
-        color: var(--color-accent); font-weight: 600;
-    }
-
-    /* Scroll Animations */
-    .animate-on-scroll {
-        opacity: 0;
-        transform: translateY(30px);
-        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-    }
-    .animate-on-scroll.visible {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    
-    /* Responsive Design */
-    @media (max-width: 767px) {
-        .mobile-nav-toggle { display: block; z-index: 1001; }
-        nav {
-            position: absolute; top: 100%; left: 0; width: 100%;
-            background: #fff; flex-direction: column; align-items: stretch;
-            border-bottom: 1px solid #e5e7eb; padding: 1rem 0;
-            transform: translateY(-150%);
-            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-        nav.active { display: flex; transform: translateY(0); }
-        nav a { margin: 0; padding: 1rem 10%; text-align: center; border-bottom: 1px solid #f3f4f6; }
-        nav a:last-of-type { border-bottom: none; }
-        .nav-wrapper { gap: 0.5rem; }
-    }
-    @media (min-width: 768px) {
-      nav { display: flex; }
-      .hero .btn-group { flex-direction: row; gap: 1.5rem; }
-      .audience-grid, .why-botmatic .features-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
-      .features-grid { grid-template-columns: repeat(3, 1fr); }
-      .plans { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-      .steps-container { flex-direction: row; align-items: flex-start; }
-    }
-    @media (min-width: 1024px) {
-      .hero-inner { flex-direction: row; text-align: left; gap: 4rem; }
-      .hero-content { text-align: left; }
-      .hero .btn-group { justify-content: flex-start; }
-      .hero h1 { font-size: 3rem; }
-      .section-title { font-size: 2rem; }
-    }
-  </style>
+  <!-- Link naar het externe CSS-bestand -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
     <div class="container header-inner">
-      <div class="logo">BotMatic</div>
+      <a href="index.html" class="logo">BotMatic</a>
       <div class="nav-wrapper">
         <nav id="main-nav">
-          <a href="#for-who" data-i18n="navForWho">Voor wie?</a>
-          <a href="#how-it-works" data-i18n="navHowItWorks">Hoe het werkt</a>
-          <a href="#features" data-i18n="navFeatures">Functies</a>
-          <a href="#pricing" data-i18n="navPricing">Abonnementen</a>
-          <a href="#faq" data-i18n="navFaq">FAQ</a>
-          <a href="#contact" class="btn btn-primary" data-i18n="navContact">Contact</a>
+          <!-- Aangepaste links naar nieuwe pagina's -->
+          <a href="chatbots.html" data-i18n="navServices">Diensten</a>
+          <a href="prijzen.html" data-i18n="navPricing">Abonnementen</a>
+          <a href="contact.html" data-i18n="navFaq">FAQ & Contact</a>
+          <a href="contact.html" class="btn btn-primary" data-i18n="navContact">Contact</a>
         </nav>
         <select id="lang-select" class="lang-select">
           <option value="nl">NL</option>
@@ -513,25 +41,12 @@
           <h1 data-i18n="heroTitle">Jouw chatbot, precies zoals jij het wilt.</h1>
           <p data-i18n="heroSub">Laat BotMatic krachtige, gepersonaliseerde chatbots bouwen voor WhatsApp, Telegram, Instagram en meer. Snel, efficiënt en volledig op maat van jouw bedrijf.</p>
           <div class="btn-group">
-            <a href="#contact" class="btn btn-primary" data-i18n="ctaQuote">Vraag een offerte aan</a>
-            <a href="#features" class="btn btn-secondary" data-i18n="ctaLearn">Meer weten</a>
+            <a href="contact.html" class="btn btn-primary" data-i18n="ctaQuote">Vraag een offerte aan</a>
+            <a href="chatbots.html" class="btn btn-secondary" data-i18n="ctaLearn">Ontdek de functies</a>
           </div>
         </div>
         <div class="hero-image animate-on-scroll">
           <img src="https://placehold.co/600x400/4f46e5/ffffff?text=BotMatic+Chatbot" alt="Illustratie van een chatbot-interface op een smartphone" />
-        </div>
-      </div>
-    </section>
-
-    <section id="for-who" class="for-who">
-      <div class="container animate-on-scroll">
-        <h2 class="section-title" data-i18n="forWhoTitle">Voor wie is BotMatic?</h2>
-        <div class="audience-grid">
-          <button class="audience-card" data-modal-id="auto"><h3 data-i18n="forAutoTitle">Auto‑handelaars</h3><p data-i18n="forAutoText">Automatiseer leads, opvolging en afspraken via WhatsApp of webchat.</p></button>
-          <button class="audience-card" data-modal-id="salon"><h3 data-i18n="forSalonTitle">Schoonheidssalons</h3><p data-i18n="forSalonText">Laat klanten zelf boeken, herinneringen krijgen en vragen stellen via chat.</p></button>
-          <button class="audience-card" data-modal-id="shop"><h3 data-i18n="forShopTitle">Webshops & diensten</h3><p data-i18n="forShopText">Help klanten 24/7 met productinfo, retouren en support — volledig automatisch.</p></button>
-          <button class="audience-card" data-modal-id="immo"><h3 data-i18n="forImmoTitle">Immo-kantoren</h3><p data-i18n="forImmoText">Plan bezichtigingen, beantwoord vragen over panden en volg leads automatisch op.</p></button>
-          <button class="audience-card" data-modal-id="more"><h3 data-i18n="forMoreTitle">En nog veel meer...</h3><p data-i18n="forMoreText">Onze chatbots zijn flexibel en kunnen worden aangepast aan elke sector. Neem contact op voor een oplossing op maat.</p></button>
         </div>
       </div>
     </section>
@@ -588,56 +103,18 @@
       </div>
     </section>
 
-    <section id="features" class="features">
-      <div class="container animate-on-scroll">
-        <h2 class="section-title" data-i18n="featuresTitle">Ontdek de kracht van chatbots</h2>
-        <p class="section-sub" data-i18n="featuresSub">Ontdek hoe een maatwerkchatbot je bedrijf kan boosten.</p>
-        <div class="features-grid">
-          <div class="feature-item"><h3 data-i18n="feat1Title">24/7 Klantenondersteuning</h3><p data-i18n="feat1Desc">Bied direct antwoorden en begeleid klanten op elk moment van de dag, waardoor klanttevredenheid en loyaliteit toenemen.</p></div>
-          <div class="feature-item"><h3 data-i18n="feat2Title">Slimme automatisering</h3><p data-i18n="feat2Desc">Automatiseer repetitieve taken, stroomlijn workflows en geef je team de vrijheid om zich te richten op wat echt belangrijk is.</p></div>
-          <div class="feature-item"><h3 data-i18n="feat3Title">Stimuleer verkoop</h3><p data-i18n="feat3Desc">Verzamel leads, kwalificeer prospects en help klanten bij hun aankoopproces om conversies te verhogen.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="pricing" class="pricing" style="background-color: #fff;">
-      <div class="container animate-on-scroll">
-        <h2 class="section-title" data-i18n="pricingTitle">Kies jouw perfecte plan</h2>
-        <p class="section-sub" data-i18n="pricingSub">Test elk plan gratis gedurende 2 weken. Tevreden? Behoud je plan, upgrade of kies Basis.</p>
-        <div class="plans">
-          <div class="plan"><h3 data-i18n="plan1Title">Basis</h3><p class="price"><span data-i18n="plan1Price">€29</span><span data-i18n="perMonth">/maand</span></p><p class="sub" data-i18n="plan1Desc">Voor kleine bedrijven die net beginnen.</p><ul><li data-i18n="plan1f1">Eén kernfunctie (bijv. FAQ)</li><li data-i18n="plan1f2">Integratie met één platform</li><li data-i18n="plan1f3">Standaardondersteuning</li><li data-i18n="plan1f4">Tot 500 gesprekken per maand</li></ul><a href="#contact" class="btn btn-secondary" data-i18n="plan1Btn">Kies Basis</a></div>
-          <div class="plan popular"><span class="badge" data-i18n="plan2Badge">Meest populair</span><h3 data-i18n="plan2Title">Standaard</h3><p class="price"><span data-i18n="plan2Price">€99</span><span data-i18n="perMonth">/maand</span></p><p class="sub" data-i18n="plan2Desc">Voor groeiende bedrijven die meer automatisering nodig hebben.</p><ul><li data-i18n="plan2f1">Meerdere geautomatiseerde workflows</li><li data-i18n="plan2f2">Integraties met twee platformen</li><li data-i18n="plan2f3">Prioritaire ondersteuning & updates</li><li data-i18n="plan2f4">Tot 2.000 gesprekken per maand</li></ul><a href="#contact" class="btn btn-primary" data-i18n="plan2Btn">Kies Standaard</a></div>
-          <div class="plan"><h3 data-i18n="plan3Title">Premium</h3><p class="price"><span data-i18n="plan3Price">€299</span><span data-i18n="perMonth">/maand</span></p><p class="sub" data-i18n="plan3Desc">Voor grote teams met geavanceerde AI-behoeften.</p><ul><li data-i18n="plan3f1">Geavanceerde AI- en NLP-mogelijkheden</li><li data-i18n="plan3f2">Integraties met meerdere systemen</li><li data-i18n="plan3f3">Toegewijde projectmanager</li><li data-i18n="plan3f4">Onbeperkt aantal gesprekken</li></ul><a href="#contact" class="btn btn-secondary" data-i18n="plan3Btn">Kies Premium</a></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="faq" class="faq">
+    <!-- Nieuwe Call-to-Action sectie -->
+    <section class="cta-section">
         <div class="container animate-on-scroll">
-            <h2 class="section-title" data-i18n="faqTitle">Veelgestelde Vragen</h2>
-            <p class="section-sub" data-i18n="faqSub">Vind hier antwoorden op de meest voorkomende vragen.</p>
-            <div class="faq-container">
-                <div class="faq-item"><button class="faq-question" data-i18n="faq1q"></button><div class="faq-answer"><p data-i18n="faq1a"></p></div></div>
-                <div class="faq-item"><button class="faq-question" data-i18n="faq2q"></button><div class="faq-answer"><p data-i18n="faq2a"></p></div></div>
-                <div class="faq-item"><button class="faq-question" data-i18n="faq3q"></button><div class="faq-answer"><p data-i18n="faq3a"></p></div></div>
-                <div class="faq-item"><button class="faq-question" data-i18n="faq4q"></button><div class="faq-answer"><p data-i18n="faq4a"></p></div></div>
+            <h2 class="section-title" data-i18n="ctaTitle">Ontdek wat BotMatic voor u kan doen</h2>
+            <p class="section-sub" data-i18n="ctaSub">Bekijk onze gedetailleerde functies en vind het perfecte abonnement dat bij uw bedrijf past.</p>
+            <div class="btn-group">
+                <a href="prijzen.html" class="btn btn-primary" data-i18n="ctaPricing">Bekijk abonnementen</a>
+                <a href="chatbots.html" class="btn btn-secondary" data-i18n="ctaServices">Ontdek onze diensten</a>
             </div>
         </div>
     </section>
 
-    <section id="contact" class="contact">
-      <div class="container animate-on-scroll">
-        <h2 class="section-title" data-i18n="contactTitle">Klaar om je klantinteracties naar een hoger niveau te tillen?</h2>
-        <p class="section-sub" data-i18n="contactDesc">Neem contact op om je gratis proefperiode te starten en ontdek hoe BotMatic je bedrijf kan transformeren.</p>
-        <form id="contact-form" class="contact-form">
-          <div><label for="name" data-i18n="nameLabel">Naam</label><input type="text" id="name" name="name" required placeholder="Je naam" data-i18n-placeholder="namePlaceholder" /></div>
-          <div><label for="email" data-i18n="emailLabel">E-mailadres</label><input type="email" id="email" name="email" required placeholder="je.email@voorbeeld.com" data-i18n-placeholder="emailPlaceholder" /></div>
-          <div><label for="message" data-i18n="messageLabel">Bericht</label><textarea id="message" name="message" rows="5" required placeholder="Vertel ons over jouw chatbot-behoeften..." data-i18n-placeholder="messagePlaceholder"></textarea></div>
-          <button type="submit" class="btn btn-primary" data-i18n="submitBtn">Verzend bericht</button>
-        </form>
-        <div id="form-feedback"></div>
-      </div>
-    </section>
   </main>
 
   <footer>
@@ -651,121 +128,47 @@
     </div>
   </footer>
 
-  <div id="info-modal" class="modal-overlay">
-    <div class="modal-content">
-      <button id="modal-close-btn" class="modal-close">&times;</button>
-      <h3 id="modal-title"></h3>
-      <div id="modal-body"></div>
-    </div>
-  </div>
-
   <script>
     const translations = {
       nl: {
-        navForWho: 'Voor wie?', navWhyBotmatic: 'Waarom kiezen?', navFeatures: 'Functies', navPricing: 'Abonnementen', navContact: 'Contact', navHowItWorks: 'Hoe het werkt', navFaq: 'FAQ',
+        navServices: 'Diensten', navPricing: 'Abonnementen', navFaq: 'FAQ & Contact', navContact: 'Contact',
         heroTitle: 'Jouw chatbot, precies zoals jij het wilt.', heroSub: 'Laat BotMatic krachtige, gepersonaliseerde chatbots bouwen voor WhatsApp, Telegram, Instagram en meer. Snel, efficiënt en volledig op maat van jouw bedrijf.',
-        ctaQuote: 'Vraag een offerte aan', ctaLearn: 'Meer weten',
-        forWhoTitle: 'Voor wie is BotMatic?', forAutoTitle: 'Auto‑handelaars', forAutoText: 'Automatiseer leads, opvolging en afspraken via WhatsApp of webchat.', forSalonTitle: 'Schoonheidssalons', forSalonText: 'Laat klanten zelf boeken, herinneringen krijgen en vragen stellen via chat.', forShopTitle: 'Webshops & diensten', forShopText: 'Help klanten 24/7 met productinfo, retouren en support — volledig automatisch.', forImmoTitle: 'Immo-kantoren', forImmoText: 'Plan bezichtigingen, beantwoord vragen over panden en volg leads automatisch op.', forMoreTitle: 'En nog veel meer...', forMoreText: 'Onze chatbots zijn flexibel en kunnen worden aangepast aan elke sector. Neem contact op voor een oplossing op maat.',
+        ctaQuote: 'Vraag een offerte aan', ctaLearn: 'Ontdek de functies',
         whyBotmaticTitle: 'Waarom kiezen voor BotMatic?', fastLaunchTitle: 'Snel live', fastLaunchText: 'Binnen 48u klaar voor gebruik — zonder technisch gedoe.', customTitle: '100% op maat', customText: 'Wij bouwen je chatbot volledig rond jouw bedrijf & processen.', multiPlatformTitle: 'Werkt overal', multiPlatformText: 'WhatsApp, Telegram, Instagram, website — jij kiest de kanalen.', aiTitle: 'AI inside', aiText: 'Slimme chatflows met GPT & taalherkenning voor echte impact.',
         howItWorksTitle: 'Hoe het werkt', howItWorksSub: 'In drie eenvoudige stappen naar een krachtige chatbot voor jouw bedrijf.',
         step1Title: 'Analyse & Strategie', step1Desc: 'We starten met een gesprek om jouw doelen, processen en klanten te begrijpen. Samen bepalen we de perfecte strategie voor je chatbot.',
         step2Title: 'Ontwikkeling & Testen', step2Desc: 'Ons team bouwt de chatbot op maat. We testen alle conversaties en integraties grondig om een vlekkeloze werking te garanderen.',
         step3Title: 'Lancering & Optimalisatie', step3Desc: 'Je chatbot gaat live! We monitoren de prestaties en blijven de chatbot optimaliseren op basis van echte gebruikersdata voor maximaal resultaat.',
-        featuresTitle: 'Ontdek de kracht van chatbots', featuresSub: 'Ontdek hoe een maatwerkchatbot je bedrijf kan boosten.',
-        feat1Title: '24/7 Klantenondersteuning', feat1Desc: 'Bied direct antwoorden en begeleid klanten op elk moment van de dag, waardoor klanttevredenheid en loyaliteit toenemen.', feat2Title: 'Slimme automatisering', feat2Desc: 'Automatiseer repetitieve taken, stroomlijn workflows en geef je team de vrijheid om zich te richten op wat echt belangrijk is.', feat3Title: 'Stimuleer verkoop', feat3Desc: 'Verzamel leads, kwalificeer prospects en help klanten bij hun aankoopproces om conversies te verhogen.',
-        pricingTitle: 'Kies jouw perfecte plan', pricingSub: 'Test elk plan gratis gedurende 2 weken. Tevreden? Behoud je plan, upgrade of kies Basis.',
-        plan1Title: 'Basis', plan1Price: '€29', plan1Desc: 'Voor kleine bedrijven die net beginnen.', plan1f1: 'Eén kernfunctie (bijv. FAQ)', plan1f2: 'Integratie met één platform', plan1f3: 'Standaardondersteuning', plan1f4: 'Tot 500 gesprekken per maand', plan1Btn: 'Kies Basis',
-        plan2Badge: 'Meest populair', plan2Title: 'Standaard', plan2Price: '€99', plan2Desc: 'Voor groeiende bedrijven die meer automatisering nodig hebben.', plan2f1: 'Meerdere geautomatiseerde workflows', plan2f2: 'Integraties met twee platformen', plan2f3: 'Prioritaire ondersteuning & updates', plan2f4: 'Tot 2.000 gesprekken per maand', plan2Btn: 'Kies Standaard',
-        plan3Title: 'Premium', plan3Price: '€299', plan3Desc: 'Voor grote teams met geavanceerde AI-behoeften.', plan3f1: 'Geavanceerde AI- en NLP-mogelijkheden', plan3f2: 'Integraties met meerdere systemen', plan3f3: 'Toegewijde projectmanager', plan3f4: 'Onbeperkt aantal gesprekken', plan3Btn: 'Kies Premium',
-        perMonth: '/maand',
-        faqTitle: 'Veelgestelde Vragen', faqSub: 'Vind hier antwoorden op de meest voorkomende vragen.',
-        faq1q: 'Hoe lang duurt het om een chatbot te bouwen?', faq1a: 'Een basischatbot kan al binnen 48 uur live zijn. Voor complexere chatbots met geavanceerde integraties hangt de doorlooptijd af van de specifieke vereisten, maar we streven altijd naar een snelle en efficiënte lancering.',
-        faq2q: 'Kan de chatbot gekoppeld worden met mijn systemen?', faq2a: 'Absoluut. We kunnen onze chatbots integreren met een breed scala aan systemen, zoals uw CRM, agenda, e-commerceplatform en meer. Dit zorgt voor een naadloze workflow en data-uitwisseling.',
-        faq3q: 'Wat gebeurt er na de lancering?', faq3a: 'Onze service stopt niet na de lancering. We bieden doorlopende ondersteuning en optimalisatie om ervoor te zorgen dat uw chatbot effectief blijft presteren en meegroeit met uw bedrijf.',
-        faq4q: 'Is de chatbot meertalig?', faq4a: 'Jazeker. We kunnen chatbots bouwen die meerdere talen ondersteunen, zodat u een breder, internationaal publiek kunt bereiken en bedienen.',
-        contactTitle: 'Klaar om je klantinteracties naar een hoger niveau te tillen?', contactDesc: 'Neem contact op om je gratis proefperiode te starten en ontdek hoe BotMatic je bedrijf kan transformeren.',
-        nameLabel: 'Naam', emailLabel: 'E-mailadres', messageLabel: 'Bericht', namePlaceholder: 'Je naam', emailPlaceholder: 'je.email@voorbeeld.com', messagePlaceholder: 'Vertel ons over jouw chatbot-behoeften...', submitBtn: 'Verzend bericht',
-        formAlert: 'Bedankt! We nemen snel contact met je op.',
+        ctaTitle: 'Ontdek wat BotMatic voor u kan doen', ctaSub: 'Bekijk onze gedetailleerde functies en vind het perfecte abonnement dat bij uw bedrijf past.',
+        ctaPricing: 'Bekijk abonnementen', ctaServices: 'Ontdek onze diensten',
         footerLink1: 'Over ons', footerLink2: 'Privacybeleid', footerLink3: 'Algemene voorwaarden', footerCopyright: 'Alle rechten voorbehouden.'
       },
       fr: {
-        navForWho: 'Pour qui ?', navWhyBotmatic: 'Pourquoi choisir ?', navFeatures: 'Fonctionnalités', navPricing: 'Tarifs', navContact: 'Contact', navHowItWorks: 'Comment ça marche', navFaq: 'FAQ',
+        navServices: 'Services', navPricing: 'Tarifs', navFaq: 'FAQ & Contact', navContact: 'Contact',
         heroTitle: 'Votre chatbot, conçu exactement comme vous le souhaitez.', heroSub: 'Laissez BotMatic créer des chatbots puissants et personnalisés pour WhatsApp, Telegram, Instagram et plus encore. Rapide, efficace et entièrement adapté à votre entreprise.',
-        ctaQuote: 'Demander un devis', ctaLearn: 'En savoir plus',
-        forWhoTitle: 'Pour qui est BotMatic ?', forAutoTitle: 'Concessionnaires automobiles', forAutoText: 'Automatisez les leads, le suivi et les rendez-vous via WhatsApp ou webchat.', forSalonTitle: 'Instituts de beauté', forSalonText: 'Permettez aux clients de réserver eux-mêmes, de recevoir des rappels et de poser des questions via chat.', forShopTitle: 'Boutiques en ligne & services', forShopText: 'Aidez les clients 24/7 avec des infos produit, des retours et du support — entièrement automatique.', forImmoTitle: 'Agences immobilières', forImmoText: 'Planifiez des visites, répondez aux questions sur les biens et suivez les prospects automatiquement.', forMoreTitle: 'Et bien plus encore...', forMoreText: 'Nos chatbots sont flexibles et peuvent être adaptés à n\'importe quel secteur. Contactez-nous pour une solution sur mesure.',
+        ctaQuote: 'Demander un devis', ctaLearn: 'Découvrir les fonctionnalités',
         whyBotmaticTitle: 'Pourquoi choisir BotMatic ?', fastLaunchTitle: 'Lancement rapide', fastLaunchText: 'Prêt à l\'emploi en 48 h — sans tracas technique.', customTitle: '100 % sur mesure', customText: 'Nous construisons votre chatbot entièrement autour de votre entreprise et de vos processus.', multiPlatformTitle: 'Fonctionne partout', multiPlatformText: 'WhatsApp, Telegram, Instagram, site Web — à vous de choisir les canaux.', aiTitle: 'IA intégrée', aiText: 'Des workflows intelligents avec GPT et reconnaissance linguistique pour un impact réel.',
         howItWorksTitle: 'Comment ça marche', howItWorksSub: 'En trois étapes simples vers un chatbot puissant pour votre entreprise.',
         step1Title: 'Analyse & Stratégie', step1Desc: 'Nous commençons par une discussion pour comprendre vos objectifs, processus et clients. Ensemble, nous définissons la stratégie parfaite pour votre chatbot.',
         step2Title: 'Développement & Tests', step2Desc: 'Notre équipe construit le chatbot sur mesure. Nous testons toutes les conversations et intégrations pour garantir un fonctionnement sans faille.',
         step3Title: 'Lancement & Optimisation', step3Desc: 'Votre chatbot est en ligne ! Nous surveillons les performances et continuons à l\'optimiser en fonction des données réelles des utilisateurs pour un résultat maximal.',
-        featuresTitle: 'Déverrouillez la puissance des chatbots', featuresSub: 'Découvrez comment un chatbot sur mesure peut booster votre entreprise.',
-        feat1Title: 'Support client 24/7', feat1Desc: 'Fournissez des réponses instantanées et guidez les clients à tout moment de la journée, améliorant la satisfaction et la fidélité.', feat2Title: 'Automatisation intelligente', feat2Desc: 'Automatisez les tâches répétitives, rationalisez les workflows et permettez à votre équipe de se concentrer sur l’essentiel.', feat3Title: 'Augmenter les ventes', feat3Desc: 'Générez des leads, qualifiez les prospects et assistez les clients dans leur parcours d’achat pour augmenter les conversions.',
-        pricingTitle: 'Choisissez votre plan parfait', pricingSub: 'Testez chaque offre gratuitement pendant 2 semaines. Satisfait ? Conservez votre plan, surclassez ou choisissez Basique.',
-        plan1Title: 'Basique', plan1Price: '€29', plan1Desc: 'Pour les petites entreprises qui débutent.', plan1f1: 'Une fonctionnalité principale (par ex. FAQ)', plan1f2: 'Intégration avec une seule plateforme', plan1f3: 'Support standard', plan1f4: 'Jusqu’à 500 conversations par mois', plan1Btn: 'Choisir Basique',
-        plan2Badge: 'Le plus populaire', plan2Title: 'Standard', plan2Price: '€99', plan2Desc: 'Pour les entreprises en croissance ayant besoin de plus d’automatisation.', plan2f1: 'Plusieurs workflows automatisés', plan2f2: 'Intégrations avec deux plateformes', plan2f3: 'Support prioritaire et mises à jour', plan2f4: 'Jusqu’à 2 000 conversations par mois', plan2Btn: 'Choisir Standard',
-        plan3Title: 'Premium', plan3Price: '€299', plan3Desc: 'Pour les grandes équipes avec des besoins avancés en IA.', plan3f1: 'Capacités avancées en IA et NLP', plan3f2: 'Intégrations avec plusieurs systèmes', plan3f3: 'Chef de projet dédié', plan3f4: 'Conversations illimitées', plan3Btn: 'Choisir Premium',
-        perMonth: '/mois',
-        faqTitle: 'Questions Fréquemment Posées', faqSub: 'Trouvez ici les réponses aux questions les plus courantes.',
-        faq1q: 'Combien de temps faut-il pour construire un chatbot ?', faq1a: 'Un chatbot de base peut être mis en ligne en 48 heures. Pour les chatbots plus complexes avec des intégrations avancées, le délai dépend des exigences spécifiques, mais nous visons toujours un lancement rapide et efficace.',
-        faq2q: 'Le chatbot peut-il être connecté à mes systèmes ?', faq2a: 'Absolument. Nous pouvons intégrer nos chatbots à une large gamme de systèmes, tels que votre CRM, votre calendrier, votre plateforme de commerce électronique, etc. Cela garantit un flux de travail et un échange de données fluides.',
-        faq3q: 'Que se passe-t-il après le lancement ?', faq3a: 'Notre service ne s\'arrête pas après le lancement. Nous offrons un soutien et une optimisation continus pour garantir que votre chatbot reste performant et évolue avec votre entreprise.',
-        faq4q: 'Le chatbot est-il multilingue ?', faq4a: 'Oui, bien sûr. Nous pouvons créer des chatbots qui prennent en charge plusieurs langues, vous permettant d\'atteindre et de servir un public plus large et international.',
-        contactTitle: 'Prêt à améliorer vos interactions avec vos clients ?', contactDesc: 'Contactez-nous pour commencer votre essai gratuit et découvrez comment BotMatic peut transformer votre entreprise.',
-        nameLabel: 'Nom', emailLabel: 'E-mail', messageLabel: 'Message', namePlaceholder: 'Votre nom', emailPlaceholder: 'votre.email@exemple.com', messagePlaceholder: 'Parlez-nous de vos besoins en chatbot...', submitBtn: 'Envoyer le message',
-        formAlert: 'Merci ! Nous vous recontacterons bientôt.',
+        ctaTitle: 'Découvrez ce que BotMatic peut faire pour vous', ctaSub: 'Consultez nos fonctionnalités détaillées et trouvez l\'abonnement parfait pour votre entreprise.',
+        ctaPricing: 'Voir les tarifs', ctaServices: 'Découvrir nos services',
         footerLink1: 'À propos de nous', footerLink2: 'Politique de confidentialité', footerLink3: 'Conditions générales', footerCopyright: 'Tous droits réservés.'
       },
       en: {
-        navForWho: 'Who is it for?', navWhyBotmatic: 'Why choose?', navFeatures: 'Features', navPricing: 'Pricing', navContact: 'Contact', navHowItWorks: 'How It Works', navFaq: 'FAQ',
+        navServices: 'Services', navPricing: 'Pricing', navFaq: 'FAQ & Contact', navContact: 'Contact',
         heroTitle: 'Your custom chatbot, built just the way you need it.', heroSub: 'Let BotMatic craft powerful, personalized chatbots for WhatsApp, Telegram, Instagram and more. Fast, efficient, fully tailored to your business.',
-        ctaQuote: 'Request a Quote', ctaLearn: 'Learn More',
-        forWhoTitle: 'Who is BotMatic for?', forAutoTitle: 'Car dealers', forAutoText: 'Automate leads, follow-ups and appointments via WhatsApp or web chat.', forSalonTitle: 'Beauty salons', forSalonText: 'Let clients book themselves, receive reminders and ask questions via chat.', forShopTitle: 'Webshops & services', forShopText: 'Help customers 24/7 with product info, returns and support — fully automated.', forImmoTitle: 'Real Estate Agencies', forImmoText: 'Schedule viewings, answer property questions, and automatically follow up on leads.', forMoreTitle: 'And many more...', forMoreText: 'Our chatbots are flexible and can be adapted to any industry. Contact us for a custom solution.',
+        ctaQuote: 'Request a Quote', ctaLearn: 'Discover Features',
         whyBotmaticTitle: 'Why choose BotMatic?', fastLaunchTitle: 'Fast launch', fastLaunchText: 'Ready to use in 48h — no technical hassle.', customTitle: '100% customized', customText: 'We build your chatbot entirely around your company & processes.', multiPlatformTitle: 'Works everywhere', multiPlatformText: 'WhatsApp, Telegram, Instagram, website — you choose the channels.', aiTitle: 'AI inside', aiText: 'Smart chat flows with GPT & language recognition for real impact.',
         howItWorksTitle: 'How It Works', howItWorksSub: 'A powerful chatbot for your business in three simple steps.',
         step1Title: 'Analysis & Strategy', step1Desc: 'We start with a conversation to understand your goals, processes, and customers. Together, we define the perfect strategy for your chatbot.',
         step2Title: 'Development & Testing', step2Desc: 'Our team builds the custom chatbot. We thoroughly test all conversations and integrations to ensure flawless operation.',
         step3Title: 'Launch & Optimization', step3Desc: 'Your chatbot goes live! We monitor its performance and continue to optimize it based on real user data for maximum results.',
-        featuresTitle: 'Unlock the Power of Chatbots', featuresSub: 'Discover how a tailored chatbot can boost your business.',
-        feat1Title: '24/7 Customer Support', feat1Desc: 'Provide instant answers and guide customers any time of day, enhancing satisfaction and loyalty.', feat2Title: 'Smart Automation', feat2Desc: 'Automate repetitive tasks, streamline workflows, and empower your team to focus on what matters most.', feat3Title: 'Drive Sales', feat3Desc: 'Capture leads, qualify prospects, and assist customers in their buying journey to boost conversions.',
-        pricingTitle: 'Choose Your Perfect Plan', pricingSub: 'Test any plan free for 2 weeks. Love it? Keep your plan, upgrade or choose Basic.',
-        plan1Title: 'Basic', plan1Price: '€29', plan1Desc: 'For small businesses just starting out.', plan1f1: 'One core feature (e.g., FAQ)', plan1f2: 'Integration with a single platform', plan1f3: 'Standard support', plan1f4: 'Up to 500 conversations per month', plan1Btn: 'Choose Basic',
-        plan2Badge: 'Most Popular', plan2Title: 'Standard', plan2Price: '€99', plan2Desc: 'For growing businesses needing more automation.', plan2f1: 'Multiple automated workflows', plan2f2: 'Integrations with two platforms', plan2f3: 'Priority support & updates', plan2f4: 'Up to 2,000 conversations per month', plan2Btn: 'Choose Standard',
-        plan3Title: 'Premium', plan3Price: '€299', plan3Desc: 'For large teams with advanced AI needs.', plan3f1: 'Advanced AI & NLP capabilities', plan3f2: 'Integrations with multiple systems', plan3f3: 'Dedicated project manager', plan3f4: 'Unlimited conversations', plan3Btn: 'Choose Premium',
-        perMonth: '/month',
-        faqTitle: 'Frequently Asked Questions', faqSub: 'Find answers to the most common questions here.',
-        faq1q: 'How long does it take to build a chatbot?', faq1a: 'A basic chatbot can be live within 48 hours. For more complex chatbots with advanced integrations, the lead time depends on the specific requirements, but we always aim for a quick and efficient launch.',
-        faq2q: 'Can the chatbot be connected to my systems?', faq2a: 'Absolutely. We can integrate our chatbots with a wide range of systems, such as your CRM, calendar, e-commerce platform, and more. This ensures a seamless workflow and data exchange.',
-        faq3q: 'What happens after the launch?', faq3a: 'Our service doesn\'t stop after launch. We provide ongoing support and optimization to ensure your chatbot continues to perform effectively and grows with your business.',
-        faq4q: 'Is the chatbot multilingual?', faq4a: 'Yes, indeed. We can build chatbots that support multiple languages, allowing you to reach and serve a broader, international audience.',
-        contactTitle: 'Ready to elevate your customer interactions?', contactDesc: 'Get in touch to start your free trial and discover how BotMatic can transform your business.',
-        nameLabel: 'Name', emailLabel: 'Email', messageLabel: 'Message', namePlaceholder: 'Your Name', emailPlaceholder: 'your.email@example.com', messagePlaceholder: 'Tell us about your chatbot needs...', submitBtn: 'Send Message',
-        formAlert: 'Thank you! We will get back to you soon.',
+        ctaTitle: 'Discover what BotMatic can do for you', ctaSub: 'View our detailed features and find the perfect plan that fits your business.',
+        ctaPricing: 'View Pricing', ctaServices: 'Discover our Services',
         footerLink1: 'About Us', footerLink2: 'Privacy Policy', footerLink3: 'Terms & Conditions', footerCopyright: 'All rights reserved.'
       }
-    };
-    
-    const modalContent = {
-        nl: {
-            auto: { title: 'Chatbots voor Autohandelaars', body: `<p>Verhoog uw verkopen en efficiëntie. Een BotMatic chatbot kan u helpen met:</p><ul><li>Direct leads kwalificeren van uw website of sociale media.</li><li>Automatisch proefritten en onderhoudsafspraken inplannen.</li><li>24/7 vragen beantwoorden over modellen, prijzen en beschikbaarheid.</li><li>Opvolgherinneringen sturen naar potentiële klanten.</li></ul>` },
-            salon: { title: 'Chatbots voor Schoonheidssalons', body: `<p>Geef klanten de controle en bespaar zelf tijd. Uw chatbot kan:</p><ul><li>Klanten zelf afspraken laten boeken, wijzigen of annuleren.</li><li>Automatische herinneringen sturen om no-shows te verminderen.</li><li>Vragen over behandelingen, prijzen en producten direct beantwoorden.</li><li>Klanten informeren over promoties en nieuwe diensten.</li></ul>` },
-            shop: { title: 'Chatbots voor Webshops & Diensten', body: `<p>Bied een naadloze klantervaring en verhoog uw conversie. Uw chatbot kan:</p><ul><li>Klanten helpen het juiste product te vinden met gerichte vragen.</li><li>Veelgestelde vragen over bestellingen, verzending en retouren afhandelen.</li><li>Proactief hulp aanbieden aan bezoekers op uw website.</li><li>Feedback verzamelen om uw aanbod te verbeteren.</li></ul>` },
-            immo: { title: 'Chatbots voor Immo-kantoren', body: `<p>Mis nooit meer een lead en geef sneller service. Een chatbot voor vastgoed kan:</p><ul><li>Automatisch bezichtigingen inplannen op basis van uw agenda.</li><li>Direct vragen beantwoorden over de specificaties van een pand.</li><li>Leads kwalificeren door te vragen naar budget, locatie en wensen.</li><li>Geïnteresseerden op de hoogte houden van nieuw aanbod.</li></ul>` },
-            more: { title: 'Een Oplossing voor Elke Sector', body: `<p>Staat uw sector er niet bij? Geen probleem. De kracht van BotMatic is maatwerk. We hebben ervaring met het bouwen van chatbots voor o.a.:</p><ul><li>Restaurants (reservaties, menu's)</li><li>Fitnesscentra (abonnementen, lesroosters)</li><li>Educatieve instellingen (inschrijvingen, info)</li><li>En nog veel meer. We analyseren uw processen en bouwen een chatbot die perfect bij uw bedrijf past.</li></ul>` }
-        },
-        fr: {
-            auto: { title: 'Chatbots pour Concessionnaires Auto', body: `<p>Augmentez vos ventes et votre efficacité. Un chatbot BotMatic peut vous aider à :</p><ul><li>Qualifier instantanément les leads de votre site web ou des réseaux sociaux.</li><li>Planifier automatiquement les essais et les rendez-vous d'entretien.</li><li>Répondre 24/7 aux questions sur les modèles, les prix et la disponibilité.</li><li>Envoyer des rappels de suivi aux clients potentiels.</li></ul>` },
-            salon: { title: 'Chatbots pour Instituts de Beauté', body: `<p>Donnez le contrôle à vos clients et gagnez du temps. Votre chatbot peut :</p><ul><li>Permettre aux clients de prendre, modifier ou annuler des rendez-vous eux-mêmes.</li><li>Envoyer des rappels automatiques pour réduire les absences.</li><li>Répondre instantanément aux questions sur les soins, les prix et les produits.</li><li>Informer les clients des promotions et des nouveaux services.</li></ul>` },
-            shop: { title: 'Chatbots pour E-commerces & Services', body: `<p>Offrez une expérience client fluide et augmentez votre conversion. Votre chatbot peut :</p><ul><li>Aider les clients à trouver le bon produit avec des questions ciblées.</li><li>Gérer les questions fréquentes sur les commandes, la livraison et les retours.</li><li>Offrir une aide proactive aux visiteurs de votre site web.</li><li>Recueillir des commentaires pour améliorer votre offre.</li></ul>` },
-            immo: { title: 'Chatbots pour Agences Immobilières', body: `<p>Ne manquez plus jamais un lead et offrez un service plus rapide. Un chatbot immobilier peut :</p><ul><li>Planifier automatiquement les visites en fonction de votre agenda.</li><li>Répondre instantanément aux questions sur les spécifications d'un bien.</li><li>Qualifier les leads en posant des questions sur le budget, l'emplacement et les souhaits.</li><li>Tenir les personnes intéressées informées des nouvelles offres.</li></ul>` },
-            more: { title: 'Une Solution pour Chaque Secteur', body: `<p>Votre secteur n'est pas listé ? Pas de problème. La force de BotMatic est le sur-mesure. Nous avons de l'expérience dans la création de chatbots pour, entre autres :</p><ul><li>Restaurants (réservations, menus)</li><li>Salles de sport (abonnements, horaires)</li><li>Établissements d'enseignement (inscriptions, informations)</li><li>Et bien plus encore. Nous analysons vos processus et construisons un chatbot parfaitement adapté à votre entreprise.</li></ul>` }
-        },
-        en: {
-            auto: { title: 'Chatbots for Car Dealers', body: `<p>Increase your sales and efficiency. A BotMatic chatbot can help you with:</p><ul><li>Instantly qualifying leads from your website or social media.</li><li>Automatically scheduling test drives and maintenance appointments.</li><li>Answering questions 24/7 about models, prices, and availability.</li><li>Sending follow-up reminders to potential customers.</li></ul>` },
-            salon: { title: 'Chatbots for Beauty Salons', body: `<p>Give clients control and save your own time. Your chatbot can:</p><ul><li>Allow clients to book, change, or cancel appointments themselves.</li><li>Send automatic reminders to reduce no-shows.</li><li>Instantly answer questions about treatments, prices, and products.</li><li>Inform clients about promotions and new services.</li></ul>` },
-            shop: { title: 'Chatbots for Webshops & Services', body: `<p>Offer a seamless customer experience and increase your conversion. Your chatbot can:</p><ul><li>Help customers find the right product with targeted questions.</li><li>Handle frequently asked questions about orders, shipping, and returns.</li><li>Proactively offer help to visitors on your website.</li><li>Collect feedback to improve your offerings.</li></ul>` },
-            immo: { title: 'Chatbots for Real Estate Agencies', body: `<p>Never miss a lead again and provide faster service. A real estate chatbot can:</p><ul><li>Automatically schedule viewings based on your calendar.</li><li>Instantly answer questions about property specifications.</li><li>Qualify leads by asking about budget, location, and preferences.</li><li>Keep interested parties informed about new listings.</li></ul>` },
-            more: { title: 'A Solution for Every Industry', body: `<p>Is your industry not listed? No problem. The power of BotMatic is customization. We have experience building chatbots for, among others:</p><ul><li>Restaurants (reservations, menus)</li><li>Fitness centers (memberships, class schedules)</li><li>Educational institutions (registrations, info)</li><li>And much more. We analyze your processes and build a chatbot that perfectly fits your business.</li></ul>` }
-        }
     };
 
     let currentLang = 'nl';
@@ -778,26 +181,13 @@
         const key = el.getAttribute('data-i18n');
         if (translations[lang] && translations[lang][key]) { el.textContent = translations[lang][key]; }
       });
-      const placeholderElems = document.querySelectorAll('[data-i18n-placeholder]');
-      placeholderElems.forEach(el => {
-        const key = el.getAttribute('data-i18n-placeholder');
-        if (translations[lang] && translations[lang][key]) { el.placeholder = translations[lang][key]; }
-      });
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       const langSelect = document.getElementById('lang-select');
       const yearSpan = document.getElementById('year');
-      const contactForm = document.getElementById('contact-form');
-      const formFeedback = document.getElementById('form-feedback');
       const mobileNavToggle = document.getElementById('mobile-nav-toggle');
       const mainNav = document.getElementById('main-nav');
-      const modalOverlay = document.getElementById('info-modal');
-      const modalTitle = document.getElementById('modal-title');
-      const modalBody = document.getElementById('modal-body');
-      const modalCloseBtn = document.getElementById('modal-close-btn');
-      const audienceCards = document.querySelectorAll('.audience-card');
-      const faqItems = document.querySelectorAll('.faq-item');
       const animatedEls = document.querySelectorAll('.animate-on-scroll');
 
       setLanguage(langSelect.value);
@@ -812,41 +202,6 @@
               mainNav.classList.remove('active');
               mobileNavToggle.classList.remove('active');
           }
-      });
-      contactForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        formFeedback.textContent = translations[currentLang].formAlert;
-        formFeedback.style.display = 'block';
-        setTimeout(() => {
-            contactForm.reset();
-            formFeedback.style.display = 'none';
-        }, 4000); 
-      });
-
-      function openModal(modalId) {
-          const content = modalContent[currentLang][modalId];
-          if (content) {
-              modalTitle.textContent = content.title;
-              modalBody.innerHTML = content.body;
-              modalOverlay.classList.add('active');
-          }
-      }
-      function closeModal() { modalOverlay.classList.remove('active'); }
-      audienceCards.forEach(card => {
-          card.addEventListener('click', () => { openModal(card.dataset.modalId); });
-      });
-      modalCloseBtn.addEventListener('click', closeModal);
-      modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) { closeModal(); } });
-
-      faqItems.forEach(item => {
-          const question = item.querySelector('.faq-question');
-          question.addEventListener('click', () => {
-              const wasActive = item.classList.contains('active');
-              faqItems.forEach(i => i.classList.remove('active'));
-              if (!wasActive) {
-                  item.classList.add('active');
-              }
-          });
       });
 
       const observer = new IntersectionObserver((entries) => {
