@@ -1,475 +1,697 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BotMatic | Custom Chatbots for Your Business</title>
-    <!-- Import Inter font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-    <style>
-      /* Root variables for easy theming */
-      :root {
-        --color-primary: #4f46e5;
-        --color-primary-dark: #4338ca;
-        --color-accent: #10b981;
-        --color-bg: #f9fafb;
-        --color-text: #374151;
-        --color-muted: #6b7280;
-      }
-
-      html {
-        box-sizing: border-box;
-        font-size: 100%;
-      }
-      *, *::before, *::after {
-        box-sizing: inherit;
-        margin: 0;
-        padding: 0;
-      }
-      body {
-        font-family: 'Inter', sans-serif;
-        line-height: 1.6;
-        color: var(--color-text);
-        background-color: var(--color-bg);
-      }
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
-      img {
-        max-width: 100%;
-        display: block;
-      }
-      .container {
-        width: 90%;
-        max-width: 1200px;
-        margin: 0 auto;
-      }
-      /* Header */
-      header {
-        background: #fff;
-        border-bottom: 1px solid #e5e7eb;
-        position: sticky;
-        top: 0;
-        z-index: 50;
-      }
-      .header-inner {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 1rem 0;
-      }
-      .logo {
-        font-size: 1.5rem;
-        font-weight: 800;
-        color: var(--color-primary);
-      }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BotMatic | Maatwerk Chatbots voor Jouw Bedrijf</title>
+  <!-- Import Inter font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* Root variables */
+    :root {
+      --color-primary: #4f46e5;
+      --color-primary-dark: #4338ca;
+      --color-accent: #10b981;
+      --color-bg: #f9fafb;
+      --color-text: #374151;
+      --color-muted: #6b7280;
+    }
+    html {
+      box-sizing: border-box;
+      font-size: 100%;
+    }
+    *, *::before, *::after {
+      box-sizing: inherit;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      color: var(--color-text);
+      background-color: var(--color-bg);
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    img {
+      max-width: 100%;
+      display: block;
+    }
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    /* Header */
+    header {
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--color-primary);
+    }
+    nav {
+      display: none;
+      align-items: center;
+    }
+    nav a {
+      margin-left: 1rem;
+      font-weight: 600;
+      color: var(--color-text);
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: var(--color-primary);
+    }
+    /* Language Selector */
+    .lang-select {
+      margin-left: 1rem;
+      padding: 0.3rem 0.5rem;
+      border-radius: 6px;
+      border: 1px solid #d1d5db;
+      background: #fff;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+    /* Hero */
+    .hero {
+      padding: 4rem 0 3rem;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 1.125rem;
+      color: var(--color-muted);
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    .btn-primary {
+      background: var(--color-primary);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: var(--color-primary-dark);
+    }
+    .btn-secondary {
+      background: #fff;
+      border: 1px solid var(--color-primary);
+      color: var(--color-primary);
+    }
+    .btn-secondary:hover {
+      background: var(--color-primary);
+      color: #fff;
+    }
+    /* Features */
+    .features {
+      padding: 4rem 0;
+      text-align: center;
+    }
+    .features h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .features p.section-sub {
+      color: var(--color-muted);
+      margin-bottom: 2rem;
+    }
+    .features-grid {
+      display: grid;
+      gap: 2rem;
+    }
+    .feature-item {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      text-align: left;
+    }
+    .feature-item h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .feature-item p {
+      color: var(--color-muted);
+      font-size: 0.95rem;
+    }
+    /* Pricing */
+    .pricing {
+      padding: 4rem 0;
+      text-align: center;
+    }
+    .pricing h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .pricing p.section-sub {
+      color: var(--color-muted);
+      margin-bottom: 2rem;
+    }
+    .plans {
+      display: grid;
+      gap: 2rem;
+    }
+    .plan {
+      background: #fff;
+      border: 2px solid transparent;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      position: relative;
+    }
+    .plan.popular {
+      border-color: var(--color-primary);
+    }
+    .plan.popular .badge {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background: var(--color-primary);
+      color: #fff;
+      padding: 0.25rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+    }
+    .plan h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .plan .price {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 0.5rem;
+    }
+    .plan .price span {
+      font-size: 1rem;
+      color: var(--color-muted);
+    }
+    .plan p.sub {
+      font-size: 0.95rem;
+      color: var(--color-muted);
+      margin-bottom: 1rem;
+    }
+    .plan ul {
+      list-style: none;
+      text-align: left;
+      margin-bottom: 1.5rem;
+    }
+    .plan ul li {
+      margin: 0.5rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+      font-size: 0.95rem;
+      color: var(--color-text);
+    }
+    .plan ul li::before {
+      content: '✔';
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--color-accent);
+    }
+    .plan .btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+    /* Contact */
+    .contact {
+      padding: 4rem 0;
+      text-align: center;
+      background: #fff;
+      border-top: 1px solid #e5e7eb;
+    }
+    .contact h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .contact p {
+      font-size: 1rem;
+      color: var(--color-muted);
+      margin-bottom: 2rem;
+    }
+    .contact-form {
+      max-width: 500px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .contact-form label {
+      text-align: left;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    .contact-form textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+    .contact-form button {
+      align-self: flex-start;
+    }
+    /* Footer */
+    footer {
+      background: #fff;
+      border-top: 1px solid #e5e7eb;
+      padding: 2rem 0;
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--color-muted);
+    }
+    footer .footer-links {
+      margin-bottom: 1rem;
+    }
+    footer .footer-links a {
+      margin: 0 0.75rem;
+      color: var(--color-muted);
+      font-weight: 600;
+    }
+    footer .footer-links a:hover {
+      color: var(--color-primary);
+    }
+    /* Responsive */
+    @media (min-width: 640px) {
       nav {
-        display: none;
-      }
-      nav a {
-        margin-left: 1.5rem;
-        font-weight: 600;
-        color: var(--color-text);
-        transition: color 0.3s;
-      }
-      nav a:hover {
-        color: var(--color-primary);
-      }
-      /* Hero */
-      .hero {
-        padding: 4rem 0 3rem;
-        text-align: center;
+        display: flex;
       }
       .hero h1 {
-        font-size: 2rem;
-        font-weight: 800;
-        margin-bottom: 1rem;
-      }
-      .hero p {
-        font-size: 1.125rem;
-        color: var(--color-muted);
-        margin-bottom: 2rem;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-      .hero .btn-group {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        align-items: center;
-      }
-      .btn {
-        display: inline-block;
-        padding: 0.75rem 1.5rem;
-        border-radius: 8px;
-        font-weight: 600;
-        transition: background 0.3s;
-      }
-      .btn-primary {
-        background: var(--color-primary);
-        color: #fff;
-      }
-      .btn-primary:hover {
-        background: var(--color-primary-dark);
-      }
-      .btn-secondary {
-        background: #fff;
-        border: 1px solid var(--color-primary);
-        color: var(--color-primary);
-      }
-      .btn-secondary:hover {
-        background: var(--color-primary);
-        color: #fff;
-      }
-      /* Features */
-      .features {
-        padding: 4rem 0;
-        text-align: center;
-      }
-      .features h2 {
-        font-size: 1.75rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-      }
-      .features p.section-sub {
-        color: var(--color-muted);
-        margin-bottom: 2rem;
+        font-size: 2.5rem;
       }
       .features-grid {
-        display: grid;
-        gap: 2rem;
-      }
-      .feature-item {
-        background: #fff;
-        padding: 2rem;
-        border-radius: 12px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-        text-align: left;
-      }
-      .feature-item h3 {
-        font-size: 1.25rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-      }
-      .feature-item p {
-        color: var(--color-muted);
-        font-size: 0.95rem;
-      }
-      /* Pricing */
-      .pricing {
-        padding: 4rem 0;
-        text-align: center;
-      }
-      .pricing h2 {
-        font-size: 1.75rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-      }
-      .pricing p.section-sub {
-        color: var(--color-muted);
-        margin-bottom: 2rem;
+        grid-template-columns: repeat(3, 1fr);
       }
       .plans {
-        display: grid;
-        gap: 2rem;
+        grid-template-columns: repeat(3, 1fr);
       }
-      .plan {
-        background: #fff;
-        border: 2px solid transparent;
-        padding: 2rem;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        position: relative;
+      .hero .btn-group {
+        flex-direction: row;
       }
-      .plan.popular {
-        border-color: var(--color-primary);
+    }
+    @media (min-width: 1024px) {
+      .hero h1 {
+        font-size: 3rem;
       }
-      .plan.popular .badge {
-        position: absolute;
-        top: -10px;
-        right: -10px;
-        background: var(--color-primary);
-        color: #fff;
-        padding: 0.25rem 0.5rem;
-        border-radius: 9999px;
-        font-size: 0.75rem;
-      }
-      .plan h3 {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-      }
-      .plan .price {
-        font-size: 2rem;
-        font-weight: 700;
-        color: var(--color-primary);
-        margin-bottom: 0.5rem;
-      }
-      .plan .price span {
-        font-size: 1rem;
-        color: var(--color-muted);
-      }
-      .plan p.sub {
-        font-size: 0.95rem;
-        color: var(--color-muted);
-        margin-bottom: 1rem;
-      }
-      .plan ul {
-        list-style: none;
-        text-align: left;
-        margin-bottom: 1.5rem;
-      }
-      .plan ul li {
-        margin: 0.5rem 0;
-        padding-left: 1.5rem;
-        position: relative;
-        font-size: 0.95rem;
-        color: var(--color-text);
-      }
-      .plan ul li::before {
-        content: '✔';
-        position: absolute;
-        left: 0;
-        top: 0;
-        color: var(--color-accent);
-      }
-      .plan .btn {
-        display: block;
-        width: 100%;
-        text-align: center;
-      }
-      /* Contact */
-      .contact {
-        padding: 4rem 0;
-        text-align: center;
-        background: #fff;
-        border-top: 1px solid #e5e7eb;
-      }
+      .features h2,
+      .pricing h2,
       .contact h2 {
-        font-size: 1.75rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
+        font-size: 2rem;
       }
-      .contact p {
-        font-size: 1rem;
-        color: var(--color-muted);
-        margin-bottom: 2rem;
-      }
-      .contact-form {
-        max-width: 500px;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-      }
-      .contact-form label {
-        text-align: left;
-        font-weight: 600;
-        margin-bottom: 0.25rem;
-      }
-      .contact-form input,
-      .contact-form textarea {
-        width: 100%;
-        padding: 0.75rem;
-        border: 1px solid #d1d5db;
-        border-radius: 8px;
-        font-size: 1rem;
-      }
-      .contact-form textarea {
-        resize: vertical;
-        min-height: 120px;
-      }
-      .contact-form button {
-        align-self: flex-start;
-      }
-      /* Footer */
-      footer {
-        background: #fff;
-        border-top: 1px solid #e5e7eb;
-        padding: 2rem 0;
-        text-align: center;
-        font-size: 0.875rem;
-        color: var(--color-muted);
-      }
-      footer .footer-links {
-        margin-bottom: 1rem;
-      }
-      footer .footer-links a {
-        margin: 0 0.75rem;
-        color: var(--color-muted);
-        font-weight: 600;
-      }
-      footer .footer-links a:hover {
-        color: var(--color-primary);
-      }
-      /* Responsive */
-      @media (min-width: 640px) {
-        nav {
-          display: flex;
-        }
-        .hero h1 {
-          font-size: 2.5rem;
-        }
-        .features-grid {
-          grid-template-columns: repeat(3, 1fr);
-        }
-        .plans {
-          grid-template-columns: repeat(3, 1fr);
-        }
-        .hero .btn-group {
-          flex-direction: row;
-        }
-      }
-      @media (min-width: 1024px) {
-        .hero h1 {
-          font-size: 3rem;
-        }
-        .features h2,
-        .pricing h2,
-        .contact h2 {
-          font-size: 2rem;
-        }
-      }
-    </style>
+    }
+  </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-      <div class="container header-inner">
-        <div class="logo">BotMatic</div>
-        <nav>
-          <a href="#features">Features</a>
-          <a href="#pricing">Pricing</a>
-          <a href="#contact" class="btn btn-primary">Contact</a>
-        </nav>
-      </div>
-    </header>
+  <!-- Header -->
+  <header>
+    <div class="container header-inner">
+      <div class="logo">BotMatic</div>
+      <nav>
+        <a href="#features" data-i18n="navFeatures">Functies</a>
+        <a href="#pricing" data-i18n="navPricing">Abonnementen</a>
+        <a href="#contact" class="btn btn-primary" data-i18n="navContact">Contact</a>
+      </nav>
+      <select id="lang-select" class="lang-select">
+        <option value="nl">NL</option>
+        <option value="fr">FR</option>
+        <option value="en">EN</option>
+      </select>
+    </div>
+  </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-      <div class="container">
-        <h1>Your custom chatbot, built just the way you need it.</h1>
-        <p>Let BotMatic craft powerful, personalized chatbots for WhatsApp, Telegram, Instagram and more. Fast, efficient, fully tailored to your business.</p>
-        <div class="btn-group">
-          <a href="#contact" class="btn btn-primary">Request a Quote</a>
-          <a href="#features" class="btn btn-secondary">Learn More</a>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1 data-i18n="heroTitle">Jouw chatbot, precies zoals jij het wilt.</h1>
+      <p data-i18n="heroSub">Laat BotMatic krachtige, gepersonaliseerde chatbots bouwen voor WhatsApp, Telegram, Instagram en meer. Snel, efficiënt en volledig op maat van jouw bedrijf.</p>
+      <div class="btn-group">
+        <a href="#contact" class="btn btn-primary" data-i18n="ctaQuote">Vraag een offerte aan</a>
+        <a href="#features" class="btn btn-secondary" data-i18n="ctaLearn">Meer weten</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="features">
+    <div class="container">
+      <h2 data-i18n="featuresTitle">Ontdek de kracht van chatbots</h2>
+      <p class="section-sub" data-i18n="featuresSub">Ontdek hoe een maatwerkchatbot je bedrijf kan boosten.</p>
+      <div class="features-grid">
+        <div class="feature-item">
+          <h3 data-i18n="feat1Title">24/7 Klantenondersteuning</h3>
+          <p data-i18n="feat1Desc">Bied direct antwoorden en begeleid klanten op elk moment van de dag, waardoor klanttevredenheid en loyaliteit toenemen.</p>
+        </div>
+        <div class="feature-item">
+          <h3 data-i18n="feat2Title">Slimme automatisering</h3>
+          <p data-i18n="feat2Desc">Automatiseer repetitieve taken, stroomlijn workflows en geef je team de vrijheid om zich te richten op wat echt belangrijk is.</p>
+        </div>
+        <div class="feature-item">
+          <h3 data-i18n="feat3Title">Stimuleer verkoop</h3>
+          <p data-i18n="feat3Desc">Verzamel leads, kwalificeer prospects en help klanten bij hun aankoopproces om conversies te verhogen.</p>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Features Section -->
-    <section id="features" class="features">
-      <div class="container">
-        <h2>Unlock the Power of Chatbots</h2>
-        <p class="section-sub">Discover how a tailored chatbot can boost your business.</p>
-        <div class="features-grid">
-          <div class="feature-item">
-            <h3>24/7 Customer Support</h3>
-            <p>Provide instant answers and guide customers any time of day, enhancing satisfaction and loyalty.</p>
-          </div>
-          <div class="feature-item">
-            <h3>Smart Automation</h3>
-            <p>Automate repetitive tasks, streamline workflows, and empower your team to focus on what matters most.</p>
-          </div>
-          <div class="feature-item">
-            <h3>Drive Sales</h3>
-            <p>Capture leads, qualify prospects, and assist customers in their buying journey to boost conversions.</p>
-          </div>
+  <!-- Pricing Section -->
+  <section id="pricing" class="pricing">
+    <div class="container">
+      <h2 data-i18n="pricingTitle">Kies jouw perfecte plan</h2>
+      <p class="section-sub" data-i18n="pricingSub">Elk plan begint met een proefperiode van 2 weken. Geen verplichtingen.</p>
+      <div class="plans">
+        <!-- Basic Plan -->
+        <div class="plan">
+          <h3 data-i18n="plan1Title">Basis</h3>
+          <p class="price"><span data-i18n="plan1Price">€29</span><span data-i18n="perMonth">/maand</span></p>
+          <p class="sub" data-i18n="plan1Desc">Voor kleine bedrijven die net beginnen.</p>
+          <ul>
+            <li data-i18n="plan1f1">Eén kernfunctie (bijv. FAQ)</li>
+            <li data-i18n="plan1f2">Integratie met één platform</li>
+            <li data-i18n="plan1f3">Standaardondersteuning</li>
+            <li data-i18n="plan1f4">Tot 500 gesprekken per maand</li>
+          </ul>
+          <a href="#contact" class="btn btn-primary" data-i18n="plan1Btn">Kies Basis</a>
+        </div>
+        <!-- Standard Plan -->
+        <div class="plan popular">
+          <span class="badge" data-i18n="plan2Badge">Meest populair</span>
+          <h3 data-i18n="plan2Title">Standaard</h3>
+          <p class="price"><span data-i18n="plan2Price">€99</span><span data-i18n="perMonth">/maand</span></p>
+          <p class="sub" data-i18n="plan2Desc">Voor groeiende bedrijven die meer automatisering nodig hebben.</p>
+          <ul>
+            <li data-i18n="plan2f1">Meerdere geautomatiseerde workflows</li>
+            <li data-i18n="plan2f2">Integraties met twee platformen</li>
+            <li data-i18n="plan2f3">Prioritaire ondersteuning & updates</li>
+            <li data-i18n="plan2f4">Tot 2.000 gesprekken per maand</li>
+          </ul>
+          <a href="#contact" class="btn btn-primary" data-i18n="plan2Btn">Kies Standaard</a>
+        </div>
+        <!-- Premium Plan -->
+        <div class="plan">
+          <h3 data-i18n="plan3Title">Premium</h3>
+          <p class="price"><span data-i18n="plan3Price">€299</span><span data-i18n="perMonth">/maand</span></p>
+          <p class="sub" data-i18n="plan3Desc">Voor grote teams met geavanceerde AI-behoeften.</p>
+          <ul>
+            <li data-i18n="plan3f1">Geavanceerde AI- en NLP-mogelijkheden</li>
+            <li data-i18n="plan3f2">Integraties met meerdere systemen</li>
+            <li data-i18n="plan3f3">Toegewijde projectmanager</li>
+            <li data-i18n="plan3f4">Onbeperkt aantal gesprekken</li>
+          </ul>
+          <a href="#contact" class="btn btn-primary" data-i18n="plan3Btn">Kies Premium</a>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Pricing Section -->
-    <section id="pricing" class="pricing">
-      <div class="container">
-        <h2>Choose Your Perfect Plan</h2>
-        <p class="section-sub">Every plan starts with a 2‑week free trial. No commitments.</p>
-        <div class="plans">
-          <!-- Basic Plan -->
-          <div class="plan">
-            <h3>Basic</h3>
-            <p class="price">€29<span>/month</span></p>
-            <p class="sub">For small businesses just starting out.</p>
-            <ul>
-              <li>One core feature (e.g., FAQ)</li>
-              <li>Integration with a single platform</li>
-              <li>Standard support</li>
-              <li>Up to 500 conversations/month</li>
-            </ul>
-            <a href="#contact" class="btn btn-primary">Choose Basic</a>
-          </div>
-          <!-- Standard Plan -->
-          <div class="plan popular">
-            <span class="badge">Most Popular</span>
-            <h3>Standard</h3>
-            <p class="price">€99<span>/month</span></p>
-            <p class="sub">For growing businesses needing more automation.</p>
-            <ul>
-              <li>Multiple automated workflows</li>
-              <li>Integrations with two platforms</li>
-              <li>Priority support & updates</li>
-              <li>Up to 2,000 conversations/month</li>
-            </ul>
-            <a href="#contact" class="btn btn-primary">Choose Standard</a>
-          </div>
-          <!-- Premium Plan -->
-          <div class="plan">
-            <h3>Premium</h3>
-            <p class="price">€299<span>/month</span></p>
-            <p class="sub">For large teams with advanced AI needs.</p>
-            <ul>
-              <li>Advanced AI & NLP capabilities</li>
-              <li>Integrations with multiple systems</li>
-              <li>Dedicated project manager</li>
-              <li>Unlimited conversations</li>
-            </ul>
-            <a href="#contact" class="btn btn-primary">Choose Premium</a>
-          </div>
+  <!-- Contact Section -->
+  <section id="contact" class="contact">
+    <div class="container">
+      <h2 data-i18n="contactTitle">Klaar om je klantinteracties naar een hoger niveau te tillen?</h2>
+      <p data-i18n="contactDesc">Neem contact op om je gratis proefperiode te starten en ontdek hoe BotMatic je bedrijf kan transformeren.</p>
+      <form class="contact-form" onsubmit="event.preventDefault(); this.reset(); alert(translations[currentLang].formAlert);">
+        <div>
+          <label for="name" data-i18n="nameLabel">Naam</label>
+          <input type="text" id="name" name="name" required placeholder="Je naam" data-i18n-placeholder="namePlaceholder" />
         </div>
-      </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-      <div class="container">
-        <h2>Ready to elevate your customer interactions?</h2>
-        <p>Get in touch to start your free trial and discover how BotMatic can transform your business.</p>
-        <form class="contact-form" onsubmit="event.preventDefault(); this.reset(); alert('Thank you! We will get back to you soon.');">
-          <div>
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" required placeholder="Your Name" />
-          </div>
-          <div>
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required placeholder="your.email@example.com" />
-          </div>
-          <div>
-            <label for="message">Message</label>
-            <textarea id="message" name="message" rows="5" required placeholder="Tell us about your chatbot needs..."></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary">Send Message</button>
-        </form>
-      </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-      <div class="container">
-        <div class="footer-links">
-          <a href="#">About Us</a>
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms & Conditions</a>
+        <div>
+          <label for="email" data-i18n="emailLabel">E-mail</label>
+          <input type="email" id="email" name="email" required placeholder="je.email@voorbeeld.com" data-i18n-placeholder="emailPlaceholder" />
         </div>
-        <p>&copy; <span id="year"></span> BotMatic. All rights reserved.</p>
-      </div>
-    </footer>
+        <div>
+          <label for="message" data-i18n="messageLabel">Bericht</label>
+          <textarea id="message" name="message" rows="5" required placeholder="Vertel ons over jouw chatbotbehoeften..." data-i18n-placeholder="messagePlaceholder"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" data-i18n="submitBtn">Verzend bericht</button>
+      </form>
+    </div>
+  </section>
 
-    <script>
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="#" data-i18n="footerLink1">Over ons</a>
+        <a href="#" data-i18n="footerLink2">Privacybeleid</a>
+        <a href="#" data-i18n="footerLink3">Algemene voorwaarden</a>
+      </div>
+      <p>&copy; <span id="year"></span> BotMatic. <span data-i18n="footerCopyright">Alle rechten voorbehouden.</span></p>
+    </div>
+  </footer>
+
+  <script>
+    // Translation data
+    const translations = {
+      nl: {
+        navFeatures: 'Functies',
+        navPricing: 'Abonnementen',
+        navContact: 'Contact',
+        heroTitle: 'Jouw chatbot, precies zoals jij het wilt.',
+        heroSub: 'Laat BotMatic krachtige, gepersonaliseerde chatbots bouwen voor WhatsApp, Telegram, Instagram en meer. Snel, efficiënt en volledig op maat van jouw bedrijf.',
+        ctaQuote: 'Vraag een offerte aan',
+        ctaLearn: 'Meer weten',
+        featuresTitle: 'Ontdek de kracht van chatbots',
+        featuresSub: 'Ontdek hoe een maatwerkchatbot je bedrijf kan boosten.',
+        feat1Title: '24/7 Klantenondersteuning',
+        feat1Desc: 'Bied direct antwoorden en begeleid klanten op elk moment van de dag, waardoor klanttevredenheid en loyaliteit toenemen.',
+        feat2Title: 'Slimme automatisering',
+        feat2Desc: 'Automatiseer repetitieve taken, stroomlijn workflows en geef je team de vrijheid om zich te richten op wat echt belangrijk is.',
+        feat3Title: 'Stimuleer verkoop',
+        feat3Desc: 'Verzamel leads, kwalificeer prospects en help klanten bij hun aankoopproces om conversies te verhogen.',
+        pricingTitle: 'Kies jouw perfecte plan',
+        pricingSub: 'Elk plan begint met een proefperiode van 2 weken. Geen verplichtingen.',
+        plan1Title: 'Basis',
+        plan1Price: '€29',
+        plan1Desc: 'Voor kleine bedrijven die net beginnen.',
+        plan1f1: 'Eén kernfunctie (bijv. FAQ)',
+        plan1f2: 'Integratie met één platform',
+        plan1f3: 'Standaardondersteuning',
+        plan1f4: 'Tot 500 gesprekken per maand',
+        plan1Btn: 'Kies Basis',
+        plan2Badge: 'Meest populair',
+        plan2Title: 'Standaard',
+        plan2Price: '€99',
+        plan2Desc: 'Voor groeiende bedrijven die meer automatisering nodig hebben.',
+        plan2f1: 'Meerdere geautomatiseerde workflows',
+        plan2f2: 'Integraties met twee platformen',
+        plan2f3: 'Prioritaire ondersteuning & updates',
+        plan2f4: 'Tot 2.000 gesprekken per maand',
+        plan2Btn: 'Kies Standaard',
+        plan3Title: 'Premium',
+        plan3Price: '€299',
+        plan3Desc: 'Voor grote teams met geavanceerde AI-behoeften.',
+        plan3f1: 'Geavanceerde AI- en NLP-mogelijkheden',
+        plan3f2: 'Integraties met meerdere systemen',
+        plan3f3: 'Toegewijde projectmanager',
+        plan3f4: 'Onbeperkt aantal gesprekken',
+        plan3Btn: 'Kies Premium',
+        contactTitle: 'Klaar om je klantinteracties naar een hoger niveau te tillen?',
+        contactDesc: 'Neem contact op om je gratis proefperiode te starten en ontdek hoe BotMatic je bedrijf kan transformeren.',
+        nameLabel: 'Naam',
+        emailLabel: 'E-mail',
+        messageLabel: 'Bericht',
+        namePlaceholder: 'Je naam',
+        emailPlaceholder: 'je.email@voorbeeld.com',
+        messagePlaceholder: 'Vertel ons over jouw chatbotbehoeften...',
+        submitBtn: 'Verzend bericht',
+        formAlert: 'Bedankt! We nemen snel contact met je op.',
+        footerLink1: 'Over ons',
+        footerLink2: 'Privacybeleid',
+        footerLink3: 'Algemene voorwaarden',
+        footerCopyright: 'Alle rechten voorbehouden.'
+        ,perMonth: '/maand'
+      },
+      fr: {
+        navFeatures: 'Fonctionnalités',
+        navPricing: 'Tarifs',
+        navContact: 'Contact',
+        heroTitle: 'Votre chatbot, conçu exactement comme vous le souhaitez.',
+        heroSub: 'Laissez BotMatic créer des chatbots puissants et personnalisés pour WhatsApp, Telegram, Instagram et plus encore. Rapide, efficace et entièrement adapté à votre entreprise.',
+        ctaQuote: 'Demander un devis',
+        ctaLearn: 'En savoir plus',
+        featuresTitle: 'Déverrouillez la puissance des chatbots',
+        featuresSub: 'Découvrez comment un chatbot sur mesure peut booster votre entreprise.',
+        feat1Title: 'Support client 24/7',
+        feat1Desc: 'Fournissez des réponses instantanées et guidez les clients à tout moment de la journée, améliorant la satisfaction et la fidélité.',
+        feat2Title: 'Automatisation intelligente',
+        feat2Desc: 'Automatisez les tâches répétitives, rationalisez les workflows et permettez à votre équipe de se concentrer sur l’essentiel.',
+        feat3Title: 'Augmenter les ventes',
+        feat3Desc: 'Générez des leads, qualifiez les prospects et assistez les clients dans leur parcours d’achat pour augmenter les conversions.',
+        pricingTitle: 'Choisissez votre plan parfait',
+        pricingSub: 'Chaque plan commence par un essai gratuit de 2 semaines. Sans engagement.',
+        plan1Title: 'Basique',
+        plan1Price: '€29',
+        plan1Desc: 'Pour les petites entreprises qui débutent.',
+        plan1f1: 'Une fonctionnalité principale (par ex. FAQ)',
+        plan1f2: 'Intégration avec une seule plateforme',
+        plan1f3: 'Support standard',
+        plan1f4: 'Jusqu’à 500 conversations par mois',
+        plan1Btn: 'Choisir Basique',
+        plan2Badge: 'Le plus populaire',
+        plan2Title: 'Standard',
+        plan2Price: '€99',
+        plan2Desc: 'Pour les entreprises en croissance ayant besoin de plus d’automatisation.',
+        plan2f1: 'Plusieurs workflows automatisés',
+        plan2f2: 'Intégrations avec deux plateformes',
+        plan2f3: 'Support prioritaire et mises à jour',
+        plan2f4: 'Jusqu’à 2 000 conversations par mois',
+        plan2Btn: 'Choisir Standard',
+        plan3Title: 'Premium',
+        plan3Price: '€299',
+        plan3Desc: 'Pour les grandes équipes avec des besoins avancés en IA.',
+        plan3f1: 'Capacités avancées en IA et NLP',
+        plan3f2: 'Intégrations avec plusieurs systèmes',
+        plan3f3: 'Chef de projet dédié',
+        plan3f4: 'Conversations illimitées',
+        plan3Btn: 'Choisir Premium',
+        contactTitle: 'Prêt à améliorer vos interactions avec vos clients ?',
+        contactDesc: 'Contactez-nous pour commencer votre essai gratuit et découvrez comment BotMatic peut transformer votre entreprise.',
+        nameLabel: 'Nom',
+        emailLabel: 'E-mail',
+        messageLabel: 'Message',
+        namePlaceholder: 'Votre nom',
+        emailPlaceholder: 'votre.email@exemple.com',
+        messagePlaceholder: 'Parlez-nous de vos besoins en chatbot...',
+        submitBtn: 'Envoyer le message',
+        formAlert: 'Merci ! Nous vous recontacterons bientôt.',
+        footerLink1: 'À propos de nous',
+        footerLink2: 'Politique de confidentialité',
+        footerLink3: 'Conditions générales',
+        footerCopyright: 'Tous droits réservés.'
+        ,perMonth: '/mois'
+      },
+      en: {
+        navFeatures: 'Features',
+        navPricing: 'Pricing',
+        navContact: 'Contact',
+        heroTitle: 'Your custom chatbot, built just the way you need it.',
+        heroSub: 'Let BotMatic craft powerful, personalized chatbots for WhatsApp, Telegram, Instagram and more. Fast, efficient, fully tailored to your business.',
+        ctaQuote: 'Request a Quote',
+        ctaLearn: 'Learn More',
+        featuresTitle: 'Unlock the Power of Chatbots',
+        featuresSub: 'Discover how a tailored chatbot can boost your business.',
+        feat1Title: '24/7 Customer Support',
+        feat1Desc: 'Provide instant answers and guide customers any time of day, enhancing satisfaction and loyalty.',
+        feat2Title: 'Smart Automation',
+        feat2Desc: 'Automate repetitive tasks, streamline workflows, and empower your team to focus on what matters most.',
+        feat3Title: 'Drive Sales',
+        feat3Desc: 'Capture leads, qualify prospects, and assist customers in their buying journey to boost conversions.',
+        pricingTitle: 'Choose Your Perfect Plan',
+        pricingSub: 'Every plan starts with a 2-week free trial. No commitments.',
+        plan1Title: 'Basic',
+        plan1Price: '€29',
+        plan1Desc: 'For small businesses just starting out.',
+        plan1f1: 'One core feature (e.g., FAQ)',
+        plan1f2: 'Integration with a single platform',
+        plan1f3: 'Standard support',
+        plan1f4: 'Up to 500 conversations per month',
+        plan1Btn: 'Choose Basic',
+        plan2Badge: 'Most Popular',
+        plan2Title: 'Standard',
+        plan2Price: '€99',
+        plan2Desc: 'For growing businesses needing more automation.',
+        plan2f1: 'Multiple automated workflows',
+        plan2f2: 'Integrations with two platforms',
+        plan2f3: 'Priority support & updates',
+        plan2f4: 'Up to 2,000 conversations per month',
+        plan2Btn: 'Choose Standard',
+        plan3Title: 'Premium',
+        plan3Price: '€299',
+        plan3Desc: 'For large teams with advanced AI needs.',
+        plan3f1: 'Advanced AI & NLP capabilities',
+        plan3f2: 'Integrations with multiple systems',
+        plan3f3: 'Dedicated project manager',
+        plan3f4: 'Unlimited conversations',
+        plan3Btn: 'Choose Premium',
+        contactTitle: 'Ready to elevate your customer interactions?',
+        contactDesc: 'Get in touch to start your free trial and discover how BotMatic can transform your business.',
+        nameLabel: 'Name',
+        emailLabel: 'Email',
+        messageLabel: 'Message',
+        namePlaceholder: 'Your Name',
+        emailPlaceholder: 'your.email@example.com',
+        messagePlaceholder: 'Tell us about your chatbot needs...',
+        submitBtn: 'Send Message',
+        formAlert: 'Thank you! We will get back to you soon.',
+        footerLink1: 'About Us',
+        footerLink2: 'Privacy Policy',
+        footerLink3: 'Terms & Conditions',
+        footerCopyright: 'All rights reserved.'
+        ,perMonth: '/month'
+      }
+    };
+    let currentLang = 'nl';
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      const elems = document.querySelectorAll('[data-i18n]');
+      elems.forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang][key]) {
+          el.textContent = translations[lang][key];
+        }
+      });
+      // Update placeholders separately
+      const placeholderElems = document.querySelectorAll('[data-i18n-placeholder]');
+      placeholderElems.forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (translations[lang][key]) {
+          el.placeholder = translations[lang][key];
+        }
+      });
+    }
+    // Initialize language
+    document.addEventListener('DOMContentLoaded', () => {
+      setLanguage(document.getElementById('lang-select').value);
       document.getElementById('year').textContent = new Date().getFullYear();
-    </script>
+      document.getElementById('lang-select').addEventListener('change', (e) => {
+        setLanguage(e.target.value);
+      });
+    });
+  </script>
 </body>
 </html>
