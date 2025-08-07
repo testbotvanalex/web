@@ -4,12 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BotMatic | Maatwerk Chatbots voor Jouw Bedrijf</title>
-  <!-- Import Inter font -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    /* Root variables */
     :root {
       --color-primary: #4f46e5;
       --color-primary-dark: #4338ca;
@@ -46,7 +44,6 @@
       max-width: 1200px;
       margin: 0 auto;
     }
-    /* Header */
     header {
       background: #fff;
       border-bottom: 1px solid #e5e7eb;
@@ -78,7 +75,6 @@
     nav a:hover {
       color: var(--color-primary);
     }
-    /* Language Selector */
     .lang-select {
       margin-left: 1rem;
       padding: 0.3rem 0.5rem;
@@ -88,19 +84,15 @@
       font-weight: 600;
       color: var(--color-text);
     }
-    /* Hero */
     .hero {
-      /* Add space above and below */
       padding: 4rem 0;
     }
-    /* Inner wrapper to align text and image */
     .hero-inner {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 2rem;
     }
-    /* Container for text content within the hero */
     .hero-content {
       max-width: 600px;
       text-align: center;
@@ -115,14 +107,12 @@
       color: var(--color-muted);
       margin-bottom: 2rem;
     }
-    /* Button group styling remains similar */
     .hero .btn-group {
       display: flex;
       flex-direction: column;
       gap: 1rem;
       align-items: center;
     }
-    /* Hero image container */
     .hero-image {
       width: 100%;
       max-width: 600px;
@@ -154,7 +144,37 @@
       background: var(--color-primary);
       color: #fff;
     }
-    /* Features */
+    .for-who, .why-botmatic {
+      padding: 4rem 0;
+      text-align: center;
+    }
+    .audience-grid {
+      display: grid;
+      gap: 2rem;
+    }
+    .audience-card {
+      background: #f9fafb;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      text-align: left;
+    }
+    .why-botmatic .features-grid {
+      display: grid;
+      gap: 2rem;
+    }
+    .feature-card {
+      background: #f9fafb;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      text-align: left;
+    }
+    .icon {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
     .features {
       padding: 4rem 0;
       text-align: center;
@@ -188,7 +208,6 @@
       color: var(--color-muted);
       font-size: 0.95rem;
     }
-    /* Pricing */
     .pricing {
       padding: 4rem 0;
       text-align: center;
@@ -271,40 +290,6 @@
       width: 100%;
       text-align: center;
     }
-
-    /* Testimonials */
-    .testimonials {
-      padding: 4rem 0;
-      background: #fff;
-      text-align: center;
-    }
-    .testimonials h2 {
-      font-size: 1.75rem;
-      font-weight: 700;
-      margin-bottom: 2rem;
-    }
-    .testimonials-grid {
-      display: grid;
-      gap: 2rem;
-      justify-content: center;
-      grid-template-columns: 1fr;
-    }
-    .testimonial-item {
-      background: var(--color-bg);
-      padding: 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    }
-    .testimonial-item .quote {
-      font-style: italic;
-      margin-bottom: 0.75rem;
-      color: var(--color-text);
-    }
-    .testimonial-item .name {
-      font-weight: 600;
-      color: var(--color-primary);
-    }
-    /* Contact */
     .contact {
       padding: 4rem 0;
       text-align: center;
@@ -348,7 +333,6 @@
     .contact-form button {
       align-self: flex-start;
     }
-    /* Footer */
     footer {
       background: #fff;
       border-top: 1px solid #e5e7eb;
@@ -368,13 +352,18 @@
     footer .footer-links a:hover {
       color: var(--color-primary);
     }
-    /* Responsive */
     @media (min-width: 640px) {
       nav {
         display: flex;
       }
       .hero h1 {
         font-size: 2.5rem;
+      }
+      .audience-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .why-botmatic .features-grid {
+        grid-template-columns: repeat(2, 1fr);
       }
       .features-grid {
         grid-template-columns: repeat(3, 1fr);
@@ -384,21 +373,6 @@
       }
       .hero .btn-group {
         flex-direction: row;
-      }
-      /* On larger screens, place hero text and image side by side */
-      .hero-inner {
-        flex-direction: row;
-        justify-content: space-between;
-      }
-      .hero-content {
-        max-width: 50%;
-        text-align: left;
-      }
-      .hero-image {
-        max-width: 45%;
-      }
-      .testimonials-grid {
-        grid-template-columns: repeat(3, 1fr);
       }
     }
     @media (min-width: 1024px) {
@@ -414,11 +388,12 @@
   </style>
 </head>
 <body>
-  <!-- Header -->
   <header>
     <div class="container header-inner">
       <div class="logo">BotMatic</div>
       <nav>
+        <a href="#for-who" data-i18n="navForWho">Voor wie?</a>
+        <a href="#why-botmatic" data-i18n="navWhyBotmatic">Waarom kiezen?</a>
         <a href="#features" data-i18n="navFeatures">Functies</a>
         <a href="#pricing" data-i18n="navPricing">Abonnementen</a>
         <a href="#contact" class="btn btn-primary" data-i18n="navContact">Contact</a>
@@ -431,7 +406,6 @@
     </div>
   </header>
 
-  <!-- Hero Section -->
   <section class="hero">
     <div class="container hero-inner">
       <div class="hero-content">
@@ -443,13 +417,59 @@
         </div>
       </div>
       <div class="hero-image">
-        <img src="8d1928ad-3147-4e59-8d4b-2f608a0b9e78.png" alt="Abstract chatbot network illustration">
+        <img src="8d1928ad-3147-4e59-8d4b-2f608a0b9e78.png" alt="" />
       </div>
     </div>
   </section>
 
+  <section id="for-who" class="for-who">
+    <div class="container">
+      <h2 data-i18n="forWhoTitle">Voor wie is BotMatic?</h2>
+      <div class="audience-grid">
+        <div class="audience-card">
+          <h3 data-i18n="forAutoTitle">Auto‑handelaars</h3>
+          <p data-i18n="forAutoText">Automatiseer leads, opvolging en afspraken via WhatsApp of webchat.</p>
+        </div>
+        <div class="audience-card">
+          <h3 data-i18n="forSalonTitle">Schoonheidssalons</h3>
+          <p data-i18n="forSalonText">Laat klanten zelf boeken, herinneringen krijgen en vragen stellen via chat.</p>
+        </div>
+        <div class="audience-card">
+          <h3 data-i18n="forShopTitle">Webshops & diensten</h3>
+          <p data-i18n="forShopText">Help klanten 24/7 met productinfo, retouren en support — volledig automatisch.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <!-- Features Section -->
+  <section id="why-botmatic" class="why-botmatic">
+    <div class="container">
+      <h2 data-i18n="whyBotmaticTitle">Waarom kiezen voor BotMatic?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <span class="icon">⚡</span>
+          <h3 data-i18n="fastLaunchTitle">Snel live</h3>
+          <p data-i18n="fastLaunchText">Binnen 48u klaar voor gebruik — zonder technisch gedoe.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">🎯</span>
+          <h3 data-i18n="customTitle">100% op maat</h3>
+          <p data-i18n="customText">Wij bouwen je chatbot volledig rond jouw bedrijf & processen.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">📲</span>
+          <h3 data-i18n="multiPlatformTitle">Werkt overal</h3>
+          <p data-i18n="multiPlatformText">WhatsApp, Telegram, Instagram, website — jij kiest de kanalen.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">🤖</span>
+          <h3 data-i18n="aiTitle">AI inside</h3>
+          <p data-i18n="aiText">Slimme chatflows met GPT & taalherkenning voor echte impact.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="features" class="features">
     <div class="container">
       <h2 data-i18n="featuresTitle">Ontdek de kracht van chatbots</h2>
@@ -471,13 +491,11 @@
     </div>
   </section>
 
-  <!-- Pricing Section -->
   <section id="pricing" class="pricing">
     <div class="container">
       <h2 data-i18n="pricingTitle">Kies jouw perfecte plan</h2>
       <p class="section-sub" data-i18n="pricingSub">Test elk plan gratis gedurende 2 weken. Tevreden? Behoud je plan, upgrade of kies Basis.</p>
       <div class="plans">
-        <!-- Basic Plan -->
         <div class="plan">
           <h3 data-i18n="plan1Title">Basis</h3>
           <p class="price"><span data-i18n="plan1Price">€29</span><span data-i18n="perMonth">/maand</span></p>
@@ -490,7 +508,6 @@
           </ul>
           <a href="#contact" class="btn btn-primary" data-i18n="plan1Btn">Kies Basis</a>
         </div>
-        <!-- Standard Plan -->
         <div class="plan popular">
           <span class="badge" data-i18n="plan2Badge">Meest populair</span>
           <h3 data-i18n="plan2Title">Standaard</h3>
@@ -504,7 +521,6 @@
           </ul>
           <a href="#contact" class="btn btn-primary" data-i18n="plan2Btn">Kies Standaard</a>
         </div>
-        <!-- Premium Plan -->
         <div class="plan">
           <h3 data-i18n="plan3Title">Premium</h3>
           <p class="price"><span data-i18n="plan3Price">€299</span><span data-i18n="perMonth">/maand</span></p>
@@ -521,28 +537,6 @@
     </div>
   </section>
 
-  <!-- Testimonials Section -->
-  <section id="testimonials" class="testimonials">
-    <div class="container">
-      <h2 data-i18n="testimonialsTitle">Wat onze klanten zeggen</h2>
-      <div class="testimonials-grid">
-        <div class="testimonial-item">
-          <p class="quote" data-i18n="testimonial1Quote">BotMatic transformeerde onze klantenservice – hun bots behandelen 80% van de vragen direct.</p>
-          <p class="name" data-i18n="testimonial1Name">Alex, CEO bij TechCorp</p>
-        </div>
-        <div class="testimonial-item">
-          <p class="quote" data-i18n="testimonial2Quote">De chatbot op maat van BotMatic verhoogde onze leadconversie met 30%.</p>
-          <p class="name" data-i18n="testimonial2Name">Sophie, Marketingmanager bij WellnessCo</p>
-        </div>
-        <div class="testimonial-item">
-          <p class="quote" data-i18n="testimonial3Quote">Onder de indruk van de snelheid en maatwerk – precies wat we nodig hadden.</p>
-          <p class="name" data-i18n="testimonial3Name">Jeroen, Oprichter bij RetailPro</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact Section -->
   <section id="contact" class="contact">
     <div class="container">
       <h2 data-i18n="contactTitle">Klaar om je klantinteracties naar een hoger niveau te tillen?</h2>
@@ -553,19 +547,18 @@
           <input type="text" id="name" name="name" required placeholder="Je naam" data-i18n-placeholder="namePlaceholder" />
         </div>
         <div>
-          <label for="email" data-i18n="emailLabel">E-mail</label>
+          <label for="email" data-i18n="emailLabel">E-mailadres</label>
           <input type="email" id="email" name="email" required placeholder="je.email@voorbeeld.com" data-i18n-placeholder="emailPlaceholder" />
         </div>
         <div>
           <label for="message" data-i18n="messageLabel">Bericht</label>
-          <textarea id="message" name="message" rows="5" required placeholder="Vertel ons over jouw chatbotbehoeften..." data-i18n-placeholder="messagePlaceholder"></textarea>
+          <textarea id="message" name="message" rows="5" required placeholder="Vertel ons over jouw chatbot-behoeften..." data-i18n-placeholder="messagePlaceholder"></textarea>
         </div>
         <button type="submit" class="btn btn-primary" data-i18n="submitBtn">Verzend bericht</button>
       </form>
     </div>
   </section>
 
-  <!-- Footer -->
   <footer>
     <div class="container">
       <div class="footer-links">
@@ -578,9 +571,10 @@
   </footer>
 
   <script>
-    // Translation data
     const translations = {
       nl: {
+        navForWho: 'Voor wie?',
+        navWhyBotmatic: 'Waarom kiezen?',
         navFeatures: 'Functies',
         navPricing: 'Abonnementen',
         navContact: 'Contact',
@@ -588,6 +582,22 @@
         heroSub: 'Laat BotMatic krachtige, gepersonaliseerde chatbots bouwen voor WhatsApp, Telegram, Instagram en meer. Snel, efficiënt en volledig op maat van jouw bedrijf.',
         ctaQuote: 'Vraag een offerte aan',
         ctaLearn: 'Meer weten',
+        forWhoTitle: 'Voor wie is BotMatic?',
+        forAutoTitle: 'Auto‑handelaars',
+        forAutoText: 'Automatiseer leads, opvolging en afspraken via WhatsApp of webchat.',
+        forSalonTitle: 'Schoonheidssalons',
+        forSalonText: 'Laat klanten zelf boeken, herinneringen krijgen en vragen stellen via chat.',
+        forShopTitle: 'Webshops & diensten',
+        forShopText: 'Help klanten 24/7 met productinfo, retouren en support — volledig automatisch.',
+        whyBotmaticTitle: 'Waarom kiezen voor BotMatic?',
+        fastLaunchTitle: 'Snel live',
+        fastLaunchText: 'Binnen 48u klaar voor gebruik — zonder technisch gedoe.',
+        customTitle: '100% op maat',
+        customText: 'Wij bouwen je chatbot volledig rond jouw bedrijf & processen.',
+        multiPlatformTitle: 'Werkt overal',
+        multiPlatformText: 'WhatsApp, Telegram, Instagram, website — jij kiest de kanalen.',
+        aiTitle: 'AI inside',
+        aiText: 'Slimme chatflows met GPT & taalherkenning voor echte impact.',
         featuresTitle: 'Ontdek de kracht van chatbots',
         featuresSub: 'Ontdek hoe een maatwerkchatbot je bedrijf kan boosten.',
         feat1Title: '24/7 Klantenondersteuning',
@@ -623,30 +633,25 @@
         plan3f3: 'Toegewijde projectmanager',
         plan3f4: 'Onbeperkt aantal gesprekken',
         plan3Btn: 'Kies Premium',
+        perMonth: '/maand',
         contactTitle: 'Klaar om je klantinteracties naar een hoger niveau te tillen?',
         contactDesc: 'Neem contact op om je gratis proefperiode te starten en ontdek hoe BotMatic je bedrijf kan transformeren.',
         nameLabel: 'Naam',
-        emailLabel: 'E-mail',
+        emailLabel: 'E-mailadres',
         messageLabel: 'Bericht',
         namePlaceholder: 'Je naam',
         emailPlaceholder: 'je.email@voorbeeld.com',
-        messagePlaceholder: 'Vertel ons over jouw chatbotbehoeften...',
+        messagePlaceholder: 'Vertel ons over jouw chatbot-behoeften...',
         submitBtn: 'Verzend bericht',
         formAlert: 'Bedankt! We nemen snel contact met je op.',
         footerLink1: 'Over ons',
         footerLink2: 'Privacybeleid',
         footerLink3: 'Algemene voorwaarden',
         footerCopyright: 'Alle rechten voorbehouden.'
-        ,perMonth: '/maand'
-        ,testimonialsTitle: 'Wat onze klanten zeggen'
-        ,testimonial1Quote: 'BotMatic transformeerde onze klantenservice – hun bots behandelen 80% van de vragen direct.'
-        ,testimonial1Name: 'Alex, CEO bij TechCorp'
-        ,testimonial2Quote: 'De chatbot op maat van BotMatic verhoogde onze leadconversie met 30%.'
-        ,testimonial2Name: 'Sophie, Marketingmanager bij WellnessCo'
-        ,testimonial3Quote: 'Onder de indruk van de snelheid en maatwerk – precies wat we nodig hadden.'
-        ,testimonial3Name: 'Jeroen, Oprichter bij RetailPro'
       },
       fr: {
+        navForWho: 'Pour qui ?',
+        navWhyBotmatic: 'Pourquoi choisir ?',
         navFeatures: 'Fonctionnalités',
         navPricing: 'Tarifs',
         navContact: 'Contact',
@@ -654,6 +659,22 @@
         heroSub: 'Laissez BotMatic créer des chatbots puissants et personnalisés pour WhatsApp, Telegram, Instagram et plus encore. Rapide, efficace et entièrement adapté à votre entreprise.',
         ctaQuote: 'Demander un devis',
         ctaLearn: 'En savoir plus',
+        forWhoTitle: 'Pour qui est BotMatic ?',
+        forAutoTitle: 'Concessionnaires automobiles',
+        forAutoText: 'Automatisez les leads, le suivi et les rendez-vous via WhatsApp ou webchat.',
+        forSalonTitle: 'Instituts de beauté',
+        forSalonText: 'Permettez aux clients de réserver eux-mêmes, de recevoir des rappels et de poser des questions via chat.',
+        forShopTitle: 'Boutiques en ligne & services',
+        forShopText: 'Aidez les clients 24/7 avec des infos produit, des retours et du support — entièrement automatique.',
+        whyBotmaticTitle: 'Pourquoi choisir BotMatic ?',
+        fastLaunchTitle: 'Lancement rapide',
+        fastLaunchText: 'Prêt à l'emploi en 48 h — sans tracas technique.',
+        customTitle: '100 % sur mesure',
+        customText: 'Nous construisons votre chatbot entièrement autour de votre entreprise et de vos processus.',
+        multiPlatformTitle: 'Fonctionne partout',
+        multiPlatformText: 'WhatsApp, Telegram, Instagram, site Web — à vous de choisir les canaux.',
+        aiTitle: 'IA intégrée',
+        aiText: 'Des workflows intelligents avec GPT et reconnaissance linguistique pour un impact réel.',
         featuresTitle: 'Déverrouillez la puissance des chatbots',
         featuresSub: 'Découvrez comment un chatbot sur mesure peut booster votre entreprise.',
         feat1Title: 'Support client 24/7',
@@ -663,7 +684,7 @@
         feat3Title: 'Augmenter les ventes',
         feat3Desc: 'Générez des leads, qualifiez les prospects et assistez les clients dans leur parcours d’achat pour augmenter les conversions.',
         pricingTitle: 'Choisissez votre plan parfait',
-        pricingSub: 'Testez chaque offre gratuitement pendant 2 semaines. Satisfait ? Conservez votre plan, surclassez ou choisissez Basique.',
+        pricingSub: 'Testez chaque offre gratuitement pendant 2 semaines. Satisfait ? Conservez votre plan, surclassez ou choisissez Basique.',
         plan1Title: 'Basique',
         plan1Price: '€29',
         plan1Desc: 'Pour les petites entreprises qui débutent.',
@@ -679,7 +700,7 @@
         plan2f1: 'Plusieurs workflows automatisés',
         plan2f2: 'Intégrations avec deux plateformes',
         plan2f3: 'Support prioritaire et mises à jour',
-        plan2f4: 'Jusqu’à 2 000 conversations par mois',
+        plan2f4: 'Jusqu’à 2 000 conversations par mois',
         plan2Btn: 'Choisir Standard',
         plan3Title: 'Premium',
         plan3Price: '€299',
@@ -689,6 +710,7 @@
         plan3f3: 'Chef de projet dédié',
         plan3f4: 'Conversations illimitées',
         plan3Btn: 'Choisir Premium',
+        perMonth: '/mois',
         contactTitle: 'Prêt à améliorer vos interactions avec vos clients ?',
         contactDesc: 'Contactez-nous pour commencer votre essai gratuit et découvrez comment BotMatic peut transformer votre entreprise.',
         nameLabel: 'Nom',
@@ -703,16 +725,10 @@
         footerLink2: 'Politique de confidentialité',
         footerLink3: 'Conditions générales',
         footerCopyright: 'Tous droits réservés.'
-        ,perMonth: '/mois'
-        ,testimonialsTitle: 'Ce que disent nos clients'
-        ,testimonial1Quote: 'BotMatic a transformé notre service client – leurs bots répondent instantanément à 80 % des demandes.'
-        ,testimonial1Name: 'Alex, PDG chez TechCorp'
-        ,testimonial2Quote: 'Le chatbot sur mesure de BotMatic a augmenté nos conversions de leads de 30 %.'
-        ,testimonial2Name: 'Sophie, Responsable marketing chez WellnessCo'
-        ,testimonial3Quote: 'Impressionné par la rapidité et la personnalisation – exactement ce dont nous avions besoin.'
-        ,testimonial3Name: 'Jeroen, Fondateur chez RetailPro'
       },
       en: {
+        navForWho: 'Who is it for?',
+        navWhyBotmatic: 'Why choose?',
         navFeatures: 'Features',
         navPricing: 'Pricing',
         navContact: 'Contact',
@@ -720,6 +736,22 @@
         heroSub: 'Let BotMatic craft powerful, personalized chatbots for WhatsApp, Telegram, Instagram and more. Fast, efficient, fully tailored to your business.',
         ctaQuote: 'Request a Quote',
         ctaLearn: 'Learn More',
+        forWhoTitle: 'Who is BotMatic for?',
+        forAutoTitle: 'Car dealers',
+        forAutoText: 'Automate leads, follow-ups and appointments via WhatsApp or web chat.',
+        forSalonTitle: 'Beauty salons',
+        forSalonText: 'Let clients book themselves, receive reminders and ask questions via chat.',
+        forShopTitle: 'Webshops & services',
+        forShopText: 'Help customers 24/7 with product info, returns and support — fully automated.',
+        whyBotmaticTitle: 'Why choose BotMatic?',
+        fastLaunchTitle: 'Fast launch',
+        fastLaunchText: 'Ready to use in 48h — no technical hassle.',
+        customTitle: '100% customized',
+        customText: 'We build your chatbot entirely around your company & processes.',
+        multiPlatformTitle: 'Works everywhere',
+        multiPlatformText: 'WhatsApp, Telegram, Instagram, website — you choose the channels.',
+        aiTitle: 'AI inside',
+        aiText: 'Smart chat flows with GPT & language recognition for real impact.',
         featuresTitle: 'Unlock the Power of Chatbots',
         featuresSub: 'Discover how a tailored chatbot can boost your business.',
         feat1Title: '24/7 Customer Support',
@@ -729,7 +761,7 @@
         feat3Title: 'Drive Sales',
         feat3Desc: 'Capture leads, qualify prospects, and assist customers in their buying journey to boost conversions.',
         pricingTitle: 'Choose Your Perfect Plan',
-        pricingSub: 'Test any plan free for 2 weeks. Love it? Keep your plan, upgrade or choose Basic.',
+        pricingSub: 'Test any plan free for 2 weeks. Love it? Keep your plan, upgrade or choose Basic.',
         plan1Title: 'Basic',
         plan1Price: '€29',
         plan1Desc: 'For small businesses just starting out.',
@@ -755,6 +787,7 @@
         plan3f3: 'Dedicated project manager',
         plan3f4: 'Unlimited conversations',
         plan3Btn: 'Choose Premium',
+        perMonth: '/month',
         contactTitle: 'Ready to elevate your customer interactions?',
         contactDesc: 'Get in touch to start your free trial and discover how BotMatic can transform your business.',
         nameLabel: 'Name',
@@ -769,18 +802,9 @@
         footerLink2: 'Privacy Policy',
         footerLink3: 'Terms & Conditions',
         footerCopyright: 'All rights reserved.'
-        ,perMonth: '/month'
-        ,testimonialsTitle: 'What Our Clients Say'
-        ,testimonial1Quote: 'BotMatic transformed our customer service – their bots handle 80% of requests instantly.'
-        ,testimonial1Name: 'Alex, CEO at TechCorp'
-        ,testimonial2Quote: 'The custom chatbot built by BotMatic increased our lead conversions by 30%.'
-        ,testimonial2Name: 'Sophie, Marketing Manager at WellnessCo'
-        ,testimonial3Quote: 'Impressed by the speed and customization – exactly what we needed.'
-        ,testimonial3Name: 'Jeroen, Founder at RetailPro'
       }
     };
     let currentLang = 'nl';
-
     function setLanguage(lang) {
       currentLang = lang;
       const elems = document.querySelectorAll('[data-i18n]');
@@ -790,7 +814,6 @@
           el.textContent = translations[lang][key];
         }
       });
-      // Update placeholders separately
       const placeholderElems = document.querySelectorAll('[data-i18n-placeholder]');
       placeholderElems.forEach(el => {
         const key = el.getAttribute('data-i18n-placeholder');
@@ -799,7 +822,6 @@
         }
       });
     }
-    // Initialize language
     document.addEventListener('DOMContentLoaded', () => {
       setLanguage(document.getElementById('lang-select').value);
       document.getElementById('year').textContent = new Date().getFullYear();
