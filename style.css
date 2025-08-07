@@ -1,655 +1,484 @@
-/*
- * Globale Stijlen en CSS Variabelen (Custom Properties)
- * Hier worden de basiskleuren, lettertypes en schaduwen gedefinieerd voor consistentie.
- */
 :root {
-    --primary-color: #007bff; /* Een iets zachtere, standaard blauwtint */
-    --primary-hover-color: #0056b3; /* Donkerder blauw bij hover */
-    --secondary-color: #6c757d; /* Grijs voor secundaire tekst en elementen */
-    --secondary-hover-color: #5a6268; /* Donkerder grijs bij hover */
-    --background-color: #f8f9fa; /* Lichtgrijze achtergrond voor secties */
-    --card-background: #ffffff; /* Witte achtergrond voor kaarten en panelen */
-    --text-color: #343a40; /* Donkerdere tekstkleur voor optimale leesbaarheid */
-    --heading-color: #212529; /* Nog donkerder voor koppen, voor contrast */
-    --border-color: #dee2e6; /* Lichtere randkleur voor subtiele scheidingen */
-    --populair-badge-color: #218838; /* Een iets dieper, levendiger groen voor 'populair' badge en vinkjes */
-    --font-family: 'Inter', sans-serif; /* Standaard lettertype */
-    --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08); /* Lichte schaduw voor diepte */
-    --shadow-medium: 0 8px 20px rgba(0, 0, 0, 0.12); /* Medium schaduw voor prominente elementen */
+  --color-primary: #4f46e5;
+  --color-primary-dark: #4338ca;
+  --color-accent: #10b981;
+  --color-bg: #f9fafb;
+  --color-text: #374151;
+  --color-muted: #6b7280;
 }
-
-/* Algemene Reset Regels */
-* {
-    box-sizing: border-box; /* Zorgt ervoor dat padding en border binnen de breedte/hoogte vallen */
-    margin: 0;
-    padding: 0;
-}
-
 html {
-    scroll-behavior: smooth; /* Zorgt voor een vloeiende scroll bij ankerlinks */
+  box-sizing: border-box;
+  font-size: 100%;
+  scroll-behavior: smooth;
 }
-
+*, *::before, *::after {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
 body {
-    font-family: var(--font-family);
-    line-height: 1.6; /* Iets minder regelafstand voor betere leesbaarheid */
-    color: var(--text-color);
-    background-color: var(--background-color);
-    padding-top: 65px; /* Ruimte voor de vaste header, voorkomt dat content onder de header verdwijnt */
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  overflow-x: hidden; /* Prevent horizontal scroll from animations */
 }
-
-/* Stijlen voor Links */
 a {
-    text-decoration: none; /* Geen onderstreping standaard */
-    color: var(--primary-color);
-    transition: color 0.3s ease-in-out; /* Vloeiende overgang bij hover */
+  color: inherit;
+  text-decoration: none;
 }
-
-a:hover {
-    color: var(--primary-hover-color);
+img {
+  max-width: 100%;
+  display: block;
 }
-
-/* Container voor maximale breedte en centrering */
 .container {
-    max-width: 1100px; /* Iets smaller container */
-    margin: 0 auto; /* Centreert de container horizontaal */
-    padding: 0 15px; /* Iets minder padding aan de zijkanten voor kleinere schermen */
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
-
-/* Knoppen (Buttons) Stijlen */
-.btn {
-    display: inline-block; /* Zorgt ervoor dat padding en breedte werken */
-    padding: 12px 25px; /* Iets kleinere knoppen */
-    border-radius: 40px; /* Iets minder afgeronde hoeken */
-    font-weight: 700; /* Dikkere tekst voor betere zichtbaarheid */
-    text-align: center;
-    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, transform 0.2s ease-out, box-shadow 0.3s ease-in-out; /* Vloeiende overgangen */
-    white-space: nowrap; /* Voorkomt dat tekst afbreekt op meerdere regels */
-    cursor: pointer; /* Geeft aan dat het klikbaar is */
-    font-size: 0.95rem; /* Iets kleiner font */
+header {
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
-
-.btn-primary {
-    background-color: var(--primary-color);
-    color: #fff;
-    border: 1px solid var(--primary-color);
-    box-shadow: var(--shadow-light);
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
 }
-
-.btn-primary:hover {
-    background-color: var(--primary-hover-color);
-    transform: translateY(-2px); /* Iets minder beweging bij hover */
-    box-shadow: var(--shadow-medium);
-}
-
-.btn-secondary {
-    background-color: transparent;
-    color: var(--primary-color);
-    border: 2px solid var(--primary-color); /* Dikkere rand voor secundaire knop */
-}
-
-.btn-secondary:hover {
-    background-color: var(--primary-color);
-    color: #fff;
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-medium);
-}
-
-.btn-tertiary {
-    background-color: var(--primary-color);
-    color: #fff;
-    border: 1px solid var(--primary-color);
-    width: 100%; /* Neemt de volledige breedte van de ouder in */
-    padding: 10px 18px; /* Iets kleinere padding voor de kaarten */
-    font-size: 0.9rem; /* Iets kleiner font */
-}
-
-.btn-tertiary:hover {
-    background-color: var(--primary-hover-color);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-light);
-}
-
-/* Header Stijlen */
-.header {
-    background-color: #fff;
-    position: fixed; /* Zorgt ervoor dat de header blijft staan tijdens scrollen */
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000; /* Zorgt ervoor dat de header boven andere elementen ligt */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); /* Lichtere schaduw */
-}
-
-.header .container {
-    display: flex;
-    justify-content: space-between; /* Verdeelt items over de breedte */
-    align-items: center; /* Centreert items verticaal */
-    padding: 15px 15px; /* Iets minder padding */
-}
-
 .logo {
-    font-weight: 800; /* Extra dik lettertype voor het logo */
-    font-size: 1.6rem; /* Iets kleiner logo */
-    color: var(--heading-color);
-    letter-spacing: -0.5px; /* Lichte aanpassing van de letterafstand */
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-primary);
 }
-
-.nav a {
-    margin-left: 1.2rem; /* Iets minder ruimte tussen nav-links */
-    font-weight: 600;
-    color: var(--text-color);
-    position: relative; /* Nodig voor het pseudo-element onderstreepje */
-    outline: none; /* Verbergt standaard focus-outline */
-}
-
-.nav a:not(.btn)::after { /* Onderstreepje bij hover voor niet-knop links */
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: -4px; /* Iets hoger plaatsen */
-    left: 0;
-    background-color: var(--primary-color);
-    transition: width 0.3s ease-in-out;
-}
-
-.nav a:not(.btn):hover::after,
-.nav a:not(.btn):focus::after { /* Ook voor focus-state */
-    width: 100%;
-}
-
-.nav .btn-primary {
-    margin-left: 1.5rem; /* Iets minder marge */
-}
-
-/* Algemene Sectie Stijlen */
-section {
-    padding: 70px 0; /* Iets minder verticale padding */
-    text-align: center;
-}
-
-.section-title {
-    font-size: 2.5rem; /* Aangepast: nog kleinere titel */
-    font-weight: 800;
-    margin-bottom: 1rem; /* Iets minder marge */
-    color: var(--heading-color);
-    line-height: 1.2;
-}
-
-.section-subtitle {
-    font-size: 1.1rem; /* Aangepast: nog kleinere ondertitel */
-    max-width: 650px; /* Iets smaller */
-    margin: 0 auto 3.5rem; /* Iets minder marge onder ondertitel */
-    color: var(--secondary-color);
-}
-
-/* Hero Sectie Stijlen */
-.hero-section {
-    padding: 90px 0; /* Iets minder padding */
-    /* Subtiel patroon toegevoegd aan de achtergrond */
-    background: linear-gradient(135deg, #e0f2f7 0%, #ffffff 100%),
-                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%239C92AC' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M0 0h30v30H0V0zm30 30h30v30H30V30z'/%3E%3C/g%3E%3C/svg%3E");
-    background-size: cover, 30px 30px; /* Pas de grootte van het patroon aan */
-    background-blend-mode: overlay; /* Meng de gradiënt en het patroon */
-    position: relative;
-    overflow: hidden;
-}
-
-.hero-section h1 {
-    font-size: 3.2rem; /* Aangepast: nog kleinere hero titel */
-    font-weight: 800;
-    color: var(--heading-color);
-    line-height: 1.1;
-    margin-bottom: 1rem; /* Iets minder marge */
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Subtiele tekstschaduw */
-}
-
-.hero-section .subtitle {
-    font-size: 1.2rem; /* Aangepast: nog kleinere hero ondertitel */
-    max-width: 550px; /* Iets smaller */
-    margin: 0 auto 1rem; /* Iets minder marge */
-    color: var(--text-color);
-}
-
-.free-trial-hero {
-    font-size: 1rem; /* Aangepast: nog kleinere proefperiode tekst */
-    font-weight: 700;
-    color: var(--populair-badge-color);
-    margin-bottom: 1.8rem; /* Iets minder marge */
-}
-
-.hero-buttons .btn {
-    margin: 0 8px; /* Iets minder ruimte tussen knoppen */
-}
-
-/* Nieuwe Wat is een Chatbot Sectie Stijlen */
-.what-is-chatbot-section {
-    background-color: #fff; /* Witte achtergrond voor deze sectie */
-    padding: 70px 0; /* Iets minder padding */
-}
-
-.chatbot-benefits-grid {
-    display: grid;
-    grid-template-columns: 1fr; /* Standaard 1 kolom op mobiel */
-    gap: 1.8rem; /* Iets minder ruimte */
-    margin-top: 2.5rem; /* Iets minder marge */
-    text-align: left; /* Tekst links uitlijnen in benefit kaarten */
-}
-
-.benefit-card {
-    background-color: var(--background-color); /* Lichte achtergrond voor benefit kaart */
-    padding: 1.8rem; /* Iets minder padding */
-    border-radius: 14px; /* Iets minder afgerond */
-    box-shadow: var(--shadow-light);
-    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
-}
-
-.benefit-card:hover {
-    transform: translateY(-4px); /* Iets minder beweging */
-    box-shadow: var(--shadow-medium);
-}
-
-.benefit-card h3 {
-    font-size: 1.3rem; /* Aangepast: nog kleinere titel */
-    font-weight: 700;
-    color: var(--heading-color);
-    margin-bottom: 0.7rem; /* Iets minder marge */
+.nav-wrapper {
     display: flex;
     align-items: center;
-    justify-content: center; /* Centreer de titel en icon op mobiel */
+    gap: 1rem;
+}
+.mobile-nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+.mobile-nav-toggle .icon-bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: var(--color-text);
+    margin: 5px 0;
+    transition: all 0.3s;
+}
+.mobile-nav-toggle.active .icon-bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.mobile-nav-toggle.active .icon-bar:nth-child(2) { opacity: 0; }
+.mobile-nav-toggle.active .icon-bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+nav {
+  display: none;
+  align-items: center;
+}
+nav a {
+  margin-left: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  transition: color 0.3s;
+}
+nav a:hover { color: var(--color-primary); }
+.lang-select {
+  padding: 0.3rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  font-weight: 600;
+  color: var(--color-text);
+}
+.hero { padding: 4rem 0; }
+.hero-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+}
+.hero-content {
+  max-width: 600px;
+  text-align: center;
+}
+.hero h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+.hero p {
+  font-size: 1.125rem;
+  color: var(--color-muted);
+  margin-bottom: 2rem;
+}
+.hero .btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+.hero-image {
+  width: 100%;
+  max-width: 500px;
+}
+.hero-image img {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s;
+  border: 1px solid transparent;
+}
+.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-2px);
+}
+.btn-secondary {
+  background: #fff;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+.btn-secondary:hover {
+  background: var(--color-primary);
+  color: #fff;
+  transform: translateY(-2px);
+}
+.for-who, .why-botmatic, .features, .pricing, .contact, .how-it-works, .faq, .cta-section {
+  padding: 4rem 0;
+  text-align: center;
+}
+.section-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+.section-sub {
+    color: var(--color-muted);
+    margin-bottom: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.audience-grid, .why-botmatic .features-grid, .features-grid, .plans {
+  display: grid;
+  gap: 2rem;
+}
+.audience-card, .feature-card, .feature-item, .plan {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-align: left;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.audience-card {
+    border: none;
+    font-family: inherit;
+    color: inherit;
+    width: 100%;
+}
+.audience-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+}
+.feature-card:hover, .feature-item:hover, .plan:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+.feature-card .icon {
+  background-color: #eef2ff;
+  color: var(--color-primary);
+  border-radius: 8px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.feature-card .icon svg {
+    width: 24px;
+    height: 24px;
+}
+.feature-item h3, .audience-card h3, .feature-card h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.feature-item p, .audience-card p, .feature-card p {
+  color: var(--color-muted);
+  font-size: 0.95rem;
 }
 
-.benefit-card .icon {
-    font-size: 1.6rem; /* Aangepast: nog kleiner icoon */
-    margin-right: 0.6rem; /* Iets minder marge */
-    color: var(--primary-color);
-}
-
-.benefit-card p {
-    font-size: 0.95rem; /* Aangepast: nog kleinere tekst */
-    color: var(--text-color);
-    line-height: 1.5; /* Iets minder regelafstand */
-}
-
-.cta-bottom-section {
-    margin-top: 2.5rem; /* Iets minder ruimte boven de CTA knop */
-}
-
-
-/* Pricing Sectie Stijlen */
-.pricing-section {
-    background-color: var(--background-color); /* Aangepaste achtergrond voor pricing */
-}
-
-.pricing-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.8rem; /* Iets minder ruimte */
-    text-align: center;
-}
-
-.free-trial-pricing {
-    font-size: 0.95rem; /* Aangepast: nog kleinere proefperiode tekst */
-    font-weight: 600;
-    color: var(--populair-badge-color);
-    margin-bottom: 1.8rem; /* Iets minder marge */
-}
-
-.pricing-card {
-    background-color: var(--card-background);
-    padding: 2.2rem 1.8rem; /* Iets minder padding */
-    border-radius: 14px;
-    border: 2px solid var(--border-color);
+/* How it works */
+.how-it-works { background: #fff; }
+.steps-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    position: relative;
-    box-shadow: var(--shadow-light);
-    transition: transform 0.3s ease-out, border-color 0.3s ease-out, box-shadow 0.3s ease-out;
+    gap: 2rem;
 }
-
-.pricing-card.popular {
-    border-color: var(--primary-color);
-    transform: scale(1.01); /* Iets minder schaal */
-    box-shadow: var(--shadow-medium);
-}
-
-.pricing-card.popular .btn-tertiary {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-}
-
-.pricing-card h3 {
-    font-size: 1.6rem; /* Aangepast: nog kleinere titel */
-    font-weight: 800;
-    color: var(--heading-color);
-    margin-bottom: 0.3rem; /* Iets minder marge */
-}
-
-.pricing-card .price {
-    font-size: 2.2rem; /* Aangepast: nog kleinere prijs */
-    font-weight: 800;
-    color: var(--primary-color);
-    margin-bottom: 0.7rem; /* Iets minder marge */
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
-    width: 100%;
-}
-
-.pricing-card .price span {
-    font-size: 1rem; /* Aangepast: nog kleiner "vanaf" */
-    font-weight: 600;
-    color: var(--secondary-color);
-    margin-left: 0.3rem; /* Iets minder marge */
-    align-self: flex-end;
-}
-
-.pricing-card .pricing-text {
-    font-size: 0.95rem; /* Aangepast: nog kleinere tekst */
-    margin-bottom: 1.6rem; /* Iets minder marge */
-    color: var(--secondary-color);
-}
-
-.pricing-card ul {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 1.8rem; /* Iets minder marge */
+.step {
+    background: var(--color-bg);
+    padding: 2rem;
+    border-radius: 12px;
     text-align: left;
-    flex-grow: 1;
-    width: 100%;
+    position: relative;
 }
-
-.pricing-card li {
-    padding: 0.5rem 0; /* Iets minder padding */
-    border-bottom: 1px solid var(--border-color);
-    font-size: 0.95rem; /* Aangepast: nog kleinere tekst */
+.step-number {
+    position: absolute;
+    top: -20px;
+    left: 2rem;
+    background: var(--color-primary);
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
-}
-
-.pricing-card li:last-child {
-    border-bottom: none;
-}
-
-.check-icon {
-    color: var(--populair-badge-color);
-    margin-right: 0.6rem; /* Iets minder marge */
-    font-size: 1rem; /* Iets kleiner vinkje */
-}
-
-.popular-badge {
-    background-color: var(--populair-badge-color);
-    color: #fff;
-    font-size: 0.8rem; /* Iets kleinere badge tekst */
+    justify-content: center;
+    font-size: 1.25rem;
     font-weight: 700;
-    padding: 4px 12px; /* Iets minder padding */
-    border-radius: 40px;
-    position: absolute;
-    top: -16px; /* Iets hoger plaatsen */
-    left: 50%;
-    transform: translateX(-50%);
-    box-shadow: var(--shadow-light);
+    border: 4px solid #fff;
 }
+.step h3 { font-size: 1.25rem; margin-top: 1rem; }
+.step p { color: var(--color-muted); }
 
-/* Contact Sectie Stijlen (met Formulier en CTA) */
-.contact-section {
-    background-color: #fff; /* Aangepaste achtergrond voor contact */
-    padding: 70px 0; /* Iets minder padding */
-}
-
-.cta-block { /* Nieuw CTA blok */
-    background-color: var(--primary-color);
-    color: #fff;
-    padding: 2.2rem 1.6rem; /* Iets minder padding */
-    border-radius: 14px;
-    max-width: 650px; /* Iets smaller */
-    margin: 0 auto 2.5rem; /* Iets minder marge onderaan */
-    box-shadow: var(--shadow-medium);
-    text-align: center;
-}
-
-.cta-block h3 {
-    font-size: 1.8rem; /* Aangepast: nog kleinere titel */
-    font-weight: 800;
-    margin-bottom: 0.7rem; /* Iets minder marge */
-    line-height: 1.2;
-}
-
-.cta-block p {
-    font-size: 1rem; /* Aangepast: nog kleinere tekst */
-    margin-bottom: 1.6rem; /* Iets minder marge */
-    opacity: 0.9;
-}
-
-.cta-block .btn-primary {
-    background-color: #fff; /* Witte knop op blauwe achtergrond */
-    color: var(--primary-color);
-    border: 1px solid #fff;
-    box-shadow: none; /* Schaduw verwijderen om niet te concurreren met het blok */
-}
-
-.cta-block .btn-primary:hover {
-    background-color: rgba(255, 255, 255, 0.9); /* Iets transparanter bij hover */
-    color: var(--primary-hover-color);
-    transform: translateY(-1px);
-    box-shadow: none;
-}
-
-
-.contact-form {
-    max-width: 500px; /* Iets smaller */
+/* FAQ Section */
+.faq-container {
+    max-width: 800px;
     margin: 0 auto;
-    padding: 2rem; /* Iets minder padding */
-    background-color: var(--card-background);
-    border-radius: 14px;
-    box-shadow: var(--shadow-medium); /* Prominentere schaduw voor het formulier */
-    text-align: left; /* Tekst in formulier links uitlijnen */
+    text-align: left;
 }
-
-.form-group {
-    margin-bottom: 1rem; /* Iets minder marge */
+.faq-item {
+    background: #fff;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
-
-.form-group label {
-    display: block;
-    font-size: 0.9rem; /* Iets kleiner label */
-    font-weight: 600;
-    color: var(--heading-color);
-    margin-bottom: 0.3rem; /* Iets minder marge */
-}
-
-.form-group input[type="text"],
-.form-group input[type="email"],
-.form-group textarea {
+.faq-question {
     width: 100%;
-    padding: 9px 10px; /* Iets minder padding */
-    border: 1px solid var(--border-color);
-    border-radius: 7px; /* Iets minder afgerond */
-    font-family: var(--font-family);
-    font-size: 0.9rem; /* Iets kleiner font */
-    color: var(--text-color);
-    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    background: none;
+    border: none;
+    padding: 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.faq-question::after {
+    content: '+';
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    transition: transform 0.3s;
+}
+.faq-item.active .faq-question::after {
+    transform: rotate(45deg);
+}
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+}
+.faq-answer p {
+    padding: 0 1.5rem 1.5rem;
+    color: var(--color-muted);
+}
+.faq-item.active .faq-answer {
+    max-height: 200px; /* Adjust as needed */
 }
 
-.form-group input[type="text"]:focus,
-.form-group input[type="email"]:focus,
-.form-group textarea:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2); /* Kleinere focus ring */
+/* Plan Section */
+.plan {
+  border: 2px solid transparent;
+  position: relative;
+  text-align: center;
+}
+.plan.popular { border-color: var(--color-primary); }
+.plan.popular .badge {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-primary);
+  color: #fff;
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.plan h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+.plan .price {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+.plan .price span { font-size: 1rem; color: var(--color-muted); font-weight: 400; }
+.plan p.sub { font-size: 0.95rem; color: var(--color-muted); margin-bottom: 1.5rem; min-height: 50px; }
+.plan ul { list-style: none; text-align: left; margin-bottom: 2rem; }
+.plan ul li {
+  margin: 0.75rem 0;
+  padding-left: 2rem;
+  position: relative;
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+.plan ul li::before {
+  content: '✔';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--color-accent);
+  font-size: 1.2rem;
+}
+.plan .btn { display: block; width: 100%; text-align: center; }
+
+/* CTA Section */
+.cta-section {
+    background-color: #fff;
+}
+.cta-section .btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Contact Section */
+.contact { background: #fff; border-top: 1px solid #e5e7eb; }
+.contact-form {
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.contact-form label { text-align: left; font-weight: 600; margin-bottom: 0.25rem; display: block; }
+.contact-form input, .contact-form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.contact-form input:focus, .contact-form textarea:focus {
     outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
 }
-
-.form-group textarea {
-    resize: vertical; /* Alleen verticaal resizen toestaan */
-    min-height: 90px; /* Iets kleinere minimale hoogte */
-}
-
-.contact-form .btn-primary {
-    width: auto; /* Zodat de knop niet de volledige breedte inneemt, tenzij op mobiel */
-    padding: 10px 22px; /* Iets minder padding */
-    display: block; /* Maak het een blok-element om margin auto te laten werken */
-    margin: 0 auto; /* Centreer de knop in het formulier */
-    font-size: 0.9rem; /* Iets kleiner font */
-}
-
-
-/* Footer Stijlen */
-.footer {
-    background-color: var(--heading-color);
-    color: #e9ecef;
-    padding: 35px 0; /* Iets minder padding */
+.contact-form textarea { resize: vertical; min-height: 120px; }
+.contact-form button { align-self: flex-start; }
+#form-feedback {
+    padding: 1rem;
+    border-radius: 8px;
     text-align: center;
-    font-size: 0.85rem; /* Iets kleiner font */
+    margin-top: 1.5rem;
+    display: none;
+    background-color: #d1fae5;
+    color: #065f46;
+    font-weight: 600;
+}
+footer {
+  background: #374151;
+  padding: 2.5rem 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #d1d5db;
+}
+footer .footer-links { margin-bottom: 1rem; }
+footer .footer-links a { margin: 0 0.75rem; color: #d1d5db; font-weight: 500; transition: color 0.3s; }
+footer .footer-links a:hover { color: #fff; }
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: none; align-items: center; justify-content: center;
+    z-index: 1000; opacity: 0; transition: opacity 0.3s ease;
+}
+.modal-overlay.active { display: flex; opacity: 1; }
+.modal-content {
+    background: #fff; padding: 2rem; border-radius: 12px;
+    width: 90%; max-width: 600px; max-height: 90vh;
+    overflow-y: auto; position: relative;
+    transform: translateY(-20px); transition: transform 0.3s ease;
+}
+.modal-overlay.active .modal-content { transform: translateY(0); }
+.modal-close {
+    position: absolute; top: 1rem; right: 1rem; background: none;
+    border: none; font-size: 2rem; line-height: 1;
+    color: var(--color-muted); cursor: pointer;
+}
+#modal-title { font-size: 1.75rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-primary); }
+#modal-body ul { list-style: none; padding: 0; }
+#modal-body li { padding-left: 1.5rem; position: relative; margin-bottom: 0.75rem; }
+#modal-body li::before {
+    content: '✓'; position: absolute; left: 0;
+    color: var(--color-accent); font-weight: 600;
 }
 
-.footer-links {
-    margin-bottom: 1rem; /* Iets minder marge */
+/* Scroll Animations */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
-.footer-links a {
-    color: #e9ecef;
-    margin: 0 0.8rem; /* Iets minder ruimte tussen links */
-    transition: color 0.3s ease-in-out;
-}
-
-.footer-links a:hover {
-    color: var(--primary-color);
-}
-
-.copyright {
-    font-size: 0.75rem; /* Iets kleiner font */
-    opacity: 0.8;
-}
-
-/* Media Queries voor Responsiviteit */
+/* Responsive Design */
 @media (max-width: 767px) {
-    .header .nav {
-        display: none;
+    .mobile-nav-toggle { display: block; z-index: 1001; }
+    nav {
+        position: absolute; top: 100%; left: 0; width: 100%;
+        background: #fff; flex-direction: column; align-items: stretch;
+        border-bottom: 1px solid #e5e7eb; padding: 1rem 0;
+        transform: translateY(-150%);
+        transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     }
-    .header .container {
-        justify-content: center;
-    }
-    .hero-section h1 {
-        font-size: 2.2rem; /* Aangepast: kleinere titel op mobiel */
-    }
-    .hero-section .subtitle {
-        font-size: 0.95rem; /* Aangepast: kleinere ondertitel op mobiel */
-    }
-    .free-trial-hero {
-        font-size: 0.85rem; /* Aangepast: kleinere tekst op mobiel */
-        margin-bottom: 1rem;
-    }
-    .free-trial-pricing {
-        font-size: 0.85rem; /* Aangepast: kleinere tekst op mobiel */
-        margin-bottom: 1rem;
-    }
-    .hero-buttons {
-        flex-direction: column;
-        gap: 10px; /* Iets minder ruimte */
-    }
-    .hero-buttons .btn {
-        margin: 0;
-        width: 95%; /* Knoppen nemen meer breedte in */
-        max-width: 250px; /* Iets smaller */
-        padding: 10px 18px; /* Iets minder padding */
-        font-size: 0.9rem; /* Iets kleiner font */
-    }
-    .section-title {
-        font-size: 1.8rem; /* Aangepast: kleinere titel op mobiel */
-    }
-    .section-subtitle {
-        font-size: 0.85rem; /* Aangepast: kleinere ondertitel op mobiel */
-        margin-bottom: 2rem; /* Iets minder marge */
-    }
-    .benefit-card, .pricing-card, .contact-form {
-        padding: 1.5rem; /* Iets minder padding op mobiel */
-    }
-    .pricing-card.popular {
-        transform: scale(1.0);
-    }
-    .contact-form {
-        padding: 1rem; /* Nog minder padding op mobiel */
-    }
-    .contact-form .btn-primary {
-        width: 100%;
-        padding: 9px 18px; /* Iets minder padding */
-        font-size: 0.85rem; /* Iets kleiner font */
-    }
-    .cta-block {
-        padding: 1.5rem 1rem; /* Iets minder padding op mobiel */
-        margin-bottom: 1.8rem; /* Iets minder marge */
-    }
-    .cta-block h3 {
-        font-size: 1.4rem; /* Aangepast: kleinere titel op mobiel */
-    }
-    .cta-block p {
-        font-size: 0.9rem; /* Aangepast: kleinere tekst op mobiel */
-    }
+    nav.active { display: flex; transform: translateY(0); }
+    nav a { margin: 0; padding: 1rem 10%; text-align: center; border-bottom: 1px solid #f3f4f6; }
+    nav a:last-of-type { border-bottom: none; }
+    .nav-wrapper { gap: 0.5rem; }
 }
-
 @media (min-width: 768px) {
-    .section-title {
-        font-size: 2.5rem; /* Aangepast: kleinere titel op tablet */
-    }
-
-    .hero-section h1 {
-        font-size: 3.5rem; /* Aangepast: kleinere hero titel op tablet */
-    }
-
-    .hero-section .subtitle {
-        margin-bottom: 1.2rem;
-    }
-
-    .free-trial-hero {
-        font-size: 1.1rem; /* Aangepast: kleinere tekst op tablet */
-    }
-
-    .free-trial-pricing {
-        font-size: 1rem; /* Aangepast: kleinere tekst op tablet */
-    }
-
-    .chatbot-benefits-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .benefit-card h3 {
-        justify-content: flex-start;
-    }
-
-    .pricing-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .pricing-card {
-        align-items: flex-start;
-        text-align: left;
-    }
-
-    .pricing-card ul {
-        text-align: left;
-    }
+  nav { display: flex; }
+  .hero .btn-group { flex-direction: row; gap: 1.5rem; }
+  .cta-section .btn-group { flex-direction: row; gap: 1.5rem; }
+  .audience-grid, .why-botmatic .features-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+  .features-grid { grid-template-columns: repeat(3, 1fr); }
+  .plans { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .steps-container { flex-direction: row; align-items: flex-start; }
 }
-
 @media (min-width: 1024px) {
-    .chatbot-benefits-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .pricing-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .pricing-card.popular {
-        transform: scale(1.03); /* Iets minder schaal op desktop */
-    }
-}
-
-@media (min-width: 1200px) {
-    .hero-section h1 {
-        font-size: 4rem; /* Aangepast: kleinere hero titel op grotere schermen */
-    }
-    .section-title {
-        font-size: 3rem; /* Aangepast: kleinere titel op grotere schermen */
-    }
+  .hero-inner { flex-direction: row; text-align: left; gap: 4rem; }
+  .hero-content { text-align: left; }
+  .hero .btn-group { justify-content: flex-start; }
+  .hero h1 { font-size: 3rem; }
+  .section-title { font-size: 2rem; }
 }
