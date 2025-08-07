@@ -1,207 +1,475 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BotMatic | Maatwerk Chatbots voor Jouw Bedrijf</title>
-  <meta name="description" content="Bouw krachtige chatbots voor WhatsApp, Telegram of je website. Automatisering, klanttevredenheid en conversie — allemaal in één slimme oplossing." />
-  <meta property="og:title" content="BotMatic | Maatwerk Chatbots voor jouw bedrijf" />
-  <meta property="og:description" content="Bouw een slimme chatbot voor WhatsApp, Telegram of je website. 2 weken gratis testen!" />
-  <meta property="og:image" content="https://botmatic.be/images/preview.jpg" />
-  <meta property="og:url" content="https://botmatic.be" />
-  <meta property="og:type" content="website" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BotMatic | Custom Chatbots for Your Business</title>
+    <!-- Import Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      /* Root variables for easy theming */
+      :root {
+        --color-primary: #4f46e5;
+        --color-primary-dark: #4338ca;
+        --color-accent: #10b981;
+        --color-bg: #f9fafb;
+        --color-text: #374151;
+        --color-muted: #6b7280;
+      }
+
+      html {
+        box-sizing: border-box;
+        font-size: 100%;
+      }
+      *, *::before, *::after {
+        box-sizing: inherit;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+        line-height: 1.6;
+        color: var(--color-text);
+        background-color: var(--color-bg);
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
+      .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      /* Header */
+      header {
+        background: #fff;
+        border-bottom: 1px solid #e5e7eb;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      }
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 0;
+      }
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--color-primary);
+      }
+      nav {
+        display: none;
+      }
+      nav a {
+        margin-left: 1.5rem;
+        font-weight: 600;
+        color: var(--color-text);
+        transition: color 0.3s;
+      }
+      nav a:hover {
+        color: var(--color-primary);
+      }
+      /* Hero */
+      .hero {
+        padding: 4rem 0 3rem;
+        text-align: center;
+      }
+      .hero h1 {
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+      }
+      .hero p {
+        font-size: 1.125rem;
+        color: var(--color-muted);
+        margin-bottom: 2rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .hero .btn-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+      }
+      .btn {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: background 0.3s;
+      }
+      .btn-primary {
+        background: var(--color-primary);
+        color: #fff;
+      }
+      .btn-primary:hover {
+        background: var(--color-primary-dark);
+      }
+      .btn-secondary {
+        background: #fff;
+        border: 1px solid var(--color-primary);
+        color: var(--color-primary);
+      }
+      .btn-secondary:hover {
+        background: var(--color-primary);
+        color: #fff;
+      }
+      /* Features */
+      .features {
+        padding: 4rem 0;
+        text-align: center;
+      }
+      .features h2 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+      }
+      .features p.section-sub {
+        color: var(--color-muted);
+        margin-bottom: 2rem;
+      }
+      .features-grid {
+        display: grid;
+        gap: 2rem;
+      }
+      .feature-item {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        text-align: left;
+      }
+      .feature-item h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+      .feature-item p {
+        color: var(--color-muted);
+        font-size: 0.95rem;
+      }
+      /* Pricing */
+      .pricing {
+        padding: 4rem 0;
+        text-align: center;
+      }
+      .pricing h2 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+      }
+      .pricing p.section-sub {
+        color: var(--color-muted);
+        margin-bottom: 2rem;
+      }
+      .plans {
+        display: grid;
+        gap: 2rem;
+      }
+      .plan {
+        background: #fff;
+        border: 2px solid transparent;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        position: relative;
+      }
+      .plan.popular {
+        border-color: var(--color-primary);
+      }
+      .plan.popular .badge {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background: var(--color-primary);
+        color: #fff;
+        padding: 0.25rem 0.5rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+      }
+      .plan h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+      .plan .price {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--color-primary);
+        margin-bottom: 0.5rem;
+      }
+      .plan .price span {
+        font-size: 1rem;
+        color: var(--color-muted);
+      }
+      .plan p.sub {
+        font-size: 0.95rem;
+        color: var(--color-muted);
+        margin-bottom: 1rem;
+      }
+      .plan ul {
+        list-style: none;
+        text-align: left;
+        margin-bottom: 1.5rem;
+      }
+      .plan ul li {
+        margin: 0.5rem 0;
+        padding-left: 1.5rem;
+        position: relative;
+        font-size: 0.95rem;
+        color: var(--color-text);
+      }
+      .plan ul li::before {
+        content: '✔';
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: var(--color-accent);
+      }
+      .plan .btn {
+        display: block;
+        width: 100%;
+        text-align: center;
+      }
+      /* Contact */
+      .contact {
+        padding: 4rem 0;
+        text-align: center;
+        background: #fff;
+        border-top: 1px solid #e5e7eb;
+      }
+      .contact h2 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+      }
+      .contact p {
+        font-size: 1rem;
+        color: var(--color-muted);
+        margin-bottom: 2rem;
+      }
+      .contact-form {
+        max-width: 500px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .contact-form label {
+        text-align: left;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+      }
+      .contact-form input,
+      .contact-form textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 1rem;
+      }
+      .contact-form textarea {
+        resize: vertical;
+        min-height: 120px;
+      }
+      .contact-form button {
+        align-self: flex-start;
+      }
+      /* Footer */
+      footer {
+        background: #fff;
+        border-top: 1px solid #e5e7eb;
+        padding: 2rem 0;
+        text-align: center;
+        font-size: 0.875rem;
+        color: var(--color-muted);
+      }
+      footer .footer-links {
+        margin-bottom: 1rem;
+      }
+      footer .footer-links a {
+        margin: 0 0.75rem;
+        color: var(--color-muted);
+        font-weight: 600;
+      }
+      footer .footer-links a:hover {
+        color: var(--color-primary);
+      }
+      /* Responsive */
+      @media (min-width: 640px) {
+        nav {
+          display: flex;
+        }
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+        .features-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .plans {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .hero .btn-group {
+          flex-direction: row;
+        }
+      }
+      @media (min-width: 1024px) {
+        .hero h1 {
+          font-size: 3rem;
+        }
+        .features h2,
+        .pricing h2,
+        .contact h2 {
+          font-size: 2rem;
+        }
+      }
+    </style>
 </head>
 <body>
-
-<header class="header">
-  <div class="container">
-    <a href="#" class="logo">BotMatic</a>
-    <nav class="nav">
-      <a href="#what-is-chatbot">Wat is een Chatbot?</a>
-      <a href="#pricing">Abonnementen</a>
-      <a href="#contact" class="btn btn-primary">Neem contact op</a>
-    </nav>
-  </div>
-</header>
-
-<main>
-  <section class="hero-section">
-    <div class="container">
-      <h1>Jouw chatbot, precies zoals jij het wilt.</h1>
-      <p class="subtitle">Laat BotMatic krachtige, gepersonaliseerde chatbots bouwen voor WhatsApp, Telegram en je website. Snel, efficiënt en volledig op maat.</p>
-      <p class="free-trial-hero">Start vandaag nog met een <strong>2 weken gratis proefperiode!</strong> Geen verplichtingen.</p>
-      <div class="hero-buttons">
-        <a href="#contact" class="btn btn-primary">Vraag een offerte aan</a>
-        <a href="#what-is-chatbot" class="btn btn-secondary">Meer over chatbots</a>
+    <!-- Header -->
+    <header>
+      <div class="container header-inner">
+        <div class="logo">BotMatic</div>
+        <nav>
+          <a href="#features">Features</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#contact" class="btn btn-primary">Contact</a>
+        </nav>
       </div>
-    </div>
-  </section>
+    </header>
 
-  <section id="what-is-chatbot" class="what-is-chatbot-section">
-    <div class="container">
-      <h2 class="section-title">Wat is een Chatbot?</h2>
-      <p class="section-subtitle">Een chatbot is een virtuele assistent die automatisch met je klanten communiceert. Via kanalen zoals WhatsApp of je website voert de bot gesprekken alsof het een echte medewerker is – 24/7, zonder pauze.</p>
-      <div class="chatbot-benefits-grid">
-        <div class="benefit-card">
-          <h3><span class="icon">⚙️</span> Geautomatiseerde gesprekken</h3>
-          <p>Chatbots reageren razendsnel op vragen, geven informatie of begeleiden bezoekers in hun klantreis.</p>
-        </div>
-        <div class="benefit-card">
-          <h3><span class="icon">📊</span> Slimme inzet van AI</h3>
-          <p>Onze bots maken gebruik van AI om natuurlijke dialogen te voeren en zelfs complexe klantvragen te herkennen en verwerken.</p>
-        </div>
-        <div class="benefit-card">
-          <h3><span class="icon">🚀</span> Conversie & klanttevredenheid</h3>
-          <p>Een goed ingestelde chatbot verhoogt je conversie én ontlast je team. Meer omzet, minder werk.</p>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <h1>Your custom chatbot, built just the way you need it.</h1>
+        <p>Let BotMatic craft powerful, personalized chatbots for WhatsApp, Telegram, Instagram and more. Fast, efficient, fully tailored to your business.</p>
+        <div class="btn-group">
+          <a href="#contact" class="btn btn-primary">Request a Quote</a>
+          <a href="#features" class="btn btn-secondary">Learn More</a>
         </div>
       </div>
-      <p class="extra-info">Chatbots zijn niet meer weg te denken uit moderne marketing en klantenservice. Of je nu leads wilt genereren, afspraken wil laten boeken of service wil automatiseren – een chatbot helpt jou sneller groeien.</p>
-      <a href="#contact" class="btn btn-primary cta-bottom-section">Bekijk wat mogelijk is voor jouw bedrijf</a>
-    </div>
-  </section>
+    </section>
 
-  <section id="pricing" class="pricing-section">
-    <div class="container">
-      <h2 class="section-title">Kies jouw perfecte abonnement.</h2>
-      <p class="section-subtitle">Vind de maandelijkse oplossing die past bij jouw behoeften en budget.</p>
-      <p class="free-trial-pricing">Elk abonnement start met een <strong>2 weken gratis proefperiode!</strong></p>
-      <div class="pricing-grid">
-        <div class="pricing-card">
-          <h3>Basis Abonnement</h3>
-          <p class="price">&euro;29 <span>/maand</span></p>
-          <p class="pricing-text">Ideaal voor kleine bedrijven die willen starten met basisautomatisering.</p>
-          <ul>
-            <li><span class="check-icon">&#10004;</span> Snelle FAQ-antwoorden</li>
-            <li><span class="check-icon">&#10004;</span> Eenvoudige integratie (WhatsApp of je website)</li>
-            <li><span class="check-icon">&#10004;</span> Basis ondersteuning</li>
-            <li><span class="check-icon">&#10004;</span> Tot 500 gesprekken/maand</li>
-          </ul>
-          <a href="basis-abonnement.html" class="btn btn-tertiary">Abonnement kiezen</a>
-        </div>
-
-        <div class="pricing-card popular">
-          <h3>Standaard Abonnement</h3>
-          <p class="price">&euro;99 <span>/maand</span></p>
-          <span class="popular-badge">Meest populair</span>
-          <p class="pricing-text">Onze meest gekozen optie voor groeiende bedrijven.</p>
-          <ul>
-            <li><span class="check-icon">&#10004;</span> Meerdere taken automatiseren (afspraken, leads, FAQ)</li>
-            <li><span class="check-icon">&#10004;</span> Integratie op 2 platforms</li>
-            <li><span class="check-icon">&#10004;</span> Prioritaire ondersteuning & updates</li>
-            <li><span class="check-icon">&#10004;</span> Tot 2.000 gesprekken/maand</li>
-          </ul>
-          <a href="standaard-abonnement.html" class="btn btn-tertiary">Abonnement kiezen</a>
-        </div>
-
-        <div class="pricing-card">
-          <h3>Premium Abonnement</h3>
-          <p class="price">&euro;299 <span>/maand</span></p>
-          <p class="pricing-text">De ultieme oplossing voor grote organisaties met complexe AI-vereisten.</p>
-          <ul>
-            <li><span class="check-icon">&#10004;</span> Geavanceerde AI & NLP</li>
-            <li><span class="check-icon">&#10004;</span> Integratie met CRM, ERP en meer</li>
-            <li><span class="check-icon">&#10004;</span> Toegewijde projectmanager & 24/7 support</li>
-            <li><span class="check-icon">&#10004;</span> Onbeperkt aantal gesprekken</li>
-          </ul>
-          <a href="premium-abonnement.html" class="btn btn-tertiary">Abonnement kiezen</a>
+    <!-- Features Section -->
+    <section id="features" class="features">
+      <div class="container">
+        <h2>Unlock the Power of Chatbots</h2>
+        <p class="section-sub">Discover how a tailored chatbot can boost your business.</p>
+        <div class="features-grid">
+          <div class="feature-item">
+            <h3>24/7 Customer Support</h3>
+            <p>Provide instant answers and guide customers any time of day, enhancing satisfaction and loyalty.</p>
+          </div>
+          <div class="feature-item">
+            <h3>Smart Automation</h3>
+            <p>Automate repetitive tasks, streamline workflows, and empower your team to focus on what matters most.</p>
+          </div>
+          <div class="feature-item">
+            <h3>Drive Sales</h3>
+            <p>Capture leads, qualify prospects, and assist customers in their buying journey to boost conversions.</p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="contact" class="contact-section">
-    <div class="container">
-      <h2 class="section-title">Klaar om de volgende stap te zetten?</h2>
-      <p class="section-subtitle">Neem contact met ons op voor een vrijblijvend gesprek over jouw chatbot-behoeften.</p>
-
-      <form class="contact-form" id="contactForm">
-        <div class="form-group">
-          <label for="name">Naam:</label>
-          <input type="text" id="name" name="name" required placeholder="Je naam" />
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+      <div class="container">
+        <h2>Choose Your Perfect Plan</h2>
+        <p class="section-sub">Every plan starts with a 2‑week free trial. No commitments.</p>
+        <div class="plans">
+          <!-- Basic Plan -->
+          <div class="plan">
+            <h3>Basic</h3>
+            <p class="price">€29<span>/month</span></p>
+            <p class="sub">For small businesses just starting out.</p>
+            <ul>
+              <li>One core feature (e.g., FAQ)</li>
+              <li>Integration with a single platform</li>
+              <li>Standard support</li>
+              <li>Up to 500 conversations/month</li>
+            </ul>
+            <a href="#contact" class="btn btn-primary">Choose Basic</a>
+          </div>
+          <!-- Standard Plan -->
+          <div class="plan popular">
+            <span class="badge">Most Popular</span>
+            <h3>Standard</h3>
+            <p class="price">€99<span>/month</span></p>
+            <p class="sub">For growing businesses needing more automation.</p>
+            <ul>
+              <li>Multiple automated workflows</li>
+              <li>Integrations with two platforms</li>
+              <li>Priority support & updates</li>
+              <li>Up to 2,000 conversations/month</li>
+            </ul>
+            <a href="#contact" class="btn btn-primary">Choose Standard</a>
+          </div>
+          <!-- Premium Plan -->
+          <div class="plan">
+            <h3>Premium</h3>
+            <p class="price">€299<span>/month</span></p>
+            <p class="sub">For large teams with advanced AI needs.</p>
+            <ul>
+              <li>Advanced AI & NLP capabilities</li>
+              <li>Integrations with multiple systems</li>
+              <li>Dedicated project manager</li>
+              <li>Unlimited conversations</li>
+            </ul>
+            <a href="#contact" class="btn btn-primary">Choose Premium</a>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="email">E-mailadres:</label>
-          <input type="email" id="email" name="email" required placeholder="je.email@voorbeeld.com" />
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+      <div class="container">
+        <h2>Ready to elevate your customer interactions?</h2>
+        <p>Get in touch to start your free trial and discover how BotMatic can transform your business.</p>
+        <form class="contact-form" onsubmit="event.preventDefault(); this.reset(); alert('Thank you! We will get back to you soon.');">
+          <div>
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required placeholder="Your Name" />
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required placeholder="your.email@example.com" />
+          </div>
+          <div>
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" required placeholder="Tell us about your chatbot needs..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Send Message</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-links">
+          <a href="#">About Us</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms & Conditions</a>
         </div>
-        <div class="form-group">
-          <label for="message">Bericht:</label>
-          <textarea id="message" name="message" rows="6" required placeholder="Vertel ons over jouw chatbot-behoeften..."></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Verzend bericht</button>
-        <div id="form-messages" style="margin-top: 20px; font-weight: bold;"></div>
-      </form>
-    </div>
-  </section>
-</main>
+        <p>&copy; <span id="year"></span> BotMatic. All rights reserved.</p>
+      </div>
+    </footer>
 
-<footer class="footer">
-  <div class="container">
-    <div class="footer-links">
-      <a href="#">Over ons</a>
-      <a href="#">Privacybeleid</a>
-      <a href="#">Algemene voorwaarden</a>
-    </div>
-    <p class="copyright">
-      &copy; <span id="current-year"></span> BotMatic. Alle rechten voorbehouden.
-    </p>
-  </div>
-</footer>
-
-<script>
-  document.getElementById('current-year').textContent = new Date().getFullYear();
-
-  document.getElementById('contactForm').addEventListener('submit', async function (event) {
-    event.preventDefault();
-    const formMessages = document.getElementById('form-messages');
-    formMessages.textContent = 'Bericht wordt verzonden...';
-    formMessages.style.color = '#007bff';
-
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const message = document.getElementById('message').value.trim();
-
-    const telegramMessage = `
-📥 *Nieuw formulier via BotMatic.be*:
-
-👤 *Naam:* ${name}
-📧 *E-mail:* ${email}
-💬 *Bericht:*
-${message}
-    `;
-
-    const telegramToken = '8085805971:AAE9U2PdoyP4ucfbYmgrytv2ZJir-SUbIGE';
-    const chatId = '6467617164';
-
-    try {
-      const response = await fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: telegramMessage,
-          parse_mode: 'Markdown'
-        })
-      });
-
-      if (response.ok) {
-        formMessages.textContent = 'Bericht succesvol verzonden!';
-        formMessages.style.color = '#218838';
-        document.getElementById('contactForm').reset();
-      } else {
-        const errorData = await response.json();
-        formMessages.textContent = `Fout bij verzenden: ${errorData.description || response.statusText}`;
-        formMessages.style.color = '#dc3545';
-      }
-    } catch (error) {
-      formMessages.textContent = 'Netwerkfout. Probeer opnieuw.';
-      formMessages.style.color = '#dc3545';
-    }
-  });
-</script>
-
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
 </body>
 </html>
