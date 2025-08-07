@@ -90,7 +90,19 @@
     }
     /* Hero */
     .hero {
-      padding: 4rem 0 3rem;
+      /* Add space above and below */
+      padding: 4rem 0;
+    }
+    /* Inner wrapper to align text and image */
+    .hero-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+    /* Container for text content within the hero */
+    .hero-content {
+      max-width: 600px;
       text-align: center;
     }
     .hero h1 {
@@ -102,15 +114,22 @@
       font-size: 1.125rem;
       color: var(--color-muted);
       margin-bottom: 2rem;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
     }
+    /* Button group styling remains similar */
     .hero .btn-group {
       display: flex;
       flex-direction: column;
       gap: 1rem;
       align-items: center;
+    }
+    /* Hero image container */
+    .hero-image {
+      width: 100%;
+      max-width: 600px;
+    }
+    .hero-image img {
+      width: 100%;
+      border-radius: 12px;
     }
     .btn {
       display: inline-block;
@@ -252,6 +271,39 @@
       width: 100%;
       text-align: center;
     }
+
+    /* Testimonials */
+    .testimonials {
+      padding: 4rem 0;
+      background: #fff;
+      text-align: center;
+    }
+    .testimonials h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+    }
+    .testimonials-grid {
+      display: grid;
+      gap: 2rem;
+      justify-content: center;
+      grid-template-columns: 1fr;
+    }
+    .testimonial-item {
+      background: var(--color-bg);
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+    .testimonial-item .quote {
+      font-style: italic;
+      margin-bottom: 0.75rem;
+      color: var(--color-text);
+    }
+    .testimonial-item .name {
+      font-weight: 600;
+      color: var(--color-primary);
+    }
     /* Contact */
     .contact {
       padding: 4rem 0;
@@ -333,6 +385,21 @@
       .hero .btn-group {
         flex-direction: row;
       }
+      /* On larger screens, place hero text and image side by side */
+      .hero-inner {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+      .hero-content {
+        max-width: 50%;
+        text-align: left;
+      }
+      .hero-image {
+        max-width: 45%;
+      }
+      .testimonials-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
     }
     @media (min-width: 1024px) {
       .hero h1 {
@@ -366,15 +433,21 @@
 
   <!-- Hero Section -->
   <section class="hero">
-    <div class="container">
-      <h1 data-i18n="heroTitle">Jouw chatbot, precies zoals jij het wilt.</h1>
-      <p data-i18n="heroSub">Laat BotMatic krachtige, gepersonaliseerde chatbots bouwen voor WhatsApp, Telegram, Instagram en meer. Snel, efficiënt en volledig op maat van jouw bedrijf.</p>
-      <div class="btn-group">
-        <a href="#contact" class="btn btn-primary" data-i18n="ctaQuote">Vraag een offerte aan</a>
-        <a href="#features" class="btn btn-secondary" data-i18n="ctaLearn">Meer weten</a>
+    <div class="container hero-inner">
+      <div class="hero-content">
+        <h1 data-i18n="heroTitle">Jouw chatbot, precies zoals jij het wilt.</h1>
+        <p data-i18n="heroSub">Laat BotMatic krachtige, gepersonaliseerde chatbots bouwen voor WhatsApp, Telegram, Instagram en meer. Snel, efficiënt en volledig op maat van jouw bedrijf.</p>
+        <div class="btn-group">
+          <a href="#contact" class="btn btn-primary" data-i18n="ctaQuote">Vraag een offerte aan</a>
+          <a href="#features" class="btn btn-secondary" data-i18n="ctaLearn">Meer weten</a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="8d1928ad-3147-4e59-8d4b-2f608a0b9e78.png" alt="Abstract chatbot network illustration">
       </div>
     </div>
   </section>
+
 
   <!-- Features Section -->
   <section id="features" class="features">
@@ -443,6 +516,27 @@
             <li data-i18n="plan3f4">Onbeperkt aantal gesprekken</li>
           </ul>
           <a href="#contact" class="btn btn-primary" data-i18n="plan3Btn">Kies Premium</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section id="testimonials" class="testimonials">
+    <div class="container">
+      <h2 data-i18n="testimonialsTitle">Wat onze klanten zeggen</h2>
+      <div class="testimonials-grid">
+        <div class="testimonial-item">
+          <p class="quote" data-i18n="testimonial1Quote">BotMatic transformeerde onze klantenservice – hun bots behandelen 80% van de vragen direct.</p>
+          <p class="name" data-i18n="testimonial1Name">Alex, CEO bij TechCorp</p>
+        </div>
+        <div class="testimonial-item">
+          <p class="quote" data-i18n="testimonial2Quote">De chatbot op maat van BotMatic verhoogde onze leadconversie met 30%.</p>
+          <p class="name" data-i18n="testimonial2Name">Sophie, Marketingmanager bij WellnessCo</p>
+        </div>
+        <div class="testimonial-item">
+          <p class="quote" data-i18n="testimonial3Quote">Onder de indruk van de snelheid en maatwerk – precies wat we nodig hadden.</p>
+          <p class="name" data-i18n="testimonial3Name">Jeroen, Oprichter bij RetailPro</p>
         </div>
       </div>
     </div>
@@ -544,6 +638,13 @@
         footerLink3: 'Algemene voorwaarden',
         footerCopyright: 'Alle rechten voorbehouden.'
         ,perMonth: '/maand'
+        ,testimonialsTitle: 'Wat onze klanten zeggen'
+        ,testimonial1Quote: 'BotMatic transformeerde onze klantenservice – hun bots behandelen 80% van de vragen direct.'
+        ,testimonial1Name: 'Alex, CEO bij TechCorp'
+        ,testimonial2Quote: 'De chatbot op maat van BotMatic verhoogde onze leadconversie met 30%.'
+        ,testimonial2Name: 'Sophie, Marketingmanager bij WellnessCo'
+        ,testimonial3Quote: 'Onder de indruk van de snelheid en maatwerk – precies wat we nodig hadden.'
+        ,testimonial3Name: 'Jeroen, Oprichter bij RetailPro'
       },
       fr: {
         navFeatures: 'Fonctionnalités',
@@ -603,6 +704,13 @@
         footerLink3: 'Conditions générales',
         footerCopyright: 'Tous droits réservés.'
         ,perMonth: '/mois'
+        ,testimonialsTitle: 'Ce que disent nos clients'
+        ,testimonial1Quote: 'BotMatic a transformé notre service client – leurs bots répondent instantanément à 80 % des demandes.'
+        ,testimonial1Name: 'Alex, PDG chez TechCorp'
+        ,testimonial2Quote: 'Le chatbot sur mesure de BotMatic a augmenté nos conversions de leads de 30 %.'
+        ,testimonial2Name: 'Sophie, Responsable marketing chez WellnessCo'
+        ,testimonial3Quote: 'Impressionné par la rapidité et la personnalisation – exactement ce dont nous avions besoin.'
+        ,testimonial3Name: 'Jeroen, Fondateur chez RetailPro'
       },
       en: {
         navFeatures: 'Features',
@@ -662,6 +770,13 @@
         footerLink3: 'Terms & Conditions',
         footerCopyright: 'All rights reserved.'
         ,perMonth: '/month'
+        ,testimonialsTitle: 'What Our Clients Say'
+        ,testimonial1Quote: 'BotMatic transformed our customer service – their bots handle 80% of requests instantly.'
+        ,testimonial1Name: 'Alex, CEO at TechCorp'
+        ,testimonial2Quote: 'The custom chatbot built by BotMatic increased our lead conversions by 30%.'
+        ,testimonial2Name: 'Sophie, Marketing Manager at WellnessCo'
+        ,testimonial3Quote: 'Impressed by the speed and customization – exactly what we needed.'
+        ,testimonial3Name: 'Jeroen, Founder at RetailPro'
       }
     };
     let currentLang = 'nl';
