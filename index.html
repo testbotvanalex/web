@@ -306,27 +306,29 @@
                 body: JSON.stringify(payload)
             });
 
-            if (!response.ok) {
-                throw new Error(`API request failed with status ${response.status}`);
-            }
-
             const result = await response.json();
             
-            if (result.candidates && result.candidates.length > 0 &&
-                result.candidates[0].content && result.candidates[0].content.parts &&
-                result.candidates[0].content.parts.length > 0) {
-                const text = result.candidates[0].content.parts[0].text;
+            if (!response.ok) {
+                const errorDetails = result?.error?.message || `HTTP status ${response.status}`;
+                throw new Error(`API-verzoek mislukt: ${errorDetails}`);
+            }
+
+            const candidate = result.candidates?.[0];
+            const text = candidate?.content?.parts?.[0]?.text;
+
+            if (text) {
                 const formattedText = text
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
-                    .replace(/\n/g, '<br>'); // Newlines
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\n/g, '<br>');
                 resultsDiv.innerHTML = formattedText;
                 resultsDiv.style.display = 'block';
             } else {
-                throw new Error('Unexpected API response format');
+                console.warn("API response was successful but contained no text.", result);
+                throw new Error("De AI kon geen passend antwoord genereren. Probeer uw omschrijving aan te passen.");
             }
         } catch (error) {
-            console.error("Error calling Gemini API:", error);
-            resultsDiv.innerHTML = `<p style="color: red;">Er is iets misgegaan. Probeer het later opnieuw.</p>`;
+            console.error("Fout bij het aanroepen van de Gemini API:", error);
+            resultsDiv.innerHTML = `<p style="color: red;">${error.message || 'Er is iets onverwachts misgegaan. Probeer het later opnieuw.'}</p>`;
             resultsDiv.style.display = 'block';
         } finally {
             btnText.style.display = 'inline';
