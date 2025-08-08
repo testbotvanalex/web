@@ -344,6 +344,7 @@
       const mainNav = document.getElementById('main-nav');
       const animatedEls = document.querySelectorAll('.animate-on-scroll');
       const generateBtn = document.getElementById('generate-ideas-btn');
+      const descriptionInput = document.getElementById('business-description');
 
       setLanguage(langSelect.value);
       if (yearSpan) { yearSpan.textContent = new Date().getFullYear(); }
@@ -361,6 +362,14 @@
       
       if(generateBtn) {
         generateBtn.addEventListener('click', generateIdeas);
+      }
+      
+      if(descriptionInput) {
+        descriptionInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                generateIdeas();
+            }
+        });
       }
 
       const observer = new IntersectionObserver((entries) => {
