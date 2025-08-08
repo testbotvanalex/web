@@ -7,7 +7,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <!-- Link naar het externe CSS-bestand -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -16,12 +15,10 @@
       <a href="index.html" class="logo">BotMatic</a>
       <div class="nav-wrapper">
         <nav id="main-nav">
-          <!-- Aangepaste links naar nieuwe pagina's -->
           <a href="chatbots.html" data-i18n="navServices">Diensten</a>
           <a href="prijzen.html" data-i18n="navPricing">Abonnementen</a>
-          <a href="contact.html" data-i18n="navFaq">FAQ & Contact</a>
-          <!-- FIX: Link naar contact sectie -->
-          <a href="contact.html#contact" class="btn btn-primary" data-i18n="navContact">Contact</a>
+          <a href="faq.html" data-i18n="navFaq">FAQ</a>
+          <a href="contact.html" class="btn btn-primary" data-i18n="navContact">Contact</a>
         </nav>
         <select id="lang-select" class="lang-select">
           <option value="nl">NL</option>
@@ -42,8 +39,7 @@
           <h1 data-i18n="heroTitle">Jouw chatbot, precies zoals jij het wilt.</h1>
           <p data-i18n="heroSub">Laat BotMatic krachtige, gepersonaliseerde chatbots bouwen voor WhatsApp, Telegram, Instagram en meer. Snel, efficiënt en volledig op maat van jouw bedrijf.</p>
           <div class="btn-group">
-            <!-- FIX: Link naar contact sectie -->
-            <a href="contact.html#contact" class="btn btn-primary" data-i18n="ctaQuote">Vraag een offerte aan</a>
+            <a href="contact.html" class="btn btn-primary" data-i18n="ctaQuote">Vraag een offerte aan</a>
             <a href="chatbots.html" class="btn btn-secondary" data-i18n="ctaLearn">Ontdek de functies</a>
           </div>
         </div>
@@ -105,7 +101,6 @@
       </div>
     </section>
 
-    <!-- Nieuwe Call-to-Action sectie -->
     <section class="cta-section">
         <div class="container animate-on-scroll">
             <h2 class="section-title" data-i18n="ctaTitle">Ontdek wat BotMatic voor u kan doen</h2>
@@ -133,7 +128,7 @@
   <script>
     const translations = {
       nl: {
-        navServices: 'Diensten', navPricing: 'Abonnementen', navFaq: 'FAQ & Contact', navContact: 'Contact',
+        navServices: 'Diensten', navPricing: 'Abonnementen', navFaq: 'FAQ', navContact: 'Contact',
         heroTitle: 'Jouw chatbot, precies zoals jij het wilt.', heroSub: 'Laat BotMatic krachtige, gepersonaliseerde chatbots bouwen voor WhatsApp, Telegram, Instagram en meer. Snel, efficiënt en volledig op maat van jouw bedrijf.',
         ctaQuote: 'Vraag een offerte aan', ctaLearn: 'Ontdek de functies',
         whyBotmaticTitle: 'Waarom kiezen voor BotMatic?', fastLaunchTitle: 'Snel live', fastLaunchText: 'Binnen 48u klaar voor gebruik — zonder technisch gedoe.', customTitle: '100% op maat', customText: 'Wij bouwen je chatbot volledig rond jouw bedrijf & processen.', multiPlatformTitle: 'Werkt overal', multiPlatformText: 'WhatsApp, Telegram, Instagram, website — jij kiest de kanalen.', aiTitle: 'AI inside', aiText: 'Slimme chatflows met GPT & taalherkenning voor echte impact.',
@@ -146,7 +141,7 @@
         footerLink1: 'Over ons', footerLink2: 'Privacybeleid', footerLink3: 'Algemene voorwaarden', footerCopyright: 'Alle rechten voorbehouden.'
       },
       fr: {
-        navServices: 'Services', navPricing: 'Tarifs', navFaq: 'FAQ & Contact', navContact: 'Contact',
+        navServices: 'Services', navPricing: 'Tarifs', navFaq: 'FAQ', navContact: 'Contact',
         heroTitle: 'Votre chatbot, conçu exactement comme vous le souhaitez.', heroSub: 'Laissez BotMatic créer des chatbots puissants et personnalisés pour WhatsApp, Telegram, Instagram et plus encore. Rapide, efficace et entièrement adapté à votre entreprise.',
         ctaQuote: 'Demander un devis', ctaLearn: 'Découvrir les fonctionnalités',
         whyBotmaticTitle: 'Pourquoi choisir BotMatic ?', fastLaunchTitle: 'Lancement rapide', fastLaunchText: 'Prêt à l\'emploi en 48 h — sans tracas technique.', customTitle: '100 % sur mesure', customText: 'Nous construisons votre chatbot entièrement autour de votre entreprise et de vos processus.', multiPlatformTitle: 'Fonctionne partout', multiPlatformText: 'WhatsApp, Telegram, Instagram, site Web — à vous de choisir les canaux.', aiTitle: 'IA intégrée', aiText: 'Des workflows intelligents avec GPT et reconnaissance linguistique pour un impact réel.',
@@ -159,7 +154,7 @@
         footerLink1: 'À propos de nous', footerLink2: 'Politique de confidentialité', footerLink3: 'Conditions générales', footerCopyright: 'Tous droits réservés.'
       },
       en: {
-        navServices: 'Services', navPricing: 'Pricing', navFaq: 'FAQ & Contact', navContact: 'Contact',
+        navServices: 'Services', navPricing: 'Pricing', navFaq: 'FAQ', navContact: 'Contact',
         heroTitle: 'Your custom chatbot, built just the way you need it.', heroSub: 'Let BotMatic craft powerful, personalized chatbots for WhatsApp, Telegram, Instagram and more. Fast, efficient, fully tailored to your business.',
         ctaQuote: 'Request a Quote', ctaLearn: 'Discover Features',
         whyBotmaticTitle: 'Why choose BotMatic?', fastLaunchTitle: 'Fast launch', fastLaunchText: 'Ready to use in 48h — no technical hassle.', customTitle: '100% customized', customText: 'We build your chatbot entirely around your company & processes.', multiPlatformTitle: 'Works everywhere', multiPlatformText: 'WhatsApp, Telegram, Instagram, website — you choose the channels.', aiTitle: 'AI inside', aiText: 'Smart chat flows with GPT & language recognition for real impact.',
