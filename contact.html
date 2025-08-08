@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contact & FAQ | BotMatic</title>
+  <title>Contact | BotMatic</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
@@ -17,7 +17,7 @@
         <nav id="main-nav">
           <a href="chatbots.html" data-i18n="navServices">Diensten</a>
           <a href="prijzen.html" data-i18n="navPricing">Abonnementen</a>
-          <a href="contact.html" data-i18n="navFaq">FAQ & Contact</a>
+          <a href="faq.html" data-i18n="navFaq">FAQ</a>
           <a href="contact.html" class="btn btn-primary" data-i18n="navContact">Contact</a>
         </nav>
         <select id="lang-select" class="lang-select">
@@ -33,23 +33,10 @@
   </header>
 
   <main>
-    <section id="faq" class="faq">
-        <div class="container animate-on-scroll">
-            <h1 class="section-title" data-i18n="faqTitle">Veelgestelde Vragen</h1>
-            <p class="section-sub" data-i18n="faqSub">Vind hier antwoorden op de meest voorkomende vragen.</p>
-            <div class="faq-container">
-                <div class="faq-item"><button class="faq-question" data-i18n="faq1q"></button><div class="faq-answer"><p data-i18n="faq1a"></p></div></div>
-                <div class="faq-item"><button class="faq-question" data-i18n="faq2q"></button><div class="faq-answer"><p data-i18n="faq2a"></p></div></div>
-                <div class="faq-item"><button class="faq-question" data-i18n="faq3q"></button><div class="faq-answer"><p data-i18n="faq3a"></p></div></div>
-                <div class="faq-item"><button class="faq-question" data-i18n="faq4q"></button><div class="faq-answer"><p data-i18n="faq4a"></p></div></div>
-            </div>
-        </div>
-    </section>
-
-    <section id="contact" class="contact" style="background-color: #fff;">
+    <section id="contact" class="contact">
       <div class="container animate-on-scroll">
-        <h2 class="section-title" data-i18n="contactTitle">Klaar om je klantinteracties naar een hoger niveau te tillen?</h2>
-        <p class="section-sub" data-i18n="contactDesc">Neem contact op om je gratis proefperiode te starten en ontdek hoe BotMatic je bedrijf kan transformeren.</p>
+        <h1 class="section-title" data-i18n="contactTitle">Neem contact met ons op</h1>
+        <p class="section-sub" data-i18n="contactDesc">Klaar om te starten of heb je een vraag? Vul het formulier in en we nemen zo snel mogelijk contact met je op.</p>
         <form id="contact-form" class="contact-form">
           <div><label for="name" data-i18n="nameLabel">Naam</label><input type="text" id="name" name="name" required placeholder="Je naam" data-i18n-placeholder="namePlaceholder" /></div>
           <div><label for="email" data-i18n="emailLabel">E-mailadres</label><input type="email" id="email" name="email" required placeholder="je.email@voorbeeld.com" data-i18n-placeholder="emailPlaceholder" /></div>
@@ -75,37 +62,22 @@
   <script>
     const translations = {
       nl: {
-        navServices: 'Diensten', navPricing: 'Abonnementen', navFaq: 'FAQ & Contact', navContact: 'Contact',
-        faqTitle: 'Veelgestelde Vragen', faqSub: 'Vind hier antwoorden op de meest voorkomende vragen.',
-        faq1q: 'Hoe lang duurt het om een chatbot te bouwen?', faq1a: 'Een basischatbot kan al binnen 48 uur live zijn. Voor complexere chatbots met geavanceerde integraties hangt de doorlooptijd af van de specifieke vereisten, maar we streven altijd naar een snelle en efficiënte lancering.',
-        faq2q: 'Kan de chatbot gekoppeld worden met mijn systemen?', faq2a: 'Absoluut. We kunnen onze chatbots integreren met een breed scala aan systemen, zoals uw CRM, agenda, e-commerceplatform en meer. Dit zorgt voor een naadloze workflow en data-uitwisseling.',
-        faq3q: 'Wat gebeurt er na de lancering?', faq3a: 'Onze service stopt niet na de lancering. We bieden doorlopende ondersteuning en optimalisatie om ervoor te zorgen dat uw chatbot effectief blijft presteren en meegroeit met uw bedrijf.',
-        faq4q: 'Is de chatbot meertalig?', faq4a: 'Jazeker. We kunnen chatbots bouwen die meerdere talen ondersteunen, zodat u een breder, internationaal publiek kunt bereiken en bedienen.',
-        contactTitle: 'Klaar om je klantinteracties naar een hoger niveau te tillen?', contactDesc: 'Neem contact op om je gratis proefperiode te starten en ontdek hoe BotMatic je bedrijf kan transformeren.',
+        navServices: 'Diensten', navPricing: 'Abonnementen', navFaq: 'FAQ', navContact: 'Contact',
+        contactTitle: 'Neem contact met ons op', contactDesc: 'Klaar om te starten of heb je een vraag? Vul het formulier in en we nemen zo snel mogelijk contact met je op.',
         nameLabel: 'Naam', emailLabel: 'E-mailadres', messageLabel: 'Bericht', namePlaceholder: 'Je naam', emailPlaceholder: 'je.email@voorbeeld.com', messagePlaceholder: 'Vertel ons over jouw chatbot-behoeften...', submitBtn: 'Verzend bericht',
         formAlert: 'Bedankt! We nemen snel contact met je op.',
         footerLink1: 'Over ons', footerLink2: 'Privacybeleid', footerLink3: 'Algemene voorwaarden', footerCopyright: 'Alle rechten voorbehouden.'
       },
       fr: {
-        navServices: 'Services', navPricing: 'Tarifs', navFaq: 'FAQ & Contact', navContact: 'Contact',
-        faqTitle: 'Questions Fréquemment Posées', faqSub: 'Trouvez ici les réponses aux questions les plus courantes.',
-        faq1q: 'Combien de temps faut-il pour construire un chatbot ?', faq1a: 'Un chatbot de base peut être mis en ligne en 48 heures. Pour les chatbots plus complexes avec des intégrations avancées, le délai dépend des exigences spécifiques, mais nous visons toujours un lancement rapide et efficace.',
-        faq2q: 'Le chatbot peut-il être connecté à mes systèmes ?', faq2a: 'Absolument. Nous pouvons intégrer nos chatbots à une large gamme de systèmes, tels que votre CRM, votre calendrier, votre plateforme de commerce électronique, etc. Cela garantit un flux de travail et un échange de données fluides.',
-        faq3q: 'Que se passe-t-il après le lancement ?', faq3a: 'Notre service ne s\'arrête pas après le lancement. Nous offrons un soutien et une optimisation continus pour garantir que votre chatbot reste performant et évolue avec votre entreprise.',
-        faq4q: 'Le chatbot est-il multilingue ?', faq4a: 'Oui, bien sûr. Nous pouvons créer des chatbots qui prennent en charge plusieurs langues, vous permettant d\'atteindre et de servir un public plus large et international.',
-        contactTitle: 'Prêt à améliorer vos interactions avec vos clients ?', contactDesc: 'Contactez-nous pour commencer votre essai gratuit et découvrez comment BotMatic peut transformer votre entreprise.',
+        navServices: 'Services', navPricing: 'Tarifs', navFaq: 'FAQ', navContact: 'Contact',
+        contactTitle: 'Contactez-nous', contactDesc: 'Prêt à commencer ou vous avez une question ? Remplissez le formulaire et nous vous contacterons dès que possible.',
         nameLabel: 'Nom', emailLabel: 'E-mail', messageLabel: 'Message', namePlaceholder: 'Votre nom', emailPlaceholder: 'votre.email@exemple.com', messagePlaceholder: 'Parlez-nous de vos besoins en chatbot...', submitBtn: 'Envoyer le message',
         formAlert: 'Merci ! Nous vous recontacterons bientôt.',
         footerLink1: 'À propos de nous', footerLink2: 'Politique de confidentialité', footerLink3: 'Conditions générales', footerCopyright: 'Tous droits réservés.'
       },
       en: {
-        navServices: 'Services', navPricing: 'Pricing', navFaq: 'FAQ & Contact', navContact: 'Contact',
-        faqTitle: 'Frequently Asked Questions', faqSub: 'Find answers to the most common questions here.',
-        faq1q: 'How long does it take to build a chatbot?', faq1a: 'A basic chatbot can be live within 48 hours. For more complex chatbots with advanced integrations, the lead time depends on the specific requirements, but we always aim for a quick and efficient launch.',
-        faq2q: 'Can the chatbot be connected to my systems?', faq2a: 'Absolutely. We can integrate our chatbots with a wide range of systems, such as your CRM, calendar, e-commerce platform, and more. This ensures a seamless workflow and data exchange.',
-        faq3q: 'What happens after the launch?', faq3a: 'Our service doesn\'t stop after launch. We provide ongoing support and optimization to ensure your chatbot continues to perform effectively and grows with your business.',
-        faq4q: 'Is the chatbot multilingual?', faq4a: 'Yes, indeed. We can build chatbots that support multiple languages, allowing you to reach and serve a broader, international audience.',
-        contactTitle: 'Ready to elevate your customer interactions?', contactDesc: 'Get in touch to start your free trial and discover how BotMatic can transform your business.',
+        navServices: 'Services', navPricing: 'Pricing', navFaq: 'FAQ', navContact: 'Contact',
+        contactTitle: 'Contact Us', contactDesc: 'Ready to get started or have a question? Fill out the form and we will get back to you as soon as possible.',
         nameLabel: 'Name', emailLabel: 'Email', messageLabel: 'Message', namePlaceholder: 'Your Name', emailPlaceholder: 'your.email@example.com', messagePlaceholder: 'Tell us about your chatbot needs...', submitBtn: 'Send Message',
         formAlert: 'Thank you! We will get back to you soon.',
         footerLink1: 'About Us', footerLink2: 'Privacy Policy', footerLink3: 'Terms & Conditions', footerCopyright: 'All rights reserved.'
@@ -136,7 +108,6 @@
       const formFeedback = document.getElementById('form-feedback');
       const mobileNavToggle = document.getElementById('mobile-nav-toggle');
       const mainNav = document.getElementById('main-nav');
-      const faqItems = document.querySelectorAll('.faq-item');
       const animatedEls = document.querySelectorAll('.animate-on-scroll');
 
       setLanguage(langSelect.value);
@@ -160,17 +131,6 @@
             contactForm.reset();
             formFeedback.style.display = 'none';
         }, 4000); 
-      });
-
-      faqItems.forEach(item => {
-          const question = item.querySelector('.faq-question');
-          question.addEventListener('click', () => {
-              const wasActive = item.classList.contains('active');
-              faqItems.forEach(i => i.classList.remove('active'));
-              if (!wasActive) {
-                  item.classList.add('active');
-              }
-          });
       });
 
       const observer = new IntersectionObserver((entries) => {
