@@ -8,6 +8,72 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Stijlen voor de Gemini Demo Sectie */
+    .gemini-demo-section {
+        background-color: var(--color-bg);
+        padding: 4rem 0;
+        text-align: center;
+    }
+    .gemini-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        max-width: 600px;
+        margin: 0 auto 2rem auto;
+    }
+    .gemini-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-family: 'Inter', sans-serif;
+    }
+    .gemini-input:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+    }
+    #generate-ideas-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+    }
+    .loader {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid var(--color-primary);
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    .gemini-results {
+        margin-top: 2rem;
+        padding: 2rem;
+        background-color: #fff;
+        border-radius: 12px;
+        text-align: left;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.7;
+        border: 1px solid #e5e7eb;
+    }
+     @media (min-width: 768px) {
+        .gemini-form {
+            flex-direction: row;
+        }
+        .gemini-input {
+            flex-grow: 1;
+        }
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -49,22 +115,6 @@
       </div>
     </section>
 
-    <!-- Gemini API Feature Section -->
-    <section id="gemini-demo" class="gemini-demo-section">
-        <div class="container animate-on-scroll">
-            <h2 class="section-title" data-i18n="geminiTitle">Ontdek de Kracht van AI</h2>
-            <p class="section-sub" data-i18n="geminiSub">Geef een korte omschrijving van uw bedrijf en onze AI-assistent genereert direct drie concrete ideeën voor hoe een chatbot uw bedrijf kan versterken.</p>
-            <div class="gemini-form">
-                <input type="text" id="business-description" class="gemini-input" placeholder="Bv. 'een lokale bloemenwinkel' of 'een online kledingzaak'" data-i18n-placeholder="geminiPlaceholder">
-                <button id="generate-ideas-btn" class="btn btn-primary">
-                    <span class="btn-text" data-i18n="geminiBtn">✨ Genereer Ideeën</span>
-                    <div class="loader" style="display: none;"></div>
-                </button>
-            </div>
-            <div id="gemini-results" class="gemini-results"></div>
-        </div>
-    </section>
-
     <section id="why-botmatic" class="why-botmatic" style="background-color: #fff;">
         <div class="container animate-on-scroll">
             <h2 class="section-title" data-i18n="whyBotmaticTitle">Waarom kiezen voor BotMatic?</h2>
@@ -90,6 +140,22 @@
                     <p data-i18n="aiText">Slimme chatflows met GPT & taalherkenning voor echte impact.</p>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- Gemini API Feature Section -->
+    <section id="gemini-demo" class="gemini-demo-section">
+        <div class="container animate-on-scroll">
+            <h2 class="section-title" data-i18n="geminiTitle">Ontdek de Kracht van AI</h2>
+            <p class="section-sub" data-i18n="geminiSub">Geef een korte omschrijving van uw bedrijf en onze AI-assistent genereert direct drie concrete ideeën voor hoe een chatbot uw bedrijf kan versterken.</p>
+            <div class="gemini-form">
+                <input type="text" id="business-description" class="gemini-input" placeholder="Bv. 'een lokale bloemenwinkel' of 'een online kledingzaak'" data-i18n-placeholder="geminiPlaceholder">
+                <button id="generate-ideas-btn" class="btn btn-primary">
+                    <span class="btn-text" data-i18n="geminiBtn">✨ Genereer Ideeën</span>
+                    <div class="loader" style="display: none;"></div>
+                </button>
+            </div>
+            <div id="gemini-results" class="gemini-results" style="display: none;"></div>
         </div>
     </section>
 
@@ -205,7 +271,7 @@
         }
       });
     }
-
+    
     async function generateIdeas() {
         const descriptionInput = document.getElementById('business-description');
         const resultsDiv = document.getElementById('gemini-results');
@@ -216,14 +282,16 @@
         const businessDescription = descriptionInput.value;
         if (!businessDescription.trim()) {
             resultsDiv.innerHTML = `<p style="color: red;">Gelieve een omschrijving in te vullen.</p>`;
+            resultsDiv.style.display = 'block';
             return;
         }
 
         btnText.style.display = 'none';
         loader.style.display = 'block';
+        resultsDiv.style.display = 'none';
         resultsDiv.innerHTML = '';
 
-        const prompt = `Je bent een expert in chatbot-automatisering voor bedrijven. Een potentiële klant heeft het volgende bedrijf: "${businessDescription}". Genereer 3 creatieve en praktische ideeën voor hoe een chatbot hun bedrijf kan helpen. Focus op klantenservice, leadgeneratie en verkoop. Formatteer het antwoord als een genummerde lijst (1., 2., 3.) met een titel voor elk idee.`;
+        const prompt = `Je bent een expert in chatbot-automatisering voor bedrijven. Een potentiële klant heeft het volgende bedrijf: "${businessDescription}". Genereer 3 creatieve en praktische ideeën voor hoe een chatbot hun bedrijf kan helpen. Focus op klantenservice, leadgeneratie en verkoop. Formatteer het antwoord als een genummerde lijst (1., 2., 3.) met een titel voor elk idee in bold (bv. **Idee 1:**).`;
         
         try {
             let chatHistory = [];
@@ -248,13 +316,18 @@
                 result.candidates[0].content && result.candidates[0].content.parts &&
                 result.candidates[0].content.parts.length > 0) {
                 const text = result.candidates[0].content.parts[0].text;
-                resultsDiv.innerHTML = text.replace(/\n/g, '<br>');
+                const formattedText = text
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
+                    .replace(/\n/g, '<br>'); // Newlines
+                resultsDiv.innerHTML = formattedText;
+                resultsDiv.style.display = 'block';
             } else {
                 throw new Error('Unexpected API response format');
             }
         } catch (error) {
             console.error("Error calling Gemini API:", error);
             resultsDiv.innerHTML = `<p style="color: red;">Er is iets misgegaan. Probeer het later opnieuw.</p>`;
+            resultsDiv.style.display = 'block';
         } finally {
             btnText.style.display = 'inline';
             loader.style.display = 'none';
