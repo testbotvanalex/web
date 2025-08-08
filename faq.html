@@ -8,6 +8,71 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Stijlen voor de Gemini Demo Sectie */
+    .gemini-demo-section {
+        background-color: #fff;
+        padding: 4rem 0;
+        text-align: center;
+    }
+    .gemini-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        max-width: 600px;
+        margin: 0 auto 2rem auto;
+    }
+    .gemini-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-family: 'Inter', sans-serif;
+    }
+    .gemini-input:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+    }
+    #generate-ideas-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+    }
+    .loader {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid var(--color-primary);
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    .gemini-results {
+        margin-top: 2rem;
+        padding: 2rem;
+        background-color: var(--color-bg);
+        border-radius: 12px;
+        text-align: left;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.7;
+    }
+     @media (min-width: 768px) {
+        .gemini-form {
+            flex-direction: row;
+        }
+        .gemini-input {
+            flex-grow: 1;
+        }
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -33,7 +98,23 @@
   </header>
 
   <main>
-    <section id="faq" class="faq">
+    <!-- Gemini API Feature Section -->
+    <section id="gemini-demo" class="gemini-demo-section">
+        <div class="container animate-on-scroll">
+            <h2 class="section-title" data-i18n="geminiTitle">Ontdek de Kracht van AI</h2>
+            <p class="section-sub" data-i18n="geminiSub">Geef een korte omschrijving van uw bedrijf en onze AI-assistent genereert direct drie concrete ideeën voor hoe een chatbot uw bedrijf kan versterken.</p>
+            <div class="gemini-form">
+                <input type="text" id="business-description" class="gemini-input" placeholder="Bv. 'een lokale bloemenwinkel' of 'een online kledingzaak'" data-i18n-placeholder="geminiPlaceholder">
+                <button id="generate-ideas-btn" class="btn btn-primary">
+                    <span class="btn-text" data-i18n="geminiBtn">✨ Genereer Ideeën</span>
+                    <div class="loader" style="display: none;"></div>
+                </button>
+            </div>
+            <div id="gemini-results" class="gemini-results" style="display: none;"></div>
+        </div>
+    </section>
+
+    <section id="faq" class="faq" style="padding-top: 0;">
         <div class="container animate-on-scroll">
             <h1 class="section-title" data-i18n="faqTitle">Veelgestelde Vragen</h1>
             <p class="section-sub" data-i18n="faqSub">Vind hier antwoorden op de meest voorkomende vragen. Staat uw vraag er niet tussen? <a href="contact.html">Neem dan contact met ons op</a>.</p>
@@ -62,6 +143,7 @@
     const translations = {
       nl: {
         navServices: 'Diensten', navPricing: 'Abonnementen', navFaq: 'FAQ', navContact: 'Contact',
+        geminiTitle: 'Ontdek de Kracht van AI', geminiSub: 'Geef een korte omschrijving van uw bedrijf en onze AI-assistent genereert direct drie concrete ideeën voor hoe een chatbot uw bedrijf kan versterken.', geminiPlaceholder: 'Bv. \'een lokale bloemenwinkel\' of \'een online kledingzaak\'', geminiBtn: '✨ Genereer Ideeën',
         faqTitle: 'Veelgestelde Vragen', faqSub: 'Vind hier antwoorden op de meest voorkomende vragen. Staat uw vraag er niet tussen? Neem dan contact met ons op.',
         faq1q: 'Hoe lang duurt het om een chatbot te bouwen?', faq1a: 'Een basischatbot kan al binnen 48 uur live zijn. Voor complexere chatbots met geavanceerde integraties hangt de doorlooptijd af van de specifieke vereisten, maar we streven altijd naar een snelle en efficiënte lancering.',
         faq2q: 'Kan de chatbot gekoppeld worden met mijn systemen?', faq2a: 'Absoluut. We kunnen onze chatbots integreren met een breed scala aan systemen, zoals uw CRM, agenda, e-commerceplatform en meer. Dit zorgt voor een naadloze workflow en data-uitwisseling.',
@@ -71,6 +153,7 @@
       },
       fr: {
         navServices: 'Services', navPricing: 'Tarifs', navFaq: 'FAQ', navContact: 'Contact',
+        geminiTitle: 'Découvrez la Puissance de l\'IA', geminiSub: 'Donnez une brève description de votre entreprise et notre assistant IA générera instantanément trois idées concrètes sur la manière dont un chatbot peut renforcer votre activité.', geminiPlaceholder: 'Ex. \'un fleuriste local\' ou \'une boutique de vêtements en ligne\'', geminiBtn: '✨ Générer des Idées',
         faqTitle: 'Questions Fréquemment Posées', faqSub: 'Trouvez ici les réponses aux questions les plus courantes. Votre question n\'est pas listée ? Contactez-nous.',
         faq1q: 'Combien de temps faut-il pour construire un chatbot ?', faq1a: 'Un chatbot de base peut être mis en ligne en 48 heures. Pour les chatbots plus complexes avec des intégrations avancées, le délai dépend des exigences spécifiques, mais nous visons toujours un lancement rapide et efficace.',
         faq2q: 'Le chatbot peut-il être connecté à mes systèmes ?', faq2a: 'Absolument. Nous pouvons intégrer nos chatbots à une large gamme de systèmes, tels que votre CRM, votre calendrier, votre plateforme de commerce électronique, etc. Cela garantit un flux de travail et un échange de données fluides.',
@@ -80,6 +163,7 @@
       },
       en: {
         navServices: 'Services', navPricing: 'Pricing', navFaq: 'FAQ', navContact: 'Contact',
+        geminiTitle: 'Discover the Power of AI', geminiSub: 'Provide a brief description of your business, and our AI assistant will instantly generate three concrete ideas for how a chatbot can enhance your business.', geminiPlaceholder: 'E.g., \'a local flower shop\' or \'an online clothing store\'', geminiBtn: '✨ Generate Ideas',
         faqTitle: 'Frequently Asked Questions', faqSub: 'Find answers to the most common questions here. Is your question not listed? Contact us.',
         faq1q: 'How long does it take to build a chatbot?', faq1a: 'A basic chatbot can be live within 48 hours. For more complex chatbots with advanced integrations, the lead time depends on the specific requirements, but we always aim for a quick and efficient launch.',
         faq2q: 'Can the chatbot be connected to my systems?', faq2a: 'Absolutely. We can integrate our chatbots with a wide range of systems, such as your CRM, calendar, e-commerce platform, and more. This ensures a seamless workflow and data exchange.',
@@ -99,7 +183,77 @@
         const key = el.getAttribute('data-i18n');
         if (translations[lang] && translations[lang][key]) { el.textContent = translations[lang][key]; }
       });
+      const placeholderElems = document.querySelectorAll('[data-i18n-placeholder]');
+      placeholderElems.forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (translations[lang] && translations[lang][key]) {
+          el.placeholder = translations[lang][key];
+        }
+      });
     }
+    
+    async function generateIdeas() {
+        const descriptionInput = document.getElementById('business-description');
+        const resultsDiv = document.getElementById('gemini-results');
+        const generateBtn = document.getElementById('generate-ideas-btn');
+        const btnText = generateBtn.querySelector('.btn-text');
+        const loader = generateBtn.querySelector('.loader');
+
+        const businessDescription = descriptionInput.value;
+        if (!businessDescription.trim()) {
+            resultsDiv.innerHTML = `<p style="color: red;">Gelieve een omschrijving in te vullen.</p>`;
+            resultsDiv.style.display = 'block';
+            return;
+        }
+
+        btnText.style.display = 'none';
+        loader.style.display = 'block';
+        resultsDiv.style.display = 'none';
+        resultsDiv.innerHTML = '';
+
+        const prompt = `Je bent een expert in chatbot-automatisering voor bedrijven. Een potentiële klant heeft het volgende bedrijf: "${businessDescription}". Genereer 3 creatieve en praktische ideeën voor hoe een chatbot hun bedrijf kan helpen. Focus op klantenservice, leadgeneratie en verkoop. Formatteer het antwoord als een genummerde lijst (1., 2., 3.) met een titel voor elk idee in bold (bv. **Idee 1:**).`;
+        
+        try {
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+            
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`API request failed with status ${response.status}`);
+            }
+
+            const result = await response.json();
+            
+            if (result.candidates && result.candidates.length > 0 &&
+                result.candidates[0].content && result.candidates[0].content.parts &&
+                result.candidates[0].content.parts.length > 0) {
+                const text = result.candidates[0].content.parts[0].text;
+                const formattedText = text
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
+                    .replace(/\n/g, '<br>'); // Newlines
+                resultsDiv.innerHTML = formattedText;
+                resultsDiv.style.display = 'block';
+            } else {
+                throw new Error('Unexpected API response format');
+            }
+        } catch (error) {
+            console.error("Error calling Gemini API:", error);
+            resultsDiv.innerHTML = `<p style="color: red;">Er is iets misgegaan. Probeer het later opnieuw.</p>`;
+            resultsDiv.style.display = 'block';
+        } finally {
+            btnText.style.display = 'inline';
+            loader.style.display = 'none';
+        }
+    }
+
 
     document.addEventListener('DOMContentLoaded', () => {
       const langSelect = document.getElementById('lang-select');
@@ -108,6 +262,7 @@
       const mainNav = document.getElementById('main-nav');
       const faqItems = document.querySelectorAll('.faq-item');
       const animatedEls = document.querySelectorAll('.animate-on-scroll');
+      const generateBtn = document.getElementById('generate-ideas-btn');
 
       setLanguage(langSelect.value);
       if (yearSpan) { yearSpan.textContent = new Date().getFullYear(); }
@@ -123,6 +278,10 @@
           }
       });
       
+      if(generateBtn) {
+        generateBtn.addEventListener('click', generateIdeas);
+      }
+
       faqItems.forEach(item => {
           const question = item.querySelector('.faq-question');
           question.addEventListener('click', () => {
