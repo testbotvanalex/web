@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* Stijlen voor de Gemini Demo Sectie */
+    /* AI Demo Sectie (klassenaam gelaten как есть) */
     .gemini-demo-section {
         background-color: var(--color-bg);
         padding: 4rem 0;
@@ -49,10 +49,7 @@
         height: 24px;
         animation: spin 1s linear infinite;
     }
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
+    @keyframes spin { 0% {transform: rotate(0deg);} 100% {transform: rotate(360deg);} }
     .gemini-results {
         margin-top: 2rem;
         padding: 2rem;
@@ -65,13 +62,9 @@
         line-height: 1.7;
         border: 1px solid #e5e7eb;
     }
-     @media (min-width: 768px) {
-        .gemini-form {
-            flex-direction: row;
-        }
-        .gemini-input {
-            flex-grow: 1;
-        }
+    @media (min-width: 768px) {
+      .gemini-form { flex-direction: row; }
+      .gemini-input { flex-grow: 1; }
     }
   </style>
 </head>
@@ -116,47 +109,47 @@
     </section>
 
     <section id="why-botmatic" class="why-botmatic" style="background-color: #fff;">
-        <div class="container animate-on-scroll">
-            <h2 class="section-title" data-i18n="whyBotmaticTitle">Waarom kiezen voor BotMatic?</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" /></svg></div>
-                    <h3 data-i18n="fastLaunchTitle">Snel live</h3>
-                    <p data-i18n="fastLaunchText">Binnen 48u klaar voor gebruik — zonder technisch gedoe.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" /></svg></div>
-                    <h3 data-i18n="customTitle">100% op maat</h3>
-                    <p data-i18n="customText">Wij bouwen je chatbot volledig rond jouw bedrijf & processen.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg></div>
-                    <h3 data-i18n="multiPlatformTitle">Werkt overal</h3>
-                    <p data-i18n="multiPlatformText">WhatsApp, Telegram, Instagram, website — jij kiest de kanalen.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V8.25a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 8.25v7.5a2.25 2.25 0 0 0 2.25 2.25Z" /></svg></div>
-                    <h3 data-i18n="aiTitle">AI inside</h3>
-                    <p data-i18n="aiText">Slimme chatflows met GPT & taalherkenning voor echte impact.</p>
-                </div>
-            </div>
+      <div class="container animate-on-scroll">
+        <h2 class="section-title" data-i18n="whyBotmaticTitle">Waarom kiezen voor BotMatic?</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" /></svg></div>
+            <h3 data-i18n="fastLaunchTitle">Snel live</h3>
+            <p data-i18n="fastLaunchText">Binnen 48u klaar voor gebruik — zonder technisch gedoe.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" /></svg></div>
+            <h3 data-i18n="customTitle">100% op maat</h3>
+            <p data-i18n="customText">Wij bouwen je chatbot volledig rond jouw bedrijf & processen.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg></div>
+            <h3 data-i18n="multiPlatformTitle">Werkt overal</h3>
+            <p data-i18n="multiPlatformText">WhatsApp, Telegram, Instagram, website — jij kiest de kanalen.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V8.25a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 8.25v7.5a2.25 2.25 0 0 0 2.25 2.25Z" /></svg></div>
+            <h3 data-i18n="aiTitle">AI inside</h3>
+            <p data-i18n="aiText">Slimme chatflows met GPT & taalherkenning voor echte impact.</p>
+          </div>
         </div>
+      </div>
     </section>
 
-    <!-- Gemini API Feature Section -->
+    <!-- AI Feature Section -->
     <section id="gemini-demo" class="gemini-demo-section">
-        <div class="container animate-on-scroll">
-            <h2 class="section-title" data-i18n="geminiTitle">Ontdek de Kracht van AI</h2>
-            <p class="section-sub" data-i18n="geminiSub">Geef een korte omschrijving van uw bedrijf en onze AI-assistent genereert direct drie concrete ideeën voor hoe een chatbot uw bedrijf kan versterken.</p>
-            <div class="gemini-form">
-                <input type="text" id="business-description" class="gemini-input" placeholder="Bv. 'een lokale bloemenwinkel' of 'een online kledingzaak'" data-i18n-placeholder="geminiPlaceholder">
-                <button id="generate-ideas-btn" class="btn btn-primary">
-                    <span class="btn-text" data-i18n="geminiBtn">✨ Genereer Ideeën</span>
-                    <div class="loader" style="display: none;"></div>
-                </button>
-            </div>
-            <div id="gemini-results" class="gemini-results" style="display: none;"></div>
+      <div class="container animate-on-scroll">
+        <h2 class="section-title" data-i18n="geminiTitle">Ontdek de Kracht van AI</h2>
+        <p class="section-sub" data-i18n="geminiSub">Geef een korte omschrijving van uw bedrijf en onze AI-assistent genereert direct drie concrete ideeën voor hoe een chatbot uw bedrijf kan versterken.</p>
+        <div class="gemini-form">
+          <input type="text" id="business-description" class="gemini-input" placeholder="Bv. 'een lokale bloemenwinkel' of 'een online kledingzaak'" data-i18n-placeholder="geminiPlaceholder">
+          <button id="generate-ideas-btn" class="btn btn-primary">
+            <span class="btn-text" data-i18n="geminiBtn">✨ Genereer Ideeën</span>
+            <div class="loader" style="display: none;"></div>
+          </button>
         </div>
+        <div id="gemini-results" class="gemini-results" style="display: none;"></div>
+      </div>
     </section>
 
     <section id="how-it-works" class="how-it-works">
@@ -184,16 +177,15 @@
     </section>
 
     <section class="cta-section">
-        <div class="container animate-on-scroll">
-            <h2 class="section-title" data-i18n="ctaTitle">Ontdek wat BotMatic voor u kan doen</h2>
-            <p class="section-sub" data-i18n="ctaSub">Bekijk onze gedetailleerde functies en vind het perfecte abonnement dat bij uw bedrijf past.</p>
-            <div class="btn-group">
-                <a href="prijzen.html" class="btn btn-primary" data-i18n="ctaPricing">Bekijk abonnementen</a>
-                <a href="chatbots.html" class="btn btn-secondary" data-i18n="ctaServices">Ontdek onze diensten</a>
-            </div>
+      <div class="container animate-on-scroll">
+        <h2 class="section-title" data-i18n="ctaTitle">Ontdek wat BotMatic voor u kan doen</h2>
+        <p class="section-sub" data-i18n="ctaSub">Bekijk onze gedetailleerde functies en vind het perfecte abonnement dat bij uw bedrijf past.</p>
+        <div class="btn-group">
+          <a href="prijzen.html" class="btn btn-primary" data-i18n="ctaPricing">Bekijk abonnementen</a>
+          <a href="chatbots.html" class="btn btn-secondary" data-i18n="ctaServices">Ontdek onze diensten</a>
         </div>
+      </div>
     </section>
-
   </main>
 
   <footer>
@@ -263,7 +255,7 @@
         const key = el.getAttribute('data-i18n');
         if (translations[lang] && translations[lang][key]) { el.textContent = translations[lang][key]; }
       });
-       const placeholderElems = document.querySelectorAll('[data-i18n-placeholder]');
+      const placeholderElems = document.querySelectorAll('[data-i18n-placeholder]');
       placeholderElems.forEach(el => {
         const key = el.getAttribute('data-i18n-placeholder');
         if (translations[lang] && translations[lang][key]) {
@@ -272,70 +264,49 @@
       });
     }
     
+    // ✅ ИСПРАВЛЕНО: больше НЕТ вызова Gemini. Только POST на /api/ideas.
     async function generateIdeas() {
-        const descriptionInput = document.getElementById('business-description');
-        const resultsDiv = document.getElementById('gemini-results');
-        const generateBtn = document.getElementById('generate-ideas-btn');
-        const btnText = generateBtn.querySelector('.btn-text');
-        const loader = generateBtn.querySelector('.loader');
+      const descriptionInput = document.getElementById('business-description');
+      const resultsDiv = document.getElementById('gemini-results');
+      const generateBtn = document.getElementById('generate-ideas-btn');
+      const btnText = generateBtn.querySelector('.btn-text');
+      const loader = generateBtn.querySelector('.loader');
 
-        const businessDescription = descriptionInput.value;
-        if (!businessDescription.trim()) {
-            resultsDiv.innerHTML = `<p style="color: red;">Gelieve een omschrijving in te vullen.</p>`;
-            resultsDiv.style.display = 'block';
-            return;
-        }
+      const businessDescription = descriptionInput.value || '';
+      if (!businessDescription.trim()) {
+        resultsDiv.innerHTML = `<p style="color: red;">Gelieve een omschrijving in te vullen.</p>`;
+        resultsDiv.style.display = 'block';
+        return;
+      }
 
-        btnText.style.display = 'none';
-        loader.style.display = 'block';
-        resultsDiv.style.display = 'none';
-        resultsDiv.innerHTML = '';
+      btnText.style.display = 'none';
+      loader.style.display = 'block';
+      resultsDiv.style.display = 'none';
+      resultsDiv.innerHTML = '';
 
-        const prompt = `Je bent een expert in chatbot-automatisering voor bedrijven. Een potentiële klant heeft het volgende bedrijf: "${businessDescription}". Genereer 3 creatieve en praktische ideeën voor hoe een chatbot hun bedrijf kan helpen. Focus op klantenservice, leadgeneratie en verkoop. Formatteer het antwoord als een genummerde lijst (1., 2., 3.) met een titel voor elk idee in bold (bv. **Idee 1:**).`;
-        
-        try {
-            let chatHistory = [];
-            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-            const payload = { contents: chatHistory };
-            const apiKey = "";
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-            
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
+      try {
+        const r = await fetch('/api/ideas', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ description: businessDescription, lang: currentLang })
+        });
 
-            const result = await response.json();
-            
-            if (!response.ok) {
-                const errorDetails = result?.error?.message || `HTTP status ${response.status}`;
-                throw new Error(`API-verzoek mislukt: ${errorDetails}`);
-            }
+        const data = await r.json();
+        if (!r.ok) throw new Error(data.error || 'Er ging iets mis.');
 
-            const candidate = result.candidates?.[0];
-            const text = candidate?.content?.parts?.[0]?.text;
-
-            if (text) {
-                const formattedText = text
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                    .replace(/\n/g, '<br>');
-                resultsDiv.innerHTML = formattedText;
-                resultsDiv.style.display = 'block';
-            } else {
-                console.warn("API response was successful but contained no text.", result);
-                throw new Error("De AI kon geen passend antwoord genereren. Probeer uw omschrijving aan te passen.");
-            }
-        } catch (error) {
-            console.error("Fout bij het aanroepen van de Gemini API:", error);
-            resultsDiv.innerHTML = `<p style="color: red;">${error.message || 'Er is iets onverwachts misgegaan. Probeer het later opnieuw.'}</p>`;
-            resultsDiv.style.display = 'block';
-        } finally {
-            btnText.style.display = 'inline';
-            loader.style.display = 'none';
-        }
+        const html = (data.text || '')
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\n/g, '<br>');
+        resultsDiv.innerHTML = html || '<p>Geen resultaat. Probeer een andere omschrijving.</p>';
+        resultsDiv.style.display = 'block';
+      } catch (error) {
+        resultsDiv.innerHTML = `<p style="color: red;">${error.message || 'Onbekende fout'}</p>`;
+        resultsDiv.style.display = 'block';
+      } finally {
+        btnText.style.display = 'inline';
+        loader.style.display = 'none';
+      }
     }
-
 
     document.addEventListener('DOMContentLoaded', () => {
       const langSelect = document.getElementById('lang-select');
@@ -360,25 +331,20 @@
           }
       });
       
-      if(generateBtn) {
-        generateBtn.addEventListener('click', generateIdeas);
-      }
-      
-      if(descriptionInput) {
+      if (generateBtn) generateBtn.addEventListener('click', generateIdeas);
+      if (descriptionInput) {
         descriptionInput.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
-                generateIdeas();
-            }
+          if (event.key === 'Enter') { event.preventDefault(); generateIdeas(); }
         });
       }
 
       const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                  entry.target.classList.add('visible');
-                  observer.unobserve(entry.target);
-              }
-          });
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
       }, { threshold: 0.1 });
       animatedEls.forEach(el => observer.observe(el));
     });
