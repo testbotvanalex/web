@@ -2,77 +2,39 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FAQ | BotMatic</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>FAQ — Veelgestelde vragen over BotMatic chatbots</title>
+  <meta name="description" content="Antwoorden op de meest gestelde vragen over chatbots: kanalen, prijzen, doorlooptijd (48u), integraties en support.">
+  <link rel="canonical" href="https://botmatic.be/faq.html" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="FAQ — BotMatic" />
+  <meta property="og:description" content="Alles over kanalen, prijzen, implementatie en support." />
+  <meta property="og:url" content="https://botmatic.be/faq.html" />
+  <meta property="og:image" content="https://botmatic.be/images/preview-faq.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
-  <style>
-    /* Stijlen voor de Gemini Demo Sectie */
-    .gemini-demo-section {
-        background-color: #fff;
-        padding: 4rem 0;
-        text-align: center;
-    }
-    .gemini-form {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        max-width: 600px;
-        margin: 0 auto 2rem auto;
-    }
-    .gemini-input {
-        width: 100%;
-        padding: 0.75rem 1rem;
-        border: 1px solid #d1d5db;
-        border-radius: 8px;
-        font-size: 1rem;
-        font-family: 'Inter', sans-serif;
-    }
-    .gemini-input:focus {
-        outline: none;
-        border-color: var(--color-primary);
-        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-    }
-    #generate-ideas-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 48px;
-    }
-    .loader {
-        border: 4px solid #f3f3f3;
-        border-top: 4px solid var(--color-primary);
-        border-radius: 50%;
-        width: 24px;
-        height: 24px;
-        animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-    .gemini-results {
-        margin-top: 2rem;
-        padding: 2rem;
-        background-color: var(--color-bg);
-        border-radius: 12px;
-        text-align: left;
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-        line-height: 1.7;
-    }
-     @media (min-width: 768px) {
-        .gemini-form {
-            flex-direction: row;
-        }
-        .gemini-input {
-            flex-grow: 1;
-        }
-    }
-  </style>
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+    {"@type":"Question","name":"Hoe snel kunnen jullie een chatbot lanceren?","acceptedAnswer":{"@type":"Answer","text":"In de meeste gevallen binnen 48 uur, afhankelijk van integraties en content."}},
+    {"@type":"Question","name":"Welke kanalen ondersteunen jullie?","acceptedAnswer":{"@type":"Answer","text":"WhatsApp, Telegram, Instagram en web widgets. We koppelen met CRM en betaalproviders."}},
+    {"@type":"Question","name":"Wat kosten jullie chatbots?","acceptedAnswer":{"@type":"Answer","text":"Drie abonnementen: Basis (€29), Standaard (€99), Premium (€299) per maand."}},
+    {"@type":"Question","name":"Kunnen jullie integreren met mijn systemen?","acceptedAnswer":{"@type":"Answer","text":"Ja, met CRM, kalender/booking, e-mail en webhooks."}},
+    {"@type":"Question","name":"Bieden jullie support en optimalisatie?","acceptedAnswer":{"@type":"Answer","text":"Ja. We monitoren en optimaliseren flows volgens je plan."}}
+  ]}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://botmatic.be/"},
+    {"@type":"ListItem","position":2,"name":"FAQ","item":"https://botmatic.be/faq.html"}
+  ]}
+  </script>
 </head>
 <body>
   <header>
@@ -80,229 +42,32 @@
       <a href="index.html" class="logo">BotMatic</a>
       <div class="nav-wrapper">
         <nav id="main-nav">
-          <a href="chatbots.html" data-i18n="navServices">Diensten</a>
-          <a href="prijzen.html" data-i18n="navPricing">Abonnementen</a>
-          <a href="faq.html" data-i18n="navFaq">FAQ</a>
-          <a href="contact.html" class="btn btn-primary" data-i18n="navContact">Contact</a>
+          <a href="chatbots.html">Diensten</a>
+          <a href="prijzen.html">Abonnementen</a>
+          <a href="faq.html" class="active">FAQ</a>
+          <a href="contact.html" class="btn btn-primary">Contact</a>
         </nav>
-        <select id="lang-select" class="lang-select">
-          <option value="nl">NL</option>
-          <option value="fr">FR</option>
-          <option value="en">EN</option>
-        </select>
-        <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu">
-            <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-        </button>
+        <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
       </div>
     </div>
   </header>
 
   <main>
-    <!-- Gemini API Feature Section -->
-    <section id="gemini-demo" class="gemini-demo-section">
-        <div class="container animate-on-scroll">
-            <h2 class="section-title" data-i18n="geminiTitle">Ontdek de Kracht van AI</h2>
-            <p class="section-sub" data-i18n="geminiSub">Geef een korte omschrijving van uw bedrijf en onze AI-assistent genereert direct drie concrete ideeën voor hoe een chatbot uw bedrijf kan versterken.</p>
-            <div class="gemini-form">
-                <input type="text" id="business-description" class="gemini-input" placeholder="Bv. 'een lokale bloemenwinkel' of 'een online kledingzaak'" data-i18n-placeholder="geminiPlaceholder">
-                <button id="generate-ideas-btn" class="btn btn-primary">
-                    <span class="btn-text" data-i18n="geminiBtn">✨ Genereer Ideeën</span>
-                    <div class="loader" style="display: none;"></div>
-                </button>
-            </div>
-            <div id="gemini-results" class="gemini-results" style="display: none;"></div>
+    <section class="faq">
+      <div class="container">
+        <h1 class="section-title">Veelgestelde vragen</h1>
+        <div class="faq-list">
+          <details open><summary>Hoe snel kunnen jullie een chatbot lanceren?</summary><p>Meestal binnen 48 uur, afhankelijk van integraties en content.</p></details>
+          <details><summary>Welke kanalen ondersteunen jullie?</summary><p>WhatsApp, Telegram, Instagram en web widgets. Integraties met CRM en betaalproviders.</p></details>
+          <details><summary>Wat kosten jullie chatbots?</summary><p>Basis (€29), Standaard (€99) en Premium (€299) per maand.</p></details>
+          <details><summary>Integreren jullie met mijn systemen?</summary><p>Ja. We koppelen o.a. met CRM, agenda/booking, e-mail en webhooks.</p></details>
+          <details><summary>Is er support en optimalisatie?</summary><p>Ja. Monitoring en doorlopende verbeteringen volgens je plan.</p></details>
         </div>
-    </section>
-
-    <section id="faq" class="faq" style="padding-top: 0;">
-        <div class="container animate-on-scroll">
-            <h1 class="section-title" data-i18n="faqTitle">Veelgestelde Vragen</h1>
-            <p class="section-sub" data-i18n="faqSub">Vind hier antwoorden op de meest voorkomende vragen. Staat uw vraag er niet tussen? <a href="contact.html">Neem dan contact met ons op</a>.</p>
-            <div class="faq-container">
-                <div class="faq-item"><button class="faq-question" data-i18n="faq1q"></button><div class="faq-answer"><p data-i18n="faq1a"></p></div></div>
-                <div class="faq-item"><button class="faq-question" data-i18n="faq2q"></button><div class="faq-answer"><p data-i18n="faq2a"></p></div></div>
-                <div class="faq-item"><button class="faq-question" data-i18n="faq3q"></button><div class="faq-answer"><p data-i18n="faq3a"></p></div></div>
-                <div class="faq-item"><button class="faq-question" data-i18n="faq4q"></button><div class="faq-answer"><p data-i18n="faq4a"></p></div></div>
-            </div>
-        </div>
+      </div>
     </section>
   </main>
 
-  <footer>
-    <div class="container">
-      <div class="footer-links">
-        <a href="#" data-i18n="footerLink1">Over ons</a>
-        <a href="#" data-i18n="footerLink2">Privacybeleid</a>
-        <a href="#" data-i18n="footerLink3">Algemene voorwaarden</a>
-      </div>
-      <p>&copy; <span id="year"></span> BotMatic. <span data-i18n="footerCopyright">Alle rechten voorbehouden.</span></p>
-    </div>
-  </footer>
-
-  <script>
-    const translations = {
-      nl: {
-        navServices: 'Diensten', navPricing: 'Abonnementen', navFaq: 'FAQ', navContact: 'Contact',
-        geminiTitle: 'Ontdek de Kracht van AI', geminiSub: 'Geef een korte omschrijving van uw bedrijf en onze AI-assistent genereert direct drie concrete ideeën voor hoe een chatbot uw bedrijf kan versterken.', geminiPlaceholder: 'Bv. \'een lokale bloemenwinkel\' of \'een online kledingzaak\'', geminiBtn: '✨ Genereer Ideeën',
-        faqTitle: 'Veelgestelde Vragen', faqSub: 'Vind hier antwoorden op de meest voorkomende vragen. Staat uw vraag er niet tussen? Neem dan contact met ons op.',
-        faq1q: 'Hoe lang duurt het om een chatbot te bouwen?', faq1a: 'Een basischatbot kan al binnen 48 uur live zijn. Voor complexere chatbots met geavanceerde integraties hangt de doorlooptijd af van de specifieke vereisten, maar we streven altijd naar een snelle en efficiënte lancering.',
-        faq2q: 'Kan de chatbot gekoppeld worden met mijn systemen?', faq2a: 'Absoluut. We kunnen onze chatbots integreren met een breed scala aan systemen, zoals uw CRM, agenda, e-commerceplatform en meer. Dit zorgt voor een naadloze workflow en data-uitwisseling.',
-        faq3q: 'Wat gebeurt er na de lancering?', faq3a: 'Onze service stopt niet na de lancering. We bieden doorlopende ondersteuning en optimalisatie om ervoor te zorgen dat uw chatbot effectief blijft presteren en meegroeit met uw bedrijf.',
-        faq4q: 'Is de chatbot meertalig?', faq4a: 'Jazeker. We kunnen chatbots bouwen die meerdere talen ondersteunen, zodat u een breder, internationaal publiek kunt bereiken en bedienen.',
-        footerLink1: 'Over ons', footerLink2: 'Privacybeleid', footerLink3: 'Algemene voorwaarden', footerCopyright: 'Alle rechten voorbehouden.'
-      },
-      fr: {
-        navServices: 'Services', navPricing: 'Tarifs', navFaq: 'FAQ', navContact: 'Contact',
-        geminiTitle: 'Découvrez la Puissance de l\'IA', geminiSub: 'Donnez une brève description de votre entreprise et notre assistant IA générera instantanément trois idées concrètes sur la manière dont un chatbot peut renforcer votre activité.', geminiPlaceholder: 'Ex. \'un fleuriste local\' ou \'une boutique de vêtements en ligne\'', geminiBtn: '✨ Générer des Idées',
-        faqTitle: 'Questions Fréquemment Posées', faqSub: 'Trouvez ici les réponses aux questions les plus courantes. Votre question n\'est pas listée ? Contactez-nous.',
-        faq1q: 'Combien de temps faut-il pour construire un chatbot ?', faq1a: 'Un chatbot de base peut être mis en ligne en 48 heures. Pour les chatbots plus complexes avec des intégrations avancées, le délai dépend des exigences spécifiques, mais nous visons toujours un lancement rapide et efficace.',
-        faq2q: 'Le chatbot peut-il être connecté à mes systèmes ?', faq2a: 'Absolument. Nous pouvons intégrer nos chatbots à une large gamme de systèmes, tels que votre CRM, votre calendrier, votre plateforme de commerce électronique, etc. Cela garantit un flux de travail et un échange de données fluides.',
-        faq3q: 'Que se passe-t-il après le lancement ?', faq3a: 'Notre service ne s\'arrête pas après le lancement. Nous offrons un soutien et une optimisation continus pour garantir que votre chatbot reste performant et évolue avec votre entreprise.',
-        faq4q: 'Le chatbot est-il multilingue ?', faq4a: 'Oui, bien sûr. Nous pouvons créer des chatbots qui prennent en charge plusieurs langues, vous permettant d\'atteindre et de servir un public plus large et international.',
-        footerLink1: 'À propos de nous', footerLink2: 'Politique de confidentialité', footerLink3: 'Conditions générales', footerCopyright: 'Tous droits réservés.'
-      },
-      en: {
-        navServices: 'Services', navPricing: 'Pricing', navFaq: 'FAQ', navContact: 'Contact',
-        geminiTitle: 'Discover the Power of AI', geminiSub: 'Provide a brief description of your business, and our AI assistant will instantly generate three concrete ideas for how a chatbot can enhance your business.', geminiPlaceholder: 'E.g., \'a local flower shop\' or \'an online clothing store\'', geminiBtn: '✨ Generate Ideas',
-        faqTitle: 'Frequently Asked Questions', faqSub: 'Find answers to the most common questions here. Is your question not listed? Contact us.',
-        faq1q: 'How long does it take to build a chatbot?', faq1a: 'A basic chatbot can be live within 48 hours. For more complex chatbots with advanced integrations, the lead time depends on the specific requirements, but we always aim for a quick and efficient launch.',
-        faq2q: 'Can the chatbot be connected to my systems?', faq2a: 'Absolutely. We can integrate our chatbots with a wide range of systems, such as your CRM, calendar, e-commerce platform, and more. This ensures a seamless workflow and data exchange.',
-        faq3q: 'What happens after the launch?', faq3a: 'Our service doesn\'t stop after launch. We provide ongoing support and optimization to ensure your chatbot continues to perform effectively and grows with your business.',
-        faq4q: 'Is the chatbot multilingual?', faq4a: 'Yes, indeed. We can build chatbots that support multiple languages, allowing you to reach and serve a broader, international audience.',
-        footerLink1: 'About Us', footerLink2: 'Privacy Policy', footerLink3: 'Terms & Conditions', footerCopyright: 'All rights reserved.'
-      }
-    };
-
-    let currentLang = 'nl';
-
-    function setLanguage(lang) {
-      currentLang = lang;
-      document.documentElement.lang = lang;
-      const elems = document.querySelectorAll('[data-i18n]');
-      elems.forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (translations[lang] && translations[lang][key]) { el.textContent = translations[lang][key]; }
-      });
-      const placeholderElems = document.querySelectorAll('[data-i18n-placeholder]');
-      placeholderElems.forEach(el => {
-        const key = el.getAttribute('data-i18n-placeholder');
-        if (translations[lang] && translations[lang][key]) {
-          el.placeholder = translations[lang][key];
-        }
-      });
-    }
-    
-    async function generateIdeas() {
-        const descriptionInput = document.getElementById('business-description');
-        const resultsDiv = document.getElementById('gemini-results');
-        const generateBtn = document.getElementById('generate-ideas-btn');
-        const btnText = generateBtn.querySelector('.btn-text');
-        const loader = generateBtn.querySelector('.loader');
-
-        const businessDescription = descriptionInput.value;
-        if (!businessDescription.trim()) {
-            resultsDiv.innerHTML = `<p style="color: red;">Gelieve een omschrijving in te vullen.</p>`;
-            resultsDiv.style.display = 'block';
-            return;
-        }
-
-        btnText.style.display = 'none';
-        loader.style.display = 'block';
-        resultsDiv.style.display = 'none';
-        resultsDiv.innerHTML = '';
-
-        const prompt = `Je bent een expert in chatbot-automatisering voor bedrijven. Een potentiële klant heeft het volgende bedrijf: "${businessDescription}". Genereer 3 creatieve en praktische ideeën voor hoe een chatbot hun bedrijf kan helpen. Focus op klantenservice, leadgeneratie en verkoop. Formatteer het antwoord als een genummerde lijst (1., 2., 3.) met een titel voor elk idee in bold (bv. **Idee 1:**).`;
-        
-        try {
-            let chatHistory = [];
-            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-            const payload = { contents: chatHistory };
-            const apiKey = "";
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-            
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            if (!response.ok) {
-                throw new Error(`API request failed with status ${response.status}`);
-            }
-
-            const result = await response.json();
-            
-            if (result.candidates && result.candidates.length > 0 &&
-                result.candidates[0].content && result.candidates[0].content.parts &&
-                result.candidates[0].content.parts.length > 0) {
-                const text = result.candidates[0].content.parts[0].text;
-                const formattedText = text
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
-                    .replace(/\n/g, '<br>'); // Newlines
-                resultsDiv.innerHTML = formattedText;
-                resultsDiv.style.display = 'block';
-            } else {
-                throw new Error('Unexpected API response format');
-            }
-        } catch (error) {
-            console.error("Error calling Gemini API:", error);
-            resultsDiv.innerHTML = `<p style="color: red;">Er is iets misgegaan. Probeer het later opnieuw.</p>`;
-            resultsDiv.style.display = 'block';
-        } finally {
-            btnText.style.display = 'inline';
-            loader.style.display = 'none';
-        }
-    }
-
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const langSelect = document.getElementById('lang-select');
-      const yearSpan = document.getElementById('year');
-      const mobileNavToggle = document.getElementById('mobile-nav-toggle');
-      const mainNav = document.getElementById('main-nav');
-      const faqItems = document.querySelectorAll('.faq-item');
-      const animatedEls = document.querySelectorAll('.animate-on-scroll');
-      const generateBtn = document.getElementById('generate-ideas-btn');
-
-      setLanguage(langSelect.value);
-      if (yearSpan) { yearSpan.textContent = new Date().getFullYear(); }
-      langSelect.addEventListener('change', (e) => { setLanguage(e.target.value); });
-      mobileNavToggle.addEventListener('click', () => {
-          mainNav.classList.toggle('active');
-          mobileNavToggle.classList.toggle('active');
-      });
-      mainNav.addEventListener('click', (e) => {
-          if (e.target.tagName === 'A') {
-              mainNav.classList.remove('active');
-              mobileNavToggle.classList.remove('active');
-          }
-      });
-      
-      if(generateBtn) {
-        generateBtn.addEventListener('click', generateIdeas);
-      }
-
-      faqItems.forEach(item => {
-          const question = item.querySelector('.faq-question');
-          question.addEventListener('click', () => {
-              const wasActive = item.classList.contains('active');
-              faqItems.forEach(i => i.classList.remove('active'));
-              if (!wasActive) {
-                  item.classList.add('active');
-              }
-          });
-      });
-
-      const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                  entry.target.classList.add('visible');
-                  observer.unobserve(entry.target);
-              }
-          });
-      }, { threshold: 0.1 });
-      animatedEls.forEach(el => observer.observe(el));
-    });
-  </script>
+  <footer><div class="container"><p>&copy; <span id="year"></span> BotMatic.</p></div></footer>
+  <script>document.getElementById('year').textContent=new Date().getFullYear();</script>
 </body>
 </html>
