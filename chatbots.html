@@ -2,12 +2,39 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Onze Diensten | BotMatic</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Diensten — Chatbots op maat (WhatsApp, Telegram, Website) | BotMatic</title>
+  <meta name="description" content="Wij ontwerpen en bouwen chatbots op maat voor WhatsApp, Telegram, Instagram en je website. Snel live (48u), integraties met CRM en betaalproviders.">
+  <link rel="canonical" href="https://botmatic.be/chatbots.html" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Diensten — Chatbots op maat | BotMatic" />
+  <meta property="og:description" content="WhatsApp, Telegram, Instagram en web. Snel live, volledig op maat." />
+  <meta property="og:url" content="https://botmatic.be/chatbots.html" />
+  <meta property="og:image" content="https://botmatic.be/images/preview-services.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Service",
+   "name":"Maatwerk Chatbots",
+   "provider":{"@type":"Organization","name":"BotMatic","url":"https://botmatic.be"},
+   "areaServed":"BE",
+   "serviceType":"Chatbot development & automation",
+   "description":"Ontwerp, bouw en optimalisatie van chatbots; implementatie binnen 48 uur; CRM/betaal-integraties."
+  }
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://botmatic.be/"},
+    {"@type":"ListItem","position":2,"name":"Diensten","item":"https://botmatic.be/chatbots.html"}
+  ]}
+  </script>
 </head>
 <body>
   <header>
@@ -15,191 +42,38 @@
       <a href="index.html" class="logo">BotMatic</a>
       <div class="nav-wrapper">
         <nav id="main-nav">
-          <a href="chatbots.html" data-i18n="navServices">Diensten</a>
-          <a href="prijzen.html" data-i18n="navPricing">Abonnementen</a>
-          <a href="contact.html" data-i18n="navFaq">FAQ & Contact</a>
-          <a href="contact.html" class="btn btn-primary" data-i18n="navContact">Contact</a>
+          <a href="chatbots.html" class="active">Diensten</a>
+          <a href="prijzen.html">Abonnementen</a>
+          <a href="faq.html">FAQ</a>
+          <a href="contact.html" class="btn btn-primary">Contact</a>
         </nav>
-        <select id="lang-select" class="lang-select">
-          <option value="nl">NL</option>
-          <option value="fr">FR</option>
-          <option value="en">EN</option>
-        </select>
-        <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu">
-            <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-        </button>
+        <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
       </div>
     </div>
   </header>
 
   <main>
-    <section class="hero">
-      <div class="container hero-content animate-on-scroll">
-          <h1 data-i18n="servicesTitle">Chatbots op Maat voor Elke Sector</h1>
-          <p class="section-sub" data-i18n="servicesSub">Wij bouwen intelligente chatbots die uw klantenservice automatiseren, leads genereren en uw verkoop stimuleren. Ontdek de mogelijkheden voor uw bedrijf.</p>
-      </div>
-    </section>
+    <section class="services">
+      <div class="container">
+        <h1 class="section-title">Onze diensten</h1>
+        <p class="section-sub">Chatbots op maat — WhatsApp, Telegram, Instagram en website.</p>
 
-    <section id="for-who" class="for-who" style="padding-top: 0;">
-      <div class="container animate-on-scroll">
-        <h2 class="section-title" data-i18n="forWhoTitle">Voor wie is BotMatic?</h2>
-        <div class="audience-grid">
-          <button class="audience-card" data-modal-id="auto"><h3 data-i18n="forAutoTitle">Auto‑handelaars</h3><p data-i18n="forAutoText">Automatiseer leads, opvolging en afspraken via WhatsApp of webchat.</p></button>
-          <button class="audience-card" data-modal-id="salon"><h3 data-i18n="forSalonTitle">Schoonheidssalons</h3><p data-i18n="forSalonText">Laat klanten zelf boeken, herinneringen krijgen en vragen stellen via chat.</p></button>
-          <button class="audience-card" data-modal-id="shop"><h3 data-i18n="forShopTitle">Webshops & diensten</h3><p data-i18n="forShopText">Help klanten 24/7 met productinfo, retouren en support — volledig automatisch.</p></button>
-          <button class="audience-card" data-modal-id="immo"><h3 data-i18n="forImmoTitle">Immo-kantoren</h3><p data-i18n="forImmoText">Plan bezichtigingen, beantwoord vragen over panden en volg leads automatisch op.</p></button>
-          <button class="audience-card" data-modal-id="more"><h3 data-i18n="forMoreTitle">En nog veel meer...</h3><p data-i18n="forMoreText">Onze chatbots zijn flexibel en kunnen worden aangepast aan elke sector. Neem contact op voor een oplossing op maat.</p></button>
-        </div>
-      </div>
-    </section>
-
-    <section id="features" class="features" style="background-color: #fff;">
-      <div class="container animate-on-scroll">
-        <h2 class="section-title" data-i18n="featuresTitle">Ontdek de kracht van chatbots</h2>
-        <p class="section-sub" data-i18n="featuresSub">Ontdek hoe een maatwerkchatbot je bedrijf kan boosten.</p>
         <div class="features-grid">
-          <div class="feature-item"><h3 data-i18n="feat1Title">24/7 Klantenondersteuning</h3><p data-i18n="feat1Desc">Bied direct antwoorden en begeleid klanten op elk moment van de dag, waardoor klanttevredenheid en loyaliteit toenemen.</p></div>
-          <div class="feature-item"><h3 data-i18n="feat2Title">Slimme automatisering</h3><p data-i18n="feat2Desc">Automatiseer repetitieve taken, stroomlijn workflows en geef je team de vrijheid om zich te richten op wat echt belangrijk is.</p></div>
-          <div class="feature-item"><h3 data-i18n="feat3Title">Stimuleer verkoop</h3><p data-i18n="feat3Desc">Verzamel leads, kwalificeer prospects en help klanten bij hun aankoopproces om conversies te verhogen.</p></div>
+          <div class="feature-card"><h3>WhatsApp Chatbot</h3><p>Lead intake, afspraken, reminders, CRM-koppelingen.</p></div>
+          <div class="feature-card"><h3>Telegram Chatbot</h3><p>Kanalen & communities, betalingen, moderatie.</p></div>
+          <div class="feature-card"><h3>Website Chatbot</h3><p>24/7 FAQ, formulieren, doorsturen naar sales.</p></div>
+          <div class="feature-card"><h3>Integraties</h3><p>CRM, agenda/booking, e-mail, webhooks, betalingen.</p></div>
+        </div>
+
+        <div class="btn-group" style="margin-top:2rem;">
+          <a href="contact.html" class="btn btn-primary">Vraag een offerte</a>
+          <a href="prijzen.html" class="btn btn-secondary">Bekijk prijzen</a>
         </div>
       </div>
     </section>
   </main>
 
-  <footer>
-    <div class="container">
-      <div class="footer-links">
-        <a href="#" data-i18n="footerLink1">Over ons</a>
-        <a href="#" data-i18n="footerLink2">Privacybeleid</a>
-        <a href="#" data-i18n="footerLink3">Algemene voorwaarden</a>
-      </div>
-      <p>&copy; <span id="year"></span> BotMatic. <span data-i18n="footerCopyright">Alle rechten voorbehouden.</span></p>
-    </div>
-  </footer>
-
-  <div id="info-modal" class="modal-overlay">
-    <div class="modal-content">
-      <button id="modal-close-btn" class="modal-close">&times;</button>
-      <h3 id="modal-title"></h3>
-      <div id="modal-body"></div>
-    </div>
-  </div>
-
-  <script>
-    const translations = {
-      nl: {
-        navServices: 'Diensten', navPricing: 'Abonnementen', navFaq: 'FAQ & Contact', navContact: 'Contact',
-        servicesTitle: 'Chatbots op Maat voor Elke Sector', servicesSub: 'Wij bouwen intelligente chatbots die uw klantenservice automatiseren, leads genereren en uw verkoop stimuleren. Ontdek de mogelijkheden voor uw bedrijf.',
-        forWhoTitle: 'Voor wie is BotMatic?', forAutoTitle: 'Auto‑handelaars', forAutoText: 'Automatiseer leads, opvolging en afspraken via WhatsApp of webchat.', forSalonTitle: 'Schoonheidssalons', forSalonText: 'Laat klanten zelf boeken, herinneringen krijgen en vragen stellen via chat.', forShopTitle: 'Webshops & diensten', forShopText: 'Help klanten 24/7 met productinfo, retouren en support — volledig automatisch.', forImmoTitle: 'Immo-kantoren', forImmoText: 'Plan bezichtigingen, beantwoord vragen over panden en volg leads automatisch op.', forMoreTitle: 'En nog veel meer...', forMoreText: 'Onze chatbots zijn flexibel en kunnen worden aangepast aan elke sector. Neem contact op voor een oplossing op maat.',
-        featuresTitle: 'Ontdek de kracht van chatbots', featuresSub: 'Ontdek hoe een maatwerkchatbot je bedrijf kan boosten.',
-        feat1Title: '24/7 Klantenondersteuning', feat1Desc: 'Bied direct antwoorden en begeleid klanten op elk moment van de dag, waardoor klanttevredenheid en loyaliteit toenemen.', feat2Title: 'Slimme automatisering', feat2Desc: 'Automatiseer repetitieve taken, stroomlijn workflows en geef je team de vrijheid om zich te richten op wat echt belangrijk is.', feat3Title: 'Stimuleer verkoop', feat3Desc: 'Verzamel leads, kwalificeer prospects en help klanten bij hun aankoopproces om conversies te verhogen.',
-        footerLink1: 'Over ons', footerLink2: 'Privacybeleid', footerLink3: 'Algemene voorwaarden', footerCopyright: 'Alle rechten voorbehouden.'
-      },
-      fr: {
-        navServices: 'Services', navPricing: 'Tarifs', navFaq: 'FAQ & Contact', navContact: 'Contact',
-        servicesTitle: 'Chatbots sur Mesure pour Chaque Secteur', servicesSub: 'Nous créons des chatbots intelligents qui automatisent votre service client, génèrent des leads et stimulent vos ventes. Découvrez les possibilités pour votre entreprise.',
-        forWhoTitle: 'Pour qui est BotMatic ?', forAutoTitle: 'Concessionnaires automobiles', forAutoText: 'Automatisez les leads, le suivi et les rendez-vous via WhatsApp ou webchat.', forSalonTitle: 'Instituts de beauté', forSalonText: 'Permettez aux clients de réserver eux-mêmes, de recevoir des rappels et de poser des questions via chat.', forShopTitle: 'Boutiques en ligne & services', forShopText: 'Aidez les clients 24/7 avec des infos produit, des retours et du support — entièrement automatique.', forImmoTitle: 'Agences immobilières', forImmoText: 'Planifiez des visites, répondez aux questions sur les biens et suivez les prospects automatiquement.', forMoreTitle: 'Et bien plus encore...', forMoreText: 'Nos chatbots sont flexibles et peuvent être adaptés à n\'importe quel secteur. Contactez-nous pour une solution sur mesure.',
-        featuresTitle: 'Déverrouillez la puissance des chatbots', featuresSub: 'Découvrez comment un chatbot sur mesure peut booster votre entreprise.',
-        feat1Title: 'Support client 24/7', feat1Desc: 'Fournissez des réponses instantanées et guidez les clients à tout moment de la journée, améliorant la satisfaction et la fidélité.', feat2Title: 'Automatisation intelligente', feat2Desc: 'Automatisez les tâches répétitives, rationalisez les workflows et permettez à votre équipe de se concentrer sur l’essentiel.', feat3Title: 'Augmenter les ventes', feat3Desc: 'Générez des leads, qualifiez les prospects et assistez les clients dans leur parcours d’achat pour augmenter les conversions.',
-        footerLink1: 'À propos de nous', footerLink2: 'Politique de confidentialité', footerLink3: 'Conditions générales', footerCopyright: 'Tous droits réservés.'
-      },
-      en: {
-        navServices: 'Services', navPricing: 'Pricing', navFaq: 'FAQ & Contact', navContact: 'Contact',
-        servicesTitle: 'Custom Chatbots for Every Industry', servicesSub: 'We build intelligent chatbots that automate your customer service, generate leads, and boost your sales. Discover the possibilities for your business.',
-        forWhoTitle: 'Who is BotMatic for?', forAutoTitle: 'Car dealers', forAutoText: 'Automate leads, follow-ups and appointments via WhatsApp or web chat.', forSalonTitle: 'Beauty salons', forSalonText: 'Let clients book themselves, receive reminders and ask questions via chat.', forShopTitle: 'Webshops & services', forShopText: 'Help customers 24/7 with product info, returns and support — fully automated.', forImmoTitle: 'Real Estate Agencies', forImmoText: 'Schedule viewings, answer property questions, and automatically follow up on leads.', forMoreTitle: 'And many more...', forMoreText: 'Our chatbots are flexible and can be adapted to any industry. Contact us for a custom solution.',
-        featuresTitle: 'Unlock the Power of Chatbots', featuresSub: 'Discover how a tailored chatbot can boost your business.',
-        feat1Title: '24/7 Customer Support', feat1Desc: 'Provide instant answers and guide customers any time of day, enhancing satisfaction and loyalty.', feat2Title: 'Smart Automation', feat2Desc: 'Automate repetitive tasks, streamline workflows, and empower your team to focus on what matters most.', feat3Title: 'Drive Sales', feat3Desc: 'Capture leads, qualify prospects, and assist customers in their buying journey to boost conversions.',
-        footerLink1: 'About Us', footerLink2: 'Privacy Policy', footerLink3: 'Terms & Conditions', footerCopyright: 'All rights reserved.'
-      }
-    };
-    
-    const modalContent = {
-        nl: {
-            auto: { title: 'Chatbots voor Autohandelaars', body: `<p>Verhoog uw verkopen en efficiëntie. Een BotMatic chatbot kan u helpen met:</p><ul><li>Direct leads kwalificeren van uw website of sociale media.</li><li>Automatisch proefritten en onderhoudsafspraken inplannen.</li><li>24/7 vragen beantwoorden over modellen, prijzen en beschikbaarheid.</li><li>Opvolgherinneringen sturen naar potentiële klanten.</li></ul>` },
-            salon: { title: 'Chatbots voor Schoonheidssalons', body: `<p>Geef klanten de controle en bespaar zelf tijd. Uw chatbot kan:</p><ul><li>Klanten zelf afspraken laten boeken, wijzigen of annuleren.</li><li>Automatische herinneringen sturen om no-shows te verminderen.</li><li>Vragen over behandelingen, prijzen en producten direct beantwoorden.</li><li>Klanten informeren over promoties en nieuwe diensten.</li></ul>` },
-            shop: { title: 'Chatbots voor Webshops & Diensten', body: `<p>Bied een naadloze klantervaring en verhoog uw conversie. Uw chatbot kan:</p><ul><li>Klanten helpen het juiste product te vinden met gerichte vragen.</li><li>Veelgestelde vragen over bestellingen, verzending en retouren afhandelen.</li><li>Proactief hulp aanbieden aan bezoekers op uw website.</li><li>Feedback verzamelen om uw aanbod te verbeteren.</li></ul>` },
-            immo: { title: 'Chatbots voor Immo-kantoren', body: `<p>Mis nooit meer een lead en geef sneller service. Een chatbot voor vastgoed kan:</p><ul><li>Automatisch bezichtigingen inplannen op basis van uw agenda.</li><li>Direct vragen beantwoorden over de specificaties van een pand.</li><li>Leads kwalificeren door te vragen naar budget, locatie en wensen.</li><li>Geïnteresseerden op de hoogte houden van nieuw aanbod.</li></ul>` },
-            more: { title: 'Een Oplossing voor Elke Sector', body: `<p>Staat uw sector er niet bij? Geen probleem. De kracht van BotMatic is maatwerk. We hebben ervaring met het bouwen van chatbots voor o.a.:</p><ul><li>Restaurants (reservaties, menu's)</li><li>Fitnesscentra (abonnementen, lesroosters)</li><li>Educatieve instellingen (inschrijvingen, info)</li><li>En nog veel meer. We analyseren uw processen en bouwen een chatbot die perfect bij uw bedrijf past.</li></ul>` }
-        },
-        fr: {
-            auto: { title: 'Chatbots pour Concessionnaires Auto', body: `<p>Augmentez vos ventes et votre efficacité. Un chatbot BotMatic peut vous aider à :</p><ul><li>Qualifier instantanément les leads de votre site web ou des réseaux sociaux.</li><li>Planifier automatiquement les essais et les rendez-vous d'entretien.</li><li>Répondre 24/7 aux questions sur les modèles, les prix et la disponibilité.</li><li>Envoyer des rappels de suivi aux clients potentiels.</li></ul>` },
-            salon: { title: 'Chatbots pour Instituts de Beauté', body: `<p>Donnez le contrôle à vos clients et gagnez du temps. Votre chatbot peut :</p><ul><li>Permettre aux clients de prendre, modifier ou annuler des rendez-vous eux-mêmes.</li><li>Envoyer des rappels automatiques pour réduire les absences.</li><li>Répondre instantanément aux questions sur les soins, les prix et les produits.</li><li>Informer les clients des promotions et des nouveaux services.</li></ul>` },
-            shop: { title: 'Chatbots pour E-commerces & Services', body: `<p>Offrez une expérience client fluide et augmentez votre conversion. Votre chatbot peut :</p><ul><li>Aider les clients à trouver le bon produit avec des questions ciblées.</li><li>Gérer les questions fréquentes sur les commandes, la livraison et les retours.</li><li>Offrir une aide proactive aux visiteurs de votre site web.</li><li>Recueillir des commentaires pour améliorer votre offre.</li></ul>` },
-            immo: { title: 'Chatbots pour Agences Immobilières', body: `<p>Ne manquez plus jamais un lead et offrez un service plus rapide. Un chatbot immobilier peut :</p><ul><li>Planifier automatiquement les visites en fonction de votre agenda.</li><li>Répondre instantanément aux questions sur les spécifications d'un bien.</li><li>Qualifier les leads en posant des questions sur le budget, l'emplacement et les souhaits.</li><li>Tenir les personnes intéressées informées des nouvelles offres.</li></ul>` },
-            more: { title: 'Une Solution pour Chaque Secteur', body: `<p>Votre secteur n'est pas listé ? Pas de problème. La force de BotMatic est le sur-mesure. Nous avons de l'expérience dans la création de chatbots pour, entre autres :</p><ul><li>Restaurants (réservations, menus)</li><li>Salles de sport (abonnements, horaires)</li><li>Établissements d'enseignement (inscriptions, informations)</li><li>Et bien plus encore. Nous analysons vos processus et construisons un chatbot parfaitement adapté à votre entreprise.</li></ul>` }
-        },
-        en: {
-            auto: { title: 'Chatbots for Car Dealers', body: `<p>Increase your sales and efficiency. A BotMatic chatbot can help you with:</p><ul><li>Instantly qualifying leads from your website or social media.</li><li>Automatically scheduling test drives and maintenance appointments.</li><li>Answering questions 24/7 about models, prices, and availability.</li><li>Sending follow-up reminders to potential customers.</li></ul>` },
-            salon: { title: 'Chatbots for Beauty Salons', body: `<p>Give clients control and save your own time. Your chatbot can:</p><ul><li>Allow clients to book, change, or cancel appointments themselves.</li><li>Send automatic reminders to reduce no-shows.</li><li>Instantly answer questions about treatments, prices, and products.</li><li>Inform clients about promotions and new services.</li></ul>` },
-            shop: { title: 'Chatbots for Webshops & Services', body: `<p>Offer a seamless customer experience and increase your conversion. Your chatbot can:</p><ul><li>Help customers find the right product with targeted questions.</li><li>Handle frequently asked questions about orders, shipping, and returns.</li><li>Proactively offer help to visitors on your website.</li><li>Collect feedback to improve your offerings.</li></ul>` },
-            immo: { title: 'Chatbots for Real Estate Agencies', body: `<p>Never miss a lead again and provide faster service. A real estate chatbot can:</p><ul><li>Automatically schedule viewings based on your calendar.</li><li>Instantly answer questions about property specifications.</li><li>Qualify leads by asking about budget, location, and preferences.</li><li>Keep interested parties informed about new listings.</li></ul>` },
-            more: { title: 'A Solution for Every Industry', body: `<p>Is your industry not listed? No problem. The power of BotMatic is customization. We have experience building chatbots for, among others:</p><ul><li>Restaurants (reservations, menus)</li><li>Fitness centers (memberships, class schedules)</li><li>Educational institutions (registrations, info)</li><li>And much more. We analyze your processes and build a chatbot that perfectly fits your business.</li></ul>` }
-        }
-    };
-
-    let currentLang = 'nl';
-
-    function setLanguage(lang) {
-      currentLang = lang;
-      document.documentElement.lang = lang;
-      const elems = document.querySelectorAll('[data-i18n]');
-      elems.forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (translations[lang] && translations[lang][key]) { el.textContent = translations[lang][key]; }
-      });
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const langSelect = document.getElementById('lang-select');
-      const yearSpan = document.getElementById('year');
-      const mobileNavToggle = document.getElementById('mobile-nav-toggle');
-      const mainNav = document.getElementById('main-nav');
-      const modalOverlay = document.getElementById('info-modal');
-      const modalTitle = document.getElementById('modal-title');
-      const modalBody = document.getElementById('modal-body');
-      const modalCloseBtn = document.getElementById('modal-close-btn');
-      const audienceCards = document.querySelectorAll('.audience-card');
-      const animatedEls = document.querySelectorAll('.animate-on-scroll');
-
-      setLanguage(langSelect.value);
-      if (yearSpan) { yearSpan.textContent = new Date().getFullYear(); }
-      langSelect.addEventListener('change', (e) => { setLanguage(e.target.value); });
-      mobileNavToggle.addEventListener('click', () => {
-          mainNav.classList.toggle('active');
-          mobileNavToggle.classList.toggle('active');
-      });
-      mainNav.addEventListener('click', (e) => {
-          if (e.target.tagName === 'A') {
-              mainNav.classList.remove('active');
-              mobileNavToggle.classList.remove('active');
-          }
-      });
-
-      function openModal(modalId) {
-          const content = modalContent[currentLang][modalId];
-          if (content) {
-              modalTitle.textContent = content.title;
-              modalBody.innerHTML = content.body;
-              modalOverlay.classList.add('active');
-          }
-      }
-      function closeModal() { modalOverlay.classList.remove('active'); }
-      audienceCards.forEach(card => {
-          card.addEventListener('click', () => { openModal(card.dataset.modalId); });
-      });
-      modalCloseBtn.addEventListener('click', closeModal);
-      modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) { closeModal(); } });
-
-      const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                  entry.target.classList.add('visible');
-                  observer.unobserve(entry.target);
-              }
-          });
-      }, { threshold: 0.1 });
-      animatedEls.forEach(el => observer.observe(el));
-    });
-  </script>
+  <footer><div class="container"><p>&copy; <span id="year"></span> BotMatic.</p></div></footer>
+  <script>document.getElementById('year').textContent=new Date().getFullYear();</script>
 </body>
 </html>
