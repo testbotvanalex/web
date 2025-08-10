@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Служебное (если появится)
+Disallow: /api/
+
+Sitemap: https://botmatic.be/sitemap.xml
