@@ -2,12 +2,39 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contact | BotMatic</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Contact opnemen — BotMatic</title>
+  <meta name="description" content="Vragen over chatbots of direct starten? Neem contact op met BotMatic. We reageren snel en denken mee over een oplossing op maat.">
+
+  <link rel="canonical" href="https://botmatic.be/contact.html" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Contact — BotMatic" />
+  <meta property="og:description" content="Stel je vraag of start vandaag nog. BotMatic reageert snel." />
+  <meta property="og:url" content="https://botmatic.be/contact.html" />
+  <meta property="og:image" content="https://botmatic.be/images/preview-contact.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"ContactPage",
+   "mainEntityOfPage":{"@type":"WebPage","@id":"https://botmatic.be/contact.html"},
+   "about":{"@type":"Organization","name":"BotMatic","url":"https://botmatic.be",
+     "logo":"https://botmatic.be/images/logo.png","email":"info@botmatic.be",
+     "contactPoint":[{"@type":"ContactPoint","contactType":"customer support","email":"info@botmatic.be","telephone":"+32 000 00 00 00","areaServed":"BE","availableLanguage":["nl","fr","en"]}]
+   }}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://botmatic.be/"},
+    {"@type":"ListItem","position":2,"name":"Contact","item":"https://botmatic.be/contact.html"}
+  ]}
+  </script>
 </head>
 <body>
   <header>
@@ -20,14 +47,8 @@
           <a href="faq.html" data-i18n="navFaq">FAQ</a>
           <a href="contact.html" class="btn btn-primary" data-i18n="navContact">Contact</a>
         </nav>
-        <select id="lang-select" class="lang-select">
-          <option value="nl">NL</option>
-          <option value="fr">FR</option>
-          <option value="en">EN</option>
-        </select>
-        <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu">
-            <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-        </button>
+        <select id="lang-select" class="lang-select"><option value="nl">NL</option><option value="fr">FR</option><option value="en">EN</option></select>
+        <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
       </div>
     </div>
   </header>
@@ -60,88 +81,24 @@
   </footer>
 
   <script>
-    const translations = {
-      nl: {
-        navServices: 'Diensten', navPricing: 'Abonnementen', navFaq: 'FAQ', navContact: 'Contact',
-        contactTitle: 'Neem contact met ons op', contactDesc: 'Klaar om te starten of heb je een vraag? Vul het formulier in en we nemen zo snel mogelijk contact met je op.',
-        nameLabel: 'Naam', emailLabel: 'E-mailadres', messageLabel: 'Bericht', namePlaceholder: 'Je naam', emailPlaceholder: 'je.email@voorbeeld.com', messagePlaceholder: 'Vertel ons over jouw chatbot-behoeften...', submitBtn: 'Verzend bericht',
-        formAlert: 'Bedankt! We nemen snel contact met je op.',
-        footerLink1: 'Over ons', footerLink2: 'Privacybeleid', footerLink3: 'Algemene voorwaarden', footerCopyright: 'Alle rechten voorbehouden.'
-      },
-      fr: {
-        navServices: 'Services', navPricing: 'Tarifs', navFaq: 'FAQ', navContact: 'Contact',
-        contactTitle: 'Contactez-nous', contactDesc: 'Prêt à commencer ou vous avez une question ? Remplissez le formulaire et nous vous contacterons dès que possible.',
-        nameLabel: 'Nom', emailLabel: 'E-mail', messageLabel: 'Message', namePlaceholder: 'Votre nom', emailPlaceholder: 'votre.email@exemple.com', messagePlaceholder: 'Parlez-nous de vos besoins en chatbot...', submitBtn: 'Envoyer le message',
-        formAlert: 'Merci ! Nous vous recontacterons bientôt.',
-        footerLink1: 'À propos de nous', footerLink2: 'Politique de confidentialité', footerLink3: 'Conditions générales', footerCopyright: 'Tous droits réservés.'
-      },
-      en: {
-        navServices: 'Services', navPricing: 'Pricing', navFaq: 'FAQ', navContact: 'Contact',
-        contactTitle: 'Contact Us', contactDesc: 'Ready to get started or have a question? Fill out the form and we will get back to you as soon as possible.',
-        nameLabel: 'Name', emailLabel: 'Email', messageLabel: 'Message', namePlaceholder: 'Your Name', emailPlaceholder: 'your.email@example.com', messagePlaceholder: 'Tell us about your chatbot needs...', submitBtn: 'Send Message',
-        formAlert: 'Thank you! We will get back to you soon.',
-        footerLink1: 'About Us', footerLink2: 'Privacy Policy', footerLink3: 'Terms & Conditions', footerCopyright: 'All rights reserved.'
-      }
-    };
-
-    let currentLang = 'nl';
-
-    function setLanguage(lang) {
-      currentLang = lang;
-      document.documentElement.lang = lang;
-      const elems = document.querySelectorAll('[data-i18n]');
-      elems.forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (translations[lang] && translations[lang][key]) { el.textContent = translations[lang][key]; }
-      });
-      const placeholderElems = document.querySelectorAll('[data-i18n-placeholder]');
-      placeholderElems.forEach(el => {
-        const key = el.getAttribute('data-i18n-placeholder');
-        if (translations[lang] && translations[lang][key]) { el.placeholder = translations[lang][key]; }
-      });
+    const translations = { /* … твои nl/fr/en … */ };
+    let currentLang='nl';
+    function setLanguage(lang){
+      currentLang=lang; document.documentElement.lang=lang;
+      document.querySelectorAll('[data-i18n]').forEach(el=>{ const k=el.getAttribute('data-i18n'); if(translations[lang]&&translations[lang][k]) el.textContent=translations[lang][k]; });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{ const k=el.getAttribute('data-i18n-placeholder'); if(translations[lang]&&translations[lang][k]) el.placeholder=translations[lang][k]; });
     }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const langSelect = document.getElementById('lang-select');
-      const yearSpan = document.getElementById('year');
-      const contactForm = document.getElementById('contact-form');
-      const formFeedback = document.getElementById('form-feedback');
-      const mobileNavToggle = document.getElementById('mobile-nav-toggle');
-      const mainNav = document.getElementById('main-nav');
-      const animatedEls = document.querySelectorAll('.animate-on-scroll');
-
-      setLanguage(langSelect.value);
-      if (yearSpan) { yearSpan.textContent = new Date().getFullYear(); }
-      langSelect.addEventListener('change', (e) => { setLanguage(e.target.value); });
-      mobileNavToggle.addEventListener('click', () => {
-          mainNav.classList.toggle('active');
-          mobileNavToggle.classList.toggle('active');
-      });
-      mainNav.addEventListener('click', (e) => {
-          if (e.target.tagName === 'A') {
-              mainNav.classList.remove('active');
-              mobileNavToggle.classList.remove('active');
-          }
-      });
-      contactForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        formFeedback.textContent = translations[currentLang].formAlert;
-        formFeedback.style.display = 'block';
-        setTimeout(() => {
-            contactForm.reset();
-            formFeedback.style.display = 'none';
-        }, 4000); 
-      });
-
-      const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                  entry.target.classList.add('visible');
-                  observer.unobserve(entry.target);
-              }
-          });
-      }, { threshold: 0.1 });
-      animatedEls.forEach(el => observer.observe(el));
+    document.addEventListener('DOMContentLoaded',()=>{
+      const langSelect=document.getElementById('lang-select'); const yearSpan=document.getElementById('year'); const contactForm=document.getElementById('contact-form'); const formFeedback=document.getElementById('form-feedback');
+      const mobileNavToggle=document.getElementById('mobile-nav-toggle'); const mainNav=document.getElementById('main-nav');
+      setLanguage(langSelect.value); if(yearSpan) yearSpan.textContent=new Date().getFullYear();
+      langSelect.addEventListener('change',e=>setLanguage(e.target.value));
+      mobileNavToggle.addEventListener('click',()=>{ mainNav.classList.toggle('active'); mobileNavToggle.classList.toggle('active'); });
+      mainNav.addEventListener('click',e=>{ if(e.target.tagName==='A'){ mainNav.classList.remove('active'); mobileNavToggle.classList.remove('active'); }});
+      contactForm.addEventListener('submit',(e)=>{ e.preventDefault(); formFeedback.textContent=(translations[currentLang]?.formAlert)||'Bedankt!'; formFeedback.style.display='block'; setTimeout(()=>{ contactForm.reset(); formFeedback.style.display='none'; },4000); });
+      const animatedEls=document.querySelectorAll('.animate-on-scroll');
+      const observer=new IntersectionObserver((entries)=>{ entries.forEach(entry=>{ if(entry.isIntersecting){ entry.target.classList.add('visible'); observer.unobserve(entry.target);} }); },{threshold:.1});
+      animatedEls.forEach(el=>observer.observe(el));
     });
   </script>
 </body>
