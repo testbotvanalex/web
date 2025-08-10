@@ -1,19 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://botmatic.be/</loc>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://botmatic.be/basis-abonnement.html</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://botmatic.be/standaard-abonnement.html</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://botmatic.be/premium-abonnement.html</loc>
-    <priority>0.8</priority>
-  </url>
+  <url><loc>https://botmatic.be/</loc><priority>1.0</priority></url>
+  <url><loc>https://botmatic.be/chatbots.html</loc></url>
+  <url><loc>https://botmatic.be/prijzen.html</loc></url>
+  <url><loc>https://botmatic.be/faq.html</loc></url>
+  <url><loc>https://botmatic.be/contact.html</loc></url>
 </urlset>
