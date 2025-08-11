@@ -154,12 +154,10 @@ body.menu-open{overflow:hidden}
   .foot{grid-template-columns:1fr auto;align-items:center;justify-content:space-between;text-align:left}
   body.menu-open{overflow:auto}
 }
-/* UX tweaks */
+
+/* === UX/SEO tweaks === */
 html{scroll-behavior:smooth}
 :target{scroll-margin-top:80px}
-
-/* Safer hover contrast */
 .cta:hover{filter:none;opacity:.96}
-
-/* Footer policy links smaller */
 .footer a.policy{color:var(--muted);font-weight:600}
+img[loading="lazy"]{contain-intrinsic-size:auto 150px}
