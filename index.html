@@ -23,7 +23,6 @@
     a{color:inherit;text-decoration:none} img{max-width:100%;display:block}
     .container{max-width:var(--container);margin:0 auto;padding:0 20px}
 
-    /* Header */
     header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
     .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
     .brand{display:inline-flex;align-items:center;gap:10px;font-weight:800}
@@ -40,7 +39,6 @@
     .lang button{border:0;background:transparent;padding:6px 10px;border-radius:999px;font-weight:700;color:var(--muted);cursor:pointer}
     .lang button.active{background:#eef2ff;color:#3730a3}
 
-    /* Hero */
     .hero{padding:56px 0 18px;background: radial-gradient(900px 400px at 50% -150px,#eef2ff,transparent)}
     .hero-wrap{display:grid;gap:24px}
     .hero h1{font-size:34px;line-height:1.14;margin:0 0 10px;font-weight:900;letter-spacing:-.02em}
@@ -53,7 +51,6 @@
     .hero-stat div{background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px}
     .hero-stat strong{font-size:18px}
 
-    /* Mockup */
     .mockup{display:grid;place-items:center}
     .phone{width:280px;height:540px;border:10px solid #111;border-radius:28px;background:#000;box-shadow:var(--shadow)}
     .screen{height:100%;background:#e5e7eb;border-radius:18px;padding:12px;display:grid;grid-auto-rows:max-content;gap:8px;overflow:auto}
@@ -63,7 +60,6 @@
     .kb{display:flex;gap:6px;flex-wrap:wrap}
     .kb span{font-size:12px;border:1px solid var(--border);background:#fff;border-radius:999px;padding:6px 10px}
 
-    /* Sections */
     .section{padding:52px 0}
     .section h2{font-size:24px;letter-spacing:-.01em;margin:0 0 8px}
     .section p.lead{color:var(--muted);margin:0 0 20px}
@@ -74,7 +70,6 @@
     .feature h3{margin:0;font-size:16px}
     .feature p{margin:0;color:var(--muted)}
 
-    /* Pricing */
     .pricing{grid-template-columns:1fr}
     .plan{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);display:grid;gap:10px}
     .plan.popular{border:2px solid #c7d2fe}
@@ -86,7 +81,6 @@
     .check{width:20px;height:20px;border-radius:5px;background:#e8f5ee;display:grid;place-items:center;border:1px solid #ccebdc;font-weight:900;color:#16a34a;line-height:1}
     .note{color:var(--muted);margin-top:12px}
 
-    /* Contact */
     .contact-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;box-shadow:var(--shadow);display:grid;gap:12px}
     .form{display:grid;gap:10px}
     .form-grid{grid-template-columns:1fr}
@@ -95,13 +89,11 @@
     .contact-actions{grid-template-columns:1fr 1fr 1fr}
     .gdpr{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.95rem}
 
-    /* Footer */
     .footer{border-top:1px solid var(--border);padding:26px 0;background:#fff}
     .foot{display:grid;gap:16px}
     .foot-left .muted{color:var(--muted);margin:6px 0 0}
     .foot-right{display:flex;gap:16px;flex-wrap:wrap}
 
-    /* ≥768px */
     @media (min-width:768px){
       .menu{display:flex}.mobile-toggle{display:none}
       .menu.open{display:flex;position:static;padding:0;background:transparent;border:0}
@@ -138,7 +130,6 @@
     </div>
   </header>
 
-  <!-- Hero -->
   <section class="hero">
     <div class="container hero-wrap">
       <div>
@@ -177,7 +168,6 @@
     </div>
   </section>
 
-  <!-- Features -->
   <section id="features" class="section">
     <div class="container">
       <h2 data-i18n="featuresTitle">Everything you need to go live</h2>
@@ -218,7 +208,6 @@
     </div>
   </section>
 
-  <!-- Pricing -->
   <section id="pricing" class="section">
     <div class="container">
       <h2 data-i18n="pricingTitle">Simple pricing</h2>
@@ -266,7 +255,6 @@
     </div>
   </section>
 
-  <!-- Contact -->
   <section id="contact" class="section">
     <div class="container">
       <h2 data-i18n="contactTitle">Get a free scope & quote</h2>
@@ -295,7 +283,6 @@
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="footer">
     <div class="container foot">
       <div class="foot-left">
@@ -315,7 +302,7 @@
     const $ = (sel,ctx=document)=>ctx.querySelector(sel);
     const $$ = (sel,ctx=document)=>Array.from(ctx.querySelectorAll(sel));
 
-    // Minimal i18n
+    // i18n dictionary (EN/NL/FR)
     const dict = {
       en: {
         metaTitle:"BotMatic — Custom Chatbots for WhatsApp, Telegram & Instagram",
@@ -366,7 +353,7 @@
         statLeads:"Meer gekwalificeerde leads", statDays:"dagen", statLaunch:"Typische doorlooptijd", statCustom:"Maatwerk scenario’s",
         mock1:"Hi! Ik ben je BotMatic assistent 👋", mock2:"Kies een platform:", mock3:"Top! Ik zet flows, GDPR en betalingen op.",
         featuresTitle:"Alles om snel live te gaan",
-        featuresLead:"Een complete, conversie‑klare chatbot met heldere UX en meetbare resultaten.",
+        featuresLead:"Een complete, conversie‑klare chatbot met helder UX en meetbare resultaten.",
         f1Title:"Snelle setup", f1Text:"Van briefing tot live in dagen. Wij regelen integraties, tests en overdracht.",
         f2Title:"Volledig maatwerk", f2Text:"Flows, talen en logica afgestemd op jouw merk en sector.",
         f3Title:"CRM + Betalingen", f3Text:"Koppel Stripe, Bitrix24, Zapier, Google Sheets en meer.",
@@ -429,12 +416,10 @@
 
     function applyI18n(lang){
       const pack = dict[lang] || dict.en;
-      // text nodes
       $$("[data-i18n]").forEach(el=>{
         const key = el.getAttribute("data-i18n");
         if (pack[key] !== undefined) el.textContent = pack[key];
       });
-      // attributes (e.g., placeholders, meta)
       $$("[data-i18n-attr]").forEach(el=>{
         const items = el.getAttribute("data-i18n-attr").split(";").map(s=>s.trim()).filter(Boolean);
         items.forEach(item=>{
@@ -442,19 +427,14 @@
           if (pack[key]) el.setAttribute(attr, pack[key]);
         });
       });
-      // document <html lang>
       document.documentElement.setAttribute("lang", lang);
-      // active button
       $$(".lang button").forEach(b=>b.classList.toggle("active", b.dataset.lang===lang));
-      // persist
       localStorage.setItem("botmatic_lang", lang);
     }
 
-    // events
     $("#menuBtn").addEventListener("click", ()=> $("#menu").classList.toggle("open"));
     $$(".lang button").forEach(btn=> btn.addEventListener("click", ()=> applyI18n(btn.dataset.lang)));
 
-    // init: user choice -> browser -> EN
     const saved = localStorage.getItem("botmatic_lang");
     const browser = (navigator.language||"en").toLowerCase();
     const guess = saved || (browser.startsWith("nl") ? "nl" : browser.startsWith("fr") ? "fr" : "en");
