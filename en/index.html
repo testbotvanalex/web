@@ -1,4 +1,4 @@
-<!-- /en/index.html — clean homepage (Pricing & FAQ moved to /en/pricing.html) -->
+<!-- /en/index.html — EN homepage (Pricing & FAQ moved to /en/pricing.html) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>BotMatic — Custom Chatbots for WhatsApp, Telegram & Instagram</title>
   <meta name="description" content="We build custom chatbots fast — WhatsApp, Telegram, Instagram & web. Simple setup, rapid delivery, full customization."/>
+  <link rel="canonical" href="https://botmatic.be/en/"/>
+  <link rel="alternate" href="https://botmatic.be/" hreflang="nl"/>
+  <link rel="alternate" href="https://botmatic.be/en/" hreflang="en"/>
+  <link rel="alternate" href="https://botmatic.be/fr/" hreflang="fr"/>
   <link rel="icon" href="/favicon.ico"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
@@ -17,7 +21,7 @@
     <nav class="nav" aria-label="Primary">
       <a class="brand" href="/en/"><span class="brand-badge" aria-hidden="true">🤖</span><span class="brand-name">BotMatic</span></a>
       <div class="lang" aria-label="Language">
-        <a class="pill" href="/en/">EN</a><a class="pill" href="/nl/">NL</a><a class="pill" href="/fr/">FR</a>
+        <a class="pill" href="/">NL</a><a class="pill active" href="/en/">EN</a><a class="pill" href="/fr/">FR</a>
       </div>
       <button class="mobile-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainmenu">☰</button>
       <div id="mainmenu" class="menu" role="menu">
@@ -32,7 +36,6 @@
 </header>
 
 <main id="top">
-  <!-- Hero -->
   <section class="hero">
     <div class="container hero-wrap">
       <div>
@@ -47,7 +50,6 @@
           <a href="/en/#contact" class="cta">Start a project</a>
           <a href="/en/pricing.html" class="cta secondary">Compare plans</a>
         </div>
-
         <div class="hero-card">
           <div class="hero-stat">
             <div><strong>40%+</strong><br/><small>Lead‑to‑chat rate</small></div>
@@ -56,20 +58,16 @@
           </div>
         </div>
       </div>
-
-      <!-- Mock phone -->
       <div class="mockup" id="demo" aria-label="Chat demo">
         <div class="phone"><div class="screen"></div></div>
       </div>
     </div>
   </section>
 
-  <!-- Features -->
   <section id="features" class="section">
     <div class="container">
       <h2>Why teams choose BotMatic</h2>
       <p class="lead">From idea to a live, revenue‑generating chatbot — without the drag.</p>
-
       <div class="grid features">
         <article class="feature"><div class="feat-icon">🚀</div><h3>Fast delivery</h3><p>Brief → flow draft → go‑live in 7–14 days.</p></article>
         <article class="feature"><div class="feat-icon">🧠</div><h3>AI + buttons UX</h3><p>Guided flows + AI answers for speed and control.</p></article>
@@ -81,12 +79,10 @@
     </div>
   </section>
 
-  <!-- Pricing teaser -->
   <section class="section">
     <div class="container">
       <h2>Simple pricing</h2>
       <p class="lead">Start small, upgrade anytime. Full details on the pricing page.</p>
-
       <div class="grid pricing">
         <div class="plan"><div class="plan-h">Starter</div><div class="price">€29 <small>/mo</small></div><a href="/en/pricing.html" class="cta wfull">View details</a></div>
         <div class="plan popular"><div class="plan-h">Standard</div><div class="price">€99 <small>/mo</small></div><a href="/en/pricing.html" class="cta wfull">View details</a><div class="note">Most popular</div></div>
@@ -95,12 +91,10 @@
     </div>
   </section>
 
-  <!-- Contact -->
   <section id="contact" class="section">
     <div class="container">
       <h2>Tell us about your bot</h2>
       <p class="lead">Share a few details and we’ll get back within 24 hours.</p>
-
       <div class="contact-card">
         <form class="form" id="contact-form" onsubmit="return false">
           <div class="grid form-grid">
@@ -109,9 +103,7 @@
           </div>
           <input class="input" type="text" name="company" placeholder="Company / Industry"/>
           <textarea class="input" name="message" rows="5" placeholder="What should the bot do? Platforms, flows, integrations…"></textarea>
-
-          <label class="gdpr"><input type="checkbox" name="gdpr" required/> I agree to be contacted about my request and accept the privacy policy.</label>
-
+          <label class="gdpr"><input type="checkbox" required/> I agree to be contacted and accept the privacy policy.</label>
           <div class="grid contact-actions">
             <button class="cta" type="submit">Send request</button>
             <a class="cta secondary" href="mailto:info@botmatic.be">Email us</a>
