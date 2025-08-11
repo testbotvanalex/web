@@ -1,279 +1,226 @@
-<!-- /en/index.html -->
+<!-- /en/index.html — cleaner homepage (pricing+faq moved out, added logos & testimonial) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>BotMatic — Custom Chatbots for WhatsApp, Telegram & Instagram</title>
-  <meta name="description" content="We build custom chatbots fast — WhatsApp, Telegram, Instagram & web. Simple setup, rapid delivery, full customization."/>
-  <link rel="canonical" href="https://www.botmatic.be/en/"/>
-  <link rel="alternate" href="https://www.botmatic.be/en/" hreflang="en"/>
-  <link rel="alternate" href="https://www.botmatic.be/nl/" hreflang="nl"/>
-  <link rel="alternate" href="https://www.botmatic.be/fr/" hreflang="fr"/>
-  <link rel="alternate" href="https://www.botmatic.be/en/" hreflang="x-default"/>
-  <!-- OG/Twitter -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="BotMatic — Custom chatbots for WhatsApp, Telegram & Instagram">
-  <meta property="og:description" content="We build custom chatbots fast. Simple setup, rapid delivery, full customization.">
-  <meta property="og:image" content="https://www.botmatic.be/og.jpg">
-  <meta property="og:url" content="https://www.botmatic.be/en/">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#4f46e5">
+  <meta name="description" content="We design and ship custom chatbots fast — WhatsApp, Telegram, Instagram & web. Simple setup, rapid delivery, full customization."/>
   <link rel="icon" href="/favicon.ico"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="/assets/style.css"/>
 </head>
 <body>
-  <header class="site-header">
+<header class="site-header">
+  <div class="container">
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="/en/">
+        <span class="brand-badge" aria-hidden="true">🤖</span>
+        <span class="brand-name">BotMatic</span>
+      </a>
+
+      <div class="lang" aria-label="Language">
+        <a class="pill" href="/en/">EN</a>
+        <a class="pill" href="/nl/">NL</a>
+        <a class="pill" href="/fr/">FR</a>
+      </div>
+
+      <button class="mobile-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainmenu">☰</button>
+
+      <div id="mainmenu" class="menu" role="menu">
+        <a href="/en/#features" role="menuitem">Features</a>
+        <a href="/en/pricing.html" role="menuitem">Pricing</a>
+        <a href="/en/#contact" role="menuitem">Contact</a>
+        <a href="https://wa.me/32470000000" class="cta secondary" role="menuitem" rel="nofollow noopener">WhatsApp</a>
+        <a href="/en/#demo" role="menuitem" class="cta" style="padding:8px 12px;border-radius:10px;">Get a Demo</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-wrap">
+      <div>
+        <div class="hero-badges">
+          <span class="badge">⚡ 7–14 days delivery</span>
+          <span class="badge">🧩 Fully custom flows</span>
+          <span class="badge">🔌 CRM & payments</span>
+        </div>
+        <h1>Custom chatbots for WhatsApp, Telegram & Instagram — built fast</h1>
+        <p>Automate lead capture, qualification and booking. We build, integrate and launch — then keep improving with you.</p>
+        <div class="actions">
+          <a href="/en/#contact" class="cta">Start a project</a>
+          <a href="/en/pricing.html" class="cta secondary">Compare plans</a>
+        </div>
+
+        <div class="hero-card">
+          <div class="hero-stat">
+            <div><strong>40%+</strong><br/><small>Lead‑to‑chat rate</small></div>
+            <div><strong>2×</strong><br/><small>Faster response</small></div>
+            <div><strong>24/7</strong><br/><small>Automated handling</small></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mock phone -->
+      <div class="mockup" id="demo" aria-label="Chat demo">
+        <div class="phone">
+          <div class="screen"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social proof: logos -->
+  <section class="section" aria-label="Trusted by">
     <div class="container">
-      <nav class="nav" aria-label="Primary">
-        <a class="brand" href="#top">
-          <span class="brand-badge" aria-hidden="true">🤖</span>
-          <span class="brand-name">BotMatic</span>
-        </a>
-
-        <div class="lang" aria-label="Language">
-          <a class="pill" href="/en/">EN</a>
-          <a class="pill" href="/nl/">NL</a>
-          <a class="pill" href="/fr/">FR</a>
+      <div class="hero-card" style="display:grid;gap:14px">
+        <div style="font-weight:800">Trusted for growth</div>
+        <div class="grid" style="grid-template-columns:repeat(2,1fr);align-items:center;gap:10px">
+          <div class="badge" style="justify-content:center">Beauty & Wellness</div>
+          <div class="badge" style="justify-content:center">Clinics</div>
+          <div class="badge" style="justify-content:center">Local Services</div>
+          <div class="badge" style="justify-content:center">E‑commerce</div>
         </div>
-
-        <button class="mobile-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainmenu">☰</button>
-
-        <div id="mainmenu" class="menu" role="menu">
-          <a href="#features" role="menuitem">Features</a>
-          <a href="#pricing" role="menuitem">Pricing</a>
-          <a href="#contact" role="menuitem">Contact</a>
-          <a href="https://wa.me/32470000000" class="cta secondary" role="menuitem" rel="nofollow noopener">WhatsApp</a>
-          <a href="#demo" role="menuitem" class="cta" style="padding:8px 12px;border-radius:10px;">Get a Demo</a>
-        </div>
-      </nav>
-    </div>
-  </header>
-
-  <main id="top">
-    <section class="hero">
-      <div class="container hero-wrap">
-        <div>
-          <div class="hero-badges">
-            <span class="badge">⚡ 7–14 days delivery</span>
-            <span class="badge">🧩 Fully custom flows</span>
-            <span class="badge">🔌 CRM & payments</span>
-          </div>
-          <h1>Custom chatbots for WhatsApp, Telegram & Instagram — built fast</h1>
-          <p>We design, build and launch chatbots that automate lead capture, qualification and booking. Simple setup, rapid turnaround, ongoing support.</p>
-          <div class="actions">
-            <a href="#contact" class="cta">Start a project</a>
-            <a href="#pricing" class="cta secondary">Compare plans</a>
-          </div>
-
-          <div class="hero-card">
-            <div class="hero-stat">
-              <div><strong>40%+</strong><br/><small>Lead‑to‑chat rate</small></div>
-              <div><strong>2×</strong><br/><small>Faster response</small></div>
-              <div><strong>24/7</strong><br/><small>Automated handling</small></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="mockup" id="demo" aria-label="Chat demo">
-          <div class="phone">
-            <div class="screen">
-              <!-- hourly demo bubbles will be rendered here by /assets/main.js -->
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="features" class="section">
-      <div class="container">
-        <h2>Why teams choose BotMatic</h2>
-        <p class="lead">Everything you need to go from idea to a live, revenue‑generating chatbot.</p>
-
-        <div class="grid features">
-          <article class="feature">
-            <div class="feat-icon">🚀</div>
-            <h3>Fast delivery</h3>
-            <p>From brief to launch in 7–14 days with tight feedback loops.</p>
-          </article>
-          <article class="feature">
-            <div class="feat-icon">🧠</div>
-            <h3>AI + buttons UX</h3>
-            <p>Blend guided flows with AI answers for speed and control.</p>
-          </article>
-          <article class="feature">
-            <div class="feat-icon">🔌</div>
-            <h3>Integrations</h3>
-            <p>CRM, calendars, payments, Google Sheets — we connect your stack.</p>
-          </article>
-          <article class="feature">
-            <div class="feat-icon">📈</div>
-            <h3>Qualify & convert</h3>
-            <p>Score leads, route hot prospects, and auto‑book in one flow.</p>
-          </article>
-          <article class="feature">
-            <div class="feat-icon">🛡️</div>
-            <h3>GDPR‑ready</h3>
-            <p>Clear consent, data minimization and opt‑out built‑in.</p>
-          </article>
-          <article class="feature">
-            <div class="feat-icon">🤝</div>
-            <h3>Ongoing support</h3>
-            <p>We tune copy, steps and KPIs as your needs evolve.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section id="pricing" class="section">
-      <div class="container">
-        <h2>Simple pricing</h2>
-        <p class="lead">Pick a plan — cancel or upgrade anytime. Custom enterprise plans on request.</p>
-
-        <div class="grid pricing">
-          <div class="plan">
-            <div class="plan-h">Starter</div>
-            <div class="price">€29 <small>/mo</small></div>
-            <ul class="ul">
-              <li><span class="check">✓</span><span>1 core flow (FAQ or lead capture)</span></li>
-              <li><span class="check">✓</span><span>1 platform (e.g. WhatsApp)</span></li>
-              <li><span class="check">✓</span><span>Up to 500 conversations/mo</span></li>
-            </ul>
-            <a href="#contact" class="cta wfull">Choose Starter</a>
-            <div class="note">Good for MVPs and small teams.</div>
-          </div>
-
-          <div class="plan popular">
-            <div class="plan-h">Standard</div>
-            <div class="price">€99 <small>/mo</small></div>
-            <ul class="ul">
-              <li><span class="check">✓</span><span>Multi‑step flows (qualify + booking)</span></li>
-              <li><span class="check">✓</span><span>2 platforms</span></li>
-              <li><span class="check">✓</span><span>Priority support & updates</span></li>
-              <li><span class="check">✓</span><span>Up to 2,000 conversations/mo</span></li>
-            </ul>
-            <a href="#contact" class="cta wfull">Choose Standard</a>
-            <div class="note">Our most popular plan.</div>
-          </div>
-
-          <div class="plan">
-            <div class="plan-h">Premium</div>
-            <div class="price">€299 <small>/mo</small></div>
-            <ul class="ul">
-              <li><span class="check">✓</span><span>Advanced AI & NLP tuning</span></li>
-              <li><span class="check">✓</span><span>Multi‑platform & system integrations</span></li>
-              <li><span class="check">✓</span><span>Dedicated PM & SLAs</span></li>
-              <li><span class="check">✓</span><span>Unlimited conversations</span></li>
-            </ul>
-            <a href="#contact" class="cta wfull">Choose Premium</a>
-            <div class="note">For scale‑ups and enterprises.</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FAQ -->
-    <section id="faq" class="section">
-      <div class="container">
-        <h2>FAQ</h2>
-        <p class="lead">Quick answers to common questions.</p>
-        <div class="grid features">
-          <article class="feature"><h3>How fast can you launch?</h3><p>Most bots go live in 7–14 days.</p></article>
-          <article class="feature"><h3>Which platforms do you support?</h3><p>WhatsApp, Telegram, Instagram and web widgets.</p></article>
-          <article class="feature"><h3>Do you integrate with calendars/CRMs?</h3><p>Yes — Google Calendar, Sheets, HubSpot, payments and more.</p></article>
-          <article class="feature"><h3>Can you route hot leads to a human?</h3><p>Yes — we qualify and hand off to live agents with context.</p></article>
-          <article class="feature"><h3>Is it GDPR‑compliant?</h3><p>Consent, data minimization and opt‑out are built‑in.</p></article>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="section">
-      <div class="container">
-        <h2>Tell us about your bot</h2>
-        <p class="lead">Share a few details and we’ll get back within 24 hours.</p>
-
-        <div class="contact-card">
-          <form class="form" id="contact-form" action="#" method="POST" onsubmit="return false">
-            <div class="grid form-grid">
-              <input class="input" type="text" name="name" placeholder="Full name" required/>
-              <input class="input" type="email" name="email" placeholder="Work email" required/>
-            </div>
-            <input class="input" type="text" name="company" placeholder="Company / Industry"/>
-            <textarea class="input" name="message" rows="5" placeholder="What should the bot do? Platforms, flows, integrations…"></textarea>
-
-            <label class="gdpr">
-              <input type="checkbox" name="gdpr" required/>
-              I agree to be contacted about my request and accept the privacy policy.
-            </label>
-
-            <div class="grid contact-actions">
-              <button class="cta" type="submit">Send request</button>
-              <a class="cta secondary" href="mailto:info@botmatic.be">Email us</a>
-              <a class="cta secondary" href="#demo">See demo</a>
-            </div>
-          </form>
-          <p class="form-ok" role="status" aria-live="polite" hidden>Thanks! We’ll reply within 24 hours.</p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="container foot">
-      <div class="foot-left">
-        <strong>BotMatic</strong>
-        <div class="muted">Custom chatbots for WhatsApp, Telegram, Instagram & web.</div>
-      </div>
-      <div class="foot-right">
-        <a href="#features">Features</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#contact">Contact</a>
-        <a href="mailto:info@botmatic.be">info@botmatic.be</a>
-        <a href="/privacy.html" class="policy">Privacy</a>
-        <a href="/cookies.html" class="policy">Cookies</a>
       </div>
     </div>
-  </footer>
+  </section>
 
-  <!-- JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"Organization",
-    "name":"BotMatic",
-    "url":"https://www.botmatic.be/",
-    "logo":"https://www.botmatic.be/og.jpg"
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"Service",
-    "name":"Custom Chatbots",
-    "areaServed":"BE",
-    "offers":[
-      {"@type":"Offer","name":"Starter","price":"29","priceCurrency":"EUR","url":"https://www.botmatic.be/en/#pricing"},
-      {"@type":"Offer","name":"Standard","price":"99","priceCurrency":"EUR","url":"https://www.botmatic.be/en/#pricing"},
-      {"@type":"Offer","name":"Premium","price":"299","priceCurrency":"EUR","url":"https://www.botmatic.be/en/#pricing"}
-    ]
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-   "@context":"https://schema.org",
-   "@type":"FAQPage",
-   "mainEntity":[
-    {"@type":"Question","name":"How fast can you launch?","acceptedAnswer":{"@type":"Answer","text":"Most bots go live in 7–14 days."}},
-    {"@type":"Question","name":"Which platforms do you support?","acceptedAnswer":{"@type":"Answer","text":"WhatsApp, Telegram, Instagram and web widgets."}},
-    {"@type":"Question","name":"Do you integrate with calendars/CRMs?","acceptedAnswer":{"@type":"Answer","text":"Yes — Google Calendar, Sheets, HubSpot, payments and more."}},
-    {"@type":"Question","name":"Is it GDPR‑compliant?","acceptedAnswer":{"@type":"Answer","text":"Consent, data minimization and opt‑out are built‑in."}}
-   ]
-  }
-  </script>
+  <!-- Features (short) -->
+  <section id="features" class="section">
+    <div class="container">
+      <h2>Why teams choose BotMatic</h2>
+      <p class="lead">From idea to a live, revenue‑generating chatbot — without the drag.</p>
 
-  <script src="/assets/main.js" defer></script>
+      <div class="grid features">
+        <article class="feature">
+          <div class="feat-icon">🚀</div>
+          <h3>Fast delivery</h3>
+          <p>Brief → flow draft → go‑live in 7–14 days.</p>
+        </article>
+        <article class="feature">
+          <div class="feat-icon">🧠</div>
+          <h3>AI + buttons UX</h3>
+          <p>Guided flows blended with AI answers for speed & control.</p>
+        </article>
+        <article class="feature">
+          <div class="feat-icon">🔌</div>
+          <h3>Integrations</h3>
+          <p>Calendars, CRMs, payments, Sheets — we connect your stack.</p>
+        </article>
+        <article class="feature">
+          <div class="feat-icon">📈</div>
+          <h3>Qualify & convert</h3>
+          <p>Score leads, route hot prospects, auto‑book in one flow.</p>
+        </article>
+        <article class="feature">
+          <div class="feat-icon">🛡️</div>
+          <h3>GDPR‑ready</h3>
+          <p>Consent, minimization and opt‑out built‑in.</p>
+        </article>
+        <article class="feature">
+          <div class="feat-icon">🤝</div>
+          <h3>Ongoing support</h3>
+          <p>We tune copy, steps and KPIs as you grow.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mini pricing teaser -->
+  <section class="section">
+    <div class="container">
+      <h2>Simple pricing</h2>
+      <p class="lead">Start small, upgrade anytime. Full details on the pricing page.</p>
+
+      <div class="grid pricing">
+        <div class="plan">
+          <div class="plan-h">Starter</div>
+          <div class="price">€29 <small>/mo</small></div>
+          <a href="/en/pricing.html" class="cta wfull">View details</a>
+        </div>
+
+        <div class="plan popular">
+          <div class="plan-h">Standard</div>
+          <div class="price">€99 <small>/mo</small></div>
+          <a href="/en/pricing.html" class="cta wfull">View details</a>
+          <div class="note">Most popular</div>
+        </div>
+
+        <div class="plan">
+          <div class="plan-h">Premium</div>
+          <div class="price">€299 <small>/mo</small></div>
+          <a href="/en/pricing.html" class="cta wfull">View details</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial -->
+  <section class="section" aria-label="Testimonial">
+    <div class="container">
+      <div class="contact-card" style="gap:8px">
+        <p class="lead" style="margin:0">“We replaced manual WhatsApp replies with a BotMatic flow — bookings went up and our team finally sleeps.”</p>
+        <div style="display:flex;gap:10px;align-items:center">
+          <div class="badge" aria-hidden="true">⭐️⭐️⭐️⭐️⭐️</div>
+          <strong>Owner, local clinic</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="section">
+    <div class="container">
+      <h2>Tell us about your bot</h2>
+      <p class="lead">Share a few details and we’ll get back within 24 hours.</p>
+
+      <div class="contact-card">
+        <form class="form" id="contact-form" action="#" method="POST" onsubmit="return false">
+          <div class="grid form-grid">
+            <input class="input" type="text" name="name" placeholder="Full name" required/>
+            <input class="input" type="email" name="email" placeholder="Work email" required/>
+          </div>
+          <input class="input" type="text" name="company" placeholder="Company / Industry"/>
+          <textarea class="input" name="message" rows="5" placeholder="What should the bot do? Platforms, flows, integrations…"></textarea>
+
+          <label class="gdpr">
+            <input type="checkbox" name="gdpr" required/>
+            I agree to be contacted about my request and accept the privacy policy.
+          </label>
+
+          <div class="grid contact-actions">
+            <button class="cta" type="submit">Send request</button>
+            <a class="cta secondary" href="mailto:info@botmatic.be">Email us</a>
+            <a class="cta secondary" href="#demo">See demo</a>
+          </div>
+        </form>
+        <p class="form-ok" role="status" aria-live="polite" hidden>Thanks! We’ll reply within 24 hours.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container foot">
+    <div class="foot-left">
+      <strong>BotMatic</strong>
+      <div class="muted">Custom chatbots for WhatsApp, Telegram, Instagram & web.</div>
+    </div>
+    <div class="foot-right">
+      <a href="/en/#features">Features</a>
+      <a href="/en/pricing.html">Pricing</a>
+      <a href="/en/#contact">Contact</a>
+      <a href="mailto:info@botmatic.be">info@botmatic.be</a>
+      <a href="/privacy.html" class="policy">Privacy</a>
+      <a href="/cookies.html" class="policy">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/main.js" defer></script>
 </body>
 </html>
