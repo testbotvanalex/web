@@ -11,6 +11,14 @@
   <link rel="alternate" href="https://www.botmatic.be/nl/" hreflang="nl"/>
   <link rel="alternate" href="https://www.botmatic.be/fr/" hreflang="fr"/>
   <link rel="alternate" href="https://www.botmatic.be/en/" hreflang="x-default"/>
+  <!-- OG/Twitter -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="BotMatic — Custom chatbots for WhatsApp, Telegram & Instagram">
+  <meta property="og:description" content="We build custom chatbots fast. Simple setup, rapid delivery, full customization.">
+  <meta property="og:image" content="https://www.botmatic.be/og.jpg">
+  <meta property="og:url" content="https://www.botmatic.be/en/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#4f46e5">
   <link rel="icon" href="/favicon.ico"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -38,6 +46,7 @@
           <a href="#features" role="menuitem">Features</a>
           <a href="#pricing" role="menuitem">Pricing</a>
           <a href="#contact" role="menuitem">Contact</a>
+          <a href="https://wa.me/32470000000" class="cta secondary" role="menuitem" rel="nofollow noopener">WhatsApp</a>
           <a href="#demo" role="menuitem" class="cta" style="padding:8px 12px;border-radius:10px;">Get a Demo</a>
         </div>
       </nav>
@@ -57,7 +66,7 @@
           <p>We design, build and launch chatbots that automate lead capture, qualification and booking. Simple setup, rapid turnaround, ongoing support.</p>
           <div class="actions">
             <a href="#contact" class="cta">Start a project</a>
-            <a href="#pricing" class="cta secondary">See pricing</a>
+            <a href="#pricing" class="cta secondary">Compare plans</a>
           </div>
 
           <div class="hero-card">
@@ -72,14 +81,7 @@
         <div class="mockup" id="demo" aria-label="Chat demo">
           <div class="phone">
             <div class="screen">
-              <div class="msg bot">Hi! I’m BotMatic. What do you need help with?</div>
-              <div class="kb">
-                <span>Book an appointment</span><span>Prices</span><span>Talk to agent</span>
-              </div>
-              <div class="msg user">Book a facial this Friday</div>
-              <div class="msg bot">Great! Morning or afternoon works best?</div>
-              <div class="msg user">Afternoon</div>
-              <div class="msg bot">Done ✅ 16:30 reserved. You’ll get a reminder 2h before.</div>
+              <!-- hourly demo bubbles will be rendered here by /assets/main.js -->
             </div>
           </div>
         </div>
@@ -173,13 +175,28 @@
       </div>
     </section>
 
+    <!-- FAQ -->
+    <section id="faq" class="section">
+      <div class="container">
+        <h2>FAQ</h2>
+        <p class="lead">Quick answers to common questions.</p>
+        <div class="grid features">
+          <article class="feature"><h3>How fast can you launch?</h3><p>Most bots go live in 7–14 days.</p></article>
+          <article class="feature"><h3>Which platforms do you support?</h3><p>WhatsApp, Telegram, Instagram and web widgets.</p></article>
+          <article class="feature"><h3>Do you integrate with calendars/CRMs?</h3><p>Yes — Google Calendar, Sheets, HubSpot, payments and more.</p></article>
+          <article class="feature"><h3>Can you route hot leads to a human?</h3><p>Yes — we qualify and hand off to live agents with context.</p></article>
+          <article class="feature"><h3>Is it GDPR‑compliant?</h3><p>Consent, data minimization and opt‑out are built‑in.</p></article>
+        </div>
+      </div>
+    </section>
+
     <section id="contact" class="section">
       <div class="container">
         <h2>Tell us about your bot</h2>
         <p class="lead">Share a few details and we’ll get back within 24 hours.</p>
 
         <div class="contact-card">
-          <form class="form" id="contact-form" action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
+          <form class="form" id="contact-form" action="#" method="POST" onsubmit="return false">
             <div class="grid form-grid">
               <input class="input" type="text" name="name" placeholder="Full name" required/>
               <input class="input" type="email" name="email" placeholder="Work email" required/>
@@ -198,7 +215,7 @@
               <a class="cta secondary" href="#demo">See demo</a>
             </div>
           </form>
-          <p class="form-ok" hidden>Thanks! We’ll reply within 24 hours.</p>
+          <p class="form-ok" role="status" aria-live="polite" hidden>Thanks! We’ll reply within 24 hours.</p>
         </div>
       </div>
     </section>
@@ -215,9 +232,47 @@
         <a href="#pricing">Pricing</a>
         <a href="#contact">Contact</a>
         <a href="mailto:info@botmatic.be">info@botmatic.be</a>
+        <a href="/privacy.html" class="policy">Privacy</a>
+        <a href="/cookies.html" class="policy">Cookies</a>
       </div>
     </div>
   </footer>
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"BotMatic",
+    "url":"https://www.botmatic.be/",
+    "logo":"https://www.botmatic.be/og.jpg"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Service",
+    "name":"Custom Chatbots",
+    "areaServed":"BE",
+    "offers":[
+      {"@type":"Offer","name":"Starter","price":"29","priceCurrency":"EUR","url":"https://www.botmatic.be/en/#pricing"},
+      {"@type":"Offer","name":"Standard","price":"99","priceCurrency":"EUR","url":"https://www.botmatic.be/en/#pricing"},
+      {"@type":"Offer","name":"Premium","price":"299","priceCurrency":"EUR","url":"https://www.botmatic.be/en/#pricing"}
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+   "@context":"https://schema.org",
+   "@type":"FAQPage",
+   "mainEntity":[
+    {"@type":"Question","name":"How fast can you launch?","acceptedAnswer":{"@type":"Answer","text":"Most bots go live in 7–14 days."}},
+    {"@type":"Question","name":"Which platforms do you support?","acceptedAnswer":{"@type":"Answer","text":"WhatsApp, Telegram, Instagram and web widgets."}},
+    {"@type":"Question","name":"Do you integrate with calendars/CRMs?","acceptedAnswer":{"@type":"Answer","text":"Yes — Google Calendar, Sheets, HubSpot, payments and more."}},
+    {"@type":"Question","name":"Is it GDPR‑compliant?","acceptedAnswer":{"@type":"Answer","text":"Consent, data minimization and opt‑out are built‑in."}}
+   ]
+  }
+  </script>
 
   <script src="/assets/main.js" defer></script>
 </body>
