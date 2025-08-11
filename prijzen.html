@@ -1,137 +1,142 @@
+<!-- /pricing.html — NL prijzen + FAQ -->
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <title>Prijzen & Abonnementen — BotMatic</title>
-  <meta name="description" content="Transparante prijzen voor chatbots op maat. Kies Basis, Standaard of Premium. 2 weken gratis testen.">
-
-  <link rel="canonical" href="https://botmatic.be/prijzen.html" />
-
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Prijzen & Abonnementen — BotMatic" />
-  <meta property="og:description" content="Transparante prijzen: Basis, Standaard en Premium. 2 weken gratis testen." />
-  <meta property="og:url" content="https://botmatic.be/prijzen.html" />
-  <meta property="og:image" content="https://botmatic.be/images/preview-prijzen.jpg" />
-  <meta name="twitter:card" content="summary_large_image" />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Service","name":"Maatwerk Chatbots",
-   "provider":{"@type":"Organization","name":"BotMatic","url":"https://botmatic.be"},
-   "areaServed":"BE",
-   "hasOfferCatalog":{"@type":"OfferCatalog","name":"Abonnementen","itemListElement":[
-     {"@type":"Offer","name":"Basis","price":"29","priceCurrency":"EUR","url":"https://botmatic.be/contact.html","availability":"https://schema.org/InStock"},
-     {"@type":"Offer","name":"Standaard","price":"99","priceCurrency":"EUR","url":"https://botmatic.be/contact.html","availability":"https://schema.org/InStock"},
-     {"@type":"Offer","name":"Premium","price":"299","priceCurrency":"EUR","url":"https://botmatic.be/contact.html","availability":"https://schema.org/InStock"}
-   ]}}
-  </script>
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
-    {"@type":"ListItem","position":1,"name":"Home","item":"https://botmatic.be/"},
-    {"@type":"ListItem","position":2,"name":"Prijzen","item":"https://botmatic.be/prijzen.html"}
-  ]}
-  </script>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Prijzen — BotMatic</title>
+  <meta name="description" content="Vergelijk BotMatic‑pakketten en functies. Eenvoudige prijzen, maandelijks opzegbaar."/>
+  <link rel="canonical" href="https://botmatic.be/pricing.html"/>
+  <link rel="alternate" href="https://botmatic.be/" hreflang="nl"/>
+  <link rel="alternate" href="https://botmatic.be/en/pricing.html" hreflang="en"/>
+  <link rel="alternate" href="https://botmatic.be/fr/pricing.html" hreflang="fr"/>
+  <link rel="icon" href="/favicon.ico"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
 </head>
 <body>
-  <header>
-    <div class="container header-inner">
-      <a href="index.html" class="logo">BotMatic</a>
-      <div class="nav-wrapper">
-        <nav id="main-nav">
-          <a href="chatbots.html" data-i18n="navServices">Diensten</a>
-          <a href="prijzen.html" data-i18n="navPricing">Abonnementen</a>
-          <a href="contact.html" data-i18n="navFaq">FAQ & Contact</a>
-          <a href="contact.html" class="btn btn-primary" data-i18n="navContact">Contact</a>
-        </nav>
-        <select id="lang-select" class="lang-select"><option value="nl">NL</option><option value="fr">FR</option><option value="en">EN</option></select>
-        <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+<header class="site-header">
+  <div class="container">
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="/"><span class="brand-badge" aria-hidden="true">🤖</span><span class="brand-name">BotMatic</span></a>
+      <div class="lang" aria-label="Taal">
+        <a class="pill active" href="/">NL</a><a class="pill" href="/en/pricing.html">EN</a><a class="pill" href="/fr/pricing.html">FR</a>
       </div>
-    </div>
-  </header>
+      <button class="mobile-toggle" aria-label="Menu openen" aria-expanded="false" aria-controls="mainmenu">☰</button>
+      <div id="mainmenu" class="menu" role="menu">
+        <a href="/#features" role="menuitem">Functies</a>
+        <a href="/pricing.html" role="menuitem" aria-current="page">Prijzen</a>
+        <a href="/#contact" role="menuitem">Contact</a>
+        <a href="https://wa.me/32470000000" class="cta secondary" role="menuitem" rel="nofollow noopener">WhatsApp</a>
+        <a href="/#demo" role="menuitem" class="cta" style="padding:8px 12px;border-radius:10px;">Vraag een demo</a>
+      </div>
+    </nav>
+  </div>
+</header>
 
-  <main>
-    <section id="pricing" class="pricing">
-      <div class="container animate-on-scroll">
-        <h1 class="section-title" data-i18n="pricingTitle">Kies jouw perfecte plan</h1>
-        <p class="section-sub" data-i18n="pricingSub">Test elk plan gratis gedurende 2 weken. Tevreden? Behoud je plan, upgrade of kies Basis.</p>
-        <div class="plans">
-          <div class="plan">
-            <h3 data-i18n="plan1Title">Basis</h3>
-            <p class="price"><span data-i18n="plan1Price">€29</span><span data-i18n="perMonth">/maand</span></p>
-            <p class="sub" data-i18n="plan1Desc">Voor kleine bedrijven die net beginnen.</p>
-            <ul>
-              <li data-i18n="plan1f1">Eén kernfunctie (bijv. FAQ)</li>
-              <li data-i18n="plan1f2">Integratie met één platform</li>
-              <li data-i18n="plan1f3">Standaardondersteuning</li>
-              <li data-i18n="plan1f4">Tot 500 gesprekken per maand</li>
-            </ul>
-            <a href="contact.html" class="btn btn-secondary" data-i18n="plan1Btn">Kies Basis</a>
-          </div>
-          <div class="plan popular">
-            <span class="badge" data-i18n="plan2Badge">Meest populair</span>
-            <h3 data-i18n="plan2Title">Standaard</h3>
-            <p class="price"><span data-i18n="plan2Price">€99</span><span data-i18n="perMonth">/maand</span></p>
-            <p class="sub" data-i18n="plan2Desc">Voor groeiende bedrijven die meer automatisering nodig hebben.</p>
-            <ul>
-              <li data-i18n="plan2f1">Meerdere geautomatiseerde workflows</li>
-              <li data-i18n="plan2f2">Integraties met twee platformen</li>
-              <li data-i18n="plan2f3">Prioritaire ondersteuning & updates</li>
-              <li data-i18n="plan2f4">Tot 2.000 gesprekken per maand</li>
-            </ul>
-            <a href="contact.html" class="btn btn-primary" data-i18n="plan2Btn">Kies Standaard</a>
-          </div>
-          <div class="plan">
-            <h3 data-i18n="plan3Title">Premium</h3>
-            <p class="price"><span data-i18n="plan3Price">€299</span><span data-i18n="perMonth">/maand</span></p>
-            <p class="sub" data-i18n="plan3Desc">Voor grote teams met geavanceerde AI-behoeften.</p>
-            <ul>
-              <li data-i18n="plan3f1">Geavanceerde AI- en NLP-mogelijkheden</li>
-              <li data-i18n="plan3f2">Integraties met meerdere systemen</li>
-              <li data-i18n="plan3f3">Toegewijde projectmanager</li>
-              <li data-i18n="plan3f4">Onbeperkt aantal gesprekken</li>
-            </ul>
-            <a href="contact.html" class="btn btn-secondary" data-i18n="plan3Btn">Kies Premium</a>
-          </div>
+<main id="top">
+  <section class="section">
+    <div class="container">
+      <h1>Vergelijk pakketten</h1>
+      <p class="lead">Klein starten, opschalen wanneer nodig. Maandelijks opzegbaar.</p>
+
+      <div id="plans" class="grid pricing" style="margin-top:12px">
+        <div class="plan">
+          <div class="plan-h">Starter</div>
+          <div class="price">€29 <small>/mnd</small></div>
+          <ul class="ul">
+            <li><span class="check">✓</span><span>1 kernflow (FAQ of lead capture)</span></li>
+            <li><span class="check">✓</span><span>1 platform (bv. WhatsApp)</span></li>
+            <li><span class="check">✓</span><span>Tot 500 conversaties/mnd</span></li>
+            <li><span class="check">✓</span><span>Eenvoudige handoff per e‑mail</span></li>
+          </ul>
+          <a href="/#contact" class="cta wfull">Kies Starter</a>
+          <div class="note">Goed voor MVP’s en tests.</div>
+        </div>
+
+        <div class="plan popular">
+          <div class="plan-h">Standaard</div>
+          <div class="price">€99 <small>/mnd</small></div>
+          <ul class="ul">
+            <li><span class="check">✓</span><span>Meerstapsflows (kwalificatie + booking)</span></li>
+            <li><span class="check">✓</span><span>2 platformen (bv. WhatsApp + Instagram)</span></li>
+            <li><span class="check">✓</span><span>Agenda‑ en CRM‑koppelingen</span></li>
+            <li><span class="check">✓</span><span>Prioritaire support & updates</span></li>
+            <li><span class="check">✓</span><span>Tot 2.000 conversaties/mnd</span></li>
+          </ul>
+          <a href="/#contact" class="cta wfull">Kies Standaard</a>
+          <div class="note">Meest gekozen.</div>
+        </div>
+
+        <div class="plan">
+          <div class="plan-h">Premium</div>
+          <div class="price">€299 <small>/mnd</small></div>
+          <ul class="ul">
+            <li><span class="check">✓</span><span>Geavanceerde AI & NLP‑tuning</span></li>
+            <li><span class="check">✓</span><span>Multi‑platform + betalingen & Sheets</span></li>
+            <li><span class="check">✓</span><span>Dedicated PM, SLA’s, kwartaalreviews</span></li>
+            <li><span class="check">✓</span><span>Onbeperkte conversaties</span></li>
+          </ul>
+          <a href="/#contact" class="cta wfull">Kies Premium</a>
+          <div class="note">Voor scale‑ups en enterprises.</div>
         </div>
       </div>
-    </section>
-  </main>
 
-  <footer>
-    <div class="container">
-      <div class="footer-links">
-        <a href="#" data-i18n="footerLink1">Over ons</a>
-        <a href="#" data-i18n="footerLink2">Privacybeleid</a>
-        <a href="#" data-i18n="footerLink3">Algemene voorwaarden</a>
+      <div class="hero-card" style="margin-top:18px">
+        <strong>Opties</strong>
+        <ul class="ul" style="margin-top:8px">
+          <li><span class="check">+</span><span>Maatwerk‑integraties (HubSpot, Stripe, Airtable)</span></li>
+          <li><span class="check">+</span><span>Meertalige flows & copy</span></li>
+          <li><span class="check">+</span><span>Dashboard & KPI‑reviews</span></li>
+        </ul>
       </div>
-      <p>&copy; <span id="year"></span> BotMatic. <span data-i18n="footerCopyright">Alle rechten voorbehouden.</span></p>
     </div>
-  </footer>
+  </section>
 
-  <script>
-    /* оставил твой i18n и поведение без изменений */
-    const translations = { /* … твои nl/fr/en объекты … */ };
-    let currentLang='nl';
-    function setLanguage(lang){ currentLang=lang; document.documentElement.lang=lang;
-      document.querySelectorAll('[data-i18n]').forEach(el=>{ const k=el.getAttribute('data-i18n'); if(translations[lang]&&translations[lang][k]) el.textContent=translations[lang][k]; });
-    }
-    document.addEventListener('DOMContentLoaded',()=>{
-      const langSelect=document.getElementById('lang-select'); const yearSpan=document.getElementById('year');
-      const mobileNavToggle=document.getElementById('mobile-nav-toggle'); const mainNav=document.getElementById('main-nav');
-      setLanguage(langSelect.value); if(yearSpan) yearSpan.textContent=new Date().getFullYear();
-      langSelect.addEventListener('change',e=>setLanguage(e.target.value));
-      mobileNavToggle.addEventListener('click',()=>{ mainNav.classList.toggle('active'); mobileNavToggle.classList.toggle('active'); });
-      mainNav.addEventListener('click',e=>{ if(e.target.tagName==='A'){ mainNav.classList.remove('active'); mobileNavToggle.classList.remove('active'); }});
-      const animatedEls=document.querySelectorAll('.animate-on-scroll');
-      const observer=new IntersectionObserver((entries)=>{ entries.forEach(entry=>{ if(entry.isIntersecting){ entry.target.classList.add('visible'); observer.unobserve(entry.target);} }); },{threshold:.1});
-      animatedEls.forEach(el=>observer.observe(el));
-    });
-  </script>
+  <section id="faq" class="section">
+    <div class="container">
+      <h2>FAQ</h2>
+      <p class="lead">Veelgestelde vragen over setup, timing en koppelingen.</p>
+      <div class="grid features">
+        <article class="feature"><h3>Hoe snel kunnen jullie live?</h3><p>Meestal binnen 7–14 dagen vanaf de briefing.</p></article>
+        <article class="feature"><h3>Welke platformen ondersteunen jullie?</h3><p>WhatsApp, Telegram, Instagram en web‑widgets.</p></article>
+        <article class="feature"><h3>Koppelen jullie agenda’s/CRM’s?</h3><p>Ja — Google Agenda, HubSpot, Sheets, betalingen en meer.</p></article>
+        <article class="feature"><h3>Hoe zit het met GDPR?</h3><p>Toestemming, dataminimalisatie en opt‑out zijn ingebouwd.</p></article>
+        <article class="feature"><h3>Heet leads naar medewerkers?</h3><p>Ja — automatische kwalificatie en doorschakeling met context.</p></article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container foot">
+    <div class="foot-left"><strong>BotMatic</strong><div class="muted">Maatwerk chatbots voor WhatsApp, Telegram, Instagram & web.</div></div>
+    <div class="foot-right">
+      <a href="/#features">Functies</a>
+      <a href="/pricing.html" aria-current="page">Prijzen</a>
+      <a href="/#contact">Contact</a>
+      <a href="mailto:info@botmatic.be">info@botmatic.be</a>
+      <a href="/privacy.html" class="policy">Privacy</a>
+      <a href="/cookies.html" class="policy">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/main.js" defer></script>
+
+<script type="application/ld+json">
+{
+ "@context":"https://schema.org",
+ "@type":"FAQPage",
+ "mainEntity":[
+  {"@type":"Question","name":"Hoe snel kunnen jullie live?","acceptedAnswer":{"@type":"Answer","text":"Meestal binnen 7–14 dagen vanaf de briefing."}},
+  {"@type":"Question","name":"Welke platformen ondersteunen jullie?","acceptedAnswer":{"@type":"Answer","text":"WhatsApp, Telegram, Instagram en web‑widgets."}},
+  {"@type":"Question","name":"Koppelen jullie agenda’s/CRM’s?","acceptedAnswer":{"@type":"Answer","text":"Ja — Google Agenda, HubSpot, Sheets, betalingen en meer."}},
+  {"@type":"Question","name":"Hoe zit het met GDPR?","acceptedAnswer":{"@type":"Answer","text":"Toestemming, dataminimalisatie en opt‑out zijn ingebouwd."}},
+  {"@type":"Question","name":"Heet leads naar medewerkers?","acceptedAnswer":{"@type":"Answer","text":"Ja — automatische kwalificatie en doorschakeling met context."}}
+ ]
+}
+</script>
 </body>
 </html>
