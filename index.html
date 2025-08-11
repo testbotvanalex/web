@@ -1,6 +1,6 @@
-<!-- botmatic-single.html (drop-in: one file, works on Mac/Safari) -->
+<!-- botmatic-single.html — single file, Safari/Mac OK + working EN/NL/FR switch -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -9,7 +9,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
-
   <style>
     :root{
       --bg:#ffffff; --text:#0f172a; --muted:#475569; --primary:#4f46e5; --primary-ink:#ffffff;
@@ -169,23 +168,23 @@
     <div class="container">
       <nav class="nav" aria-label="Primary">
         <a class="brand" href="#top">
-          <span class="brand-badge">🤖</span>
+          <span class="brand-badge" aria-hidden="true">🤖</span>
           <span class="brand-name">BotMatic</span>
         </a>
 
         <div class="lang" aria-label="Language">
-          <button type="button" class="active" data-lang="en">EN</button>
-          <button type="button" data-lang="nl">NL</button>
-          <button type="button" data-lang="fr">FR</button>
+          <button type="button" class="active" data-lang="en" aria-pressed="true">EN</button>
+          <button type="button" data-lang="nl" aria-pressed="false">NL</button>
+          <button type="button" data-lang="fr" aria-pressed="false">FR</button>
         </div>
 
         <button class="mobile-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainmenu">☰</button>
 
         <div id="mainmenu" class="menu" role="menu">
-          <a href="#features" role="menuitem">Features</a>
-          <a href="#pricing" role="menuitem">Pricing</a>
-          <a href="#contact" role="menuitem">Contact</a>
-          <a href="#demo" role="menuitem" class="cta" style="padding:8px 12px;border-radius:10px;">Get a Demo</a>
+          <a href="#features" role="menuitem" data-i18n="nav.features">Features</a>
+          <a href="#pricing" role="menuitem" data-i18n="nav.pricing">Pricing</a>
+          <a href="#contact" role="menuitem" data-i18n="nav.contact">Contact</a>
+          <a href="#demo" role="menuitem" class="cta" style="padding:8px 12px;border-radius:10px;" data-i18n="nav.demo">Get a Demo</a>
         </div>
       </nav>
     </div>
@@ -197,22 +196,22 @@
       <div class="container hero-wrap">
         <div>
           <div class="hero-badges">
-            <span class="badge">⚡ 7–14 days delivery</span>
-            <span class="badge">🧩 Fully custom flows</span>
-            <span class="badge">🔌 CRM & payments</span>
+            <span class="badge" data-i18n="hero.badge1">⚡ 7–14 days delivery</span>
+            <span class="badge" data-i18n="hero.badge2">🧩 Fully custom flows</span>
+            <span class="badge" data-i18n="hero.badge3">🔌 CRM & payments</span>
           </div>
-          <h1>Custom chatbots for WhatsApp, Telegram & Instagram — built fast</h1>
-          <p>We design, build and launch chatbots that automate lead capture, qualification and booking. Simple setup, rapid turnaround, ongoing support.</p>
+          <h1 data-i18n="hero.title">Custom chatbots for WhatsApp, Telegram & Instagram — built fast</h1>
+          <p data-i18n="hero.subtitle">We design, build and launch chatbots that automate lead capture, qualification and booking. Simple setup, rapid turnaround, ongoing support.</p>
           <div class="actions">
-            <a href="#contact" class="cta">Start a project</a>
-            <a href="#pricing" class="cta secondary">See pricing</a>
+            <a href="#contact" class="cta" data-i18n="hero.ctaPrimary">Start a project</a>
+            <a href="#pricing" class="cta secondary" data-i18n="hero.ctaSecondary">See pricing</a>
           </div>
 
           <div class="hero-card">
             <div class="hero-stat">
-              <div><strong>40%+</strong><br/><small>Lead‑to‑chat rate</small></div>
-              <div><strong>2×</strong><br/><small>Faster response</small></div>
-              <div><strong>24/7</strong><br/><small>Automated handling</small></div>
+              <div><strong>40%+</strong><br/><small data-i18n="stats.s1">Lead‑to‑chat rate</small></div>
+              <div><strong>2×</strong><br/><small data-i18n="stats.s2">Faster response</small></div>
+              <div><strong>24/7</strong><br/><small data-i18n="stats.s3">Automated handling</small></div>
             </div>
           </div>
         </div>
@@ -221,14 +220,16 @@
         <div class="mockup" id="demo" aria-label="Chat demo">
           <div class="phone">
             <div class="screen">
-              <div class="msg bot">Hi! I’m BotMatic. What do you need help with?</div>
+              <div class="msg bot" data-i18n="demo.bot1">Hi! I’m BotMatic. What do you need help with?</div>
               <div class="kb">
-                <span>Book an appointment</span><span>Prices</span><span>Talk to agent</span>
+                <span data-i18n="demo.k1">Book an appointment</span>
+                <span data-i18n="demo.k2">Prices</span>
+                <span data-i18n="demo.k3">Talk to agent</span>
               </div>
-              <div class="msg user">Book a facial this Friday</div>
-              <div class="msg bot">Great! Morning or afternoon works best?</div>
-              <div class="msg user">Afternoon</div>
-              <div class="msg bot">Done ✅ 16:30 reserved. You’ll get a reminder 2h before.</div>
+              <div class="msg user" data-i18n="demo.user1">Book a facial this Friday</div>
+              <div class="msg bot" data-i18n="demo.bot2">Great! Morning or afternoon works best?</div>
+              <div class="msg user" data-i18n="demo.user2">Afternoon</div>
+              <div class="msg bot" data-i18n="demo.bot3">Done ✅ 16:30 reserved. You’ll get a reminder 2h before.</div>
             </div>
           </div>
         </div>
@@ -238,39 +239,39 @@
     <!-- Features -->
     <section id="features" class="section">
       <div class="container">
-        <h2>Why teams choose BotMatic</h2>
-        <p class="lead">Everything you need to go from idea to a live, revenue‑generating chatbot.</p>
+        <h2 data-i18n="features.title">Why teams choose BotMatic</h2>
+        <p class="lead" data-i18n="features.lead">Everything you need to go from idea to a live, revenue‑generating chatbot.</p>
 
         <div class="grid features">
           <article class="feature">
             <div class="feat-icon">🚀</div>
-            <h3>Fast delivery</h3>
-            <p>From brief to launch in 7–14 days with tight feedback loops.</p>
+            <h3 data-i18n="features.f1.title">Fast delivery</h3>
+            <p data-i18n="features.f1.desc">From brief to launch in 7–14 days with tight feedback loops.</p>
           </article>
           <article class="feature">
             <div class="feat-icon">🧠</div>
-            <h3>AI + buttons UX</h3>
-            <p>Blend guided flows with AI answers for speed and control.</p>
+            <h3 data-i18n="features.f2.title">AI + buttons UX</h3>
+            <p data-i18n="features.f2.desc">Blend guided flows with AI answers for speed and control.</p>
           </article>
           <article class="feature">
             <div class="feat-icon">🔌</div>
-            <h3>Integrations</h3>
-            <p>CRM, calendars, payments, Google Sheets — we connect your stack.</p>
+            <h3 data-i18n="features.f3.title">Integrations</h3>
+            <p data-i18n="features.f3.desc">CRM, calendars, payments, Google Sheets — we connect your stack.</p>
           </article>
           <article class="feature">
             <div class="feat-icon">📈</div>
-            <h3>Qualify & convert</h3>
-            <p>Score leads, route hot prospects, and auto‑book in one flow.</p>
+            <h3 data-i18n="features.f4.title">Qualify & convert</h3>
+            <p data-i18n="features.f4.desc">Score leads, route hot prospects, and auto‑book in one flow.</p>
           </article>
           <article class="feature">
             <div class="feat-icon">🛡️</div>
-            <h3>GDPR‑ready</h3>
-            <p>Clear consent, data minimization and opt‑out built‑in.</p>
+            <h3 data-i18n="features.f5.title">GDPR‑ready</h3>
+            <p data-i18n="features.f5.desc">Clear consent, data minimization and opt‑out built‑in.</p>
           </article>
           <article class="feature">
             <div class="feat-icon">🤝</div>
-            <h3>Ongoing support</h3>
-            <p>We tune copy, steps and KPIs as your needs evolve.</p>
+            <h3 data-i18n="features.f6.title">Ongoing support</h3>
+            <p data-i18n="features.f6.desc">We tune copy, steps and KPIs as your needs evolve.</p>
           </article>
         </div>
       </div>
@@ -279,46 +280,46 @@
     <!-- Pricing -->
     <section id="pricing" class="section">
       <div class="container">
-        <h2>Simple pricing</h2>
-        <p class="lead">Pick a plan — cancel or upgrade anytime. Custom enterprise plans on request.</p>
+        <h2 data-i18n="pricing.title">Simple pricing</h2>
+        <p class="lead" data-i18n="pricing.lead">Pick a plan — cancel or upgrade anytime. Custom enterprise plans on request.</p>
 
         <div class="grid pricing">
           <div class="plan">
-            <div class="plan-h">Starter</div>
-            <div class="price">€29 <small>/mo</small></div>
+            <div class="plan-h" data-i18n="pricing.starter.title">Starter</div>
+            <div class="price"><span data-i18n="pricing.starter.price">€29</span> <small>/mo</small></div>
             <ul class="ul">
-              <li><span class="check">✓</span><span>1 core flow (FAQ or lead capture)</span></li>
-              <li><span class="check">✓</span><span>1 platform (e.g. WhatsApp)</span></li>
-              <li><span class="check">✓</span><span>Up to 500 conversations/mo</span></li>
+              <li><span class="check">✓</span><span data-i18n="pricing.starter.l1">1 core flow (FAQ or lead capture)</span></li>
+              <li><span class="check">✓</span><span data-i18n="pricing.starter.l2">1 platform (e.g. WhatsApp)</span></li>
+              <li><span class="check">✓</span><span data-i18n="pricing.starter.l3">Up to 500 conversations/mo</span></li>
             </ul>
-            <a href="#contact" class="cta wfull">Choose Starter</a>
-            <div class="note">Good for MVPs and small teams.</div>
+            <a href="#contact" class="cta wfull" data-i18n="pricing.starter.cta">Choose Starter</a>
+            <div class="note" data-i18n="pricing.starter.note">Good for MVPs and small teams.</div>
           </div>
 
           <div class="plan popular">
-            <div class="plan-h">Standard</div>
-            <div class="price">€99 <small>/mo</small></div>
+            <div class="plan-h" data-i18n="pricing.standard.title">Standard</div>
+            <div class="price"><span data-i18n="pricing.standard.price">€99</span> <small>/mo</small></div>
             <ul class="ul">
-              <li><span class="check">✓</span><span>Multi‑step flows (qualify + booking)</span></li>
-              <li><span class="check">✓</span><span>2 platforms</span></li>
-              <li><span class="check">✓</span><span>Priority support & updates</span></li>
-              <li><span class="check">✓</span><span>Up to 2,000 conversations/mo</span></li>
+              <li><span class="check">✓</span><span data-i18n="pricing.standard.l1">Multi‑step flows (qualify + booking)</span></li>
+              <li><span class="check">✓</span><span data-i18n="pricing.standard.l2">2 platforms</span></li>
+              <li><span class="check">✓</span><span data-i18n="pricing.standard.l3">Priority support & updates</span></li>
+              <li><span class="check">✓</span><span data-i18n="pricing.standard.l4">Up to 2,000 conversations/mo</span></li>
             </ul>
-            <a href="#contact" class="cta wfull">Choose Standard</a>
-            <div class="note">Our most popular plan.</div>
+            <a href="#contact" class="cta wfull" data-i18n="pricing.standard.cta">Choose Standard</a>
+            <div class="note" data-i18n="pricing.standard.note">Our most popular plan.</div>
           </div>
 
           <div class="plan">
-            <div class="plan-h">Premium</div>
-            <div class="price">€299 <small>/mo</small></div>
+            <div class="plan-h" data-i18n="pricing.premium.title">Premium</div>
+            <div class="price"><span data-i18n="pricing.premium.price">€299</span> <small>/mo</small></div>
             <ul class="ul">
-              <li><span class="check">✓</span><span>Advanced AI & NLP tuning</span></li>
-              <li><span class="check">✓</span><span>Multi‑platform & system integrations</span></li>
-              <li><span class="check">✓</span><span>Dedicated PM & SLAs</span></li>
-              <li><span class="check">✓</span><span>Unlimited conversations</span></li>
+              <li><span class="check">✓</span><span data-i18n="pricing.premium.l1">Advanced AI & NLP tuning</span></li>
+              <li><span class="check">✓</span><span data-i18n="pricing.premium.l2">Multi‑platform & system integrations</span></li>
+              <li><span class="check">✓</span><span data-i18n="pricing.premium.l3">Dedicated PM & SLAs</span></li>
+              <li><span class="check">✓</span><span data-i18n="pricing.premium.l4">Unlimited conversations</span></li>
             </ul>
-            <a href="#contact" class="cta wfull">Choose Premium</a>
-            <div class="note">For scale‑ups and enterprises.</div>
+            <a href="#contact" class="cta wfull" data-i18n="pricing.premium.cta">Choose Premium</a>
+            <div class="note" data-i18n="pricing.premium.note">For scale‑ups and enterprises.</div>
           </div>
         </div>
       </div>
@@ -327,27 +328,27 @@
     <!-- Contact -->
     <section id="contact" class="section">
       <div class="container">
-        <h2>Tell us about your bot</h2>
-        <p class="lead">Share a few details and we’ll get back within 24 hours.</p>
+        <h2 data-i18n="contact.title">Tell us about your bot</h2>
+        <p class="lead" data-i18n="contact.lead">Share a few details and we’ll get back within 24 hours.</p>
 
         <div class="contact-card">
           <form class="form" onsubmit="return false">
             <div class="grid form-grid">
-              <input class="input" type="text" name="name" placeholder="Full name" required/>
-              <input class="input" type="email" name="email" placeholder="Work email" required/>
+              <input class="input" type="text" name="name" data-i18n-placeholder="contact.name" placeholder="Full name" required/>
+              <input class="input" type="email" name="email" data-i18n-placeholder="contact.email" placeholder="Work email" required/>
             </div>
-            <input class="input" type="text" name="company" placeholder="Company / Industry"/>
-            <textarea class="" name="message" rows="5" placeholder="What should the bot do? Platforms, flows, integrations…"></textarea>
+            <input class="input" type="text" name="company" data-i18n-placeholder="contact.company" placeholder="Company / Industry"/>
+            <textarea class="input" name="message" rows="5" data-i18n-placeholder="contact.message" placeholder="What should the bot do? Platforms, flows, integrations…"></textarea>
 
             <label class="gdpr">
               <input type="checkbox" required/>
-              I agree to be contacted about my request and accept the privacy policy.
+              <span data-i18n="contact.gdpr">I agree to be contacted about my request and accept the privacy policy.</span>
             </label>
 
             <div class="grid contact-actions">
-              <button class="cta" type="submit">Send request</button>
-              <a class="cta secondary" href="mailto:info@botmatic.be">Email us</a>
-              <a class="cta secondary" href="#demo">See demo</a>
+              <button class="cta" type="submit" data-i18n="contact.send">Send request</button>
+              <a class="cta secondary" href="mailto:info@botmatic.be" data-i18n="contact.emailus">Email us</a>
+              <a class="cta secondary" href="#demo" data-i18n="contact.seedemo">See demo</a>
             </div>
           </form>
         </div>
@@ -360,21 +361,180 @@
     <div class="container foot">
       <div class="foot-left">
         <strong>BotMatic</strong>
-        <div class="muted">Custom chatbots for WhatsApp, Telegram, Instagram & web.</div>
+        <div class="muted" data-i18n="footer.tagline">Custom chatbots for WhatsApp, Telegram, Instagram & web.</div>
       </div>
       <div class="foot-right">
-        <a href="#features">Features</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#contact">Contact</a>
+        <a href="#features" data-i18n="nav.features">Features</a>
+        <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+        <a href="#contact" data-i18n="nav.contact">Contact</a>
         <a href="mailto:info@botmatic.be">info@botmatic.be</a>
       </div>
     </div>
   </footer>
 
   <script>
-    // Safe init (works in Safari)
     (function(){
-      function ready(fn){ if(document.readyState!=='loading'){fn()} else {document.addEventListener('DOMContentLoaded', fn, {once:true})} }
+      // ----- i18n dictionaries -----
+      const I18N = {
+        en:{
+          nav:{features:"Features",pricing:"Pricing",contact:"Contact",demo:"Get a Demo"},
+          hero:{
+            badge1:"⚡ 7–14 days delivery", badge2:"🧩 Fully custom flows", badge3:"🔌 CRM & payments",
+            title:"Custom chatbots for WhatsApp, Telegram & Instagram — built fast",
+            subtitle:"We design, build and launch chatbots that automate lead capture, qualification and booking. Simple setup, rapid turnaround, ongoing support.",
+            ctaPrimary:"Start a project", ctaSecondary:"See pricing"
+          },
+          stats:{s1:"Lead‑to‑chat rate",s2:"Faster response",s3:"Automated handling"},
+          demo:{
+            bot1:"Hi! I’m BotMatic. What do you need help with?",
+            k1:"Book an appointment", k2:"Prices", k3:"Talk to agent",
+            user1:"Book a facial this Friday", bot2:"Great! Morning or afternoon works best?",
+            user2:"Afternoon", bot3:"Done ✅ 16:30 reserved. You’ll get a reminder 2h before."
+          },
+          features:{
+            title:"Why teams choose BotMatic",
+            lead:"Everything you need to go from idea to a live, revenue‑generating chatbot.",
+            f1:{title:"Fast delivery",desc:"From brief to launch in 7–14 days with tight feedback loops."},
+            f2:{title:"AI + buttons UX",desc:"Blend guided flows with AI answers for speed and control."},
+            f3:{title:"Integrations",desc:"CRM, calendars, payments, Google Sheets — we connect your stack."},
+            f4:{title:"Qualify & convert",desc:"Score leads, route hot prospects, and auto‑book in one flow."},
+            f5:{title:"GDPR‑ready",desc:"Clear consent, data minimization and opt‑out built‑in."},
+            f6:{title:"Ongoing support",desc:"We tune copy, steps and KPIs as your needs evolve."}
+          },
+          pricing:{
+            title:"Simple pricing",
+            lead:"Pick a plan — cancel or upgrade anytime. Custom enterprise plans on request.",
+            starter:{title:"Starter",price:"€29",l1:"1 core flow (FAQ or lead capture)",l2:"1 platform (e.g. WhatsApp)",l3:"Up to 500 conversations/mo",cta:"Choose Starter",note:"Good for MVPs and small teams."},
+            standard:{title:"Standard",price:"€99",l1:"Multi‑step flows (qualify + booking)",l2:"2 platforms",l3:"Priority support & updates",l4:"Up to 2,000 conversations/mo",cta:"Choose Standard",note:"Our most popular plan."},
+            premium:{title:"Premium",price:"€299",l1:"Advanced AI & NLP tuning",l2:"Multi‑platform & system integrations",l3:"Dedicated PM & SLAs",l4:"Unlimited conversations",cta:"Choose Premium",note:"For scale‑ups and enterprises."}
+          },
+          contact:{
+            title:"Tell us about your bot",
+            lead:"Share a few details and we’ll get back within 24 hours.",
+            name:"Full name", email:"Work email", company:"Company / Industry",
+            message:"What should the bot do? Platforms, flows, integrations…",
+            gdpr:"I agree to be contacted about my request and accept the privacy policy.",
+            send:"Send request", emailus:"Email us", seedemo:"See demo"
+          },
+          footer:{tagline:"Custom chatbots for WhatsApp, Telegram, Instagram & web."}
+        },
+        nl:{
+          nav:{features:"Functies",pricing:"Prijzen",contact:"Contact",demo:"Vraag een demo"},
+          hero:{
+            badge1:"⚡ Levering in 7–14 dagen", badge2:"🧩 Volledig maatwerk", badge3:"🔌 CRM & betalingen",
+            title:"Maatwerk chatbots voor WhatsApp, Telegram & Instagram — razendsnel gebouwd",
+            subtitle:"We bouwen bots die leads vangen, kwalificeren en automatisch boeken. Simpele setup, snelle doorlooptijd, blijvende support.",
+            ctaPrimary:"Start een project", ctaSecondary:"Bekijk prijzen"
+          },
+          stats:{s1:"Lead‑naar‑chat ratio",s2:"Snellere reactie",s3:"Automatische afhandeling"},
+          demo:{
+            bot1:"Hoi! Ik ben BotMatic. Waarmee kan ik helpen?",
+            k1:"Afspraak maken", k2:"Prijzen", k3:"Praat met agent",
+            user1:"Boek een gezichtsbehandeling voor vrijdag", bot2:"Top! Voorkeur voor ochtend of namiddag?",
+            user2:"Namiddag", bot3:"Klaar ✅ 16:30 gereserveerd. Je krijgt 2u op voorhand een herinnering."
+          },
+          features:{
+            title:"Waarom teams voor BotMatic kiezen",
+            lead:"Alles wat je nodig hebt om snel live te gaan met een chatbot die oplevert.",
+            f1:{title:"Snel leveren",desc:"Van briefing tot live in 7–14 dagen met korte feedback‑loops."},
+            f2:{title:"AI + knoppen UX",desc:"Geleide flows combineren met AI‑antwoorden voor snelheid en controle."},
+            f3:{title:"Integraties",desc:"CRM, agenda’s, betalingen, Google Sheets — wij koppelen je stack."},
+            f4:{title:"Kwalificeren & converteren",desc:"Scoor leads, stuur hot prospects door en boek automatisch."},
+            f5:{title:"GDPR‑proof",desc:"Duidelijke toestemming, dataminimalisatie en opt‑out ingebouwd."},
+            f6:{title:"Doorlopende support",desc:"We finetunen copy, stappen en KPI’s wanneer je groeit."}
+          },
+          pricing:{
+            title:"Eenvoudige prijzen",
+            lead:"Kies een plan — maandelijks opzegbaar of op te schalen. Enterprise op aanvraag.",
+            starter:{title:"Starter",price:"€29",l1:"1 kernflow (FAQ of lead capture)",l2:"1 platform (bv. WhatsApp)",l3:"Tot 500 conversaties/maand",cta:"Kies Starter",note:"Voor MVP’s en kleine teams."},
+            standard:{title:"Standaard",price:"€99",l1:"Meerstapsflows (kwalificatie + booking)",l2:"2 platformen",l3:"Prioritaire support & updates",l4:"Tot 2.000 conversaties/maand",cta:"Kies Standaard",note:"Meest gekozen plan."},
+            premium:{title:"Premium",price:"€299",l1:"Geavanceerde AI & NLP",l2:"Meerdere platformen & systemen",l3:"Dedicated PM & SLA’s",l4:"Onbeperkte conversaties",cta:"Kies Premium",note:"Voor scale‑ups en enterprises."}
+          },
+          contact:{
+            title:"Vertel ons over je bot",
+            lead:"Geef wat details en we reageren binnen 24 uur.",
+            name:"Volledige naam", email:"Zakelijk e‑mail", company:"Bedrijf / Sector",
+            message:"Wat moet de bot doen? Platformen, flows, integraties…",
+            gdpr:"Ik ga akkoord dat jullie me contacteren en accepteer het privacybeleid.",
+            send:"Verstuur aanvraag", emailus:"Mail ons", seedemo:"Bekijk demo"
+          },
+          footer:{tagline:"Maatwerk chatbots voor WhatsApp, Telegram, Instagram & web."}
+        },
+        fr:{
+          nav:{features:"Fonctionnalités",pricing:"Tarifs",contact:"Contact",demo:"Demander une démo"},
+          hero:{
+            badge1:"⚡ Livraison en 7–14 jours", badge2:"🧩 Parcours 100% sur‑mesure", badge3:"🔌 CRM & paiements",
+            title:"Chatbots sur‑mesure pour WhatsApp, Telegram & Instagram — déployés vite",
+            subtitle:"Nous créons des bots qui captent, qualifient et réservent automatiquement. Mise en place simple, délai court, support continu.",
+            ctaPrimary:"Lancer un projet", ctaSecondary:"Voir les tarifs"
+          },
+          stats:{s1:"Taux lead→chat",s2:"Réponse plus rapide",s3:"Traitement automatisé"},
+          demo:{
+            bot1:"Salut ! Je suis BotMatic. Je peux t’aider ?",
+            k1:"Prendre rendez‑vous", k2:"Tarifs", k3:"Parler à un agent",
+            user1:"Réserver un soin visage vendredi", bot2:"Parfait ! Matin ou après‑midi ?",
+            user2:"Après‑midi", bot3:"C’est fait ✅ 16:30 réservé. Rappel 2h avant."
+          },
+          features:{
+            title:"Pourquoi choisir BotMatic",
+            lead:"Tout pour passer de l’idée à un chatbot qui génère des revenus.",
+            f1:{title:"Livraison rapide",desc:"Du brief au live en 7–14 jours avec itérations serrées."},
+            f2:{title:"IA + boutons",desc:"Mélange de parcours guidés et réponses IA pour vitesse & contrôle."},
+            f3:{title:"Intégrations",desc:"CRM, calendriers, paiements, Google Sheets — on connecte votre stack."},
+            f4:{title:"Qualifier & convertir",desc:"Scorage de leads, routage des prospects chauds et réservation auto."},
+            f5:{title:"Conforme RGPD",desc:"Consentement clair, minimisation des données et opt‑out inclus."},
+            f6:{title:"Support continu",desc:"On ajuste la copie, les étapes et KPI au fil du temps."}
+          },
+          pricing:{
+            title:"Tarification simple",
+            lead:"Choisissez un forfait — résiliable ou évolutif à tout moment. Entreprise sur demande.",
+            starter:{title:"Starter",price:"€29",l1:"1 parcours clé (FAQ ou capture de leads)",l2:"1 plateforme (ex. WhatsApp)",l3:"Jusqu’à 500 conversations/mois",cta:"Choisir Starter",note:"Idéal pour MVP et petites équipes."},
+            standard:{title:"Standard",price:"€99",l1:"Parcours multi‑étapes (qualif + réservation)",l2:"2 plateformes",l3:"Support prioritaire & mises à jour",l4:"Jusqu’à 2 000 conversations/mois",cta:"Choisir Standard",note:"Notre offre la plus populaire."},
+            premium:{title:"Premium",price:"€299",l1:"IA & NLP avancés",l2:"Multi‑plateformes & systèmes",l3:"Chef de projet dédié & SLA",l4:"Conversations illimitées",cta:"Choisir Premium",note:"Pour scale‑ups et grands comptes."}
+          },
+          contact:{
+            title:"Parlez‑nous de votre bot",
+            lead:"Partagez quelques détails et nous revenons vers vous sous 24h.",
+            name:"Nom complet", email:"Email professionnel", company:"Entreprise / Secteur",
+            message:"Que doit faire le bot ? Plateformes, parcours, intégrations…",
+            gdpr:"J’accepte d’être contacté au sujet de ma demande et j’accepte la politique de confidentialité.",
+            send:"Envoyer la demande", emailus:"Nous écrire", seedemo:"Voir la démo"
+          },
+          footer:{tagline:"Chatbots sur‑mesure pour WhatsApp, Telegram, Instagram & web."}
+        }
+      };
+
+      function applyI18n(lang){
+        const dict = I18N[lang] || I18N.en;
+        document.documentElement.lang = lang;
+        document.documentElement.setAttribute('data-lang', lang);
+        // text nodes
+        document.querySelectorAll('[data-i18n]').forEach(el=>{
+          const path = el.getAttribute('data-i18n').split('.');
+          let val = dict;
+          for(const k of path){ if(val && k in val){ val = val[k]; } }
+          if(typeof val === 'string'){ el.textContent = val; }
+        });
+        // placeholders
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+          const path = el.getAttribute('data-i18n-placeholder').split('.');
+          let val = dict;
+          for(const k of path){ if(val && k in val){ val = val[k]; } }
+          if(typeof val === 'string'){ el.setAttribute('placeholder', val); }
+        });
+        // active pill + aria
+        document.querySelectorAll('.lang button').forEach(b=>{
+          const isActive = (b.dataset.lang === lang);
+          b.classList.toggle('active', isActive);
+          b.setAttribute('aria-pressed', String(isActive));
+        });
+        try{ localStorage.setItem('botmatic_lang', lang); }catch(e){}
+      }
+
+      function ready(fn){
+        if(document.readyState !== 'loading') fn();
+        else document.addEventListener('DOMContentLoaded', fn, {once:true});
+      }
 
       ready(function(){
         // Mobile menu
@@ -391,33 +551,28 @@
             document.body.classList.toggle('menu-open', open);
             btn.setAttribute('aria-expanded', String(open));
           }, false);
-          // Close on link click
           Array.prototype.forEach.call(menu.querySelectorAll('a'), function(a){
             a.addEventListener('click', closeMenu, false);
           });
-          // Close on ESC
-          document.addEventListener('keydown', function(e){
-            if(e.key === 'Escape') closeMenu();
-          }, false);
-          // Reset on desktop
+          document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeMenu(); }, false);
           var mq = window.matchMedia('(min-width: 768px)');
           var handleMQ = function(){ if(mq.matches){ closeMenu(); } };
-          if(mq.addEventListener) mq.addEventListener('change', handleMQ);
-          else mq.addListener(handleMQ);
+          if(mq.addEventListener) mq.addEventListener('change', handleMQ); else mq.addListener(handleMQ);
         }
 
-        // Language pills
-        var pills = document.querySelectorAll('.lang button');
-        if(pills.length){
-          Array.prototype.forEach.call(pills, function(b){
-            b.addEventListener('click', function(){
-              Array.prototype.forEach.call(pills, function(x){x.classList.remove('active')});
-              b.classList.add('active');
-              var v = (b.getAttribute('data-lang') || 'en').toLowerCase();
-              document.documentElement.setAttribute('lang', v);
-            }, false);
-          });
-        }
+        // Language switch (persisted)
+        var saved = null;
+        try { saved = localStorage.getItem('botmatic_lang'); } catch(e){}
+        var initial = (saved && I18N[saved]) ? saved : (document.documentElement.getAttribute('lang') || 'en');
+        if(!I18N[initial]) initial = 'en';
+        applyI18n(initial);
+
+        document.querySelectorAll('.lang button').forEach(function(b){
+          b.addEventListener('click', function(){
+            var lang = (b.getAttribute('data-lang') || 'en').toLowerCase();
+            applyI18n(lang);
+          }, false);
+        });
       });
     })();
   </script>
