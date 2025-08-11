@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,11 +13,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css"/>
-
-  <!-- Safety override in case old CSS hid the menu with opacity/transform -->
-  <style>
-    .menu{opacity:1 !important; transform:none !important}
-  </style>
 </head>
 <body>
   <!-- Header -->
@@ -226,44 +222,6 @@
     </div>
   </footer>
 
-  <!-- Minimal JS -->
-  <script>
-    // Mobile menu toggle
-    (function () {
-      const btn = document.querySelector('.mobile-toggle');
-      const menu = document.querySelector('.menu');
-      if (btn && menu) {
-        btn.addEventListener('click', () => {
-          const open = menu.classList.toggle('open');
-          btn.setAttribute('aria-expanded', String(open));
-          document.body.style.overflow = open ? 'hidden' : '';
-        });
-        // Close on link click (mobile)
-        menu.querySelectorAll('a').forEach(a=>{
-          a.addEventListener('click', ()=> {
-            if(menu.classList.contains('open')){
-              menu.classList.remove('open');
-              btn.setAttribute('aria-expanded','false');
-              document.body.style.overflow = '';
-            }
-          });
-        });
-      }
-    })();
-
-    // Language pills (visual only + <html lang>)
-    (function () {
-      const pills = document.querySelectorAll('.lang button');
-      if (!pills.length) return;
-      pills.forEach(btn => {
-        btn.addEventListener('click', () => {
-          pills.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          const v = (btn.dataset.lang || 'en').toLowerCase();
-          document.documentElement.setAttribute('lang', v);
-        });
-      });
-    })();
-  </script>
+  <script src="main.js" defer></script>
 </body>
 </html>
