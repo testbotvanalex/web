@@ -153,3 +153,4 @@ body.menu-open{overflow:hidden}
   .foot{grid-template-columns:1fr auto;align-items:center;justify-content:space-between;text-align:left}
   body.menu-open{overflow:auto}
 }
+js
