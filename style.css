@@ -54,8 +54,8 @@ img{max-width:100%;display:block}
 body.menu-open{overflow:hidden}
 
 /* Language pills */
-.lang{display:flex;gap:6px;align-items:center;border:1px solid var(--border);border-radius:999px;padding:4px 6px;background:#fff}
-.lang button{border:0;background:transparent;padding:6px 10px;border-radius:999px;font-weight:800;color:var(--muted);cursor:pointer}
+.lang{display:flex;gap:6px;align-items:center}
+.lang button{padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:#fff;color:#475569;font-weight:800;cursor:pointer}
 .lang button:hover{background:#f1f5f9;color:#0f172a}
 .lang button.active{background:#eef2ff;color:#3730a3}
 
@@ -123,7 +123,8 @@ body.menu-open{overflow:hidden}
 .input:hover, textarea:hover{border-color:#cbd5e1}
 .input:focus, textarea:focus{outline:2px solid #c7d2fe;border-color:#a5b4fc}
 .contact-actions{grid-template-columns:1fr 1fr 1fr}
-.gdpr{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.95rem}
+.gdpr{display:flex;align-items:center;gap:8px;color:#64748b;font-size:.95rem}
+.form-ok{margin-top:10px;color:#16a34a;font-weight:700}
 
 /* Footer */
 .footer{border-top:1px solid var(--border);padding:26px 0;background:#fff}
@@ -153,4 +154,11 @@ body.menu-open{overflow:hidden}
   .foot{grid-template-columns:1fr auto;align-items:center;justify-content:space-between;text-align:left}
   body.menu-open{overflow:auto}
 }
+
+/* === UX/SEO tweaks === */
+html{scroll-behavior:smooth}
+:target{scroll-margin-top:80px}
+.cta:hover{filter:none;opacity:.96}
+.footer a.policy{color:var(--muted);font-weight:600}
+img[loading="lazy"]{contain-intrinsic-size:auto 150px}
 js
