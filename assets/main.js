@@ -197,7 +197,7 @@
     // Language
     var saved = null;
     try { saved = localStorage.getItem('botmatic_lang'); } catch(e){}
-    var initial = (saved && I18N[saved]) ? saved : (document.documentElement.getAttribute('lang') || 'en');
+    var initial = (saved && I18N[saved]) ? saved : (document.documentElement.getAttribute('lang') || 'nl');
     if(!I18N[initial]) initial = 'en';
     applyI18n(initial);
 
