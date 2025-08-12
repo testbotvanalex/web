@@ -1,136 +1,462 @@
-<!-- /index.html — NL = default homepage (Pricing & FAQ on /pricing.html) -->
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>BotMatic — Maatwerk chatbots voor WhatsApp, Telegram & Instagram</title>
-  <meta name="description" content="We bouwen maatwerk chatbots — WhatsApp, Telegram, Instagram & web. Simpele setup, snelle levering, volledige customisatie."/>
-  <link rel="canonical" href="https://botmatic.be/"/>
-  <link rel="alternate" href="https://botmatic.be/" hreflang="nl"/>
-  <link rel="alternate" href="https://botmatic.be/en/" hreflang="en"/>
-  <link rel="alternate" href="https://botmatic.be/fr/" hreflang="fr"/>
-  <link rel="alternate" href="https://botmatic.be/" hreflang="x-default"/>
-  <link rel="icon" href="/favicon.ico"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="/assets/style.css"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BotMatic — Custom Chatbots for WhatsApp, Telegram, Instagram</title>
+  <meta name="description" content="BotMatic builds custom chatbots fast — WhatsApp, Telegram, Instagram, and websites. Simple setup, fast delivery, fully customized." />
+  <style>
+    :root{
+      --bg:#ffffff;--fg:#0f172a;--muted:#64748b;--primary:#3b82f6;--primary-600:#2563eb;--accent:#10b981;--card:#f8fafc;--border:#e5e7eb;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif}
+    a{color:var(--primary);text-decoration:none}
+    img{max-width:100%;height:auto}
+    .container{max-width:1120px;margin:0 auto;padding:0 1rem}
+    header{position:sticky;top:0;background:rgba(255,255,255,.9);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);z-index:20}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:.75rem 0}
+    .brand{display:flex;gap:.6rem;align-items:center}
+    .logo{width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,var(--primary),var(--accent))}
+    .brand span{font-weight:700;letter-spacing:.2px}
+    .lang{display:flex;gap:.5rem;align-items:center}
+    select{border:1px solid var(--border);background:#fff;padding:.5rem .75rem;border-radius:.6rem;font-weight:600}
+    .btn{display:inline-flex;align-items:center;justify-content:center;border-radius:.8rem;border:1px solid transparent;padding:.8rem 1rem;font-weight:700}
+    .btn-primary{background:var(--primary);color:#fff}
+    .btn-primary:hover{background:var(--primary-600)}
+    .btn-secondary{background:#fff;border-color:var(--border);color:var(--fg)}
+    .grid{display:grid;gap:1rem}
+    /* HERO */
+    .hero{padding:3rem 0 2rem}
+    .hero-wrap{display:grid;gap:1.25rem}
+    .eyebrow{color:var(--accent);font-weight:700;font-size:.9rem;letter-spacing:.2px;text-transform:uppercase}
+    h1{font-size:clamp(1.6rem,3.8vw,3rem);line-height:1.1;margin:.25rem 0}
+    .lead{color:var(--muted);font-size:clamp(1rem,2.4vw,1.2rem)}
+    .cta{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1rem}
+    .hero-card{margin-top:1rem;background:var(--card);border:1px solid var(--border);border-radius:1rem;padding:1rem}
+    .trust{display:flex;gap:1rem;flex-wrap:wrap;color:var(--muted);font-size:.9rem}
+    /* FEATURES */
+    section{padding:2.5rem 0}
+    .section-head{display:flex;justify-content:space-between;align-items:end;gap:1rem;margin-bottom:1.25rem}
+    h2{font-size:clamp(1.2rem,3vw,2rem);margin:0}
+    .features{grid-template-columns:repeat(1,1fr)}
+    .feature{background:var(--card);border:1px solid var(--border);border-radius:1rem;padding:1rem}
+    .icon{width:40px;height:40px;border-radius:10px;display:inline-grid;place-items:center;background:linear-gradient(135deg,#eef2ff,#ecfeff);color:var(--primary);font-weight:900}
+    .feature h3{margin:.6rem 0 .25rem;font-size:1.05rem}
+    .feature p{color:var(--muted);margin:0}
+    /* PRICING */
+    .pricing{grid-template-columns:repeat(1,1fr)}
+    .plan{background:#fff;border:1px solid var(--border);border-radius:1rem;padding:1.25rem;display:flex;flex-direction:column;gap:.75rem}
+    .badge{display:inline-block;font-size:.75rem;font-weight:700;color:var(--primary);background:#eff6ff;border:1px solid #dbeafe;padding:.25rem .5rem;border-radius:.5rem}
+    .price{font-size:2rem;font-weight:800}
+    ul{margin:0;padding-left:1.1rem}
+    li{margin:.35rem 0}
+    /* CONTACT */
+    .contact-card{background:var(--card);border:1px solid var(--border);border-radius:1rem;padding:1rem}
+    .row{display:grid;grid-template-columns:1fr;gap:.75rem}
+    input,textarea{width:100%;border:1px solid var(--border);border-radius:.7rem;padding:.75rem;background:#fff}
+    textarea{min-height:120px;resize:vertical}
+    /* FOOTER */
+    footer{border-top:1px solid var(--border);padding:1.5rem 0;color:var(--muted);font-size:.95rem}
+    .foot{display:grid;gap:.75rem;align-items:center}
+    .foot a{color:inherit}
+    /* RESPONSIVE */
+    @media (min-width:720px){
+      .hero{padding:4rem 0 3rem}
+      .hero-wrap{grid-template-columns:1.1fr .9fr;align-items:center}
+      .features{grid-template-columns:repeat(3,1fr)}
+      .pricing{grid-template-columns:repeat(3,1fr)}
+      .row{grid-template-columns:1fr 1fr}
+      .foot{grid-template-columns:auto 1fr auto}
+    }
+  </style>
 </head>
 <body>
-<header class="site-header">
-  <div class="container">
-    <nav class="nav" aria-label="Primary">
-      <a class="brand" href="/"><span class="brand-badge" aria-hidden="true">🤖</span><span class="brand-name">BotMatic</span></a>
-      <div class="lang" aria-label="Taal">
-        <a class="pill active" href="/">NL</a><a class="pill" href="/en/">EN</a><a class="pill" href="/fr/">FR</a>
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <span>BotMatic</span>
       </div>
-      <button class="mobile-toggle" aria-label="Menu openen" aria-expanded="false" aria-controls="mainmenu">☰</button>
-      <div id="mainmenu" class="menu" role="menu">
-        <a href="/#features" role="menuitem">Functies</a>
-        <a href="/pricing.html" role="menuitem">Prijzen</a>
-        <a href="/#contact" role="menuitem">Contact</a>
-        <a href="https://wa.me/32470000000" class="cta secondary" role="menuitem" rel="nofollow noopener">WhatsApp</a>
-        <a href="/#demo" role="menuitem" class="cta" style="padding:8px 12px;border-radius:10px;">Vraag een demo</a>
+      <div class="lang">
+        <label for="lang" aria-label="Language" style="display:none">Language</label>
+        <select id="lang">
+          <option value="en">EN</option>
+          <option value="nl">NL</option>
+          <option value="fr">FR</option>
+        </select>
+        <a class="btn btn-secondary" href="#contact" data-i="header.cta">Get a quote</a>
       </div>
-    </nav>
-  </div>
-</header>
+    </div>
+  </header>
 
-<main id="top">
-  <section class="hero">
-    <div class="container hero-wrap">
-      <div>
-        <div class="hero-badges">
-          <span class="badge">⚡ Levering in 7–14 dagen</span>
-          <span class="badge">🧩 Volledig maatwerk</span>
-          <span class="badge">🔌 CRM & betalingen</span>
+  <main>
+    <section class="hero">
+      <div class="container hero-wrap">
+        <div>
+          <div class="eyebrow" data-i="hero.eyebrow">Custom chatbots, fast</div>
+          <h1 data-i="hero.title">Build smarter conversations for WhatsApp, Telegram & Instagram</h1>
+          <p class="lead" data-i="hero.lead">I design and ship tailored chatbots in days — simple setup, fast results, and full customization for your business.</p>
+          <div class="cta">
+            <a class="btn btn-primary" href="#pricing" data-i="hero.primary">View pricing</a>
+            <a class="btn btn-secondary" href="#contact" data-i="hero.secondary">Free consultation</a>
+          </div>
+          <div class="hero-card">
+            <div class="trust">
+              <span data-i="hero.point1">⚡ Ready in days</span>
+              <span>•</span>
+              <span data-i="hero.point2">🧩 CRM & website integrations</span>
+              <span>•</span>
+              <span data-i="hero.point3">🌍 Multilingual flows</span>
+            </div>
+          </div>
         </div>
-        <h1>Maatwerk chatbots voor WhatsApp, Telegram & Instagram — razendsnel gebouwd</h1>
-        <p>Automatiseer leads, kwalificatie en boekingen. Wij bouwen, koppelen en lanceren — en blijven optimaliseren.</p>
-        <div class="actions">
-          <a href="/#contact" class="cta">Start een project</a>
-          <a href="/pricing.html" class="cta secondary">Bekijk prijzen</a>
-        </div>
-        <div class="hero-card">
-          <div class="hero-stat">
-            <div><strong>40%+</strong><br/><small>Lead‑naar‑chat</small></div>
-            <div><strong>2×</strong><br/><small>Snellere reactie</small></div>
-            <div><strong>24/7</strong><br/><small>Automatische afhandeling</small></div>
+        <div>
+          <div class="hero-card">
+            <strong data-i="hero.cardTitle">Channels</strong>
+            <p class="lead" style="margin:.25rem 0 0">WhatsApp (Official API), Telegram, Instagram, Web widgets.</p>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-top:.75rem">
+              <div class="icon">W</div>
+              <div class="icon">T</div>
+              <div class="icon">IG</div>
+              <div class="icon">WWW</div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="mockup" id="demo" aria-label="Chat demo">
-        <div class="phone"><div class="screen"></div></div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="features" class="section">
-    <div class="container">
-      <h2>Waarom teams voor BotMatic kiezen</h2>
-      <p class="lead">Van idee naar live chatbot die oplevert — zonder gedoe.</p>
-      <div class="grid features">
-        <article class="feature"><div class="feat-icon">🚀</div><h3>Snel leveren</h3><p>Brief → flow‑schets → live in 7–14 dagen.</p></article>
-        <article class="feature"><div class="feat-icon">🧠</div><h3>AI + knoppen</h3><p>Geleide flows + AI‑antwoorden voor snelheid & controle.</p></article>
-        <article class="feature"><div class="feat-icon">🔌</div><h3>Integraties</h3><p>Agenda’s, CRM’s, betalingen, Sheets — wij koppelen.</p></article>
-        <article class="feature"><div class="feat-icon">📈</div><h3>Kwalificeren & converteren</h3><p>Scoor leads, routeer hot prospects, boek automatisch.</p></article>
-        <article class="feature"><div class="feat-icon">🛡️</div><h3>GDPR‑proof</h3><p>Toestemming, dataminimalisatie en opt‑out.</p></article>
-        <article class="feature"><div class="feat-icon">🤝</div><h3>Doorlopende support</h3><p>Copy, stappen en KPI’s blijven we tunen.</p></article>
+    <section id="features">
+      <div class="container">
+        <div class="section-head">
+          <h2 data-i="features.title">What you get</h2>
+          <p class="lead" data-i="features.lead">From idea to launch — streamlined, measurable, and on-brand.</p>
+        </div>
+        <div class="grid features">
+          <article class="feature">
+            <div class="icon">⚙️</div>
+            <h3 data-i="features.f1.title">Custom logic & flows</h3>
+            <p data-i="features.f1.desc">Design tailored conversations: qualification, FAQs, bookings, payments, and more.</p>
+          </article>
+          <article class="feature">
+            <div class="icon">⏱️</div>
+            <h3 data-i="features.f2.title">Fast delivery</h3>
+            <p data-i="features.f2.desc">Most bots go live within days — not weeks.</p>
+          </article>
+          <article class="feature">
+            <div class="icon">📈</div>
+            <h3 data-i="features.f3.title">Metrics that matter</h3>
+            <p data-i="features.f3.desc">Track leads, conversions, and response times in one place.</p>
+          </article>
+          <article class="feature">
+            <div class="icon">🔗</div>
+            <h3 data-i="features.f4.title">Integrations</h3>
+            <p data-i="features.f4.desc">Connect to CRMs, Google Sheets, webhooks, and e‑commerce tools.</p>
+          </article>
+          <article class="feature">
+            <div class="icon">🧠</div>
+            <h3 data-i="features.f5.title">AI assistance</h3>
+            <p data-i="features.f5.desc">LLM-powered replies with your brand tone and knowledge base.</p>
+          </article>
+          <article class="feature">
+            <div class="icon">🌐</div>
+            <h3 data-i="features.f6.title">Multilingual</h3>
+            <p data-i="features.f6.desc">Serve users in EN / NL / FR with localized copy.</p>
+          </article>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section">
-    <div class="container">
-      <h2>Eenvoudige prijzen</h2>
-      <p class="lead">Klein starten, altijd opschaalbaar. Alle details op de prijzenpagina.</p>
-      <div class="grid pricing">
-        <div class="plan"><div class="plan-h">Starter</div><div class="price">€29 <small>/mnd</small></div><a href="/pricing.html" class="cta wfull">Details</a></div>
-        <div class="plan popular"><div class="plan-h">Standaard</div><div class="price">€99 <small>/mnd</small></div><a href="/pricing.html" class="cta wfull">Details</a><div class="note">Meest gekozen</div></div>
-        <div class="plan"><div class="plan-h">Premium</div><div class="price">€299 <small>/mnd</small></div><a href="/pricing.html" class="cta wfull">Details</a></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="contact" class="section">
-    <div class="container">
-      <h2>Vertel ons over je bot</h2>
-      <p class="lead">Geef wat details en we reageren binnen 24 uur.</p>
-      <div class="contact-card">
-        <form class="form" id="contact-form" onsubmit="return false">
-          <div class="grid form-grid">
-            <input class="input" type="text" name="name" placeholder="Volledige naam" required/>
-            <input class="input" type="email" name="email" placeholder="Zakelijk e‑mail" required/>
+    <section id="pricing">
+      <div class="container">
+        <div class="section-head">
+          <h2 data-i="pricing.title">Simple pricing</h2>
+          <p class="lead" data-i="pricing.lead">Start small, scale when you’re ready. Every plan includes onboarding and a free audit.</p>
+        </div>
+        <div class="grid pricing">
+          <div class="plan">
+            <span class="badge" data-i="pricing.p1.badge">Starter</span>
+            <div class="price" data-i="pricing.p1.price">€29 / mo</div>
+            <p data-i="pricing.p1.desc">One core use case (e.g., FAQ or lead capture).</p>
+            <ul>
+              <li data-i="pricing.p1.l1">1 channel (e.g., WhatsApp or Telegram)</li>
+              <li data-i="pricing.p1.l2">Basic analytics</li>
+              <li data-i="pricing.p1.l3">Up to 500 conversations / month</li>
+            </ul>
+            <a class="btn btn-primary" href="#contact" data-i="pricing.cta">Choose plan</a>
           </div>
-          <input class="input" type="text" name="company" placeholder="Bedrijf / Sector"/>
-          <textarea class="input" name="message" rows="5" placeholder="Wat moet de bot doen? Platformen, flows, integraties…"></textarea>
-          <label class="gdpr"><input type="checkbox" required/> Ik ga akkoord om gecontacteerd te worden en accepteer het privacybeleid.</label>
-          <div class="grid contact-actions">
-            <button class="cta" type="submit">Verstuur aanvraag</button>
-            <a class="cta secondary" href="mailto:info@botmatic.be">Mail ons</a>
-            <a class="cta secondary" href="#demo">Bekijk demo</a>
+          <div class="plan" style="border-color:#c7d2fe">
+            <span class="badge" data-i="pricing.p2.badge">Standard • Popular</span>
+            <div class="price" data-i="pricing.p2.price">€99 / mo</div>
+            <p data-i="pricing.p2.desc">Multiple automated tasks and integrations.</p>
+            <ul>
+              <li data-i="pricing.p2.l1">2 channels</li>
+              <li data-i="pricing.p2.l2">Priority support & updates</li>
+              <li data-i="pricing.p2.l3">Up to 2,000 conversations / month</li>
+            </ul>
+            <a class="btn btn-primary" href="#contact" data-i="pricing.cta">Choose plan</a>
           </div>
-        </form>
-        <p class="form-ok" role="status" aria-live="polite" hidden>Top! We antwoorden binnen 24 uur.</p>
+          <div class="plan">
+            <span class="badge" data-i="pricing.p3.badge">Premium</span>
+            <div class="price" data-i="pricing.p3.price">€299 / mo</div>
+            <p data-i="pricing.p3.desc">Advanced AI and multi-system integrations.</p>
+            <ul>
+              <li data-i="pricing.p3.l1">3+ channels</li>
+              <li data-i="pricing.p3.l2">Dedicated PM & SLA</li>
+              <li data-i="pricing.p3.l3">Unlimited conversations</li>
+            </ul>
+            <a class="btn btn-primary" href="#contact" data-i="pricing.cta">Choose plan</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <div class="section-head">
+          <h2 data-i="contact.title">Let’s talk</h2>
+          <p class="lead" data-i="contact.lead">Tell me about your use case. I’ll reply within one business day.</p>
+        </div>
+        <div class="contact-card">
+          <form class="grid row" method="post" action="mailto:hello@botmatic.be" enctype="text/plain">
+            <div>
+              <label for="name" data-i="contact.name">Your name</label>
+              <input id="name" name="name" type="text" required placeholder="Jane Doe" />
+            </div>
+            <div>
+              <label for="email" data-i="contact.email">Email</label>
+              <input id="email" name="email" type="email" required placeholder="you@company.com" />
+            </div>
+            <div style="grid-column:1/-1">
+              <label for="message" data-i="contact.message">Project details</label>
+              <textarea id="message" name="message" placeholder="Channels, goals, deadlines…"></textarea>
+            </div>
+            <div style="grid-column:1/-1;display:flex;gap:.75rem;align-items:center;justify-content:space-between;flex-wrap:wrap">
+              <small class="muted" data-i="contact.note">By sending this form you agree to be contacted about your request.</small>
+              <button class="btn btn-primary" type="submit" data-i="contact.submit">Send request</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container foot">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <span>BotMatic</span>
+      </div>
+      <div style="text-align:center">
+        <span data-i="footer.copy">© BotMatic. All rights reserved.</span>
+      </div>
+      <div style="text-align:right">
+        <a href="/privacy.html" data-i="footer.privacy">Privacy</a> ·
+        <a href="/cookies.html" data-i="footer.cookies">Cookies</a>
       </div>
     </div>
-  </section>
-</main>
+  </footer>
 
-<footer class="footer">
-  <div class="container foot">
-    <div class="foot-left"><strong>BotMatic</strong><div class="muted">Maatwerk chatbots voor WhatsApp, Telegram, Instagram & web.</div></div>
-    <div class="foot-right">
-      <a href="/#features">Functies</a>
-      <a href="/pricing.html">Prijzen</a>
-      <a href="/#contact">Contact</a>
-      <a href="mailto:info@botmatic.be">info@botmatic.be</a>
-      <a href="/privacy.html" class="policy">Privacy</a>
-      <a href="/cookies.html" class="policy">Cookies</a>
-    </div>
-  </div>
-</footer>
+  <script>
+    const t = {
+      en:{
+        "header.cta":"Get a quote",
+        "hero.eyebrow":"Custom chatbots, fast",
+        "hero.title":"Build smarter conversations for WhatsApp, Telegram & Instagram",
+        "hero.lead":"I design and ship tailored chatbots in days — simple setup, fast results, and full customization for your business.",
+        "hero.primary":"View pricing",
+        "hero.secondary":"Free consultation",
+        "hero.point1":"⚡ Ready in days",
+        "hero.point2":"🧩 CRM & website integrations",
+        "hero.point3":"🌍 Multilingual flows",
+        "hero.cardTitle":"Channels",
+        "features.title":"What you get",
+        "features.lead":"From idea to launch — streamlined, measurable, and on-brand.",
+        "features.f1.title":"Custom logic & flows",
+        "features.f1.desc":"Design tailored conversations: qualification, FAQs, bookings, payments, and more.",
+        "features.f2.title":"Fast delivery",
+        "features.f2.desc":"Most bots go live within days — not weeks.",
+        "features.f3.title":"Metrics that matter",
+        "features.f3.desc":"Track leads, conversions, and response times in one place.",
+        "features.f4.title":"Integrations",
+        "features.f4.desc":"Connect to CRMs, Google Sheets, webhooks, and e‑commerce tools.",
+        "features.f5.title":"AI assistance",
+        "features.f5.desc":"LLM-powered replies with your brand tone and knowledge base.",
+        "features.f6.title":"Multilingual",
+        "features.f6.desc":"Serve users in EN / NL / FR with localized copy.",
+        "pricing.title":"Simple pricing",
+        "pricing.lead":"Start small, scale when you’re ready. Every plan includes onboarding and a free audit.",
+        "pricing.p1.badge":"Starter",
+        "pricing.p1.price":"€29 / mo",
+        "pricing.p1.desc":"One core use case (e.g., FAQ or lead capture).",
+        "pricing.p1.l1":"1 channel (e.g., WhatsApp or Telegram)",
+        "pricing.p1.l2":"Basic analytics",
+        "pricing.p1.l3":"Up to 500 conversations / month",
+        "pricing.p2.badge":"Standard • Popular",
+        "pricing.p2.price":"€99 / mo",
+        "pricing.p2.desc":"Multiple automated tasks and integrations.",
+        "pricing.p2.l1":"2 channels",
+        "pricing.p2.l2":"Priority support & updates",
+        "pricing.p2.l3":"Up to 2,000 conversations / month",
+        "pricing.p3.badge":"Premium",
+        "pricing.p3.price":"€299 / mo",
+        "pricing.p3.desc":"Advanced AI and multi-system integrations.",
+        "pricing.p3.l1":"3+ channels",
+        "pricing.p3.l2":"Dedicated PM & SLA",
+        "pricing.p3.l3":"Unlimited conversations",
+        "pricing.cta":"Choose plan",
+        "contact.title":"Let’s talk",
+        "contact.lead":"Tell me about your use case. I’ll reply within one business day.",
+        "contact.name":"Your name",
+        "contact.email":"Email",
+        "contact.message":"Project details",
+        "contact.note":"By sending this form you agree to be contacted about your request.",
+        "contact.submit":"Send request",
+        "footer.copy":"© BotMatic. All rights reserved.",
+        "footer.privacy":"Privacy",
+        "footer.cookies":"Cookies"
+      },
+      nl:{
+        "header.cta":"Offerte aanvragen",
+        "hero.eyebrow":"Maatwerk chatbots, snel",
+        "hero.title":"Slimmere gesprekken voor WhatsApp, Telegram & Instagram",
+        "hero.lead":"Ik bouw en lever maatwerk chatbots in enkele dagen — eenvoudig op te zetten, snel resultaat en volledig op maat van jouw bedrijf.",
+        "hero.primary":"Prijzen bekijken",
+        "hero.secondary":"Gratis consult",
+        "hero.point1":"⚡ Klaar in dagen",
+        "hero.point2":"🧩 Integraties met CRM & website",
+        "hero.point3":"🌍 Meertalige flows",
+        "hero.cardTitle":"Kanalen",
+        "features.title":"Wat je krijgt",
+        "features.lead":"Van idee tot livegang — efficiënt, meetbaar en on-brand.",
+        "features.f1.title":"Aangepaste logica & flows",
+        "features.f1.desc":"Ontwerp gesprekken op maat: kwalificatie, FAQ, bookings, betalingen en meer.",
+        "features.f2.title":"Snelle oplevering",
+        "features.f2.desc":"De meeste bots gaan live binnen enkele dagen — geen weken.",
+        "features.f3.title":"Belangrijke metrics",
+        "features.f3.desc":"Volg leads, conversies en responstijden op één plek.",
+        "features.f4.title":"Integraties",
+        "features.f4.desc":"Koppel met CRM’s, Google Sheets, webhooks en e‑commerce.",
+        "features.f5.title":"AI‑assistentie",
+        "features.f5.desc":"LLM‑antwoorden in jouw merktoon met eigen kennisbank.",
+        "features.f6.title":"Meertalig",
+        "features.f6.desc":"Bedien gebruikers in EN / NL / FR met lokale copy.",
+        "pricing.title":"Eenvoudige prijzen",
+        "pricing.lead":"Start klein, schaal wanneer je klaar bent. Elke formule bevat onboarding en een gratis audit.",
+        "pricing.p1.badge":"Basis",
+        "pricing.p1.price":"€29 / mnd",
+        "pricing.p1.desc":"Eén kernusecase (bv. FAQ of leadcaptatie).",
+        "pricing.p1.l1":"1 kanaal (bv. WhatsApp of Telegram)",
+        "pricing.p1.l2":"Basisanalytics",
+        "pricing.p1.l3":"Tot 500 conversaties / maand",
+        "pricing.p2.badge":"Standaard • Populair",
+        "pricing.p2.price":"€99 / mnd",
+        "pricing.p2.desc":"Meerdere taken en integraties.",
+        "pricing.p2.l1":"2 kanalen",
+        "pricing.p2.l2":"Prioritaire support & updates",
+        "pricing.p2.l3":"Tot 2.000 conversaties / maand",
+        "pricing.p3.badge":"Premium",
+        "pricing.p3.price":"€299 / mnd",
+        "pricing.p3.desc":"Geavanceerde AI en multisysteemintegraties.",
+        "pricing.p3.l1":"3+ kanalen",
+        "pricing.p3.l2":"Toegewijde PM & SLA",
+        "pricing.p3.l3":"Onbeperkte conversaties",
+        "pricing.cta":"Kies formule",
+        "contact.title":"Laten we praten",
+        "contact.lead":"Vertel me jouw case. Ik antwoord binnen één werkdag.",
+        "contact.name":"Naam",
+        "contact.email":"E‑mail",
+        "contact.message":"Projectdetails",
+        "contact.note":"Door dit formulier te verzenden ga je akkoord dat we contact opnemen.",
+        "contact.submit":"Verzenden",
+        "footer.copy":"© BotMatic. Alle rechten voorbehouden.",
+        "footer.privacy":"Privacy",
+        "footer.cookies":"Cookies"
+      },
+      fr:{
+        "header.cta":"Demander un devis",
+        "hero.eyebrow":"Chatbots sur mesure, rapides",
+        "hero.title":"Des conversations plus intelligentes pour WhatsApp, Telegram & Instagram",
+        "hero.lead":"Je conçois et livre des chatbots personnalisés en quelques jours — mise en place simple, résultats rapides, et personnalisation complète.",
+        "hero.primary":"Voir les tarifs",
+        "hero.secondary":"Consultation gratuite",
+        "hero.point1":"⚡ Prêt en quelques jours",
+        "hero.point2":"🧩 Intégrations CRM & site web",
+        "hero.point3":"🌍 Flows multilingues",
+        "hero.cardTitle":"Canaux",
+        "features.title":"Ce que vous obtenez",
+        "features.lead":"De l’idée au lancement — fluide, mesurable et conforme à votre marque.",
+        "features.f1.title":"Logique & parcours sur mesure",
+        "features.f1.desc":"Conversations adaptées : qualification, FAQ, rendez‑vous, paiements, etc.",
+        "features.f2.title":"Livraison rapide",
+        "features.f2.desc":"La plupart des bots sont en ligne en quelques jours — pas des semaines.",
+        "features.f3.title":"Les bons indicateurs",
+        "features.f3.desc":"Suivez leads, conversions et temps de réponse au même endroit.",
+        "features.f4.title":"Intégrations",
+        "features.f4.desc":"CRMs, Google Sheets, webhooks et e‑commerce.",
+        "features.f5.title":"Assistance IA",
+        "features.f5.desc":"Réponses LLM avec votre ton de marque et votre base de connaissances.",
+        "features.f6.title":"Multilingue",
+        "features.f6.desc":"Servez vos utilisateurs en EN / NL / FR avec un contenu localisé.",
+        "pricing.title":"Tarification simple",
+        "pricing.lead":"Commencez petit, évoluez ensuite. Chaque offre inclut l’onboarding et un audit gratuit.",
+        "pricing.p1.badge":"Starter",
+        "pricing.p1.price":"29 € / mois",
+        "pricing.p1.desc":"Un cas d’usage clé (ex. FAQ ou capture de leads).",
+        "pricing.p1.l1":"1 canal (WhatsApp ou Telegram)",
+        "pricing.p1.l2":"Analytics de base",
+        "pricing.p1.l3":"Jusqu’à 500 conversations / mois",
+        "pricing.p2.badge":"Standard • Populaire",
+        "pricing.p2.price":"99 € / mois",
+        "pricing.p2.desc":"Plusieurs tâches automatisées et intégrations.",
+        "pricing.p2.l1":"2 canaux",
+        "pricing.p2.l2":"Support prioritaire & mises à jour",
+        "pricing.p2.l3":"Jusqu’à 2 000 conversations / mois",
+        "pricing.p3.badge":"Premium",
+        "pricing.p3.price":"299 € / mois",
+        "pricing.p3.desc":"IA avancée et intégrations multi‑systèmes.",
+        "pricing.p3.l1":"3+ canaux",
+        "pricing.p3.l2":"Chef de projet dédié & SLA",
+        "pricing.p3.l3":"Conversations illimitées",
+        "pricing.cta":"Choisir l’offre",
+        "contact.title":"Discutons",
+        "contact.lead":"Parlez‑moi de votre projet. Je réponds sous un jour ouvrable.",
+        "contact.name":"Votre nom",
+        "contact.email":"E‑mail",
+        "contact.message":"Détails du projet",
+        "contact.note":"En envoyant ce formulaire, vous acceptez d’être recontacté.",
+        "contact.submit":"Envoyer la demande",
+        "footer.copy":"© BotMatic. Tous droits réservés.",
+        "footer.privacy":"Confidentialité",
+        "footer.cookies":"Cookies"
+      }
+    };
 
-<script src="/assets/main.js" defer></script>
+    const $ = (s,root=document)=>root.querySelectorAll(s);
+    function applyLang(lang){
+      const dict = t[lang]||t.en;
+      document.documentElement.lang = lang;
+      $('[data-i]').forEach(el=>{
+        const key = el.getAttribute('data-i');
+        if(dict[key]) el.textContent = dict[key];
+      });
+      // Update prices formatting (optional placeholder for future logic)
+    }
+    const sel = document.getElementById('lang');
+    // Initialize from URL ?lang=, localStorage, or navigator
+    const urlLang = new URLSearchParams(location.search).get('lang');
+    const stored = localStorage.getItem('bm_lang');
+    const nav = (navigator.language||'en').slice(0,2);
+    const start = ['en','nl','fr'].includes(urlLang)?urlLang:(['nl','fr'].includes(stored)?stored:(['nl','fr'].includes(nav)?nav:'en'));
+    sel.value = start;
+    applyLang(start);
+    sel.addEventListener('change',()=>{
+      localStorage.setItem('bm_lang', sel.value);
+      applyLang(sel.value);
+      const params = new URLSearchParams(location.search);
+      params.set('lang', sel.value);
+      history.replaceState({},'',location.pathname+'?'+params.toString());
+    });
+  </script>
 </body>
 </html>
