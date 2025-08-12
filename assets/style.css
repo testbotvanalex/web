@@ -161,3 +161,6 @@ html{scroll-behavior:smooth}
 .cta:hover{filter:none;opacity:.96}
 .footer a.policy{color:var(--muted);font-weight:600}
 img[loading="lazy"]{contain-intrinsic-size:auto 150px}
+
+html { scroll-behavior: smooth; }
+:target { scroll-margin-top: 80px; } /* подстрой при другой высоте шапки */
