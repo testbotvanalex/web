@@ -1,18 +1,17 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <!-- ===== META / SEO PATCH ===== -->
+  <!-- ========= META / SEO / OPEN GRAPH ========= -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>BotMatic — WhatsApp, Telegram & Instagram chatbots in 7–14 days</title>
   <meta name="description" content="Custom chatbots for WhatsApp, Telegram, Instagram. Lead capture, qualification, booking and payments. Fast 7–14 day delivery. Available in EN/NL/FR." />
   <link rel="canonical" href="https://www.botmatic.be/" />
-  <!-- Hreflang (adjust hrefs if your language URLs differ) -->
+  <!-- Hreflang (keep if you serve language routes; otherwise ok for SEO hint) -->
   <link rel="alternate" href="https://www.botmatic.be/" hreflang="en" />
   <link rel="alternate" href="https://www.botmatic.be/nl/" hreflang="nl" />
   <link rel="alternate" href="https://www.botmatic.be/fr/" hreflang="fr" />
   <link rel="alternate" href="https://www.botmatic.be/" hreflang="x-default" />
-
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.botmatic.be/" />
@@ -22,49 +21,49 @@
   <meta property="og:locale" content="en_US" />
   <meta property="og:locale:alternate" content="nl_BE" />
   <meta property="og:locale:alternate" content="fr_BE" />
-
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="BotMatic — WhatsApp, Telegram & Instagram chatbots in 7–14 days" />
   <meta name="twitter:description" content="Custom chatbots delivered fast. EN/NL/FR." />
   <meta name="twitter:image" content="https://www.botmatic.be/og-image.jpg" />
 
-  <!-- Preload optional: replace with your logo/font if needed -->
-  <link rel="preload" href="/assets/fonts/inter-regular.woff2" as="font" type="font/woff2" crossorigin>
-
-  <!-- ===== MIN CSS (mobile-first) ===== -->
+  <!-- ========= MINIMAL CSS (mobile-first) ========= -->
   <style>
     :root{
       --bg:#ffffff; --text:#0e1116; --muted:#667085; --brand:#2f6bff; --brand-2:#1b49c7;
-      --border:#e6e8ec; --success:#0ea5e9; --focus:#111827;
+      --border:#e6e8ec; --focus:#1f2937; --ok:#0ea5e9;
       --radius:14px; --shadow:0 8px 24px rgba(17,24,39,.08);
     }
-    *{box-sizing:border-box} html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
-    a{color:var(--brand);text-decoration:none}
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
     img{max-width:100%;height:auto}
+    a{color:var(--brand);text-decoration:none}
     .container{max-width:1100px;margin:0 auto;padding:0 16px}
+
     /* Header */
     .header{position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid var(--border)}
     .header__row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;gap:12px}
-    .logo{display:flex;align-items:center;gap:10px;font-weight:700}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:800}
     .logo svg{width:28px;height:28px}
     .lang{display:flex;gap:6px;align-items:center}
     .lang button{border:1px solid var(--border);background:#fff;padding:6px 10px;border-radius:999px;font-size:14px;cursor:pointer}
     .lang button[aria-current="true"]{border-color:var(--brand);color:var(--brand);font-weight:600}
     .cta{display:flex;gap:8px}
-    .btn{border:1px solid var(--border);background:#fff;padding:10px 14px;border-radius:999px;font-weight:600;cursor:pointer}
+    .btn{border:1px solid var(--border);background:#fff;padding:10px 14px;border-radius:999px;font-weight:700;cursor:pointer}
     .btn--primary{background:var(--brand);border-color:var(--brand);color:#fff}
     .btn--primary:hover{background:var(--brand-2)}
     .btn:focus{outline:3px solid rgba(47,107,255,.35);outline-offset:2px}
+
     /* Hero */
     .hero{padding:56px 0 28px}
     .hero__grid{display:grid;gap:18px}
-    .eyebrow{display:inline-block;background:#f2f6ff;color:#0b2a8f;border:1px solid #e3ecff;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600}
+    .eyebrow{display:inline-block;background:#f2f6ff;color:#0b2a8f;border:1px solid #e3ecff;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700}
     .h1{font-size:28px;line-height:1.15;margin:12px 0 10px}
     .lead{color:var(--muted)}
     .badges{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}
     .badge{border:1px solid var(--border);padding:8px 12px;border-radius:999px;font-size:13px;color:#111827;background:#fff}
-    /* Form */
+
+    /* Card / Form */
     .card{border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;background:#fff}
     form{display:grid;gap:12px}
     label{display:block;font-weight:600;font-size:14px}
@@ -72,28 +71,41 @@
     .row{display:grid;gap:12px}
     .fine{font-size:12px;color:var(--muted)}
     .error{color:#b42318;font-size:13px;display:none}
-    /* Modal */
-    .modal{position:fixed;inset:0;background:rgba(17,24,39,.6);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
-    .modal__panel{background:#fff;border-radius:16px;max-width:860px;width:100%;box-shadow:var(--shadow);overflow:hidden}
-    .modal__header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border)}
-    .modal__body{padding:0;height:min(80vh,680px)}
-    .modal__close{background:none;border:none;font-size:16px;cursor:pointer}
+
     /* Sections */
     .section{padding:28px 0}
     .features{display:grid;gap:12px}
-    .feature{display:flex;gap:12px;border:1px dashed var(--border);border-radius:12px;padding:12px;align-items:flex-start}
+    .feature{display:flex;gap:12px;border:1px dashed var(--border);border-radius:12px;padding:12px;align-items:flex-start;background:#fff}
     .feature svg{min-width:20px}
-    /* Desktop */
+
+    /* Pricing */
+    .pricing{padding:28px 0}
+    .plans{display:grid;gap:12px}
+    .plan{border:1px solid var(--border);border-radius:var(--radius);background:#fff;box-shadow:var(--shadow);padding:16px;display:flex;flex-direction:column;gap:10px}
+    .plan h3{margin:0;font-size:18px}
+    .price{font-size:28px;font-weight:800}
+    .ul{margin:0;padding-left:18px;color:var(--muted)}
+    .plan .btn{align-self:start}
+
+    /* Footer */
+    .footer{border-top:1px solid var(--border);padding:22px 0;background:#fafbff;margin-top:12px}
+    .footer__row{display:flex;flex-direction:column;gap:10px}
+    .footer__row small{color:var(--muted)}
+    .footer nav a{margin-right:8px}
+
+    /* Desktop tweaks */
     @media (min-width:768px){
       .h1{font-size:44px}
       .hero__grid{grid-template-columns:1.1fr .9fr;align-items:start}
       .row{grid-template-columns:1fr 1fr}
       .features{grid-template-columns:repeat(4,1fr)}
+      .plans{grid-template-columns:repeat(3,1fr)}
+      .footer__row{flex-direction:row;align-items:center;justify-content:space-between}
     }
   </style>
 </head>
 <body>
-  <!-- ===== HEADER ===== -->
+  <!-- ========= HEADER ========= -->
   <header class="header" role="banner">
     <div class="container header__row">
       <a class="logo" href="/" aria-label="BotMatic home">
@@ -120,7 +132,7 @@
     </div>
   </header>
 
-  <!-- ===== HERO ===== -->
+  <!-- ========= HERO ========= -->
   <section class="hero" aria-labelledby="hero-title">
     <div class="container hero__grid">
       <div>
@@ -142,8 +154,8 @@
         </div>
       </div>
 
-      <!-- Lead form card -->
-      <aside class="card" aria-labelledby="form-title">
+      <!-- Contact/Lead form -->
+      <aside class="card" aria-labelledby="form-title" id="contact">
         <h2 id="form-title" data-i18n="form_title">Tell us about your bot</h2>
         <form id="leadForm" novalidate>
           <div class="row">
@@ -161,8 +173,8 @@
 
           <div class="row">
             <div>
-              <label for="contact" data-i18n="label_contact">WhatsApp or Email</label>
-              <input class="input" id="contact" name="contact" inputmode="email" placeholder="+32 4… or name@company.com" required />
+              <label for="contactField" data-i18n="label_contact">WhatsApp or Email</label>
+              <input class="input" id="contactField" name="contact" inputmode="email" placeholder="+32 4… or name@company.com" required />
               <div class="error" id="err-contact" data-i18n="err_contact">Enter valid WhatsApp or email.</div>
             </div>
             <div>
@@ -190,7 +202,11 @@
             </div>
           </div>
 
-          <label><input type="checkbox" id="gdpr" required /> <span class="fine" data-i18n="gdpr_copy">I agree to the processing of my data as described in the</span> <a class="fine" href="/privacy" target="_blank" rel="noopener">Privacy Policy</a></label>
+          <label>
+            <input type="checkbox" id="gdpr" required />
+            <span class="fine" data-i18n="gdpr_copy">I agree to the processing of my data as described in the</span>
+            <a class="fine" href="/privacy" target="_blank" rel="noopener">Privacy Policy</a>
+          </label>
           <div class="error" id="err-gdpr" data-i18n="err_gdpr">Please accept the privacy terms.</div>
 
           <button type="submit" class="btn btn--primary" data-i18n="cta_submit">Send</button>
@@ -200,7 +216,7 @@
     </div>
   </section>
 
-  <!-- ===== FEATURES (compact) ===== -->
+  <!-- ========= FEATURES ========= -->
   <section class="section" aria-labelledby="feat-title">
     <div class="container">
       <h2 id="feat-title" data-i18n="features_title">What we deliver</h2>
@@ -225,21 +241,74 @@
     </div>
   </section>
 
-  <!-- ===== DEMO MODAL ===== -->
-  <div class="modal" id="demoModal" role="dialog" aria-modal="true" aria-labelledby="demoTitle" hidden>
-    <div class="modal__panel">
-      <div class="modal__header">
-        <strong id="demoTitle" data-i18n="demo_title">Book a demo</strong>
-        <button class="modal__close" aria-label="Close" onclick="closeDemoModal()">✕</button>
+  <!-- ========= PRICING ========= -->
+  <section class="pricing section" id="pricing" aria-labelledby="pricing-title">
+    <div class="container">
+      <h2 id="pricing-title" data-i18n="pricing_title">Pricing</h2>
+      <div class="plans">
+        <!-- Starter -->
+        <article class="plan" aria-labelledby="p1-title">
+          <h3 id="p1-title" data-i18n="p1_t">Starter</h3>
+          <div class="price"><span>€</span><span data-i18n="p1_price">29</span><span class="fine">/mo</span></div>
+          <ul class="ul">
+            <li data-i18n="p1_f1">Essential flows</li>
+            <li data-i18n="p1_f2">1 channel (e.g. WhatsApp)</li>
+            <li data-i18n="p1_f3">Basic support</li>
+          </ul>
+          <button class="btn" data-plan="Starter" data-i18n="p_cta">Choose plan</button>
+        </article>
+        <!-- Growth -->
+        <article class="plan" aria-labelledby="p2-title">
+          <h3 id="p2-title" data-i18n="p2_t">Growth</h3>
+          <div class="price"><span>€</span><span data-i18n="p2_price">99</span><span class="fine">/mo</span></div>
+          <ul class="ul">
+            <li data-i18n="p2_f1">Advanced flows + AI</li>
+            <li data-i18n="p2_f2">2 channels</li>
+            <li data-i18n="p2_f3">Integrations (Sheets/Calendly)</li>
+          </ul>
+          <button class="btn btn--primary" data-plan="Growth" data-i18n="p_cta">Choose plan</button>
+        </article>
+        <!-- Premium -->
+        <article class="plan" aria-labelledby="p3-title">
+          <h3 id="p3-title" data-i18n="p3_t">Premium</h3>
+          <div class="price"><span>€</span><span data-i18n="p3_price">299</span><span class="fine">/mo</span></div>
+          <ul class="ul">
+            <li data-i18n="p3_f1">Full customization</li>
+            <li data-i18n="p3_f2">3+ channels</li>
+            <li data-i18n="p3_f3">Priority SLA + migration</li>
+          </ul>
+          <button class="btn" data-plan="Premium" data-i18n="p_cta">Choose plan</button>
+        </article>
       </div>
-      <div class="modal__body">
+    </div>
+  </section>
+
+  <!-- ========= DEMO MODAL ========= -->
+  <div class="modal" id="demoModal" role="dialog" aria-modal="true" aria-labelledby="demoTitle" style="display:none" hidden>
+    <div class="modal__panel" style="background:#fff;border-radius:16px;max-width:860px;width:100%;box-shadow:var(--shadow);overflow:hidden">
+      <div class="modal__header" style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border)">
+        <strong id="demoTitle" data-i18n="demo_title">Book a demo</strong>
+        <button class="modal__close" aria-label="Close" onclick="closeDemoModal()" style="background:none;border:none;font-size:16px;cursor:pointer">✕</button>
+      </div>
+      <div class="modal__body" style="padding:0;height:min(80vh,680px)">
         <!-- Replace with your Calendly/Cal.com embed -->
         <iframe id="demoFrame" title="Demo booking" src="about:blank" style="border:0;width:100%;height:100%"></iframe>
       </div>
     </div>
   </div>
 
-  <!-- ===== JSON-LD (Organization + Products) ===== -->
+  <!-- ========= FOOTER ========= -->
+  <footer class="footer" role="contentinfo">
+    <div class="container footer__row">
+      <small>© <span id="y"></span> BotMatic — <span data-i18n="footer_tag">Chatbots for WhatsApp, Telegram & Instagram</span></small>
+      <nav aria-label="Footer links">
+        <a href="https://www.botmatic.be" target="_blank" rel="noopener">botmatic.be</a>
+        <a href="https://github.com/testbotvanalex/web" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- ========= JSON-LD (Organization + Products) ========= -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -261,7 +330,7 @@
   }
   </script>
 
-  <!-- ===== I18N + UX JS (no libs) ===== -->
+  <!-- ========= I18N + UX JS (no libraries) ========= -->
   <script>
     // Simple i18n dictionary
     const I18N = {
@@ -283,7 +352,12 @@
         f2_t:"Qualification", f2_d:"Score leads with rules or AI.",
         f3_t:"Booking", f3_d:"Calendly/Cal.com integration + reminders.",
         f4_t:"Payments", f4_d:"Stripe checkout & invoicing flows.",
-        demo_title:"Book a demo"
+        pricing_title:"Pricing", p_cta:"Choose plan",
+        p1_t:"Starter", p1_price:"29", p1_f1:"Essential flows", p1_f2:"1 channel (e.g. WhatsApp)", p1_f3:"Basic support",
+        p2_t:"Growth",  p2_price:"99", p2_f1:"Advanced flows + AI", p2_f2:"2 channels", p2_f3:"Integrations (Sheets/Calendly)",
+        p3_t:"Premium", p3_price:"299", p3_f1:"Full customization", p3_f2:"3+ channels", p3_f3:"Priority SLA + migration",
+        demo_title:"Book a demo",
+        footer_tag:"Chatbots for WhatsApp, Telegram & Instagram"
       },
       nl:{
         eyebrow:"Aangepaste chatbots in 7–14 dagen",
@@ -303,7 +377,12 @@
         f2_t:"Kwalificatie", f2_d:"Score leads met regels of AI.",
         f3_t:"Boeken", f3_d:"Integratie met Calendly/Cal.com + reminders.",
         f4_t:"Betalingen", f4_d:"Stripe checkout & facturatieflows.",
-        demo_title:"Plan een demo"
+        pricing_title:"Prijzen", p_cta:"Kies pakket",
+        p1_t:"Starter", p1_price:"29", p1_f1:"Essentiële flows", p1_f2:"1 kanaal (bv. WhatsApp)", p1_f3:"Basis support",
+        p2_t:"Growth",  p2_price:"99", p2_f1:"Geavanceerde flows + AI", p2_f2:"2 kanalen", p2_f3:"Integraties (Sheets/Calendly)",
+        p3_t:"Premium", p3_price:"299", p3_f1:"Volledige maatwerk", p3_f2:"3+ kanalen", p3_f3:"Priority SLA + migratie",
+        demo_title:"Plan een demo",
+        footer_tag:"Chatbots voor WhatsApp, Telegram & Instagram"
       },
       fr:{
         eyebrow:"Chatbots sur mesure en 7–14 jours",
@@ -323,13 +402,20 @@
         f2_t:"Qualification", f2_d:"Score des leads via règles ou IA.",
         f3_t:"Prise de RDV", f3_d:"Intégration Calendly/Cal.com + rappels.",
         f4_t:"Paiements", f4_d:"Stripe checkout & facturation.",
-        demo_title:"Réserver une démo"
+        pricing_title:"Tarifs", p_cta:"Choisir l’offre",
+        p1_t:"Starter", p1_price:"29", p1_f1:"Parcours essentiels", p1_f2:"1 canal (ex. WhatsApp)", p1_f3:"Support basique",
+        p2_t:"Growth",  p2_price:"99", p2_f1:"Parcours avancés + IA", p2_f2:"2 canaux", p2_f3:"Intégrations (Sheets/Calendly)",
+        p3_t:"Premium", p3_price:"299", p3_f1:"Personnalisation totale", p3_f2:"3+ canaux", p3_f3:"SLA prioritaire + migration",
+        demo_title:"Réserver une démo",
+        footer_tag:"Chatbots pour WhatsApp, Telegram & Instagram"
       }
     };
 
-    // Init lang from localStorage or <html lang>
+    // Helpers
     const $ = (q,ctx=document)=>ctx.querySelector(q);
     const $$ = (q,ctx=document)=>Array.from(ctx.querySelectorAll(q));
+
+    // Language init
     const langButtons = $$('.lang button');
     function setLang(l){
       if(!I18N[l]) l='en';
@@ -339,24 +425,22 @@
         const key = el.getAttribute('data-i18n');
         if(I18N[l][key]) el.textContent = I18N[l][key];
       });
-      // Update aria-current on buttons
       langButtons.forEach(b=>b.setAttribute('aria-current', b.dataset.lang===l ? 'true' : 'false'));
     }
     langButtons.forEach(btn=>btn.addEventListener('click', ()=>setLang(btn.dataset.lang)));
     setLang(localStorage.getItem('bm_lang') || document.documentElement.lang || 'en');
 
-    // CTA handlers (replace with your routes/anchors)
+    // CTA handlers
     function openStartProject(){
       window.dataLayer = window.dataLayer || [];
       dataLayer.push({event:'cta_start_click', lang: document.documentElement.lang});
-      // Scroll to form:
       document.getElementById('leadForm').scrollIntoView({behavior:'smooth', block:'start'});
     }
     function openDemoModal(){
       window.dataLayer = window.dataLayer || [];
       dataLayer.push({event:'cta_demo_click', lang: document.documentElement.lang});
       const m = document.getElementById('demoModal');
-      $('#demoFrame').src = 'https://cal.com/your-handle?embed=true'; // <-- replace your scheduling link
+      $('#demoFrame').src = 'https://cal.com/your-handle?embed=true'; // change to your scheduling link
       m.style.display = 'flex'; m.removeAttribute('hidden');
     }
     function closeDemoModal(){
@@ -383,14 +467,14 @@
       });
 
       // contact check: email OR whatsapp
-      const contact=v('contact'); const isValidContact = emailRx.test(contact) || waRx.test(contact);
+      const contact=v('contactField'); const isValidContact = emailRx.test(contact) || waRx.test(contact);
       $('#err-contact').style.display = isValidContact ? 'none':'block'; ok = ok && isValidContact;
 
       const gdpr = $('#gdpr').checked; $('#err-gdpr').style.display = gdpr ? 'none':'block'; ok = ok && gdpr;
 
       if(!ok) return;
 
-      // Submit: replace with your endpoint
+      // Submit (replace with your endpoint)
       const payload={
         name:v('name'), company:v('company'), contact,
         usecase:v('usecase'), budget:v('budget'), deadline:v('deadline'), lang:l, ts: new Date().toISOString()
@@ -413,13 +497,17 @@
         });
     });
 
-    // Track pricing clicks if you add buttons with [data-plan]
+    // Pricing buttons -> open same demo modal (and track)
     document.addEventListener('click',(e)=>{
       const t=e.target.closest('[data-plan]');
       if(!t) return;
       window.dataLayer = window.dataLayer || [];
       dataLayer.push({event:'pricing_plan_click', plan:t.getAttribute('data-plan'), lang:document.documentElement.lang});
+      openDemoModal();
     });
+
+    // Footer year
+    document.getElementById('y').textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
