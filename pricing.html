@@ -1,53 +1,71 @@
+<!-- pricing.html -->
 <!DOCTYPE html>
 <html lang="en" data-lang="en">
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <title>Pricing — BotMatic</title>
   <link rel="canonical" href="https://www.botmatic.be/pricing.html"/>
   <meta name="description" content="Simple pricing for custom chatbots. Starter, Standard, Premium.">
   <meta property="og:title" content="Pricing — BotMatic">
   <meta property="og:image" content="/og.jpg">
-  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="/assets/style.css?v=3">
 </head>
 <body data-page="pricing">
-  <header class="header">
+  <header class="header" role="banner">
     <div class="container nav">
-      <a href="/" class="brand">🤖 <strong>BotMatic</strong></a>
-      <nav class="menu" aria-label="Main">
+      <a href="/" class="brand" aria-label="BotMatic">🤖 <strong>BotMatic</strong></a>
+      <button class="mobile-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainmenu">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </button>
+      <nav class="menu" id="mainmenu" aria-label="Main">
         <a href="/" data-i18n="nav.home">Home</a>
         <a href="/pricing.html" class="active" data-i18n="nav.pricing">Pricing</a>
         <a href="/faq.html" data-i18n="nav.faq">FAQ</a>
         <a href="/contact.html" data-i18n="nav.contact">Contact</a>
       </nav>
       <div class="lang">
-        <button type="button" data-lang="en">EN</button>
-        <button type="button" data-lang="nl">NL</button>
-        <button type="button" data-lang="fr">FR</button>
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="nl" aria-pressed="false">NL</button>
+        <button type="button" data-lang="fr" aria-pressed="false">FR</button>
       </div>
     </div>
   </header>
 
-  <main class="main">
+  <main class="main" id="pjax-root">
     <div class="container">
       <h1 class="h1" data-i18n="pricing.title">Simple pricing</h1>
       <p class="lead" data-i18n="pricing.lead">Pick a plan — upgrade anytime.</p>
 
-      <div class="grid cols-3">
-        <div class="card"><strong>Starter — €29/mo</strong><br>1 core flow, 1 platform</div>
-        <div class="card"><strong>Standard — €99/mo</strong><br>Qualify + booking, 2 platforms</div>
-        <div class="card"><strong>Premium — €299/mo</strong><br>Advanced AI, integrations</div>
+      <div class="grid plans">
+        <div class="plan card">
+          <h3>Starter — €29/mo</h3>
+          <ul>
+            <li>1 core flow</li><li>1 platform</li><li>Up to 500 conversations</li>
+          </ul>
+          <a class="cta" href="/contact.html">Choose Starter</a>
+        </div>
+        <div class="plan card popular">
+          <h3>Standard — €99/mo</h3>
+          <ul>
+            <li>Qualify + booking</li><li>2 platforms</li><li>Priority support</li>
+          </ul>
+          <a class="cta" href="/contact.html">Choose Standard</a>
+        </div>
+        <div class="plan card">
+          <h3>Premium — €299/mo</h3>
+          <ul>
+            <li>Advanced AI/NLP</li><li>Integrations</li><li>Unlimited convos</li>
+          </ul>
+          <a class="cta" href="/contact.html">Choose Premium</a>
+        </div>
       </div>
-
-      <p style="margin-top:16px;"><a class="cta" href="/contact.html">Start</a></p>
     </div>
   </main>
 
-  <footer class="footer">
-    <div class="container">© <span id="y"></span> BotMatic</div>
-  </footer>
-
+  <footer class="footer"><div class="container foot">© <span id="y"></span> BotMatic</div></footer>
+  <div class="scrim" data-scrim hidden></div>
   <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
-  <script src="/assets/main.js" defer></script>
+  <script src="/assets/main.js?v=3" defer></script>
 </body>
 </html>
