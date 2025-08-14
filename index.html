@@ -3,9 +3,10 @@
 <html lang="en" data-lang="en">
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <title>BotMatic — Custom Chatbots</title>
 
+  <!-- SEO / i18n -->
   <link rel="canonical" href="https://www.botmatic.be/"/>
   <link rel="alternate" href="https://www.botmatic.be/?lang=en" hreflang="en">
   <link rel="alternate" href="https://www.botmatic.be/?lang=nl" hreflang="nl">
@@ -18,52 +19,66 @@
   <meta property="og:url" content="https://www.botmatic.be/">
   <meta name="theme-color" content="#4f46e5">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/style.css?v=2">
+  <!-- Fonts & CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/assets/style.css?v=3">
 </head>
 <body data-page="home">
-  <header class="header">
+  <header class="header" role="banner">
     <div class="container nav">
-      <a href="/" class="brand">🤖 <strong>BotMatic</strong></a>
-      <nav class="menu" aria-label="Main">
+      <a href="/" class="brand" aria-label="BotMatic">🤖 <strong>BotMatic</strong></a>
+
+      <button class="mobile-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainmenu">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </button>
+
+      <nav class="menu" id="mainmenu" aria-label="Main">
         <a href="/" data-i18n="nav.home">Home</a>
         <a href="/pricing.html" data-i18n="nav.pricing">Pricing</a>
         <a href="/faq.html" data-i18n="nav.faq">FAQ</a>
         <a href="/contact.html" data-i18n="nav.contact">Contact</a>
       </nav>
+
       <div class="lang" aria-label="Language">
-        <button type="button" data-lang="en">EN</button>
-        <button type="button" data-lang="nl">NL</button>
-        <button type="button" data-lang="fr">FR</button>
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="nl" aria-pressed="false">NL</button>
+        <button type="button" data-lang="fr" aria-pressed="false">FR</button>
       </div>
     </div>
   </header>
 
-  <main class="main">
+  <main class="main" id="pjax-root">
     <div class="container">
       <h1 class="h1" data-i18n="home.title">Custom chatbots — shipped in 7–14 days</h1>
       <p class="lead" data-i18n="home.lead">WhatsApp, Telegram, Instagram & web. Simple setup, fast delivery, full customization.</p>
 
-      <div class="grid cols-3">
-        <div class="card" data-i18n="home.feature1">⚡ Fast delivery</div>
-        <div class="card" data-i18n="home.feature2">🧩 Custom flows</div>
-        <div class="card" data-i18n="home.feature3">🔌 Integrations</div>
+      <div class="grid cols-3 features-row">
+        <div class="card pill" data-i18n="home.feature1">⚡ Fast delivery</div>
+        <div class="card pill" data-i18n="home.feature2">🧩 Custom flows</div>
+        <div class="card pill" data-i18n="home.feature3">🔌 Integrations</div>
       </div>
 
-      <p style="margin-top:16px;">
+      <div class="cta-row">
         <a class="cta" href="/contact.html" data-i18n="home.ctaDemo">Get a demo</a>
         <a class="cta secondary" href="/pricing.html" data-i18n="home.ctaPricing">See pricing</a>
-      </p>
+      </div>
     </div>
   </main>
 
-  <footer class="footer">
-    <div class="container">© <span id="y"></span> BotMatic · <a href="https://github.com/testbotvanalex/web" target="_blank" rel="noopener">GitHub</a></div>
+  <footer class="footer" role="contentinfo">
+    <div class="container foot">
+      <div>© <span id="y"></span> BotMatic</div>
+      <div class="links">
+        <a href="https://github.com/testbotvanalex/web" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
   </footer>
 
+  <div class="scrim" data-scrim hidden></div>
+
   <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
-  <script src="/assets/main.js?v=2" defer></script>
+  <script src="/assets/main.js?v=3" defer></script>
 </body>
 </html>
