@@ -1,44 +1,70 @@
-<!-- index.html (Home) -->
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>BotMatic — Custom Chatbots</title>
-<link rel="canonical" href="https://www.botmatic.be/"/>
-<link rel="alternate" href="https://www.botmatic.be/?lang=en" hreflang="en">
-<link rel="alternate" href="https://www.botmatic.be/?lang=nl" hreflang="nl">
-<link rel="alternate" href="https://www.botmatic.be/?lang=fr" hreflang="fr">
-<link rel="alternate" href="https://www.botmatic.be/" hreflang="x-default">
-<meta name="description" content="Custom chatbots for WhatsApp, Telegram, Instagram & web. Shipped in 7–14 days.">
-<meta property="og:title" content="BotMatic — Custom Chatbots"><meta property="og:image" content="/og.jpg">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/style.css">
-</head><body data-page="home">
-<header class="header"><div class="container nav">
-  <a href="/" class="brand">🤖 <strong>BotMatic</strong></a>
-  <nav class="menu">
-    <a href="/" data-i18n="nav.home">Home</a>
-    <a href="/pricing.html" data-i18n="nav.pricing">Pricing</a>
-    <a href="/faq.html" data-i18n="nav.faq">FAQ</a>
-    <a href="/contact.html" data-i18n="nav.contact">Contact</a>
-  </nav>
-  <div class="lang">
-    <button type="button" data-lang="en">EN</button>
-    <button type="button" data-lang="nl">NL</button>
-    <button type="button" data-lang="fr">FR</button>
-  </div>
-</div></header>
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>BotMatic — Custom Chatbots</title>
 
-<main class="main"><div class="container">
-  <h1 class="h1" data-i18n="home.title">Custom chatbots — shipped in 7–14 days</h1>
-  <p class="lead" data-i18n="home.lead">WhatsApp, Telegram, Instagram & web…</p>
-  <div class="grid cols-3">
-    <div class="card">⚡ Fast delivery</div>
-    <div class="card">🧩 Custom flows</div>
-    <div class="card">🔌 Integrations</div>
-  </div>
-  <p><a class="cta" href="/contact.html">Get a demo</a> <a class="cta secondary" href="/pricing.html">See pricing</a></p>
-</div></main>
+  <!-- SEO / i18n -->
+  <link rel="canonical" href="https://www.botmatic.be/"/>
+  <link rel="alternate" href="https://www.botmatic.be/?lang=en" hreflang="en">
+  <link rel="alternate" href="https://www.botmatic.be/?lang=nl" hreflang="nl">
+  <link rel="alternate" href="https://www.botmatic.be/?lang=fr" hreflang="fr">
+  <link rel="alternate" href="https://www.botmatic.be/" hreflang="x-default">
+  <meta name="description" content="Custom chatbots for WhatsApp, Telegram, Instagram & web. Shipped in 7–14 days.">
+  <meta property="og:title" content="BotMatic — Custom Chatbots">
+  <meta property="og:description" content="We build and launch WhatsApp/Telegram/Instagram bots in 7–14 days.">
+  <meta property="og:image" content="/og.jpg">
+  <meta property="og:url" content="https://www.botmatic.be/">
+  <meta name="theme-color" content="#4f46e5">
 
-<footer class="footer"><div class="container">© BotMatic · <a href="https://github.com/testbotvanalex/web">GitHub</a></div></footer>
-<script src="/assets/main.js" defer></script>
-</body></html>
+  <!-- Fonts & CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body data-page="home">
+  <header class="header">
+    <div class="container nav">
+      <a href="/" class="brand">🤖 <strong>BotMatic</strong></a>
+      <nav class="menu" aria-label="Main">
+        <a href="/" data-i18n="nav.home">Home</a>
+        <a href="/pricing.html" data-i18n="nav.pricing">Pricing</a>
+        <a href="/faq.html" data-i18n="nav.faq">FAQ</a>
+        <a href="/contact.html" data-i18n="nav.contact">Contact</a>
+      </nav>
+      <div class="lang" aria-label="Language">
+        <button type="button" data-lang="en">EN</button>
+        <button type="button" data-lang="nl">NL</button>
+        <button type="button" data-lang="fr">FR</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="container">
+      <h1 class="h1" data-i18n="home.title">Custom chatbots — shipped in 7–14 days</h1>
+      <p class="lead" data-i18n="home.lead">WhatsApp, Telegram, Instagram & web. Simple setup, fast delivery, full customization.</p>
+
+      <div class="grid cols-3">
+        <div class="card">⚡ Fast delivery</div>
+        <div class="card">🧩 Custom flows</div>
+        <div class="card">🔌 Integrations</div>
+      </div>
+
+      <p style="margin-top:16px;">
+        <a class="cta" href="/contact.html">Get a demo</a>
+        <a class="cta secondary" href="/pricing.html">See pricing</a>
+      </p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">© <span id="y"></span> BotMatic · <a href="https://github.com/testbotvanalex/web" target="_blank" rel="noopener">GitHub</a></div>
+  </footer>
+
+  <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+  <script src="/assets/main.js" defer></script>
+</body>
+</html>
