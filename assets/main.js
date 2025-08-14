@@ -1,4 +1,4 @@
-// assets/main.js
+// assets/main.js (v2)
 (function(){
   const $=(q,d=document)=>d.querySelector(q), $$=(q,d=document)=>Array.from(d.querySelectorAll(q));
 
