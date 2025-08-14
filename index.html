@@ -1,200 +1,44 @@
-<!DOCTYPE html>
-<html lang="en" data-lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>BotMatic — Custom Chatbots (WhatsApp, Telegram, Instagram)</title>
-  <meta name="description" content="We build custom chatbots for WhatsApp, Telegram, Instagram & web. Simple setup, fast delivery (7–14 days), full customization.">
-  <link rel="canonical" href="https://www.botmatic.be/">
-  <link rel="alternate" href="https://www.botmatic.be/?lang=en" hreflang="en">
-  <link rel="alternate" href="https://www.botmatic.be/?lang=nl" hreflang="nl">
-  <link rel="alternate" href="https://www.botmatic.be/?lang=fr" hreflang="fr">
-  <link rel="alternate" href="https://www.botmatic.be/" hreflang="x-default">
-  <meta property="og:title" content="BotMatic — Custom Chatbots">
-  <meta property="og:description" content="We build and launch WhatsApp/Telegram/Instagram bots in 7–14 days.">
-  <meta property="og:image" content="https://www.botmatic.be/og.jpg">
-  <meta property="og:url" content="https://www.botmatic.be/">
-  <meta name="theme-color" content="#4f46e5">
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="/assets/style.css">
-</head>
-<body>
-  <header class="site-header">
-    <div class="container nav">
-      <a href="/" class="brand" aria-label="BotMatic">
-        <span class="brand-badge" aria-hidden="true">🤖</span>
-        <span class="brand-name">BotMatic</span>
-      </a>
-      <nav class="menu" id="mainmenu" aria-label="Main">
-        <a href="#features" data-i18n="nav.features">Features</a>
-        <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
-        <a href="#contact" data-i18n="nav.contact">Contact</a>
-        <a href="#contact" class="cta small" data-i18n="nav.demo">Get a Demo</a>
-      </nav>
-      <div class="lang">
-        <button type="button" data-lang="en" aria-label="English">EN</button>
-        <button type="button" data-lang="nl" aria-label="Nederlands">NL</button>
-        <button type="button" data-lang="fr" aria-label="Français">FR</button>
-        <button class="mobile-toggle" aria-expanded="false" aria-controls="mainmenu">☰</button>
-      </div>
-    </div>
-  </header>
+<!-- index.html (Home) -->
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BotMatic — Custom Chatbots</title>
+<link rel="canonical" href="https://www.botmatic.be/"/>
+<link rel="alternate" href="https://www.botmatic.be/?lang=en" hreflang="en">
+<link rel="alternate" href="https://www.botmatic.be/?lang=nl" hreflang="nl">
+<link rel="alternate" href="https://www.botmatic.be/?lang=fr" hreflang="fr">
+<link rel="alternate" href="https://www.botmatic.be/" hreflang="x-default">
+<meta name="description" content="Custom chatbots for WhatsApp, Telegram, Instagram & web. Shipped in 7–14 days.">
+<meta property="og:title" content="BotMatic — Custom Chatbots"><meta property="og:image" content="/og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-page="home">
+<header class="header"><div class="container nav">
+  <a href="/" class="brand">🤖 <strong>BotMatic</strong></a>
+  <nav class="menu">
+    <a href="/" data-i18n="nav.home">Home</a>
+    <a href="/pricing.html" data-i18n="nav.pricing">Pricing</a>
+    <a href="/faq.html" data-i18n="nav.faq">FAQ</a>
+    <a href="/contact.html" data-i18n="nav.contact">Contact</a>
+  </nav>
+  <div class="lang">
+    <button type="button" data-lang="en">EN</button>
+    <button type="button" data-lang="nl">NL</button>
+    <button type="button" data-lang="fr">FR</button>
+  </div>
+</div></header>
 
-  <main>
-    <!-- HERO -->
-    <section class="hero section" id="hero">
-      <div class="container hero-wrap">
-        <div>
-          <div class="hero-badges">
-            <span class="badge" data-i18n="hero.badge1">⚡ 7–14 days delivery</span>
-            <span class="badge" data-i18n="hero.badge2">🧩 Fully custom flows</span>
-            <span class="badge" data-i18n="hero.badge3">🔌 CRM & payments</span>
-          </div>
-          <h1 data-i18n="hero.title">Custom chatbots for WhatsApp, Telegram & Instagram — built fast</h1>
-          <p class="lead" data-i18n="hero.subtitle">We build bots that capture leads, qualify them and auto-book. Simple setup, rapid turnaround, ongoing support.</p>
-          <div class="actions">
-            <a href="#contact" class="cta" data-i18n="hero.ctaPrimary">Start a project</a>
-            <a href="#pricing" class="cta secondary" data-i18n="hero.ctaSecondary">See pricing</a>
-          </div>
-          <div class="hero-card">
-            <div class="hero-stat">
-              <div><strong>+32%</strong><div class="muted" data-i18n="stats.s1">Lead to chat rate</div></div>
-              <div><strong>×3</strong><div class="muted" data-i18n="stats.s2">Faster response</div></div>
-              <div><strong>60%</strong><div class="muted" data-i18n="stats.s3">Automated handling</div></div>
-            </div>
-          </div>
-        </div>
-        <div class="mockup">
-          <div class="phone" aria-hidden="true">
-            <div class="screen">
-              <div class="msg bot" data-i18n="demo.bot1">Hi! I’m BotMatic. What do you need help with?</div>
-              <div class="kb">
-                <span data-i18n="demo.k1">Book an appointment</span>
-                <span data-i18n="demo.k2">Prices</span>
-                <span data-i18n="demo.k3">Talk to agent</span>
-              </div>
-              <div class="msg user" data-i18n="demo.user1">Book a facial this Friday</div>
-              <div class="msg bot" data-i18n="demo.bot2">Great! Morning or afternoon works best?</div>
-              <div class="msg user" data-i18n="demo.user2">Afternoon</div>
-              <div class="msg bot" data-i18n="demo.bot3">Done ✅ 16:30 reserved. You’ll get a reminder 2h before.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+<main class="main"><div class="container">
+  <h1 class="h1" data-i18n="home.title">Custom chatbots — shipped in 7–14 days</h1>
+  <p class="lead" data-i18n="home.lead">WhatsApp, Telegram, Instagram & web…</p>
+  <div class="grid cols-3">
+    <div class="card">⚡ Fast delivery</div>
+    <div class="card">🧩 Custom flows</div>
+    <div class="card">🔌 Integrations</div>
+  </div>
+  <p><a class="cta" href="/contact.html">Get a demo</a> <a class="cta secondary" href="/pricing.html">See pricing</a></p>
+</div></main>
 
-    <!-- FEATURES -->
-    <section class="section" id="features">
-      <div class="container">
-        <h2 data-i18n="features.title">Why teams choose BotMatic</h2>
-        <p class="lead" data-i18n="features.lead">Everything you need to go from idea to a live, revenue-generating chatbot.</p>
-        <div class="grid features">
-          <article class="feature">
-            <div class="feat-icon">⚡</div>
-            <h3 data-i18n="features.f1.title">Fast delivery</h3>
-            <p data-i18n="features.f1.desc">From brief to launch in 7–14 days with tight feedback loops.</p>
-          </article>
-          <article class="feature">
-            <div class="feat-icon">🎛️</div>
-            <h3 data-i18n="features.f2.title">AI + buttons UX</h3>
-            <p data-i18n="features.f2.desc">Blend guided flows with AI answers for speed and control.</p>
-          </article>
-          <article class="feature">
-            <div class="feat-icon">🔌</div>
-            <h3 data-i18n="features.f3.title">Integrations</h3>
-            <p data-i18n="features.f3.desc">CRM, calendars, payments, Google Sheets — we connect your stack.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- PRICING -->
-    <section class="section" id="pricing">
-      <div class="container">
-        <h2 data-i18n="pricing.title">Simple pricing</h2>
-        <p class="lead" data-i18n="pricing.lead">Pick a plan — cancel or upgrade anytime.</p>
-        <div class="grid pricing">
-          <div class="plan" data-plan="Starter">
-            <div class="plan-h" data-i18n="pricing.starter.title">Starter</div>
-            <div class="price"><span data-i18n="pricing.starter.price">€29</span> <small>/mo</small></div>
-            <ul class="ul">
-              <li><span class="check">✓</span><span data-i18n="pricing.starter.l1">1 core flow (FAQ or lead capture)</span></li>
-              <li><span class="check">✓</span><span data-i18n="pricing.starter.l2">1 platform (e.g. WhatsApp)</span></li>
-              <li><span class="check">✓</span><span data-i18n="pricing.starter.l3">Up to 500 conversations/mo</span></li>
-            </ul>
-            <a href="#contact" class="cta wfull cta-plan" data-i18n="pricing.starter.cta">Choose Starter</a>
-          </div>
-          <div class="plan popular" data-plan="Standard">
-            <div class="plan-h" data-i18n="pricing.standard.title">Standard</div>
-            <div class="price"><span data-i18n="pricing.standard.price">€99</span> <small>/mo</small></div>
-            <ul class="ul">
-              <li><span class="check">✓</span><span data-i18n="pricing.standard.l1">Multi step flows (qualify + booking)</span></li>
-              <li><span class="check">✓</span><span data-i18n="pricing.standard.l2">2 platforms</span></li>
-              <li><span class="check">✓</span><span data-i18n="pricing.standard.l3">Priority support & updates</span></li>
-            </ul>
-            <a href="#contact" class="cta wfull cta-plan" data-i18n="pricing.standard.cta">Choose Standard</a>
-          </div>
-          <div class="plan" data-plan="Premium">
-            <div class="plan-h" data-i18n="pricing.premium.title">Premium</div>
-            <div class="price"><span data-i18n="pricing.premium.price">€299</span> <small>/mo</small></div>
-            <ul class="ul">
-              <li><span class="check">✓</span><span data-i18n="pricing.premium.l1">Advanced AI & NLP tuning</span></li>
-              <li><span class="check">✓</span><span data-i18n="pricing.premium.l2">Multi platform & integrations</span></li>
-              <li><span class="check">✓</span><span data-i18n="pricing.premium.l3">Dedicated PM & SLAs</span></li>
-            </ul>
-            <a href="#contact" class="cta wfull cta-plan" data-i18n="pricing.premium.cta">Choose Premium</a>
-          </div>
-        </div>
-        <p class="note" data-i18n="pricing.note">All plans include a free mini audit. Custom enterprise plans on request.</p>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section class="section" id="contact">
-      <div class="container">
-        <h2 data-i18n="contact.title">Tell us about your bot</h2>
-        <p class="lead" data-i18n="contact.lead">Share a few details and we’ll get back within 24 hours.</p>
-        <div class="contact-card">
-          <form id="contactForm" class="form">
-            <div class="grid form-grid">
-              <input class="input" name="name" placeholder="Jane Doe" aria-label="Full name" required
-                     data-i18n-placeholder="contact.name">
-              <input class="input" name="email" type="email" placeholder="you@company.com" aria-label="Work email" required
-                     data-i18n-placeholder="contact.email">
-            </div>
-            <textarea class="input" name="message" rows="4" placeholder="What should the bot do? Platforms, flows, integrations…"
-                      data-i18n-placeholder="contact.message"></textarea>
-            <label class="gdpr">
-              <input type="checkbox" name="gdpr" required>
-              <span data-i18n="contact.gdpr">I agree to be contacted about my request and accept the privacy policy.</span>
-            </label>
-            <div class="grid contact-actions">
-              <button class="cta" type="submit" data-i18n="contact.send">Send request</button>
-              <a class="cta secondary" href="mailto:hello@botmatic.be" data-i18n="contact.emailus">Email us</a>
-              <a class="cta secondary" id="whatsappLink" href="https://wa.me/32400000000" target="_blank" rel="noopener">WhatsApp</a>
-            </div>
-            <div id="contactOk" class="form-ok hidden">✓ Thanks! We will reply within 24h.</div>
-          </form>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer" role="contentinfo">
-    <div class="container foot">
-      <div class="foot-left">
-        <strong>BotMatic</strong>
-        <div class="muted" data-i18n="footer.tagline">Custom chatbots for WhatsApp, Telegram, Instagram & web.</div>
-      </div>
-      <div class="foot-right">
-        <a href="https://www.botmatic.be/" target="_blank" rel="noopener">botmatic.be</a>
-        <a href="https://github.com/testbotvanalex/web" target="_blank" rel="noopener">GitHub</a>
-      </div>
-    </div>
-  </footer>
-
-  <script src="/assets/main.js" defer></script>
-</body>
-</html>
+<footer class="footer"><div class="container">© BotMatic · <a href="https://github.com/testbotvanalex/web">GitHub</a></div></footer>
+<script src="/assets/main.js" defer></script>
+</body></html>
