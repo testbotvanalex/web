@@ -1,178 +1,79 @@
-/* assets/style.css (v6 — more colors, still clean & responsive) */
+/* === v7 polish === */
 :root{
-  --bg:#ffffff; --ink:#0f172a; --muted:#475569; --line:#e5e7eb;
-  --brand:#4f46e5; --brand-2:#7c6bf1; --ink-inv:#fff; --w:1080px;
-  --shadow:0 10px 30px rgba(2,6,23,.06);
-
-  /* Pastel palette */
-  --y-50:#fef9c3; --y-100:#fef08a;
-  --g-50:#eafff1; --g-100:#c6f6d5;
-  --b-50:#e6f1ff; --b-100:#bfdbfe;
-  --p-50:#eef2ff; --p-100:#c7d2fe;
-  --c-50:#ecfeff; --c-100:#a5f3fc;
-  --o-50:#fff7ed; --o-100:#fed7aa;
-
-  --r-sm:12px; --r:14px; --r-lg:18px;
+  --container:1080px;
+  --h1:clamp(26px,3.6vw,40px);
+  --h2:clamp(18px,2.2vw,22px);
 }
-*{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,Arial,sans-serif;-webkit-text-size-adjust:100%}
-a{text-decoration:none;color:inherit}
-img,svg{max-width:100%;display:block}
-.container{max-width:var(--w);margin:0 auto;padding:0 18px}
-.hidden{display:none!important}
-.muted{color:var(--muted)}
+/* контейнер ровнее */
+.container{max-width:var(--container);margin:0 auto;padding:0 16px}
 
-/* ===== Header */
-.header{
-  position:sticky;top:0;z-index:40;
-  background:rgba(255,255,255,.92);
-  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
-  border-bottom:1px solid var(--line);
-  box-shadow:0 6px 22px rgba(2,6,23,.04)
-}
-.nav{height:60px;display:flex;gap:14px;align-items:center;justify-content:space-between}
-.brand{display:flex;gap:10px;align-items:center;font-weight:900}
-
-/* Menu */
-.menu{display:flex;gap:14px;align-items:center}
-.menu a{
-  color:var(--muted);font-weight:700;padding:8px 10px;border-radius:10px;
-  transition:background .2s ease, color .2s ease, transform .2s ease
-}
-.menu a:hover{background:#f8fafc;color:#111;transform:translateY(-1px)}
-.menu a.active{color:#111;background:#f8fafc}
-
-/* Lang pills */
-.lang{display:flex;gap:6px}
-.lang button{
-  padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;
-  color:#475569;font-weight:800;cursor:pointer;min-width:44px;min-height:36px;
-  transition:all .2s ease
-}
-.lang button:hover{background:#f1f5f9}
-.lang button.active{background:var(--p-50);color:#3730a3;border-color:var(--p-100)}
-
-/* Hamburger */
-.mobile-toggle{
-  display:inline-flex;flex-direction:column;gap:4px;background:#fff;border:1px solid var(--line);
-  border-radius:10px;padding:8px;cursor:pointer;box-shadow:var(--shadow)
-}
-.mobile-toggle .bar{width:20px;height:2px;background:#0f172a;display:block;border-radius:2px}
-@media (min-width:900px){.mobile-toggle{display:none}}
-
-/* Mobile menu overlay */
-.scrim[hidden]{display:none}
-.scrim{position:fixed;inset:0;background:rgba(2,6,23,.5);z-index:30}
-.menu{position:static;background:transparent;padding:0}
-@media (max-width:899px){
-  .menu{
-    position:fixed;inset:60px 0 auto 0;background:#fff;border-bottom:1px solid var(--line);
-    transform:translateY(-120%);transition:transform .2s ease;z-index:40;display:grid;padding:12px 18px
-  }
-  .menu.open{transform:translateY(0)}
-  body.menu-open{overflow:hidden}
-}
-
-/* ===== Main layout (colorful hero) */
+/* hero плотнее и чище */
 .main{
-  padding:28px 0;
+  padding:22px 0 26px; /* было 28-36 */
   background:
-    radial-gradient(1000px 380px at 50% -180px, var(--p-50), transparent 60%),
-    radial-gradient(800px 320px at 10% -120px, var(--c-50), transparent 60%),
-    radial-gradient(800px 320px at 90% -120px, #f0f9ff, transparent 60%);
+    radial-gradient(900px 320px at 50% -160px, var(--p-50), transparent 60%),
+    radial-gradient(700px 260px at 90% -120px, #f0f9ff, transparent 60%);
 }
-.section{margin-top:34px}
-.h1{font-weight:900;letter-spacing:-.01em;margin:0 0 8px;font-size:clamp(26px,4.2vw,42px);line-height:1.18}
-.h2{margin:0 0 12px;font-size:clamp(18px,2.8vw,24px);letter-spacing:-.01em}
-.grid{display:grid;gap:12px}
-.cols-3{grid-template-columns:1fr}
+.h1{font-size:var(--h1);line-height:1.16;margin:0 0 6px}
+.h2{font-size:var(--h2);margin:0 0 10px}
 
-/* Feature pills — colorized */
-.card{
-  background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:12px;box-shadow:var(--shadow);
-  transition:transform .2s ease, box-shadow .2s ease
+/* feature pills — контрастнее и аккуратнее */
+.features-row .card{
+  min-height:52px;align-items:center;
+  box-shadow:0 6px 18px rgba(2,6,23,.06); /* тень легче */
 }
-.card:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(2,6,23,.08)}
-.pill{border-radius:var(--r-lg);padding:14px}
-.features-row .card{min-height:54px;display:flex;align-items:center}
-.features-row .card:nth-child(1){background:linear-gradient(0deg, var(--y-50), #fff);}
-.features-row .card:nth-child(2){background:linear-gradient(0deg, var(--g-50), #fff);}
-.features-row .card:nth-child(3){background:linear-gradient(0deg, var(--b-50), #fff);}
+.features-row .card:nth-child(1){
+  background:linear-gradient(180deg,#fff 65%, var(--y-50));
+}
+.features-row .card:nth-child(2){
+  background:linear-gradient(180deg,#fff 65%, var(--g-50));
+}
+.features-row .card:nth-child(3){
+  background:linear-gradient(180deg,#fff 65%, var(--b-50));
+}
+.card:hover{transform:translateY(-1px);box-shadow:0 10px 26px rgba(2,6,23,.07)}
 
-/* CTA row — brand gradient */
-.cta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+/* CTA — меньше «пухлости» + быстрый tap‑feedback */
 .cta{
-  display:inline-flex;align-items:center;justify-content:center;padding:12px 16px;border-radius:12px;
-  background:linear-gradient(135deg, var(--brand), var(--brand-2));
-  color:var(--ink-inv);font-weight:800;border:1px solid #4338ca;min-height:44px;
-  box-shadow:0 8px 22px rgba(79,70,229,.25); transition:transform .15s ease, filter .15s ease
+  box-shadow:0 6px 16px rgba(79,70,229,.22);
+  transform:translateZ(0);
 }
-.cta:hover{filter:brightness(1.03);transform:translateY(-1px)}
-.cta.secondary{
-  background:linear-gradient(135deg, var(--p-50), #fff);
-  color:#3730a3;border-color:var(--p-100);box-shadow:0 8px 22px rgba(39,61,194,.08)
-}
+.cta:active{transform:translateY(1px)}
 
-/* Trust strip */
-.trust{display:grid;gap:10px;margin:20px 0 6px}
-.trust-logos{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-@media (min-width:640px){.trust-logos{grid-template-columns:repeat(4,1fr)}}
-.trust svg{width:100%;height:auto;border-radius:10px;box-shadow:var(--shadow)}
+/* trust strip компактнее */
+.trust{margin:16px 0 2px}
+.trust-logos{gap:8px}
+.trust svg{box-shadow:0 4px 12px rgba(2,6,23,.05)}
 
-/* Use cases — colorful icons */
-.usecases{grid-template-columns:1fr}
-.uc{display:grid;gap:8px;background:linear-gradient(0deg,#fff, #fafafa)}
-.uc-ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-size:18px}
-.usecases .uc:nth-child(1) .uc-ic{background:var(--y-50);box-shadow:0 0 0 1px var(--y-100) inset}
-.usecases .uc:nth-child(2) .uc-ic{background:var(--g-50);box-shadow:0 0 0 1px var(--g-100) inset}
-.usecases .uc:nth-child(3) .uc-ic{background:var(--p-50);box-shadow:0 0 0 1px var(--p-100) inset}
-.usecases .uc:nth-child(4) .uc-ic{background:var(--b-50);box-shadow:0 0 0 1px var(--b-100) inset}
-@media (min-width:700px){.usecases{grid-template-columns:repeat(4,1fr)}}
+/* разделители секций — лёгкие */
+.section{margin-top:28px;padding-top:14px;border-top:1px solid #f2f4f8}
 
-/* Steps — numbered bubbles with colors */
-.steps{grid-template-columns:1fr}
-.step{display:grid;gap:6px;background:linear-gradient(0deg,#fff,#fbfdff)}
-.step-num{width:28px;height:28px;border-radius:999px;display:grid;place-items:center;font-weight:900;color:#111}
-.steps .step:nth-child(1) .step-num{background:var(--p-50);box-shadow:0 0 0 2px var(--p-100) inset}
-.steps .step:nth-child(2) .step-num{background:var(--g-50);box-shadow:0 0 0 2px var(--g-100) inset}
-.steps .step:nth-child(3) .step-num{background:var(--b-50);box-shadow:0 0 0 2px var(--b-100) inset}
-@media (min-width:800px){.steps{grid-template-columns:repeat(3,1fr)}}
+/* use-cases — одинаковая высота, ярче заголовки */
+.usecases{grid-auto-rows:1fr}
+.uc{display:grid;grid-template-rows:auto auto 1fr;gap:8px}
+.uc h3{font-weight:800;letter-spacing:-.01em}
+.uc .muted{color:#55627a}
 
-/* Testimonial — soft tint */
+/* steps — стройнее */
+.step{gap:4px}
+.step-num{width:26px;height:26px;font-size:13px}
+
+/* testimonial — компактнее, меньше градиента */
 .testimonial{
-  display:grid;gap:10px;align-items:center;margin-top:26px;
-  background:linear-gradient(180deg, #ffffff, var(--p-50));
-  border:1px solid var(--p-100)
+  background:linear-gradient(180deg,#fff, #f6f7ff);
+  box-shadow:0 6px 18px rgba(2,6,23,.06)
 }
-.testimonial .avatar{width:56px}
-.testimonial blockquote{margin:0;font-size:clamp(14px,2.4vw,16px)}
-.testimonial .by{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.testimonial .name{font-weight:800}
 
-/* Forms (contact page) */
-.form-card{max-width:640px;margin:0 auto}
-.form-grid{grid-template-columns:1fr}
-.input, textarea{
-  width:100%;border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff;font:inherit;
-  transition:border-color .15s ease, box-shadow .15s ease
+/* footer — плотнее */
+.footer{padding:18px 0}
+
+/* ===== Sticky mobile CTA (новое) ===== */
+.sticky-cta{
+  position:sticky;bottom:0;inset-inline:0;z-index:35;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
+  border-top:1px solid var(--line);
+  padding:10px 16px;
 }
-.input:hover, textarea:hover{border-color:#cbd5e1}
-.input:focus, textarea:focus{outline:2px solid var(--p-100);border-color:var(--p-100);box-shadow:0 0 0 3px rgba(199,210,254,.35)}
-
-/* Pricing grid compatibility */
-.plans{grid-template-columns:1fr}
-.plan.popular{border:2px solid var(--p-100)}
-@media (min-width:900px){.plans{grid-template-columns:repeat(3,1fr)}}
-
-/* Footer */
-.footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted);background:linear-gradient(0deg,#fff,#fafafa)}
-.foot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-
-/* Responsive tweaks */
-@media (min-width:600px){.main{padding:32px 0}.cols-3{grid-template-columns:repeat(2,1fr)}}
-@media (min-width:900px){.main{padding:36px 0}.cols-3{grid-template-columns:repeat(3,1fr)}}
-
-/* Accessibility / motion */
-:focus-visible{outline:2px solid var(--p-100);outline-offset:2px;border-radius:10px}
-button,a{touch-action:manipulation}
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+.sticky-cta .row{display:flex;gap:10px}
+.sticky-cta .cta{flex:1}
+@media (min-width:700px){.sticky-cta{display:none}}
