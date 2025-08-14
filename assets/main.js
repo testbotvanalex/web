@@ -1,5 +1,6 @@
 (function(){
   const $=(q,d=document)=>d.querySelector(q), $$=(q,d=document)=>Array.from(d.querySelectorAll(q));
+
   const I18N={
     en:{nav:{home:"Home",pricing:"Pricing",faq:"FAQ",contact:"Contact"},
         home:{title:"Custom chatbots — shipped in 7–14 days",lead:"WhatsApp, Telegram, Instagram & web. Simple setup, fast delivery, full customization."},
@@ -18,26 +19,28 @@
         contact:{title:"Contact",lead:"Parlez‑nous de votre bot — réponse sous 24h."}}
   };
 
-  function setLang(lang){
+  function translate(lang){
     const dict=I18N[lang]||I18N.en;
-    document.documentElement.lang=lang; document.body.dataset.lang=lang;
+    document.documentElement.lang=lang;
     $$('[data-i18n]').forEach(el=>{
-      const path=el.dataset.i18n.split('.'); let val=dict; for(const k of path){ val=val?.[k]; }
-      if(typeof val==='string') el.textContent=val;
+      const path=el.getAttribute('data-i18n').split('.');
+      let v=dict; for(const k of path){ v=v?.[k]; }
+      if(typeof v==='string') el.textContent=v;
     });
     $$('.lang button').forEach(b=>b.classList.toggle('active', b.dataset.lang===lang));
     try{ localStorage.setItem('lang',lang); const u=new URL(location.href); u.searchParams.set('lang',lang); history.replaceState(null,'',u); }catch{}
   }
 
   document.addEventListener('DOMContentLoaded', ()=>{
-    // активный пункт меню
+    // active menu item
     const path=location.pathname.replace(/\/+$/,'')||'/';
     $$('.menu a').forEach(a=>a.classList.toggle('active', a.getAttribute('href')===path));
 
-    // язык
+    // language init + handlers
     let qp=null; try{ qp=new URL(location.href).searchParams.get('lang'); }catch{}
-    const saved=localStorage.getItem('lang'); const initial=(qp&&I18N[qp])?qp:(saved&&I18N[saved])?saved:'en';
-    setLang(initial);
-    $$('.lang button').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
+    const saved=localStorage.getItem('lang');
+    const initial=(qp&&I18N[qp])?qp:(saved&&I18N[saved])?saved:'en';
+    translate(initial);
+    $$('.lang button').forEach(b=>b.addEventListener('click',()=>translate(b.dataset.lang)));
   });
 })();
