@@ -1,44 +1,48 @@
+<!-- contact.html -->
 <!DOCTYPE html>
 <html lang="en" data-lang="en">
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <title>Contact — BotMatic</title>
   <link rel="canonical" href="https://www.botmatic.be/contact.html"/>
   <meta name="description" content="Tell us about your bot — we reply within 24h.">
   <meta property="og:title" content="Contact — BotMatic">
   <meta property="og:image" content="/og.jpg">
-  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="/assets/style.css?v=3">
 </head>
 <body data-page="contact">
-  <header class="header">
+  <header class="header" role="banner">
     <div class="container nav">
-      <a href="/" class="brand">🤖 <strong>BotMatic</strong></a>
-      <nav class="menu" aria-label="Main">
+      <a href="/" class="brand" aria-label="BotMatic">🤖 <strong>BotMatic</strong></a>
+      <button class="mobile-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainmenu">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </button>
+      <nav class="menu" id="mainmenu" aria-label="Main">
         <a href="/" data-i18n="nav.home">Home</a>
         <a href="/pricing.html" data-i18n="nav.pricing">Pricing</a>
         <a href="/faq.html" data-i18n="nav.faq">FAQ</a>
         <a href="/contact.html" class="active" data-i18n="nav.contact">Contact</a>
       </nav>
       <div class="lang">
-        <button type="button" data-lang="en">EN</button>
-        <button type="button" data-lang="nl">NL</button>
-        <button type="button" data-lang="fr">FR</button>
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="nl" aria-pressed="false">NL</button>
+        <button type="button" data-lang="fr" aria-pressed="false">FR</button>
       </div>
     </div>
   </header>
 
-  <main class="main">
+  <main class="main" id="pjax-root">
     <div class="container">
       <h1 class="h1" data-i18n="contact.title">Contact</h1>
       <p class="lead" data-i18n="contact.lead">Tell us about your bot — we reply within 24h.</p>
 
-      <div class="card" style="max-width:600px">
-        <form id="contactForm" class="grid" style="gap:10px">
+      <div class="card form-card">
+        <form id="contactForm" class="grid form-grid" novalidate>
           <input class="input" name="name" placeholder="Jane Doe" required>
           <input class="input" name="email" type="email" placeholder="you@company.com" required>
           <textarea class="input" name="message" rows="4" placeholder="What should the bot do?"></textarea>
-          <label><input type="checkbox" name="gdpr" required> I agree to be contacted.</label>
+          <label class="gdpr"><input type="checkbox" name="gdpr" required> I agree to be contacted.</label>
           <button class="cta" type="submit">Send</button>
           <div id="contactOk" class="hidden">✓ Thanks! We will reply within 24h.</div>
         </form>
@@ -46,25 +50,9 @@
     </div>
   </main>
 
-  <footer class="footer">
-    <div class="container">© <span id="y"></span> BotMatic</div>
-  </footer>
-
+  <footer class="footer"><div class="container foot">© <span id="y"></span> BotMatic</div></footer>
+  <div class="scrim" data-scrim hidden></div>
   <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
-  <script>
-    document.getElementById('contactForm')?.addEventListener('submit', e=>{
-      e.preventDefault();
-      const ok=document.getElementById('contactOk');
-      const lang=document.documentElement.lang||'en';
-      const map={
-        en:"✓ Thanks! We will reply within 24h.",
-        nl:"✓ Bedankt! We reageren binnen 24 uur.",
-        fr:"✓ Merci ! Réponse sous 24 h."
-      };
-      if(ok){ ok.textContent=map[lang]||map.en; ok.classList.remove('hidden'); }
-      e.target.reset();
-    });
-  </script>
-  <script src="/assets/main.js" defer></script>
+  <script src="/assets/main.js?v=3" defer></script>
 </body>
 </html>
