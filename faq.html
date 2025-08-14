@@ -1,51 +1,53 @@
+<!-- faq.html -->
 <!DOCTYPE html>
 <html lang="en" data-lang="en">
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <title>FAQ — BotMatic</title>
   <link rel="canonical" href="https://www.botmatic.be/faq.html"/>
   <meta name="description" content="FAQ about timelines, channels, integrations, support.">
   <meta property="og:title" content="FAQ — BotMatic">
   <meta property="og:image" content="/og.jpg">
-  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="/assets/style.css?v=3">
 </head>
 <body data-page="faq">
-  <header class="header">
+  <header class="header" role="banner">
     <div class="container nav">
-      <a href="/" class="brand">🤖 <strong>BotMatic</strong></a>
-      <nav class="menu" aria-label="Main">
+      <a href="/" class="brand" aria-label="BotMatic">🤖 <strong>BotMatic</strong></a>
+      <button class="mobile-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainmenu">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </button>
+      <nav class="menu" id="mainmenu" aria-label="Main">
         <a href="/" data-i18n="nav.home">Home</a>
         <a href="/pricing.html" data-i18n="nav.pricing">Pricing</a>
         <a href="/faq.html" class="active" data-i18n="nav.faq">FAQ</a>
         <a href="/contact.html" data-i18n="nav.contact">Contact</a>
       </nav>
       <div class="lang">
-        <button type="button" data-lang="en">EN</button>
-        <button type="button" data-lang="nl">NL</button>
-        <button type="button" data-lang="fr">FR</button>
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="nl" aria-pressed="false">NL</button>
+        <button type="button" data-lang="fr" aria-pressed="false">FR</button>
       </div>
     </div>
   </header>
 
-  <main class="main">
+  <main class="main" id="pjax-root">
     <div class="container">
       <h1 class="h1" data-i18n="faq.title">FAQ</h1>
       <p class="lead" data-i18n="faq.lead">Answers to common questions.</p>
 
-      <div class="grid">
-        <div class="card"><strong>How fast?</strong><br>Most bots ship in 7–14 days.</div>
-        <div class="card"><strong>Which channels?</strong><br>WhatsApp, Telegram, Instagram, web.</div>
-        <div class="card"><strong>Integrations?</strong><br>CRM, calendars, payments, webhooks.</div>
+      <div class="faq">
+        <details class="card"><summary>How fast?</summary><p>Most bots ship in 7–14 days.</p></details>
+        <details class="card"><summary>Which channels?</summary><p>WhatsApp, Telegram, Instagram, web.</p></details>
+        <details class="card"><summary>Integrations?</summary><p>CRM, calendars, payments, webhooks.</p></details>
       </div>
     </div>
   </main>
 
-  <footer class="footer">
-    <div class="container">© <span id="y"></span> BotMatic</div>
-  </footer>
-
+  <footer class="footer"><div class="container foot">© <span id="y"></span> BotMatic</div></footer>
+  <div class="scrim" data-scrim hidden></div>
   <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
-  <script src="/assets/main.js" defer></script>
+  <script src="/assets/main.js?v=3" defer></script>
 </body>
 </html>
