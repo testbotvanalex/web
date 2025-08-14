@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Contact — BotMatic</title>
+<link rel="canonical" href="https://www.botmatic.be/contact.html"/>
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-page="contact">
+<header class="header"><div class="container nav">
+  <a href="/" class="brand">🤖 <strong>BotMatic</strong></a>
+  <nav class="menu">
+    <a href="/">Home</a><a href="/pricing.html">Pricing</a><a href="/faq.html">FAQ</a><a href="/contact.html" class="active">Contact</a>
+  </nav>
+  <div class="lang"><button data-lang="en">EN</button><button data-lang="nl">NL</button><button data-lang="fr">FR</button></div>
+</div></header>
+<main class="main"><div class="container">
+  <h1 class="h1" data-i18n="contact.title">Contact</h1>
+  <p class="lead" data-i18n="contact.lead">Tell us about your bot — we reply within 24h.</p>
+  <div class="card">
+    <form id="contactForm" class="grid" style="gap:10px;max-width:560px">
+      <input class="input" name="name" placeholder="Jane Doe" required>
+      <input class="input" name="email" type="email" placeholder="you@company.com" required>
+      <textarea class="input" name="message" rows="4" placeholder="What should the bot do?"></textarea>
+      <label><input type="checkbox" required> I agree to be contacted.</label>
+      <button class="cta" type="submit">Send</button>
+      <div id="contactOk" class="hidden">✓ Thanks! We will reply within 24h.</div>
+    </form>
+  </div>
+</div></main>
+<footer class="footer"><div class="container">© BotMatic</div></footer>
+<script src="/assets/main.js" defer></script>
+<script>
+document.getElementById('contactForm')?.addEventListener('submit',e=>{
+  e.preventDefault(); document.getElementById('contactOk').classList.remove('hidden'); e.target.reset();
+});
+</script>
+</body></html>
