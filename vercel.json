@@ -1,9 +1,7 @@
 {
   "redirects": [
-    { "source": "/prijzen", "destination": "/#pricing", "permanent": true },
-    { "source": "/basis-abonnement", "destination": "/#pricing", "permanent": true },
-    { "source": "/standaard-abonnement", "destination": "/#pricing", "permanent": true },
-    { "source": "/premium-abonnement", "destination": "/#pricing", "permanent": true },
-    { "source": "/chatbots", "destination": "/#features", "permanent": true }
+    { "source": "/pricing", "destination": "/pricing.html", "permanent": true },
+    { "source": "/faq", "destination": "/faq.html", "permanent": true },
+    { "source": "/contact", "destination": "/contact.html", "permanent": true }
   ]
 }
