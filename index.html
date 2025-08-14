@@ -1,213 +1,319 @@
 <!-- index.html -->
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="nl" data-lang="nl">
 <head>
-  <!-- ========= META / SEO / OPEN GRAPH ========= -->
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>BotMatic — WhatsApp, Telegram & Instagram chatbots in 7–14 days</title>
-  <meta name="description" content="Custom chatbots for WhatsApp, Telegram, Instagram. Lead capture, qualification, booking and payments. Fast 7–14 day delivery. Available in EN/NL/FR." />
-  <link rel="canonical" href="https://www.botmatic.be/" />
-  <link rel="alternate" href="https://www.botmatic.be/" hreflang="en" />
-  <link rel="alternate" href="https://www.botmatic.be/nl/" hreflang="nl" />
-  <link rel="alternate" href="https://www.botmatic.be/fr/" hreflang="fr" />
-  <link rel="alternate" href="https://www.botmatic.be/" hreflang="x-default" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://www.botmatic.be/" />
-  <meta property="og:title" content="BotMatic — WhatsApp, Telegram & Instagram chatbots in 7–14 days" />
-  <meta property="og:description" content="We design and ship custom chatbots in 7–14 days. Lead capture, qualification, booking and payments. EN/NL/FR." />
-  <meta property="og:image" content="https://www.botmatic.be/og-image.jpg" />
-  <meta property="og:locale" content="en_US" />
-  <meta property="og:locale:alternate" content="nl_BE" />
-  <meta property="og:locale:alternate" content="fr_BE" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="BotMatic — WhatsApp, Telegram & Instagram chatbots in 7–14 days" />
-  <meta name="twitter:description" content="Custom chatbots delivered fast. EN/NL/FR." />
-  <meta name="twitter:image" content="https://www.botmatic.be/og-image.jpg" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>BotMatic — Custom Chatbots</title>
+  <meta name="description" content="Simple. Fast. Custom chatbots for WhatsApp, Telegram, Instagram & web."/>
+  <link rel="canonical" href="https://www.botmatic.be/">
+  <meta name="theme-color" content="#4f46e5"/>
 
-  <link rel="stylesheet" href="./style.css" />
+  <!-- Open Graph / Twitter -->
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="BotMatic — Custom Chatbots"/>
+  <meta property="og:description" content="We build and launch WhatsApp/Telegram/Instagram bots in 7–14 days."/>
+  <meta property="og:image" content="https://www.botmatic.be/og.jpg"/>
+  <meta property="og:url" content="https://www.botmatic.be/"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <!-- ========= HEADER ========= -->
-  <header class="header" role="banner">
-    <div class="container header__row">
-      <a class="logo" href="/" aria-label="BotMatic home">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" class="logo__icon">
-          <rect x="2" y="3" width="20" height="14" rx="4" stroke="currentColor" stroke-width="2"/>
-          <circle cx="7.5" cy="10" r="1.5" fill="currentColor"/>
-          <circle cx="12" cy="10" r="1.5" fill="currentColor"/>
-          <circle cx="16.5" cy="10" r="1.5" fill="currentColor"/>
-          <path d="M8 19.5h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-        <span>BotMatic</span>
-      </a>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="nav" aria-label="Primary">
+        <a class="brand" href="#top">
+          <span class="brand-badge" aria-hidden="true">🤖</span>
+          <span class="brand-name">BotMatic</span>
+        </a>
 
-      <nav class="lang" aria-label="Language">
-        <button type="button" data-lang="en" aria-current="true">EN</button>
-        <button type="button" data-lang="nl">NL</button>
-        <button type="button" data-lang="fr">FR</button>
+        <div class="lang" aria-label="Language">
+          <button type="button" data-lang="en">EN</button>
+          <button type="button" class="active" data-lang="nl">NL</button>
+          <button type="button" data-lang="fr">FR</button>
+        </div>
+
+        <button class="mobile-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainmenu">☰</button>
+
+        <div id="mainmenu" class="menu" role="menu">
+          <a href="#features" role="menuitem" data-i18n="nav.features">Features</a>
+          <a href="#pricing" role="menuitem" data-i18n="nav.pricing">Pricing</a>
+          <a href="#contact" role="menuitem" data-i18n="nav.contact">Contact</a>
+          <a href="#demo" role="menuitem" class="cta" style="padding:8px 12px;border-radius:10px;" data-i18n="nav.demo">Get a Demo</a>
+        </div>
       </nav>
-
-      <div class="cta">
-        <button class="btn" id="ctaStart" data-i18n="cta_start">Start a project</button>
-        <button class="btn btn--primary" id="ctaDemo" data-i18n="cta_demo">Get a demo</button>
-      </div>
     </div>
   </header>
 
-  <!-- ========= HERO + CONTACT ========= -->
-  <section class="hero" aria-labelledby="hero-title">
-    <div class="container hero__grid">
-      <div>
-        <span class="eyebrow" data-i18n="eyebrow">Custom chatbots in 7–14 days</span>
-        <h1 class="h1" id="hero-title" data-i18n="h1">We build WhatsApp, Telegram & Instagram chatbots — fast</h1>
-        <p class="lead" data-i18n="lead">
-          Simple setup, quick delivery, fully tailored flows for lead capture, qualification, booking and payments.
-        </p>
+  <!-- Main -->
+  <main id="top">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container hero-wrap">
+        <div>
+          <div class="hero-badges">
+            <span class="badge" data-i18n="hero.badge1">⚡ 7–14 days delivery</span>
+            <span class="badge" data-i18n="hero.badge2">🧩 Fully custom flows</span>
+            <span class="badge" data-i18n="hero.badge3">🔌 CRM & payments</span>
+          </div>
+          <h1 data-i18n="hero.title">Custom chatbots for WhatsApp, Telegram & Instagram — built fast</h1>
+          <p data-i18n="hero.subtitle">We build bots that capture leads, qualify them and auto book. Simple setup, rapid turnaround, ongoing support.</p>
+          <div class="actions">
+            <a href="#contact" class="cta" data-i18n="hero.ctaPrimary">Start a project</a>
+            <a href="#pricing" class="cta secondary" data-i18n="hero.ctaSecondary">See pricing</a>
+          </div>
 
-        <div class="badges" aria-label="Highlights">
-          <span class="badge" data-i18n="badge1">Avg. go‑live: 9 days</span>
-          <span class="badge" data-i18n="badge2">GDPR‑ready</span>
-          <span class="badge" data-i18n="badge3">EN / NL / FR</span>
+          <div class="hero-card">
+            <div class="hero-stat">
+              <div><strong>40%+</strong><br/><small data-i18n="stats.s1">Lead to chat rate</small></div>
+              <div><strong>2×</strong><br/><small data-i18n="stats.s2">Faster response</small></div>
+              <div><strong>24/7</strong><br/><small data-i18n="stats.s3">Automated handling</small></div>
+            </div>
+          </div>
         </div>
 
-        <div class="cta">
-          <button class="btn" data-i18n="cta_start" onclick="openStartProject()"></button>
-          <button class="btn btn--primary" data-i18n="cta_demo" onclick="openDemoModal()"></button>
+        <!-- Mock phone -->
+        <div class="mockup" id="demo" aria-label="Chat demo">
+          <div class="phone">
+            <div class="screen">
+              <div class="msg bot" data-i18n="demo.bot1">Hi! I’m BotMatic. What do you need help with?</div>
+              <div class="kb">
+                <span data-i18n="demo.k1">Book an appointment</span><span data-i18n="demo.k2">Prices</span><span data-i18n="demo.k3">Talk to agent</span>
+              </div>
+              <div class="msg user" data-i18n="demo.user1">Book a facial this Friday</div>
+              <div class="msg bot" data-i18n="demo.bot2">Great! Morning or afternoon works best?</div>
+              <div class="msg user" data-i18n="demo.user2">Afternoon</div>
+              <div class="msg bot" data-i18n="demo.bot3">Done ✅ 16:30 reserved. You’ll get a reminder 2h before.</div>
+            </div>
+          </div>
         </div>
       </div>
+    </section>
 
-      <aside class="card" aria-labelledby="form-title" id="contact">
-        <h2 id="form-title" data-i18n="form_title">Tell us about your bot</h2>
-        <form id="leadForm" novalidate>
-          <div class="row">
-            <div>
-              <label for="name" data-i18n="label_name">Name</label>
-              <input class="input" id="name" name="name" autocomplete="name" required />
-              <div class="error" id="err-name" data-i18n="err_required">This field is required.</div>
+    <!-- STEP 1: Use‑case tiles -->
+    <section id="usecases" class="section">
+      <div class="container">
+        <h2 data-i18n="funnel.step1.title">What do you want to build?</h2>
+        <p class="lead" data-i18n="funnel.step1.lead">Pick a use case. We’ll tailor the plan in 30 seconds.</p>
+        <div class="grid cases">
+          <button class="case" data-case="lead">
+            <span class="case-ic">📥</span>
+            <span class="case-t" data-i18n="funnel.cases.lead">Lead capture</span>
+          </button>
+          <button class="case" data-case="qualify">
+            <span class="case-ic">🧮</span>
+            <span class="case-t" data-i18n="funnel.cases.qualify">Qualification</span>
+          </button>
+          <button class="case" data-case="booking">
+            <span class="case-ic">🗓️</span>
+            <span class="case-t" data-i18n="funnel.cases.booking">Booking</span>
+          </button>
+          <button class="case" data-case="payments">
+            <span class="case-ic">💳</span>
+            <span class="case-t" data-i18n="funnel.cases.payments">Payments / Shop</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 2: Mini‑quiz -->
+    <section id="quiz" class="section quiz hidden" aria-hidden="true">
+      <div class="container">
+        <h2 data-i18n="funnel.step2.title">Tell us a bit more</h2>
+        <p class="lead" data-i18n="funnel.step2.lead">3 quick choices — channels, integrations and timeline.</p>
+
+        <form id="quizForm" class="quiz-form" onsubmit="return false">
+          <fieldset>
+            <legend data-i18n="funnel.q.channels.title">Which channels?</legend>
+            <div class="chips" role="group" aria-label="Channels">
+              <label><input type="checkbox" value="WhatsApp"><span>WhatsApp</span></label>
+              <label><input type="checkbox" value="Instagram"><span>Instagram</span></label>
+              <label><input type="checkbox" value="Telegram"><span>Telegram</span></label>
+              <label><input type="checkbox" value="Web"><span>Web</span></label>
             </div>
-            <div>
-              <label for="company" data-i18n="label_company">Company</label>
-              <input class="input" id="company" name="company" autocomplete="organization" required />
-              <div class="error" id="err-company" data-i18n="err_required">This field is required.</div>
+          </fieldset>
+
+          <fieldset>
+            <legend data-i18n="funnel.q.integrations.title">Integrations</legend>
+            <div class="chips" role="group" aria-label="Integrations">
+              <label><input type="checkbox" value="Google Sheets"><span>Google Sheets</span></label>
+              <label><input type="checkbox" value="Calendly"><span>Calendly</span></label>
+              <label><input type="checkbox" value="Stripe"><span>Stripe</span></label>
+              <label><input type="checkbox" value="CRM"><span>CRM</span></label>
             </div>
+          </fieldset>
+
+          <fieldset>
+            <legend data-i18n="funnel.q.deadline.title">Deadline</legend>
+            <div class="chips" role="group" aria-label="Deadline">
+              <label><input type="radio" name="deadline" value="ASAP"><span>ASAP</span></label>
+              <label><input type="radio" name="deadline" value="7–14 days"><span>7–14 days</span></label>
+              <label><input type="radio" name="deadline" value=">14 days"><span>&gt;14 days</span></label>
+            </div>
+          </fieldset>
+
+          <div class="quiz-actions">
+            <button id="seePlan" class="cta" data-i18n="funnel.actions.seeplan">See plan & price</button>
           </div>
-
-          <div class="row">
-            <div>
-              <label for="contactField" data-i18n="label_contact">WhatsApp or Email</label>
-              <input class="input" id="contactField" name="contact" inputmode="email" placeholder="+32 4… or name@company.com" required />
-              <div class="error" id="err-contact" data-i18n="err_contact">Enter valid WhatsApp or email.</div>
-            </div>
-            <div>
-              <label for="usecase" data-i18n="label_usecase">Use case</label>
-              <select class="select" id="usecase" name="usecase" required>
-                <option value="" selected disabled data-i18n="opt_choose">Choose…</option>
-                <option>Lead capture</option>
-                <option>Qualification</option>
-                <option>Booking & reminders</option>
-                <option>E‑commerce / payments</option>
-                <option>Support / FAQs</option>
-              </select>
-              <div class="error" id="err-usecase" data-i18n="err_required">This field is required.</div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div>
-              <label for="budget" data-i18n="label_budget">Budget (€/mo)</label>
-              <input class="input" id="budget" name="budget" type="number" min="0" step="1" placeholder="99" />
-            </div>
-            <div>
-              <label for="deadline" data-i18n="label_deadline">Deadline</label>
-              <input class="input" id="deadline" name="deadline" type="date" />
-            </div>
-          </div>
-
-          <label>
-            <input type="checkbox" id="gdpr" required />
-            <span class="fine" data-i18n="gdpr_copy">I agree to the processing of my data as described in the</span>
-            <a class="fine" href="/privacy" target="_blank" rel="noopener">Privacy Policy</a>
-          </label>
-          <div class="error" id="err-gdpr" data-i18n="err_gdpr">Please accept the privacy terms.</div>
-
-          <button type="submit" class="btn btn--primary" data-i18n="cta_submit">Send</button>
-          <p class="fine" id="form-note" data-i18n="form_note">We’ll reply within 24 hours.</p>
         </form>
-      </aside>
-    </div>
-  </section>
-
-  <!-- ========= FEATURES ========= -->
-  <section class="section" aria-labelledby="feat-title">
-    <div class="container">
-      <h2 id="feat-title" data-i18n="features_title">What we deliver</h2>
-      <div class="features">
-        <article class="feature">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true"><path d="M4 5h16v6H4z" stroke="currentColor" stroke-width="2"/><path d="M4 15h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <div><strong data-i18n="f1_t">Lead capture</strong><div class="fine" data-i18n="f1_d">Forms & flows connected to Google Sheets / CRM.</div></div>
-        </article>
-        <article class="feature">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M8 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <div><strong data-i18n="f2_t">Qualification</strong><div class="fine" data-i18n="f2_d">Score leads with rules or AI.</div></div>
-        </article>
-        <article class="feature">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true"><path d="M7 3h10v4H7zM5 7h14v14H5z" stroke="currentColor" stroke-width="2"/></svg>
-          <div><strong data-i18n="f3_t">Booking</strong><div class="fine" data-i18n="f3_d">Calendly/Cal.com integration + reminders.</div></div>
-        </article>
-        <article class="feature">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true"><path d="M4 7h16v10H4z" stroke="currentColor" stroke-width="2"/><path d="M8 11h8M8 15h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <div><strong data-i18n="f4_t">Payments</strong><div class="fine" data-i18n="f4_d">Stripe checkout & invoicing flows.</div></div>
-        </article>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ========= PRICING ========= -->
-  <section class="pricing section" id="pricing" aria-labelledby="pricing-title">
-    <div class="container">
-      <h2 id="pricing-title" data-i18n="pricing_title">Pricing</h2>
-      <div class="plans">
-        <article class="plan" aria-labelledby="p1-title">
-          <h3 id="p1-title" data-i18n="p1_t">Starter</h3>
-          <div class="price"><span>€</span><span data-i18n="p1_price">29</span><span class="fine">/mo</span></div>
-          <ul class="ul">
-            <li data-i18n="p1_f1">Essential flows</li>
-            <li data-i18n="p1_f2">1 channel (e.g. WhatsApp)</li>
-            <li data-i18n="p1_f3">Basic support</li>
-          </ul>
-          <button class="btn" data-plan="Starter" data-i18n="p_cta">Choose plan</button>
-        </article>
-        <article class="plan" aria-labelledby="p2-title">
-          <h3 id="p2-title" data-i18n="p2_t">Growth</h3>
-          <div class="price"><span>€</span><span data-i18n="p2_price">99</span><span class="fine">/mo</span></div>
-          <ul class="ul">
-            <li data-i18n="p2_f1">Advanced flows + AI</li>
-            <li data-i18n="p2_f2">2 channels</li>
-            <li data-i18n="p2_f3">Integrations (Sheets/Calendly)</li>
-          </ul>
-          <button class="btn btn--primary" data-plan="Growth" data-i18n="p_cta">Choose plan</button>
-        </article>
-        <article class="plan" aria-labelledby="p3-title">
-          <h3 id="p3-title" data-i18n="p3_t">Premium</h3>
-          <div class="price"><span>€</span><span data-i18n="p3_price">299</span><span class="fine">/mo</span></div>
-          <ul class="ul">
-            <li data-i18n="p3_f1">Full customization</li>
-            <li data-i18n="p3_f2">3+ channels</li>
-            <li data-i18n="p3_f3">Priority SLA + migration</li>
-          </ul>
-          <button class="btn" data-plan="Premium" data-i18n="p_cta">Choose plan</button>
-        </article>
+    <!-- STEP 3: Estimate -->
+    <section id="estimate" class="section hidden" aria-hidden="true">
+      <div class="container">
+        <h2 data-i18n="funnel.step3.title">Recommended plan</h2>
+        <p class="lead" data-i18n="funnel.step3.lead">This is a starting point — we tailor it on the demo call.</p>
+
+        <div class="est-card">
+          <div class="est-head">
+            <div class="est-plan" id="estPlan">Standard</div>
+            <div class="est-price" id="estPrice">€99 <small>/mo</small></div>
+          </div>
+          <ul id="estIncludes" class="ul"></ul>
+
+          <div class="grid est-cta">
+            <button class="cta" id="estDemo" data-i18n="funnel.actions.book">Book a demo</button>
+            <a class="cta secondary" id="estWA" target="_blank" rel="noopener" data-i18n="funnel.actions.whatsapp">Talk on WhatsApp</a>
+          </div>
+          <div class="note" id="estNote"></div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ========= DEMO MODAL ========= -->
+    <!-- Features -->
+    <section id="features" class="section">
+      <div class="container">
+        <h2 data-i18n="features.title">Why teams choose BotMatic</h2>
+        <p class="lead" data-i18n="features.lead">Everything you need to go from idea to a live, revenue generating chatbot.</p>
+
+        <div class="grid features">
+          <article class="feature">
+            <div class="feat-icon">🚀</div>
+            <h3 data-i18n="features.f1.title">Fast delivery</h3>
+            <p data-i18n="features.f1.desc">From brief to launch in 7–14 days with tight feedback loops.</p>
+          </article>
+          <article class="feature">
+            <div class="feat-icon">🧠</div>
+            <h3 data-i18n="features.f2.title">AI + buttons UX</h3>
+            <p data-i18n="features.f2.desc">Blend guided flows with AI answers for speed and control.</p>
+          </article>
+          <article class="feature">
+            <div class="feat-icon">🔌</div>
+            <h3 data-i18n="features.f3.title">Integrations</h3>
+            <p data-i18n="features.f3.desc">CRM, calendars, payments, Google Sheets — we connect your stack.</p>
+          </article>
+          <article class="feature">
+            <div class="feat-icon">📈</div>
+            <h3 data-i18n="features.f4.title">Qualify & convert</h3>
+            <p data-i18n="features.f4.desc">Score leads, route hot prospects, and auto book in one flow.</p>
+          </article>
+          <article class="feature">
+            <div class="feat-icon">🛡️</div>
+            <h3 data-i18n="features.f5.title">GDPR ready</h3>
+            <p data-i18n="features.f5.desc">Clear consent, data minimization and opt out built in.</p>
+          </article>
+          <article class="feature">
+            <div class="feat-icon">🤝</div>
+            <h3 data-i18n="features.f6.title">Ongoing support</h3>
+            <p data-i18n="features.f6.desc">We tune copy, steps and KPIs as your needs evolve.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="section">
+      <div class="container">
+        <h2 data-i18n="pricing.title">Simple pricing</h2>
+        <p class="lead" data-i18n="pricing.lead">Pick a plan — cancel or upgrade anytime. Custom enterprise plans on request.</p>
+
+        <div class="grid pricing">
+          <div class="plan" data-plan="Starter">
+            <div class="plan-h" data-i18n="pricing.starter.title">Starter</div>
+            <div class="price"><span data-i18n="pricing.starter.price">€29</span> <small>/mo</small></div>
+            <ul class="ul">
+              <li><span class="check">✓</span><span data-i18n="pricing.starter.l1">1 core flow (FAQ or lead capture)</span></li>
+              <li><span class="check">✓</span><span data-i18n="pricing.starter.l2">1 platform (e.g. WhatsApp)</span></li>
+              <li><span class="check">✓</span><span data-i18n="pricing.starter.l3">Up to 500 conversations/mo</span></li>
+            </ul>
+            <a href="#usecases" class="cta wfull" data-i18n="pricing.starter.cta">Choose Starter</a>
+            <div class="note" data-i18n="pricing.starter.note">Good for MVPs and small teams.</div>
+          </div>
+
+          <div class="plan popular" data-plan="Standard">
+            <div class="plan-h" data-i18n="pricing.standard.title">Standard</div>
+            <div class="price"><span data-i18n="pricing.standard.price">€99</span> <small>/mo</small></div>
+            <ul class="ul">
+              <li><span class="check">✓</span><span data-i18n="pricing.standard.l1">Multi step flows (qualify + booking)</span></li>
+              <li><span class="check">✓</span><span data-i18n="pricing.standard.l2">2 platforms</span></li>
+              <li><span class="check">✓</span><span data-i18n="pricing.standard.l3">Priority support & updates</span></li>
+              <li><span class="check">✓</span><span data-i18n="pricing.standard.l4">Up to 2,000 conversations/mo</span></li>
+            </ul>
+            <a href="#usecases" class="cta wfull" data-i18n="pricing.standard.cta">Choose Standard</a>
+            <div class="note" data-i18n="pricing.standard.note">Our most popular plan.</div>
+          </div>
+
+          <div class="plan" data-plan="Premium">
+            <div class="plan-h" data-i18n="pricing.premium.title">Premium</div>
+            <div class="price"><span data-i18n="pricing.premium.price">€299</span> <small>/mo</small></div>
+            <ul class="ul">
+              <li><span class="check">✓</span><span data-i18n="pricing.premium.l1">Advanced AI & NLP tuning</span></li>
+              <li><span class="check">✓</span><span data-i18n="pricing.premium.l2">Multi platform & system integrations</span></li>
+              <li><span class="check">✓</span><span data-i18n="pricing.premium.l3">Dedicated PM & SLAs</span></li>
+              <li><span class="check">✓</span><span data-i18n="pricing.premium.l4">Unlimited conversations</span></li>
+            </ul>
+            <a href="#usecases" class="cta wfull" data-i18n="pricing.premium.cta">Choose Premium</a>
+            <div class="note" data-i18n="pricing.premium.note">For scale ups and enterprises.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="section">
+      <div class="container">
+        <h2 data-i18n="contact.title">Tell us about your bot</h2>
+        <p class="lead" data-i18n="contact.lead">Share a few details and we’ll get back within 24 hours.</p>
+
+        <div class="contact-card">
+          <form class="form" id="contactForm" novalidate>
+            <div class="grid form-grid">
+              <input class="input" type="text" name="name" data-i18n-placeholder="contact.name" placeholder="Full name" required/>
+              <input class="input" type="email" name="email" data-i18n-placeholder="contact.email" placeholder="Work email" required/>
+            </div>
+            <input class="input" type="text" name="company" data-i18n-placeholder="contact.company" placeholder="Company / Industry"/>
+            <textarea name="message" rows="5" class="input" data-i18n-placeholder="contact.message" placeholder="What should the bot do? Platforms, flows, integrations…"></textarea>
+
+            <label class="gdpr">
+              <input type="checkbox" name="gdpr" required/>
+              <span data-i18n="contact.gdpr">I agree to be contacted about my request and accept the privacy policy.</span>
+            </label>
+
+            <div class="grid contact-actions">
+              <button class="cta" type="submit" data-i18n="contact.send">Send request</button>
+              <a class="cta secondary" href="mailto:info@botmatic.be" data-i18n="contact.emailus">Email us</a>
+              <a class="cta secondary" href="#demo" data-i18n="contact.seedemo">See demo</a>
+            </div>
+            <div class="form-ok" id="contactOk" hidden>✓</div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Demo modal -->
   <div class="modal" id="demoModal" role="dialog" aria-modal="true" aria-labelledby="demoTitle" hidden>
     <div class="modal__panel">
       <div class="modal__header">
-        <strong id="demoTitle" data-i18n="demo_title">Book a demo</strong>
-        <button class="modal__close" aria-label="Close" onclick="closeDemoModal()">✕</button>
+        <strong id="demoTitle" data-i18n="funnel.actions.book">Book a demo</strong>
+        <button class="modal__close" aria-label="Close">✕</button>
       </div>
       <div class="modal__body">
         <iframe id="demoFrame" title="Demo booking" src="about:blank" loading="lazy"></iframe>
@@ -215,18 +321,24 @@
     </div>
   </div>
 
-  <!-- ========= FOOTER ========= -->
-  <footer class="footer" role="contentinfo">
-    <div class="container footer__row">
-      <small>© <span id="y"></span> BotMatic — <span data-i18n="footer_tag">Chatbots for WhatsApp, Telegram & Instagram</span></small>
-      <nav aria-label="Footer links">
-        <a href="https://www.botmatic.be" target="_blank" rel="noopener">botmatic.be</a>
-        <a href="https://github.com/testbotvanalex/web" target="_blank" rel="noopener">GitHub</a>
-      </nav>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container foot">
+      <div class="foot-left">
+        <strong>BotMatic</strong>
+        <div class="muted" data-i18n="footer.tagline">Custom chatbots for WhatsApp, Telegram, Instagram & web.</div>
+      </div>
+      <div class="foot-right">
+        <a href="#features" data-i18n="nav.features">Features</a>
+        <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+        <a href="#contact" data-i18n="nav.contact">Contact</a>
+        <a class="policy" href="https://www.botmatic.be" target="_blank" rel="noopener">botmatic.be</a>
+        <a class="policy" href="https://github.com/testbotvanalex/web" target="_blank" rel="noopener">GitHub</a>
+      </div>
     </div>
   </footer>
 
-  <!-- ========= JSON-LD ========= -->
+  <!-- JSON-LD -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -234,20 +346,19 @@
     "name":"BotMatic",
     "url":"https://www.botmatic.be/",
     "logo":"https://www.botmatic.be/logo.png",
-    "email":"hello@botmatic.be",
-    "sameAs":[ "https://github.com/testbotvanalex/web" ],
+    "sameAs":["https://github.com/testbotvanalex/web"],
     "hasOfferCatalog":{
       "@type":"OfferCatalog",
       "name":"BotMatic Plans",
       "itemListElement":[
         {"@type":"Product","name":"Starter","description":"Basic chatbot with essential flows","offers":{"@type":"Offer","priceCurrency":"EUR","price":"29","availability":"https://schema.org/InStock"}},
-        {"@type":"Product","name":"Growth","description":"Advanced flows + integrations","offers":{"@type":"Offer","priceCurrency":"EUR","price":"99","availability":"https://schema.org/InStock"}},
+        {"@type":"Product","name":"Standard","description":"Advanced flows + integrations","offers":{"@type":"Offer","priceCurrency":"EUR","price":"99","availability":"https://schema.org/InStock"}},
         {"@type":"Product","name":"Premium","description":"Full customization + priority SLA","offers":{"@type":"Offer","priceCurrency":"EUR","price":"299","availability":"https://schema.org/InStock"}}
       ]
     }
   }
   </script>
 
-  <script src="./main.js" defer></script>
+  <script src="main.js" defer></script>
 </body>
 </html>
