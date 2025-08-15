@@ -1,0 +1,116 @@
+<!-- FILE: standard-plan.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title data-i18n="planDetail.standard.metaTitle">Standard Plan — BotMatic</title>
+  <meta name="description" content="Standard plan: multiple flows, 2 platforms, priority support, up to 2,000 conversations."/>
+  <meta name="theme-color" content="#111827"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="canonical" href="https://www.botmatic.be/standard-plan.html">
+  <meta property="og:title" content="Standard Plan — BotMatic">
+  <meta property="og:description" content="Most popular plan for teams ready to scale.">
+  <meta property="og:image" content="assets/og.jpg">
+  <meta property="og:url" content="https://www.botmatic.be/standard-plan.html">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="assets/favicon.png" type="image/png"/>
+</head>
+<body>
+<header class="site-header">
+  <div class="container row space">
+    <a class="logo" href="index.html#home"><img src="assets/logo.svg" alt="BotMatic" height="28"></a>
+    <nav class="nav">
+      <a href="index.html#features" data-i18n="nav.features">Features</a>
+      <a href="pricing.html" class="active" data-i18n="nav.pricing">Pricing</a>
+      <a href="index.html#contact" data-i18n="nav.contact">Contact</a>
+      <a href="index.html#demo" class="btn btn--ghost" data-i18n="nav.demo">Demo</a>
+    </nav>
+    <div class="lang">
+      <button class="lang-btn" data-lang="nl">NL</button>
+      <button class="lang-btn" data-lang="fr">FR</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+    <button class="burger" aria-label="Menu" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<main>
+  <section class="section">
+    <div class="container">
+      <a href="pricing.html" class="muted tiny">← <span data-i18n="planDetail.back">Back to pricing</span></a>
+      <h1 data-i18n="planDetail.standard.title">Standard Plan</h1>
+      <p class="lead" data-i18n="planDetail.standard.subtitle">Most popular: multiple automations, two channels, priority support — built to scale.</p>
+
+      <div class="p-card" style="margin-top:12px">
+        <div class="p-head">
+          <h3 data-i18n="plans.standard.name">Standard</h3>
+          <div class="p-price">€99<span class="per">/month</span></div>
+        </div>
+        <ul class="p-list">
+          <li data-i18n="plans.standard.l1">Multiple automations</li>
+          <li data-i18n="plans.standard.l2">2 platforms</li>
+          <li data-i18n="plans.standard.l3">Priority support</li>
+          <li data-i18n="plans.standard.l4">Up to 2,000 conversations</li>
+        </ul>
+        <a href="index.html#contact" class="btn" data-i18n="plans.cta">Choose plan</a>
+      </div>
+
+      <div class="grid-3" style="margin-top:18px">
+        <article class="card">
+          <h3 data-i18n="planDetail.includes.title">Included</h3>
+          <ul class="p-list">
+            <li data-i18n="planDetail.standard.inc1">Conversation design across multiple flows</li>
+            <li data-i18n="planDetail.standard.inc2">Integrations: CRM/calendar/payments/Sheets</li>
+            <li data-i18n="planDetail.standard.inc3">A/B testing & optimizations</li>
+            <li data-i18n="planDetail.standard.inc4">Priority support & SLA</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3 data-i18n="planDetail.usecases.title">Use cases</h3>
+          <ul class="p-list">
+            <li data-i18n="planDetail.standard.u1">End‑to‑end lead funnel with qualification</li>
+            <li data-i18n="planDetail.standard.u2">Auto scheduling + reminders</li>
+            <li data-i18n="planDetail.standard.u3">Payments/deposits via Stripe</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3 data-i18n="planDetail.next.title">Upgrade path</h3>
+          <p class="muted" data-i18n="planDetail.standard.next">Need advanced NLP and complex routing? Premium adds stronger AI, more systems and a dedicated PM.</p>
+        </article>
+      </div>
+
+      <div class="card" style="margin-top:18px">
+        <h3 data-i18n="planDetail.faq.title">FAQ</h3>
+        <details>
+          <summary data-i18n="planDetail.faq.q1">Are WhatsApp/Telegram fees included?</summary>
+          <div class="muted" data-i18n="planDetail.faq.a1">External platform fees (e.g., WhatsApp Business API) aren’t included and are passed through at cost.</div>
+        </details>
+        <details>
+          <summary data-i18n="planDetail.standard.q2">Can we build custom integrations?</summary>
+          <div class="muted" data-i18n="planDetail.standard.a2">Yes, via webhooks or APIs (CRM, booking, payments). More complex builds fit Premium.</div>
+        </details>
+        <details>
+          <summary data-i18n="planDetail.faq.q3">Is there a trial?</summary>
+          <div class="muted" data-i18n="planDetail.faq.a3">We provide a free diagnosis + demo flow for your case before kickoff.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container row space">
+    <div class="muted tiny">© <span id="y"></span> BotMatic</div>
+    <div class="muted tiny"><a href="sitemap.xml">Sitemap</a> · <a href="robots.txt">Robots</a></div>
+    <div class="muted tiny">VAT/BTW BE-0000.000.000</div>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+<script>document.getElementById('y').textContent = new Date().getFullYear(); setLang('en');</script>
+</body>
+</html>
