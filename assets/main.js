@@ -1,186 +1,141 @@
-// /assets/main.js (v2) — i18n + mobile menu + contact ok; includes home.sub string
-(function(){
-  const $=(q,d=document)=>d.querySelector(q), $$=(q,d=document)=>Array.from(d.querySelectorAll(q));
-
-  const I18N={
-    en:{
-      nav:{home:"Home",pricing:"Pricing",usecases:"Use cases",faq:"FAQ",contact:"Contact"},
-      cta:{demo:"Get a demo",pricing:"See pricing",usecases:"See use cases",start:"Start",wa:"WhatsApp"},
-      home:{
-        title:"Custom chatbots in 7–14 days",
-        lead:"WhatsApp, Telegram, Instagram & web. We design, build and launch bots that convert — fast.",
-        sub:"7–14 days • Custom flows • CRM / Calendars / Stripe",
-        "cta.t":"Ready to launch your chatbot?"
-      },
-      stats:{s1:"Lead→chat rate",s2:"Faster response",s3:"Automated handling"},
-      pricing:{
-        title:"Simple pricing",lead:"Pick a plan — upgrade anytime.",
-        popular:"Most popular",
-        starter:{title:"Starter",price:"€29",l1:"1 core flow (FAQ or lead capture)",l2:"1 platform (e.g. WhatsApp)",l3:"Up to 500 conversations/mo"},
-        standard:{title:"Standard",price:"€99",l1:"Multi step flows (qualify + booking)",l2:"2 platforms",l3:"Priority support & updates",l4:"Up to 2,000 conversations/mo"},
-        premium:{title:"Premium",price:"€299",l1:"Advanced AI & NLP tuning",l2:"Multi platform & system integrations",l3:"Dedicated PM & SLAs",l4:"Unlimited conversations"}
-      },
-      cases:{
-        title:"Popular use cases",lead:"Short flows that convert — tailored to your business.",
-        lead:{t:"Lead capture",d:"Turn clicks into qualified contacts with clear opt‑in and consent."},
-        qual:{t:"Qualification",d:"Score leads by need, budget and timeline. Route instantly."},
-        booking:{t:"Booking & reminders",d:"Auto‑book calendar slots, send reminders and follow‑ups."}
-      },
-      faq:{
-        title:"FAQ",lead:"Answers to common questions.",
-        q1:{t:"How long does it take?",d:"Typically 7–14 days from brief to launch, depending on integrations."},
-        q2:{t:"Which channels do you support?",d:"WhatsApp, Telegram, Instagram, web widget, and more on request."},
-        q3:{t:"Do you handle GDPR?",d:"Yes. We include consent, data minimization and simple opt‑out."},
-        q4:{t:"Can you integrate with our tools?",d:"We connect calendars, CRMs, payments, and spreadsheets via APIs."}
-      },
-      contact:{
-        title:"Tell us about your bot",lead:"Share a few details and we’ll reply within 24h.",
-        name:"Full name",email:"Work email",company:"Company / Industry",
-        message:"What should the bot do? Platforms, flows, integrations…",
-        gdpr:"I agree to be contacted about my request and accept the privacy policy.",
-        send:"Send request",whatsapp:"Chat on WhatsApp"
-      },
-      ok:"✓ Thanks! We will reply within 24h."
+// FILE: main.js
+const I18N = {
+  nl:{
+    nav:{features:"Functies",pricing:"Prijzen",contact:"Contact",demo:"Demo"},
+    hero:{
+      badge1:"⚡ 7–14 dagen oplevering", badge2:"🧩 Volledig maatwerk", badge3:"🔌 CRM & betalingen",
+      title:"Chatbots voor WhatsApp, Telegram & websites — snel gebouwd",
+      subtitle:"We bouwen bots die leads vangen, kwalificeren en automatisch afspraken boeken. Eenvoudige setup, snelle oplevering, doorlopend support.",
+      ctaPrimary:"Start een project", ctaSecondary:"Bekijk prijzen", disclaimer:"Demo is illustratief. Integreren kan met WhatsApp, Telegram, webwidget."
     },
-    nl:{
-      nav:{home:"Home",pricing:"Prijzen",usecases:"Use cases",faq:"FAQ",contact:"Contact"},
-      cta:{demo:"Plan een demo",pricing:"Bekijk prijzen",usecases:"Bekijk cases",start:"Start",wa:"WhatsApp"},
-      home:{
-        title:"Maatwerk chatbots in 7–14 dagen",
-        lead:"WhatsApp, Telegram, Instagram & web. We bouwen en lanceren bots die converteren — snel.",
-        sub:"7–14 dagen • Maatwerk flows • CRM / Agenda’s / Stripe",
-        "cta.t":"Klaar om je chatbot te lanceren?"
-      },
-      stats:{s1:"Lead→chat ratio",s2:"Sneller antwoord",s3:"Automatische afhandeling"},
-      pricing:{
-        title:"Eenvoudige prijzen",lead:"Kies een plan — upgraden kan altijd.",
-        popular:"Meest gekozen",
-        starter:{title:"Starter",price:"€29",l1:"1 kernflow (FAQ of lead capture)",l2:"1 platform (bv. WhatsApp)",l3:"Tot 500 conversaties/maand"},
-        standard:{title:"Standaard",price:"€99",l1:"Meerstapsflows (kwalificatie + booking)",l2:"2 platformen",l3:"Prioritaire support & updates",l4:"Tot 2.000 conversaties/maand"},
-        premium:{title:"Premium",price:"€299",l1:"Geavanceerde AI & NLP",l2:"Meerdere platformen & systemen",l3:"Dedicated PM & SLA’s",l4:"Onbeperkte conversaties"}
-      },
-      cases:{
-        title:"Populaire use cases",lead:"Korte flows die converteren — op maat van jouw business.",
-        lead:{t:"Lead capture",d:"Maak van kliks gekwalificeerde contacten met duidelijke opt‑in."},
-        qual:{t:"Kwalificatie",d:"Scoreer leads op behoefte, budget en timing. Routeer direct."},
-        booking:{t:"Boeken & reminders",d:"Plan automatisch agenda‑slots, stuur reminders en follow‑ups."}
-      },
-      faq:{
-        title:"FAQ",lead:"Antwoorden op veelgestelde vragen.",
-        q1:{t:"Hoe lang duurt het?",d:"Meestal 7–14 dagen van briefing tot live, afhankelijk van integraties."},
-        q2:{t:"Welke kanalen ondersteunen jullie?",d:"WhatsApp, Telegram, Instagram, web widget, en meer op aanvraag."},
-        q3:{t:"GDPR?",d:"Ja. Toestemming, dataminimalisatie en eenvoudige opt‑out inbegrepen."},
-        q4:{t:"Koppelen jullie onze tools?",d:"Ja, agenda’s, CRM, betalingen en spreadsheets via API’s."}
-      },
-      contact:{
-        title:"Vertel ons over je bot",lead:"Geef enkele details — we reageren binnen 24u.",
-        name:"Volledige naam",email:"Zakelijk e‑mail",company:"Bedrijf / Sector",
-        message:"Wat moet de bot doen? Platformen, flows, integraties…",
-        gdpr:"Ik ga akkoord dat jullie me contacteren en accepteer het privacybeleid.",
-        send:"Verstuur aanvraag",whatsapp:"Chat op WhatsApp"
-      },
-      ok:"✓ Bedankt! We reageren binnen 24 uur."
+    stats:{s1:"Meer chats uit verkeer",s2:"Snellere reactie",s3:"Automatische afhandeling"},
+    demo:{bot1:"Hoi! Ik ben BotMatic. Waarmee kan ik helpen?",k1:"Afspraak boeken",k2:"Prijzen",k3:"Contact met agent"},
+    features:{title:"Wat je van ons krijgt",f1:"Diagnose, kwalificatie, FAQ, doorverbinden naar agent.",f2:"CRM, agenda’s, betalingen (Stripe), Google Sheets, webhooks.",f3:"Meertaligheid, statistieken, updates, support."},
+    pricing:{title:"Prijzen",note:"Alle plannen inclusief gratis huidig advies/diagnose van je funnel.",gambling:"21+ Gokken kan verslavend zijn. Stop op tijd! Meer info: stopoptijd.be"},
+    plans:{
+      popular:"Meest gekozen",cta:"Kies dit plan",
+      basic:{name:"Basis",l1:"1 kernfunctie (bv. FAQ)",l2:"1 platform",l3:"Standaard support",l4:"Tot 500 conversaties"},
+      standard:{name:"Standaard",l1:"Meerdere taken/flows",l2:"2 platforms",l3:"Priority support",l4:"Tot 2.000 conversaties"},
+      premium:{name:"Premium",l1:"Geavanceerde AI/NLP",l2:"Meerdere systemen",l3:"Toegewijde PM & support",l4:"Onbeperkte conversaties"}
     },
-    fr:{
-      nav:{home:"Accueil",pricing:"Tarifs",usecases:"Cas d’usage",faq:"FAQ",contact:"Contact"},
-      cta:{demo:"Demander une démo",pricing:"Voir les tarifs",usecases:"Voir les cas",start:"Commencer",wa:"WhatsApp"},
-      home:{
-        title:"Chatbots sur mesure en 7–14 jours",
-        lead:"WhatsApp, Telegram, Instagram & web. Nous concevons, construisons et lançons des bots qui convertissent — vite.",
-        sub:"7–14 jours • Parcours sur‑mesure • CRM / Agendas / Stripe",
-        "cta.t":"Prêt à lancer votre chatbot ?"
-      },
-      stats:{s1:"Taux lead→chat",s2:"Réponse plus rapide",s3:"Traitement automatisé"},
-      pricing:{
-        title:"Tarification simple",lead:"Choisissez une offre — évolutive à tout moment.",
-        popular:"Le plus populaire",
-        starter:{title:"Starter",price:"€29",l1:"1 parcours clé (FAQ ou capture de leads)",l2:"1 plateforme (ex. WhatsApp)",l3:"Jusqu’à 500 conversations/mois"},
-        standard:{title:"Standard",price:"€99",l1:"Parcours multi‑étapes (qualif + réservation)",l2:"2 plateformes",l3:"Support prioritaire & mises à jour",l4:"Jusqu’à 2 000 conversations/mois"},
-        premium:{title:"Premium",price:"€299",l1:"IA & NLP avancés",l2:"Multi‑plateformes & systèmes",l3:"Chef de projet dédié & SLA",l4:"Conversations illimitées"}
-      },
-      cases:{
-        title:"Cas d’usage populaires",lead:"Parcours courts et efficaces — adaptés à votre activité.",
-        lead:{t:"Capture de leads",d:"Transformez les clics en contacts qualifiés avec opt‑in clair."},
-        qual:{t:"Qualification",d:"Scorez par besoin, budget et délai. Routage instantané."},
-        booking:{t:"Prise de RDV & rappels",d:"Réservation automatique, rappels et relances."}
-      },
-      faq:{
-        title:"FAQ",lead:"Réponses aux questions fréquentes.",
-        q1:{t:"Combien de temps ?",d:"Généralement 7–14 jours du brief au live, selon les intégrations."},
-        q2:{t:"Quels canaux ?",d:"WhatsApp, Telegram, Instagram, widget web, et plus sur demande."},
-        q3:{t:"RGPD ?",d:"Oui. Consentement, minimisation des données et opt‑out inclus."},
-        q4:{t:"Intégrations ?",d:"Calendriers, CRM, paiements et feuilles de calcul via API."}
-      },
-      contact:{
-        title:"Parlez‑nous de votre bot",lead:"Partagez quelques détails — réponse sous 24 h.",
-        name:"Nom complet",email:"Email professionnel",company:"Entreprise / Secteur",
-        message:"Que doit faire le bot ? Plateformes, parcours, intégrations…",
-        gdpr:"J’accepte d’être contacté pour ma demande et j’accepte la politique de confidentialité.",
-        send:"Envoyer la demande",whatsapp:"Discuter sur WhatsApp"
-      },
-      ok:"✓ Merci ! Réponse sous 24 h."
-    }
-  };
-
-  function applyI18n(lang){
-    if(!I18N[lang]) lang='en';
-    document.documentElement.lang=lang;
-    document.documentElement.setAttribute('data-lang',lang);
-    document.querySelectorAll('[data-i18n]').forEach(el=>{
-      const path=el.getAttribute('data-i18n').split('.');
-      let val=I18N[lang];
-      for(const k of path){ val = val?.[k]; }
-      if(typeof val==='string') el.textContent=val;
-    });
-    document.querySelectorAll('.lang button').forEach(b=>{
-      const on=b.dataset.lang===lang;
-      b.classList.toggle('active', on);
-      b.setAttribute('aria-pressed', String(on));
-    });
-    try{
-      localStorage.setItem('botmatic_lang',lang);
-      const u=new URL(location.href); u.searchParams.set('lang',lang); history.replaceState(null,'',u);
-    }catch{}
+    contact:{title:"Vraag een demo"},
+    form:{name:"Naam",platform:"Platform",message:"Bericht",gdpr:"Ik ga akkoord met verwerking van mijn gegevens volgens de privacyverklaring.",submit:"Versturen"}
+  },
+  fr:{
+    nav:{features:"Fonctionnalités",pricing:"Tarifs",contact:"Contact",demo:"Démo"},
+    hero:{
+      badge1:"⚡ Livraison 7–14 jours", badge2:"🧩 100% sur-mesure", badge3:"🔌 CRM & paiements",
+      title:"Chatbots pour WhatsApp, Telegram & sites — vite faits, bien faits",
+      subtitle:"On construit des bots qui captent les leads, les qualifient et réservent automatiquement. Mise en place simple, livraison rapide, support continu.",
+      ctaPrimary:"Démarrer un projet", ctaSecondary:"Voir les tarifs", disclaimer:"Démo illustrative. Intégrations possibles: WhatsApp, Telegram, widget web."
+    },
+    stats:{s1:"Plus de chats depuis le trafic",s2:"Réponse plus rapide",s3:"Traitement automatisé"},
+    demo:{bot1:"Salut ! Je suis BotMatic. Je peux t’aider ?",k1:"Réserver un rendez-vous",k2:"Tarifs",k3:"Parler à un agent"},
+    features:{title:"Ce que vous obtenez",f1:"Diagnostic, qualification, FAQ, transfert agent.",f2:"CRM, agendas, paiements (Stripe), Google Sheets, webhooks.",f3:"Multilingue, stats, mises à jour, support."},
+    pricing:{title:"Tarifs",note:"Tous les plans incluent un diagnostic gratuit de votre tunnel.",gambling:"Jeux de hasard 21+. Jouez responsable. Plus d’info: stopoptijd.be"},
+    plans:{
+      popular:"Le plus choisi",cta:"Choisir",
+      basic:{name:"Basique",l1:"1 fonctionnalité clé (ex. FAQ)",l2:"1 plateforme",l3:"Support standard",l4:"Jusqu’à 500 conversations"},
+      standard:{name:"Standard",l1:"Plusieurs tâches/flows",l2:"2 plateformes",l3:"Support prioritaire",l4:"Jusqu’à 2 000 conversations"},
+      premium:{name:"Premium",l1:"IA/NLP avancée",l2:"Multi-systèmes",l3:"Chef de projet dédié",l4:"Conversations illimitées"}
+    },
+    contact:{title:"Demander une démo"},
+    form:{name:"Nom",platform:"Plateforme",message:"Message",gdpr:"J’accepte le traitement de mes données conformément à la politique de confidentialité.",submit:"Envoyer"}
+  },
+  en:{
+    nav:{features:"Features",pricing:"Pricing",contact:"Contact",demo:"Demo"},
+    hero:{
+      badge1:"⚡ 7–14 days delivery", badge2:"🧩 Fully custom", badge3:"🔌 CRM & payments",
+      title:"Custom chatbots for WhatsApp, Telegram & websites — built fast",
+      subtitle:"We build bots that capture leads, qualify them and auto‑book. Simple setup, quick turnaround, ongoing support.",
+      ctaPrimary:"Start a project", ctaSecondary:"See pricing", disclaimer:"Demo is illustrative. Integrations: WhatsApp, Telegram, web widget."
+    },
+    stats:{s1:"More chats from traffic",s2:"Faster responses",s3:"Automated handling"},
+    demo:{bot1:"Hi! I’m BotMatic. What do you need?",k1:"Book an appointment",k2:"Pricing",k3:"Talk to an agent"},
+    features:{title:"What you get",f1:"Diagnosis, qualification, FAQ, agent handoff.",f2:"CRM, calendars, payments (Stripe), Google Sheets, webhooks.",f3:"Multilingual, analytics, updates, support."},
+    pricing:{title:"Pricing",note:"All plans include a free funnel health check.",gambling:"21+ Gambling can be addictive. Stop in time. More info: stopoptijd.be"},
+    plans:{
+      popular:"Most popular",cta:"Choose plan",
+      basic:{name:"Basic",l1:"1 core feature (e.g., FAQ)",l2:"1 platform",l3:"Standard support",l4:"Up to 500 conversations"},
+      standard:{name:"Standard",l1:"Multiple automations",l2:"2 platforms",l3:"Priority support",l4:"Up to 2,000 conversations"},
+      premium:{name:"Premium",l1:"Advanced AI/NLP",l2:"Multiple systems",l3:"Dedicated PM & support",l4:"Unlimited conversations"}
+    },
+    contact:{title:"Request a demo"},
+    form:{name:"Name",platform:"Platform",message:"Message",gdpr:"I agree to my data being processed per the privacy policy.",submit:"Send"}
   }
+};
 
-  function bindLang(){
-    document.querySelectorAll('.lang button').forEach(b=>b.addEventListener('click',()=>applyI18n(b.dataset.lang)));
-    let initial='en';
-    try{
-      const saved=localStorage.getItem('botmatic_lang');
-      initial = (new URL(location.href)).searchParams.get('lang') || saved || 'en';
-    }catch{}
-    applyI18n(initial);
-  }
+// --- helpers
+const $ = (s, root=document) => root.querySelector(s);
+const $$ = (s, root=document) => [...root.querySelectorAll(s)];
 
-  function bindMenu(){
-    const btn=document.querySelector('.mobile-toggle');
-    const menu=document.getElementById('mainmenu');
-    if(!btn||!menu) return;
-    const scrim=document.createElement('div'); scrim.className='scrim'; document.body.appendChild(scrim); scrim.hidden=true;
-    const close=()=>{menu.classList.remove('open'); document.body.classList.remove('menu-open'); btn.setAttribute('aria-expanded','false'); scrim.hidden=true;};
-    const open =()=>{menu.classList.add('open'); document.body.classList.add('menu-open'); btn.setAttribute('aria-expanded','true'); scrim.hidden=false;};
-    btn.addEventListener('click', ()=> menu.classList.contains('open')?close():open());
-    scrim.addEventListener('click', close);
-    document.addEventListener('keydown', e=>{ if(e.key==='Escape') close(); });
-    document.querySelectorAll('#mainmenu a').forEach(a=>a.addEventListener('click', close));
-    const mq=matchMedia('(min-width:900px)'); (mq.addEventListener?mq.addEventListener('change',()=>mq.matches&&close()):mq.addListener(()=>mq.matches&&close()));
-  }
-
-  function bindContact(){
-    const form=document.getElementById('contactForm'), ok=document.getElementById('contactOk'); if(!form) return;
-    form.addEventListener('submit', (e)=>{
-      e.preventDefault();
-      const fd=new FormData(form);
-      if(!fd.get('name')||!fd.get('email')||!fd.get('gdpr')) return;
-      ok.textContent = I18N[document.documentElement.getAttribute('data-lang')||'en'].ok;
-      ok.classList.remove('hidden');
-      form.reset();
-    });
-  }
-
-  document.addEventListener('DOMContentLoaded', ()=>{
-    bindLang(); bindMenu(); bindContact();
-    const y=document.getElementById('y'); if(y) y.textContent=new Date().getFullYear();
+function setLang(lang){
+  const dict = I18N[lang] || I18N.nl;
+  document.documentElement.lang = lang;
+  localStorage.setItem('lang', lang);
+  // map [data-i18n="a.b.c"]
+  $$('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n').split('.');
+    let v = dict;
+    key.forEach(k => v = (v||{})[k]);
+    if(typeof v === 'string') el.textContent = v;
   });
-})();
+  $$('.lang-btn').forEach(b=>b.classList.toggle('active', b.dataset.lang===lang));
+}
+
+function initLang(){
+  const saved = localStorage.getItem('lang');
+  const guess = (navigator.language || 'nl').slice(0,2);
+  setLang(saved || (['nl','fr','en'].includes(guess)?guess:'nl'));
+}
+
+function smoothNav(){
+  $$('.nav a, .cta a').forEach(a=>{
+    a.addEventListener('click', e=>{
+      if(a.hash){
+        e.preventDefault();
+        document.querySelector(a.hash).scrollIntoView({behavior:'smooth',block:'start'});
+        history.pushState(null,'',a.hash);
+      }
+    });
+  });
+}
+
+function burger(){
+  const btn = $('.burger'), nav = $('.nav');
+  btn.addEventListener('click', ()=>{
+    const open = nav.style.display === 'flex';
+    nav.style.display = open ? 'none' : 'flex';
+    btn.setAttribute('aria-expanded', String(!open));
+  });
+}
+
+function form(){
+  const form = $('#contactForm'), note = $('#formNote');
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    note.textContent = '…';
+    const data = Object.fromEntries(new FormData(form).entries());
+    // 🔌 Замените на ваш endpoint (Formspree/EmailJS/own API/Vercel function)
+    try{
+      // пример: await fetch('https://formspree.io/f/xxxx', {method:'POST', headers:{'Accept':'application/json'}, body:new FormData(form)});
+      await new Promise(r=>setTimeout(r,600)); // имитация
+      form.reset();
+      note.textContent = {nl:"Bedankt! We nemen snel contact op.",
+                          fr:"Merci ! On vous recontacte rapidement.",
+                          en:"Thanks! We’ll get back to you soon."}[document.documentElement.lang] || "Thanks!";
+    }catch(err){
+      note.textContent = {nl:"Er ging iets mis. Probeer opnieuw.",
+                          fr:"Une erreur est survenue. Réessayez.",
+                          en:"Something went wrong. Try again."}[document.documentElement.lang] || "Error";
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  initLang();
+  $$('.lang-btn').forEach(b=>b.addEventListener('click', ()=>setLang(b.dataset.lang)));
+  smoothNav();
+  burger();
+  form();
+});

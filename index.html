@@ -1,370 +1,203 @@
+<!-- FILE: index.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BotMatic — Custom chatbots for WhatsApp, Telegram & Instagram</title>
-  <meta name="description" content="We build custom chatbots that capture leads, qualify them and auto‑book. Fast setup, CRM & payments, ongoing support." />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>BotMatic — Maatwerk chatbots voor WhatsApp, Telegram & websites</title>
+  <meta name="description" content="Wij bouwen chatbots die leads vangen, kwalificeren en automatisch afspraken boeken. WhatsApp, Telegram of website. Snelle oplevering, vaste prijs."/>
+  <meta name="theme-color" content="#111827"/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#0b0b0f;          /* page background */
-      --card:#11121a;        /* surface */
-      --muted:#9aa0aa;       /* secondary text */
-      --text:#e7eaf0;        /* main text */
-      --accent:#3b82f6;      /* blue */
-      --accent-2:#f59e0b;    /* amber for highlights */
-      --ring: 0 0 0 3px rgba(59,130,246,.35);
-      --shadow: 0 20px 40px rgba(0,0,0,.35);
-      --radius: 16px;
-      --maxw: 1120px;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
-      background:radial-gradient(1200px 600px at 60% -10%, rgba(59,130,246,.12), transparent 60%),
-                 radial-gradient(800px 400px at 10% 0%, rgba(245,158,11,.08), transparent 55%),
-                 var(--bg);
-      color:var(--text);
-      line-height:1.6;
-    }
-    a{color:inherit;text-decoration:none}
-    .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
-    /* Header */
-    header{position:sticky;top:0;background:rgba(11,11,15,.7);backdrop-filter:saturate(120%) blur(10px);border-bottom:1px solid #1e2233;z-index:50}
-    .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
-    .logo{display:flex;gap:10px;align-items:center;font-weight:800}
-    .logo-dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 0 0 3px rgba(59,130,246,.25)}
-    .nav a{opacity:.9}
-    .nav a:hover{opacity:1}
-    .menu{display:flex;gap:20px;align-items:center}
-    .menu a{font-weight:600;color:#cfd6e4}
-    .cta{display:inline-flex;gap:8px;align-items:center;background:linear-gradient(135deg,var(--accent),#2563eb);color:white;padding:10px 16px;border-radius:999px;box-shadow:var(--shadow)}
-    .cta:hover{transform:translateY(-1px)}
-    .ghost{padding:9px 16px;border:1px solid #26314a;border-radius:999px}
-    .lang{appearance:none;background:#0e1322;color:#cfd6e4;border:1px solid #2a3550;padding:8px 12px;border-radius:12px}
-    .hamb{display:none}
-    @media (max-width:920px){
-      .menu{display:none}
-      .hamb{display:inline-flex;align-items:center;gap:8px}
-      .drawer{display:none}
-      .drawer.open{display:flex;flex-direction:column;gap:12px;padding:16px}
-      header .wrap{padding-bottom:8px}
-    }
-    /* Hero */
-    .hero{padding:90px 0 40px}
-    .hero .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:32px}
-    .badge{display:inline-flex;gap:10px;align-items:center;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.35);color:#cfe1ff;padding:8px 12px;border-radius:999px;font-weight:600}
-    h1{font-size:44px;line-height:1.1;margin:18px 0}
-    .lead{font-size:18px;color:var(--muted);max-width:700px}
-    .actions{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap}
-    .card{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0));border:1px solid #1f2435;border-radius:var(--radius);box-shadow:var(--shadow)}
-    .phone{height:440px;padding:18px;position:relative}
-    .phone::before{content:"";position:absolute;inset:12px;border-radius:28px;border:10px solid #0a0d15}
-    .chat{height:100%;overflow:auto;padding:24px;border-radius:20px;background:linear-gradient(180deg,#0e1220,#0a0d15)}
-    .msg{max-width:82%;margin:10px 0;padding:12px 14px;border-radius:14px}
-    .bot{background:#0f1930;border:1px solid #1f2d52;color:#dbe7ff;border-bottom-left-radius:4px}
-    .you{margin-left:auto;background:#1a2438;border:1px solid #2b3a63;color:#e6ecff;border-bottom-right-radius:4px}
-    /* Sections */
-    section{padding:64px 0}
-    .h2{font-size:28px;margin:0 0 8px}
-    .muted{color:var(--muted)}
-    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-    .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-    @media (max-width:920px){.hero .grid{grid-template-columns:1fr}.grid3{grid-template-columns:1fr 1fr}.grid4{grid-template-columns:1fr 1fr}}
-    @media (max-width:560px){.grid3,.grid4{grid-template-columns:1fr}}
-    .tile{padding:18px}
-    .tile h3{margin:8px 0 6px}
-    /* Pricing */
-    .pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-    .plan{padding:22px;position:relative}
-    .plan .price{font-size:36px;font-weight:800;margin:8px 0}
-    .plan ul{list-style:none;padding:0;margin:0}
-    .plan li{margin:8px 0;display:flex;gap:10px;align-items:flex-start}
-    .plan .buy{margin-top:16px}
-    .popular::after{content:"Popular";position:absolute;top:14px;right:14px;background:linear-gradient(135deg,var(--accent-2),#f59e0b);color:#0b0b0f;font-weight:800;font-size:12px;padding:4px 8px;border-radius:999px}
-    @media (max-width:920px){.pricing{grid-template-columns:1fr}}
-    /* Footer */
-    footer{border-top:1px solid #1e2233;padding:32px 0 80px}
-    .foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:#9aa0aa}
-    .whatsapp-fab{position:fixed;right:18px;bottom:18px;background:#22c55e;color:#07140a;border-radius:999px;padding:14px 18px;font-weight:800;box-shadow:var(--shadow)}
-    .whatsapp-fab:hover{transform:translateY(-1px)}
-  </style>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="canonical" href="https://www.botmatic.be/">
+  <meta property="og:title" content="BotMatic — Chatbots voor WhatsApp, Telegram & websites">
+  <meta property="og:description" content="Volledig maatwerk, klaar in 7–14 dagen. Gratis diagnose.">
+  <meta property="og:image" content="assets/og.jpg">
+  <meta property="og:url" content="https://www.botmatic.be/">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="assets/favicon.png" type="image/png"/>
 </head>
 <body>
-  <header>
-    <div class="wrap nav">
-      <a href="#top" class="logo" aria-label="BotMatic home">
-        <span class="logo-dot"></span>
-        <span>BotMatic</span>
+  <header class="site-header">
+    <div class="container row space">
+      <a class="logo" href="#home">
+        <img src="assets/logo.svg" alt="BotMatic" height="28">
       </a>
-      <nav class="menu" aria-label="primary">
-        <a href="#features" data-i18n="nav.features">Features</a>
-        <a href="#how" data-i18n="nav.how">How it works</a>
-        <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
-        <a href="#cases" data-i18n="nav.cases">Use cases</a>
-        <a href="#faq" data-i18n="nav.faq">FAQ</a>
-        <a class="ghost" href="#contact" data-i18n="nav.contact">Contact</a>
-        <a class="cta" href="#demo" data-i18n="nav.demo">Get a demo →</a>
-        <select id="lang" class="lang" aria-label="Language">
-          <option value="en">EN</option>
-          <option value="nl">NL</option>
-          <option value="fr">FR</option>
-          <option value="ru">RU</option>
-        </select>
+      <nav class="nav">
+        <a href="#features" data-i18n="nav.features">Functies</a>
+        <a href="#pricing" data-i18n="nav.pricing">Prijzen</a>
+        <a href="#contact" data-i18n="nav.contact">Contact</a>
+        <a href="#demo" class="btn btn--ghost" data-i18n="nav.demo">Demo</a>
       </nav>
-      <div class="hamb">
-        <select id="lang-m" class="lang" aria-label="Language (mobile)">
-          <option value="en">EN</option>
-          <option value="nl">NL</option>
-          <option value="fr">FR</option>
-          <option value="ru">RU</option>
-        </select>
-        <a class="cta" href="#demo" data-i18n="nav.demo">Get a demo →</a>
+      <div class="lang">
+        <button class="lang-btn" data-lang="nl">NL</button>
+        <button class="lang-btn" data-lang="fr">FR</button>
+        <button class="lang-btn" data-lang="en">EN</button>
       </div>
+      <button class="burger" aria-label="Menu" aria-expanded="false">☰</button>
     </div>
-    <div class="wrap drawer" id="drawer"></div>
   </header>
 
-  <!-- Hero -->
-  <main id="top" class="wrap hero">
-    <div class="grid">
-      <div>
-        <div class="badge">⚡ <span data-i18n="hero.badge">Delivery in 7–14 days</span></div>
-        <h1 data-i18n="hero.title">Custom chatbots for WhatsApp, Telegram & Instagram — built fast</h1>
-        <p class="lead" data-i18n="hero.subtitle">We capture leads, auto‑qualify and book appointments. CRM & payments. No stress.</p>
-        <div class="actions">
-          <a class="cta" href="#demo" data-i18n="hero.ctaPrimary">Start a project</a>
-          <a class="ghost" href="#pricing" data-i18n="hero.ctaSecondary">See pricing</a>
+  <main id="home">
+    <section class="hero">
+      <div class="container hero__grid">
+        <div class="hero__text">
+          <div class="badges">
+            <span class="badge" data-i18n="hero.badge1">⚡ 7–14 dagen oplevering</span>
+            <span class="badge" data-i18n="hero.badge2">🧩 Volledig maatwerk</span>
+            <span class="badge" data-i18n="hero.badge3">🔌 CRM & betalingen</span>
+          </div>
+          <h1 data-i18n="hero.title">Chatbots voor WhatsApp, Telegram & websites — snel gebouwd</h1>
+          <p class="lead" data-i18n="hero.subtitle">We bouwen bots die leads vangen, kwalificeren en automatisch afspraken boeken. Eenvoudige setup, snelle oplevering, doorlopend support.</p>
+          <div class="cta">
+            <a href="#contact" class="btn" data-i18n="hero.ctaPrimary">Start een project</a>
+            <a href="#pricing" class="btn btn--ghost" data-i18n="hero.ctaSecondary">Bekijk prijzen</a>
+          </div>
+          <div class="stats">
+            <div><div class="stat">+28%</div><div class="muted" data-i18n="stats.s1">Meer chats uit verkeer</div></div>
+            <div><div class="stat">-70%</div><div class="muted" data-i18n="stats.s2">Snellere reactie</div></div>
+            <div><div class="stat">60–80%</div><div class="muted" data-i18n="stats.s3">Automatische afhandeling</div></div>
+          </div>
+        </div>
+        <div class="hero__mock">
+          <div class="phone">
+            <div class="phone__status"></div>
+            <div class="phone__screen" id="demo">
+              <div class="bubble bot" data-i18n="demo.bot1">Hoi! Ik ben BotMatic. Waarmee kan ik helpen?</div>
+              <div class="kb">
+                <button class="kbtn" data-i18n="demo.k1">Afspraak boeken</button>
+                <button class="kbtn" data-i18n="demo.k2">Prijzen</button>
+                <button class="kbtn" data-i18n="demo.k3">Contact met agent</button>
+              </div>
+            </div>
+          </div>
+          <p class="muted tiny" data-i18n="hero.disclaimer">Demo is illustratief. Integreren kan met WhatsApp, Telegram, webwidget.</p>
         </div>
       </div>
-      <div class="card phone">
-        <div class="chat">
-          <div class="msg bot">Hi! I’m BotMatic. What do you need help with?</div>
-          <div class="msg you">Book an appointment</div>
-          <div class="msg bot">Great. Which date works best? I’ll also collect your details and send a confirmation.</div>
-          <div class="msg you">Tomorrow after 16:00</div>
-          <div class="msg bot">Done ✅ Your booking is confirmed. You’ll receive reminders by WhatsApp.</div>
+    </section>
+
+    <section id="features" class="section">
+      <div class="container">
+        <h2 data-i18n="features.title">Wat je van ons krijgt</h2>
+        <div class="grid-3">
+          <article class="card">
+            <h3>Flows</h3>
+            <p data-i18n="features.f1">Diagnose, kwalificatie, FAQ, doorverbinden naar agent.</p>
+          </article>
+          <article class="card">
+            <h3>Integraties</h3>
+            <p data-i18n="features.f2">CRM, agenda’s, betalingen (Stripe), Google Sheets, webhooks.</p>
+          </article>
+          <article class="card">
+            <h3>Beheer</h3>
+            <p data-i18n="features.f3">Meertaligheid, statistieken, updates, support.</p>
+          </article>
         </div>
       </div>
-    </div>
+    </section>
+
+    <section id="pricing" class="section alt">
+      <div class="container">
+        <h2 data-i18n="pricing.title">Prijzen</h2>
+        <p class="muted center" data-i18n="pricing.note">Alle plannen inclusief gratis huidig advies/diagnose van je funnel.</p>
+        <div class="pricing">
+          <div class="p-card">
+            <div class="p-head">
+              <h3 data-i18n="plans.basic.name">Basis</h3>
+              <div class="p-price">€29<span class="per">/maand</span></div>
+            </div>
+            <ul class="p-list">
+              <li data-i18n="plans.basic.l1">1 kernfunctie (bv. FAQ)</li>
+              <li data-i18n="plans.basic.l2">1 platform</li>
+              <li data-i18n="plans.basic.l3">Standaard support</li>
+              <li data-i18n="plans.basic.l4">Tot 500 conversaties</li>
+            </ul>
+            <a href="#contact" class="btn" data-i18n="plans.cta">Kies dit plan</a>
+          </div>
+
+          <div class="p-card p-card--pro">
+            <div class="p-head">
+              <div class="badge" data-i18n="plans.popular">Meest gekozen</div>
+              <h3 data-i18n="plans.standard.name">Standaard</h3>
+              <div class="p-price">€99<span class="per">/maand</span></div>
+            </div>
+            <ul class="p-list">
+              <li data-i18n="plans.standard.l1">Meerdere taken/flows</li>
+              <li data-i18n="plans.standard.l2">2 platforms</li>
+              <li data-i18n="plans.standard.l3">Priority support</li>
+              <li data-i18n="plans.standard.l4">Tot 2.000 conversaties</li>
+            </ul>
+            <a href="#contact" class="btn" data-i18n="plans.cta">Kies dit plan</a>
+          </div>
+
+          <div class="p-card">
+            <div class="p-head">
+              <h3 data-i18n="plans.premium.name">Premium</h3>
+              <div class="p-price">€299<span class="per">/maand</span></div>
+            </div>
+            <ul class="p-list">
+              <li data-i18n="plans.premium.l1">Geavanceerde AI/NLP</li>
+              <li data-i18n="plans.premium.l2">Meerdere systemen</li>
+              <li data-i18n="plans.premium.l3">Toegewijde PM & support</li>
+              <li data-i18n="plans.premium.l4">Onbeperkte conversaties</li>
+            </ul>
+            <a href="#contact" class="btn" data-i18n="plans.cta">Kies dit plan</a>
+          </div>
+        </div>
+        <p class="muted tiny center" data-i18n="pricing.gambling">21+ Gokken kan verslavend zijn. Stop op tijd! Meer info: stopoptijd.be</p>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <div class="container">
+        <h2 data-i18n="contact.title">Vraag een demo</h2>
+        <form id="contactForm" class="form">
+          <div class="form-row">
+            <label data-i18n="form.name">Naam</label>
+            <input name="name" required placeholder="Jouw naam"/>
+          </div>
+          <div class="form-row">
+            <label>Email</label>
+            <input name="email" type="email" required placeholder="jij@bedrijf.be"/>
+          </div>
+          <div class="form-row">
+            <label data-i18n="form.platform">Platform</label>
+            <select name="platform">
+              <option>WhatsApp</option>
+              <option>Telegram</option>
+              <option>Website</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label data-i18n="form.message">Bericht</label>
+            <textarea name="message" rows="4" placeholder="Vertel kort wat je nodig hebt…"></textarea>
+          </div>
+          <label class="chk">
+            <input type="checkbox" required/>
+            <span data-i18n="form.gdpr">Ik ga akkoord met verwerking van mijn gegevens volgens de privacyverklaring.</span>
+          </label>
+          <button class="btn" type="submit" data-i18n="form.submit">Versturen</button>
+          <p id="formNote" class="muted tiny"></p>
+        </form>
+      </div>
+    </section>
   </main>
 
-  <!-- Features -->
-  <section id="features">
-    <div class="wrap">
-      <h2 class="h2" data-i18n="features.title">Why companies choose us</h2>
-      <p class="muted" data-i18n="features.subtitle">We design flows that convert and integrate with your stack.</p>
-      <div class="grid4">
-        <div class="card tile"><h3>⚡ <span data-i18n="features.f1">Fast launch — from 7 days</span></h3><p class="muted" data-i18n="features.f1d">Kick off quick with pre‑built blocks and custom flows.</p></div>
-        <div class="card tile"><h3>🔌 <span data-i18n="features.f2">CRM & payments</span></h3><p class="muted" data-i18n="features.f2d">Connect HubSpot, Bitrix24, Stripe, Make/Zapier.</p></div>
-        <div class="card tile"><h3>🧩 <span data-i18n="features.f3">Fully custom logic</span></h3><p class="muted" data-i18n="features.f3d">Buttons, AI, lead scoring, mini‑diagnostics.</p></div>
-        <div class="card tile"><h3>📈 <span data-i18n="features.f4">More sales</span></h3><p class="muted" data-i18n="features.f4d">Faster replies, fewer no‑shows, +conversion.</p></div>
+  <footer class="site-footer">
+    <div class="container row space">
+      <div class="muted tiny">© <span id="y"></span> BotMatic</div>
+      <div class="muted tiny">
+        <a href="sitemap.xml">Sitemap</a> · <a href="robots.txt">Robots</a>
       </div>
-    </div>
-  </section>
-
-  <!-- How it works -->
-  <section id="how">
-    <div class="wrap">
-      <h2 class="h2" data-i18n="how.title">How it works</h2>
-      <div class="grid3">
-        <div class="card tile"><h3>1. <span data-i18n="how.s1">Brief</span></h3><p class="muted" data-i18n="how.s1d">You describe goals and channels.</p></div>
-        <div class="card tile"><h3>2. <span data-i18n="how.s2">Design</span></h3><p class="muted" data-i18n="how.s2d">We build flows & copy, then review with you.</p></div>
-        <div class="card tile"><h3>3. <span data-i18n="how.s3">Launch</span></h3><p class="muted" data-i18n="how.s3d">Connect WhatsApp/Telegram, CRM & payments.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Pricing -->
-  <section id="pricing">
-    <div class="wrap">
-      <h2 class="h2" data-i18n="pricing.title">Pricing</h2>
-      <p class="muted" data-i18n="pricing.subtitle">Simple monthly plans. Cancel anytime.</p>
-      <div class="pricing">
-        <div class="card plan">
-          <h3 data-i18n="pricing.p1">Starter</h3>
-          <div class="price">€49<span class="muted">/mo</span></div>
-          <ul>
-            <li>✔ <span data-i18n="pricing.p1i1">FAQ bot</span></li>
-            <li>✔ <span data-i18n="pricing.p1i2">1 channel</span></li>
-            <li>✔ <span data-i18n="pricing.p1i3">Email support</span></li>
-          </ul>
-          <a class="cta buy" href="#demo" data-i18n="pricing.buy">Get started</a>
-        </div>
-        <div class="card plan popular">
-          <h3 data-i18n="pricing.p2">Business</h3>
-          <div class="price">€99<span class="muted">/mo</span></div>
-          <ul>
-            <li>✔ <span data-i18n="pricing.p2i1">Custom flows</span></li>
-            <li>✔ <span data-i18n="pricing.p2i2">2 channels</span></li>
-            <li>✔ <span data-i18n="pricing.p2i3">Integrations</span></li>
-          </ul>
-          <a class="cta buy" href="#demo" data-i18n="pricing.buy">Get started</a>
-        </div>
-        <div class="card plan">
-          <h3 data-i18n="pricing.p3">Pro</h3>
-          <div class="price">€299<span class="muted">/mo</span></div>
-          <ul>
-            <li>✔ <span data-i18n="pricing.p3i1">AI & NLP</span></li>
-            <li>✔ <span data-i18n="pricing.p3i2">CRM & payments</span></li>
-            <li>✔ <span data-i18n="pricing.p3i3">Priority support</span></li>
-          </ul>
-          <a class="cta buy" href="#demo" data-i18n="pricing.buy">Get started</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Use cases -->
-  <section id="cases">
-    <div class="wrap">
-      <h2 class="h2" data-i18n="cases.title">Use cases</h2>
-      <div class="grid3">
-        <div class="card tile"><h3 data-i18n="cases.c1">Beauty & clinics</h3><p class="muted" data-i18n="cases.c1d">Mini‑diagnostics, booking, deposits, reminders.</p></div>
-        <div class="card tile"><h3 data-i18n="cases.c2">Auto dealers</h3><p class="muted" data-i18n="cases.c2d">Lead capture, trade‑in, test drives, finance.</p></div>
-        <div class="card tile"><h3 data-i18n="cases.c3">E‑commerce</h3><p class="muted" data-i18n="cases.c3d">Abandoned cart, order status, upsell.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ -->
-  <section id="faq">
-    <div class="wrap">
-      <h2 class="h2" data-i18n="faq.title">FAQ</h2>
-      <div class="grid3">
-        <div class="card tile"><h3 data-i18n="faq.q1">How fast can we launch?</h3><p class="muted" data-i18n="faq.a1">Typically 7–14 days depending on scope.</p></div>
-        <div class="card tile"><h3 data-i18n="faq.q2">Do you integrate with our tools?</h3><p class="muted" data-i18n="faq.a2">Yes — HubSpot, Bitrix24, Make, Zapier, Stripe and more.</p></div>
-        <div class="card tile"><h3 data-i18n="faq.q3">Is support included?</h3><p class="muted" data-i18n="faq.a3">All plans include updates and support.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact / Demo form -->
-  <section id="demo">
-    <div class="wrap">
-      <h2 class="h2" data-i18n="demo.title">Get a demo</h2>
-      <p class="muted" data-i18n="demo.subtitle">Tell us about your business. We’ll propose the flow and price.</p>
-      <form class="card tile" id="form" style="display:grid;gap:12px;max-width:720px">
-        <input required name="name" placeholder="Your name" style="padding:12px;border-radius:12px;border:1px solid #2a3550;background:#0e1322;color:#e7eaf0">
-        <input required name="email" type="email" placeholder="Work email" style="padding:12px;border-radius:12px;border:1px solid #2a3550;background:#0e1322;color:#e7eaf0">
-        <input name="whatsapp" placeholder="WhatsApp number (optional)" style="padding:12px;border-radius:12px;border:1px solid #2a3550;background:#0e1322;color:#e7eaf0">
-        <textarea required name="about" rows="4" placeholder="What should the bot do?" style="padding:12px;border-radius:12px;border:1px solid #2a3550;background:#0e1322;color:#e7eaf0"></textarea>
-        <button class="cta" type="submit" data-i18n="demo.send">Send request →</button>
-        <small class="muted" data-i18n="demo.gdpr">By submitting you agree to be contacted about BotMatic services.</small>
-      </form>
-    </div>
-  </section>
-
-  <footer id="contact">
-    <div class="wrap foot">
-      <div>© <span id="year"></span> BotMatic</div>
-      <div>hello@botmatic.be</div>
-      <div>VAT/BTW: BE 0000.000.000</div>
+      <div class="muted tiny">VAT/BTW BE-0000.000.000</div>
     </div>
   </footer>
 
-  <a class="whatsapp-fab" href="https://wa.me/32400000000" target="_blank" rel="noopener" aria-label="WhatsApp">WhatsApp</a>
-
+  <script src="main.js"></script>
   <script>
-    // --- ultra‑light i18n ---
-    const I18N = {
-      en:{
-        nav:{features:"Features",how:"How it works",pricing:"Pricing",cases:"Use cases",faq:"FAQ",contact:"Contact",demo:"Get a demo"},
-        hero:{badge:"Delivery in 7–14 days",title:"Custom chatbots for WhatsApp, Telegram & Instagram — built fast",subtitle:"We capture leads, auto‑qualify and book appointments. CRM & payments. No stress.",ctaPrimary:"Start a project",ctaSecondary:"See pricing"},
-        features:{title:"Why companies choose us",subtitle:"We design flows that convert and integrate with your stack.",f1:"Fast launch — from 7 days",f1d:"Kick off quick with pre‑built blocks and custom flows.",f2:"CRM & payments",f2d:"Connect HubSpot, Bitrix24, Stripe, Make/Zapier.",f3:"Fully custom logic",f3d:"Buttons, AI, lead scoring, mini‑diagnostics.",f4:"More sales",f4d:"Faster replies, fewer no‑shows, +conversion."},
-        how:{title:"How it works",s1:"Brief",s1d:"You describe goals and channels.",s2:"Design",s2d:"We build flows & copy, then review with you.",s3:"Launch",s3d:"Connect WhatsApp/Telegram, CRM & payments."},
-        pricing:{title:"Pricing",subtitle:"Simple monthly plans. Cancel anytime.",p1:"Starter",p1i1:"FAQ bot",p1i2:"1 channel",p1i3:"Email support",p2:"Business",p2i1:"Custom flows",p2i2:"2 channels",p2i3:"Integrations",p3:"Pro",p3i1:"AI & NLP",p3i2:"CRM & payments",p3i3:"Priority support",buy:"Get started"},
-        cases:{title:"Use cases",c1:"Beauty & clinics",c1d:"Mini‑diagnostics, booking, deposits, reminders.",c2:"Auto dealers",c2d:"Lead capture, trade‑in, test drives, finance.",c3:"E‑commerce",c3d:"Abandoned cart, order status, upsell."},
-        faq:{title:"FAQ",q1:"How fast can we launch?",a1:"Typically 7–14 days depending on scope.",q2:"Do you integrate with our tools?",a2:"Yes — HubSpot, Bitrix24, Make, Zapier, Stripe and more.",q3:"Is support included?",a3:"All plans include updates and support."},
-        demo:{title:"Get a demo",subtitle:"Tell us about your business. We’ll propose the flow and price.",send:"Send request →",gdpr:"By submitting you agree to be contacted about BotMatic services."}
-      },
-      nl:{
-        nav:{features:"Features",how:"Werkt zo",pricing:"Prijzen",cases:"Use cases",faq:"FAQ",contact:"Contact",demo:"Vraag een demo"},
-        hero:{badge:"Levering in 7–14 dagen",title:"Maatwerk chatbots voor WhatsApp, Telegram & Instagram — snel gebouwd",subtitle:"We vangen leads, kwalificeren automatisch en boeken afspraken. CRM & betalingen.",ctaPrimary:"Start project",ctaSecondary:"Bekijk prijzen"},
-        features:{title:"Waarom bedrijven ons kiezen",subtitle:"Conversiegerichte flows met jouw tools.",f1:"Snel live — vanaf 7 dagen",f1d:"Start snel met blokken en maatwerk.",f2:"CRM & betalingen",f2d:"Koppel HubSpot, Bitrix24, Stripe, Make/Zapier.",f3:"Volledig maatwerk",f3d:"Knoppen, AI, lead scoring, mini‑diagnose.",f4:"Meer omzet",f4d:"Sneller antwoord, minder no‑shows, meer conversie."},
-        how:{title:"Werkt zo",s1:"Briefing",s1d:"Doelen en kanalen.",s2:"Ontwerp",s2d:"We bouwen flows & copy, review met jou.",s3:"Lancering",s3d:"Koppel WhatsApp/Telegram, CRM & betalingen."},
-        pricing:{title:"Prijzen",subtitle:"Eenvoudige maandabonnementen.",p1:"Basis",p1i1:"FAQ‑bot",p1i2:"1 kanaal",p1i3:"E‑mail support",p2:"Business",p2i1:"Maatwerkflows",p2i2:"2 kanalen",p2i3:"Integraties",p3:"Pro",p3i1:"AI & NLP",p3i2:"CRM & betalingen",p3i3:"Priority support",buy:"Start nu"},
-        cases:{title:"Use cases",c1:"Beauty & klinieken",c1d:"Mini‑diagnose, boekingen, voorschotten, reminders.",c2:"Autohandel",c2d:"Leads, inruil, testritten, financiering.",c3:"E‑commerce",c3d:"Verlaten winkelwagen, orderstatus, upsell."},
-        faq:{title:"FAQ",q1:"Hoe snel live?",a1:"Meestal 7–14 dagen.",q2:"Integreren jullie met onze tools?",a2:"Ja — HubSpot, Bitrix24, Make, Zapier, Stripe enz.",q3:"Is support inbegrepen?",a3:"Alle plannen bevatten updates en support."},
-        demo:{title:"Vraag een demo",subtitle:"Vertel over je bedrijf. Wij stellen flow en prijs voor.",send:"Verstuur →",gdpr:"Door te verzenden ga je akkoord dat we contact opnemen."}
-      },
-      fr:{
-        nav:{features:"Avantages",how:"Comment ça marche",pricing:"Tarifs",cases:"Cas d’usage",faq:"FAQ",contact:"Contact",demo:"Demander une démo"},
-        hero:{badge:"Livraison en 7–14 jours",title:"Chatbots sur mesure pour WhatsApp, Telegram & Instagram — rapides",subtitle:"On capte les leads, qualifie et prend des RDV. CRM & paiements.",ctaPrimary:"Lancer un projet",ctaSecondary:"Voir les tarifs"},
-        features:{title:"Pourquoi nous",subtitle:"Des parcours qui convertissent et s’intègrent à vos outils.",f1:"Mise en ligne rapide",f1d:"Démarrage express avec modules + sur‑mesure.",f2:"CRM & paiements",f2d:"HubSpot, Bitrix24, Stripe, Make/Zapier.",f3:"Logique 100% sur‑mesure",f3d:"Boutons, IA, scoring, mini‑diagnostics.",f4:"Plus de ventes",f4d:"Réponse rapide, moins d’absences, +conversion."},
-        how:{title:"Comment ça marche",s1:"Brief",s1d:"Objectifs et canaux.",s2:"Conception",s2d:"On construit les parcours et le copy, validation avec vous.",s3:"Lancement",s3d:"Connexion WhatsApp/Telegram, CRM & paiements."},
-        pricing:{title:"Tarifs",subtitle:"Abonnements mensuels simples.",p1:"Starter",p1i1:"Bot FAQ",p1i2:"1 canal",p1i3:"Support email",p2:"Business",p2i1:"Parcours sur‑mesure",p2i2:"2 canaux",p2i3:"Intégrations",p3:"Pro",p3i1:"IA & NLP",p3i2:"CRM & paiements",p3i3:"Support prioritaire",buy:"Commencer"},
-        cases:{title:"Cas d’usage",c1:"Beauté & cliniques",c1d:"Mini‑diagnostic, RDV, acomptes, rappels.",c2:"Concession auto",c2d:"Leads, reprise, essais, financement.",c3:"E‑commerce",c3d:"Panier abandonné, suivi, upsell."},
-        faq:{title:"FAQ",q1:"Délais de lancement ?",a1:"En général 7–14 jours.",q2:"S’intègre avec nos outils ?",a2:"Oui — HubSpot, Bitrix24, Make, Zapier, Stripe…",q3:"Support inclus ?",a3:"Tous les plans incluent mises à jour et support."},
-        demo:{title:"Demander une démo",subtitle:"Parlez‑nous de votre activité. On propose le parcours et le prix.",send:"Envoyer →",gdpr:"En envoyant, vous acceptez d’être contacté."}
-      },
-      ru:{
-        nav:{features:"Преимущества",how:"Как это работает",pricing:"Тарифы",cases:"Кейсы",faq:"FAQ",contact:"Контакты",demo:"Получить демо"},
-        hero:{badge:"Запуск за 7–14 дней",title:"Чат‑боты для WhatsApp, Telegram и Instagram — быстро и под ключ",subtitle:"Собираем лиды, квалифицируем и записываем. Интеграции с CRM и оплатой.",ctaPrimary:"Начать проект",ctaSecondary:"Смотреть цены"},
-        features:{title:"Почему выбирают нас",subtitle:"Делаем продающие сценарии и вяжем с вашими системами.",f1:"Быстрый запуск",f1d:"Стартуем быстро на готовых блоках + кастом.",f2:"CRM и платежи",f2d:"HubSpot, Bitrix24, Stripe, Make/Zapier.",f3:"Кастомная логика",f3d:"Кнопки, ИИ, скоринг, мини‑диагностика.",f4:"Больше продаж",f4d:"Быстрые ответы, меньше no‑show, больше конверсии."},
-        how:{title:"Как это работает",s1:"Бриф",s1d:"Цели и каналы.",s2:"Дизайн",s2d:"Строим сценарии и тексты, согласуем.",s3:"Запуск",s3d:"Подключаем WhatsApp/Telegram, CRM и оплату."},
-        pricing:{title:"Тарифы",subtitle:"Простая помесячная оплата.",p1:"Старт",p1i1:"FAQ‑бот",p1i2:"1 канал",p1i3:"Email‑поддержка",p2:"Бизнес",p2i1:"Кастом‑сценарии",p2i2:"2 канала",p2i3:"Интеграции",p3:"PRO",p3i1:"ИИ & NLP",p3i2:"CRM и платежи",p3i3:"Приоритетная поддержка",buy:"Запустить"},
-        cases:{title:"Кейсы",c1:"Бьюти & клиники",c1d:"Мини‑диагностика, запись, предоплата, напоминания.",c2:"Автодилеры",c2d:"Лиды, trade‑in, тест‑драйвы, финансы.",c3:"E‑commerce",c3d:"Брошенная корзина, статус заказа, допродажи."},
-        faq:{title:"FAQ",q1:"Как быстро запускаетесь?",a1:"Обычно 7–14 дней, зависит от объёма.",q2:"Интеграции есть?",a2:"Да — HubSpot, Bitrix24, Make, Zapier, Stripe и др.",q3:"Поддержка входит?",a3:"Во всех тарифах поддержка и обновления."},
-        demo:{title:"Получить демо",subtitle:"Расскажите о бизнесе, предложим сценарий и цену.",send:"Отправить →",gdpr:"Отправляя форму, вы соглашаетесь на контакт по услуге."}
-      }
-    };
-
-    const LANG_KEYS = ["en","nl","fr","ru"];
-    const els = [...document.querySelectorAll('[data-i18n]')];
-
-    function applyLang(lang){
-      const dict = I18N[lang] || I18N.en;
-      els.forEach(el=>{
-        const path = el.getAttribute('data-i18n').split('.');
-        let cur = dict; for(const p of path){cur = cur?.[p]; if(!cur) break}
-        if(typeof cur === 'string'){ el.textContent = cur }
-      });
-      document.documentElement.lang = lang;
-      localStorage.setItem('lang', lang);
-    }
-
-    function initLang(){
-      const saved = localStorage.getItem('lang');
-      const br = (navigator.language||'en').slice(0,2).toLowerCase();
-      const start = LANG_KEYS.includes(saved) ? saved : (LANG_KEYS.includes(br)?br:'en');
-      document.getElementById('lang').value = start;
-      document.getElementById('lang-m').value = start;
-      applyLang(start);
-      document.getElementById('lang').addEventListener('change', e=>applyLang(e.target.value));
-      document.getElementById('lang-m').addEventListener('change', e=>applyLang(e.target.value));
-    }
-
-    // Smooth anchor scroll
-    document.addEventListener('click', (e)=>{
-      const a = e.target.closest('a[href^="#"]');
-      if(!a) return;
-      const id = a.getAttribute('href').slice(1); if(!id) return;
-      const t = document.getElementById(id) || document.querySelector(`[id='${id}']`);
-      if(!t) return;
-      e.preventDefault();
-      t.scrollIntoView({behavior:'smooth',block:'start'});
-    });
-
-    // Simple form handler (replace with your backend)
-    document.getElementById('form').addEventListener('submit', (e)=>{
-      e.preventDefault();
-      alert('Thanks! We\'ll get back within 24h.');
-      e.target.reset();
-    });
-
-    // Mobile drawer (optional)
-    const drawer = document.getElementById('drawer');
-    // If you want a burger button later, toggle drawer.classList.toggle('open')
-
-    // Footer year & init
-    document.getElementById('year').textContent = new Date().getFullYear();
-    initLang();
+    document.getElementById('y').textContent = new Date().getFullYear();
   </script>
 </body>
 </html>

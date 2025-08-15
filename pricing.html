@@ -1,82 +1,125 @@
-<!-- pricing.html (cards + clear layout) -->
 <!DOCTYPE html>
-<html lang="en" data-lang="en">
+<html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>Pricing — BotMatic</title>
-  <meta name="description" content="Transparent pricing for custom chatbots.">
-  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="/assets/style.css?v=4">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pricing | BotMatic</title>
+  <meta name="description" content="Simple monthly plans for custom chatbots. Cancel anytime." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0b0b0f;--card:#11121a;--muted:#9aa0aa;--text:#e7eaf0;--accent:#3b82f6;--accent-2:#f59e0b;--shadow:0 20px 40px rgba(0,0,0,.35);--radius:16px;--maxw:1120px}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;background:radial-gradient(1200px 600px at 60% -10%, rgba(59,130,246,.12), transparent 60%),radial-gradient(800px 400px at 10% 0%, rgba(245,158,11,.08), transparent 55%),var(--bg);color:var(--text);line-height:1.6}
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+    header{position:sticky;top:0;background:rgba(11,11,15,.7);backdrop-filter:saturate(120%) blur(10px);border-bottom:1px solid #1e2233;z-index:50}
+    .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+    .logo{display:flex;gap:10px;align-items:center;font-weight:800}
+    .logo-dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 0 0 3px rgba(59,130,246,.25)}
+    .menu{display:flex;gap:20px;align-items:center}
+    .menu a{font-weight:600;color:#cfd6e4}
+    .cta{display:inline-flex;gap:8px;align-items:center;background:linear-gradient(135deg,var(--accent),#2563eb);color:white;padding:10px 16px;border-radius:999px;box-shadow:var(--shadow)}
+    .ghost{padding:9px 16px;border:1px solid #26314a;border-radius:999px}
+
+    main{padding:56px 0}
+    h1{font-size:40px;margin:8px 0}
+    .muted{color:var(--muted)}
+    .pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0));border:1px solid #1f2435;border-radius:var(--radius);box-shadow:var(--shadow)}
+    .plan{padding:22px;position:relative}
+    .plan .price{font-size:36px;font-weight:800;margin:8px 0}
+    .plan ul{list-style:none;padding:0;margin:0}
+    .plan li{margin:8px 0;display:flex;gap:10px;align-items:flex-start}
+    .popular::after{content:"Popular";position:absolute;top:14px;right:14px;background:linear-gradient(135deg,var(--accent-2),#f59e0b);color:#0b0b0f;font-weight:800;font-size:12px;padding:4px 8px;border-radius:999px}
+    .buy{margin-top:16px;display:inline-flex}
+    @media (max-width:920px){.pricing{grid-template-columns:1fr}}
+
+    .details{margin-top:28px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    @media (max-width:920px){.details{grid-template-columns:1fr}}
+    .tile{padding:18px}
+
+    footer{border-top:1px solid #1e2233;padding:32px 0 80px;margin-top:40px}
+    .foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:#9aa0aa}
+  </style>
 </head>
 <body>
-<header class="site-header">
-  <div class="container nav">
-    <a class="brand" href="/"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M7 7h10v8a4 4 0 0 1-4 4H11a4 4 0 0 1-4-4V7zM9 3h6v4H9z" fill="none" stroke="#111827" stroke-width="1.6"/></svg><strong>BotMatic</strong></a>
-    <button class="mobile-toggle" aria-controls="mainmenu" aria-expanded="false" aria-label="Open menu"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button>
-    <nav id="mainmenu" class="menu" aria-label="Main">
-      <a href="/" data-i18n="nav.home">Home</a>
-      <a href="/pricing.html" class="active" data-i18n="nav.pricing">Pricing</a>
-      <a href="/use-cases.html" data-i18n="nav.usecases">Use cases</a>
-      <a href="/faq.html" data-i18n="nav.faq">FAQ</a>
-      <a href="/contact.html" data-i18n="nav.contact">Contact</a>
-    </nav>
-    <div class="lang"><button data-lang="en">EN</button><button data-lang="nl">NL</button><button data-lang="fr">FR</button></div>
-  </div>
-</header>
+  <header>
+    <div class="wrap nav">
+      <a href="/" class="logo" aria-label="BotMatic home"><span class="logo-dot"></span><span>BotMatic</span></a>
+      <nav class="menu" aria-label="primary">
+        <a href="/index.html#features">Features</a>
+        <a href="/index.html#how">How it works</a>
+        <a class="ghost" href="/faq.html">FAQ</a>
+        <a class="cta" href="/index.html#demo">Get a demo →</a>
+      </nav>
+    </div>
+  </header>
 
-<main class="section">
-  <div class="container">
-    <h1 class="h1" data-i18n="pricing.title">Simple pricing</h1>
-    <p class="lead" data-i18n="pricing.lead">Pick a plan — upgrade anytime.</p>
+  <main class="wrap">
+    <p class="muted">Simple monthly plans. Cancel anytime.</p>
+    <h1>Pricing</h1>
 
-    <div class="plans">
-      <article class="plan">
-        <h3 class="plan-h" data-i18n="pricing.starter.title">Starter</h3>
-        <div class="price"><span data-i18n="pricing.starter.price">€29</span> <small>/mo</small></div>
-        <ul class="ul">
-          <li data-i18n="pricing.starter.l1">1 core flow (FAQ or lead capture)</li>
-          <li data-i18n="pricing.starter.l2">1 platform (e.g. WhatsApp)</li>
-          <li data-i18n="pricing.starter.l3">Up to 500 conversations/mo</li>
+    <div class="pricing">
+      <div class="card plan">
+        <h3>Starter</h3>
+        <div class="price">€49<span class="muted">/mo</span></div>
+        <ul>
+          <li>✔ FAQ bot</li>
+          <li>✔ 1 channel</li>
+          <li>✔ Email support</li>
         </ul>
-        <a class="btn btn--primary" href="/contact.html" data-i18n="cta.start">Start</a>
-      </article>
-
-      <article class="plan popular">
-        <div class="badge" data-i18n="pricing.popular">Most popular</div>
-        <h3 class="plan-h" data-i18n="pricing.standard.title">Standard</h3>
-        <div class="price"><span data-i18n="pricing.standard.price">€99</span> <small>/mo</small></div>
-        <ul class="ul">
-          <li data-i18n="pricing.standard.l1">Multi step flows (qualify + booking)</li>
-          <li data-i18n="pricing.standard.l2">2 platforms</li>
-          <li data-i18n="pricing.standard.l3">Priority support & updates</li>
-          <li data-i18n="pricing.standard.l4">Up to 2,000 conversations/mo</li>
+        <a class="cta buy" href="/index.html#demo">Get started</a>
+      </div>
+      <div class="card plan popular">
+        <h3>Business</h3>
+        <div class="price">€99<span class="muted">/mo</span></div>
+        <ul>
+          <li>✔ Custom flows</li>
+          <li>✔ 2 channels</li>
+          <li>✔ Integrations (CRM/Make/Zapier)</li>
         </ul>
-        <a class="btn btn--primary" href="/contact.html" data-i18n="cta.start">Start</a>
-      </article>
-
-      <article class="plan">
-        <h3 class="plan-h" data-i18n="pricing.premium.title">Premium</h3>
-        <div class="price"><span data-i18n="pricing.premium.price">€299</span> <small>/mo</small></div>
-        <ul class="ul">
-          <li data-i18n="pricing.premium.l1">Advanced AI & NLP tuning</li>
-          <li data-i18n="pricing.premium.l2">Multi platform & system integrations</li>
-          <li data-i18n="pricing.premium.l3">Dedicated PM & SLAs</li>
-          <li data-i18n="pricing.premium.l4">Unlimited conversations</li>
+        <a class="cta buy" href="/index.html#demo">Get started</a>
+      </div>
+      <div class="card plan">
+        <h3>Pro</h3>
+        <div class="price">€299<span class="muted">/mo</span></div>
+        <ul>
+          <li>✔ AI & NLP</li>
+          <li>✔ CRM & payments</li>
+          <li>✔ Priority support</li>
         </ul>
-        <a class="btn btn--primary" href="/contact.html" data-i18n="cta.start">Start</a>
-      </article>
+        <a class="cta buy" href="/index.html#demo">Get started</a>
+      </div>
     </div>
 
-    <div class="cta-row mt">
-      <a class="btn btn--ghost" href="/use-cases.html" data-i18n="cta.usecases">See use cases</a>
-      <a class="btn btn--line" href="/faq.html" data-i18n="nav.faq">FAQ</a>
+    <div class="details">
+      <div class="card tile">
+        <h3>Onboarding</h3>
+        <p class="muted">Setup, copywriting, basic integrations included. Typical launch: 7–14 days.</p>
+      </div>
+      <div class="card tile">
+        <h3>Channels</h3>
+        <p class="muted">WhatsApp, Telegram, Instagram. Add extra channels on any plan.</p>
+      </div>
+      <div class="card tile">
+        <h3>Cancel anytime</h3>
+        <p class="muted">No lock‑in. Pause or cancel monthly. You own your data.</p>
+      </div>
     </div>
-  </div>
-</main>
+  </main>
 
-<footer class="footer"><div class="container foot">© <span id="y"></span> BotMatic</div></footer>
-<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
-<script src="/assets/main.js?v=2" defer></script>
+  <footer>
+    <div class="wrap foot">
+      <div>© <span id="year"></span> BotMatic</div>
+      <div>hello@botmatic.be</div>
+      <div>VAT/BTW: BE 0000.000.000</div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
