@@ -1,4 +1,4 @@
-<!-- pricing.html -->
+<!-- pricing.html (cards + clear layout) -->
 <!DOCTYPE html>
 <html lang="en" data-lang="en">
 <head>
@@ -7,7 +7,7 @@
   <meta name="description" content="Transparent pricing for custom chatbots.">
   <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="/assets/style.css?v=3">
+  <link rel="stylesheet" href="/assets/style.css?v=4">
 </head>
 <body>
 <header class="site-header">
@@ -32,7 +32,7 @@
 
     <div class="plans">
       <article class="plan">
-        <h3 data-i18n="pricing.starter.title">Starter</h3>
+        <h3 class="plan-h" data-i18n="pricing.starter.title">Starter</h3>
         <div class="price"><span data-i18n="pricing.starter.price">€29</span> <small>/mo</small></div>
         <ul class="ul">
           <li data-i18n="pricing.starter.l1">1 core flow (FAQ or lead capture)</li>
@@ -44,7 +44,7 @@
 
       <article class="plan popular">
         <div class="badge" data-i18n="pricing.popular">Most popular</div>
-        <h3 data-i18n="pricing.standard.title">Standard</h3>
+        <h3 class="plan-h" data-i18n="pricing.standard.title">Standard</h3>
         <div class="price"><span data-i18n="pricing.standard.price">€99</span> <small>/mo</small></div>
         <ul class="ul">
           <li data-i18n="pricing.standard.l1">Multi step flows (qualify + booking)</li>
@@ -56,7 +56,7 @@
       </article>
 
       <article class="plan">
-        <h3 data-i18n="pricing.premium.title">Premium</h3>
+        <h3 class="plan-h" data-i18n="pricing.premium.title">Premium</h3>
         <div class="price"><span data-i18n="pricing.premium.price">€299</span> <small>/mo</small></div>
         <ul class="ul">
           <li data-i18n="pricing.premium.l1">Advanced AI & NLP tuning</li>
@@ -66,6 +66,11 @@
         </ul>
         <a class="btn btn--primary" href="/contact.html" data-i18n="cta.start">Start</a>
       </article>
+    </div>
+
+    <div class="cta-row mt">
+      <a class="btn btn--ghost" href="/use-cases.html" data-i18n="cta.usecases">See use cases</a>
+      <a class="btn btn--line" href="/faq.html" data-i18n="nav.faq">FAQ</a>
     </div>
   </div>
 </main>
