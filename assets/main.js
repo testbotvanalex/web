@@ -1,4 +1,4 @@
-// /assets/main.js
+// /assets/main.js (v2) — i18n + mobile menu + contact ok; includes home.sub string
 (function(){
   const $=(q,d=document)=>d.querySelector(q), $$=(q,d=document)=>Array.from(d.querySelectorAll(q));
 
@@ -9,10 +9,7 @@
       home:{
         title:"Custom chatbots in 7–14 days",
         lead:"WhatsApp, Telegram, Instagram & web. We design, build and launch bots that convert — fast.",
-        trust:"Trusted by small businesses & agencies",
-        b1:{t:"Fast",d:"From brief to launch in 7–14 days with tight feedback loops."},
-        b2:{t:"Custom",d:"Flows, tone and integrations tailored to your process."},
-        b3:{t:"Integrated",d:"Calendars, CRM, payments, Sheets — we connect your stack."},
+        sub:"7–14 days • Custom flows • CRM / Calendars / Stripe",
         "cta.t":"Ready to launch your chatbot?"
       },
       stats:{s1:"Lead→chat rate",s2:"Faster response",s3:"Automated handling"},
@@ -27,8 +24,7 @@
         title:"Popular use cases",lead:"Short flows that convert — tailored to your business.",
         lead:{t:"Lead capture",d:"Turn clicks into qualified contacts with clear opt‑in and consent."},
         qual:{t:"Qualification",d:"Score leads by need, budget and timeline. Route instantly."},
-        booking:{t:"Booking & reminders",d:"Auto‑book calendar slots, send reminders and follow‑ups."},
-        pay:{t:"Payments / shop",d:"Checkout inside chat with Stripe and invoicing."}
+        booking:{t:"Booking & reminders",d:"Auto‑book calendar slots, send reminders and follow‑ups."}
       },
       faq:{
         title:"FAQ",lead:"Answers to common questions.",
@@ -52,10 +48,7 @@
       home:{
         title:"Maatwerk chatbots in 7–14 dagen",
         lead:"WhatsApp, Telegram, Instagram & web. We bouwen en lanceren bots die converteren — snel.",
-        trust:"Vertrouwd door kmo’s & agencies",
-        b1:{t:"Snel",d:"Van briefing tot live in 7–14 dagen met korte feedback loops."},
-        b2:{t:"Maatwerk",d:"Flows, tone of voice en integraties op maat van je proces."},
-        b3:{t:"Geïntegreerd",d:"Agenda’s, CRM, betalingen, Sheets — we koppelen je stack."},
+        sub:"7–14 dagen • Maatwerk flows • CRM / Agenda’s / Stripe",
         "cta.t":"Klaar om je chatbot te lanceren?"
       },
       stats:{s1:"Lead→chat ratio",s2:"Sneller antwoord",s3:"Automatische afhandeling"},
@@ -70,8 +63,7 @@
         title:"Populaire use cases",lead:"Korte flows die converteren — op maat van jouw business.",
         lead:{t:"Lead capture",d:"Maak van kliks gekwalificeerde contacten met duidelijke opt‑in."},
         qual:{t:"Kwalificatie",d:"Scoreer leads op behoefte, budget en timing. Routeer direct."},
-        booking:{t:"Boeken & reminders",d:"Plan automatisch agenda‑slots, stuur reminders en follow‑ups."},
-        pay:{t:"Betalingen / shop",d:"Afrekenen in chat met Stripe en facturatie."}
+        booking:{t:"Boeken & reminders",d:"Plan automatisch agenda‑slots, stuur reminders en follow‑ups."}
       },
       faq:{
         title:"FAQ",lead:"Antwoorden op veelgestelde vragen.",
@@ -95,10 +87,7 @@
       home:{
         title:"Chatbots sur mesure en 7–14 jours",
         lead:"WhatsApp, Telegram, Instagram & web. Nous concevons, construisons et lançons des bots qui convertissent — vite.",
-        trust:"Plébiscité par PME & agences",
-        b1:{t:"Rapide",d:"Du brief au live en 7–14 jours avec itérations courtes."},
-        b2:{t:"Sur‑mesure",d:"Parcours, ton et intégrations adaptés à vos process."},
-        b3:{t:"Intégré",d:"Calendriers, CRM, paiements, Sheets — on connecte votre stack."},
+        sub:"7–14 jours • Parcours sur‑mesure • CRM / Agendas / Stripe",
         "cta.t":"Prêt à lancer votre chatbot ?"
       },
       stats:{s1:"Taux lead→chat",s2:"Réponse plus rapide",s3:"Traitement automatisé"},
@@ -113,8 +102,7 @@
         title:"Cas d’usage populaires",lead:"Parcours courts et efficaces — adaptés à votre activité.",
         lead:{t:"Capture de leads",d:"Transformez les clics en contacts qualifiés avec opt‑in clair."},
         qual:{t:"Qualification",d:"Scorez par besoin, budget et délai. Routage instantané."},
-        booking:{t:"Prise de RDV & rappels",d:"Réservation automatique, rappels et relances."},
-        pay:{t:"Paiements / boutique",d:"Paiement en chat avec Stripe et facturation."}
+        booking:{t:"Prise de RDV & rappels",d:"Réservation automatique, rappels et relances."}
       },
       faq:{
         title:"FAQ",lead:"Réponses aux questions fréquentes.",

@@ -1,4 +1,4 @@
-<!-- index.html (updated) -->
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en" data-lang="en">
 <head>
@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="/assets/style.css?v=2">
+  <link rel="stylesheet" href="/assets/style.css?v=3">
 </head>
 <body>
 <header class="site-header">
@@ -41,66 +41,46 @@
 </header>
 
 <main>
-  <!-- HERO -->
-  <section class="hero hero--accent">
-    <div class="container hero__grid">
-      <div>
-        <p class="eyebrow" aria-hidden="true">WhatsApp • Telegram • Instagram • Web</p>
-        <h1 class="h1 gradient-heading" data-i18n="home.title">Custom chatbots in 7–14 days</h1>
-        <p class="lead" data-i18n="home.lead">WhatsApp, Telegram, Instagram & web. We design, build and launch bots that convert — fast.</p>
-        <div class="cta-row">
-          <a class="btn btn--primary btn--glow" href="/contact.html" data-i18n="cta.demo">Get a demo</a>
-          <a class="btn btn--ghost" href="/pricing.html" data-i18n="cta.pricing">See pricing</a>
-          <a class="btn btn--line" href="https://wa.me/32400000000" rel="nofollow" data-i18n="cta.wa">WhatsApp</a>
-        </div>
-        <div class="chips">
-          <span>7–14 days</span><span>AI + Buttons</span><span>CRM • Calendars • Stripe</span>
-        </div>
+  <!-- HERO (minimal) -->
+  <section class="hero hero--clean">
+    <div class="container hero__stack">
+      <h1 class="h1 gradient-heading" data-i18n="home.title">Custom chatbots in 7–14 days</h1>
+      <p class="lead" data-i18n="home.lead">WhatsApp, Telegram, Instagram & web. We design, build and launch bots that convert — fast.</p>
+      <div class="cta-row">
+        <a class="btn btn--primary btn--glow" href="/contact.html" data-i18n="cta.demo">Get a demo</a>
+        <a class="btn btn--ghost" href="/pricing.html" data-i18n="cta.pricing">See pricing</a>
       </div>
-
-      <div class="hero__statgrid">
-        <div class="stat stat--card">
-          <span class="kpi">+30%</span>
-          <span class="lbl" data-i18n="stats.s1">Lead→chat rate</span>
-        </div>
-        <div class="stat stat--card">
-          <span class="kpi">×3</span>
-          <span class="lbl" data-i18n="stats.s2">Faster response</span>
-        </div>
-        <div class="stat stat--card">
-          <span class="kpi">70%</span>
-          <span class="lbl" data-i18n="stats.s3">Automated handling</span>
-        </div>
-      </div>
+      <p class="subnote" data-i18n="home.sub">7–14 days • Custom flows • CRM / Calendars / Stripe</p>
     </div>
   </section>
 
-  <!-- TRUST -->
-  <section class="trust">
-    <div class="container trust__row">
-      <span class="muted small" data-i18n="home.trust">Trusted by small businesses & agencies</span>
-      <div class="logos"><span>Beauty Studio</span><span>Auto Dealer</span><span>Clinic</span><span>Real Estate</span></div>
+  <!-- LIGHT STATS -->
+  <section class="stats">
+    <div class="container stats__row">
+      <div class="s"><strong>+30%</strong><span data-i18n="stats.s1">Lead→chat rate</span></div>
+      <div class="s"><strong>×3</strong><span data-i18n="stats.s2">Faster response</span></div>
+      <div class="s"><strong>70%</strong><span data-i18n="stats.s3">Automated handling</span></div>
     </div>
   </section>
 
   <!-- 3 BULLETS -->
   <section class="section">
     <div class="container grid3">
-      <article class="bullet card">
+      <article class="card bullet">
         <div class="ic">⚡</div>
         <div>
           <h3 data-i18n="home.b1.t">Fast</h3>
           <p class="muted" data-i18n="home.b1.d">From brief to launch in 7–14 days with tight feedback loops.</p>
         </div>
       </article>
-      <article class="bullet card">
+      <article class="card bullet">
         <div class="ic">🧩</div>
         <div>
           <h3 data-i18n="home.b2.t">Custom</h3>
           <p class="muted" data-i18n="home.b2.d">Flows, tone and integrations tailored to your process.</p>
         </div>
       </article>
-      <article class="bullet card">
+      <article class="card bullet">
         <div class="ic">🔌</div>
         <div>
           <h3 data-i18n="home.b3.t">Integrated</h3>
@@ -135,6 +115,6 @@
 </footer>
 
 <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
-<script src="/assets/main.js?v=1" defer></script>
+<script src="/assets/main.js?v=2" defer></script>
 </body>
 </html>
