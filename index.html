@@ -1,426 +1,370 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BotMatic — Custom Chatbots</title>
-  <meta name="description" content="Custom chatbots for WhatsApp, Telegram, Websites & Instagram. Lead capture, qualification, booking, and payments — built in 7–14 days." />
+  <title>BotMatic — Custom chatbots for WhatsApp, Telegram & Instagram</title>
+  <meta name="description" content="We build custom chatbots that capture leads, qualify them and auto‑book. Fast setup, CRM & payments, ongoing support." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #0b0c10;
-      --panel: #0f1117;
-      --text: #e5e7eb;
-      --muted: #9aa3b2;
-      --primary: #6d5efb;
-      --primary-2: #4f46e5;
-      --border: #1f2430;
-      --ok: #10b981;
-      --warn: #f59e0b;
+    :root{
+      --bg:#0b0b0f;          /* page background */
+      --card:#11121a;        /* surface */
+      --muted:#9aa0aa;       /* secondary text */
+      --text:#e7eaf0;        /* main text */
+      --accent:#3b82f6;      /* blue */
+      --accent-2:#f59e0b;    /* amber for highlights */
+      --ring: 0 0 0 3px rgba(59,130,246,.35);
+      --shadow: 0 20px 40px rgba(0,0,0,.35);
+      --radius: 16px;
+      --maxw: 1120px;
     }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; }
-    body {
-      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      background: linear-gradient(180deg, var(--bg), #0c0e14 60%);
-      color: var(--text);
-      line-height: 1.55;
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+      background:radial-gradient(1200px 600px at 60% -10%, rgba(59,130,246,.12), transparent 60%),
+                 radial-gradient(800px 400px at 10% 0%, rgba(245,158,11,.08), transparent 55%),
+                 var(--bg);
+      color:var(--text);
+      line-height:1.6;
     }
-    a { color: inherit; text-decoration: none; }
-    img { max-width: 100%; display: block; }
-    .container { width: min(1120px, 92%); margin: 0 auto; }
-    .btn { display:inline-flex; align-items:center; gap:.5rem; padding:.9rem 1.1rem; border-radius:14px; border:1px solid var(--border); font-weight:600; }
-    .btn.primary { background: linear-gradient(90deg, var(--primary), var(--primary-2)); color:white; border:none; box-shadow: 0 8px 24px rgba(99,102,241,.35); }
-    .btn.ghost { background: transparent; color: var(--text); }
-    .btn.small { padding:.65rem .9rem; border-radius:12px; font-weight:600; }
-    .chip { display:inline-flex; align-items:center; gap:.45rem; padding:.35rem .6rem; border:1px solid var(--border); border-radius:999px; color:var(--muted); font-size:.8rem; }
-    header {
-      position: sticky; top: 0; z-index: 50; backdrop-filter: saturate(140%) blur(8px);
-      background: rgba(11,12,16,.6); border-bottom: 1px solid var(--border);
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+    /* Header */
+    header{position:sticky;top:0;background:rgba(11,11,15,.7);backdrop-filter:saturate(120%) blur(10px);border-bottom:1px solid #1e2233;z-index:50}
+    .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+    .logo{display:flex;gap:10px;align-items:center;font-weight:800}
+    .logo-dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 0 0 3px rgba(59,130,246,.25)}
+    .nav a{opacity:.9}
+    .nav a:hover{opacity:1}
+    .menu{display:flex;gap:20px;align-items:center}
+    .menu a{font-weight:600;color:#cfd6e4}
+    .cta{display:inline-flex;gap:8px;align-items:center;background:linear-gradient(135deg,var(--accent),#2563eb);color:white;padding:10px 16px;border-radius:999px;box-shadow:var(--shadow)}
+    .cta:hover{transform:translateY(-1px)}
+    .ghost{padding:9px 16px;border:1px solid #26314a;border-radius:999px}
+    .lang{appearance:none;background:#0e1322;color:#cfd6e4;border:1px solid #2a3550;padding:8px 12px;border-radius:12px}
+    .hamb{display:none}
+    @media (max-width:920px){
+      .menu{display:none}
+      .hamb{display:inline-flex;align-items:center;gap:8px}
+      .drawer{display:none}
+      .drawer.open{display:flex;flex-direction:column;gap:12px;padding:16px}
+      header .wrap{padding-bottom:8px}
     }
-    .nav { display:flex; align-items:center; justify-content:space-between; padding:.9rem 0; }
-    .nav .left { display:flex; align-items:center; gap:1.25rem; }
-    .brand { display:flex; align-items:center; gap:.6rem; font-weight:800; letter-spacing:.2px; }
-    .brand .logo { width:28px; height:28px; background: linear-gradient(135deg, var(--primary-2), var(--ok)); border-radius:8px; box-shadow: 0 6px 18px rgba(16,185,129,.25); }
-    .menu { display:flex; gap:1rem; color:var(--muted); }
-    .menu a { padding:.6rem .8rem; border-radius:10px; }
-    .menu a:hover { background: #121521; color: var(--text); }
-    .right { display:flex; align-items:center; gap:.6rem; }
-    .select { appearance:none; background:#121521; border:1px solid var(--border); color:var(--text); padding:.6rem .9rem; border-radius:10px; }
-    .burger { display:none; }
-
     /* Hero */
-    .hero { padding: 72px 0 36px; }
-    .hero-grid { display:grid; grid-template-columns: 1.1fr .9fr; align-items:center; gap: 48px; }
-    .h1 { font-size: clamp(1.9rem, 1.1rem + 2.4vw, 3rem); font-weight: 800; letter-spacing:-.02em; margin: 0 0 14px; }
-    .sub { color:var(--muted); font-size: clamp(1rem, .9rem + .3vw, 1.15rem); margin: 0 0 18px; }
-    .badges { display:flex; gap:.5rem; flex-wrap: wrap; margin: 18px 0 0; }
-    .hero-card { background: radial-gradient(1200px 600px at 100% -20%, rgba(99,102,241,.15), transparent), #0f1117; border:1px solid var(--border); border-radius:18px; padding:18px; }
-
+    .hero{padding:90px 0 40px}
+    .hero .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:32px}
+    .badge{display:inline-flex;gap:10px;align-items:center;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.35);color:#cfe1ff;padding:8px 12px;border-radius:999px;font-weight:600}
+    h1{font-size:44px;line-height:1.1;margin:18px 0}
+    .lead{font-size:18px;color:var(--muted);max-width:700px}
+    .actions{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0));border:1px solid #1f2435;border-radius:var(--radius);box-shadow:var(--shadow)}
+    .phone{height:440px;padding:18px;position:relative}
+    .phone::before{content:"";position:absolute;inset:12px;border-radius:28px;border:10px solid #0a0d15}
+    .chat{height:100%;overflow:auto;padding:24px;border-radius:20px;background:linear-gradient(180deg,#0e1220,#0a0d15)}
+    .msg{max-width:82%;margin:10px 0;padding:12px 14px;border-radius:14px}
+    .bot{background:#0f1930;border:1px solid #1f2d52;color:#dbe7ff;border-bottom-left-radius:4px}
+    .you{margin-left:auto;background:#1a2438;border:1px solid #2b3a63;color:#e6ecff;border-bottom-right-radius:4px}
     /* Sections */
-    section { padding: 56px 0; border-top: 1px solid var(--border); }
-    .sec-title { font-size: 1.2rem; letter-spacing:.12em; color:var(--muted); text-transform: uppercase; margin:0 0 14px; }
-    .h2 { font-size: clamp(1.4rem, 1rem + 1.6vw, 2.1rem); font-weight:800; margin:0 0 10px; }
-    .grid-3 { display:grid; grid-template-columns: repeat(3, 1fr); gap:18px; }
-    .grid-4 { display:grid; grid-template-columns: repeat(4, 1fr); gap:18px; }
-    .card { background:#0f1117; border:1px solid var(--border); border-radius:16px; padding:18px; }
-    .card h3 { margin:0 0 8px; font-size:1rem; }
-    .muted { color:var(--muted); }
-
-    /* Logos / Testimonials */
-    .logo-row { display:flex; gap:24px; flex-wrap:wrap; align-items:center; opacity:.9; }
-
-    /* Pricing teaser */
-    .pricing { display:grid; grid-template-columns: repeat(3, 1fr); gap:18px; }
-    .price { background:#0f1117; border:1px solid var(--border); border-radius:18px; padding:20px; display:flex; flex-direction:column; gap:10px; }
-    .price .tag { font-size:.85rem; color:var(--muted); }
-    .price .val { font-size:2rem; font-weight:800; }
-    .price ul { margin:0; padding-left:1rem; display:grid; gap:6px; }
-
-    /* FAQ */
-    details { background:#0f1117; border:1px solid var(--border); border-radius:14px; padding:14px 16px; }
-    details + details { margin-top:10px; }
-    summary { cursor:pointer; font-weight:600; }
-
+    section{padding:64px 0}
+    .h2{font-size:28px;margin:0 0 8px}
+    .muted{color:var(--muted)}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+    @media (max-width:920px){.hero .grid{grid-template-columns:1fr}.grid3{grid-template-columns:1fr 1fr}.grid4{grid-template-columns:1fr 1fr}}
+    @media (max-width:560px){.grid3,.grid4{grid-template-columns:1fr}}
+    .tile{padding:18px}
+    .tile h3{margin:8px 0 6px}
+    /* Pricing */
+    .pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .plan{padding:22px;position:relative}
+    .plan .price{font-size:36px;font-weight:800;margin:8px 0}
+    .plan ul{list-style:none;padding:0;margin:0}
+    .plan li{margin:8px 0;display:flex;gap:10px;align-items:flex-start}
+    .plan .buy{margin-top:16px}
+    .popular::after{content:"Popular";position:absolute;top:14px;right:14px;background:linear-gradient(135deg,var(--accent-2),#f59e0b);color:#0b0b0f;font-weight:800;font-size:12px;padding:4px 8px;border-radius:999px}
+    @media (max-width:920px){.pricing{grid-template-columns:1fr}}
     /* Footer */
-    footer { padding: 40px 0 56px; border-top: 1px solid var(--border); color: var(--muted); }
-
-    /* Responsive */
-    @media (max-width: 960px) {
-      .hero-grid { grid-template-columns: 1fr; }
-      .grid-3 { grid-template-columns: 1fr; }
-      .grid-4 { grid-template-columns: 1fr 1fr; }
-      .pricing { grid-template-columns: 1fr; }
-      .menu { display:none; }
-      .burger { display:inline-flex; }
-    }
+    footer{border-top:1px solid #1e2233;padding:32px 0 80px}
+    .foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:#9aa0aa}
+    .whatsapp-fab{position:fixed;right:18px;bottom:18px;background:#22c55e;color:#07140a;border-radius:999px;padding:14px 18px;font-weight:800;box-shadow:var(--shadow)}
+    .whatsapp-fab:hover{transform:translateY(-1px)}
   </style>
 </head>
 <body>
   <header>
-    <div class="container nav">
-      <div class="left">
-        <a href="#" class="brand" aria-label="BotMatic home">
-          <span class="logo" aria-hidden="true"></span>
-          <span>BotMatic</span>
-        </a>
-        <nav class="menu" aria-label="Primary">
-          <a href="#solutions" data-i18n="nav_solutions">Solutions</a>
-          <a href="#platforms" data-i18n="nav_platforms">Platforms</a>
-          <a href="#cases" data-i18n="nav_cases">Cases</a>
-          <a href="#pricing" data-i18n="nav_pricing">Pricing</a>
-          <a href="#resources" data-i18n="nav_resources">Resources</a>
-          <a href="#about" data-i18n="nav_about">About</a>
-        </nav>
-      </div>
-      <div class="right">
-        <select class="select" id="lang">
+    <div class="wrap nav">
+      <a href="#top" class="logo" aria-label="BotMatic home">
+        <span class="logo-dot"></span>
+        <span>BotMatic</span>
+      </a>
+      <nav class="menu" aria-label="primary">
+        <a href="#features" data-i18n="nav.features">Features</a>
+        <a href="#how" data-i18n="nav.how">How it works</a>
+        <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+        <a href="#cases" data-i18n="nav.cases">Use cases</a>
+        <a href="#faq" data-i18n="nav.faq">FAQ</a>
+        <a class="ghost" href="#contact" data-i18n="nav.contact">Contact</a>
+        <a class="cta" href="#demo" data-i18n="nav.demo">Get a demo →</a>
+        <select id="lang" class="lang" aria-label="Language">
           <option value="en">EN</option>
           <option value="nl">NL</option>
           <option value="fr">FR</option>
           <option value="ru">RU</option>
         </select>
-        <a href="#demo" class="btn small primary" data-i18n="cta_demo">Get a Demo</a>
-        <button class="btn small ghost burger" aria-label="Open menu" onclick="toggleMenu()">☰</button>
+      </nav>
+      <div class="hamb">
+        <select id="lang-m" class="lang" aria-label="Language (mobile)">
+          <option value="en">EN</option>
+          <option value="nl">NL</option>
+          <option value="fr">FR</option>
+          <option value="ru">RU</option>
+        </select>
+        <a class="cta" href="#demo" data-i18n="nav.demo">Get a demo →</a>
       </div>
     </div>
+    <div class="wrap drawer" id="drawer"></div>
   </header>
 
-  <main>
-    <section class="hero">
-      <div class="container hero-grid">
-        <div>
-          <h1 class="h1" data-i18n="hero_title">Custom chatbots for WhatsApp, Telegram, Websites & Instagram — built in 7–14 days</h1>
-          <p class="sub" data-i18n="hero_sub">We build bots that capture leads, qualify them and auto‑book. Simple setup, rapid turnaround, ongoing support.</p>
-          <div class="buttons" style="display:flex; gap:.6rem; margin: 16px 0 8px;">
-            <a href="#demo" class="btn primary" data-i18n="cta_demo">Get a Demo</a>
-            <a href="#pricing" class="btn ghost" data-i18n="cta_pricing">See Pricing</a>
-          </div>
-          <div class="badges">
-            <span class="chip">⚡ <span data-i18n="badge_speed">7–14 days delivery</span></span>
-            <span class="chip">🧩 <span data-i18n="badge_flows">Fully custom flows</span></span>
-            <span class="chip">🔌 <span data-i18n="badge_integrations">CRM & payments</span></span>
-          </div>
-        </div>
-        <div class="hero-card" aria-label="Demo preview">
-          <img src="https://images.unsplash.com/photo-1528287949036-b9d1b95a5d64?q=80&w=1200&auto=format&fit=crop" alt="Chat demo illustration" />
+  <!-- Hero -->
+  <main id="top" class="wrap hero">
+    <div class="grid">
+      <div>
+        <div class="badge">⚡ <span data-i18n="hero.badge">Delivery in 7–14 days</span></div>
+        <h1 data-i18n="hero.title">Custom chatbots for WhatsApp, Telegram & Instagram — built fast</h1>
+        <p class="lead" data-i18n="hero.subtitle">We capture leads, auto‑qualify and book appointments. CRM & payments. No stress.</p>
+        <div class="actions">
+          <a class="cta" href="#demo" data-i18n="hero.ctaPrimary">Start a project</a>
+          <a class="ghost" href="#pricing" data-i18n="hero.ctaSecondary">See pricing</a>
         </div>
       </div>
-    </section>
-
-    <section id="how">
-      <div class="container">
-        <div class="sec-title" data-i18n="how_kicker">How it works</div>
-        <h2 class="h2" data-i18n="how_title">From brief to leads in 3 steps</h2>
-        <div class="grid-3">
-          <div class="card"><h3 data-i18n="how_1_t">1) Quick brief</h3><p class="muted" data-i18n="how_1_d">Tell us your goals, channels and CRM. 10–15 minutes.</p></div>
-          <div class="card"><h3 data-i18n="how_2_t">2) Build & connect</h3><p class="muted" data-i18n="how_2_d">We design flows, add AI, integrate payments and your CRM.</p></div>
-          <div class="card"><h3 data-i18n="how_3_t">3) Go live</h3><p class="muted" data-i18n="how_3_d">Launch in 7–14 days and start getting qualified leads.</p></div>
+      <div class="card phone">
+        <div class="chat">
+          <div class="msg bot">Hi! I’m BotMatic. What do you need help with?</div>
+          <div class="msg you">Book an appointment</div>
+          <div class="msg bot">Great. Which date works best? I’ll also collect your details and send a confirmation.</div>
+          <div class="msg you">Tomorrow after 16:00</div>
+          <div class="msg bot">Done ✅ Your booking is confirmed. You’ll receive reminders by WhatsApp.</div>
         </div>
       </div>
-    </section>
-
-    <section id="benefits">
-      <div class="container">
-        <div class="sec-title" data-i18n="ben_kicker">Benefits</div>
-        <h2 class="h2" data-i18n="ben_title">Why companies pick BotMatic</h2>
-        <div class="grid-3">
-          <div class="card"><h3>24/7 automation</h3><p class="muted">No missed inquiries, instant replies.</p></div>
-          <div class="card"><h3>Multi‑platform</h3><p class="muted">WhatsApp, Telegram, Instagram, Website.</p></div>
-          <div class="card"><h3>AI qualification</h3><p class="muted">Score, route and book automatically.</p></div>
-          <div class="card"><h3>Payments in chat</h3><p class="muted">Faster checkout with fewer steps.</p></div>
-          <div class="card"><h3>GDPR compliant</h3><p class="muted">Consent capture and data controls.</p></div>
-          <div class="card"><h3>CRM integrations</h3><p class="muted">Pipe leads to HubSpot, Bitrix24, etc.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="demo">
-      <div class="container">
-        <div class="sec-title">Demo</div>
-        <h2 class="h2">See the bot in action</h2>
-        <div class="card" role="region" aria-label="Demo video">
-          <div style="aspect-ratio:16/9; background:#0c0f16; border:1px dashed var(--border); border-radius:12px; display:grid; place-items:center;">
-            <div class="muted">Embed your 30–45s demo video here</div>
-          </div>
-          <div style="display:flex; gap:.6rem; margin-top:12px;">
-            <a class="btn primary" href="#" aria-label="Open demo bot">Talk to Demo Bot</a>
-            <a class="btn ghost" href="#cases">View case studies</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="solutions">
-      <div class="container">
-        <div class="sec-title">Solutions</div>
-        <h2 class="h2">What we can automate</h2>
-        <div class="grid-4">
-          <div class="card"><h3>Lead Generation</h3><p class="muted">Capture, qualify and route leads.</p></div>
-          <div class="card"><h3>Booking</h3><p class="muted">Calendar integration and reminders.</p></div>
-          <div class="card"><h3>Support</h3><p class="muted">FAQ + agent handoff.</p></div>
-          <div class="card"><h3>E‑commerce</h3><p class="muted">Catalog, cart and in‑chat payments.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="platforms">
-      <div class="container">
-        <div class="sec-title">Platforms</div>
-        <h2 class="h2">Build once — launch everywhere</h2>
-        <div class="grid-4">
-          <div class="card"><h3>WhatsApp</h3><p class="muted">Official API, templates, payments.</p></div>
-          <div class="card"><h3>Telegram</h3><p class="muted">Fast, flexible, cost‑efficient.</p></div>
-          <div class="card"><h3>Website</h3><p class="muted">Widget or full chat page.</p></div>
-          <div class="card"><h3>Instagram</h3><p class="muted">DM automation and stories.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="social">
-      <div class="container">
-        <div class="sec-title">Trusted by teams</div>
-        <h2 class="h2">Proof & trust</h2>
-        <div class="logo-row">
-          <span class="chip">Your logo</span>
-          <span class="chip">Your logo</span>
-          <span class="chip">Your logo</span>
-          <span class="chip">Your logo</span>
-        </div>
-        <div class="grid-3" style="margin-top:18px;">
-          <div class="card"><h3>“Great turnaround”</h3><p class="muted">We launched in 10 days and cut response time by 80%.</p></div>
-          <div class="card"><h3>“More qualified leads”</h3><p class="muted">Lead quality improved thanks to AI screening.</p></div>
-          <div class="card"><h3>“Bookings up”</h3><p class="muted">Self‑service booking increased conversion by 27%.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="cases">
-      <div class="container">
-        <div class="sec-title">Cases</div>
-        <h2 class="h2">Problems → Solutions → Results</h2>
-        <div class="grid-3">
-          <div class="card"><h3>Beauty & Spa</h3><p class="muted">From DMs chaos to auto‑booking. +27% bookings.</p></div>
-          <div class="card"><h3>Auto Dealers</h3><p class="muted">Lead triage & test‑drive booking. +34% SQLs.</p></div>
-          <div class="card"><h3>E‑commerce</h3><p class="muted">In‑chat catalog & payments. +18% CR.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="pricing">
-      <div class="container">
-        <div class="sec-title">Pricing</div>
-        <h2 class="h2">Simple plans that scale</h2>
-        <div class="pricing">
-          <div class="price">
-            <div class="tag">Start</div>
-            <div class="val">€29<span class="muted" style="font-size:1rem;">/mo</span></div>
-            <ul>
-              <li>1 core flow</li>
-              <li>1 platform</li>
-              <li>Up to 500 conversations</li>
-            </ul>
-            <a class="btn ghost" href="#demo">Choose Start</a>
-          </div>
-          <div class="price" style="border-color:rgba(99,102,241,.6)">
-            <div class="tag">Grow (popular)</div>
-            <div class="val">€99<span class="muted" style="font-size:1rem;">/mo</span></div>
-            <ul>
-              <li>Multi flows</li>
-              <li>2 platforms</li>
-              <li>Up to 2,000 conversations</li>
-            </ul>
-            <a class="btn primary" href="#demo">Choose Grow</a>
-          </div>
-          <div class="price">
-            <div class="tag">Scale</div>
-            <div class="val">€299<span class="muted" style="font-size:1rem;">/mo</span></div>
-            <ul>
-              <li>Advanced AI & NLP</li>
-              <li>Multiple platforms</li>
-              <li>Unlimited conversations</li>
-            </ul>
-            <a class="btn ghost" href="#demo">Talk to sales</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="faq">
-      <div class="container">
-        <div class="sec-title">FAQ</div>
-        <h2 class="h2">Good to know</h2>
-        <details><summary>How fast can we launch?</summary><p class="muted">Typical project ships in 7–14 days depending on scope.</p></details>
-        <details><summary>Which CRMs do you support?</summary><p class="muted">HubSpot, Bitrix24, Pipedrive, custom webhooks and more.</p></details>
-        <details><summary>Is WhatsApp official?</summary><p class="muted">Yes, we work with the official WhatsApp API providers.</p></details>
-      </div>
-    </section>
-
-    <section id="contact">
-      <div class="container">
-        <div class="sec-title">Get started</div>
-        <h2 class="h2">Tell us about your project</h2>
-        <form class="card" onsubmit="event.preventDefault(); alert('Thanks! We\'ll get back to you.');">
-          <div style="display:grid; gap:12px; grid-template-columns:1fr 1fr;">
-            <label>Full name<input required name="name" style="width:100%; margin-top:6px; padding:.7rem .8rem; border-radius:10px; border:1px solid var(--border); background:#0b0d13; color:var(--text);" /></label>
-            <label>Company<input name="company" style="width:100%; margin-top:6px; padding:.7rem .8rem; border-radius:10px; border:1px solid var(--border); background:#0b0d13; color:var(--text);" /></label>
-            <label>Email or WhatsApp<input required name="contact" style="width:100%; margin-top:6px; padding:.7rem .8rem; border-radius:10px; border:1px solid var(--border); background:#0b0d13; color:var(--text);" /></label>
-            <label>Platform<select name="platform" style="width:100%; margin-top:6px; padding:.7rem .8rem; border-radius:10px; border:1px solid var(--border); background:#0b0d13; color:var(--text);"><option>WhatsApp</option><option>Telegram</option><option>Website</option><option>Instagram</option></select></label>
-            <label style="grid-column:1/-1;">What do you want to build?<textarea name="message" rows="4" style="width:100%; margin-top:6px; padding:.7rem .8rem; border-radius:10px; border:1px solid var(--border); background:#0b0d13; color:var(--text);"></textarea></label>
-            <label style="display:flex; align-items:center; gap:.5rem; grid-column:1/-1;" class="muted"><input type="checkbox" required /> I agree to the Privacy Policy (GDPR).</label>
-          </div>
-          <div style="margin-top:12px; display:flex; gap:.6rem;">
-            <button type="submit" class="btn primary">Get a Demo</button>
-            <a class="btn ghost" href="#pricing">See Pricing</a>
-          </div>
-        </form>
-      </div>
-    </section>
+    </div>
   </main>
 
-  <footer id="about">
-    <div class="container">
-      <div style="display:grid; gap:20px; grid-template-columns:2fr 1fr 1fr 1fr;">
-        <div>
-          <div class="brand"><span class="logo"></span><span>BotMatic</span></div>
-          <p class="muted" style="margin-top:10px; max-width:44ch;">Custom chatbots for WhatsApp, Telegram, Websites & Instagram. Built fast. Supported long‑term.</p>
-        </div>
-        <div>
-          <strong>Solutions</strong>
-          <ul class="muted" style="list-style:none; padding:0; margin:10px 0 0; display:grid; gap:6px;">
-            <li><a href="#solutions">Lead gen</a></li>
-            <li><a href="#solutions">Booking</a></li>
-            <li><a href="#solutions">Support</a></li>
-            <li><a href="#solutions">E‑commerce</a></li>
+  <!-- Features -->
+  <section id="features">
+    <div class="wrap">
+      <h2 class="h2" data-i18n="features.title">Why companies choose us</h2>
+      <p class="muted" data-i18n="features.subtitle">We design flows that convert and integrate with your stack.</p>
+      <div class="grid4">
+        <div class="card tile"><h3>⚡ <span data-i18n="features.f1">Fast launch — from 7 days</span></h3><p class="muted" data-i18n="features.f1d">Kick off quick with pre‑built blocks and custom flows.</p></div>
+        <div class="card tile"><h3>🔌 <span data-i18n="features.f2">CRM & payments</span></h3><p class="muted" data-i18n="features.f2d">Connect HubSpot, Bitrix24, Stripe, Make/Zapier.</p></div>
+        <div class="card tile"><h3>🧩 <span data-i18n="features.f3">Fully custom logic</span></h3><p class="muted" data-i18n="features.f3d">Buttons, AI, lead scoring, mini‑diagnostics.</p></div>
+        <div class="card tile"><h3>📈 <span data-i18n="features.f4">More sales</span></h3><p class="muted" data-i18n="features.f4d">Faster replies, fewer no‑shows, +conversion.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how">
+    <div class="wrap">
+      <h2 class="h2" data-i18n="how.title">How it works</h2>
+      <div class="grid3">
+        <div class="card tile"><h3>1. <span data-i18n="how.s1">Brief</span></h3><p class="muted" data-i18n="how.s1d">You describe goals and channels.</p></div>
+        <div class="card tile"><h3>2. <span data-i18n="how.s2">Design</span></h3><p class="muted" data-i18n="how.s2d">We build flows & copy, then review with you.</p></div>
+        <div class="card tile"><h3>3. <span data-i18n="how.s3">Launch</span></h3><p class="muted" data-i18n="how.s3d">Connect WhatsApp/Telegram, CRM & payments.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing">
+    <div class="wrap">
+      <h2 class="h2" data-i18n="pricing.title">Pricing</h2>
+      <p class="muted" data-i18n="pricing.subtitle">Simple monthly plans. Cancel anytime.</p>
+      <div class="pricing">
+        <div class="card plan">
+          <h3 data-i18n="pricing.p1">Starter</h3>
+          <div class="price">€49<span class="muted">/mo</span></div>
+          <ul>
+            <li>✔ <span data-i18n="pricing.p1i1">FAQ bot</span></li>
+            <li>✔ <span data-i18n="pricing.p1i2">1 channel</span></li>
+            <li>✔ <span data-i18n="pricing.p1i3">Email support</span></li>
           </ul>
+          <a class="cta buy" href="#demo" data-i18n="pricing.buy">Get started</a>
         </div>
-        <div>
-          <strong>Company</strong>
-          <ul class="muted" style="list-style:none; padding:0; margin:10px 0 0; display:grid; gap:6px;">
-            <li><a href="#cases">Cases</a></li>
-            <li><a href="#pricing">Pricing</a></li>
-            <li><a href="#faq">FAQ</a></li>
-            <li><a href="#contact">Contact</a></li>
+        <div class="card plan popular">
+          <h3 data-i18n="pricing.p2">Business</h3>
+          <div class="price">€99<span class="muted">/mo</span></div>
+          <ul>
+            <li>✔ <span data-i18n="pricing.p2i1">Custom flows</span></li>
+            <li>✔ <span data-i18n="pricing.p2i2">2 channels</span></li>
+            <li>✔ <span data-i18n="pricing.p2i3">Integrations</span></li>
           </ul>
+          <a class="cta buy" href="#demo" data-i18n="pricing.buy">Get started</a>
         </div>
-        <div>
-          <strong>Legal</strong>
-          <ul class="muted" style="list-style:none; padding:0; margin:10px 0 0; display:grid; gap:6px;">
-            <li><a href="#">Privacy</a></li>
-            <li><a href="#">Terms</a></li>
-            <li><a href="#">Cookies</a></li>
+        <div class="card plan">
+          <h3 data-i18n="pricing.p3">Pro</h3>
+          <div class="price">€299<span class="muted">/mo</span></div>
+          <ul>
+            <li>✔ <span data-i18n="pricing.p3i1">AI & NLP</span></li>
+            <li>✔ <span data-i18n="pricing.p3i2">CRM & payments</span></li>
+            <li>✔ <span data-i18n="pricing.p3i3">Priority support</span></li>
           </ul>
+          <a class="cta buy" href="#demo" data-i18n="pricing.buy">Get started</a>
         </div>
       </div>
-      <div class="muted" style="margin-top:22px;">© <span id="year"></span> BotMatic. All rights reserved.</div>
+    </div>
+  </section>
+
+  <!-- Use cases -->
+  <section id="cases">
+    <div class="wrap">
+      <h2 class="h2" data-i18n="cases.title">Use cases</h2>
+      <div class="grid3">
+        <div class="card tile"><h3 data-i18n="cases.c1">Beauty & clinics</h3><p class="muted" data-i18n="cases.c1d">Mini‑diagnostics, booking, deposits, reminders.</p></div>
+        <div class="card tile"><h3 data-i18n="cases.c2">Auto dealers</h3><p class="muted" data-i18n="cases.c2d">Lead capture, trade‑in, test drives, finance.</p></div>
+        <div class="card tile"><h3 data-i18n="cases.c3">E‑commerce</h3><p class="muted" data-i18n="cases.c3d">Abandoned cart, order status, upsell.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="wrap">
+      <h2 class="h2" data-i18n="faq.title">FAQ</h2>
+      <div class="grid3">
+        <div class="card tile"><h3 data-i18n="faq.q1">How fast can we launch?</h3><p class="muted" data-i18n="faq.a1">Typically 7–14 days depending on scope.</p></div>
+        <div class="card tile"><h3 data-i18n="faq.q2">Do you integrate with our tools?</h3><p class="muted" data-i18n="faq.a2">Yes — HubSpot, Bitrix24, Make, Zapier, Stripe and more.</p></div>
+        <div class="card tile"><h3 data-i18n="faq.q3">Is support included?</h3><p class="muted" data-i18n="faq.a3">All plans include updates and support.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact / Demo form -->
+  <section id="demo">
+    <div class="wrap">
+      <h2 class="h2" data-i18n="demo.title">Get a demo</h2>
+      <p class="muted" data-i18n="demo.subtitle">Tell us about your business. We’ll propose the flow and price.</p>
+      <form class="card tile" id="form" style="display:grid;gap:12px;max-width:720px">
+        <input required name="name" placeholder="Your name" style="padding:12px;border-radius:12px;border:1px solid #2a3550;background:#0e1322;color:#e7eaf0">
+        <input required name="email" type="email" placeholder="Work email" style="padding:12px;border-radius:12px;border:1px solid #2a3550;background:#0e1322;color:#e7eaf0">
+        <input name="whatsapp" placeholder="WhatsApp number (optional)" style="padding:12px;border-radius:12px;border:1px solid #2a3550;background:#0e1322;color:#e7eaf0">
+        <textarea required name="about" rows="4" placeholder="What should the bot do?" style="padding:12px;border-radius:12px;border:1px solid #2a3550;background:#0e1322;color:#e7eaf0"></textarea>
+        <button class="cta" type="submit" data-i18n="demo.send">Send request →</button>
+        <small class="muted" data-i18n="demo.gdpr">By submitting you agree to be contacted about BotMatic services.</small>
+      </form>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="wrap foot">
+      <div>© <span id="year"></span> BotMatic</div>
+      <div>hello@botmatic.be</div>
+      <div>VAT/BTW: BE 0000.000.000</div>
     </div>
   </footer>
 
-  <script>
-  // Robust, idempotent init — safe on re-exec and avoids duplicate variables
-  (() => {
-    if (window.__botmaticInit_v2) return; // prevent duplicate runs
-    window.__botmaticInit_v2 = true;
+  <a class="whatsapp-fab" href="https://wa.me/32400000000" target="_blank" rel="noopener" aria-label="WhatsApp">WhatsApp</a>
 
+  <script>
+    // --- ultra‑light i18n ---
     const I18N = {
-      en:{nav_solutions:'Solutions',nav_platforms:'Platforms',nav_cases:'Cases',nav_pricing:'Pricing',nav_resources:'Resources',nav_about:'About',cta_demo:'Get a Demo',cta_pricing:'See Pricing',hero_title:'Custom chatbots for WhatsApp, Telegram, Websites & Instagram — built in 7–14 days',hero_sub:'We build bots that capture leads, qualify them and auto‑book. Simple setup, rapid turnaround, ongoing support.',badge_speed:'7–14 days delivery',badge_flows:'Fully custom flows',badge_integrations:'CRM & payments',how_kicker:'How it works',how_title:'From brief to leads in 3 steps',how_1_t:'1) Quick brief',how_1_d:'Tell us your goals, channels and CRM. 10–15 minutes.',how_2_t:'2) Build & connect',how_2_d:'We design flows, add AI, integrate payments and your CRM.',how_3_t:'3) Go live',how_3_d:'Launch in 7–14 days and start getting qualified leads.'},
-      nl:{nav_solutions:'Oplossingen',nav_platforms:'Platforms',nav_cases:'Cases',nav_pricing:'Prijzen',nav_resources:'Resources',nav_about:'Over',cta_demo:'Vraag een demo',cta_pricing:'Bekijk prijzen',hero_title:'Maatwerk chatbots voor WhatsApp, Telegram, Websites & Instagram — klaar in 7–14 dagen',hero_sub:'Wij bouwen bots die leads vangen, kwalificeren en automatisch boeken.',badge_speed:'Levering in 7–14 dagen',badge_flows:'Volledig maatwerk',badge_integrations:'CRM & betalingen',how_kicker:'Zo werkt het',how_title:'Van briefing naar leads in 3 stappen',how_1_t:'1) Korte briefing',how_1_d:'Doelen, kanalen en CRM. 10–15 minuten.',how_2_t:'2) Bouwen & koppelen',how_2_d:'Flows, AI, betalingen en CRM‑integratie.',how_3_t:'3) Live',how_3_d:'Start in 7–14 dagen en ontvang gekwalificeerde leads.'},
-      fr:{nav_solutions:'Solutions',nav_platforms:'Plateformes',nav_cases:'Cas',nav_pricing:'Tarifs',nav_resources:'Ressources',nav_about:'À propos',cta_demo:'Demander une démo',cta_pricing:'Voir les tarifs',hero_title:'Chatbots sur mesure pour WhatsApp, Telegram, Sites & Instagram — en 7–14 jours',hero_sub:'Nous créons des bots qui captent, qualifient et réservent automatiquement.',badge_speed:'Livraison 7–14 jours',badge_flows:'Parcours personnalisés',badge_integrations:'CRM & paiements',how_kicker:'Comment ça marche',how_title:'De la brief aux leads en 3 étapes',how_1_t:'1) Brief rapide',how_1_d:'Objectifs, canaux, CRM. 10–15 minutes.',how_2_t:'2) Construire & connecter',how_2_d:'Flows, IA, paiements et intégration CRM.',how_3_t:'3) Mise en ligne',how_3_d:'Lancement en 7–14 jours et leads qualifiés.'},
-      ru:{nav_solutions:'Решения',nav_platforms:'Платформы',nav_cases:'Кейсы',nav_pricing:'Цены',nav_resources:'Ресурсы',nav_about:'О нас',cta_demo:'Получить демо',cta_pricing:'Смотреть цены',hero_title:'Кастомные чат‑боты для WhatsApp, Telegram, сайтов и Instagram — за 7–14 дней',hero_sub:'Строим ботов, которые собирают лиды, квалифицируют и записывают автоматически.',badge_speed:'Готово за 7–14 дней',badge_flows:'Полностью кастомные флоу',badge_integrations:'CRM и платежи',how_kicker:'Как это работает',how_title:'От брифа к лидам за 3 шага',how_1_t:'1) Короткий бриф',how_1_d:'Цели, каналы и CRM. 10–15 минут.',how_2_t:'2) Сборка и интеграция',how_2_d:'Флоу, AI, платежи и CRM‑интеграция.',how_3_t:'3) Запуск',how_3_d:'Старт за 7–14 дней и поток квалифицированных лидов.'}
+      en:{
+        nav:{features:"Features",how:"How it works",pricing:"Pricing",cases:"Use cases",faq:"FAQ",contact:"Contact",demo:"Get a demo"},
+        hero:{badge:"Delivery in 7–14 days",title:"Custom chatbots for WhatsApp, Telegram & Instagram — built fast",subtitle:"We capture leads, auto‑qualify and book appointments. CRM & payments. No stress.",ctaPrimary:"Start a project",ctaSecondary:"See pricing"},
+        features:{title:"Why companies choose us",subtitle:"We design flows that convert and integrate with your stack.",f1:"Fast launch — from 7 days",f1d:"Kick off quick with pre‑built blocks and custom flows.",f2:"CRM & payments",f2d:"Connect HubSpot, Bitrix24, Stripe, Make/Zapier.",f3:"Fully custom logic",f3d:"Buttons, AI, lead scoring, mini‑diagnostics.",f4:"More sales",f4d:"Faster replies, fewer no‑shows, +conversion."},
+        how:{title:"How it works",s1:"Brief",s1d:"You describe goals and channels.",s2:"Design",s2d:"We build flows & copy, then review with you.",s3:"Launch",s3d:"Connect WhatsApp/Telegram, CRM & payments."},
+        pricing:{title:"Pricing",subtitle:"Simple monthly plans. Cancel anytime.",p1:"Starter",p1i1:"FAQ bot",p1i2:"1 channel",p1i3:"Email support",p2:"Business",p2i1:"Custom flows",p2i2:"2 channels",p2i3:"Integrations",p3:"Pro",p3i1:"AI & NLP",p3i2:"CRM & payments",p3i3:"Priority support",buy:"Get started"},
+        cases:{title:"Use cases",c1:"Beauty & clinics",c1d:"Mini‑diagnostics, booking, deposits, reminders.",c2:"Auto dealers",c2d:"Lead capture, trade‑in, test drives, finance.",c3:"E‑commerce",c3d:"Abandoned cart, order status, upsell."},
+        faq:{title:"FAQ",q1:"How fast can we launch?",a1:"Typically 7–14 days depending on scope.",q2:"Do you integrate with our tools?",a2:"Yes — HubSpot, Bitrix24, Make, Zapier, Stripe and more.",q3:"Is support included?",a3:"All plans include updates and support."},
+        demo:{title:"Get a demo",subtitle:"Tell us about your business. We’ll propose the flow and price.",send:"Send request →",gdpr:"By submitting you agree to be contacted about BotMatic services."}
+      },
+      nl:{
+        nav:{features:"Features",how:"Werkt zo",pricing:"Prijzen",cases:"Use cases",faq:"FAQ",contact:"Contact",demo:"Vraag een demo"},
+        hero:{badge:"Levering in 7–14 dagen",title:"Maatwerk chatbots voor WhatsApp, Telegram & Instagram — snel gebouwd",subtitle:"We vangen leads, kwalificeren automatisch en boeken afspraken. CRM & betalingen.",ctaPrimary:"Start project",ctaSecondary:"Bekijk prijzen"},
+        features:{title:"Waarom bedrijven ons kiezen",subtitle:"Conversiegerichte flows met jouw tools.",f1:"Snel live — vanaf 7 dagen",f1d:"Start snel met blokken en maatwerk.",f2:"CRM & betalingen",f2d:"Koppel HubSpot, Bitrix24, Stripe, Make/Zapier.",f3:"Volledig maatwerk",f3d:"Knoppen, AI, lead scoring, mini‑diagnose.",f4:"Meer omzet",f4d:"Sneller antwoord, minder no‑shows, meer conversie."},
+        how:{title:"Werkt zo",s1:"Briefing",s1d:"Doelen en kanalen.",s2:"Ontwerp",s2d:"We bouwen flows & copy, review met jou.",s3:"Lancering",s3d:"Koppel WhatsApp/Telegram, CRM & betalingen."},
+        pricing:{title:"Prijzen",subtitle:"Eenvoudige maandabonnementen.",p1:"Basis",p1i1:"FAQ‑bot",p1i2:"1 kanaal",p1i3:"E‑mail support",p2:"Business",p2i1:"Maatwerkflows",p2i2:"2 kanalen",p2i3:"Integraties",p3:"Pro",p3i1:"AI & NLP",p3i2:"CRM & betalingen",p3i3:"Priority support",buy:"Start nu"},
+        cases:{title:"Use cases",c1:"Beauty & klinieken",c1d:"Mini‑diagnose, boekingen, voorschotten, reminders.",c2:"Autohandel",c2d:"Leads, inruil, testritten, financiering.",c3:"E‑commerce",c3d:"Verlaten winkelwagen, orderstatus, upsell."},
+        faq:{title:"FAQ",q1:"Hoe snel live?",a1:"Meestal 7–14 dagen.",q2:"Integreren jullie met onze tools?",a2:"Ja — HubSpot, Bitrix24, Make, Zapier, Stripe enz.",q3:"Is support inbegrepen?",a3:"Alle plannen bevatten updates en support."},
+        demo:{title:"Vraag een demo",subtitle:"Vertel over je bedrijf. Wij stellen flow en prijs voor.",send:"Verstuur →",gdpr:"Door te verzenden ga je akkoord dat we contact opnemen."}
+      },
+      fr:{
+        nav:{features:"Avantages",how:"Comment ça marche",pricing:"Tarifs",cases:"Cas d’usage",faq:"FAQ",contact:"Contact",demo:"Demander une démo"},
+        hero:{badge:"Livraison en 7–14 jours",title:"Chatbots sur mesure pour WhatsApp, Telegram & Instagram — rapides",subtitle:"On capte les leads, qualifie et prend des RDV. CRM & paiements.",ctaPrimary:"Lancer un projet",ctaSecondary:"Voir les tarifs"},
+        features:{title:"Pourquoi nous",subtitle:"Des parcours qui convertissent et s’intègrent à vos outils.",f1:"Mise en ligne rapide",f1d:"Démarrage express avec modules + sur‑mesure.",f2:"CRM & paiements",f2d:"HubSpot, Bitrix24, Stripe, Make/Zapier.",f3:"Logique 100% sur‑mesure",f3d:"Boutons, IA, scoring, mini‑diagnostics.",f4:"Plus de ventes",f4d:"Réponse rapide, moins d’absences, +conversion."},
+        how:{title:"Comment ça marche",s1:"Brief",s1d:"Objectifs et canaux.",s2:"Conception",s2d:"On construit les parcours et le copy, validation avec vous.",s3:"Lancement",s3d:"Connexion WhatsApp/Telegram, CRM & paiements."},
+        pricing:{title:"Tarifs",subtitle:"Abonnements mensuels simples.",p1:"Starter",p1i1:"Bot FAQ",p1i2:"1 canal",p1i3:"Support email",p2:"Business",p2i1:"Parcours sur‑mesure",p2i2:"2 canaux",p2i3:"Intégrations",p3:"Pro",p3i1:"IA & NLP",p3i2:"CRM & paiements",p3i3:"Support prioritaire",buy:"Commencer"},
+        cases:{title:"Cas d’usage",c1:"Beauté & cliniques",c1d:"Mini‑diagnostic, RDV, acomptes, rappels.",c2:"Concession auto",c2d:"Leads, reprise, essais, financement.",c3:"E‑commerce",c3d:"Panier abandonné, suivi, upsell."},
+        faq:{title:"FAQ",q1:"Délais de lancement ?",a1:"En général 7–14 jours.",q2:"S’intègre avec nos outils ?",a2:"Oui — HubSpot, Bitrix24, Make, Zapier, Stripe…",q3:"Support inclus ?",a3:"Tous les plans incluent mises à jour et support."},
+        demo:{title:"Demander une démo",subtitle:"Parlez‑nous de votre activité. On propose le parcours et le prix.",send:"Envoyer →",gdpr:"En envoyant, vous acceptez d’être contacté."}
+      },
+      ru:{
+        nav:{features:"Преимущества",how:"Как это работает",pricing:"Тарифы",cases:"Кейсы",faq:"FAQ",contact:"Контакты",demo:"Получить демо"},
+        hero:{badge:"Запуск за 7–14 дней",title:"Чат‑боты для WhatsApp, Telegram и Instagram — быстро и под ключ",subtitle:"Собираем лиды, квалифицируем и записываем. Интеграции с CRM и оплатой.",ctaPrimary:"Начать проект",ctaSecondary:"Смотреть цены"},
+        features:{title:"Почему выбирают нас",subtitle:"Делаем продающие сценарии и вяжем с вашими системами.",f1:"Быстрый запуск",f1d:"Стартуем быстро на готовых блоках + кастом.",f2:"CRM и платежи",f2d:"HubSpot, Bitrix24, Stripe, Make/Zapier.",f3:"Кастомная логика",f3d:"Кнопки, ИИ, скоринг, мини‑диагностика.",f4:"Больше продаж",f4d:"Быстрые ответы, меньше no‑show, больше конверсии."},
+        how:{title:"Как это работает",s1:"Бриф",s1d:"Цели и каналы.",s2:"Дизайн",s2d:"Строим сценарии и тексты, согласуем.",s3:"Запуск",s3d:"Подключаем WhatsApp/Telegram, CRM и оплату."},
+        pricing:{title:"Тарифы",subtitle:"Простая помесячная оплата.",p1:"Старт",p1i1:"FAQ‑бот",p1i2:"1 канал",p1i3:"Email‑поддержка",p2:"Бизнес",p2i1:"Кастом‑сценарии",p2i2:"2 канала",p2i3:"Интеграции",p3:"PRO",p3i1:"ИИ & NLP",p3i2:"CRM и платежи",p3i3:"Приоритетная поддержка",buy:"Запустить"},
+        cases:{title:"Кейсы",c1:"Бьюти & клиники",c1d:"Мини‑диагностика, запись, предоплата, напоминания.",c2:"Автодилеры",c2d:"Лиды, trade‑in, тест‑драйвы, финансы.",c3:"E‑commerce",c3d:"Брошенная корзина, статус заказа, допродажи."},
+        faq:{title:"FAQ",q1:"Как быстро запускаетесь?",a1:"Обычно 7–14 дней, зависит от объёма.",q2:"Интеграции есть?",a2:"Да — HubSpot, Bitrix24, Make, Zapier, Stripe и др.",q3:"Поддержка входит?",a3:"Во всех тарифах поддержка и обновления."},
+        demo:{title:"Получить демо",subtitle:"Расскажите о бизнесе, предложим сценарий и цену.",send:"Отправить →",gdpr:"Отправляя форму, вы соглашаетесь на контакт по услуге."}
+      }
     };
+
+    const LANG_KEYS = ["en","nl","fr","ru"];
+    const els = [...document.querySelectorAll('[data-i18n]')];
 
     function applyLang(lang){
       const dict = I18N[lang] || I18N.en;
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (dict[key]) el.textContent = dict[key];
+      els.forEach(el=>{
+        const path = el.getAttribute('data-i18n').split('.');
+        let cur = dict; for(const p of path){cur = cur?.[p]; if(!cur) break}
+        if(typeof cur === 'string'){ el.textContent = cur }
       });
       document.documentElement.lang = lang;
-      try{ localStorage.setItem('lang', lang); }catch(_){/* ignore */}
+      localStorage.setItem('lang', lang);
     }
 
     function initLang(){
-      const sel = document.getElementById('lang');
-      if (!sel) return;
-      if (!sel.dataset.listenerAttached){
-        sel.addEventListener('change', () => applyLang(sel.value));
-        sel.dataset.listenerAttached = '1';
-      }
-      const saved = (()=>{try{return localStorage.getItem('lang')}catch(_){return null}})();
+      const saved = localStorage.getItem('lang');
       const br = (navigator.language||'en').slice(0,2).toLowerCase();
-      const start = (saved && I18N[saved]) ? saved : (I18N[br] ? br : 'en');
-      sel.value = start; applyLang(start);
+      const start = LANG_KEYS.includes(saved) ? saved : (LANG_KEYS.includes(br)?br:'en');
+      document.getElementById('lang').value = start;
+      document.getElementById('lang-m').value = start;
+      applyLang(start);
+      document.getElementById('lang').addEventListener('change', e=>applyLang(e.target.value));
+      document.getElementById('lang-m').addEventListener('change', e=>applyLang(e.target.value));
     }
 
-    function initScroll(){
-      if (window.__bmScrollInited) return; window.__bmScrollInited = true;
-      document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click', e=>{
-        const id = a.getAttribute('href').slice(1);
-        const t = document.getElementById(id) || document.querySelector(`[name="${id}"]`);
-        if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth', block:'start'}); }
-      }));
-    }
+    // Smooth anchor scroll
+    document.addEventListener('click', (e)=>{
+      const a = e.target.closest('a[href^="#"]');
+      if(!a) return;
+      const id = a.getAttribute('href').slice(1); if(!id) return;
+      const t = document.getElementById(id) || document.querySelector(`[id='${id}']`);
+      if(!t) return;
+      e.preventDefault();
+      t.scrollIntoView({behavior:'smooth',block:'start'});
+    });
 
-    if (!window.toggleMenu) window.toggleMenu = function(){ alert('Mobile menu placeholder — we can expand into an overlay.'); };
+    // Simple form handler (replace with your backend)
+    document.getElementById('form').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      alert('Thanks! We\'ll get back within 24h.');
+      e.target.reset();
+    });
 
-    const yearEl = document.getElementById('year'); if (yearEl) yearEl.textContent = new Date().getFullYear();
+    // Mobile drawer (optional)
+    const drawer = document.getElementById('drawer');
+    // If you want a burger button later, toggle drawer.classList.toggle('open')
 
-    // Init
+    // Footer year & init
+    document.getElementById('year').textContent = new Date().getFullYear();
     initLang();
-    initScroll();
-
-    // Minimal runtime tests (visible in console)
-    try {
-      const prev = document.documentElement.lang;
-      applyLang('en');
-      console.assert(document.documentElement.lang === 'en', '[TEST] html lang → en');
-      applyLang(prev);
-      console.assert(document.documentElement.lang === prev, '[TEST] html lang restored');
-      console.log('[TEST] basic checks passed');
-    } catch (e) { console.warn('[TEST] failed', e); }
-  })();
   </script>
 </body>
 </html>
