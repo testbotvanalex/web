@@ -2,57 +2,53 @@
 <!DOCTYPE html>
 <html lang="en" data-lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Contact — BotMatic</title>
-  <link rel="canonical" href="https://www.botmatic.be/contact.html"/>
-  <meta name="description" content="Tell us about your bot — we reply within 24h.">
-  <meta property="og:title" content="Contact — BotMatic">
-  <meta property="og:image" content="/og.jpg">
-  <link rel="stylesheet" href="/assets/style.css?v=3">
+  <meta name="description" content="Tell us about your chatbot project.">
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/assets/style.css?v=1">
 </head>
-<body data-page="contact">
-  <header class="header" role="banner">
-    <div class="container nav">
-      <a href="/" class="brand" aria-label="BotMatic">🤖 <strong>BotMatic</strong></a>
-      <button class="mobile-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainmenu">
-        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
-      </button>
-      <nav class="menu" id="mainmenu" aria-label="Main">
-        <a href="/" data-i18n="nav.home">Home</a>
-        <a href="/pricing.html" data-i18n="nav.pricing">Pricing</a>
-        <a href="/faq.html" data-i18n="nav.faq">FAQ</a>
-        <a href="/contact.html" class="active" data-i18n="nav.contact">Contact</a>
-      </nav>
-      <div class="lang">
-        <button type="button" data-lang="en" aria-pressed="true">EN</button>
-        <button type="button" data-lang="nl" aria-pressed="false">NL</button>
-        <button type="button" data-lang="fr" aria-pressed="false">FR</button>
+<body>
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="/"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M7 7h10v8a4 4 0 0 1-4 4H11a4 4 0 0 1-4-4V7zM9 3h6v4H9z" fill="none" stroke="#111827" stroke-width="1.6"/></svg><strong>BotMatic</strong></a>
+    <button class="mobile-toggle" aria-controls="mainmenu" aria-expanded="false" aria-label="Open menu"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button>
+    <nav id="mainmenu" class="menu" aria-label="Main">
+      <a href="/" data-i18n="nav.home">Home</a>
+      <a href="/pricing.html" data-i18n="nav.pricing">Pricing</a>
+      <a href="/use-cases.html" data-i18n="nav.usecases">Use cases</a>
+      <a href="/faq.html" data-i18n="nav.faq">FAQ</a>
+      <a href="/contact.html" class="active" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="lang"><button data-lang="en">EN</button><button data-lang="nl">NL</button><button data-lang="fr">FR</button></div>
+  </div>
+</header>
+
+<main class="section">
+  <div class="container form-card">
+    <h1 class="h1" data-i18n="contact.title">Tell us about your bot</h1>
+    <p class="lead" data-i18n="contact.lead">Share a few details and we’ll reply within 24h.</p>
+
+    <form id="contactForm" class="form" aria-describedby="contactOk">
+      <div class="grid2">
+        <label><span data-i18n="contact.name">Full name</span><input class="input" type="text" name="name" required></label>
+        <label><span data-i18n="contact.email">Work email</span><input class="input" type="email" name="email" required></label>
       </div>
-    </div>
-  </header>
-
-  <main class="main" id="pjax-root">
-    <div class="container">
-      <h1 class="h1" data-i18n="contact.title">Contact</h1>
-      <p class="lead" data-i18n="contact.lead">Tell us about your bot — we reply within 24h.</p>
-
-      <div class="card form-card">
-        <form id="contactForm" class="grid form-grid" novalidate>
-          <input class="input" name="name" placeholder="Jane Doe" required>
-          <input class="input" name="email" type="email" placeholder="you@company.com" required>
-          <textarea class="input" name="message" rows="4" placeholder="What should the bot do?"></textarea>
-          <label class="gdpr"><input type="checkbox" name="gdpr" required> I agree to be contacted.</label>
-          <button class="cta" type="submit">Send</button>
-          <div id="contactOk" class="hidden">✓ Thanks! We will reply within 24h.</div>
-        </form>
+      <label><span data-i18n="contact.company">Company / Industry</span><input class="input" type="text" name="company"></label>
+      <label><span data-i18n="contact.message">What should the bot do? Platforms, flows, integrations…</span><textarea class="input" name="message" rows="5" required></textarea></label>
+      <label class="gdpr"><input type="checkbox" name="gdpr" required> <span data-i18n="contact.gdpr">I agree to be contacted about my request and accept the privacy policy.</span></label>
+      <div class="cta-row">
+        <button class="btn btn--primary" type="submit" data-i18n="contact.send">Send request</button>
+        <a class="btn btn--line" href="https://wa.me/32400000000" rel="nofollow" data-i18n="contact.whatsapp">Chat on WhatsApp</a>
       </div>
-    </div>
-  </main>
+      <p id="contactOk" class="form-ok hidden" data-i18n="ok">✓ Thanks! We will reply within 24h.</p>
+    </form>
+  </div>
+</main>
 
-  <footer class="footer"><div class="container foot">© <span id="y"></span> BotMatic</div></footer>
-  <div class="scrim" data-scrim hidden></div>
-  <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
-  <script src="/assets/main.js?v=3" defer></script>
+<footer class="footer"><div class="container foot">© <span id="y"></span> BotMatic</div></footer>
+<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+<script src="/assets/main.js?v=1" defer></script>
 </body>
 </html>
