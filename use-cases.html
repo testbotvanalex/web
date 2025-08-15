@@ -1,0 +1,67 @@
+<!-- use-cases.html -->
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Use cases — BotMatic</title>
+  <meta name="description" content="Popular chatbot use cases and example flows.">
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/assets/style.css?v=1">
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="/"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M7 7h10v8a4 4 0 0 1-4 4H11a4 4 0 0 1-4-4V7zM9 3h6v4H9z" fill="none" stroke="#111827" stroke-width="1.6"/></svg><strong>BotMatic</strong></a>
+    <button class="mobile-toggle" aria-controls="mainmenu" aria-expanded="false" aria-label="Open menu"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button>
+    <nav id="mainmenu" class="menu" aria-label="Main">
+      <a href="/" data-i18n="nav.home">Home</a>
+      <a href="/pricing.html" data-i18n="nav.pricing">Pricing</a>
+      <a href="/use-cases.html" class="active" data-i18n="nav.usecases">Use cases</a>
+      <a href="/faq.html" data-i18n="nav.faq">FAQ</a>
+      <a href="/contact.html" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="lang"><button data-lang="en">EN</button><button data-lang="nl">NL</button><button data-lang="fr">FR</button></div>
+  </div>
+</header>
+
+<main class="section">
+  <div class="container">
+    <h1 class="h1" data-i18n="cases.title">Popular use cases</h1>
+    <p class="lead" data-i18n="cases.lead">Short flows that convert — tailored to your business.</p>
+
+    <div class="grid4">
+      <article class="card">
+        <h3 data-i18n="cases.lead.t">Lead capture</h3>
+        <p class="muted" data-i18n="cases.lead.d">Turn clicks into qualified contacts with clear opt‑in and consent.</p>
+        <ul class="ul small"><li>WhatsApp / Instagram DM</li><li>Webhook → CRM</li><li>Tag hot leads</li></ul>
+      </article>
+      <article class="card">
+        <h3 data-i18n="cases.qual.t">Qualification</h3>
+        <p class="muted" data-i18n="cases.qual.d">Score leads by need, budget and timeline. Route instantly.</p>
+        <ul class="ul small"><li>Button + AI hybrid</li><li>CRM scoring field</li><li>Agent handover</li></ul>
+      </article>
+      <article class="card">
+        <h3 data-i18n="cases.booking.t">Booking & reminders</h3>
+        <p class="muted" data-i18n="cases.booking.d">Auto‑book calendar slots, send reminders and follow‑ups.</p>
+        <ul class="ul small"><li>Google/Outlook Calendar</li><li>Reminders 24h / 2h</li><li>No‑show recovery</li></ul>
+      </article>
+      <article class="card">
+        <h3 data-i18n="cases.pay.t">Payments / shop</h3>
+        <p class="muted" data-i18n="cases.pay.d">Checkout inside chat with Stripe and invoicing.</p>
+        <ul class="ul small"><li>Stripe Payment Links</li><li>Invoice email</li><li>Order status</li></ul>
+      </article>
+    </div>
+
+    <div class="cta-row mt">
+      <a class="btn btn--primary" href="/contact.html" data-i18n="cta.demo">Get a demo</a>
+      <a class="btn btn--ghost" href="/pricing.html" data-i18n="cta.pricing">See pricing</a>
+    </div>
+  </div>
+</main>
+
+<footer class="footer"><div class="container foot">© <span id="y"></span> BotMatic</div></footer>
+<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+<script src="/assets/main.js?v=1" defer></script>
+</body>
+</html>
