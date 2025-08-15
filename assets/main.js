@@ -1,4 +1,4 @@
-// assets/main.js (v5) — adds i18n keys for the new sections + mobile menu + SPA-lite
+// assets/main.js (v5 — i18n + mobile menu + SPA-lite + contact success)
 (function(){
   const $=(q,d=document)=>d.querySelector(q), $$=(q,d=document)=>Array.from(d.querySelectorAll(q));
   const sameOrigin = (u)=>{ try{ const x=new URL(u,location.href); return x.origin===location.origin; }catch{ return false; } };
@@ -43,7 +43,7 @@
         feature3:"🔌 Integraties",
         ctaDemo:"Plan een demo",
         ctaPricing:"Bekijk prijzen",
-        trust:"Vertrouwd door kmo’s en agencies",
+        trust:"Vertrouwd door kmo’s & agencies",
         usecases:{title:"Populaire use cases",
           lead:{title:"Lead capture",desc:"Maak van kliks gesprekken en verzamel gekwalificeerde contacten."},
           qual:{title:"Kwalificatie",desc:"Score & routeer prospects op basis van behoefte en budget."},
@@ -72,7 +72,7 @@
         feature3:"🔌 Intégrations",
         ctaDemo:"Demander une démo",
         ctaPricing:"Voir les tarifs",
-        trust:"Plébiscité par PME et agences",
+        trust:"Plébiscité par PME & agences",
         usecases:{title:"Cas d’usage populaires",
           lead:{title:"Capture de leads",desc:"Transformez les clics en conversations et contacts qualifiés."},
           qual:{title:"Qualification",desc:"Scorez et orientez selon besoins et budget."},
@@ -183,5 +183,6 @@
     bindMobileMenu();
     bindSPA();
     bindContactForm();
+    document.getElementById('y') && (document.getElementById('y').textContent = new Date().getFullYear());
   });
 })();

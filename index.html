@@ -1,4 +1,4 @@
-<!-- index.html (enriched home so it's not empty) -->
+<!-- index.html — polished & enriched (with sticky mobile CTA) -->
 <!DOCTYPE html>
 <html lang="en" data-lang="en">
 <head>
@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <title>BotMatic — Custom Chatbots</title>
 
+  <!-- SEO / i18n -->
   <link rel="canonical" href="https://www.botmatic.be/"/>
   <link rel="alternate" href="https://www.botmatic.be/?lang=en" hreflang="en">
   <link rel="alternate" href="https://www.botmatic.be/?lang=nl" hreflang="nl">
@@ -18,10 +19,11 @@
   <meta property="og:url" content="https://www.botmatic.be/">
   <meta name="theme-color" content="#4f46e5">
 
+  <!-- Fonts & CSS -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="/assets/style.css?v=5">
+  <link rel="stylesheet" href="/assets/style.css?v=7">
 </head>
 <body data-page="home">
   <header class="header" role="banner">
@@ -137,6 +139,13 @@
         <a class="cta secondary" href="/pricing.html" data-i18n="home.testimonial.cta">See plans</a>
       </section>
 
+      <!-- Sticky mobile CTA panel -->
+      <div class="sticky-cta" aria-label="Quick actions on mobile">
+        <div class="row">
+          <a class="cta" href="/contact.html" data-i18n="home.ctaDemo">Get a demo</a>
+          <a class="cta secondary" href="/pricing.html" data-i18n="home.ctaPricing">See pricing</a>
+        </div>
+      </div>
     </div>
   </main>
 
