@@ -20,25 +20,52 @@ const I18N = {
     },
     contact:{title:"Vraag een demo"},
     form:{name:"Naam",platform:"Platform",message:"Bericht",gdpr:"Ik ga akkoord met verwerking van mijn gegevens volgens de privacyverklaring.",submit:"Versturen"},
-    pricingPage:{
-      metaTitle:"Prijzen — BotMatic",
-      title:"Transparante prijzen",
-      subtitle:"Kies een plan. Je kan later altijd opschalen. Gratis diagnose inbegrepen.",
-      view:"Bekijk details"
-    },
+    pricingPage:{metaTitle:"Prijzen — BotMatic",title:"Transparante prijzen",subtitle:"Kies een plan. Je kan later altijd opschalen. Gratis diagnose inbegrepen.",view:"Bekijk details"},
     planDetail:{
       back:"Terug naar prijzen",
-      basic:{
-        metaTitle:"Basis Abonnement — BotMatic",
-        title:"Basis Abonnement",
-        subtitle:"Begin klein: één duidelijke use‑case, één platform. Eenvoudig te beheren, snel live."
+      basic:{metaTitle:"Basis Abonnement — BotMatic",title:"Basis Abonnement",subtitle:"Begin klein: één duidelijke use‑case, één platform. Eenvoudig te beheren, snel live."},
+      standard:{
+        metaTitle:"Standaard Abonnement — BotMatic",
+        title:"Standaard Abonnement",
+        subtitle:"Het populairst: meerdere automatiseringen, twee kanalen en prioritaire ondersteuning — ideaal om op te schalen.",
+        inc1:"Conversatie‑design voor meerdere flows",
+        inc2:"Integraties: CRM/agenda/betalingen/Sheets",
+        inc3:"AB‑tests & optimalisaties",
+        inc4:"Prioritaire support & SLA",
+        u1:"End‑to‑end leadfunnel met kwalificatie",
+        u2:"Automatisch inplannen + herinneringen",
+        u3:"Betalingen/aanbetalingen via Stripe",
+        next:"Klaar voor AI‑reasoning en complexe routing? Premium voegt geavanceerde NLP, meer systemen en dedicated PM toe.",
+        q2:"Kunnen we custom integraties bouwen?",
+        a2:"Ja, via webhooks of API’s (CRM, boeking, betalingen). Complexere integraties zijn mogelijk in Premium."
       },
-      includes:{title:"Inbegrepen", i1:"Setup en onboarding", i2:"Meertalige teksten (NL/FR/EN)", i3:"Kleine wijzigingen/update per maand", i4:"Statistieken (maandelijks rapport)"},
-      usecases:{title:"Use‑cases", u1:"FAQ/klantenservice", u2:"Leads captatie + doorsturen", u3:"Eenvoudig boeken van afspraken"},
-      next:{title:"Groeipad", text:"Wanneer je klaar bent voor meer flows, integraties of extra platformen, kan je steeds upgraden naar Standaard of Premium."},
-      faq:{title:"FAQ", q1:"Zitten WhatsApp/Telegram‑kosten inbegrepen?", a1:"Externe platformkosten (bv. WhatsApp Business API) zijn niet inbegrepen en worden 1‑op‑1 doorgerekend.",
-           q2:"Kunnen we later extra talen toevoegen?", a2:"Ja. In Basis zitten NL/FR/EN. Extra talen zijn mogelijk als add‑on.",
-           q3:"Is er een proefperiode?", a3:"We bieden een gratis diagnose + demo flow voor jouw case, zodat je ziet hoe het werkt vóór start."}
+      premium:{
+        metaTitle:"Premium Abonnement — BotMatic",
+        title:"Premium Abonnement",
+        subtitle:"Voor ambitieuze teams: geavanceerde AI/NLP, complexe integraties met meerdere systemen en een dedicated projectmanager.",
+        inc1:"Reasoning‑chains, RAG & knowledge bases",
+        inc2:"Realtime agent‑handoff & omnichannel",
+        inc3:"Complexe API‑integraties (ERP, DWH)",
+        inc4:"Dedicated PM, roadmap & kwartaalreviews",
+        u1:"Meertalige support met context & rechten",
+        u2:"Dynamische offertes, betalingen & facturatie",
+        u3:"Ops & IT‑automatisering via bot‑workflows",
+        next:"Premium kan verder uitgebreid worden met SSO, audit‑logging, dedicated hosting en custom SLAs.",
+        q2:"Kunnen jullie met onze security/IT meewerken?",
+        a2:"Ja. We ondersteunen DPIA, toegangsmodellen, logging en afwijkende hosting (bijv. VPC) op aanvraag.",
+        q3:"Bieden jullie trainingssessies aan?",
+        a3:"Ja, onboarding + kwartaaltrainingen voor teamleads zijn inbegrepen in Premium."
+      },
+      includes:{title:"Inbegrepen"},
+      usecases:{title:"Use‑cases"},
+      next:{title:"Groeipad"},
+      faq:{
+        title:"FAQ",
+        q1:"Zitten WhatsApp/Telegram‑kosten inbegrepen?",
+        a1:"Externe platformkosten (bv. WhatsApp Business API) zijn niet inbegrepen en worden 1‑op‑1 doorgerekend.",
+        q3:"Is er een proefperiode?",
+        a3:"We bieden een gratis diagnose + demo flow voor jouw case, zodat je ziet hoe het werkt vóór start."
+      }
     }
   },
   fr:{
@@ -61,25 +88,52 @@ const I18N = {
     },
     contact:{title:"Demander une démo"},
     form:{name:"Nom",platform:"Plateforme",message:"Message",gdpr:"J’accepte le traitement de mes données conformément à la politique de confidentialité.",submit:"Envoyer"},
-    pricingPage:{
-      metaTitle:"Tarifs — BotMatic",
-      title:"Tarifs transparents",
-      subtitle:"Choisissez un plan. Vous pouvez monter en gamme plus tard. Diagnostic gratuit inclus.",
-      view:"Voir le détail"
-    },
+    pricingPage:{metaTitle:"Tarifs — BotMatic",title:"Tarifs transparents",subtitle:"Choisissez un plan. Vous pouvez monter en gamme plus tard. Diagnostic gratuit inclus.",view:"Voir le détail"},
     planDetail:{
       back:"Retour aux tarifs",
-      basic:{
-        metaTitle:"Abonnement Basique — BotMatic",
-        title:"Abonnement Basique",
-        subtitle:"Commencez simple: un cas d’usage clair, une plateforme. Déploiement rapide."
+      basic:{metaTitle:"Abonnement Basique — BotMatic",title:"Abonnement Basique",subtitle:"Commencez simple: un cas d’usage clair, une plateforme. Déploiement rapide."},
+      standard:{
+        metaTitle:"Abonnement Standard — BotMatic",
+        title:"Abonnement Standard",
+        subtitle:"Le plus choisi: plusieurs automatisations, deux canaux et support prioritaire — idéal pour l’échelle.",
+        inc1:"Conception de conversations multi‑flows",
+        inc2:"Intégrations: CRM/agenda/paiements/Sheets",
+        inc3:"AB tests & optimisations",
+        inc4:"Support prioritaire & SLA",
+        u1:"Funnel de leads end‑to‑end avec qualification",
+        u2:"Planification auto + rappels",
+        u3:"Paiements/acompte via Stripe",
+        next:"Besoin d’IA avancée et de routage complexe ? Premium ajoute du NLP, plus de systèmes et un chef de projet dédié.",
+        q2:"Peut‑on créer des intégrations sur‑mesure ?",
+        a2:"Oui, via webhooks ou API (CRM, réservation, paiements). Les intégrations complexes sont possibles en Premium."
       },
-      includes:{title:"Inclus", i1:"Mise en place et onboarding", i2:"Textes multilingues (NL/FR/EN)", i3:"Petites mises à jour mensuelles", i4:"Statistiques (rapport mensuel)"},
-      usecases:{title:"Cas d’usage", u1:"FAQ/support", u2:"Capture de leads + transfert", u3:"Prise de rendez‑vous simple"},
-      next:{title:"Évolutif", text:"Passez au Standard ou Premium quand vous aurez besoin de plus de flows/intégrations."},
-      faq:{title:"FAQ", q1:"Les coûts WhatsApp/Telegram sont‑ils inclus ?", a1:"Les frais des plateformes externes ne sont pas inclus et sont refacturés 1‑pour‑1.",
-           q2:"Peut‑on ajouter d’autres langues plus tard ?", a2:"Oui. NL/FR/EN inclus dans Basique. Langues supplémentaires en option.",
-           q3:"Y a‑t‑il une période d’essai ?", a3:"Nous proposons un diagnostic gratuit + une mini‑démo avant de démarrer."}
+      premium:{
+        metaTitle:"Abonnement Premium — BotMatic",
+        title:"Abonnement Premium",
+        subtitle:"Pour les équipes ambitieuses: IA/NLP avancée, intégrations systèmes complexes et chef de projet dédié.",
+        inc1:"Reasoning‑chains, RAG & bases de connaissances",
+        inc2:"Transfert agent en temps réel & omnicanal",
+        inc3:"Intégrations API complexes (ERP, DWH)",
+        inc4:"Chef de projet, roadmap & revues trimestrielles",
+        u1:"Support multilingue avec contexte & droits",
+        u2:"Devis dynamiques, paiements & facturation",
+        u3:"Automatisation Ops & IT via workflows bot",
+        next:"Premium peut être étendu avec SSO, audit‑logs, hébergement dédié et SLA personnalisés.",
+        q2:"Pouvez‑vous travailler avec notre équipe sécurité/IT ?",
+        a2:"Oui. Nous gérons DPIA, modèles d’accès, logs et hébergement spécifique (ex: VPC) sur demande.",
+        q3:"Proposez‑vous des formations ?",
+        a3:"Oui, onboarding + formations trimestrielles pour les leads d’équipe sont inclus."
+      },
+      includes:{title:"Inclus"},
+      usecases:{title:"Cas d’usage"},
+      next:{title:"Évolutif"},
+      faq:{
+        title:"FAQ",
+        q1:"Les coûts WhatsApp/Telegram sont‑ils inclus ?",
+        a1:"Les frais des plateformes externes ne sont pas inclus et sont refacturés à prix coûtant.",
+        q3:"Y a‑t‑il une période d’essai ?",
+        a3:"Nous proposons un diagnostic gratuit + un mini‑démo avant de démarrer."
+      }
     }
   },
   en:{
@@ -102,25 +156,52 @@ const I18N = {
     },
     contact:{title:"Request a demo"},
     form:{name:"Name",platform:"Platform",message:"Message",gdpr:"I agree to my data being processed per the privacy policy.",submit:"Send"},
-    pricingPage:{
-      metaTitle:"Pricing — BotMatic",
-      title:"Transparent pricing",
-      subtitle:"Pick a plan. You can always scale later. Free diagnosis included.",
-      view:"View details"
-    },
+    pricingPage:{metaTitle:"Pricing — BotMatic",title:"Transparent pricing",subtitle:"Pick a plan. You can always scale later. Free diagnosis included.",view:"View details"},
     planDetail:{
       back:"Back to pricing",
-      basic:{
-        metaTitle:"Basic Plan — BotMatic",
-        title:"Basic Plan",
-        subtitle:"Start small: one clear use case, one platform. Quick to launch."
+      basic:{metaTitle:"Basic Plan — BotMatic",title:"Basic Plan",subtitle:"Start small: one clear use case, one platform. Quick to launch."},
+      standard:{
+        metaTitle:"Standard Plan — BotMatic",
+        title:"Standard Plan",
+        subtitle:"Most popular: multiple automations, two channels, priority support — built to scale.",
+        inc1:"Conversation design across multiple flows",
+        inc2:"Integrations: CRM/calendar/payments/Sheets",
+        inc3:"A/B testing & optimizations",
+        inc4:"Priority support & SLA",
+        u1:"End‑to‑end lead funnel with qualification",
+        u2:"Auto scheduling + reminders",
+        u3:"Payments/deposits via Stripe",
+        next:"Need advanced NLP and complex routing? Premium adds stronger AI, more systems and a dedicated PM.",
+        q2:"Can we build custom integrations?",
+        a2:"Yes, via webhooks or APIs (CRM, booking, payments). More complex builds fit Premium."
       },
-      includes:{title:"Included", i1:"Setup & onboarding", i2:"Multilingual copy (NL/FR/EN)", i3:"Small monthly adjustments", i4:"Analytics (monthly report)"},
-      usecases:{title:"Use cases", u1:"FAQ/support", u2:"Lead capture + handoff", u3:"Simple appointment booking"},
-      next:{title:"Upgrade path", text:"Move to Standard or Premium when you need more flows or integrations."},
-      faq:{title:"FAQ", q1:"Are WhatsApp/Telegram fees included?", a1:"External platform fees (e.g., WhatsApp Business API) aren’t included and are passed through at cost.",
-           q2:"Can we add more languages later?", a2:"Yes. NL/FR/EN are included; extra languages available as an add‑on.",
-           q3:"Is there a trial?", a3:"We provide a free diagnosis + demo flow for your case before kickoff."}
+      premium:{
+        metaTitle:"Premium Plan — BotMatic",
+        title:"Premium Plan",
+        subtitle:"For ambitious teams: advanced AI/NLP, multi‑system integrations and a dedicated project manager.",
+        inc1:"Reasoning chains, RAG & knowledge bases",
+        inc2:"Realtime agent handoff & omnichannel",
+        inc3:"Complex API integrations (ERP, DWH)",
+        inc4:"Dedicated PM, roadmap & quarterly reviews",
+        u1:"Multilingual support with context & permissions",
+        u2:"Dynamic quotes, payments & invoicing",
+        u3:"Ops & IT automation via bot workflows",
+        next:"Extend with SSO, audit logging, dedicated hosting and custom SLAs.",
+        q2:"Can you collaborate with our security/IT?",
+        a2:"Yes. We support DPIA, access models, logging and custom hosting (e.g., VPC) on request.",
+        q3:"Do you offer training?",
+        a3:"Yes, onboarding + quarterly trainings for team leads are included."
+      },
+      includes:{title:"Included"},
+      usecases:{title:"Use cases"},
+      next:{title:"Upgrade path"},
+      faq:{
+        title:"FAQ",
+        q1:"Are WhatsApp/Telegram fees included?",
+        a1:"External platform fees (e.g., WhatsApp Business API) aren’t included and are passed through at cost.",
+        q3:"Is there a trial?",
+        a3:"We provide a free diagnosis + demo flow for your case before kickoff."
+      }
     }
   }
 };
@@ -133,15 +214,12 @@ function setLang(lang){
   const dict = I18N[lang] || I18N.nl;
   document.documentElement.lang = lang;
   localStorage.setItem('lang', lang);
-  // map [data-i18n="a.b.c"]
   $$('[data-i18n]').forEach(el=>{
     const key = el.getAttribute('data-i18n').split('.');
-    let v = dict;
-    key.forEach(k => v = (v||{})[k]);
+    let v = dict; key.forEach(k => v = (v||{})[k]);
     if(typeof v === 'string') el.textContent = v;
   });
   $$('.lang-btn').forEach(b=>b.classList.toggle('active', b.dataset.lang===lang));
-  // обновим <title> если он с data-i18n
   const titleEl = document.querySelector('title[data-i18n]');
   if (titleEl){
     const key = titleEl.getAttribute('data-i18n').split('.');
@@ -158,7 +236,8 @@ function initLang(){
 
 function smoothNav(){
   $$('.nav a, .cta a').forEach(a=>{
-    if(a.getAttribute('href')?.startsWith('#') || a.getAttribute('href')?.startsWith('index.html#')){
+    const href = a.getAttribute('href')||'';
+    if(href.startsWith('#') || href.startsWith('index.html#')){
       a.addEventListener('click', e=>{
         const hash = a.hash;
         if(hash){
@@ -192,13 +271,9 @@ function form(){
       // 🔌 Подключи свой endpoint (Formspree/EmailJS/own API)
       await new Promise(r=>setTimeout(r,600)); // имитация
       form.reset();
-      note.textContent = {nl:"Bedankt! We nemen snel contact op.",
-                          fr:"Merci ! On vous recontacte rapidement.",
-                          en:"Thanks! We’ll get back to you soon."}[document.documentElement.lang] || "Thanks!";
+      note.textContent = {nl:"Bedankt! We nemen snel contact op.", fr:"Merci ! On vous recontacte rapidement.", en:"Thanks! We’ll get back to you soon."}[document.documentElement.lang] || "Thanks!";
     }catch(err){
-      note.textContent = {nl:"Er ging iets mis. Probeer opnieuw.",
-                          fr:"Une erreur est survenue. Réessayez.",
-                          en:"Something went wrong. Try again."}[document.documentElement.lang] || "Error";
+      note.textContent = {nl:"Er ging iets mis. Probeer opnieuw.", fr:"Une erreur est survenue. Réessayez.", en:"Something went wrong. Try again."}[document.documentElement.lang] || "Error";
     }
   });
 }
