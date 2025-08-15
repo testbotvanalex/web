@@ -1,172 +1,117 @@
-<!-- index.html (v12) -->
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en" data-lang="en">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <title>BotMatic — Custom Chatbots</title>
-
-  <link rel="canonical" href="https://www.botmatic.be/"/>
-  <link rel="alternate" href="https://www.botmatic.be/?lang=en" hreflang="en">
-  <link rel="alternate" href="https://www.botmatic.be/?lang=nl" hreflang="nl">
-  <link rel="alternate" href="https://www.botmatic.be/?lang=fr" hreflang="fr">
-  <link rel="alternate" href="https://www.botmatic.be/" hreflang="x-default">
+  <title>BotMatic — Custom chatbots in 7–14 days</title>
   <meta name="description" content="Custom chatbots for WhatsApp, Telegram, Instagram & web. Delivered in 7–14 days.">
+  <link rel="canonical" href="https://www.botmatic.be/">
   <meta property="og:title" content="BotMatic — Custom Chatbots">
-  <meta property="og:description" content="We build and launch WhatsApp/Telegram/Instagram bots in 7–14 days.">
+  <meta property="og:description" content="We design, build and launch bots that convert — fast.">
   <meta property="og:image" content="/og.jpg">
   <meta property="og:url" content="https://www.botmatic.be/">
-  <meta name="theme-color" content="#0f172a">
-
+  <meta name="theme-color" content="#4f46e5">
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="/assets/style.css?v=12">
+  <link rel="stylesheet" href="/assets/style.css?v=1">
 </head>
-<body data-page="home">
-  <header class="header" role="banner">
-    <div class="container nav">
-      <a href="/" class="brand" aria-label="BotMatic">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M7 7h10v8a4 4 0 0 1-4 4H11a4 4 0 0 1-4-4V7zM9 3h6v4H9z" fill="none" stroke="#111827" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <strong>BotMatic</strong>
-      </a>
-
-      <button class="mobile-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainmenu">
-        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
-      </button>
-
-      <nav class="menu" id="mainmenu" aria-label="Main">
-        <a href="/" data-i18n="nav.home">Home</a>
-        <a href="/pricing.html" data-i18n="nav.pricing">Pricing</a>
-        <a href="/faq.html" data-i18n="nav.faq">FAQ</a>
-        <a href="/contact.html" data-i18n="nav.contact">Contact</a>
-      </nav>
-
-      <div class="lang" aria-label="Language">
-        <button type="button" data-lang="en" aria-pressed="true">EN</button>
-        <button type="button" data-lang="nl" aria-pressed="false">NL</button>
-        <button type="button" data-lang="fr" aria-pressed="false">FR</button>
-      </div>
+<body>
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="/" aria-label="BotMatic">
+      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v8a4 4 0 0 1-4 4H11a4 4 0 0 1-4-4V7zM9 3h6v4H9z" fill="none" stroke="#111827" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <strong>BotMatic</strong>
+    </a>
+    <button class="mobile-toggle" aria-controls="mainmenu" aria-expanded="false" aria-label="Open menu"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button>
+    <nav id="mainmenu" class="menu" aria-label="Main">
+      <a href="/" class="active" data-i18n="nav.home">Home</a>
+      <a href="/pricing.html" data-i18n="nav.pricing">Pricing</a>
+      <a href="/use-cases.html" data-i18n="nav.usecases">Use cases</a>
+      <a href="/faq.html" data-i18n="nav.faq">FAQ</a>
+      <a href="/contact.html" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="lang" aria-label="Language">
+      <button type="button" data-lang="en">EN</button>
+      <button type="button" data-lang="nl">NL</button>
+      <button type="button" data-lang="fr">FR</button>
     </div>
-  </header>
+  </div>
+</header>
 
-  <main id="pjax-root">
-    <!-- HERO -->
-    <section class="hero">
-      <div class="container hero__grid">
-        <div class="hero__text">
-          <h1 class="h1" data-i18n="home.title">Custom chatbots — delivered in 7–14 days</h1>
-          <p class="lead" data-i18n="home.lead">WhatsApp, Telegram, Instagram & web. Simple setup, fast delivery, full customization.</p>
-          <div class="cta-row">
-            <a class="btn btn--primary" href="/contact.html" data-i18n="home.ctaDemo">Get a demo</a>
-            <a class="btn btn--ghost" href="/pricing.html" data-i18n="home.ctaPricing">See pricing</a>
-            <a class="btn btn--line" href="https://wa.me/32400000000" rel="nofollow">WhatsApp</a>
-          </div>
-        </div>
-        <div class="hero__stats">
-          <div class="stat"><span class="stat__kpi">+30%</span><span class="stat__label" data-i18n="stats.s1">Lead→chat rate</span></div>
-          <div class="stat"><span class="stat__kpi">×3</span><span class="stat__label" data-i18n="stats.s2">Faster response</span></div>
-          <div class="stat"><span class="stat__kpi">70%</span><span class="stat__label" data-i18n="stats.s3">Automated handling</span></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- TRUST BAR -->
-    <section class="trustbar" aria-label="Clients">
-      <div class="container trustbar__row">
-        <span class="muted small" data-i18n="home.trust">Trusted by small businesses & agencies</span>
-        <div class="logos">
-          <span>Beauty Studio</span><span>Auto Dealer</span><span>Clinic</span><span>Real Estate</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- FEATURES -->
-    <section class="section">
-      <div class="container">
-        <h2 class="h2" data-i18n="features.title">Why teams choose BotMatic</h2>
-        <p class="muted" data-i18n="features.lead">Everything you need to go from idea to a live, revenue generating chatbot.</p>
-
-        <div class="grid grid--3 features">
-          <article class="feature">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M5 12h10M5 17h8" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
-            <div><h3 data-i18n="features.f1.title">Fast delivery</h3><p class="muted" data-i18n="features.f1.desc">From brief to launch in 7–14 days with tight feedback loops.</p></div>
-          </article>
-          <article class="feature">
-            <svg viewBox="0 0 24 24"><path d="M4 7h16M7 12h10M10 17h7" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
-            <div><h3 data-i18n="features.f2.title">AI + buttons UX</h3><p class="muted" data-i18n="features.f2.desc">Blend guided flows with AI answers for speed and control.</p></div>
-          </article>
-          <article class="feature">
-            <svg viewBox="0 0 24 24"><path d="M12 6v12M6 12h12" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
-            <div><h3 data-i18n="features.f3.title">Integrations</h3><p class="muted" data-i18n="features.f3.desc">CRM, calendars, payments, Google Sheets — we connect your stack.</p></div>
-          </article>
-          <article class="feature">
-            <svg viewBox="0 0 24 24"><path d="M12 3l3 6 6 1-4.5 4.2 1 6.8L12 18l-5.5 3.9 1-6.8L3 10l6-1z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
-            <div><h3 data-i18n="features.f4.title">Qualify & convert</h3><p class="muted" data-i18n="features.f4.desc">Score leads, route hot prospects, and auto book in one flow.</p></div>
-          </article>
-          <article class="feature">
-            <svg viewBox="0 0 24 24"><path d="M4 7h16v10H4zM8 7V5h8v2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-            <div><h3 data-i18n="features.f5.title">GDPR ready</h3><p class="muted" data-i18n="features.f5.desc">Clear consent, data minimization and opt out built in.</p></div>
-          </article>
-          <article class="feature">
-            <svg viewBox="0 0 24 24"><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
-            <div><h3 data-i18n="features.f6.title">Ongoing support</h3><p class="muted" data-i18n="features.f6.desc">We tune copy, steps and KPIs as your needs evolve.</p></div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- USE CASES -->
-    <section class="section">
-      <div class="container">
-        <h2 class="h2" data-i18n="home.usecases.title">Popular use cases</h2>
-        <div class="grid grid--4">
-          <article class="card uc"><h4 data-i18n="home.usecases.lead.title">Lead capture</h4><p class="muted" data-i18n="home.usecases.lead.desc">Turn clicks into conversations and collect qualified contacts.</p></article>
-          <article class="card uc"><h4 data-i18n="home.usecases.qual.title">Qualification</h4><p class="muted" data-i18n="home.usecases.qual.desc">Score & route prospects based on needs and budget.</p></article>
-          <article class="card uc"><h4 data-i18n="home.usecases.booking.title">Booking & reminders</h4><p class="muted" data-i18n="home.usecases.booking.desc">Auto‑book appointments and send reminders.</p></article>
-          <article class="card uc"><h4 data-i18n="home.usecases.pay.title">Payments / shop</h4><p class="muted" data-i18n="home.usecases.pay.desc">Sell via chat with Stripe and invoicing integrations.</p></article>
-        </div>
-      </div>
-    </section>
-
-    <!-- HOW IT WORKS -->
-    <section class="section">
-      <div class="container">
-        <h2 class="h2" data-i18n="home.how.title">How it works</h2>
-        <ol class="steps">
-          <li><span class="num">1</span><div><strong data-i18n="home.how.s1.title">Brief</strong><p class="muted small" data-i18n="home.how.s1.desc">30‑min call to define use cases, tone, and integrations.</p></div></li>
-          <li><span class="num">2</span><div><strong data-i18n="home.how.s2.title">Build & iterate</strong><p class="muted small" data-i18n="home.how.s2.desc">We ship a working draft within a week, you give feedback.</p></div></li>
-          <li><span class="num">3</span><div><strong data-i18n="home.how.s3.title">Launch & support</strong><p class="muted small" data-i18n="home.how.s3.desc">Go live, monitor KPIs, and tune copy/flows monthly.</p></div></li>
-        </ol>
-      </div>
-    </section>
-
-    <!-- CTA BANNER -->
-    <section class="cta-banner" aria-label="Call to action">
-      <div class="container ctab__grid">
-        <h3>Ready to launch your chatbot?</h3>
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero__grid">
+      <div>
+        <h1 class="h1" data-i18n="home.title">Custom chatbots in 7–14 days</h1>
+        <p class="lead" data-i18n="home.lead">WhatsApp, Telegram, Instagram & web. We design, build and launch bots that convert — fast.</p>
         <div class="cta-row">
-          <a class="btn btn--primary" href="/contact.html" data-i18n="home.ctaDemo">Get a demo</a>
-          <a class="btn btn--ghost" href="/pricing.html" data-i18n="home.ctaPricing">See pricing</a>
+          <a class="btn btn--primary" href="/contact.html" data-i18n="cta.demo">Get a demo</a>
+          <a class="btn btn--ghost" href="/pricing.html" data-i18n="cta.pricing">See pricing</a>
+          <a class="btn btn--line" href="https://wa.me/32400000000" rel="nofollow" data-i18n="cta.wa">WhatsApp</a>
         </div>
       </div>
-    </section>
-  </main>
-
-  <footer class="footer" role="contentinfo">
-    <div class="container foot">
-      <div>© <span id="y"></span> BotMatic</div>
-      <div class="links">
-        <a href="https://github.com/testbotvanalex/web" target="_blank" rel="noopener">GitHub</a>
+      <div class="hero__statgrid">
+        <div class="stat"><span class="kpi">+30%</span><span class="lbl" data-i18n="stats.s1">Lead→chat rate</span></div>
+        <div class="stat"><span class="kpi">×3</span><span class="lbl" data-i18n="stats.s2">Faster response</span></div>
+        <div class="stat"><span class="kpi">70%</span><span class="lbl" data-i18n="stats.s3">Automated handling</span></div>
       </div>
     </div>
-  </footer>
+  </section>
 
-  <div class="scrim" data-scrim hidden></div>
+  <!-- TRUST -->
+  <section class="trust">
+    <div class="container trust__row">
+      <span class="muted small" data-i18n="home.trust">Trusted by small businesses & agencies</span>
+      <div class="logos"><span>Beauty Studio</span><span>Auto Dealer</span><span>Clinic</span><span>Real Estate</span></div>
+    </div>
+  </section>
 
-  <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
-  <script src="/assets/main.js?v=5" defer></script>
+  <!-- 3 BULLETS -->
+  <section class="section">
+    <div class="container grid3">
+      <article class="bullet">
+        <h3 data-i18n="home.b1.t">Fast</h3>
+        <p class="muted" data-i18n="home.b1.d">From brief to launch in 7–14 days with tight feedback loops.</p>
+      </article>
+      <article class="bullet">
+        <h3 data-i18n="home.b2.t">Custom</h3>
+        <p class="muted" data-i18n="home.b2.d">Flows, tone and integrations tailored to your process.</p>
+      </article>
+      <article class="bullet">
+        <h3 data-i18n="home.b3.t">Integrated</h3>
+        <p class="muted" data-i18n="home.b3.d">Calendars, CRM, payments, Sheets — we connect your stack.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-banner">
+    <div class="container ctab__grid">
+      <h3 data-i18n="home.cta.t">Ready to launch your chatbot?</h3>
+      <div class="cta-row">
+        <a class="btn btn--primary" href="/contact.html" data-i18n="cta.demo">Get a demo</a>
+        <a class="btn btn--ghost" href="/use-cases.html" data-i18n="cta.usecases">See use cases</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container foot">
+    <div>© <span id="y"></span> BotMatic</div>
+    <nav class="footnav">
+      <a href="/pricing.html" data-i18n="nav.pricing">Pricing</a>
+      <a href="/use-cases.html" data-i18n="nav.usecases">Use cases</a>
+      <a href="/faq.html" data-i18n="nav.faq">FAQ</a>
+      <a href="/contact.html" data-i18n="nav.contact">Contact</a>
+    </nav>
+  </div>
+</footer>
+
+<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+<script src="/assets/main.js?v=1" defer></script>
 </body>
 </html>

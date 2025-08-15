@@ -2,70 +2,76 @@
 <!DOCTYPE html>
 <html lang="en" data-lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Pricing — BotMatic</title>
-  <link rel="canonical" href="https://www.botmatic.be/pricing.html"/>
-  <meta name="description" content="Simple pricing for custom chatbots. Starter, Standard, Premium.">
-  <meta property="og:title" content="Pricing — BotMatic">
-  <meta property="og:image" content="/og.jpg">
-  <link rel="stylesheet" href="/assets/style.css?v=3">
+  <meta name="description" content="Transparent pricing for custom chatbots.">
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/assets/style.css?v=1">
 </head>
-<body data-page="pricing">
-  <header class="header" role="banner">
-    <div class="container nav">
-      <a href="/" class="brand" aria-label="BotMatic">🤖 <strong>BotMatic</strong></a>
-      <button class="mobile-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainmenu">
-        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
-      </button>
-      <nav class="menu" id="mainmenu" aria-label="Main">
-        <a href="/" data-i18n="nav.home">Home</a>
-        <a href="/pricing.html" class="active" data-i18n="nav.pricing">Pricing</a>
-        <a href="/faq.html" data-i18n="nav.faq">FAQ</a>
-        <a href="/contact.html" data-i18n="nav.contact">Contact</a>
-      </nav>
-      <div class="lang">
-        <button type="button" data-lang="en" aria-pressed="true">EN</button>
-        <button type="button" data-lang="nl" aria-pressed="false">NL</button>
-        <button type="button" data-lang="fr" aria-pressed="false">FR</button>
-      </div>
+<body>
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="/"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M7 7h10v8a4 4 0 0 1-4 4H11a4 4 0 0 1-4-4V7zM9 3h6v4H9z" fill="none" stroke="#111827" stroke-width="1.6"/></svg><strong>BotMatic</strong></a>
+    <button class="mobile-toggle" aria-controls="mainmenu" aria-expanded="false" aria-label="Open menu"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button>
+    <nav id="mainmenu" class="menu" aria-label="Main">
+      <a href="/" data-i18n="nav.home">Home</a>
+      <a href="/pricing.html" class="active" data-i18n="nav.pricing">Pricing</a>
+      <a href="/use-cases.html" data-i18n="nav.usecases">Use cases</a>
+      <a href="/faq.html" data-i18n="nav.faq">FAQ</a>
+      <a href="/contact.html" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="lang"><button data-lang="en">EN</button><button data-lang="nl">NL</button><button data-lang="fr">FR</button></div>
+  </div>
+</header>
+
+<main class="section">
+  <div class="container">
+    <h1 class="h1" data-i18n="pricing.title">Simple pricing</h1>
+    <p class="lead" data-i18n="pricing.lead">Pick a plan — upgrade anytime.</p>
+
+    <div class="plans">
+      <article class="plan">
+        <h3 data-i18n="pricing.starter.title">Starter</h3>
+        <div class="price"><span data-i18n="pricing.starter.price">€29</span> <small>/mo</small></div>
+        <ul class="ul">
+          <li data-i18n="pricing.starter.l1">1 core flow (FAQ or lead capture)</li>
+          <li data-i18n="pricing.starter.l2">1 platform (e.g. WhatsApp)</li>
+          <li data-i18n="pricing.starter.l3">Up to 500 conversations/mo</li>
+        </ul>
+        <a class="btn btn--primary" href="/contact.html" data-i18n="cta.start">Start</a>
+      </article>
+
+      <article class="plan popular">
+        <div class="badge" data-i18n="pricing.popular">Most popular</div>
+        <h3 data-i18n="pricing.standard.title">Standard</h3>
+        <div class="price"><span data-i18n="pricing.standard.price">€99</span> <small>/mo</small></div>
+        <ul class="ul">
+          <li data-i18n="pricing.standard.l1">Multi step flows (qualify + booking)</li>
+          <li data-i18n="pricing.standard.l2">2 platforms</li>
+          <li data-i18n="pricing.standard.l3">Priority support & updates</li>
+          <li data-i18n="pricing.standard.l4">Up to 2,000 conversations/mo</li>
+        </ul>
+        <a class="btn btn--primary" href="/contact.html" data-i18n="cta.start">Start</a>
+      </article>
+
+      <article class="plan">
+        <h3 data-i18n="pricing.premium.title">Premium</h3>
+        <div class="price"><span data-i18n="pricing.premium.price">€299</span> <small>/mo</small></div>
+        <ul class="ul">
+          <li data-i18n="pricing.premium.l1">Advanced AI & NLP tuning</li>
+          <li data-i18n="pricing.premium.l2">Multi platform & system integrations</li>
+          <li data-i18n="pricing.premium.l3">Dedicated PM & SLAs</li>
+          <li data-i18n="pricing.premium.l4">Unlimited conversations</li>
+        </ul>
+        <a class="btn btn--primary" href="/contact.html" data-i18n="cta.start">Start</a>
+      </article>
     </div>
-  </header>
+  </div>
+</main>
 
-  <main class="main" id="pjax-root">
-    <div class="container">
-      <h1 class="h1" data-i18n="pricing.title">Simple pricing</h1>
-      <p class="lead" data-i18n="pricing.lead">Pick a plan — upgrade anytime.</p>
-
-      <div class="grid plans">
-        <div class="plan card">
-          <h3>Starter — €29/mo</h3>
-          <ul>
-            <li>1 core flow</li><li>1 platform</li><li>Up to 500 conversations</li>
-          </ul>
-          <a class="cta" href="/contact.html">Choose Starter</a>
-        </div>
-        <div class="plan card popular">
-          <h3>Standard — €99/mo</h3>
-          <ul>
-            <li>Qualify + booking</li><li>2 platforms</li><li>Priority support</li>
-          </ul>
-          <a class="cta" href="/contact.html">Choose Standard</a>
-        </div>
-        <div class="plan card">
-          <h3>Premium — €299/mo</h3>
-          <ul>
-            <li>Advanced AI/NLP</li><li>Integrations</li><li>Unlimited convos</li>
-          </ul>
-          <a class="cta" href="/contact.html">Choose Premium</a>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <footer class="footer"><div class="container foot">© <span id="y"></span> BotMatic</div></footer>
-  <div class="scrim" data-scrim hidden></div>
-  <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
-  <script src="/assets/main.js?v=3" defer></script>
+<footer class="footer"><div class="container foot">© <span id="y"></span> BotMatic</div></footer>
+<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+<script src="/assets/main.js?v=1" defer></script>
 </body>
 </html>
