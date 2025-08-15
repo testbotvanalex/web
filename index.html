@@ -1,4 +1,4 @@
-<!-- index.html — neutral, cleaner (switch to v8 CSS) -->
+<!-- index.html (v9) -->
 <!DOCTYPE html>
 <html lang="en" data-lang="en">
 <head>
@@ -21,7 +21,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="/assets/style.css?v=8">
+  <link rel="stylesheet" href="/assets/style.css?v=9">
 </head>
 <body data-page="home">
   <header class="header" role="banner">
@@ -64,8 +64,8 @@
         <a class="cta ghost" href="/pricing.html" data-i18n="home.ctaPricing">See pricing</a>
       </div>
 
-      <!-- TRUST STRIP -->
-      <div class="trust">
+      <!-- TRUST -->
+      <div class="trust trust--bar">
         <span class="muted" data-i18n="home.trust">Trusted by small businesses & agencies</span>
         <div class="trust-logos" aria-hidden="true">
           <svg viewBox="0 0 120 32"><rect width="120" height="32" rx="6" fill="#fff" stroke="#e5e7eb"/><text x="50%" y="55%" text-anchor="middle" font-size="10" fill="#0f172a" font-weight="700">Beauty Studio</text></svg>
@@ -74,10 +74,12 @@
           <svg viewBox="0 0 120 32"><rect width="120" height="32" rx="6" fill="#fff" stroke="#e5e7eb"/><text x="50%" y="55%" text-anchor="middle" font-size="10" fill="#0f172a" font-weight="700">Real Estate</text></svg>
         </div>
       </div>
+    </div>
 
-      <!-- USE CASES -->
-      <section class="section">
-        <h2 class="h2" data-i18n="home.usecases.title">Popular use cases</h2>
+    <!-- USE CASES (ALT SECTION) -->
+    <section class="section alt">
+      <div class="container">
+        <h2 class="h2"><span class="h2-ic" aria-hidden="true">💡</span><span data-i18n="home.usecases.title">Popular use cases</span></h2>
         <div class="grid usecases">
           <article class="card uc">
             <div class="uc-ic">💬</div>
@@ -100,11 +102,13 @@
             <p class="muted" data-i18n="home.usecases.pay.desc">Sell via chat with Stripe and invoicing integrations.</p>
           </article>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- HOW IT WORKS -->
-      <section class="section">
-        <h2 class="h2" data-i18n="home.how.title">How it works</h2>
+    <!-- HOW IT WORKS (ALT SECTION) -->
+    <section class="section alt">
+      <div class="container">
+        <h2 class="h2"><span class="h2-ic" aria-hidden="true">🛠️</span><span data-i18n="home.how.title">How it works</span></h2>
         <div class="grid steps">
           <div class="step card">
             <div class="step-num">1</div>
@@ -122,27 +126,27 @@
             <p class="muted" data-i18n="home.how.s3.desc">Go live, monitor KPIs, and tune copy/flows monthly.</p>
           </div>
         </div>
-      </section>
 
-      <!-- TESTIMONIAL -->
-      <section class="testimonial card">
-        <div class="avatar" aria-hidden="true">
-          <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="32" fill="#f3f4f6"/><circle cx="32" cy="26" r="12" fill="#e5e7eb"/><rect x="12" y="42" width="40" height="14" rx="7" fill="#e5e7eb"/></svg>
-        </div>
-        <blockquote data-i18n="home.testimonial.quote">“We started booking 30% more appointments after adding the WhatsApp bot. Setup took a week.”</blockquote>
-        <div class="by">
-          <span class="name" data-i18n="home.testimonial.name">Elise V.</span>
-          <span class="role muted" data-i18n="home.testimonial.role">Owner, Beauty Studio</span>
-        </div>
-        <a class="cta ghost" href="/pricing.html" data-i18n="home.testimonial.cta">See plans</a>
-      </section>
+        <!-- TESTIMONIAL -->
+        <section class="testimonial card">
+          <div class="avatar" aria-hidden="true">
+            <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="32" fill="#f3f4f6"/><circle cx="32" cy="26" r="12" fill="#e5e7eb"/><rect x="12" y="42" width="40" height="14" rx="7" fill="#e5e7eb"/></svg>
+          </div>
+          <blockquote data-i18n="home.testimonial.quote">“We started booking 30% more appointments after adding the WhatsApp bot. Setup took a week.”</blockquote>
+          <div class="by">
+            <span class="name" data-i18n="home.testimonial.name">Elise V.</span>
+            <span class="role muted" data-i18n="home.testimonial.role">Owner, Beauty Studio</span>
+          </div>
+          <a class="cta ghost" href="/pricing.html" data-i18n="home.testimonial.cta">See plans</a>
+        </section>
+      </div>
+    </section>
 
-      <!-- Sticky mobile CTA panel -->
-      <div class="sticky-cta" aria-label="Quick actions on mobile">
-        <div class="row">
-          <a class="cta" href="/contact.html" data-i18n="home.ctaDemo">Get a demo</a>
-          <a class="cta ghost" href="/pricing.html" data-i18n="home.ctaPricing">See pricing</a>
-        </div>
+    <!-- Sticky mobile CTA -->
+    <div class="sticky-cta" aria-label="Quick actions on mobile">
+      <div class="row container">
+        <a class="cta" href="/contact.html" data-i18n="home.ctaDemo">Get a demo</a>
+        <a class="cta ghost" href="/pricing.html" data-i18n="home.ctaPricing">See pricing</a>
       </div>
     </div>
   </main>
