@@ -1,120 +1,78 @@
-<!-- index.html -->
 <!DOCTYPE html>
-<html lang="en" data-lang="en">
+<html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <title>BotMatic — Custom chatbots in 7–14 days</title>
-  <meta name="description" content="Custom chatbots for WhatsApp, Telegram, Instagram & web. Delivered in 7–14 days.">
-  <link rel="canonical" href="https://www.botmatic.be/">
-  <meta property="og:title" content="BotMatic — Custom Chatbots">
-  <meta property="og:description" content="We design, build and launch bots that convert — fast.">
-  <meta property="og:image" content="/og.jpg">
-  <meta property="og:url" content="https://www.botmatic.be/">
-  <meta name="theme-color" content="#4f46e5">
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="/assets/style.css?v=3">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BotMatic — Custom Chatbots</title>
+  <meta name="description" content="Custom chatbots for WhatsApp, Telegram, Websites & Instagram. Lead capture, qualification, booking, and payments — built in 7–14 days." />
+  <!-- styles omitted for brevity -->
 </head>
 <body>
-<header class="site-header">
-  <div class="container nav">
-    <a class="brand" href="/" aria-label="BotMatic">
-      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v8a4 4 0 0 1-4 4H11a4 4 0 0 1-4-4V7zM9 3h6v4H9z" fill="none" stroke="#111827" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <strong>BotMatic</strong>
-    </a>
-    <button class="mobile-toggle" aria-controls="mainmenu" aria-expanded="false" aria-label="Open menu"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button>
-    <nav id="mainmenu" class="menu" aria-label="Main">
-      <a href="/" class="active" data-i18n="nav.home">Home</a>
-      <a href="/pricing.html" data-i18n="nav.pricing">Pricing</a>
-      <a href="/use-cases.html" data-i18n="nav.usecases">Use cases</a>
-      <a href="/faq.html" data-i18n="nav.faq">FAQ</a>
-      <a href="/contact.html" data-i18n="nav.contact">Contact</a>
-    </nav>
-    <div class="lang" aria-label="Language">
-      <button type="button" data-lang="en">EN</button>
-      <button type="button" data-lang="nl">NL</button>
-      <button type="button" data-lang="fr">FR</button>
-    </div>
-  </div>
-</header>
+  <!-- body content omitted for brevity -->
+  
+  <script>
+// Robust, idempotent init — safe on re-exec and avoids duplicate variables
+(() => {
+  if (window.__botmaticInit_v2) return; // prevent duplicate runs
+  window.__botmaticInit_v2 = true;
 
-<main>
-  <!-- HERO (minimal) -->
-  <section class="hero hero--clean">
-    <div class="container hero__stack">
-      <h1 class="h1 gradient-heading" data-i18n="home.title">Custom chatbots in 7–14 days</h1>
-      <p class="lead" data-i18n="home.lead">WhatsApp, Telegram, Instagram & web. We design, build and launch bots that convert — fast.</p>
-      <div class="cta-row">
-        <a class="btn btn--primary btn--glow" href="/contact.html" data-i18n="cta.demo">Get a demo</a>
-        <a class="btn btn--ghost" href="/pricing.html" data-i18n="cta.pricing">See pricing</a>
-      </div>
-      <p class="subnote" data-i18n="home.sub">7–14 days • Custom flows • CRM / Calendars / Stripe</p>
-    </div>
-  </section>
+  const I18N = {
+    en:{nav_solutions:'Solutions',nav_platforms:'Platforms',nav_cases:'Cases',nav_pricing:'Pricing',nav_resources:'Resources',nav_about:'About',cta_demo:'Get a Demo',cta_pricing:'See Pricing',hero_title:'Custom chatbots for WhatsApp, Telegram, Websites & Instagram — built in 7–14 days',hero_sub:'We build bots that capture leads, qualify them and auto‑book. Simple setup, rapid turnaround, ongoing support.',badge_speed:'7–14 days delivery',badge_flows:'Fully custom flows',badge_integrations:'CRM & payments',how_kicker:'How it works',how_title:'From brief to leads in 3 steps',how_1_t:'1) Quick brief',how_1_d:'Tell us your goals, channels and CRM. 10–15 minutes.',how_2_t:'2) Build & connect',how_2_d:'We design flows, add AI, integrate payments and your CRM.',how_3_t:'3) Go live',how_3_d:'Launch in 7–14 days and start getting qualified leads.'},
+    nl:{nav_solutions:'Oplossingen',nav_platforms:'Platforms',nav_cases:'Cases',nav_pricing:'Prijzen',nav_resources:'Resources',nav_about:'Over',cta_demo:'Vraag een demo',cta_pricing:'Bekijk prijzen',hero_title:'Maatwerk chatbots voor WhatsApp, Telegram, Websites & Instagram — klaar in 7–14 dagen',hero_sub:'Wij bouwen bots die leads vangen, kwalificeren en automatisch boeken.',badge_speed:'Levering in 7–14 dagen',badge_flows:'Volledig maatwerk',badge_integrations:'CRM & betalingen',how_kicker:'Zo werkt het',how_title:'Van briefing naar leads in 3 stappen',how_1_t:'1) Korte briefing',how_1_d:'Doelen, kanalen en CRM. 10–15 minuten.',how_2_t:'2) Bouwen & koppelen',how_2_d:'Flows, AI, betalingen en CRM‑integratie.',how_3_t:'3) Live',how_3_d:'Start in 7–14 dagen en ontvang gekwalificeerde leads.'},
+    fr:{nav_solutions:'Solutions',nav_platforms:'Plateformes',nav_cases:'Cas',nav_pricing:'Tarifs',nav_resources:'Ressources',nav_about:'À propos',cta_demo:'Demander une démo',cta_pricing:'Voir les tarifs',hero_title:'Chatbots sur mesure pour WhatsApp, Telegram, Sites & Instagram — en 7–14 jours',hero_sub:'Nous créons des bots qui captent, qualifient et réservent automatiquement.',badge_speed:'Livraison 7–14 jours',badge_flows:'Parcours personnalisés',badge_integrations:'CRM & paiements',how_kicker:'Comment ça marche',how_title:'De la brief aux leads en 3 étapes',how_1_t:'1) Brief rapide',how_1_d:'Objectifs, canaux, CRM. 10–15 minutes.',how_2_t:'2) Construire & connecter',how_2_d:'Flows, IA, paiements et intégration CRM.',how_3_t:'3) Mise en ligne',how_3_d:'Lancement en 7–14 jours et leads qualifiés.'},
+    ru:{nav_solutions:'Решения',nav_platforms:'Платформы',nav_cases:'Кейсы',nav_pricing:'Цены',nav_resources:'Ресурсы',nav_about:'О нас',cta_demo:'Получить демо',cta_pricing:'Смотреть цены',hero_title:'Кастомные чат‑боты для WhatsApp, Telegram, сайтов и Instagram — за 7–14 дней',hero_sub:'Строим ботов, которые собирают лиды, квалифицируют и записывают автоматически.',badge_speed:'Готово за 7–14 дней',badge_flows:'Полностью кастомные флоу',badge_integrations:'CRM и платежи',how_kicker:'Как это работает',how_title:'От брифа к лидам за 3 шага',how_1_t:'1) Короткий бриф',how_1_d:'Цели, каналы и CRM. 10–15 минут.',how_2_t:'2) Сборка и интеграция',how_2_d:'Флоу, AI, платежи и CRM‑интеграция.',how_3_t:'3) Запуск',how_3_d:'Старт за 7–14 дней и поток квалифицированных лидов.'}
+  };
 
-  <!-- LIGHT STATS -->
-  <section class="stats">
-    <div class="container stats__row">
-      <div class="s"><strong>+30%</strong><span data-i18n="stats.s1">Lead→chat rate</span></div>
-      <div class="s"><strong>×3</strong><span data-i18n="stats.s2">Faster response</span></div>
-      <div class="s"><strong>70%</strong><span data-i18n="stats.s3">Automated handling</span></div>
-    </div>
-  </section>
+  function applyLang(lang){
+    const dict = I18N[lang] || I18N.en;
+    // Query fresh each time to also update dynamically-added nodes
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key]) el.textContent = dict[key];
+    });
+    document.documentElement.lang = lang;
+    try{ localStorage.setItem('lang', lang); }catch(_){/* ignore */}
+  }
 
-  <!-- 3 BULLETS -->
-  <section class="section">
-    <div class="container grid3">
-      <article class="card bullet">
-        <div class="ic">⚡</div>
-        <div>
-          <h3 data-i18n="home.b1.t">Fast</h3>
-          <p class="muted" data-i18n="home.b1.d">From brief to launch in 7–14 days with tight feedback loops.</p>
-        </div>
-      </article>
-      <article class="card bullet">
-        <div class="ic">🧩</div>
-        <div>
-          <h3 data-i18n="home.b2.t">Custom</h3>
-          <p class="muted" data-i18n="home.b2.d">Flows, tone and integrations tailored to your process.</p>
-        </div>
-      </article>
-      <article class="card bullet">
-        <div class="ic">🔌</div>
-        <div>
-          <h3 data-i18n="home.b3.t">Integrated</h3>
-          <p class="muted" data-i18n="home.b3.d">Calendars, CRM, payments, Sheets — we connect your stack.</p>
-        </div>
-      </article>
-    </div>
-  </section>
+  function initLang(){
+    const sel = document.getElementById('lang');
+    if (!sel) return;
+    if (!sel.dataset.listenerAttached){
+      sel.addEventListener('change', () => applyLang(sel.value));
+      sel.dataset.listenerAttached = '1';
+    }
+    const saved = (()=>{try{return localStorage.getItem('lang')}catch(_){return null}})();
+    const br = (navigator.language||'en').slice(0,2).toLowerCase();
+    const start = (saved && I18N[saved]) ? saved : (I18N[br] ? br : 'en');
+    sel.value = start; applyLang(start);
+  }
 
-  <!-- CTA -->
-  <section class="cta-banner">
-    <div class="container ctab__grid">
-      <h3 data-i18n="home.cta.t">Ready to launch your chatbot?</h3>
-      <div class="cta-row">
-        <a class="btn btn--primary btn--glow" href="/contact.html" data-i18n="cta.demo">Get a demo</a>
-        <a class="btn btn--ghost" href="/use-cases.html" data-i18n="cta.usecases">See use cases</a>
-      </div>
-    </div>
-  </section>
-</main>
+  function initScroll(){
+    if (window.__bmScrollInited) return; window.__bmScrollInited = true;
+    document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click', e=>{
+      const id = a.getAttribute('href').slice(1);
+      const t = document.getElementById(id) || document.querySelector(`[name="${id}"]`);
+      if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth', block:'start'}); }
+    }));
+  }
 
-<footer class="footer">
-  <div class="container foot">
-    <div>© <span id="y"></span> BotMatic</div>
-    <nav class="footnav">
-      <a href="/pricing.html" data-i18n="nav.pricing">Pricing</a>
-      <a href="/use-cases.html" data-i18n="nav.usecases">Use cases</a>
-      <a href="/faq.html" data-i18n="nav.faq">FAQ</a>
-      <a href="/contact.html" data-i18n="nav.contact">Contact</a>
-    </nav>
-  </div>
-</footer>
+  if (!window.toggleMenu) window.toggleMenu = function(){ alert('Mobile menu placeholder — we can expand into an overlay.'); };
 
-<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
-<script src="/assets/main.js?v=2" defer></script>
+  const yearEl = document.getElementById('year'); if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  // Init
+  initLang();
+  initScroll();
+
+  // Minimal runtime tests
+  try {
+    const prev = document.documentElement.lang;
+    applyLang('en');
+    console.assert(document.documentElement.lang === 'en', '[TEST] html lang → en');
+    applyLang(prev);
+    console.assert(document.documentElement.lang === prev, '[TEST] html lang restored');
+  } catch (e) { console.warn('[TEST] failed', e); }
+})();
+</script>
 </body>
 </html>
