@@ -1,3 +1,4 @@
+# FILE: robots.txt
 User-agent: *
 Allow: /
 Sitemap: https://www.botmatic.be/sitemap.xml

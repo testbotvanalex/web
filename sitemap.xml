@@ -1,7 +1,7 @@
+<!-- FILE: sitemap.xml -->
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://www.botmatic.be/</loc></url>
-  <url><loc>https://www.botmatic.be/pricing.html</loc></url>
-  <url><loc>https://www.botmatic.be/faq.html</loc></url>
-  <url><loc>https://www.botmatic.be/contact.html</loc></url>
+  <url><loc>https://www.botmatic.be/prijzen.html</loc></url>
+  <url><loc>https://www.botmatic.be/basis-abonnement.html</loc></url>
 </urlset>
