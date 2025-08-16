@@ -1,8 +1,7 @@
-// next.config.js
 const nextConfig = {
   i18n: {
-    locales: ['en', 'nl', 'fr'], // языки сайта
-    defaultLocale: 'en',         // язык по умолчанию
+    locales: ['en', 'nl', 'fr'],
+    defaultLocale: 'en',
   },
 };
 

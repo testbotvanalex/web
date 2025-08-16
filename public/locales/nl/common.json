@@ -1,4 +1,7 @@
 {
-  "heroTitle": "Start je WhatsApp-bot in 1 dag",
-  "ctaButton": "Probeer de demo"
+  "welcome": "Welkom bij Botmatic 🚀",
+  "description": "Je meertalige Next.js-site is live!",
+  "about": "Over ons",
+  "about_text": "Dit is de over-ons-pagina van je Botmatic-site.",
+  "home": "Startpagina"
 }

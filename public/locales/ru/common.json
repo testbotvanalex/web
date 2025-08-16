@@ -1,4 +1,7 @@
 {
-  "heroTitle": "Запусти WhatsApp-бота за 1 день",
-  "ctaButton": "Попробовать демо"
+  "welcome": "Bienvenue chez Botmatic 🚀",
+  "description": "Votre site Next.js multilingue est en ligne !",
+  "about": "À propos",
+  "about_text": "Ceci est la page à propos de votre site Botmatic.",
+  "home": "Accueil"
 }
