@@ -1,7 +1,14 @@
-<!-- /sitemap.xml -->
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://www.botmatic.be/en/</loc></url>
-  <url><loc>https://www.botmatic.be/nl/</loc></url>
-  <url><loc>https://www.botmatic.be/fr/</loc></url>
-</urlset>
+{
+  "redirects": [
+    { "source": "/prijzen", "destination": "/prijzen.html", "permanent": true },
+    { "source": "/pricing.html", "destination": "/prijzen.html", "permanent": true },
+    { "source": "/tarifs.html", "destination": "/prijzen.html", "permanent": true },
+    { "source": "/basis-abonnement.html", "destination": "/prijzen.html", "permanent": true },
+    { "source": "/standaard-abonnement.html", "destination": "/prijzen.html", "permanent": true },
+    { "source": "/premium-abonnement.html", "destination": "/prijzen.html", "permanent": true },
+    { "source": "/faq", "destination": "/faq.html", "permanent": true },
+    { "source": "/contact", "destination": "/contact.html", "permanent": true },
+    { "source": "/chatbots", "destination": "/chatbots.html", "permanent": true },
+    { "source": "https://www.botmatic.be/:path*", "destination": "https://botmatic.be/:path*", "permanent": true }
+  ]
+}
