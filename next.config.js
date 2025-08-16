@@ -1,5 +1,9 @@
-const { i18n } = require('./next-i18next.config');
-
-module.exports = {
-  i18n
+// next.config.js
+const nextConfig = {
+  i18n: {
+    locales: ['en', 'nl', 'fr'], // языки сайта
+    defaultLocale: 'en',         // язык по умолчанию
+  },
 };
+
+module.exports = nextConfig;
