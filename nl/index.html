@@ -3,117 +3,51 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>BotMatic — Maatwerk chatbots voor WhatsApp, Telegram & websites</title>
-  <meta name="description" content="Wij bouwen chatbots die leads vangen, kwalificeren en automatisch afspraken boeken. WhatsApp, Telegram of website. Snelle oplevering, vaste prijs."/>
-  <meta name="theme-color" content="#111827"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- 👇 абсолютный путь -->
-  <link rel="stylesheet" href="/style.css"/>
-  <link rel="canonical" href="https://www.botmatic.be/">
-  <meta property="og:title" content="BotMatic — Chatbots voor WhatsApp, Telegram & websites">
-  <meta property="og:description" content="Volledig maatwerk, klaar in 7–14 dagen. Gratis diagnose.">
-  <meta property="og:image" content="/assets/og.jpg">
-  <meta property="og:url" content="https://www.botmatic.be/">
-  <meta property="og:type" content="website">
+  <title>BotMatic — Chatbots voor WhatsApp, Telegram & websites</title>
+  <meta name="description" content="Wij bouwen chatbots die leads vangen, kwalificeren en automatisch afspraken boeken."/>
+  <!-- hreflang -->
+  <link rel="alternate" hreflang="nl" href="https://www.botmatic.be/">
+  <link rel="alternate" hreflang="en" href="https://www.botmatic.be/en/">
+  <link rel="alternate" hreflang="fr" href="https://www.botmatic.be/fr/">
+  <link rel="alternate" hreflang="x-default" href="https://www.botmatic.be/">
   <link rel="icon" href="/assets/favicon.png" type="image/png"/>
+  <link rel="stylesheet" href="/style.css"/>
 </head>
 <body>
-  <header class="site-header">
-    <div class="container row space">
-      <a class="logo" href="#home"><img src="/assets/logo.svg" alt="BotMatic" height="28"></a>
-      <nav class="nav">
-        <a href="#features">Functies</a>
-        <a href="/nl/prijzen.html">Prijzen</a>
-        <a href="#contact">Contact</a>
-        <a href="#demo" class="btn btn--ghost">Demo</a>
-      </nav>
-      <div class="lang">
-        <a class="lang-btn" href="/" style="pointer-events:none;opacity:1;border-color:#2dd4bf;box-shadow:0 0 0 2px rgba(45,212,191,.25)">NL</a>
-        <a class="lang-btn" href="/fr/">FR</a>
-        <a class="lang-btn" href="/en/">EN</a>
-      </div>
-      <button class="burger" aria-label="Menu" aria-expanded="false">☰</button>
+<header class="site-header">
+  <div class="container row space">
+    <a class="logo" href="/"><img src="/assets/logo.svg" alt="BotMatic" height="28"/></a>
+    <nav class="nav">
+      <a href="/nl/prijzen.html">Prijzen</a>
+      <a href="/nl/faq.html">FAQ</a>
+      <a href="/nl/contact.html">Contact</a>
+    </nav>
+    <div class="lang">
+      <a class="btn btn--ghost" href="/">NL</a>
+      <a class="btn btn--ghost" href="/fr/">FR</a>
+      <a class="btn btn--ghost" href="/en/">EN</a>
     </div>
-  </header>
+  </div>
+</header>
 
-  <main id="home">
-    <section class="hero">
-      <div class="container hero__grid">
-        <div class="hero__text">
-          <div class="badges">
-            <span class="badge">⚡ 7–14 dagen oplevering</span>
-            <span class="badge">🧩 Volledig maatwerk</span>
-            <span class="badge">🔌 CRM & betalingen</span>
-          </div>
-          <h1>Chatbots voor WhatsApp, Telegram & websites — snel gebouwd</h1>
-          <p class="lead">We bouwen bots die leads vangen, kwalificeren en automatisch afspraken boeken. Eenvoudige setup, snelle oplevering, doorlopend support.</p>
-          <div class="cta">
-            <a href="#contact" class="btn">Start een project</a>
-            <a href="/nl/prijzen.html" class="btn btn--ghost">Bekijk prijzen</a>
-          </div>
-          <div class="stats">
-            <div><div class="stat">+28%</div><div class="muted">Meer chats uit verkeer</div></div>
-            <div><div class="stat">-70%</div><div class="muted">Snellere reactie</div></div>
-            <div><div class="stat">60–80%</div><div class="muted">Automatische afhandeling</div></div>
-          </div>
-        </div>
-        <div class="hero__mock">
-          <div class="phone">
-            <div class="phone__status"></div>
-            <div class="phone__screen" id="demo">
-              <div class="bubble bot">Hoi! Ik ben BotMatic. Waarmee kan ik helpen?</div>
-              <div class="kb">
-                <button class="kbtn">Afspraak boeken</button>
-                <button class="kbtn">Prijzen</button>
-                <button class="kbtn">Contact met agent</button>
-              </div>
-            </div>
-          </div>
-          <p class="muted tiny">Demo is illustratief. Integreren kan met WhatsApp, Telegram, webwidget.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="features" class="section">
-      <div class="container">
-        <h2>Wat je van ons krijgt</h2>
-        <div class="grid-3">
-          <article class="card"><h3>Flows</h3><p>Diagnose, kwalificatie, FAQ, doorverbinden naar agent.</p></article>
-          <article class="card"><h3>Integraties</h3><p>CRM, agenda’s, betalingen (Stripe), Google Sheets, webhooks.</p></article>
-          <article class="card"><h3>Beheer</h3><p>Meertaligheid, statistieken, updates, support.</p></article>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="section">
-      <div class="container">
-        <h2>Vraag een demo</h2>
-        <form id="contactForm" class="form">
-          <div class="form-row"><label>Naam</label><input name="name" required placeholder="Jouw naam"/></div>
-          <div class="form-row"><label>Email</label><input name="email" type="email" required placeholder="jij@bedrijf.be"/></div>
-          <div class="form-row"><label>Platform</label>
-            <select name="platform"><option>WhatsApp</option><option>Telegram</option><option>Website</option></select>
-          </div>
-          <div class="form-row"><label>Bericht</label><textarea name="message" rows="4" placeholder="Vertel kort wat je nodig hebt…"></textarea></div>
-          <label class="chk"><input type="checkbox" required/> <span>Ik ga akkoord met verwerking van mijn gegevens volgens de privacyverklaring.</span></label>
-          <button class="btn" type="submit">Versturen</button><p id="formNote" class="muted tiny"></p>
-        </form>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container row space">
-      <div class="muted tiny">© <span id="y"></span> BotMatic</div>
-      <div class="muted tiny"><a href="/sitemap.xml">Sitemap</a> · <a href="/robots.txt">Robots</a></div>
-      <div class="muted tiny">VAT/BTW BE-0000.000.000</div>
+<main class="hero">
+  <div class="container">
+    <h1>Chatbots — snel gebouwd</h1>
+    <p class="lead">WhatsApp, Telegram & web. Leads vangen, kwalificeren, boeken.</p>
+    <div class="row">
+      <a class="btn" href="/nl/contact.html">Start project</a>
+      <a class="btn btn--ghost" href="/nl/prijzen.html">Bekijk prijzen</a>
     </div>
-  </footer>
+  </div>
+</main>
 
-  <!-- 👇 абсолютный путь -->
-  <script src="/main.js"></script>
-  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+<footer class="site-footer">
+  <div class="container row space">
+    <div class="muted tiny">© <span id="y"></span> BotMatic</div>
+    <div class="muted tiny"><a href="/sitemap.xml">Sitemap</a> · <a href="/robots.txt">Robots</a></div>
+  </div>
+</footer>
+<script src="/main.js"></script>
+<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
 </body>
 </html>

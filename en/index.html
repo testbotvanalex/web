@@ -1,100 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>BotMatic — Custom chatbots for WhatsApp, Telegram & websites</title>
-  <meta name="description" content="We build bots that capture leads, qualify them and auto‑book appointments. Fast delivery, clear pricing."/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css"/>
-  <link rel="canonical" href="https://www.botmatic.be/en/">
-  <meta property="og:title" content="BotMatic — Chatbots for WhatsApp, Telegram & websites">
-  <meta property="og:description" content="Fully custom, delivered in 7–14 days. Free diagnosis.">
-  <meta property="og:image" content="/assets/og.jpg"><meta property="og:url" content="https://www.botmatic.be/en/"><meta property="og:type" content="website">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>BotMatic — Custom chatbots</title>
+  <meta name="description" content="We build chatbots that capture leads, qualify them and auto-book appointments."/>
+  <!-- hreflang -->
+  <link rel="alternate" hreflang="nl" href="https://www.botmatic.be/">
+  <link rel="alternate" hreflang="en" href="https://www.botmatic.be/en/">
+  <link rel="alternate" hreflang="fr" href="https://www.botmatic.be/fr/">
+  <link rel="alternate" hreflang="x-default" href="https://www.botmatic.be/">
   <link rel="icon" href="/assets/favicon.png" type="image/png"/>
+  <link rel="stylesheet" href="/style.css"/>
 </head>
 <body>
 <header class="site-header">
   <div class="container row space">
-    <a class="logo" href="#home"><img src="/assets/logo.svg" alt="BotMatic" height="28"></a>
+    <a class="logo" href="/en/"><img src="/assets/logo.svg" alt="BotMatic" height="28"/></a>
     <nav class="nav">
-      <a href="#features">Features</a>
       <a href="/en/pricing.html">Pricing</a>
-      <a href="#contact">Contact</a>
-      <a href="#demo" class="btn btn--ghost">Demo</a>
+      <a href="/en/faq.html">FAQ</a>
+      <a href="/en/contact.html">Contact</a>
     </nav>
     <div class="lang">
-      <a class="lang-btn" href="/">NL</a>
-      <a class="lang-btn" href="/fr/">FR</a>
-      <a class="lang-btn" href="/en/" style="pointer-events:none;opacity:1;border-color:#2dd4bf;box-shadow:0 0 0 2px rgba(45,212,191,.25)">EN</a>
+      <a class="btn btn--ghost" href="/">NL</a>
+      <a class="btn btn--ghost" href="/fr/">FR</a>
+      <a class="btn btn--ghost" href="/en/">EN</a>
     </div>
-    <button class="burger" aria-label="Menu" aria-expanded="false">☰</button>
   </div>
 </header>
 
-<main id="home">
-  <section class="hero">
-    <div class="container hero__grid">
-      <div class="hero__text">
-        <div class="badges"><span class="badge">⚡ 7–14 days delivery</span><span class="badge">🧩 Fully custom</span><span class="badge">🔌 CRM & payments</span></div>
-        <h1>Custom chatbots for WhatsApp, Telegram & websites — built fast</h1>
-        <p class="lead">We build bots that capture leads, qualify them and auto‑book. Simple setup, quick turnaround, ongoing support.</p>
-        <div class="cta"><a href="#contact" class="btn">Start a project</a><a href="/en/pricing.html" class="btn btn--ghost">See pricing</a></div>
-        <div class="stats">
-          <div><div class="stat">+28%</div><div class="muted">More chats from traffic</div></div>
-          <div><div class="stat">-70%</div><div class="muted">Faster responses</div></div>
-          <div><div class="stat">60–80%</div><div class="muted">Automated handling</div></div>
-        </div>
-      </div>
-      <div class="hero__mock">
-        <div class="phone"><div class="phone__status"></div>
-          <div class="phone__screen" id="demo">
-            <div class="bubble bot">Hi! I’m BotMatic. What do you need?</div>
-            <div class="kb"><button class="kbtn">Book an appointment</button><button class="kbtn">Pricing</button><button class="kbtn">Talk to an agent</button></div>
-          </div>
-        </div>
-        <p class="muted tiny">Demo is illustrative. Integrations: WhatsApp, Telegram, web widget.</p>
-      </div>
+<main class="hero">
+  <div class="container">
+    <h1>Chatbots built fast</h1>
+    <p class="lead">WhatsApp, Telegram & web.</p>
+    <div class="row">
+      <a class="btn" href="/en/contact.html">Start a project</a>
+      <a class="btn btn--ghost" href="/en/pricing.html">See pricing</a>
     </div>
-  </section>
-
-  <section id="features" class="section">
-    <div class="container">
-      <h2>What you get</h2>
-      <div class="grid-3">
-        <article class="card"><h3>Flows</h3><p>Diagnosis, qualification, FAQ, agent handoff.</p></article>
-        <article class="card"><h3>Integrations</h3><p>CRM, calendars, payments (Stripe), Google Sheets, webhooks.</p></article>
-        <article class="card"><h3>Operations</h3><p>Multilingual, analytics, updates, support.</p></article>
-      </div>
-    </div>
-  </section>
-
-  <section id="contact" class="section">
-    <div class="container">
-      <h2>Request a demo</h2>
-      <form id="contactForm" class="form">
-        <div class="form-row"><label>Name</label><input name="name" required placeholder="Your name"/></div>
-        <div class="form-row"><label>Email</label><input name="email" type="email" required placeholder="you@company.com"/></div>
-        <div class="form-row"><label>Platform</label>
-          <select name="platform"><option>WhatsApp</option><option>Telegram</option><option>Website</option></select>
-        </div>
-        <div class="form-row"><label>Message</label><textarea name="message" rows="4" placeholder="Tell us briefly what you need…"></textarea></div>
-        <label class="chk"><input type="checkbox" required/> <span>I agree to my data being processed per the privacy policy.</span></label>
-        <button class="btn" type="submit">Send</button><p id="formNote" class="muted tiny"></p>
-      </form>
-    </div>
-  </section>
+  </div>
 </main>
 
 <footer class="site-footer">
   <div class="container row space">
     <div class="muted tiny">© <span id="y"></span> BotMatic</div>
-    <div class="muted tiny"><a href="/sitemap.xml">Sitemap</a> · <a href="/robots.txt">Robots</a></div>
-    <div class="muted tiny">VAT/BTW BE-0000.000.000</div>
   </div>
 </footer>
-
 <script src="/main.js"></script>
-<script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
 </body>
 </html>

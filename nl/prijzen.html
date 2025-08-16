@@ -1,112 +1,51 @@
-<!-- FILE: prijzen.html -->
 <!DOCTYPE html>
 <html lang="nl">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title data-i18n="pricingPage.metaTitle">Prijzen — BotMatic</title>
-  <meta name="description" content="Kies je abonnement: Basis, Standaard of Premium. Maandelijkse plannen met duidelijke limieten en support."/>
-  <meta name="theme-color" content="#111827"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css"/>
-  <link rel="canonical" href="https://www.botmatic.be/prijzen.html">
-  <meta property="og:title" content="Prijzen — BotMatic">
-  <meta property="og:description" content="Transparante maandplannen. Meest gekozen: Standaard.">
-  <meta property="og:image" content="assets/og.jpg">
-  <meta property="og:url" content="https://www.botmatic.be/prijzen.html">
-  <meta property="og:type" content="website">
-  <link rel="icon" href="assets/favicon.png" type="image/png"/>
+  <title>Prijzen — BotMatic</title>
+  <meta name="description" content="Transparante prijzen: Basic, Standard, Premium en Enterprise."/>
+  <!-- hreflang -->
+  <link rel="alternate" hreflang="nl" href="https://www.botmatic.be/nl/prijzen.html">
+  <link rel="alternate" hreflang="en" href="https://www.botmatic.be/en/pricing.html">
+  <link rel="alternate" hreflang="fr" href="https://www.botmatic.be/fr/tarifs.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.botmatic.be/en/pricing.html">
+  <link rel="icon" href="/assets/favicon.png" type="image/png"/>
+  <link rel="stylesheet" href="/style.css"/>
 </head>
 <body>
-  <header class="site-header">
-    <div class="container row space">
-      <a class="logo" href="index.html#home">
-        <img src="assets/logo.svg" alt="BotMatic" height="28">
-      </a>
-      <nav class="nav">
-        <a href="index.html#features" data-i18n="nav.features">Functies</a>
-        <a href="prijzen.html" class="active" data-i18n="nav.pricing">Prijzen</a>
-        <a href="index.html#contact" data-i18n="nav.contact">Contact</a>
-        <a href="index.html#demo" class="btn btn--ghost" data-i18n="nav.demo">Demo</a>
-      </nav>
-      <div class="lang">
-        <button class="lang-btn" data-lang="nl">NL</button>
-        <button class="lang-btn" data-lang="fr">FR</button>
-        <button class="lang-btn" data-lang="en">EN</button>
-      </div>
-      <button class="burger" aria-label="Menu" aria-expanded="false">☰</button>
+<header class="site-header">
+  <div class="container row space">
+    <a class="logo" href="/"><img src="/assets/logo.svg" alt="BotMatic" height="28"/></a>
+    <nav class="nav">
+      <a href="/nl/prijzen.html">Prijzen</a>
+      <a href="/nl/faq.html">FAQ</a>
+      <a href="/nl/contact.html">Contact</a>
+    </nav>
+    <div class="lang">
+      <a class="btn btn--ghost" href="/">NL</a>
+      <a class="btn btn--ghost" href="/fr/tarifs.html">FR</a>
+      <a class="btn btn--ghost" href="/en/pricing.html">EN</a>
     </div>
-  </header>
+  </div>
+</header>
 
-  <main>
-    <section class="section">
-      <div class="container">
-        <h1 data-i18n="pricingPage.title">Transparante prijzen</h1>
-        <p class="lead" data-i18n="pricingPage.subtitle">Kies een plan. Je kan later altijd opschalen. Gratis diagnose inbegrepen.</p>
-
-        <div class="pricing">
-          <div class="p-card">
-            <div class="p-head">
-              <h3 data-i18n="plans.basic.name">Basis</h3>
-              <div class="p-price">€29<span class="per">/maand</span></div>
-            </div>
-            <ul class="p-list">
-              <li data-i18n="plans.basic.l1">1 kernfunctie (bv. FAQ)</li>
-              <li data-i18n="plans.basic.l2">1 platform</li>
-              <li data-i18n="plans.basic.l3">Standaard support</li>
-              <li data-i18n="plans.basic.l4">Tot 500 conversaties</li>
-            </ul>
-            <a href="basis-abonnement.html" class="btn" data-i18n="pricingPage.view">Bekijk details</a>
-          </div>
-
-          <div class="p-card p-card--pro">
-            <div class="p-head">
-              <div class="badge" data-i18n="plans.popular">Meest gekozen</div>
-              <h3 data-i18n="plans.standard.name">Standaard</h3>
-              <div class="p-price">€99<span class="per">/maand</span></div>
-            </div>
-            <ul class="p-list">
-              <li data-i18n="plans.standard.l1">Meerdere taken/flows</li>
-              <li data-i18n="plans.standard.l2">2 platforms</li>
-              <li data-i18n="plans.standard.l3">Priority support</li>
-              <li data-i18n="plans.standard.l4">Tot 2.000 conversaties</li>
-            </ul>
-            <a href="standard-abonnement.html" class="btn" data-i18n="pricingPage.view">Bekijk details</a>
-          </div>
-
-          <div class="p-card">
-            <div class="p-head">
-              <h3 data-i18n="plans.premium.name">Premium</h3>
-              <div class="p-price">€299<span class="per">/maand</span></div>
-            </div>
-            <ul class="p-list">
-              <li data-i18n="plans.premium.l1">Geavanceerde AI/NLP</li>
-              <li data-i18n="plans.premium.l2">Meerdere systemen</li>
-              <li data-i18n="plans.premium.l3">Toegewijde PM & support</li>
-              <li data-i18n="plans.premium.l4">Onbeperkte conversaties</li>
-            </ul>
-            <a href="premium-abonnement.html" class="btn" data-i18n="pricingPage.view">Bekijk details</a>
-          </div>
-        </div>
-
-        <p class="muted tiny" data-i18n="pricing.gambling">21+ Gokken kan verslavend zijn. Stop op tijd! Meer info: stopoptijd.be</p>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container row space">
-      <div class="muted tiny">© <span id="y"></span> BotMatic</div>
-      <div class="muted tiny">
-        <a href="sitemap.xml">Sitemap</a> · <a href="robots.txt">Robots</a>
-      </div>
-      <div class="muted tiny">VAT/BTW BE-0000.000.000</div>
+<main class="section">
+  <div class="container">
+    <h1>Prijzen</h1>
+    <div class="pricing">
+      <div class="p-card"><h3>Basic — €29/m</h3><p>1 kanaal · 500 dialogen · basis-support</p></div>
+      <div class="p-card p-card--pro"><h3>Standard — €99/m</h3><p>2 kanalen · 2 000 dialogen · CRM & agenda</p></div>
+      <div class="p-card"><h3>Premium — €299/m</h3><p>Onbeperkt · Geavanceerde AI · SLA</p></div>
     </div>
-  </footer>
+    <p class="muted" style="margin-top:12px">Enterprise — op aanvraag.</p>
+  </div>
+</main>
 
-  <script src="main.js"></script>
-  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+<footer class="site-footer">
+  <div class="container row space"><div class="muted tiny">© <span id="y"></span> BotMatic</div></div>
+</footer>
+<script src="/main.js"></script>
+<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
 </body>
 </html>
