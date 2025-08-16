@@ -39,74 +39,16 @@
   </script>
 
   <style>
-    /* Gemini demo styles */
-    .gemini-demo-section {
-      background-color: var(--color-bg);
-      padding: 4rem 0;
-      text-align: center;
-    }
-    .gemini-form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      max-width: 600px;
-      margin: 0 auto 2rem auto;
-    }
-    .gemini-input {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-family: 'Inter', sans-serif;
-    }
-    .gemini-input:focus {
-      outline: none;
-      border-color: var(--color-primary);
-      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-    }
-    #generate-ideas-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 48px;
-    }
-    .loader {
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid var(--color-primary);
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      0% {
-        transform: rotate(0);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-    .gemini-results {
-      margin-top: 2rem;
-      padding: 2rem;
-      background-color: #fff;
-      border-radius: 12px;
-      text-align: left;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-      line-height: 1.7;
-      border: 1px solid #e5e7eb;
-    }
-    @media (min-width: 768px) {
-      .gemini-form {
-        flex-direction: row;
-      }
-      .gemini-input {
-        flex-grow: 1;
-      }
-    }
+    /* AI Demo Sectie (оставил классы как у тебя) */
+    .gemini-demo-section { background-color: var(--color-bg); padding: 4rem 0; text-align: center; }
+    .gemini-form { display:flex; flex-direction:column; gap:1rem; max-width:600px; margin:0 auto 2rem auto; }
+    .gemini-input { width:100%; padding:.75rem 1rem; border:1px solid #d1d5db; border-radius:8px; font-size:1rem; font-family:'Inter',sans-serif; }
+    .gemini-input:focus { outline:none; border-color:var(--color-primary); box-shadow:0 0 0 3px rgba(79,70,229,.2); }
+    #generate-ideas-btn { display:flex; align-items:center; justify-content:center; min-height:48px; }
+    .loader { border:4px solid #f3f3f3; border-top:4px solid var(--color-primary); border-radius:50%; width:24px; height:24px; animation: spin 1s linear infinite; }
+    @keyframes spin { 0%{transform:rotate(0)} 100%{transform:rotate(360deg)} }
+    .gemini-results { margin-top:2rem; padding:2rem; background-color:#fff; border-radius:12px; text-align:left; max-width:800px; margin-left:auto; margin-right:auto; line-height:1.7; border:1px solid #e5e7eb; }
+    @media (min-width:768px){ .gemini-form{flex-direction:row;} .gemini-input{flex-grow:1;} }
   </style>
 </head>
 <body>
@@ -147,29 +89,7 @@
       </div>
     </section>
 
-    <section id="why-botmatic" class="why-botmatic" style="background-color:#fff;">
-      <div class="container animate-on-scroll">
-        <h2 class="section-title" data-i18n="whyBotmaticTitle">Waarom kiezen voor BotMatic?</h2>
-        <div class="features-grid">
-          <div class="feature-card">
-            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z"/></svg></div>
-            <h3 data-i18n="fastLaunchTitle">Snel live</h3><p data-i18n="fastLaunchText">Binnen 48u klaar voor gebruik — zonder technisch gedoe.</p>
-          </div>
-          <div class="feature-card">
-            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"/></svg></div>
-            <h3 data-i18n="customTitle">100% op maat</h3><p data-i18n="customText">Wij bouwen je chatbot volledig rond jouw bedrijf & processen.</p>
-          </div>
-          <div class="feature-card">
-            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V8.25a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 8.25v7.5a2.25 2.25 0 0 0 2.25 2.25Z"/></svg></div>
-            <h3 data-i18n="multiPlatformTitle">Werkt overal</h3><p data-i18n="multiPlatformText">WhatsApp, Telegram, Instagram, website — jij kiest de kanalen.</p>
-          </div>
-          <div class="feature-card">
-            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/></svg></div>
-            <h3 data-i18n="aiTitle">AI inside</h3><p data-i18n="aiText">Slimme chatflows met GPT & taalherkenning voor echte impact.</p>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- Why choose BotMatic will be placed later -->
 
     <!-- AI Feature Section -->
     <section id="gemini-demo" class="gemini-demo-section">
@@ -203,6 +123,31 @@
           <div class="step"><div class="step-number">3</div>
             <h3 data-i18n="step3Title">Lancering & Optimalisatie</h3>
             <p data-i18n="step3Desc">Je chatbot gaat live! We monitoren de prestaties en blijven de chatbot optimaliseren op basis van echte gebruikersdata voor maximaal resultaat.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- "Why choose BotMatic" section moved below the AI demo and how-it-works. This section highlights key benefits and appears later in the scroll to improve flow. -->
+    <section id="why-botmatic" class="why-botmatic" style="background-color:#fff;">
+      <div class="container animate-on-scroll">
+        <h2 class="section-title" data-i18n="whyBotmaticTitle">Waarom kiezen voor BotMatic?</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z"/></svg></div>
+            <h3 data-i18n="fastLaunchTitle">Snel live</h3><p data-i18n="fastLaunchText">Binnen 48u klaar voor gebruik — zonder technisch gedoe.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"/></svg></div>
+            <h3 data-i18n="customTitle">100% op maat</h3><p data-i18n="customText">Wij bouwen je chatbot volledig rond jouw bedrijf & processen.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V8.25a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 8.25v7.5a2.25 2.25 0 0 0 2.25 2.25Z"/></svg></div>
+            <h3 data-i18n="multiPlatformTitle">Werkt overal</h3><p data-i18n="multiPlatformText">WhatsApp, Telegram, Instagram, website — jij kiest de kanalen.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/></svg></div>
+            <h3 data-i18n="aiTitle">AI inside</h3><p data-i18n="aiText">Slimme chatflows met GPT & taalherkenning voor echte impact.</p>
           </div>
         </div>
       </div>
@@ -247,83 +192,33 @@
         ctaPricing:'Bekijk abonnementen', ctaServices:'Ontdek onze diensten',
         footerLink1:'Over ons', footerLink2:'Privacybeleid', footerLink3:'Algemene voorwaarden', footerCopyright:'Alle rechten voorbehouden.'
       },
-      fr: {
-        navServices: 'Services',
-        navPricing: 'Tarifs',
-        navFaq: 'FAQ',
-        navContact: 'Contact',
-        heroTitle: 'Votre chatbot, exactement comme vous le souhaitez.',
-        heroSub: 'Laissez BotMatic créer des chatbots puissants et personnalisés pour WhatsApp, Telegram, Instagram et plus encore. Rapide, efficace et entièrement adapté à votre entreprise.',
-        ctaQuote: 'Demandez un devis',
-        ctaLearn: 'Découvrez les fonctionnalités',
-        geminiTitle: 'Découvrez la puissance de l\'IA',
-        geminiSub: 'Donnez une brève description de votre entreprise et notre assistant IA génèrera immédiatement trois idées concrètes sur la façon dont un chatbot peut renforcer votre entreprise.',
-        geminiPlaceholder: "Ex. 'une fleuriste locale' ou 'une boutique de vêtements en ligne'",
-        geminiBtn: '✨ Générer des idées',
-        whyBotmaticTitle: 'Pourquoi choisir BotMatic ?',
-        fastLaunchTitle: 'Mise en ligne rapide',
-        fastLaunchText: 'Prêt à l\'emploi en 48 h — sans tracas techniques.',
-        customTitle: '100 % sur mesure',
-        customText: 'Nous construisons votre chatbot entièrement autour de votre entreprise et de vos processus.',
-        multiPlatformTitle: 'Fonctionne partout',
-        multiPlatformText: 'WhatsApp, Telegram, Instagram, site web — vous choisissez les canaux.',
-        aiTitle: 'IA intégrée',
-        aiText: 'Des flux de conversation intelligents avec GPT et reconnaissance linguistique pour un véritable impact.',
-        howItWorksTitle: 'Comment ça fonctionne',
-        howItWorksSub: 'En trois étapes simples vers un chatbot puissant pour votre entreprise.',
-        step1Title: 'Analyse & Stratégie',
-        step1Desc: 'Nous commençons par une conversation pour comprendre vos objectifs, processus et clients. Ensemble, nous déterminons la stratégie parfaite pour votre chatbot.',
-        step2Title: 'Développement & Tests',
-        step2Desc: 'Notre équipe construit le chatbot sur mesure. Nous testons toutes les conversations et intégrations en profondeur afin de garantir un fonctionnement parfait.',
-        step3Title: 'Lancement & Optimisation',
-        step3Desc: 'Votre chatbot est mis en ligne ! Nous surveillons les performances et continuons à optimiser le chatbot en fonction des données réelles des utilisateurs pour un résultat maximal.',
-        ctaTitle: 'Découvrez ce que BotMatic peut faire pour vous',
-        ctaSub: 'Découvrez nos fonctionnalités détaillées et trouvez l\'abonnement parfait pour votre entreprise.',
-        ctaPricing: 'Voir les abonnements',
-        ctaServices: 'Découvrez nos services',
-        footerLink1: 'À propos de nous',
-        footerLink2: 'Politique de confidentialité',
-        footerLink3: 'Conditions générales',
-        footerCopyright: 'Tous droits réservés.'
+      fr:{
+        navServices:'Services', navPricing:'Abonnements', navFaq:'FAQ', navContact:'Contact',
+        heroTitle:'Votre chatbot, exactement comme vous le souhaitez.', heroSub:'Laissez BotMatic créer des chatbots puissants et personnalisés pour WhatsApp, Telegram, Instagram et plus encore. Rapide, efficace et entièrement adapté à votre entreprise.',
+        ctaQuote:'Demandez un devis', ctaLearn:'Découvrez les fonctionnalités',
+        geminiTitle:'Découvrez la puissance de l’IA', geminiSub:'Donnez une brève description de votre entreprise et notre assistant IA génère immédiatement trois idées concrètes pour savoir comment un chatbot peut renforcer votre entreprise.', geminiPlaceholder:"Ex. 'une fleuriste locale' ou 'une boutique de vêtements en ligne'", geminiBtn:'✨ Générer des idées',
+        whyBotmaticTitle:'Pourquoi choisir BotMatic ?', fastLaunchTitle:'Mise en service rapide', fastLaunchText:'Prêt à l’emploi en 48 h — sans tracas techniques.', customTitle:'100 % sur mesure', customText:'Nous construisons votre chatbot entièrement autour de votre entreprise et de vos processus.', multiPlatformTitle:'Fonctionne partout', multiPlatformText:'WhatsApp, Telegram, Instagram, site web — vous choisissez les canaux.', aiTitle:'IA intégrée', aiText:'Des flux de discussion intelligents avec GPT et reconnaissance linguistique pour un impact réel.',
+        howItWorksTitle:'Comment ça marche', howItWorksSub:'En trois étapes simples, vous obtenez un chatbot puissant pour votre entreprise.',
+        step1Title:'Analyse & stratégie', step1Desc:'Nous commençons par une conversation pour comprendre vos objectifs, processus et clients. Ensemble, nous déterminons la stratégie parfaite pour votre chatbot.',
+        step2Title:'Développement & test', step2Desc:'Notre équipe construit le chatbot sur mesure. Nous testons minutieusement toutes les conversations et intégrations pour garantir un fonctionnement sans faille.',
+        step3Title:'Lancement & optimisation', step3Desc:'Votre chatbot est mis en ligne ! Nous surveillons les performances et continuons d’optimiser le chatbot sur la base de données réelles pour un résultat maximal.',
+        ctaTitle:'Découvrez ce que BotMatic peut faire pour vous', ctaSub:'Découvrez nos fonctionnalités détaillées et trouvez l’abonnement parfait pour votre entreprise.',
+        ctaPricing:'Voir les abonnements', ctaServices:'Découvrez nos services',
+        footerLink1:'À propos de nous', footerLink2:'Politique de confidentialité', footerLink3:'Conditions générales', footerCopyright:'Tous droits réservés.'
       },
-      en: {
-        navServices: 'Services',
-        navPricing: 'Pricing',
-        navFaq: 'FAQ',
-        navContact: 'Contact',
-        heroTitle: 'Your chatbot, exactly the way you want it.',
-        heroSub: 'Let BotMatic build powerful, personalized chatbots for WhatsApp, Telegram, Instagram and more. Fast, efficient and completely tailored to your business.',
-        ctaQuote: 'Request a quote',
-        ctaLearn: 'Discover the features',
-        geminiTitle: 'Discover the Power of AI',
-        geminiSub: 'Provide a short description of your business and our AI assistant will generate three concrete ideas on how a chatbot can strengthen your company.',
-        geminiPlaceholder: "E.g. 'a local flower shop' or 'an online clothing store'",
-        geminiBtn: '✨ Generate Ideas',
-        whyBotmaticTitle: 'Why choose BotMatic?',
-        fastLaunchTitle: 'Go live quickly',
-        fastLaunchText: 'Ready to use within 48 hours — no technical hassle.',
-        customTitle: '100% customised',
-        customText: 'We build your chatbot entirely around your business and processes.',
-        multiPlatformTitle: 'Works everywhere',
-        multiPlatformText: 'WhatsApp, Telegram, Instagram, website — you choose the channels.',
-        aiTitle: 'AI inside',
-        aiText: 'Smart chat flows with GPT and language recognition for real impact.',
-        howItWorksTitle: 'How it works',
-        howItWorksSub: 'In three simple steps to a powerful chatbot for your business.',
-        step1Title: 'Analysis & Strategy',
-        step1Desc: 'We start with a conversation to understand your goals, processes and customers. Together we determine the perfect strategy for your chatbot.',
-        step2Title: 'Development & Testing',
-        step2Desc: 'Our team builds the chatbot tailored to your needs. We test all conversations and integrations thoroughly to ensure flawless operation.',
-        step3Title: 'Launch & Optimization',
-        step3Desc: 'Your chatbot goes live! We monitor performance and continue to optimise the chatbot based on real user data for maximum results.',
-        ctaTitle: 'Discover what BotMatic can do for you',
-        ctaSub: 'See our detailed features and find the perfect plan that suits your business.',
-        ctaPricing: 'View plans',
-        ctaServices: 'Discover our services',
-        footerLink1: 'About us',
-        footerLink2: 'Privacy policy',
-        footerLink3: 'Terms and conditions',
-        footerCopyright: 'All rights reserved.'
+      en:{
+        navServices:'Services', navPricing:'Plans', navFaq:'FAQ', navContact:'Contact',
+        heroTitle:'Your chatbot, exactly the way you want it.', heroSub:'Let BotMatic build powerful, personalised chatbots for WhatsApp, Telegram, Instagram and more. Fast, efficient and fully tailored to your business.',
+        ctaQuote:'Request a quote', ctaLearn:'Discover the features',
+        geminiTitle:'Discover the Power of AI', geminiSub:'Provide a short description of your company and our AI assistant instantly generates three concrete ideas on how a chatbot can strengthen your business.', geminiPlaceholder:"E.g. 'a local flower shop' or 'an online clothing store'", geminiBtn:'✨ Generate Ideas',
+        whyBotmaticTitle:'Why choose BotMatic?', fastLaunchTitle:'Live in 48h', fastLaunchText:'Ready to use within 48 hours — no technical hassle.', customTitle:'100% tailor‑made', customText:'We build your chatbot entirely around your business and processes.', multiPlatformTitle:'Works everywhere', multiPlatformText:'WhatsApp, Telegram, Instagram, website — you choose the channels.', aiTitle:'AI inside', aiText:'Intelligent chat flows with GPT & language detection for real impact.',
+        howItWorksTitle:'How it works', howItWorksSub:'In three simple steps to a powerful chatbot for your business.',
+        step1Title:'Analysis & strategy', step1Desc:'We start with a conversation to understand your goals, processes and customers. Together we determine the perfect strategy for your chatbot.',
+        step2Title:'Development & testing', step2Desc:'Our team builds the custom chatbot. We thoroughly test all conversations and integrations to ensure flawless operation.',
+        step3Title:'Launch & optimization', step3Desc:'Your chatbot goes live! We monitor performance and continue optimizing the chatbot based on real user data for maximum results.',
+        ctaTitle:'Discover what BotMatic can do for you', ctaSub:'See our detailed features and find the perfect plan for your business.',
+        ctaPricing:'View plans', ctaServices:'Explore our services',
+        footerLink1:'About us', footerLink2:'Privacy policy', footerLink3:'Terms and conditions', footerCopyright:'All rights reserved.'
       }
     };
 

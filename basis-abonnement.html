@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Basis Abonnement | BotMatic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <a href="index.html" class="logo">BotMatic</a>
+      <div class="nav-wrapper">
+        <nav id="main-nav">
+          <a href="chatbots.html" data-i18n="navServices">Diensten</a>
+          <a href="prijzen.html" data-i18n="navPricing">Abonnementen</a>
+          <a href="contact.html" data-i18n="navFaq">FAQ & Contact</a>
+          <a href="contact.html" class="btn btn-primary" data-i18n="navContact">Contact</a>
+        </nav>
+        <select id="lang-select" class="lang-select">
+          <option value="nl">NL</option>
+          <option value="fr">FR</option>
+          <option value="en">EN</option>
+        </select>
+        <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu">
+            <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="plan-detail">
+      <div class="container animate-on-scroll">
+        <h1 class="section-title" data-i18n="plan1Title">Basis Abonnement</h1>
+        <p class="section-sub" data-i18n="plan1Desc">Voor kleine bedrijven die net beginnen en de kracht van automatisering willen ontdekken.</p>
+        
+        <div class="plan-card">
+            <div class="plan-header">
+                <p class="price"><span data-i18n="plan1Price">€29</span><span data-i18n="perMonth">/maand</span></p>
+            </div>
+            <div class="plan-body">
+                <h3 data-i18n="featuresHeader">Inbegrepen functies:</h3>
+                <ul>
+                  <li data-i18n="plan1f1">Eén kernfunctie (bijv. FAQ)</li>
+                  <li data-i18n="plan1f2">Integratie met één platform</li>
+                  <li data-i18n="plan1f3">Standaardondersteuning</li>
+                  <li data-i18n="plan1f4">Tot 500 gesprekken per maand</li>
+                </ul>
+                <a href="contact.html" class="btn btn-primary" data-i18n="plan1Btn">Start je proefperiode</a>
+            </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="#" data-i18n="footerLink1">Over ons</a>
+        <a href="#" data-i18n="footerLink2">Privacybeleid</a>
+        <a href="#" data-i18n="footerLink3">Algemene voorwaarden</a>
+      </div>
+      <p>&copy; <span id="year"></span> BotMatic. <span data-i18n="footerCopyright">Alle rechten voorbehouden.</span></p>
+    </div>
+  </footer>
+
+  <script>
+    const translations = {
+      nl: {
+        navServices: 'Diensten', navPricing: 'Abonnementen', navFaq: 'FAQ & Contact', navContact: 'Contact',
+        plan1Title: 'Basis Abonnement',
+        plan1Desc: 'Voor kleine bedrijven die net beginnen en de kracht van automatisering willen ontdekken.',
+        plan1Price: '€29',
+        perMonth: '/maand',
+        featuresHeader: 'Inbegrepen functies:',
+        plan1f1: 'Eén kernfunctie (bijv. FAQ)',
+        plan1f2: 'Integratie met één platform',
+        plan1f3: 'Standaardondersteuning',
+        plan1f4: 'Tot 500 gesprekken per maand',
+        plan1Btn: 'Start je proefperiode',
+        footerLink1: 'Over ons', footerLink2: 'Privacybeleid', footerLink3: 'Algemene voorwaarden', footerCopyright: 'Alle rechten voorbehouden.'
+      },
+      fr: {
+        navServices: 'Services', navPricing: 'Tarifs', navFaq: 'FAQ & Contact', navContact: 'Contact',
+        plan1Title: 'Abonnement Basique',
+        plan1Desc: 'Pour les petites entreprises qui débutent et veulent découvrir la puissance de l\'automatisation.',
+        plan1Price: '€29',
+        perMonth: '/mois',
+        featuresHeader: 'Fonctionnalités incluses :',
+        plan1f1: 'Une fonctionnalité principale (par ex. FAQ)',
+        plan1f2: 'Intégration avec une seule plateforme',
+        plan1f3: 'Support standard',
+        plan1f4: 'Jusqu’à 500 conversations par mois',
+        plan1Btn: 'Commencez votre essai',
+        footerLink1: 'À propos de nous', footerLink2: 'Politique de confidentialité', footerLink3: 'Conditions générales', footerCopyright: 'Tous droits réservés.'
+      },
+      en: {
+        navServices: 'Services', navPricing: 'Pricing', navFaq: 'FAQ & Contact', navContact: 'Contact',
+        plan1Title: 'Basic Plan',
+        plan1Desc: 'For small businesses just starting out and wanting to discover the power of automation.',
+        plan1Price: '€29',
+        perMonth: '/month',
+        featuresHeader: 'Features included:',
+        plan1f1: 'One core feature (e.g., FAQ)',
+        plan1f2: 'Integration with a single platform',
+        plan1f3: 'Standard support',
+        plan1f4: 'Up to 500 conversations per month',
+        plan1Btn: 'Start your trial',
+        footerLink1: 'About Us', footerLink2: 'Privacy Policy', footerLink3: 'Terms & Conditions', footerCopyright: 'All rights reserved.'
+      }
+    };
+
+    let currentLang = 'nl';
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      const elems = document.querySelectorAll('[data-i18n]');
+      elems.forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang] && translations[lang][key]) { el.textContent = translations[lang][key]; }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const langSelect = document.getElementById('lang-select');
+      const yearSpan = document.getElementById('year');
+      const mobileNavToggle = document.getElementById('mobile-nav-toggle');
+      const mainNav = document.getElementById('main-nav');
+      const animatedEls = document.querySelectorAll('.animate-on-scroll');
+
+      setLanguage(langSelect.value);
+      if (yearSpan) { yearSpan.textContent = new Date().getFullYear(); }
+      langSelect.addEventListener('change', (e) => { setLanguage(e.target.value); });
+      mobileNavToggle.addEventListener('click', () => {
+          mainNav.classList.toggle('active');
+          mobileNavToggle.classList.toggle('active');
+      });
+      mainNav.addEventListener('click', (e) => {
+          if (e.target.tagName === 'A') {
+              mainNav.classList.remove('active');
+              mobileNavToggle.classList.remove('active');
+          }
+      });
+
+      const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                  entry.target.classList.add('visible');
+                  observer.unobserve(entry.target);
+              }
+          });
+      }, { threshold: 0.1 });
+      animatedEls.forEach(el => observer.observe(el));
+    });
+  </script>
+</body>
+</html>
