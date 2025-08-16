@@ -1,56 +1,94 @@
-<!-- FILE: index.html -->
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BotMatic | Chatbots op maat</title>
-  <meta name="description" content="BotMatic bouwt slimme chatbots voor WhatsApp, Telegram en websites. Automatiseer klantenservice, plan afspraken en verhoog conversie.">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
+  <!-- HEADER -->
   <header class="site-header">
     <div class="container row space">
-      <a href="/index.html" class="logo">
-        <img src="logo.png" alt="BotMatic" width="120">
+      <a href="index.html" class="logo">
+        <img src="assets/logo.png" alt="BotMatic" />
       </a>
       <nav class="nav">
-        <a href="/prijzen.html">Prijzen</a>
-        <a href="/faq.html">FAQ</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/chatbots.html">Chatbots</a>
+        <a href="prijzen.html">Prijzen</a>
+        <a href="faq.html">FAQ</a>
+        <a href="contact.html">Contact</a>
+        <a href="chatbots.html">Chatbots</a>
       </nav>
     </div>
   </header>
 
-  <section class="hero">
+  <!-- HERO -->
+  <main class="hero">
     <div class="container hero__grid">
       <div>
+        <div class="badges">
+          <span class="badge">⚡ 7–14 dagen oplevering</span>
+          <span class="badge">🧩 Volledig maatwerk</span>
+          <span class="badge">🔌 CRM & betalingen</span>
+        </div>
         <h1>Custom Chatbots voor WhatsApp, Telegram & Websites</h1>
-        <p class="lead">Automatiseer je klantenservice, plan afspraken en verhoog je conversie.</p>
+        <p class="lead">
+          Automatiseer je klantenservice, plan afspraken en verhoog je conversie.
+        </p>
         <div class="cta">
-          <a href="/prijzen.html" class="btn">Bekijk prijzen</a>
-          <a href="/contact.html" class="btn btn--ghost">Neem contact op</a>
+          <a href="prijzen.html" class="btn">Bekijk prijzen</a>
+          <a href="contact.html" class="btn btn--ghost">Neem contact op</a>
+        </div>
+        <div class="stats">
+          <div>
+            <div class="stat">+28%</div>
+            <div class="tiny muted">Meer chats uit verkeer</div>
+          </div>
+          <div>
+            <div class="stat">-70%</div>
+            <div class="tiny muted">Snellere reactie</div>
+          </div>
+          <div>
+            <div class="stat">60–80%</div>
+            <div class="tiny muted">Automatische afhandeling</div>
+          </div>
         </div>
       </div>
-      <div>
-        <img src="chatbot-demo.png" alt="Chatbot demo" style="max-width:400px;border-radius:16px;">
+      <div class="phone">
+        <div class="phone__status"></div>
+        <div class="phone__screen">
+          <div class="bubble bot">Hoi! Ik ben BotMatic. Waarmee kan ik helpen?</div>
+          <div class="kb">
+            <div class="kbtn">Afspraak boeken</div>
+            <div class="kbtn">Prijzen</div>
+            <div class="kbtn">Contact met agent</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- FEATURES -->
+  <section class="section alt">
+    <div class="container grid-3">
+      <div class="card">
+        <h3>Flows</h3>
+        <p>Diagnose, kwalificatie, FAQ, doorverbinden naar agent.</p>
+      </div>
+      <div class="card">
+        <h3>Integraties</h3>
+        <p>CRM, agenda’s, betalingen (Stripe), Google Sheets, webhooks.</p>
+      </div>
+      <div class="card">
+        <h3>Beheer</h3>
+        <p>Meertaligheid, statistieken, updates, support.</p>
       </div>
     </div>
   </section>
 
-  <section class="section alt">
-    <div class="container grid-3">
-      <div class="card"><h3>⚡ Snel live</h3><p>Binnen 7–14 dagen heb jij een werkende chatbot.</p></div>
-      <div class="card"><h3>🤖 Slimme flows</h3><p>Maatwerk scenario’s voor leads, afspraken en support.</p></div>
-      <div class="card"><h3>🔌 Integraties</h3><p>Koppelingen met CRM, agenda of betalingen.</p></div>
-    </div>
-  </section>
-
-  <footer class="site-footer">
-    <div class="container center">
-      <p>© 2025 BotMatic — Slimme chatbots voor WhatsApp, Telegram en websites.</p>
-    </div>
+  <!-- FOOTER -->
+  <footer class="site-footer center">
+    <p>© 2025 BotMatic — Slimme chatbots voor WhatsApp, Telegram en websites.</p>
   </footer>
 </body>
 </html>
