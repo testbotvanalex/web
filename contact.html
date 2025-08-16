@@ -1,105 +1,50 @@
+<!-- FILE: contact.html -->
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <title>Contact opnemen — BotMatic</title>
-  <meta name="description" content="Vragen over chatbots of direct starten? Neem contact op met BotMatic. We reageren snel en denken mee over een oplossing op maat.">
-
-  <link rel="canonical" href="https://botmatic.be/contact.html" />
-
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Contact — BotMatic" />
-  <meta property="og:description" content="Stel je vraag of start vandaag nog. BotMatic reageert snel." />
-  <meta property="og:url" content="https://botmatic.be/contact.html" />
-  <meta property="og:image" content="https://botmatic.be/images/preview-contact.jpg" />
-  <meta name="twitter:card" content="summary_large_image" />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"ContactPage",
-   "mainEntityOfPage":{"@type":"WebPage","@id":"https://botmatic.be/contact.html"},
-   "about":{"@type":"Organization","name":"BotMatic","url":"https://botmatic.be",
-     "logo":"https://botmatic.be/images/logo.png","email":"info@botmatic.be",
-     "contactPoint":[{"@type":"ContactPoint","contactType":"customer support","email":"info@botmatic.be","telephone":"+32 000 00 00 00","areaServed":"BE","availableLanguage":["nl","fr","en"]}]
-   }}
-  </script>
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
-    {"@type":"ListItem","position":1,"name":"Home","item":"https://botmatic.be/"},
-    {"@type":"ListItem","position":2,"name":"Contact","item":"https://botmatic.be/contact.html"}
-  ]}
-  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact | BotMatic</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <div class="container header-inner">
-      <a href="index.html" class="logo">BotMatic</a>
-      <div class="nav-wrapper">
-        <nav id="main-nav">
-          <a href="chatbots.html" data-i18n="navServices">Diensten</a>
-          <a href="prijzen.html" data-i18n="navPricing">Abonnementen</a>
-          <a href="faq.html" data-i18n="navFaq">FAQ</a>
-          <a href="contact.html" class="btn btn-primary" data-i18n="navContact">Contact</a>
-        </nav>
-        <select id="lang-select" class="lang-select"><option value="nl">NL</option><option value="fr">FR</option><option value="en">EN</option></select>
-        <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-      </div>
+  <header class="site-header">
+    <div class="container row space">
+      <a href="/index.html" class="logo"><img src="logo.png" alt="BotMatic" width="120"></a>
+      <nav class="nav">
+        <a href="/prijzen.html">Prijzen</a>
+        <a href="/faq.html">FAQ</a>
+        <a href="/contact.html" class="active">Contact</a>
+        <a href="/chatbots.html">Chatbots</a>
+      </nav>
     </div>
   </header>
 
-  <main>
-    <section id="contact" class="contact">
-      <div class="container animate-on-scroll">
-        <h1 class="section-title" data-i18n="contactTitle">Neem contact met ons op</h1>
-        <p class="section-sub" data-i18n="contactDesc">Klaar om te starten of heb je een vraag? Vul het formulier in en we nemen zo snel mogelijk contact met je op.</p>
-        <form id="contact-form" class="contact-form">
-          <div><label for="name" data-i18n="nameLabel">Naam</label><input type="text" id="name" name="name" required placeholder="Je naam" data-i18n-placeholder="namePlaceholder" /></div>
-          <div><label for="email" data-i18n="emailLabel">E-mailadres</label><input type="email" id="email" name="email" required placeholder="je.email@voorbeeld.com" data-i18n-placeholder="emailPlaceholder" /></div>
-          <div><label for="message" data-i18n="messageLabel">Bericht</label><textarea id="message" name="message" rows="5" required placeholder="Vertel ons over jouw chatbot-behoeften..." data-i18n-placeholder="messagePlaceholder"></textarea></div>
-          <button type="submit" class="btn btn-primary" data-i18n="submitBtn">Verzend bericht</button>
-        </form>
-        <div id="form-feedback"></div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
+  <section class="section">
     <div class="container">
-      <div class="footer-links">
-        <a href="#" data-i18n="footerLink1">Over ons</a>
-        <a href="#" data-i18n="footerLink2">Privacybeleid</a>
-        <a href="#" data-i18n="footerLink3">Algemene voorwaarden</a>
-      </div>
-      <p>&copy; <span id="year"></span> BotMatic. <span data-i18n="footerCopyright">Alle rechten voorbehouden.</span></p>
+      <h1>Neem contact op</h1>
+      <form class="form">
+        <div class="form-row">
+          <label>Naam</label>
+          <input type="text" required>
+        </div>
+        <div class="form-row">
+          <label>Email</label>
+          <input type="email" required>
+        </div>
+        <div class="form-row">
+          <label>Bericht</label>
+          <textarea rows="5"></textarea>
+        </div>
+        <button class="btn">Verstuur</button>
+      </form>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container center">
+      <p>© 2025 BotMatic — Slimme chatbots voor WhatsApp, Telegram en websites.</p>
     </div>
   </footer>
-
-  <script>
-    const translations = { /* … твои nl/fr/en … */ };
-    let currentLang='nl';
-    function setLanguage(lang){
-      currentLang=lang; document.documentElement.lang=lang;
-      document.querySelectorAll('[data-i18n]').forEach(el=>{ const k=el.getAttribute('data-i18n'); if(translations[lang]&&translations[lang][k]) el.textContent=translations[lang][k]; });
-      document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{ const k=el.getAttribute('data-i18n-placeholder'); if(translations[lang]&&translations[lang][k]) el.placeholder=translations[lang][k]; });
-    }
-    document.addEventListener('DOMContentLoaded',()=>{
-      const langSelect=document.getElementById('lang-select'); const yearSpan=document.getElementById('year'); const contactForm=document.getElementById('contact-form'); const formFeedback=document.getElementById('form-feedback');
-      const mobileNavToggle=document.getElementById('mobile-nav-toggle'); const mainNav=document.getElementById('main-nav');
-      setLanguage(langSelect.value); if(yearSpan) yearSpan.textContent=new Date().getFullYear();
-      langSelect.addEventListener('change',e=>setLanguage(e.target.value));
-      mobileNavToggle.addEventListener('click',()=>{ mainNav.classList.toggle('active'); mobileNavToggle.classList.toggle('active'); });
-      mainNav.addEventListener('click',e=>{ if(e.target.tagName==='A'){ mainNav.classList.remove('active'); mobileNavToggle.classList.remove('active'); }});
-      contactForm.addEventListener('submit',(e)=>{ e.preventDefault(); formFeedback.textContent=(translations[currentLang]?.formAlert)||'Bedankt!'; formFeedback.style.display='block'; setTimeout(()=>{ contactForm.reset(); formFeedback.style.display='none'; },4000); });
-      const animatedEls=document.querySelectorAll('.animate-on-scroll');
-      const observer=new IntersectionObserver((entries)=>{ entries.forEach(entry=>{ if(entry.isIntersecting){ entry.target.classList.add('visible'); observer.unobserve(entry.target);} }); },{threshold:.1});
-      animatedEls.forEach(el=>observer.observe(el));
-    });
-  </script>
 </body>
 </html>
