@@ -1,7 +1,0 @@
-User-agent: *
-Allow: /
-
-# Block API routes from being crawled
-Disallow: /api/
-
-Sitemap: https://botmatic.be/sitemap.xml
