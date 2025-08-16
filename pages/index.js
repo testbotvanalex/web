@@ -1,8 +1,8 @@
 export default function Home() {
   return (
-    <main style={{ fontFamily: 'sans-serif', padding: '2rem' }}>
+    <main>
       <h1>🚀 Привет, мир!</h1>
-      <p>Это тестовая сборка на Vercel без ошибок.</p>
+      <p>Это тестовая сборка на Vercel без ошибок — теперь с аккуратным стилем и фавиконкой.</p>
     </main>
   );
 }
