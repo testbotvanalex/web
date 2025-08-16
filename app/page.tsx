@@ -10,9 +10,15 @@ export default function Home() {
             className="mx-auto mb-6 w-24 h-24 object-contain"
           />
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Botmatic</h1>
-          <p className="text-lg md:text-xl max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl max-w-2xl mx-auto mb-8">
             Автоматизация маркетинга и чат‑боты для роста бизнеса
           </p>
+          <a
+            href="#cta"
+            className="inline-block bg-yellow-400 text-gray-900 font-semibold px-6 py-3 rounded-full shadow hover:bg-yellow-300 transition"
+          >
+            Попробовать бесплатно
+          </a>
         </div>
       </header>
 
@@ -39,6 +45,26 @@ export default function Home() {
             <li>Планирование и автопостинг в соцсети</li>
           </ul>
         </div>
+      </section>
+
+      {/* CTA секция */}
+      <section
+        id="cta"
+        className="bg-indigo-600 text-white py-16 text-center"
+      >
+        <h2 className="text-3xl font-bold mb-4">
+          Начните автоматизировать уже сегодня
+        </h2>
+        <p className="mb-8 max-w-xl mx-auto">
+          Зарегистрируйтесь и настройте своего первого чат‑бота за 10 минут —
+          без программистов и лишних затрат.
+        </p>
+        <a
+          href="https://botmatic.be/signup"
+          className="inline-block bg-yellow-400 text-gray-900 font-semibold px-6 py-3 rounded-full shadow hover:bg-yellow-300 transition"
+        >
+          Создать аккаунт
+        </a>
       </section>
 
       {/* Контакты */}
