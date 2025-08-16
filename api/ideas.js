@@ -1,68 +1,67 @@
-// /api/ideas.js — Vercel Node API route
-const RATE_WINDOW_MS = 60_000, RATE_MAX = 20;
-const ipHits = new Map();
+// /api/ideas.js
+async function readJsonSafe(req) {
+  // 1) Если body уже объект — просто вернём его
+  if (req.body && typeof req.body === 'object') return req.body;
 
-function cors(res){
-  res.setHeader('Access-Control-Allow-Origin','*');
-  res.setHeader('Access-Control-Allow-Methods','POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization');
-}
-async function readJsonSafe(req){
-  if (req.body && typeof req.body==='object') return req.body;
-  if (typeof req.body==='string'){ try{ return JSON.parse(req.body); }catch{} }
-  const chunks=[]; for await (const ch of req) chunks.push(ch);
-  const text = Buffer.concat(chunks).toString('utf8')||'';
-  try{ return text?JSON.parse(text):{} }catch{ return {} }
-}
-function rateLimit(req,res){
-  const ip=(req.headers['x-forwarded-for']||req.socket?.remoteAddress||'').toString().split(',')[0].trim();
-  const now=Date.now(); const b=ipHits.get(ip)||{ts:now,count:0};
-  if(now-b.ts>RATE_WINDOW_MS){ b.ts=now; b.count=0; }
-  if(++b.count>RATE_MAX){ res.statusCode=429; return {error:'Too many requests'} }
-  ipHits.set(ip,b); return null;
+  // 2) Если body строка — попробуем распарсить
+  if (typeof req.body === 'string') {
+    try { return JSON.parse(req.body); } catch { /* fallthrough */ }
+  }
+
+  // 3) Иначе прочитаем поток (иногда Vercel отдаёт как stream)
+  const chunks = [];
+  for await (const ch of req) chunks.push(ch);
+  const text = Buffer.concat(chunks).toString('utf8') || '';
+  try { return text ? JSON.parse(text) : {}; } catch { return {}; }
 }
 
-export default async function handler(req,res){
-  cors(res);
-  if(req.method==='OPTIONS') return res.status(200).end();
-  if(req.method!=='POST') return res.status(405).json({error:'Method not allowed'});
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
 
-  const rl=rateLimit(req,res); if(rl) return res.json(rl);
+  try {
+    const body = await readJsonSafe(req);
 
-  try{
-    const body=await readJsonSafe(req);
-    const description=String(body?.description||'').trim().slice(0,800);
-    let lang=String(body?.lang||'nl').trim().toLowerCase();
-    if(!['nl','en','fr'].includes(lang)) lang='nl';
-    if(!description) return res.status(400).json({error: lang==='nl'?'Ongeldige omschrijving':lang==='fr'?'Description invalide':'Invalid description'});
+    const description = (body.description || '').trim();
+    const lang = (body.lang || 'nl').trim();
 
-    const apiKey=process.env.OPENAI_API_KEY;
-    if(!apiKey) return res.status(500).json({error: lang==='nl'?'API-sleutel ontbreekt':lang==='fr'?"Clé d'API manquante":'API key missing'});
+    if (!description) {
+      return res.status(400).json({ error: 'Ongeldige omschrijving' });
+    }
 
-    const system = (lang==='nl'?'Je bent een zakelijke copywriter. Antwoord in het Nederlands.'
-                    :lang==='fr'?'Tu es un copywriter business. Réponds en français.'
-                    :'You are a business copywriter. Answer in English.')
-      + ' Provide 3 practical chatbot ideas. Number them 1., 2., 3., use **bold** titles and 1–2 sentences each. Focus on customer service, lead gen, and sales.';
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) return res.status(500).json({ error: 'API key ontbreekt' });
 
-    const user = (lang==='nl'?`Bedrijf: "${description}".`:lang==='fr'?`Entreprise : "${description}".`:`Business: "${description}".`);
+    const prompt =
+      `Bedrijf: "${description}". Genereer 3 praktische chatbot-ideeën ` +
+      `(klantenservice, leadgeneratie, sales). Gebruik 1., 2., 3. en **vette** titels. ` +
+      `Schrijf in taal: ${lang}.`;
 
-    const controller=new AbortController(); const timer=setTimeout(()=>controller.abort(),25_000);
-    const r = await fetch('https://api.openai.com/v1/chat/completions',{
-      method:'POST', signal:controller.signal,
-      headers:{'Content-Type':'application/json','Authorization':`Bearer ${apiKey}`},
-      body:JSON.stringify({ model:'gpt-4o-mini', messages:[{role:'system',content:system},{role:'user',content:user}], temperature:0.7, max_tokens:400 })
-    }).catch(err=>{ throw new Error(err?.name==='AbortError'?'Upstream timeout':(err?.message||'Fetch failed')); })
-      .finally(()=>clearTimeout(timer));
+    const r = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.7
+      })
+    });
 
-    let data=null; try{ data=await r.json(); }catch{}
-    if(!r.ok){ return res.status(r.status).json({error: data?.error?.message || `HTTP ${r.status}`}); }
+    const data = await r.json();
+    if (!r.ok) {
+      const msg = data?.error?.message || `HTTP ${r.status}`;
+      return res.status(r.status).json({ error: msg });
+    }
 
-    const text=data?.choices?.[0]?.message?.content?.trim();
-    if(!text) return res.status(502).json({error: lang==='nl'?'Leeg antwoord van het model':lang==='fr'?'Réponse vide du modèle':'Empty model response'});
+    const text = data?.choices?.[0]?.message?.content?.trim();
+    if (!text) return res.status(502).json({ error: 'Leeg antwoord van het model' });
 
-    return res.status(200).json({ok:true, text});
-  }catch(e){
-    const msg=e?.message||'Unknown error'; const code=/timeout|abort/i.test(msg)?504:500;
-    return res.status(code).json({error:msg});
+    return res.status(200).json({ ok: true, text });
+  } catch (e) {
+    return res.status(500).json({ error: e?.message || 'Onbekende fout' });
   }
 }

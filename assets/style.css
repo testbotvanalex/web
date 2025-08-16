@@ -1,4 +1,4 @@
-/* style.css */
+/* /assets/style.css */
 :root{
   --bg:#ffffff; --text:#0f172a; --muted:#475569; --primary:#4f46e5; --primary-ink:#ffffff;
   --border:#e5e7eb; --card:#f8fafc; --shadow:0 10px 30px rgba(2,6,23,.06);
@@ -22,8 +22,8 @@ img{max-width:100%;display:block}
 }
 
 /* Focus visibility */
-:where(a,button,.cta,.lang button,.input,textarea){outline:0}
-:where(a,button,.cta,.lang button,.input,textarea):focus-visible{
+:where(a,button,.cta,.lang .pill,.input,textarea){outline:0}
+:where(a,button,.cta,.lang .pill,.input,textarea):focus-visible{
   box-shadow:0 0 0 3px rgba(79,70,229,.25);
   outline:2px solid #c7d2fe; outline-offset:1px;
 }
@@ -55,9 +55,9 @@ body.menu-open{overflow:hidden}
 
 /* Language pills */
 .lang{display:flex;gap:6px;align-items:center}
-.lang button{padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:#fff;color:#475569;font-weight:800;cursor:pointer}
-.lang button:hover{background:#f1f5f9;color:#0f172a}
-.lang button.active{background:#eef2ff;color:#3730a3}
+.lang .pill{padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:#fff;color:var(--muted);font-weight:800}
+.lang .pill:hover{background:#f1f5f9;color:#0f172a}
+.lang .pill.active{background:#eef2ff;color:#3730a3}
 
 /* Hero */
 .hero{padding:56px 0 18px;background:radial-gradient(900px 400px at 50% -150px,#eef2ff,transparent)}
@@ -123,7 +123,7 @@ body.menu-open{overflow:hidden}
 .input:hover, textarea:hover{border-color:#cbd5e1}
 .input:focus, textarea:focus{outline:2px solid #c7d2fe;border-color:#a5b4fc}
 .contact-actions{grid-template-columns:1fr 1fr 1fr}
-.gdpr{display:flex;align-items:center;gap:8px;color:#64748b;font-size:.95rem}
+.gdpr{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.95rem}
 .form-ok{margin-top:10px;color:#16a34a;font-weight:700}
 
 /* Footer */
@@ -161,4 +161,6 @@ html{scroll-behavior:smooth}
 .cta:hover{filter:none;opacity:.96}
 .footer a.policy{color:var(--muted);font-weight:600}
 img[loading="lazy"]{contain-intrinsic-size:auto 150px}
-js
+
+html { scroll-behavior: smooth; }
+:target { scroll-margin-top: 80px; } /* подстрой при другой высоте шапки */

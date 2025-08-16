@@ -1,46 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Contact — BotMatic</title>
-  <meta name="description" content="Contact us for a demo or a quote."/>
-  <link rel="alternate" hreflang="nl" href="https://www.botmatic.be/nl/contact.html">
-  <link rel="alternate" hreflang="en" href="https://www.botmatic.be/en/contact.html">
-  <link rel="alternate" hreflang="fr" href="https://www.botmatic.be/fr/contact.html">
-  <link rel="alternate" hreflang="x-default" href="https://www.botmatic.be/en/contact.html">
-  <link rel="stylesheet" href="/style.css"/>
-</head>
-<body>
-<header class="site-header">
-  <div class="container row space">
-    <a class="logo" href="/en/"><img src="/assets/logo.svg" alt="BotMatic" height="28"/></a>
-    <nav class="nav">
-      <a href="/en/pricing.html">Pricing</a>
-      <a href="/en/faq.html">FAQ</a>
-      <a href="/en/contact.html" class="active">Contact</a>
-    </nav>
-    <div class="lang">
-      <a class="btn btn--ghost" href="/">NL</a>
-      <a class="btn btn--ghost" href="/fr/contact.html">FR</a>
-      <a class="btn btn--ghost" href="/en/contact.html">EN</a>
-    </div>
-  </div>
-</header>
-
-<main class="section">
-  <div class="container">
-    <h1>Contact</h1>
-    <form class="form" name="contact-en" method="post" data-netlify="true">
-      <div class="form-row"><label>Name<input type="text" name="name" required></label></div>
-      <div class="form-row"><label>Email<input type="email" name="email" required></label></div>
-      <div class="form-row"><label>Message<textarea name="message" required></textarea></label></div>
-      <button class="btn" type="submit">Send</button>
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Contact — BotMatic</title><link rel="stylesheet" href="/assets/clean.css"/></head><body>
+<header><div class="container nav">
+  <div class="brand"><div class="logo"></div><strong>BotMatic</strong></div>
+  <nav><a href="/en/">Home</a><a href="/en/pricing.html">Pricing</a><a href="/en/faq.html">FAQ</a></nav>
+</div></header>
+<main><div class="container">
+  <h1>Get a quote</h1>
+  <div class="card">
+    <form method="post" action="mailto:hello@botmatic.be" enctype="text/plain">
+      <p><label>Name<br><input type="text" name="name" required></label></p>
+      <p><label>Email<br><input type="email" name="email" required></label></p>
+      <p><label>Message<br><textarea name="message" rows="6" placeholder="Channels, goals, deadline…"></textarea></label></p>
+      <p><button style="all:unset" type="submit"><a class="primary" style="padding:.6rem 1rem;border-radius:.55rem;background:#2563eb;color:#fff;display:inline-block">Send</a></button></p>
     </form>
   </div>
-</main>
-
-<footer class="site-footer"><div class="container row space"><div class="muted tiny">© <span id="y"></span> BotMatic</div></div></footer>
-<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
-</body>
-</html>
+</div></main>
+<footer><div class="container">© BotMatic</div></footer>
+</body></html>

@@ -1,287 +1,214 @@
-// FILE: main.js
-const I18N = {
-  nl:{
-    nav:{features:"Functies",pricing:"Prijzen",contact:"Contact",demo:"Demo"},
-    hero:{
-      badge1:"⚡ 7–14 dagen oplevering", badge2:"🧩 Volledig maatwerk", badge3:"🔌 CRM & betalingen",
-      title:"Chatbots voor WhatsApp, Telegram & websites — snel gebouwd",
-      subtitle:"We bouwen bots die leads vangen, kwalificeren en automatisch afspraken boeken. Eenvoudige setup, snelle oplevering, doorlopend support.",
-      ctaPrimary:"Start een project", ctaSecondary:"Bekijk prijzen", disclaimer:"Demo is illustratief. Integreren kan met WhatsApp, Telegram, webwidget."
-    },
-    stats:{s1:"Meer chats uit verkeer",s2:"Snellere reactie",s3:"Automatische afhandeling"},
-    demo:{bot1:"Hoi! Ik ben BotMatic. Waarmee kan ik helpen?",k1:"Afspraak boeken",k2:"Prijzen",k3:"Contact met agent"},
-    features:{title:"Wat je van ons krijgt",f1:"Diagnose, kwalificatie, FAQ, doorverbinden naar agent.",f2:"CRM, agenda’s, betalingen (Stripe), Google Sheets, webhooks.",f3:"Meertaligheid, statistieken, updates, support."},
-    pricing:{title:"Prijzen",note:"Alle plannen inclusief gratis huidig advies/diagnose van je funnel.",gambling:"21+ Gokken kan verslavend zijn. Stop op tijd! Meer info: stopoptijd.be"},
-    plans:{
-      popular:"Meest gekozen",cta:"Kies dit plan",
-      basic:{name:"Basis",l1:"1 kernfunctie (bv. FAQ)",l2:"1 platform",l3:"Standaard support",l4:"Tot 500 conversaties"},
-      standard:{name:"Standaard",l1:"Meerdere taken/flows",l2:"2 platforms",l3:"Priority support",l4:"Tot 2.000 conversaties"},
-      premium:{name:"Premium",l1:"Geavanceerde AI/NLP",l2:"Meerdere systemen",l3:"Toegewijde PM & support",l4:"Onbeperkte conversaties"}
-    },
-    contact:{title:"Vraag een demo"},
-    form:{name:"Naam",platform:"Platform",message:"Bericht",gdpr:"Ik ga akkoord met verwerking van mijn gegevens volgens de privacyverklaring.",submit:"Versturen"},
-    pricingPage:{metaTitle:"Prijzen — BotMatic",title:"Transparante prijzen",subtitle:"Kies een plan. Je kan later altijd opschalen. Gratis diagnose inbegrepen.",view:"Bekijk details"},
-    planDetail:{
-      back:"Terug naar prijzen",
-      basic:{metaTitle:"Basis Abonnement — BotMatic",title:"Basis Abonnement",subtitle:"Begin klein: één duidelijke use‑case, één platform. Eenvoudig te beheren, snel live."},
-      standard:{
-        metaTitle:"Standaard Abonnement — BotMatic",
-        title:"Standaard Abonnement",
-        subtitle:"Het populairst: meerdere automatiseringen, twee kanalen en prioritaire ondersteuning — ideaal om op te schalen.",
-        inc1:"Conversatie‑design voor meerdere flows",
-        inc2:"Integraties: CRM/agenda/betalingen/Sheets",
-        inc3:"AB‑tests & optimalisaties",
-        inc4:"Prioritaire support & SLA",
-        u1:"End‑to‑end leadfunnel met kwalificatie",
-        u2:"Automatisch inplannen + herinneringen",
-        u3:"Betalingen/aanbetalingen via Stripe",
-        next:"Klaar voor AI‑reasoning en complexe routing? Premium voegt geavanceerde NLP, meer systemen en dedicated PM toe.",
-        q2:"Kunnen we custom integraties bouwen?",
-        a2:"Ja, via webhooks of API’s (CRM, boeking, betalingen). Complexere integraties zijn mogelijk in Premium."
+// main.js
+(function(){
+  function ready(fn){ if(document.readyState!=='loading'){fn()} else {document.addEventListener('DOMContentLoaded', fn, {once:true})} }
+
+  const I18N = {
+    en:{
+      nav:{features:"Features",pricing:"Pricing",contact:"Contact",demo:"Get a Demo"},
+      hero:{
+        badge1:"⚡ 7–14 days delivery",
+        badge2:"🧩 Fully custom flows",
+        badge3:"🔌 CRM & payments",
+        title:"Custom chatbots for WhatsApp, Telegram & Instagram — built fast",
+        subtitle:"We build bots that capture leads, qualify them and auto book. Simple setup, rapid turnaround, ongoing support.",
+        ctaPrimary:"Start a project",
+        ctaSecondary:"See pricing"
       },
-      premium:{
-        metaTitle:"Premium Abonnement — BotMatic",
-        title:"Premium Abonnement",
-        subtitle:"Voor ambitieuze teams: geavanceerde AI/NLP, complexe integraties met meerdere systemen en een dedicated projectmanager.",
-        inc1:"Reasoning‑chains, RAG & knowledge bases",
-        inc2:"Realtime agent‑handoff & omnichannel",
-        inc3:"Complexe API‑integraties (ERP, DWH)",
-        inc4:"Dedicated PM, roadmap & kwartaalreviews",
-        u1:"Meertalige support met context & rechten",
-        u2:"Dynamische offertes, betalingen & facturatie",
-        u3:"Ops & IT‑automatisering via bot‑workflows",
-        next:"Premium kan verder uitgebreid worden met SSO, audit‑logging, dedicated hosting en custom SLAs.",
-        q2:"Kunnen jullie met onze security/IT meewerken?",
-        a2:"Ja. We ondersteunen DPIA, toegangsmodellen, logging en afwijkende hosting (bijv. VPC) op aanvraag.",
-        q3:"Bieden jullie trainingssessies aan?",
-        a3:"Ja, onboarding + kwartaaltrainingen voor teamleads zijn inbegrepen in Premium."
+      stats:{s1:"Lead to chat rate",s2:"Faster response",s3:"Automated handling"},
+      demo:{
+        bot1:"Hi! I’m BotMatic. What do you need help with?",
+        k1:"Book an appointment", k2:"Prices", k3:"Talk to agent",
+        user1:"Book a facial this Friday", bot2:"Great! Morning or afternoon works best?",
+        user2:"Afternoon", bot3:"Done ✅ 16:30 reserved. You’ll get a reminder 2h before."
       },
-      includes:{title:"Inbegrepen"},
-      usecases:{title:"Use‑cases"},
-      next:{title:"Groeipad"},
-      faq:{
-        title:"FAQ",
-        q1:"Zitten WhatsApp/Telegram‑kosten inbegrepen?",
-        a1:"Externe platformkosten (bv. WhatsApp Business API) zijn niet inbegrepen en worden 1‑op‑1 doorgerekend.",
-        q3:"Is er een proefperiode?",
-        a3:"We bieden een gratis diagnose + demo flow voor jouw case, zodat je ziet hoe het werkt vóór start."
-      }
+      features:{
+        title:"Why teams choose BotMatic",
+        lead:"Everything you need to go from idea to a live, revenue generating chatbot.",
+        f1:{title:"Fast delivery",desc:"From brief to launch in 7–14 days with tight feedback loops."},
+        f2:{title:"AI + buttons UX",desc:"Blend guided flows with AI answers for speed and control."},
+        f3:{title:"Integrations",desc:"CRM, calendars, payments, Google Sheets — we connect your stack."},
+        f4:{title:"Qualify & convert",desc:"Score leads, route hot prospects, and auto book in one flow."},
+        f5:{title:"GDPR ready",desc:"Clear consent, data minimization and opt out built in."},
+        f6:{title:"Ongoing support",desc:"We tune copy, steps and KPIs as your needs evolve."}
+      },
+      pricing:{
+        title:"Simple pricing",
+        lead:"Pick a plan — cancel or upgrade anytime. Custom enterprise plans on request.",
+        starter:{title:"Starter",price:"€29",l1:"1 core flow (FAQ or lead capture)",l2:"1 platform (e.g. WhatsApp)",l3:"Up to 500 conversations/mo",cta:"Choose Starter",note:"Good for MVPs and small teams."},
+        standard:{title:"Standard",price:"€99",l1:"Multi step flows (qualify + booking)",l2:"2 platforms",l3:"Priority support & updates",l4:"Up to 2,000 conversations/mo",cta:"Choose Standard",note:"Our most popular plan."},
+        premium:{title:"Premium",price:"€299",l1:"Advanced AI & NLP tuning",l2:"Multi platform & system integrations",l3:"Dedicated PM & SLAs",l4:"Unlimited conversations",cta:"Choose Premium",note:"For scale ups and enterprises."}
+      },
+      contact:{
+        title:"Tell us about your bot",
+        lead:"Share a few details and we’ll get back within 24 hours.",
+        name:"Full name", email:"Work email", company:"Company / Industry",
+        message:"What should the bot do? Platforms, flows, integrations…",
+        gdpr:"I agree to be contacted about my request and accept the privacy policy.",
+        send:"Send request", emailus:"Email us", seedemo:"See demo"
+      },
+      footer:{tagline:"Custom chatbots for WhatsApp, Telegram, Instagram & web."}
+    },
+    nl:{
+      nav:{features:"Functies",pricing:"Prijzen",contact:"Contact",demo:"Vraag een demo"},
+      hero:{
+        badge1:"⚡ Levering in 7–14 dagen",
+        badge2:"🧩 Volledig maatwerk",
+        badge3:"🔌 CRM & betalingen",
+        title:"Maatwerk chatbots voor WhatsApp, Telegram & Instagram — razendsnel gebouwd",
+        subtitle:"We bouwen bots die leads vangen, kwalificeren en automatisch boeken. Simpele setup, snelle doorlooptijd, blijvende support.",
+        ctaPrimary:"Start een project",
+        ctaSecondary:"Bekijk prijzen"
+      },
+      stats:{s1:"Lead naar chat ratio",s2:"Snellere reactie",s3:"Automatische afhandeling"},
+      demo:{
+        bot1:"Hoi! Ik ben BotMatic. Waarmee kan ik helpen?",
+        k1:"Afspraak maken", k2:"Prijzen", k3:"Praat met agent",
+        user1:"Boek een gezichtsbehandeling voor vrijdag", bot2:"Top! Voorkeur voor ochtend of namiddag?",
+        user2:"Namiddag", bot3:"Klaar ✅ 16:30 gereserveerd. Je krijgt 2u op voorhand een herinnering."
+      },
+      features:{
+        title:"Waarom teams voor BotMatic kiezen",
+        lead:"Alles wat je nodig hebt om snel live te gaan met een chatbot die oplevert.",
+        f1:{title:"Snel leveren",desc:"Van briefing tot live in 7–14 dagen met korte feedback loops."},
+        f2:{title:"AI + knoppen UX",desc:"Geleide flows combineren met AI antwoorden voor snelheid en controle."},
+        f3:{title:"Integraties",desc:"CRM, agenda’s, betalingen, Google Sheets — wij koppelen je stack."},
+        f4:{title:"Kwalificeren & converteren",desc:"Scoor leads, stuur hot prospects door en boek automatisch."},
+        f5:{title:"GDPR proof",desc:"Duidelijke toestemming, dataminimalisatie en opt out ingebouwd."},
+        f6:{title:"Doorlopende support",desc:"We finetunen copy, stappen en KPI’s wanneer je groeit."}
+      },
+      pricing:{
+        title:"Eenvoudige prijzen",
+        lead:"Kies een plan — maandelijks opzegbaar of op te schalen. Enterprise op aanvraag.",
+        starter:{title:"Starter",price:"€29",l1:"1 kernflow (FAQ of lead capture)",l2:"1 platform (bv. WhatsApp)",l3:"Tot 500 conversaties/maand",cta:"Kies Starter",note:"Voor MVP’s en kleine teams."},
+        standard:{title:"Standaard",price:"€99",l1:"Meerstapsflows (kwalificatie + booking)",l2:"2 platformen",l3:"Prioritaire support & updates",l4:"Tot 2.000 conversaties/maand",cta:"Kies Standaard",note:"Meest gekozen plan."},
+        premium:{title:"Premium",price:"€299",l1:"Geavanceerde AI & NLP",l2:"Meerdere platformen & systemen",l3:"Dedicated PM & SLA’s",l4:"Onbeperkte conversaties",cta:"Kies Premium",note:"Voor scale ups en enterprises."}
+      },
+      contact:{
+        title:"Vertel ons over je bot",
+        lead:"Geef wat details en we reageren binnen 24 uur.",
+        name:"Volledige naam", email:"Zakelijk e mail", company:"Bedrijf / Sector",
+        message:"Wat moet de bot doen? Platformen, flows, integraties…",
+        gdpr:"Ik ga akkoord dat jullie me contacteren en accepteer het privacybeleid.",
+        send:"Verstuur aanvraag", emailus:"Mail ons", seedemo:"Bekijk demo"
+      },
+      footer:{tagline:"Maatwerk chatbots voor WhatsApp, Telegram, Instagram & web."}
+    },
+    fr:{
+      nav:{features:"Fonctionnalités",pricing:"Tarifs",contact:"Contact",demo:"Demander une démo"},
+      hero:{
+        badge1:"⚡ Livraison en 7–14 jours",
+        badge2:"🧩 Parcours 100% sur mesure",
+        badge3:"🔌 CRM & paiements",
+        title:"Chatbots sur mesure pour WhatsApp, Telegram & Instagram — déployés vite",
+        subtitle:"Nous créons des bots qui captent, qualifient et réservent automatiquement. Mise en place simple, délai court, support continu.",
+        ctaPrimary:"Lancer un projet",
+        ctaSecondary:"Voir les tarifs"
+      },
+      stats:{s1:"Taux lead→chat",s2:"Réponse plus rapide",s3:"Traitement automatisé"},
+      demo:{
+        bot1:"Salut ! Je suis BotMatic. Je peux t’aider ?",
+        k1:"Prendre rendez vous", k2:"Tarifs", k3:"Parler à un agent",
+        user1:"Réserver un soin visage vendredi", bot2:"Parfait ! Matin ou après midi ?",
+        user2:"Après midi", bot3:"C’est fait ✅ 16:30 réservé. Rappel 2h avant."
+      },
+      features:{
+        title:"Pourquoi choisir BotMatic",
+        lead:"Tout pour passer de l’idée à un chatbot qui génère des revenus.",
+        f1:{title:"Livraison rapide",desc:"Du brief au live en 7–14 jours avec itérations serrées."},
+        f2:{title:"IA + boutons",desc:"Mélange de parcours guidés et réponses IA pour vitesse & contrôle."},
+        f3:{title:"Intégrations",desc:"CRM, calendriers, paiements, Google Sheets — on connecte votre stack."},
+        f4:{title:"Qualifier & convertir",desc:"Scorage de leads, routage des prospects chauds et réservation auto."},
+        f5:{title:"Conforme RGPD",desc:"Consentement clair, minimisation des données et opt out inclus."},
+        f6:{title:"Support continu",desc:"On ajuste la copie, les étapes et KPI au fil du temps."}
+      },
+      pricing:{
+        title:"Tarification simple",
+        lead:"Choisissez un forfait — résiliable ou évolutif à tout moment. Entreprise sur demande.",
+        starter:{title:"Starter",price:"€29",l1:"1 parcours clé (FAQ ou capture de leads)",l2:"1 plateforme (ex. WhatsApp)",l3:"Jusqu’à 500 conversations/mois",cta:"Choisir Starter",note:"Idéal pour MVP et petites équipes."},
+        standard:{title:"Standard",price:"€99",l1:"Parcours multi étapes (qualif + réservation)",l2:"2 plateformes",l3:"Support prioritaire & mises à jour",l4:"Jusqu’à 2 000 conversations/mois",cta:"Choisir Standard",note:"Notre offre la plus populaire."},
+        premium:{title:"Premium",price:"€299",l1:"IA & NLP avancés",l2:"Multi plateformes & systèmes",l3:"Chef de projet dédié & SLA",l4:"Conversations illimitées",cta:"Choisir Premium",note:"Pour scale ups et grands comptes."}
+      },
+      contact:{
+        title:"Parlez nous de votre bot",
+        lead:"Partagez quelques détails et nous revenons vers vous sous 24h.",
+        name:"Nom complet", email:"Email professionnel", company:"Entreprise / Secteur",
+        message:"Que doit faire le bot ? Plateformes, parcours, intégrations…",
+        gdpr:"J’accepte d’être contacté au sujet de ma demande et j’accepte la politique de confidentialité.",
+        send:"Envoyer la demande", emailus:"Nous écrire", seedemo:"Voir la démo"
+      },
+      footer:{tagline:"Chatbots sur mesure pour WhatsApp, Telegram, Instagram & web."}
     }
-  },
-  fr:{
-    nav:{features:"Fonctionnalités",pricing:"Tarifs",contact:"Contact",demo:"Démo"},
-    hero:{
-      badge1:"⚡ Livraison 7–14 jours", badge2:"🧩 100% sur-mesure", badge3:"🔌 CRM & paiements",
-      title:"Chatbots pour WhatsApp, Telegram & sites — vite faits, bien faits",
-      subtitle:"On construit des bots qui captent les leads, les qualifient et réservent automatiquement. Mise en place simple, livraison rapide, support continu.",
-      ctaPrimary:"Démarrer un projet", ctaSecondary:"Voir les tarifs", disclaimer:"Démo illustrative. Intégrations possibles: WhatsApp, Telegram, widget web."
-    },
-    stats:{s1:"Plus de chats depuis le trafic",s2:"Réponse plus rapide",s3:"Traitement automatisé"},
-    demo:{bot1:"Salut ! Je suis BotMatic. Je peux t’aider ?",k1:"Réserver un rendez-vous",k2:"Tarifs",k3:"Parler à un agent"},
-    features:{title:"Ce que vous obtenez",f1:"Diagnostic, qualification, FAQ, transfert agent.",f2:"CRM, agendas, paiements (Stripe), Google Sheets, webhooks.",f3:"Multilingue, stats, mises à jour, support."},
-    pricing:{title:"Tarifs",note:"Tous les plans incluent un diagnostic gratuit de votre tunnel.",gambling:"Jeux de hasard 21+. Jouez responsable. Plus d’info: stopoptijd.be"},
-    plans:{
-      popular:"Le plus choisi",cta:"Choisir",
-      basic:{name:"Basique",l1:"1 fonctionnalité clé (ex. FAQ)",l2:"1 plateforme",l3:"Support standard",l4:"Jusqu’à 500 conversations"},
-      standard:{name:"Standard",l1:"Plusieurs tâches/flows",l2:"2 plateformes",l3:"Support prioritaire",l4:"Jusqu’à 2 000 conversations"},
-      premium:{name:"Premium",l1:"IA/NLP avancée",l2:"Multi-systèmes",l3:"Chef de projet dédié",l4:"Conversations illimitées"}
-    },
-    contact:{title:"Demander une démo"},
-    form:{name:"Nom",platform:"Plateforme",message:"Message",gdpr:"J’accepte le traitement de mes données conformément à la politique de confidentialité.",submit:"Envoyer"},
-    pricingPage:{metaTitle:"Tarifs — BotMatic",title:"Tarifs transparents",subtitle:"Choisissez un plan. Vous pouvez monter en gamme plus tard. Diagnostic gratuit inclus.",view:"Voir le détail"},
-    planDetail:{
-      back:"Retour aux tarifs",
-      basic:{metaTitle:"Abonnement Basique — BotMatic",title:"Abonnement Basique",subtitle:"Commencez simple: un cas d’usage clair, une plateforme. Déploiement rapide."},
-      standard:{
-        metaTitle:"Abonnement Standard — BotMatic",
-        title:"Abonnement Standard",
-        subtitle:"Le plus choisi: plusieurs automatisations, deux canaux et support prioritaire — idéal pour l’échelle.",
-        inc1:"Conception de conversations multi‑flows",
-        inc2:"Intégrations: CRM/agenda/paiements/Sheets",
-        inc3:"AB tests & optimisations",
-        inc4:"Support prioritaire & SLA",
-        u1:"Funnel de leads end‑to‑end avec qualification",
-        u2:"Planification auto + rappels",
-        u3:"Paiements/acompte via Stripe",
-        next:"Besoin d’IA avancée et de routage complexe ? Premium ajoute du NLP, plus de systèmes et un chef de projet dédié.",
-        q2:"Peut‑on créer des intégrations sur‑mesure ?",
-        a2:"Oui, via webhooks ou API (CRM, réservation, paiements). Les intégrations complexes sont possibles en Premium."
-      },
-      premium:{
-        metaTitle:"Abonnement Premium — BotMatic",
-        title:"Abonnement Premium",
-        subtitle:"Pour les équipes ambitieuses: IA/NLP avancée, intégrations systèmes complexes et chef de projet dédié.",
-        inc1:"Reasoning‑chains, RAG & bases de connaissances",
-        inc2:"Transfert agent en temps réel & omnicanal",
-        inc3:"Intégrations API complexes (ERP, DWH)",
-        inc4:"Chef de projet, roadmap & revues trimestrielles",
-        u1:"Support multilingue avec contexte & droits",
-        u2:"Devis dynamiques, paiements & facturation",
-        u3:"Automatisation Ops & IT via workflows bot",
-        next:"Premium peut être étendu avec SSO, audit‑logs, hébergement dédié et SLA personnalisés.",
-        q2:"Pouvez‑vous travailler avec notre équipe sécurité/IT ?",
-        a2:"Oui. Nous gérons DPIA, modèles d’accès, logs et hébergement spécifique (ex: VPC) sur demande.",
-        q3:"Proposez‑vous des formations ?",
-        a3:"Oui, onboarding + formations trimestrielles pour les leads d’équipe sont inclus."
-      },
-      includes:{title:"Inclus"},
-      usecases:{title:"Cas d’usage"},
-      next:{title:"Évolutif"},
-      faq:{
-        title:"FAQ",
-        q1:"Les coûts WhatsApp/Telegram sont‑ils inclus ?",
-        a1:"Les frais des plateformes externes ne sont pas inclus et sont refacturés à prix coûtant.",
-        q3:"Y a‑t‑il une période d’essai ?",
-        a3:"Nous proposons un diagnostic gratuit + un mini‑démo avant de démarrer."
-      }
-    }
-  },
-  en:{
-    nav:{features:"Features",pricing:"Pricing",contact:"Contact",demo:"Demo"},
-    hero:{
-      badge1:"⚡ 7–14 days delivery", badge2:"🧩 Fully custom", badge3:"🔌 CRM & payments",
-      title:"Custom chatbots for WhatsApp, Telegram & websites — built fast",
-      subtitle:"We build bots that capture leads, qualify them and auto‑book. Simple setup, quick turnaround, ongoing support.",
-      ctaPrimary:"Start a project", ctaSecondary:"See pricing", disclaimer:"Demo is illustrative. Integrations: WhatsApp, Telegram, web widget."
-    },
-    stats:{s1:"More chats from traffic",s2:"Faster responses",s3:"Automated handling"},
-    demo:{bot1:"Hi! I’m BotMatic. What do you need?",k1:"Book an appointment",k2:"Pricing",k3:"Talk to an agent"},
-    features:{title:"What you get",f1:"Diagnosis, qualification, FAQ, agent handoff.",f2:"CRM, calendars, payments (Stripe), Google Sheets, webhooks.",f3:"Multilingual, analytics, updates, support."},
-    pricing:{title:"Pricing",note:"All plans include a free funnel health check.",gambling:"21+ Gambling can be addictive. Stop in time. More info: stopoptijd.be"},
-    plans:{
-      popular:"Most popular",cta:"Choose plan",
-      basic:{name:"Basic",l1:"1 core feature (e.g., FAQ)",l2:"1 platform",l3:"Standard support",l4:"Up to 500 conversations"},
-      standard:{name:"Standard",l1:"Multiple automations",l2:"2 platforms",l3:"Priority support",l4:"Up to 2,000 conversations"},
-      premium:{name:"Premium",l1:"Advanced AI/NLP",l2:"Multiple systems",l3:"Dedicated PM & support",l4:"Unlimited conversations"}
-    },
-    contact:{title:"Request a demo"},
-    form:{name:"Name",platform:"Platform",message:"Message",gdpr:"I agree to my data being processed per the privacy policy.",submit:"Send"},
-    pricingPage:{metaTitle:"Pricing — BotMatic",title:"Transparent pricing",subtitle:"Pick a plan. You can always scale later. Free diagnosis included.",view:"View details"},
-    planDetail:{
-      back:"Back to pricing",
-      basic:{metaTitle:"Basic Plan — BotMatic",title:"Basic Plan",subtitle:"Start small: one clear use case, one platform. Quick to launch."},
-      standard:{
-        metaTitle:"Standard Plan — BotMatic",
-        title:"Standard Plan",
-        subtitle:"Most popular: multiple automations, two channels, priority support — built to scale.",
-        inc1:"Conversation design across multiple flows",
-        inc2:"Integrations: CRM/calendar/payments/Sheets",
-        inc3:"A/B testing & optimizations",
-        inc4:"Priority support & SLA",
-        u1:"End‑to‑end lead funnel with qualification",
-        u2:"Auto scheduling + reminders",
-        u3:"Payments/deposits via Stripe",
-        next:"Need advanced NLP and complex routing? Premium adds stronger AI, more systems and a dedicated PM.",
-        q2:"Can we build custom integrations?",
-        a2:"Yes, via webhooks or APIs (CRM, booking, payments). More complex builds fit Premium."
-      },
-      premium:{
-        metaTitle:"Premium Plan — BotMatic",
-        title:"Premium Plan",
-        subtitle:"For ambitious teams: advanced AI/NLP, multi‑system integrations and a dedicated project manager.",
-        inc1:"Reasoning chains, RAG & knowledge bases",
-        inc2:"Realtime agent handoff & omnichannel",
-        inc3:"Complex API integrations (ERP, DWH)",
-        inc4:"Dedicated PM, roadmap & quarterly reviews",
-        u1:"Multilingual support with context & permissions",
-        u2:"Dynamic quotes, payments & invoicing",
-        u3:"Ops & IT automation via bot workflows",
-        next:"Extend with SSO, audit logging, dedicated hosting and custom SLAs.",
-        q2:"Can you collaborate with our security/IT?",
-        a2:"Yes. We support DPIA, access models, logging and custom hosting (e.g., VPC) on request.",
-        q3:"Do you offer training?",
-        a3:"Yes, onboarding + quarterly trainings for team leads are included."
-      },
-      includes:{title:"Included"},
-      usecases:{title:"Use cases"},
-      next:{title:"Upgrade path"},
-      faq:{
-        title:"FAQ",
-        q1:"Are WhatsApp/Telegram fees included?",
-        a1:"External platform fees (e.g., WhatsApp Business API) aren’t included and are passed through at cost.",
-        q3:"Is there a trial?",
-        a3:"We provide a free diagnosis + demo flow for your case before kickoff."
-      }
-    }
+  };
+
+  function applyI18n(lang){
+    const dict = I18N[lang] || I18N.en;
+    document.documentElement.lang = lang;
+    document.documentElement.setAttribute('data-lang', lang);
+
+    // text nodes
+    document.querySelectorAll('[data-i18n]').forEach(el=>{
+      const path = el.getAttribute('data-i18n').split('.');
+      let val = dict;
+      for(const key of path){ if(val && key in val){ val = val[key]; } }
+      if(typeof val === 'string'){ el.textContent = val; }
+    });
+
+    // placeholders
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+      const path = el.getAttribute('data-i18n-placeholder').split('.');
+      let val = dict;
+      for(const key of path){ if(val && key in val){ val = val[key]; } }
+      if(typeof val === 'string'){ el.setAttribute('placeholder', val); }
+    });
+
+    // active pill
+    document.querySelectorAll('.lang button').forEach(b=>{
+      b.classList.toggle('active', b.dataset.lang === lang);
+    });
+
+    // persist
+    try { localStorage.setItem('botmatic_lang', lang); } catch(e){}
   }
-};
 
-// --- helpers
-const $ = (s, root=document) => root.querySelector(s);
-const $$ = (s, root=document) => [...root.querySelectorAll(s)];
-
-function setLang(lang){
-  const dict = I18N[lang] || I18N.nl;
-  document.documentElement.lang = lang;
-  localStorage.setItem('lang', lang);
-  $$('[data-i18n]').forEach(el=>{
-    const key = el.getAttribute('data-i18n').split('.');
-    let v = dict; key.forEach(k => v = (v||{})[k]);
-    if(typeof v === 'string') el.textContent = v;
-  });
-  $$('.lang-btn').forEach(b=>b.classList.toggle('active', b.dataset.lang===lang));
-  const titleEl = document.querySelector('title[data-i18n]');
-  if (titleEl){
-    const key = titleEl.getAttribute('data-i18n').split('.');
-    let v = dict; key.forEach(k=>v=(v||{})[k]);
-    if(typeof v === 'string') titleEl.textContent = v;
-  }
-}
-
-function initLang(){
-  const saved = localStorage.getItem('lang');
-  const guess = (navigator.language || 'nl').slice(0,2);
-  setLang(saved || (['nl','fr','en'].includes(guess)?guess:'nl'));
-}
-
-function smoothNav(){
-  $$('.nav a, .cta a').forEach(a=>{
-    const href = a.getAttribute('href')||'';
-    if(href.startsWith('#') || href.startsWith('index.html#')){
-      a.addEventListener('click', e=>{
-        const hash = a.hash;
-        if(hash){
-          e.preventDefault();
-          document.querySelector(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
-          history.pushState(null,'',hash);
-        }
+  ready(function(){
+    // Mobile menu
+    var btn  = document.querySelector('.mobile-toggle');
+    var menu = document.getElementById('mainmenu');
+    if(btn && menu){
+      var closeMenu = function(){
+        menu.classList.remove('open');
+        document.body.classList.remove('menu-open');
+        btn.setAttribute('aria-expanded','false');
+      };
+      btn.addEventListener('click', function(){
+        var open = menu.classList.toggle('open');
+        document.body.classList.toggle('menu-open', open);
+        btn.setAttribute('aria-expanded', String(open));
+      }, false);
+      Array.prototype.forEach.call(menu.querySelectorAll('a'), function(a){
+        a.addEventListener('click', closeMenu, false);
       });
+      document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeMenu(); }, false);
+      var mq = window.matchMedia('(min-width: 768px)');
+      var handleMQ = function(){ if(mq.matches){ closeMenu(); } };
+      if(mq.addEventListener) mq.addEventListener('change', handleMQ); else mq.addListener(handleMQ);
     }
-  });
-}
 
-function burger(){
-  const btn = $('.burger'), nav = $('.nav');
-  if (!btn || !nav) return;
-  btn.addEventListener('click', ()=>{
-    const open = nav.style.display === 'flex';
-    nav.style.display = open ? 'none' : 'flex';
-    btn.setAttribute('aria-expanded', String(!open));
-  });
-}
-
-function form(){
-  const form = $('#contactForm'), note = $('#formNote');
-  if(!form) return;
-  form.addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    note.textContent = '…';
-    const data = Object.fromEntries(new FormData(form).entries());
-    try{
-      // 🔌 Подключи свой endpoint (Formspree/EmailJS/own API)
-      await new Promise(r=>setTimeout(r,600)); // имитация
-      form.reset();
-      note.textContent = {nl:"Bedankt! We nemen snel contact op.", fr:"Merci ! On vous recontacte rapidement.", en:"Thanks! We’ll get back to you soon."}[document.documentElement.lang] || "Thanks!";
-    }catch(err){
-      note.textContent = {nl:"Er ging iets mis. Probeer opnieuw.", fr:"Une erreur est survenue. Réessayez.", en:"Something went wrong. Try again."}[document.documentElement.lang] || "Error";
+    // Language
+    var saved = null;
+    try { saved = localStorage.getItem('botmatic_lang'); } catch(e){}
+    var initial = (saved && I18N[saved]) ? saved : (document.documentElement.getAttribute('lang') || 'nl');
+    if(!I18N[initial]) {
+      initial = 'nl'; // fallback = NL
+      try { localStorage.removeItem('botmatic_lang'); } catch(e){}
     }
-  });
-}
+    applyI18n(initial);
 
-document.addEventListener('DOMContentLoaded', ()=>{
-  initLang();
-  $$('.lang-btn').forEach(b=>b.addEventListener('click', ()=>setLang(b.dataset.lang)));
-  smoothNav();
-  burger();
-  form();
-});
+    document.querySelectorAll('.lang button').forEach(function(b){
+      b.addEventListener('click', function(){
+        var lang = (b.getAttribute('data-lang') || 'en').toLowerCase();
+        applyI18n(lang);
+      }, false);
+    });
+  });
+})();
