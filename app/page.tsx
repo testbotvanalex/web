@@ -30,7 +30,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Оффер/пункты */}
+        {/* Оффер */}
         <section id="offer" className="py-14">
           <div className="max-w-5xl mx-auto px-6 grid md:grid-cols-3 gap-6">
             {[
