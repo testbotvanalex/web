@@ -6,23 +6,13 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./lib/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  theme: {
-    extend: {
-      fontFamily: {
-        sans: ["Inter", "ui-sans-serif", "system-ui"], // красивее шрифт
-      },
-      colors: {
-        brand: {
-          DEFAULT: "#4f46e5", // твой Indigo 600
-          dark: "#4338ca",
-          light: "#6366f1",
-        },
-      },
-    },
-  },
+  theme: { extend: {} },
   plugins: [
     require("@tailwindcss/forms"),
     require("@tailwindcss/typography"),
+    require("@tailwindcss/aspect-ratio"),
+    require("@tailwindcss/line-clamp"),
   ],
 };
+
 export default config;
