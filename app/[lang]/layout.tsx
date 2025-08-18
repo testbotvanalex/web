@@ -1,24 +1,25 @@
+// app/[lang]/layout.tsx
 import type { Metadata } from "next";
 import Header from "@/components/Header";
-import { languages, type Lang } from "@/lib/i18n";
+import type { Lang } from "@/lib/i18n";
 
-export const dynamic = "force-static"; // страницы статичны
+export const dynamic = "force-static";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://botmatic.be";
+const languages = ["nl", "fr", "en"] as const; // локально
 
 export async function generateMetadata(
   { params }: { params: { lang: Lang } }
 ): Promise<Metadata> {
   const { lang } = params;
+
   const alternates: Record<string, string> = {};
-  languages.forEach(l => {
-    alternates[l] = `${SITE}/${l}`;
-  });
+  languages.forEach((l) => { alternates[l] = `${SITE}/${l}`; });
 
   return {
     metadataBase: new URL(SITE),
     title: "BotMatic — Slimme chatbots",
-    description: "Chatbots die écht geld opleveren. WhatsApp/Telegram/Website. Diagnose, afspraken, betalingen, CRM-integraties.",
+    description: "Chatbots die écht geld opleveren. WA/Telegram/Website. Afspraak, betalingen, CRM.",
     alternates: { languages: alternates },
     openGraph: {
       title: "BotMatic — Smart chatbots",

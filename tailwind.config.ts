@@ -11,7 +11,7 @@ const config: Config = {
     require("@tailwindcss/forms"),
     require("@tailwindcss/typography"),
     require("@tailwindcss/aspect-ratio"),
-    require("@tailwindcss/line-clamp"),
+    // НЕ добавляй line-clamp: он уже встроен в Tailwind 3.3+
   ],
 };
 

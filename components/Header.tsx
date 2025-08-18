@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 
 const langs = [
   { code: "nl", label: "Nederlands" },
-  { code: "fr", label: "Français"  },
-  { code: "en", label: "English"   },
+  { code: "fr", label: "Français" },
+  { code: "en", label: "English" },
 ] as const;
 
 export default function Header() {
@@ -15,8 +15,8 @@ export default function Header() {
 
   const labels = {
     nl: { pricing: "Tarieven", faq: "FAQ", contact: "Contact", demo: "Demo aanvragen" },
-    fr: { pricing: "Tarifs",   faq: "FAQ", contact: "Contact", demo: "Demander une démo" },
-    en: { pricing: "Pricing",  faq: "FAQ", contact: "Contact", demo: "Request demo" },
+    fr: { pricing: "Tarifs", faq: "FAQ", contact: "Contact", demo: "Demander une démo" },
+    en: { pricing: "Pricing", faq: "FAQ", contact: "Contact", demo: "Request demo" },
   }[current];
 
   const wa = "https://wa.me/32470000000?text=" + encodeURIComponent(
@@ -33,13 +33,12 @@ export default function Header() {
         </Link>
 
         <div className="hidden md:flex items-center gap-6 text-sm text-slate-700">
-          <a href="#pricing" className="hover:text-slate-900 transition"> {labels.pricing} </a>
-          <a href="#faq" className="hover:text-slate-900 transition"> {labels.faq} </a>
-          <a href="#contact" className="hover:text-slate-900 transition"> {labels.contact} </a>
+          <a href="#pricing" className="hover:text-slate-900 transition">{labels.pricing}</a>
+          <a href="#faq" className="hover:text-slate-900 transition">{labels.faq}</a>
+          <a href="#contact" className="hover:text-slate-900 transition">{labels.contact}</a>
         </div>
 
         <div className="flex items-center gap-3">
-          {/* Language switch */}
           <div className="hidden sm:flex items-center gap-2 text-xs">
             {langs.map(l => {
               const href = `/${l.code}`;
@@ -49,9 +48,7 @@ export default function Header() {
                   key={l.code}
                   href={href}
                   className={`rounded-lg px-2 py-1 border transition ${
-                    active
-                      ? "border-slate-900 text-slate-900"
-                      : "border-slate-300 text-slate-600 hover:bg-slate-50"
+                    active ? "border-slate-900 text-slate-900" : "border-slate-300 text-slate-600 hover:bg-slate-50"
                   }`}
                 >
                   {l.label}
@@ -60,7 +57,6 @@ export default function Header() {
             })}
           </div>
 
-          {/* CTAs */}
           <a
             href={wa}
             className="hidden sm:inline-block rounded-xl border border-slate-300 px-4 py-2 text-sm hover:bg-slate-50 transition"
