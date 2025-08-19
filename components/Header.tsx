@@ -1,76 +1,54 @@
+// components/Header.tsx
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { languages, type Lang } from "@/lib/i18n";
 
-const langs = [
-  { code: "nl", label: "Nederlands" },
-  { code: "fr", label: "Français" },
-  { code: "en", label: "English" },
-] as const;
+export default function Header({ lang }: { lang: Lang }) {
+  const pathname = usePathname();
 
-export default function Header() {
-  const pathname = usePathname() || "/nl";
-  const current = (pathname.split("/")[1] || "nl") as "nl" | "fr" | "en";
-
-  const labels = {
-    nl: { pricing: "Tarieven", faq: "FAQ", contact: "Contact", demo: "Demo aanvragen" },
-    fr: { pricing: "Tarifs", faq: "FAQ", contact: "Contact", demo: "Demander une démo" },
-    en: { pricing: "Pricing", faq: "FAQ", contact: "Contact", demo: "Request demo" },
-  }[current];
-
-  const wa = "https://wa.me/32470000000?text=" + encodeURIComponent(
-    current === "nl" ? "Hoi! Ik wil een BotMatic demo."
-    : current === "fr" ? "Bonjour ! Je veux une démo BotMatic."
-    : "Hi! I’d like a BotMatic demo."
-  );
+  const switchTo = (l: Lang) => {
+    // заменяем первый сегмент языка
+    const parts = pathname?.split("/") ?? [""];
+    // / -> ['', ''] ; /nl -> ['', 'nl']
+    if (parts.length > 1 && languages.includes(parts[1] as Lang)) {
+      parts[1] = l;
+    } else {
+      parts.splice(1, 0, l);
+    }
+    const href = parts.join("/") || `/${l}`;
+    return href.replace(/\/+/g, "/");
+  };
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur border-b border-slate-200">
-      <nav className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-        <Link href={`/${current}`} className="font-extrabold tracking-tight hover:opacity-80 transition">
+    <header className="sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-white/60">
+      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        <Link href={`/${lang}`} className="font-extrabold text-xl tracking-tight">
           BotMatic
         </Link>
 
-        <div className="hidden md:flex items-center gap-6 text-sm text-slate-700">
-          <a href="#pricing" className="hover:text-slate-900 transition">{labels.pricing}</a>
-          <a href="#faq" className="hover:text-slate-900 transition">{labels.faq}</a>
-          <a href="#contact" className="hover:text-slate-900 transition">{labels.contact}</a>
-        </div>
+        <nav className="hidden md:flex items-center gap-6 text-sm">
+          <a href="#pricing" className="hover:opacity-80">Pricing</a>
+          <a href="#faq" className="hover:opacity-80">FAQ</a>
+          <a href="#contact" className="hover:opacity-80">Contact</a>
+          <Link href={`/${lang}`} className="btn btn-primary">Get demo</Link>
+        </nav>
 
-        <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center gap-2 text-xs">
-            {langs.map(l => {
-              const href = `/${l.code}`;
-              const active = l.code === current;
-              return (
-                <Link
-                  key={l.code}
-                  href={href}
-                  className={`rounded-lg px-2 py-1 border transition ${
-                    active ? "border-slate-900 text-slate-900" : "border-slate-300 text-slate-600 hover:bg-slate-50"
-                  }`}
-                >
-                  {l.label}
-                </Link>
-              );
-            })}
-          </div>
-
-          <a
-            href={wa}
-            className="hidden sm:inline-block rounded-xl border border-slate-300 px-4 py-2 text-sm hover:bg-slate-50 transition"
-          >
-            WhatsApp
-          </a>
-          <a
-            href="#contact"
-            className="rounded-xl bg-indigo-600 text-white px-4 py-2 text-sm font-semibold hover:scale-[1.02] hover:bg-indigo-700 transition"
-          >
-            {labels.demo}
-          </a>
+        <div className="flex items-center gap-2">
+          {languages.map((l) => (
+            <Link
+              key={l}
+              href={switchTo(l)}
+              className={`px-3 py-1 rounded-lg border text-sm ${
+                l === lang ? "bg-slate-900 text-white border-slate-900" : "bg-white border-slate-200"
+              }`}
+            >
+              {l.toUpperCase()}
+            </Link>
+          ))}
         </div>
-      </nav>
+      </div>
     </header>
   );
 }
