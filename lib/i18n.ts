@@ -1,11 +1,13 @@
 // lib/i18n.ts
+export type Lang = "nl" | "fr" | "en";
+export const languages: Lang[] = ["nl", "fr", "en"];
 
 export type Plan = {
   name: string;
-  price: string;
+  priceMonthly: number; // € / месяц
   features: string[];
   cta: string;
-  link: string;        // mailto или ссылка
+  link: string;         // mailto или ссылка на форму/wa
   popular?: boolean;
 };
 
@@ -16,148 +18,281 @@ export type LocaleDict = {
   heroSub: string;
   ctaContact: string;
   ctaPricing: string;
-  offerTitle?: string;
-  offer?: [string, string][];
+
   pricingTitle: string;
+  toggleMonthly: string;
+  toggleYearly: string;
+  saveText: string;
+
   plans: Plan[];
+
+  compareTitle: string;
+  compareRows: { feature: string; basis: boolean; standard: boolean; premium: boolean }[];
+
+  faqTitle: string;
+  faq: FAQ[];
+
   contactTitle: string;
   contactDesc: string;
   email: string;
-  gamble: string;
-  faqTitle: string;
-  faq: FAQ[];
+  gamble?: string;
+
+  stickyDemo: string;
+  stickyWhatsApp: string;
 };
 
-export const languages = ["nl", "fr", "en"] as const;
-export type Lang = (typeof languages)[number];
-
-// ===== Переводы =====
-export const t: Record<Lang, LocaleDict> = {
-  nl: {
-    heroTitle: "BotMatic • Slimme chatbots",
-    heroSub: "Van lead tot klant: WhatsApp, Telegram, Website. Alles geautomatiseerd.",
-    ctaContact: "Contact",
-    ctaPricing: "Tarieven",
-    pricingTitle: "Tarieven",
-    plans: [
-      {
-        name: "Basis",
-        price: "€29/maand",
-        features: ["1 kanaal (bv. WhatsApp)", "1 scenario (FAQ/afspraak)", "tot 500 dialogen"],
-        cta: "Kiezen",
-        link: "mailto:hello@botmatic.be?subject=BotMatic%20Basis%20Plan",
-      },
-      {
-        name: "Standaard",
-        price: "€99/maand",
-        features: ["2 kanalen", "Meerdere scenario’s", "tot 2.000 dialogen", "CRM integratie"],
-        cta: "Meest gekozen",
-        link: "mailto:hello@botmatic.be?subject=BotMatic%20Standaard%20Plan",
-        popular: true,
-      },
-      {
-        name: "Premium",
-        price: "€299/maand",
-        features: ["Alle kanalen + integraties", "AI-offers & betalingen", "Onbeperkt dialogen", "Toegewijde support"],
-        cta: "Demo aanvragen",
-        link: "mailto:hello@botmatic.be?subject=BotMatic%20Premium%20Plan",
-      },
-    ],
-    contactTitle: "Contact",
-    contactDesc: "Vertel kort over je bedrijf en doel; ik stel een scenario en prijs voor.",
-    email: "hello@botmatic.be",
-    gamble: "21+ Gokken kan verslavend zijn. Stop op tijd! Meer info — www.stopoptijd.be",
-    faqTitle: "Veelgestelde vragen",
-    faq: [
-      { q: "Hoe snel kan de chatbot worden geïmplementeerd?", a: "Meestal binnen 2–5 werkdagen, afhankelijk van de complexiteit." },
-      { q: "Kan ik later upgraden of downgraden?", a: "Ja, u kunt op elk moment van pakket wisselen." },
-    ],
-  },
-
-  fr: {
-    heroTitle: "BotMatic • Chatbots intelligents",
-    heroSub: "De prospect à client : WhatsApp, Telegram, Site Web. Tout automatisé.",
-    ctaContact: "Contact",
-    ctaPricing: "Tarifs",
-    pricingTitle: "Tarifs",
-    plans: [
-      {
-        name: "Basique",
-        price: "29€/mois",
-        features: ["1 canal (ex. WhatsApp)", "1 scénario (FAQ/rendez-vous)", "jusqu’à 500 dialogues"],
-        cta: "Choisir",
-        link: "mailto:hello@botmatic.be?subject=BotMatic%20Basique%20Plan",
-      },
-      {
-        name: "Standard",
-        price: "99€/mois",
-        features: ["2 canaux", "Scénarios multiples", "jusqu’à 2 000 dialogues", "Intégration CRM"],
-        cta: "Le plus choisi",
-        link: "mailto:hello@botmatic.be?subject=BotMatic%20Standard%20Plan",
-        popular: true,
-      },
-      {
-        name: "Premium",
-        price: "299€/mois",
-        features: ["Tous canaux + intégrations", "Offres IA & paiements", "Dialogues illimités", "Support dédié"],
-        cta: "Demander une démo",
-        link: "mailto:hello@botmatic.be?subject=BotMatic%20Premium%20Plan",
-      },
-    ],
-    contactTitle: "Contact",
-    contactDesc: "Présentez brièvement votre entreprise et vos objectifs; nous proposons un scénario et un prix.",
-    email: "hello@botmatic.be",
-    gamble: "18+ Jouer comporte des risques. Jouez avec modération. Plus d’infos — www.stopoptijd.be",
-    faqTitle: "Questions fréquentes",
-    faq: [
-      { q: "En combien de temps puis-je avoir mon chatbot ?", a: "Généralement en 2 à 5 jours ouvrés, selon la complexité." },
-      { q: "Puis-je changer de plan plus tard ?", a: "Oui, vous pouvez monter/descendre d’offre à tout moment." },
-    ],
-  },
-
-  en: {
-    heroTitle: "BotMatic • Smart chatbots",
-    heroSub: "From lead to customer: WhatsApp, Telegram, Website. Fully automated.",
-    ctaContact: "Contact",
-    ctaPricing: "Pricing",
-    pricingTitle: "Pricing",
-    plans: [
-      {
-        name: "Basic",
-        price: "€29/mo",
-        features: ["1 channel (e.g. WhatsApp)", "1 scenario (FAQ/booking)", "up to 500 dialogs"],
-        cta: "Choose",
-        link: "mailto:hello@botmatic.be?subject=BotMatic%20Basic%20Plan",
-      },
-      {
-        name: "Standard",
-        price: "€99/mo",
-        features: ["2 channels", "Multiple scenarios", "up to 2,000 dialogs", "CRM integration"],
-        cta: "Most popular",
-        link: "mailto:hello@botmatic.be?subject=BotMatic%20Standard%20Plan",
-        popular: true,
-      },
-      {
-        name: "Premium",
-        price: "€299/mo",
-        features: ["All channels + integrations", "AI offers & payments", "Unlimited dialogs", "Dedicated support"],
-        cta: "Request demo",
-        link: "mailto:hello@botmatic.be?subject=BotMatic%20Premium%20Plan",
-      },
-    ],
-    contactTitle: "Contact",
-    contactDesc: "Tell us briefly about your business and goals; we’ll suggest a scenario and price.",
-    email: "hello@botmatic.be",
-    gamble: "21+ Gambling can be addictive. Play responsibly! More info — www.stopoptijd.be",
-    faqTitle: "Frequently asked questions",
-    faq: [
-      { q: "How fast can the chatbot be implemented?", a: "Usually within 2–5 business days, depending on complexity." },
-      { q: "Can I upgrade or downgrade later?", a: "Yes, you can switch plans at any time." },
-    ],
-  },
+const tBase = {
+  email: "hello@botmatic.be",
 };
 
-// Хелпер
+const nl: LocaleDict = {
+  heroTitle: "BotMatic — Slimme chatbots voor groei",
+  heroSub:
+    "Krijg meer leads, plan afspraken en beantwoord vragen automatisch via WhatsApp, website en Telegram.",
+  ctaContact: "Contact",
+  ctaPricing: "Tarieven",
+
+  pricingTitle: "Tarieven",
+  toggleMonthly: "Maandelijks",
+  toggleYearly: "Jaarlijks",
+  saveText: "2 maanden gratis",
+
+  plans: [
+    {
+      name: "Basis",
+      priceMonthly: 29,
+      features: [
+        "1 kanaal (bv. WhatsApp)",
+        "1 scenario (FAQ/afspraak)",
+        "tot 500 dialogen",
+      ],
+      cta: "Start",
+      link: "mailto:hello@botmatic.be?subject=BotMatic%20Basis%20Plan",
+    },
+    {
+      name: "Standaard",
+      priceMonthly: 99,
+      features: [
+        "2 kanalen",
+        "Meerdere scenario’s",
+        "tot 2.000 dialogen",
+        "CRM integratie",
+      ],
+      cta: "Meest gekozen",
+      link: "mailto:hello@botmatic.be?subject=BotMatic%20Standaard%20Plan",
+      popular: true,
+    },
+    {
+      name: "Premium",
+      priceMonthly: 299,
+      features: [
+        "Alle kanalen + integraties",
+        "AI-aanbiedingen & betalingen",
+        "Onbeperkt dialogen",
+        "Toegewijde support",
+      ],
+      cta: "Demo aanvragen",
+      link: "mailto:hello@botmatic.be?subject=BotMatic%20Premium%20Plan",
+    },
+  ],
+
+  compareTitle: "Vergelijk plannen",
+  compareRows: [
+    { feature: "WhatsApp kanaal", basis: true, standard: true, premium: true },
+    { feature: "Website chat", basis: true, standard: true, premium: true },
+    { feature: "Telegram", basis: false, standard: true, premium: true },
+    { feature: "Meerdere scenario’s", basis: false, standard: true, premium: true },
+    { feature: "CRM integratie", basis: false, standard: true, premium: true },
+    { feature: "Betalingen", basis: false, standard: false, premium: true },
+    { feature: "Toegewijde support", basis: false, standard: false, premium: true },
+  ],
+
+  faqTitle: "Veelgestelde vragen",
+  faq: [
+    {
+      q: "Hoe snel kan de chatbot worden geïmplementeerd?",
+      a: "Meestal binnen 2–5 werkdagen, afhankelijk van de complexiteit.",
+    },
+    {
+      q: "Kan ik later upgraden of downgraden?",
+      a: "Ja, u kunt op elk moment van pakket wisselen.",
+    },
+  ],
+
+  contactTitle: "Contact",
+  contactDesc:
+    "Vertel kort over je bedrijf en doel; ik stel het scenario en prijs voor.",
+  email: tBase.email,
+  gamble: "21+ Gokken kan verslavend zijn. Stop op tijd! Meer info — www.stopoptijd.be",
+
+  stickyDemo: "Demo",
+  stickyWhatsApp: "WhatsApp",
+};
+
+const fr: LocaleDict = {
+  heroTitle: "BotMatic — Chatbots intelligents pour la croissance",
+  heroSub:
+    "Plus de leads, prise de rendez-vous et réponses automatisées via WhatsApp, site web et Telegram.",
+  ctaContact: "Contact",
+  ctaPricing: "Tarifs",
+
+  pricingTitle: "Tarifs",
+  toggleMonthly: "Mensuel",
+  toggleYearly: "Annuel",
+  saveText: "2 mois offerts",
+
+  plans: [
+    {
+      name: "Essentiel",
+      priceMonthly: 29,
+      features: [
+        "1 canal (ex. WhatsApp)",
+        "1 scénario (FAQ/rendez-vous)",
+        "jusqu’à 500 dialogues",
+      ],
+      cta: "Commencer",
+      link: "mailto:hello@botmatic.be?subject=BotMatic%20Essentiel",
+    },
+    {
+      name: "Standard",
+      priceMonthly: 99,
+      features: [
+        "2 canaux",
+        "Scénarios multiples",
+        "jusqu’à 2 000 dialogues",
+        "Intégration CRM",
+      ],
+      cta: "Le plus choisi",
+      link: "mailto:hello@botmatic.be?subject=BotMatic%20Standard",
+      popular: true,
+    },
+    {
+      name: "Premium",
+      priceMonthly: 299,
+      features: [
+        "Tous canaux + intégrations",
+        "Offres IA & paiements",
+        "Dialogues illimités",
+        "Support dédié",
+      ],
+      cta: "Demander une démo",
+      link: "mailto:hello@botmatic.be?subject=BotMatic%20Premium",
+    },
+  ],
+
+  compareTitle: "Comparer les offres",
+  compareRows: [
+    { feature: "WhatsApp", basis: true, standard: true, premium: true },
+    { feature: "Chat de site", basis: true, standard: true, premium: true },
+    { feature: "Telegram", basis: false, standard: true, premium: true },
+    { feature: "Scénarios multiples", basis: false, standard: true, premium: true },
+    { feature: "Intégration CRM", basis: false, standard: true, premium: true },
+    { feature: "Paiements", basis: false, standard: false, premium: true },
+    { feature: "Support dédié", basis: false, standard: false, premium: true },
+  ],
+
+  faqTitle: "Questions fréquentes",
+  faq: [
+    {
+      q: "Quel est le délai de mise en place ?",
+      a: "Généralement 2 à 5 jours ouvrés selon la complexité.",
+    },
+    {
+      q: "Puis-je changer d’offre plus tard ?",
+      a: "Oui, à tout moment (upgrade/downgrade).",
+    },
+  ],
+
+  contactTitle: "Contact",
+  contactDesc:
+    "Parlez-moi de votre objectif ; je propose un scénario et un prix.",
+  email: tBase.email,
+
+  stickyDemo: "Démo",
+  stickyWhatsApp: "WhatsApp",
+};
+
+const en: LocaleDict = {
+  heroTitle: "BotMatic — Smart chatbots that grow your business",
+  heroSub:
+    "Capture more leads, book meetings, and auto-answer via WhatsApp, Website, and Telegram.",
+  ctaContact: "Contact",
+  ctaPricing: "Pricing",
+
+  pricingTitle: "Pricing",
+  toggleMonthly: "Monthly",
+  toggleYearly: "Yearly",
+  saveText: "2 months free",
+
+  plans: [
+    {
+      name: "Basic",
+      priceMonthly: 29,
+      features: ["1 channel (e.g. WhatsApp)", "1 flow (FAQ/booking)", "up to 500 dialogs"],
+      cta: "Start",
+      link: "mailto:hello@botmatic.be?subject=BotMatic%20Basic",
+    },
+    {
+      name: "Standard",
+      priceMonthly: 99,
+      features: [
+        "2 channels",
+        "Multiple flows",
+        "up to 2,000 dialogs",
+        "CRM integration",
+      ],
+      cta: "Most popular",
+      link: "mailto:hello@botmatic.be?subject=BotMatic%20Standard",
+      popular: true,
+    },
+    {
+      name: "Premium",
+      priceMonthly: 299,
+      features: [
+        "All channels + integrations",
+        "AI offers & payments",
+        "Unlimited dialogs",
+        "Dedicated support",
+      ],
+      cta: "Request demo",
+      link: "mailto:hello@botmatic.be?subject=BotMatic%20Premium",
+    },
+  ],
+
+  compareTitle: "Compare plans",
+  compareRows: [
+    { feature: "WhatsApp channel", basis: true, standard: true, premium: true },
+    { feature: "Website chat", basis: true, standard: true, premium: true },
+    { feature: "Telegram", basis: false, standard: true, premium: true },
+    { feature: "Multiple flows", basis: false, standard: true, premium: true },
+    { feature: "CRM integration", basis: false, standard: true, premium: true },
+    { feature: "Payments", basis: false, standard: false, premium: true },
+    { feature: "Dedicated support", basis: false, standard: false, premium: true },
+  ],
+
+  faqTitle: "FAQ",
+  faq: [
+    {
+      q: "How fast can we go live?",
+      a: "Usually within 2–5 business days depending on scope.",
+    },
+    {
+      q: "Can I upgrade or downgrade later?",
+      a: "Yes — switch anytime.",
+    },
+  ],
+
+  contactTitle: "Contact",
+  contactDesc:
+    "Tell me your goal; I’ll propose a scenario and pricing that fits.",
+  email: tBase.email,
+
+  stickyDemo: "Demo",
+  stickyWhatsApp: "WhatsApp",
+};
+
+export const t: Record<Lang, LocaleDict> = { nl, fr, en };
+
 export function getT(lang: Lang): LocaleDict {
-  return t[lang] ?? t["en"];
+  return t[lang] ?? t.en;
 }
