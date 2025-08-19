@@ -1,36 +1,36 @@
 // app/[lang]/layout.tsx
+import "./../globals.css";
 import type { Metadata } from "next";
+import { languages, type Lang } from "@/lib/i18n";
 import Header from "@/components/Header";
-import type { Lang } from "@/lib/i18n";
+import { Inter } from "next/font/google";
 
 export const dynamic = "force-static";
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://botmatic.be";
-const languages = ["nl", "fr", "en"] as const; // локально
+const inter = Inter({ subsets: ["latin"], display: "swap" });
 
-export async function generateMetadata(
-  { params }: { params: { lang: Lang } }
-): Promise<Metadata> {
-  const { lang } = params;
-
-  const alternates: Record<string, string> = {};
-  languages.forEach((l) => { alternates[l] = `${SITE}/${l}`; });
-
-  return {
-    metadataBase: new URL(SITE),
-    title: "BotMatic — Slimme chatbots",
-    description: "Chatbots die écht geld opleveren. WA/Telegram/Website. Afspraak, betalingen, CRM.",
-    alternates: { languages: alternates },
-    openGraph: {
-      title: "BotMatic — Smart chatbots",
-      description: "From lead to deal: WA/Telegram/Web. Booking, payments, CRM.",
-      url: `${SITE}/${lang}`,
-      siteName: "BotMatic",
-      type: "website",
-      locale: lang,
-    },
-  };
+export function generateStaticParams() {
+  return languages.map((lang) => ({ lang }));
 }
+
+export const metadata: Metadata = {
+  title: "BotMatic — WhatsApp & Web Chatbots",
+  description: "Capture leads, book meetings, and auto-answer with BotMatic.",
+  openGraph: {
+    title: "BotMatic — Smart Chatbots",
+    description: "WhatsApp & Website chatbots that convert.",
+    images: ["/og.jpg"], // положи og.jpg в /public при желании
+  },
+  twitter: { card: "summary_large_image" },
+  alternates: {
+    canonical: "/",
+    languages: {
+      "nl-BE": "/nl",
+      "fr-BE": "/fr",
+      "en": "/en",
+    },
+  },
+};
 
 export default function LangLayout({
   children,
@@ -41,9 +41,10 @@ export default function LangLayout({
 }) {
   return (
     <html lang={lang}>
-      <body className="bg-white text-slate-900 antialiased">
-        <Header />
-        <div className="pt-[72px]">{children}</div>
+      <body className={inter.className}>
+        <a href="#main" className="sr-skip">Skip to content</a>
+        <Header lang={lang} />
+        {children}
       </body>
     </html>
   );
