@@ -2,38 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Слегка "премиум" светлая тема */
+/* Все кастомные классы через @apply — строго внутри @layer components */
+@layer components {
+  /* Кнопки */
+  .btn {
+    @apply inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-transform duration-200 ease-soft;
+  }
+  .btn-primary {
+    @apply bg-primary-600 text-white hover:bg-primary-700 hover:scale-[1.02];
+  }
+  .btn-outline {
+    @apply border border-slate-300 text-slate-800 hover:bg-slate-50;
+  }
+
+  /* Карточки */
+  .card {
+    @apply rounded-2xl border border-slate-200 bg-white shadow-soft transition;
+  }
+  .card:hover {
+    @apply translate-y-[-1px];
+  }
+
+  /* Чипы */
+  .chip {
+    @apply inline-flex items-center rounded-full border border-slate-200 bg-white/60 px-2 py-0.5 text-xs text-slate-600;
+  }
+}
+
+/* Опционально: общие переменные/сбросы можно оставить вне слоя */
 :root {
-  --bg: 255 255 255;
-  --fg: 15 23 42;   /* slate-900 */
-  --muted: 100 116 139; /* slate-500 */
-}
-
-html, body {
-  height: 100%;
-}
-
-body {
-  color: rgb(var(--fg));
-  background: linear-gradient(180deg, #fafaff 0%, #ffffff 30%);
-  @apply antialiased;
-}
-
-/* Карточки */
-.card {
-  @apply rounded-2xl border border-slate-200 bg-white shadow-soft transition;
-}
-.card:hover {
-  @apply -translate-y-0.5 shadow-xl;
-}
-
-/* Кнопки */
-.btn {
-  @apply rounded-xl px-5 py-3 font-semibold transition;
-}
-.btn-primary {
-  @apply bg-primary-600 text-white hover:bg-primary-700 hover:scale-[1.02];
-}
-.btn-outline {
-  @apply border border-slate-300 bg-white hover:bg-slate-50;
+  color-scheme: light;
 }
