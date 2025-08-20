@@ -1,6 +1,10 @@
 // lib/i18n.ts
-export type Lang = "nl" | "fr" | "en";
 
+// Единый источник правды для локалей:
+export const languages = ["nl", "fr", "en"] as const;
+export type Lang = typeof languages[number];
+
+// ---------- Типы ----------
 export type PlanBreakdown = {
   channels: string;
   scenarios: string;
@@ -56,6 +60,7 @@ export type LocaleDict = {
   faq: FAQ[];
 };
 
+// ---------- NL ----------
 const nl: LocaleDict = {
   heroTitle: "BotMatic • Slimme chatbots",
   heroSub:
@@ -167,6 +172,7 @@ const nl: LocaleDict = {
   ],
 };
 
+// ---------- FR ----------
 const fr: LocaleDict = {
   heroTitle: "BotMatic • Chatbots intelligents",
   heroSub:
@@ -271,6 +277,7 @@ const fr: LocaleDict = {
   ],
 };
 
+// ---------- EN ----------
 const en: LocaleDict = {
   heroTitle: "BotMatic • Smart chatbots",
   heroSub:
@@ -374,6 +381,7 @@ const en: LocaleDict = {
   ],
 };
 
+// ---------- Экспорт словаря и getT ----------
 export const t: Record<Lang, LocaleDict> = { nl, fr, en };
 
 export function getT(lang: Lang): LocaleDict {
