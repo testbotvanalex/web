@@ -1,31 +1,20 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./lib/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+// tailwind.config.ts
+import type { Config } from "tailwindcss"
+import forms from "@tailwindcss/forms"
+import typography from "@tailwindcss/typography"
+import aspectRatio from "@tailwindcss/aspect-ratio"
+
+const config: Config = {
+  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     extend: {
-      colors: {
-        primary: {
-          50:  "#eef4ff",
-          100: "#dfeaff",
-          200: "#c2d5ff",
-          300: "#9fbaff",
-          400: "#7a9dff",
-          500: "#5b8eff",
-          600: "#4b7ef0",
-          700: "#3f6ad1",
-          800: "#3456a8",
-          900: "#2a467f",
-        },
+      // ← у тебя тут уже есть colors.primary — оставь
+      boxShadow: {
+        soft: "0 8px 30px rgba(2, 6, 23, 0.06)",       // мягкая тень
+        "soft-hover": "0 12px 40px rgba(2, 6, 23, 0.10)", // по желанию для hover
       },
     },
   },
-  plugins: [
-    require("@tailwindcss/forms"),
-    require("@tailwindcss/typography"),
-    require("@tailwindcss/aspect-ratio"),
-  ],
-};
+  plugins: [forms, typography, aspectRatio],
+}
+export default config
