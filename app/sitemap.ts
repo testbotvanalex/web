@@ -4,21 +4,29 @@ import { languages } from "@/lib/i18n";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://www.botmatic.be";
-  const now = new Date().toISOString();
 
-  const entries: MetadataRoute.Sitemap = [
+  // Домашняя безязыковая
+  const root: MetadataRoute.Sitemap = [
     {
-      url: `${base}/`,
-      lastModified: now,
+      url: base,
+      lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 1,
     },
-    ...languages.map((l) => ({
-      url: `${base}/${l}`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.9,
-    })),
   ];
-  return entries;
+
+  // Локализованные URL + альты (hreflang)
+  const localized: MetadataRoute.Sitemap = languages.map((lang) => ({
+    url: `${base}/${lang}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly",
+    priority: 0.9,
+    alternates: {
+      languages: Object.fromEntries(
+        languages.map((l) => [l, `${base}/${l}`])
+      ),
+    },
+  }));
+
+  return [...root, ...localized];
 }
