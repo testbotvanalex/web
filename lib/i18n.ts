@@ -1,10 +1,7 @@
 // lib/i18n.ts
+export type Lang = "nl" | "fr" | "en";
+export const languages: Lang[] = ["nl", "fr", "en"];
 
-// Единый источник правды для локалей:
-export const languages = ["nl", "fr", "en"] as const;
-export type Lang = typeof languages[number];
-
-// ---------- Типы ----------
 export type PlanBreakdown = {
   channels: string;
   scenarios: string;
@@ -18,12 +15,12 @@ export type PlanBreakdown = {
 export type Plan = {
   name: string;
   price: string;
-  features: string[];        // краткий список (по-прежнему)
-  breakdown: PlanBreakdown;  // детальный разбор
+  features: string[];
+  breakdown: PlanBreakdown;
   cta: string;
-  link: string;              // mailto или ссылка
+  link: string;
   popular?: boolean;
-  note?: string;             // примечание мелким шрифтом
+  note?: string;
 };
 
 export type FAQ = { q: string; a: string };
@@ -34,7 +31,7 @@ export type LocaleDict = {
   ctaContact: string;
   ctaPricing: string;
   pricingTitle: string;
-  detailsTitle: string;          // “Что входит”
+  detailsTitle: string;
   detailsLabels: {
     channels: string;
     scenarios: string;
@@ -60,7 +57,6 @@ export type LocaleDict = {
   faq: FAQ[];
 };
 
-// ---------- NL ----------
 const nl: LocaleDict = {
   heroTitle: "BotMatic • Slimme chatbots",
   heroSub:
@@ -89,11 +85,7 @@ const nl: LocaleDict = {
     {
       name: "Basis",
       price: "€29/maand",
-      features: [
-        "1 kanaal (bv. WhatsApp)",
-        "1 scenario (FAQ/afspraak)",
-        "tot 500 dialogen",
-      ],
+      features: ["1 kanaal (bv. WhatsApp)", "1 scenario (FAQ/afspraak)", "tot 500 dialogen"],
       breakdown: {
         channels: "1 (WhatsApp of Website)",
         scenarios: "1 basisstroom (FAQ of afspraak)",
@@ -110,12 +102,7 @@ const nl: LocaleDict = {
     {
       name: "Standaard",
       price: "€99/maand",
-      features: [
-        "2 kanalen",
-        "Meerdere scenario’s",
-        "tot 2.000 dialogen",
-        "CRM integratie",
-      ],
+      features: ["2 kanalen", "Meerdere scenario’s", "tot 2.000 dialogen", "CRM integratie"],
       breakdown: {
         channels: "2 (WhatsApp + Website/Telegram)",
         scenarios: "Meerdere stromen (FAQ, afspraken, leads)",
@@ -133,12 +120,7 @@ const nl: LocaleDict = {
     {
       name: "Premium",
       price: "€299/maand",
-      features: [
-        "Alle kanalen + integraties",
-        "AI-offers & betalingen",
-        "Onbeperkt dialogen*",
-        "Toegewijde support",
-      ],
+      features: ["Alle kanalen + integraties", "AI-offers & betalingen", "Onbeperkt dialogen*", "Toegewijde support"],
       breakdown: {
         channels: "Alle (WhatsApp, Telegram, Web, Instagram*)",
         scenarios: "Onbeperkt, inclusief complexe flows",
@@ -157,22 +139,14 @@ const nl: LocaleDict = {
   contactDesc:
     "Vertel kort over je bedrijf en doel; we stellen een scenario en prijs voor.",
   email: "hello@botmatic.be",
-  gamble:
-    "21+ Gokken kan verslavend zijn. Stop op tijd! Meer info — www.stopoptijd.be",
+  gamble: "21+ Gokken kan verslavend zijn. Stop op tijd! Meer info — www.stopoptijd.be",
   faqTitle: "Veelgestelde vragen",
   faq: [
-    {
-      q: "Hoe snel kan de chatbot worden geïmplementeerd?",
-      a: "Meestal binnen 2–5 werkdagen, afhankelijk van de complexiteit.",
-    },
-    {
-      q: "Kan ik later upgraden of downgraden?",
-      a: "Ja, u kunt op elk moment van pakket wisselen.",
-    },
+    { q: "Hoe snel kan de chatbot worden geïmplementeerd?", a: "Meestal binnen 2–5 werkdagen, afhankelijk van de complexiteit." },
+    { q: "Kan ik later upgraden of downgraden?", a: "Ja, u kunt op elk moment van pakket wisselen." },
   ],
 };
 
-// ---------- FR ----------
 const fr: LocaleDict = {
   heroTitle: "BotMatic • Chatbots intelligents",
   heroSub:
@@ -218,12 +192,7 @@ const fr: LocaleDict = {
     {
       name: "Standard",
       price: "99 €/mois",
-      features: [
-        "2 canaux",
-        "Scénarios multiples",
-        "jusqu’à 2 000 dialogues",
-        "Intégration CRM",
-      ],
+      features: ["2 canaux", "Scénarios multiples", "jusqu’à 2 000 dialogues", "Intégration CRM"],
       breakdown: {
         channels: "2 (WhatsApp + Site/Telegram)",
         scenarios: "Multiples (FAQ, RDV, lead gen)",
@@ -241,12 +210,7 @@ const fr: LocaleDict = {
     {
       name: "Premium",
       price: "299 €/mois",
-      features: [
-        "Tous canaux + intégrations",
-        "Offres IA & paiements",
-        "Dialogues illimités*",
-        "Support dédié",
-      ],
+      features: ["Tous canaux + intégrations", "Offres IA & paiements", "Dialogues illimités*", "Support dédié"],
       breakdown: {
         channels: "Tous (WhatsApp, Telegram, Web, Instagram*)",
         scenarios: "Illimités, y compris complexes",
@@ -265,19 +229,14 @@ const fr: LocaleDict = {
   contactDesc:
     "Parlez brièvement de votre activité et de vos objectifs ; on propose un scénario et un prix.",
   email: "hello@botmatic.be",
-  gamble:
-    "Les jeux d’argent peuvent être addictifs. Jouez avec modération — www.stopoptijd.be",
+  gamble: "Les jeux d’argent peuvent être addictifs. Jouez avec modération — www.stopoptijd.be",
   faqTitle: "FAQ",
   faq: [
-    {
-      q: "Délais d’implémentation ?",
-      a: "Généralement 2–5 jours ouvrés selon la complexité.",
-    },
+    { q: "Délais d’implémentation ?", a: "Généralement 2–5 jours ouvrés selon la complexité." },
     { q: "Upgrade/downgrade possible ?", a: "Oui, à tout moment." },
   ],
 };
 
-// ---------- EN ----------
 const en: LocaleDict = {
   heroTitle: "BotMatic • Smart chatbots",
   heroSub:
@@ -323,12 +282,7 @@ const en: LocaleDict = {
     {
       name: "Standard",
       price: "€99/mo",
-      features: [
-        "2 channels",
-        "Multiple scenarios",
-        "up to 2,000 dialogs",
-        "CRM integration",
-      ],
+      features: ["2 channels", "Multiple scenarios", "up to 2,000 dialogs", "CRM integration"],
       breakdown: {
         channels: "2 (WhatsApp + Website/Telegram)",
         scenarios: "Multiple (FAQ, bookings, leads)",
@@ -346,12 +300,7 @@ const en: LocaleDict = {
     {
       name: "Premium",
       price: "€299/mo",
-      features: [
-        "All channels + integrations",
-        "AI offers & payments",
-        "Unlimited dialogs*",
-        "Dedicated support",
-      ],
+      features: ["All channels + integrations", "AI offers & payments", "Unlimited dialogs*", "Dedicated support"],
       breakdown: {
         channels: "All (WhatsApp, Telegram, Web, Instagram*)",
         scenarios: "Unlimited, incl. complex flows",
@@ -373,17 +322,12 @@ const en: LocaleDict = {
   gamble: "Gambling can be addictive. 21+. www.stopoptijd.be",
   faqTitle: "FAQ",
   faq: [
-    {
-      q: "How fast can we go live?",
-      a: "Usually within 2–5 business days, depending on complexity.",
-    },
+    { q: "How fast can we go live?", a: "Usually within 2–5 business days, depending on complexity." },
     { q: "Can I upgrade/downgrade later?", a: "Yes, anytime." },
   ],
 };
 
-// ---------- Экспорт словаря и getT ----------
 export const t: Record<Lang, LocaleDict> = { nl, fr, en };
-
 export function getT(lang: Lang): LocaleDict {
   return t[lang] || t.en;
 }

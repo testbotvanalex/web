@@ -1,12 +1,12 @@
-/* app/globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Премиум светлая тема + мягкий градиент фона */
+/* Слегка "премиум" светлая тема */
 :root {
-  --bg-from: 250 245 255;   /* фиолетовый очень светлый */
-  --bg-to:   240 249 255;   /* голубой очень светлый */
+  --bg: 255 255 255;
+  --fg: 15 23 42;   /* slate-900 */
+  --muted: 100 116 139; /* slate-500 */
 }
 
 html, body {
@@ -14,41 +14,26 @@ html, body {
 }
 
 body {
-  @apply text-slate-800 antialiased;
-  background: linear-gradient(
-    180deg,
-    rgb(var(--bg-from)) 0%,
-    rgb(var(--bg-to)) 100%
-  );
+  color: rgb(var(--fg));
+  background: linear-gradient(180deg, #fafaff 0%, #ffffff 30%);
+  @apply antialiased;
 }
 
-/* Карточка-стекло */
+/* Карточки */
 .card {
-  @apply bg-white/70 backdrop-blur-sm shadow-soft border border-white/60 rounded-2xl;
+  @apply rounded-2xl border border-slate-200 bg-white shadow-soft transition;
+}
+.card:hover {
+  @apply -translate-y-0.5 shadow-xl;
 }
 
 /* Кнопки */
 .btn {
-  @apply inline-flex items-center justify-center rounded-xl px-5 py-3 font-semibold transition;
+  @apply rounded-xl px-5 py-3 font-semibold transition;
 }
 .btn-primary {
-  @apply bg-brand-600 text-white hover:bg-brand-700;
+  @apply bg-primary-600 text-white hover:bg-primary-700 hover:scale-[1.02];
 }
-.btn-ghost {
-  @apply bg-white text-slate-900 border border-slate-200 hover:bg-slate-50;
-}
-
-/* Ссылки фокуса/доступность */
-a:focus-visible, button:focus-visible, summary:focus-visible {
-  @apply outline-none ring-2 ring-brand-300 ring-offset-2 ring-offset-white;
-}
-
-/* Скрытая, но доступная ссылка Skip */
-.sr-skip {
-  @apply sr-only focus:not-sr-only fixed top-2 left-2 z-50 bg-white/90 px-3 py-2 rounded-xl border border-slate-200 shadow;
-}
-
-/* Sticky-бар на мобиле */
-.sticky-cta {
-  @apply fixed bottom-3 inset-x-3 z-40 flex gap-3 rounded-2xl bg-white/90 backdrop-blur-xs p-3 border border-slate-200 shadow-soft md:hidden;
+.btn-outline {
+  @apply border border-slate-300 bg-white hover:bg-slate-50;
 }
