@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact — BotMatic</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="contact">
+  <header class="topbar">
+    <div class="container row between center">
+      <a href="index.html" class="brand"><span class="brand-mark">🤖</span><span class="brand-name">BotMatic</span></a>
+      <nav class="nav">
+        <a href="index.html" class="nav-link" data-i18n="nav.home">Home</a>
+        <a href="sectors.html" class="nav-link" data-i18n="nav.sectors">Sectoren</a>
+        <a href="pricing.html" class="nav-link" data-i18n="nav.pricing">Tarieven</a>
+        <a href="about.html" class="nav-link" data-i18n="nav.about">Over ons</a>
+        <a href="contact.html" class="nav-link active btn btn-outline" data-i18n="nav.contact">Contact</a>
+      </nav>
+      <div class="lang-switch">
+        <button class="lang-btn" data-lang="nl">NL</button>
+        <button class="lang-btn" data-lang="ru">RU</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container grid-2">
+      <div>
+        <h1 class="section-title" data-i18n="contact.title">Contact</h1>
+        <p class="section-sub" data-i18n="contact.subtitle">Stel een vraag of vraag een demo aan. We antwoorden snel.</p>
+        <div class="contact-ways">
+          <a class="pill-link" href="https://wa.me/32400000000">WhatsApp</a>
+          <a class="pill-link" href="mailto:sales@botmatic.be">sales@botmatic.be</a>
+        </div>
+      </div>
+
+      <form id="leadForm" class="form">
+        <label><span data-i18n="form.name">Naam</span><input type="text" name="name" required placeholder="Jouw naam" /></label>
+        <label><span data-i18n="form.email">E-mail</span><input type="email" name="email" required placeholder="naam@bedrijf.be" /></label>
+        <label>
+          <span data-i18n="form.sector">Sector</span>
+          <select name="sector">
+            <option>Beauty</option><option>Garage</option><option>Restaurant</option>
+            <option>Real Estate</option><option>Cleaning</option><option>Other</option>
+          </select>
+        </label>
+        <label><span data-i18n="form.msg">Bericht</span><textarea name="message" rows="3" placeholder="Wat wil je automatiseren?"></textarea></label>
+        <label class="check"><input type="checkbox" required /><span data-i18n="form.gdpr">Ik ga akkoord met verwerking volgens GDPR.</span></label>
+        <button class="btn btn-primary" type="submit" data-i18n="form.submit">Verstuur</button>
+        <p class="form-note" data-i18n="form.note">Door te verzenden ga je akkoord met onze voorwaarden en privacy.</p>
+      </form>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container row between start">
+      <div>
+        <div class="brand small"><span class="brand-mark">🤖</span><span class="brand-name">BotMatic</span></div>
+        <p class="muted">© <span id="year"></span> BotMatic</p>
+      </div>
+      <div class="footer-links">
+        <a href="pricing.html" data-i18n="nav.pricing">Tarieven</a>
+        <a href="about.html" data-i18n="nav.about">Over ons</a>
+        <a href="contact.html" data-i18n="nav.contact">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <a class="wa-fab" href="https://wa.me/32400000000">WA</a>
+  <div id="cookieBar" class="cookie">
+    <div class="container row between center">
+      <p class="cookie-text" data-i18n="cookie.text">We gebruiken cookies om je ervaring te verbeteren. Door verder te gaan, ga je akkoord.</p>
+      <div class="row gap">
+        <button class="btn btn-ghost" id="cookieDecline" data-i18n="cookie.decline">Weigeren</button>
+        <button class="btn btn-primary" id="cookieAccept" data-i18n="cookie.accept">Akkoord</button>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

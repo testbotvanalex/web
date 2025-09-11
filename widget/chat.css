@@ -1,0 +1,62 @@
+/* Floating Action Button (FAB) */
+#bm-chat-fab{
+  position: fixed;
+  right: 18px;
+  bottom: 96px; /* leave space for potential WhatsApp button */
+  z-index: 99999;
+  width: 56px;
+  height: 56px;
+  border-radius: 9999px;
+  background: #22c55e;
+  color: white;
+  border: none;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  cursor: pointer;
+  transition: transform .15s ease, background-color .2s ease;
+}
+#bm-chat-fab:hover{ transform: translateY(-2px); }
+
+/* Chat panel */
+#bm-chat{
+  position: fixed;
+  right: 90px;
+  bottom: 96px;
+  z-index: 99998;
+  width: 360px;
+  max-width: 90vw;
+  height: 520px;
+  max-height: 75vh;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.18);
+  display: none;
+  overflow: hidden;
+}
+
+/* Header */
+#bm-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 12px;border-bottom:1px solid #e2e8f0;background:#f8fafc;font-weight:800
+}
+#bm-head .title{display:flex;align-items:center;gap:8px}
+#bm-head .title .dot{width:8px;height:8px;border-radius:50%;background:#22c55e}
+
+/* Messages */
+#bm-msgs{height:calc(100% - 120px);overflow:auto;padding:12px;background:#fff}
+.bm-row{display:flex;margin:8px 0}
+.bm-user{justify-content:flex-end}
+.bm-bot{justify-content:flex-start}
+.bm-bubble{max-width:78%;padding:10px 12px;border-radius:14px;border:1px solid #e2e8f0;line-height:1.45}
+.bm-user .bm-bubble{background:#eef2ff}
+.bm-bot .bm-bubble{background:#f8fafc}
+
+/* Quick replies */
+#bm-quick{display:flex;flex-wrap:wrap;gap:8px;padding:8px 12px;border-top:1px solid #e2e8f0;background:#fbfdff}
+.bm-chip{border:1px solid #e2e8f0;background:#fff;padding:6px 10px;border-radius:999px;cursor:pointer}
+.bm-chip:hover{background:#f1f5f9}
+
+/* Input */
+#bm-input{display:flex;gap:8px;padding:10px;border-top:1px solid #e2e8f0;background:#fff}
+#bm-input input{flex:1;padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px}
+#bm-input button{background:#4f46e5;color:#fff;border:0;border-radius:12px;padding:10px 14px;cursor:pointer}

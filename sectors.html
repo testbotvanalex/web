@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sectoren — BotMatic</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="sectors">
+  <header class="topbar">
+    <div class="container row between center">
+      <a href="index.html" class="brand"><span class="brand-mark">🤖</span><span class="brand-name">BotMatic</span></a>
+      <nav class="nav">
+        <a href="index.html" class="nav-link" data-i18n="nav.home">Home</a>
+        <a href="sectors.html" class="nav-link active" data-i18n="nav.sectors">Sectoren</a>
+        <a href="pricing.html" class="nav-link" data-i18n="nav.pricing">Tarieven</a>
+        <a href="about.html" class="nav-link" data-i18n="nav.about">Over ons</a>
+        <a href="contact.html" class="nav-link btn btn-outline" data-i18n="nav.contact">Contact</a>
+      </nav>
+      <div class="lang-switch">
+        <button class="lang-btn" data-lang="nl">NL</button>
+        <button class="lang-btn" data-lang="ru">RU</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container">
+      <h1 class="section-title" data-i18n="sectors.title">Sectoren</h1>
+      <p class="section-sub" data-i18n="sectors.subtitle">Kant-en-klare flows per niche — direct inzetbaar.</p>
+
+      <div class="cards grid-3">
+        <article class="card">
+          <h3>Beauty & Spa</h3>
+          <p data-i18n="sectors.beauty">Automatische intake + afspraakplanning, diagnose-flow, upsell behandelingen.</p>
+          <div class="card-cta">
+            <a href="pricing.html" class="btn btn-small btn-primary" data-i18n="btn.demo">Vraag demo</a>
+            <a href="pricing.html" class="btn btn-small btn-outline" data-i18n="btn.pricing">Tarieven</a>
+          </div>
+        </article>
+        <article class="card">
+          <h3>Garage & Auto</h3>
+          <p data-i18n="sectors.garage">Offerte-aanvragen, check-in voor service, voorraadvragen, proefritten.</p>
+          <div class="card-cta">
+            <a href="pricing.html" class="btn btn-small btn-primary" data-i18n="btn.demo">Vraag demo</a>
+            <a href="pricing.html" class="btn btn-small btn-outline" data-i18n="btn.pricing">Tarieven</a>
+          </div>
+        </article>
+        <article class="card">
+          <h3>Restaurants</h3>
+          <p data-i18n="sectors.restaurant">Reserveren, menukaart, allergenen, no-show reductie via reminders.</p>
+          <div class="card-cta">
+            <a href="pricing.html" class="btn btn-small btn-primary" data-i18n="btn.demo">Vraag demo</a>
+            <a href="pricing.html" class="btn btn-small btn-outline" data-i18n="btn.pricing">Tarieven</a>
+          </div>
+        </article>
+        <article class="card">
+          <h3>Real Estate</h3>
+          <p data-i18n="sectors.re">Leads kwalificeren, afspraken voor bezichtiging, FAQ over dossiers.</p>
+          <div class="card-cta">
+            <a href="pricing.html" class="btn btn-small btn-primary" data-i18n="btn.demo">Vraag demo</a>
+            <a href="pricing.html" class="btn btn-small btn-outline" data-i18n="btn.pricing">Tarieven</a>
+          </div>
+        </article>
+        <article class="card">
+          <h3>Cleaning</h3>
+          <p data-i18n="sectors.cleaning">Schoonmaak aanvragen, prijsinschatting via vragenboom, routes.</p>
+          <div class="card-cta">
+            <a href="pricing.html" class="btn btn-small btn-primary" data-i18n="btn.demo">Vraag demo</a>
+            <a href="pricing.html" class="btn btn-small btn-outline" data-i18n="btn.pricing">Tarieven</a>
+          </div>
+        </article>
+        <article class="card">
+          <h3>Andere</h3>
+          <p data-i18n="sectors.other">We bouwen flows op maat: support, sales, back-office integraties.</p>
+          <div class="card-cta">
+            <a href="pricing.html" class="btn btn-small btn-primary" data-i18n="btn.demo">Vraag demo</a>
+            <a href="pricing.html" class="btn btn-small btn-outline" data-i18n="btn.pricing">Tarieven</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container row between start">
+      <div>
+        <div class="brand small"><span class="brand-mark">🤖</span><span class="brand-name">BotMatic</span></div>
+        <p class="muted">© <span id="year"></span> BotMatic</p>
+      </div>
+      <div class="footer-links">
+        <a href="pricing.html" data-i18n="nav.pricing">Tarieven</a>
+        <a href="about.html" data-i18n="nav.about">Over ons</a>
+        <a href="contact.html" data-i18n="nav.contact">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <a class="wa-fab" href="https://wa.me/32400000000">WA</a>
+  <div id="cookieBar" class="cookie">
+    <div class="container row between center">
+      <p class="cookie-text" data-i18n="cookie.text">We gebruiken cookies om je ervaring te verbeteren. Door verder te gaan, ga je akkoord.</p>
+      <div class="row gap">
+        <button class="btn btn-ghost" id="cookieDecline" data-i18n="cookie.decline">Weigeren</button>
+        <button class="btn btn-primary" id="cookieAccept" data-i18n="cookie.accept">Akkoord</button>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

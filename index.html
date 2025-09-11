@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BotMatic — Chatbots voor groei</title>
+  <meta name="description" content="AI-chatbots voor WhatsApp, Telegram en website. Verhoog conversie en automatiseer afspraken." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="favicon.ico" />
+</head>
+<body data-page="home">
+  <header class="topbar">
+    <div class="container row between center">
+      <a href="index.html" class="brand"><span class="brand-mark">🤖</span><span class="brand-name">BotMatic</span></a>
+      <nav class="nav">
+        <a href="index.html" class="nav-link" data-i18n="nav.home">Home</a>
+        <a href="sectors.html" class="nav-link" data-i18n="nav.sectors">Sectoren</a>
+        <a href="pricing.html" class="nav-link" data-i18n="nav.pricing">Tarieven</a>
+        <a href="about.html" class="nav-link" data-i18n="nav.about">Over ons</a>
+        <a href="contact.html" class="nav-link btn btn-outline" data-i18n="nav.contact">Contact</a>
+      </nav>
+      <div class="lang-switch">
+        <button class="lang-btn" data-lang="nl">NL</button>
+        <button class="lang-btn" data-lang="ru">RU</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero hero-center">
+    <div class="container">
+      <h1 data-i18n="home.title">Chatbots die leads omzetten in klanten</h1>
+      <p class="sub" data-i18n="home.subtitle">
+        WhatsApp, Telegram en website — één premium assistent die 24/7 verkoopt en afspraken plant.
+      </p>
+      <div class="cta center">
+        <a href="pricing.html" class="btn btn-primary" data-i18n="home.ctaPrimary">Probeer gratis</a>
+        <a href="sectors.html" class="btn btn-ghost" data-i18n="home.ctaSecondary">Bekijk sectoren</a>
+      </div>
+      <div class="hero-bullets">
+        <span class="pill" data-i18n="home.b1">2 weken gratis</span>
+        <span class="pill" data-i18n="home.b2">GDPR-proof</span>
+        <span class="pill" data-i18n="home.b3">Multi-taal</span>
+      </div>
+      <div class="hero-card mini">
+        <div class="hero-card-header"><strong data-i18n="home.compareTitle">Zonder bot vs. Met bot</strong></div>
+        <div class="compare compact">
+          <div>
+            <ul class="list-bad">
+              <li data-i18n="home.w1">Gemiste berichten ’s avonds</li>
+              <li data-i18n="home.w2">Trage reactie → verlies van lead</li>
+            </ul>
+          </div>
+          <div>
+            <ul class="list-good">
+              <li data-i18n="home.g1">Instant antwoord 24/7</li>
+              <li data-i18n="home.g2">Automatische planning & reminders</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="home-ctas">
+        <a href="pricing.html#standard" class="btn btn-outline" data-i18n="home.bestPlan">Meest gekozen: Standard</a>
+        <a href="contact.html" class="btn btn-outline" data-i18n="home.demo">Vraag demo</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container row between start">
+      <div>
+        <div class="brand small"><span class="brand-mark">🤖</span><span class="brand-name">BotMatic</span></div>
+        <p class="muted">© <span id="year"></span> BotMatic — All rights reserved.</p>
+      </div>
+      <div class="footer-links">
+        <a href="pricing.html" data-i18n="nav.pricing">Tarieven</a>
+        <a href="about.html" data-i18n="nav.about">Over ons</a>
+        <a href="contact.html" data-i18n="nav.contact">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <a class="wa-fab" href="https://wa.me/32400000000" aria-label="WhatsApp">WA</a>
+  <div id="cookieBar" class="cookie">
+    <div class="container row between center">
+      <p class="cookie-text" data-i18n="cookie.text">We gebruiken cookies om je ervaring te verbeteren. Door verder te gaan, ga je akkoord.</p>
+      <div class="row gap">
+        <button class="btn btn-ghost" id="cookieDecline" data-i18n="cookie.decline">Weigeren</button>
+        <button class="btn btn-primary" id="cookieAccept" data-i18n="cookie.accept">Akkoord</button>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

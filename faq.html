@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <title>BotMatic — FAQ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="widget/chat.css" />
+  <script defer src="script.js"></script>
+</head>
+<body data-lang="nl">
+  <header class="site-header">
+    <nav class="nav container">
+      <a class="logo" href="index.html"><img src="assets/logo.svg" class="logo-img" alt="BotMatic" /><span>BotMatic</span></a>
+      <div class="links">
+        <a href="index.html" data-i18n="nav_home">Home</a>
+        <a href="sectors.html" data-i18n="nav_sectors">Sectoren</a>
+        <a href="pricing.html" data-i18n="nav_pricing">Tarieven</a>
+        <a href="how.html" data-i18n="nav_how">How it works</a>
+        <a href="faq.html" class="active" data-i18n="nav_faq">FAQ</a>
+        <a href="about.html" data-i18n="nav_about">Over ons</a>
+        <a href="contact.html" data-i18n="nav_contact">Contact</a>
+        <a href="blog.html" data-i18n="nav_blog">Blog</a>
+      </div>
+      <div class="lang-switch"><button data-lang="nl">NL</button><button data-lang="fr">FR</button><button data-lang="en">EN</button></div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1 data-i18n="faq_h1">Veelgestelde vragen</h1>
+    <div class="faq">
+      <details open>
+        <summary data-i18n="fq1_q">Hoe snel zijn we live?</summary>
+        <p data-i18n="fq1_a">Binnen 7 dagen na intake en aanlevering gegevens.</p>
+      </details>
+      <details>
+        <summary data-i18n="fq2_q">Wat moet ik aanleveren?</summary>
+        <p data-i18n="fq2_a">BTW-nummer/KvK, bedrijfsnaam, WhatsApp-nummer (indien Basic+), logo en openingsuren.</p>
+      </details>
+      <details>
+        <summary data-i18n="fq3_q">Zijn berichten onbeperkt?</summary>
+        <p data-i18n="fq3_a">Ja, fair-use. WhatsApp rekent conversaties volgens Meta-tarieven (niet inbegrepen).</p>
+      </details>
+      <details>
+        <summary data-i18n="fq4_q">Kan ik maandelijks opzeggen?</summary>
+        <p data-i18n="fq4_a">Ja, contract is maandelijks opzegbaar.</p>
+      </details>
+    </div>
+  </main>
+
+  <footer class="site-footer"><div class="container">© <span id="year"></span> BotMatic</div></footer>
+
+  <script defer src="widget/chat.js"></script>
+</body>
+</html>

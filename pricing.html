@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tarieven — BotMatic</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="pricing">
+  <header class="topbar">
+    <div class="container row between center">
+      <a href="index.html" class="brand"><span class="brand-mark">🤖</span><span class="brand-name">BotMatic</span></a>
+      <nav class="nav">
+        <a href="index.html" class="nav-link" data-i18n="nav.home">Home</a>
+        <a href="sectors.html" class="nav-link" data-i18n="nav.sectors">Sectoren</a>
+        <a href="pricing.html" class="nav-link active" data-i18n="nav.pricing">Tarieven</a>
+        <a href="about.html" class="nav-link" data-i18n="nav.about">Over ons</a>
+        <a href="contact.html" class="nav-link btn btn-outline" data-i18n="nav.contact">Contact</a>
+      </nav>
+      <div class="lang-switch">
+        <button class="lang-btn" data-lang="nl">NL</button>
+        <button class="lang-btn" data-lang="ru">RU</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container">
+      <h1 class="section-title" data-i18n="pricing.title">Tarieven</h1>
+      <p class="section-sub" data-i18n="pricing.subtitle">Start in minuten. Annuleren kan maandelijks. 2 weken gratis.</p>
+
+      <div class="pricing grid-3">
+        <article class="price-card" id="basic">
+          <div class="price-head">
+            <span class="badge" data-i18n="pricing.basic">Basic</span>
+            <div class="price"><span class="cur">€</span><span class="num">29</span><span class="per">/m</span></div>
+          </div>
+          <ul class="features">
+            <li data-i18n="pricing.f1">Website-widget</li>
+            <li data-i18n="pricing.f2">WhatsApp ontvangst</li>
+            <li data-i18n="pricing.f3">Standaard FAQ</li>
+            <li data-i18n="pricing.f4">E-mail lead export</li>
+          </ul>
+          <div class="price-cta">
+            <a href="https://wa.me/32400000000" class="btn btn-primary" data-i18n="btn.whatsapp">WhatsApp</a>
+            <a href="contact.html" class="btn btn-outline" data-i18n="btn.try">Probeer gratis</a>
+          </div>
+        </article>
+
+        <article class="price-card featured" id="standard">
+          <div class="price-head">
+            <span class="badge gold" data-i18n="pricing.standard">Standard</span>
+            <div class="price"><span class="cur">€</span><span class="num">99</span><span class="per">/m</span></div>
+          </div>
+          <ul class="features">
+            <li data-i18n="pricing.s1">WhatsApp + Telegram</li>
+            <li data-i18n="pricing.s2">Afspraken & reminders</li>
+            <li data-i18n="pricing.s3">Meertalige flows</li>
+            <li data-i18n="pricing.s4">Basis integraties (Google Sheet)</li>
+          </ul>
+          <div class="price-cta">
+            <a href="https://wa.me/32400000000" class="btn btn-primary" data-i18n="btn.whatsapp">WhatsApp</a>
+            <a href="contact.html" class="btn btn-outline" data-i18n="btn.try">Probeer gratis</a>
+          </div>
+          <div class="ribbon" data-i18n="pricing.best">Meest gekozen</div>
+        </article>
+
+        <article class="price-card" id="premium">
+          <div class="price-head">
+            <span class="badge" data-i18n="pricing.premium">Premium</span>
+            <div class="price"><span class="cur">€</span><span class="num">299</span><span class="per">/m</span></div>
+          </div>
+          <ul class="features">
+            <li data-i18n="pricing.p1">Volledige automatisering</li>
+            <li data-i18n="pricing.p2">Custom integraties (CRM/Payments)</li>
+            <li data-i18n="pricing.p3">Prioritaire support</li>
+            <li data-i18n="pricing.p4">Setup inbegrepen</li>
+          </ul>
+          <div class="price-cta">
+            <a href="https://wa.me/32400000000" class="btn btn-primary" data-i18n="btn.whatsapp">WhatsApp</a>
+            <a href="contact.html" class="btn btn-outline" data-i18n="btn.try">Probeer gratis</a>
+          </div>
+        </article>
+      </div>
+
+      <p class="footnote" data-i18n="pricing.note">* Prijzen excl. BTW. WhatsApp-nummers en verkeer kunnen extra kosten hebben.</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container row between start">
+      <div>
+        <div class="brand small"><span class="brand-mark">🤖</span><span class="brand-name">BotMatic</span></div>
+        <p class="muted">© <span id="year"></span> BotMatic</p>
+      </div>
+      <div class="footer-links">
+        <a href="pricing.html" data-i18n="nav.pricing">Tarieven</a>
+        <a href="about.html" data-i18n="nav.about">Over ons</a>
+        <a href="contact.html" data-i18n="nav.contact">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <a class="wa-fab" href="https://wa.me/32400000000">WA</a>
+  <div id="cookieBar" class="cookie">
+    <div class="container row between center">
+      <p class="cookie-text" data-i18n="cookie.text">We gebruiken cookies om je ervaring te verbeteren. Door verder te gaan, ga je akkoord.</p>
+      <div class="row gap">
+        <button class="btn btn-ghost" id="cookieDecline" data-i18n="cookie.decline">Weigeren</button>
+        <button class="btn btn-primary" id="cookieAccept" data-i18n="cookie.accept">Akkoord</button>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
