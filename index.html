@@ -1,95 +1,141 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BotMatic — Chatbots voor groei</title>
-  <meta name="description" content="AI-chatbots voor WhatsApp, Telegram en website. Verhoog conversie en automatiseer afspraken." />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" href="favicon.ico" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BotMatic — Chatbots voor bedrijven</title>
+  <meta name="description" content="Boekingen in 1 klik. WhatsApp, Instagram, Messenger & website — intake, afspraken en betalingen automatisch. Plan een demo." />
+  <!-- Критично малый CSS одним файлом -->
+  <link rel="preload" href="./styles.css" as="style" />
+  <link rel="stylesheet" href="./styles.css" />
+  <!-- Подсказки браузеру: ничего внешнего не грузим (шрифты — системные) -->
 </head>
-<body data-page="home">
+<body>
+  <!-- Topbar -->
   <header class="topbar">
-    <div class="container row between center">
-      <a href="index.html" class="brand"><span class="brand-mark">🤖</span><span class="brand-name">BotMatic</span></a>
-      <nav class="nav">
-        <a href="index.html" class="nav-link" data-i18n="nav.home">Home</a>
-        <a href="sectors.html" class="nav-link" data-i18n="nav.sectors">Sectoren</a>
-        <a href="pricing.html" class="nav-link" data-i18n="nav.pricing">Tarieven</a>
-        <a href="about.html" class="nav-link" data-i18n="nav.about">Over ons</a>
-        <a href="contact.html" class="nav-link btn btn-outline" data-i18n="nav.contact">Contact</a>
+    <div class="container nav">
+      <a class="logo" href="./index.html">BotMatic</a>
+      <nav class="menu">
+        <a href="./index.html" aria-current="page">Home</a>
+        <a href="./sectors.html">Sectoren</a>
+        <a href="./pricing.html">Tarieven</a>
+        <a href="./about.html">Over ons</a>
+        <a href="./contact.html">Contact</a>
       </nav>
-      <div class="lang-switch">
-        <button class="lang-btn" data-lang="nl">NL</button>
-        <button class="lang-btn" data-lang="ru">RU</button>
-      </div>
+      <div class="actions"><a class="btn btn-cta" href="./contact.html">Plan een demo</a></div>
     </div>
   </header>
 
-  <section class="hero hero-center">
-    <div class="container">
-      <h1 data-i18n="home.title">Chatbots die leads omzetten in klanten</h1>
-      <p class="sub" data-i18n="home.subtitle">
-        WhatsApp, Telegram en website — één premium assistent die 24/7 verkoopt en afspraken plant.
-      </p>
-      <div class="cta center">
-        <a href="pricing.html" class="btn btn-primary" data-i18n="home.ctaPrimary">Probeer gratis</a>
-        <a href="sectors.html" class="btn btn-ghost" data-i18n="home.ctaSecondary">Bekijk sectoren</a>
+  <!-- HERO: текст + CTA. Никаких тяжелых фонов -->
+  <section class="hero container reveal hero-min hero-min--compact">
+    <div class="min-copy">
+      <h1>Boekingen in 1 klik.</h1>
+      <p class="sub">Minder stappen → meer klanten. WhatsApp, Instagram, Messenger & website — intake, afspraken en betalingen <b>automatisch</b>.</p>
+
+      <div class="cta-row">
+        <a class="btn btn-cta" href="./contact.html">Plan een demo</a>
+        <a class="btn btn-outline-dark" href="./pricing.html">Bekijk tarieven</a>
       </div>
-      <div class="hero-bullets">
-        <span class="pill" data-i18n="home.b1">2 weken gratis</span>
-        <span class="pill" data-i18n="home.b2">GDPR-proof</span>
-        <span class="pill" data-i18n="home.b3">Multi-taal</span>
-      </div>
-      <div class="hero-card mini">
-        <div class="hero-card-header"><strong data-i18n="home.compareTitle">Zonder bot vs. Met bot</strong></div>
-        <div class="compare compact">
-          <div>
-            <ul class="list-bad">
-              <li data-i18n="home.w1">Gemiste berichten ’s avonds</li>
-              <li data-i18n="home.w2">Trage reactie → verlies van lead</li>
-            </ul>
-          </div>
-          <div>
-            <ul class="list-good">
-              <li data-i18n="home.g1">Instant antwoord 24/7</li>
-              <li data-i18n="home.g2">Automatische planning & reminders</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="home-ctas">
-        <a href="pricing.html#standard" class="btn btn-outline" data-i18n="home.bestPlan">Meest gekozen: Standard</a>
-        <a href="contact.html" class="btn btn-outline" data-i18n="home.demo">Vraag demo</a>
+
+      <ul class="metrics metrics--sm">
+        <li>+23% conversie</li>
+        <li>−40% no-shows</li>
+        <li>Live binnen 3 dagen</li>
+      </ul>
+
+      <!-- Каналы с легкими inline-иконками (SVG tiny) -->
+      <div class="channels channels--tight">
+        <span class="tag"><span class="icon wa" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 8.6 15l-1 3.7-3.7-1A10 10 0 0 1 12 2Zm3.8 6.2c-.3-.7-.6-.7-1-.7h-.8c-.2 0-.6.1-.9.5-.3.3-1 1-1 2.5s1.2 3 2.7 3.9c1.3.8 2 .8 2.3.7.3 0 1.1-.5 1.3-1 .2-.6.2-1 .1-1.1-.1-.1-.3-.2-.7-.4s-1.1-.5-1.2-.6c-.2-.1-.4-.1-.6.2-.2.3-.7 1-1 .9-.3 0-.7-.3-1.3-1-.7-.8-.9-1.4-1-1.6-.1-.2 0-.4.1-.5.1-.1.3-.3.4-.5.1-.2.1-.3.2-.5 0-.1 0-.4-.1-.6Z"/></svg></span>WhatsApp</span>
+        <span class="dot">•</span>
+        <span class="tag"><span class="icon ig" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm5 4a6 6 0 1 0 0 12 6 6 0 0 0 0-12Zm0 2.2a3.8 3.8 0 1 1 0 7.6 3.8 3.8 0 0 1 0-7.6Zm6-1.7a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Z"/></svg></span>Instagram</span>
+        <span class="dot">•</span>
+        <span class="tag"><span class="icon ms" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2 4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H8l-5 5v-5H4a2 2 0 0 1-2-2V4Zm2 0v11h16V4H4Z"/></svg></span>Messenger</span>
+        <span class="dot">•</span>
+        <span class="tag"><span class="icon tg" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21.5 3.5 2.9 11.1c-1 .4-.9 1.8.1 2l4.7 1.2 1.7 5.2c.3 1 1.6 1.1 2 .1l2.5-5.3 5 3.7c.9.7 2.2.2 2.4-1l2-12.2c.2-1.1-.9-2-1.9-1.7Z"/></svg></span>Telegram</span>
       </div>
     </div>
   </section>
 
-  <footer class="footer">
-    <div class="container row between start">
-      <div>
-        <div class="brand small"><span class="brand-mark">🤖</span><span class="brand-name">BotMatic</span></div>
-        <p class="muted">© <span id="year"></span> BotMatic — All rights reserved.</p>
+  <!-- Секции (контент лёгкий, без изображений) -->
+  <section class="container ba ba--compact reveal">
+    <div class="ba-card">
+      <h3>Before</h3>
+      <ul>
+        <li>Gemiste berichten buiten kantooruren</li>
+        <li>Trage intake en repetitieve vragen</li>
+        <li>Geen structuur in leads</li>
+      </ul>
+    </div>
+    <div class="ba-card after">
+      <h3>After</h3>
+      <ul>
+        <li>24/7 antwoord en kwalificatie</li>
+        <li>Automatische afspraken &amp; betalingen</li>
+        <li>Netjes in CRM / e-mail</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="container reveal sectors">
+    <h2 class="section-title">Sectoren</h2>
+    <div class="sector">
+      <div class="sector-head"><div class="pill">Auto</div><h3>Meer werkplaats-boekingen</h3></div>
+      <div class="sector-grid">
+        <div class="sector-card"><h4>Zonder bot</h4><ul><li>Geen antwoord na sluitingstijd</li><li>Lange intake → afhakers</li><li>Geen structuur</li></ul></div>
+        <div class="sector-card pos"><h4>Met BotMatic</h4><ul><li>WhatsApp intake 24/7</li><li>Bevestiging + reminders</li><li>Agenda/CRM koppeling</li></ul></div>
       </div>
-      <div class="footer-links">
-        <a href="pricing.html" data-i18n="nav.pricing">Tarieven</a>
-        <a href="about.html" data-i18n="nav.about">Over ons</a>
-        <a href="contact.html" data-i18n="nav.contact">Contact</a>
+    </div>
+    <div class="sector">
+      <div class="sector-head"><div class="pill">Beauty</div><h3>Minder gaten in de agenda</h3></div>
+      <div class="sector-grid">
+        <div class="sector-card"><h4>Zonder bot</h4><ul><li>DM’s blijven liggen</li><li>Veel herhaalvragen</li><li>Late afzeggingen</li></ul></div>
+        <div class="sector-card pos"><h4>Met BotMatic</h4><ul><li>Antwoord op IG/Messenger</li><li>1-klik bevestiging</li><li>−40% no-shows</li></ul></div>
       </div>
+    </div>
+    <div class="sector">
+      <div class="sector-head"><div class="pill">Horeca</div><h3>Reserveringen zonder telefoon</h3></div>
+      <div class="sector-grid">
+        <div class="sector-card"><h4>Zonder bot</h4><ul><li>Langzame e-mail</li><li>Gemiste terugbelletjes</li><li>Geen data</li></ul></div>
+        <div class="sector-card pos"><h4>Met BotMatic</h4><ul><li>Tafel in 30 sec</li><li>Bevestiging + upsell</li><li>Klantprofiel (GDPR)</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mini-FAQ на <details> (0 JS) -->
+  <section class="container reveal faq">
+    <h2 class="section-title">FAQ</h2>
+    <div class="faq-list">
+      <details><summary>Hoe snel kunnen we live?</summary><div>Standaard flows vaak binnen <b>3 werkdagen</b>.</div></details>
+      <details><summary>Welke kanalen?</summary><div>WhatsApp, Instagram, Messenger, Telegram en website-widget.</div></details>
+      <details><summary>GDPR?</summary><div>Minimale data, duidelijke toestemming, EU-hosting. Zie <a href="./privacy.html">Privacy &amp; GDPR</a>.</div></details>
+      <details><summary>Kosten?</summary><div>Plannen vanaf <b>€29/m</b> — zie <a href="./pricing.html">Tarieven</a>.</div></details>
+    </div>
+    <div class="faq-cta"><a class="btn btn-cta" href="./contact.html">Plan een demo</a></div>
+  </section>
+
+  <footer class="foot">
+    <div class="container foot-inner">
+      <span>© <span id="year"></span> BotMatic</span>
+      <a href="./privacy.html">Privacy & GDPR</a>
     </div>
   </footer>
 
-  <a class="wa-fab" href="https://wa.me/32400000000" aria-label="WhatsApp">WA</a>
-  <div id="cookieBar" class="cookie">
-    <div class="container row between center">
-      <p class="cookie-text" data-i18n="cookie.text">We gebruiken cookies om je ervaring te verbeteren. Door verder te gaan, ga je akkoord.</p>
-      <div class="row gap">
-        <button class="btn btn-ghost" id="cookieDecline" data-i18n="cookie.decline">Weigeren</button>
-        <button class="btn btn-primary" id="cookieAccept" data-i18n="cookie.accept">Akkoord</button>
-      </div>
-    </div>
+  <!-- Sticky CTA (mobile) -->
+  <div class="sticky-cta">
+    <a href="./contact.html" class="btn btn-cta" style="width:100%;justify-content:center;">Plan een demo</a>
   </div>
-  <script src="script.js"></script>
+
+  <!-- Мини-bootstrap JS: reveal + год + отложенная загрузка чата -->
+  <script defer src="./script.js"></script>
+  <!-- Чат грузим лениво после idle/взаимодействия, чтобы не мешать LCP -->
+  <script>
+    const loadChat = () => {
+      if (window.__bmChatLoaded) return; window.__bmChatLoaded = true;
+      const s = document.createElement('script'); s.src = './widget/chat.js'; s.async = true; document.body.appendChild(s);
+      const c = document.createElement('link'); c.rel='stylesheet'; c.href='./widget/chat.css'; document.head.appendChild(c);
+    };
+    (window.requestIdleCallback? requestIdleCallback(loadChat): setTimeout(loadChat, 1500));
+    addEventListener('pointerdown', loadChat, {once:true});
+  </script>
 </body>
 </html>
