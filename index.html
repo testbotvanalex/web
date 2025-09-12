@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>BotMatic — Chatbots voor bedrijven</title>
-  <meta name="description" content="Boekingen in 1 klik. WhatsApp, Instagram, Messenger & website — intake, afspraken en betalingen automatisch. Plan een demo." />
-  <link rel="stylesheet" href="./styles.css" />
-  <link rel="stylesheet" href="./widget/chat.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>BotMatic — Chatbots voor WhatsApp, Instagram & Messenger</title>
+  <meta name="description" content="Chatbots die meteen antwoorden via WhatsApp, Instagram & Messenger. Automatiseer intake, afspraken en betalingen. Minder stappen → meer klanten.">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0c0f1a" media="(prefers-color-scheme: dark)">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./widget/chat.css">
 </head>
 <body>
-  <!-- Topbar (compact) -->
+  <!-- Topbar -->
   <header class="topbar">
     <div class="container nav">
       <a class="logo" href="./index.html">BotMatic</a>
@@ -21,63 +23,85 @@
         <a href="./faq.html">FAQ</a>
         <a href="./contact.html">Contact</a>
       </nav>
-      <div class="actions"><a class="btn btn-cta" href="./contact.html">Plan een demo</a></div>
+      <div class="actions">
+        <a class="btn btn-cta" href="./contact.html">Plan een demo</a>
+      </div>
+      <button class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mnav">☰</button>
     </div>
+    <nav id="mnav" class="menu-mobile">
+      <a href="./index.html">Home</a>
+      <a href="./sectors.html">Sectoren</a>
+      <a href="./pricing.html">Tarieven</a>
+      <a href="./about.html">Over ons</a>
+      <a href="./faq.html">FAQ</a>
+      <a href="./contact.html">Contact</a>
+      <a class="btn btn-cta" href="./contact.html">Plan een demo</a>
+    </nav>
   </header>
 
-  <!-- HERO (compact) -->
-  <section class="hero container reveal hero-min hero-min--compact">
-    <div class="min-copy">
-      <h1>Boekingen in 1 klik.</h1>
-      <p class="sub">Minder stappen → meer klanten. WhatsApp, Instagram, Messenger & website — intake, afspraken en betalingen <b>automatisch</b>.</p>
+  <!-- HERO -->
+  <section class="hero container reveal">
+    <div class="hero-wrap">
+      <p class="eyebrow">Sneller live • Minder frictie</p>
+      <h1>Chatbots voor WhatsApp, Instagram &amp; Messenger</h1>
+      <p class="lead">
+        Meteen antwoord, afspraken in 1 klik en betalingen — <strong>automatisch</strong>, meertalig en GDPR-proof.
+      </p>
+
+      <div class="channel-row">
+        <span class="chip"><span class="icon wa"></span>WhatsApp</span>
+        <span class="chip"><span class="icon ig"></span>Instagram</span>
+        <span class="chip"><span class="icon ms"></span>Messenger</span>
+        <span class="chip"><span class="icon tg"></span>Telegram</span>
+      </div>
 
       <div class="cta-row">
-        <a class="btn btn-cta" href="./contact.html">Plan een demo</a>
-        <a class="btn btn-outline-dark" href="./pricing.html">Bekijk tarieven</a>
+        <a class="btn btn-cta btn-lg" href="./contact.html">Plan een demo</a>
+        <a class="btn btn-outline btn-lg" href="./pricing.html">Bekijk tarieven</a>
       </div>
 
-      <ul class="metrics metrics--sm">
-        <li>+23% conversie</li>
-        <li>−40% no-shows</li>
-        <li>Live binnen 3 dagen</li>
+      <ul class="hero-bullets">
+        <li><b>24/7</b> reacties zonder wachttijd</li>
+        <li><b>−40&nbsp;%</b> no-shows door reminders</li>
+        <li><b>Live in 3 dagen</b> (standaardflows)</li>
       </ul>
-
-      <div class="channels channels--tight">
-        <span class="tag"><span class="icon wa" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 8.6 15l-1 3.7-3.7-1A10 10 0 0 1 12 2Zm3.8 6.2c-.3-.7-.6-.7-1-.7h-.8c-.2 0-.6.1-.9.5-.3.3-1 1-1 2.5s1.2 3 2.7 3.9c1.3.8 2 .8 2.3.7.3 0 1.1-.5 1.3-1 .2-.6.2-1 .1-1.1-.1-.1-.3-.2-.7-.4s-1.1-.5-1.2-.6c-.2-.1-.4-.1-.6.2-.2.3-.7 1-1 .9-.3 0-.7-.3-1.3-1-.7-.8-.9-1.4-1-1.6-.1-.2 0-.4.1-.5.1-.1.3-.3.4-.5.1-.2.1-.3.2-.5 0-.1 0-.4-.1-.6Z"/></svg>
-        </span>WhatsApp</span>
-        <span class="dot">•</span>
-        <span class="tag"><span class="icon ig" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm5 4a6 6 0 1 0 0 12 6 6 0 0 0 0-12Zm0 2.2a3.8 3.8 0 1 1 0 7.6 3.8 3.8 0 0 1 0-7.6Zm6-1.7a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Z"/></svg>
-        </span>Instagram</span>
-        <span class="dot">•</span>
-        <span class="tag"><span class="icon ms" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M2 4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H8l-5 5v-5H4a2 2 0 0 1-2-2V4Zm2 0v11h16V4H4Z"/></svg>
-        </span>Messenger</span>
-        <span class="dot">•</span>
-        <span class="tag"><span class="icon tg" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M21.5 3.5 2.9 11.1c-1 .4-.9 1.8.1 2l4.7 1.2 1.7 5.2c.3 1 1.6 1.1 2 .1l2.5-5.3 5 3.7c.9.7 2.2.2 2.4-1l2-12.2c.2-1.1-.9-2-1.9-1.7Z"/></svg>
-        </span>Telegram</span>
-      </div>
     </div>
   </section>
 
-  <!-- Before/After -->
-  <section class="container ba ba--compact reveal">
+  <!-- Value -->
+  <section class="container value reveal">
+    <div class="grid3">
+      <article class="card">
+        <h3>Altijd bereikbaar</h3>
+        <p>DM’s en chat direct beantwoord, ook buiten kantooruren.</p>
+      </article>
+      <article class="card">
+        <h3>Afspraken &amp; betalingen</h3>
+        <p>1-klik bevestiging, Stripe-aanbetaling optioneel, minder no-shows.</p>
+      </article>
+      <article class="card">
+        <h3>Meertalig &amp; GDPR</h3>
+        <p>NL/FR/EN standaard, minimale data, EU-hosting.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Before / After -->
+  <section class="container ba reveal">
     <div class="ba-card">
       <h3>Before</h3>
       <ul>
         <li>Gemiste berichten buiten kantooruren</li>
-        <li>Trage intake en repetitieve vragen</li>
-        <li>Geen structuur in leads</li>
+        <li>Trage intake en herhaalvragen</li>
+        <li>Leads verspreid over mail/DM</li>
       </ul>
     </div>
     <div class="ba-card after">
       <h3>After</h3>
       <ul>
-        <li>24/7 antwoord en kwalificatie</li>
+        <li>24/7 antwoord &amp; kwalificatie</li>
         <li>Automatische afspraken &amp; betalingen</li>
-        <li>Netjes in CRM / e-mail</li>
+        <li>Leads netjes in e-mail of CSV</li>
       </ul>
     </div>
   </section>
@@ -86,27 +110,35 @@
   <footer class="foot">
     <div class="container foot-inner">
       <span>© <span id="year"></span> BotMatic</span>
-      <a href="./privacy.html">Privacy & GDPR</a>
+      <nav>
+        <a href="./privacy.html">Privacy &amp; GDPR</a>
+        <a href="./contact.html">Contact</a>
+      </nav>
     </div>
   </footer>
 
-  <!-- Sticky CTA (mobile only) -->
+  <!-- Sticky CTA -->
   <div class="sticky-cta">
-    <a href="./contact.html" class="btn btn-cta" style="width:100%;justify-content:center;">
-      Plan een demo
-    </a>
+    <a href="./contact.html" class="btn btn-cta" style="width:100%;justify-content:center;">Plan een demo</a>
   </div>
 
-  <!-- Scripts -->
   <script defer src="./script.js"></script>
   <script>
+    // Лениво подключаем чат, чтобы не мешать LCP
     const loadChat = () => {
-      if (window.__bmChatLoaded) return; window.__bmChatLoaded = true;
-      const s = document.createElement('script'); s.src = './widget/chat.js'; s.async = true; document.body.appendChild(s);
-      const c = document.createElement('link'); c.rel='stylesheet'; c.href='./widget/chat.css'; document.head.appendChild(c);
+      if (window.__bmChatLoaded) return;
+      window.__bmChatLoaded = true;
+      const s = document.createElement('script');
+      s.src = './widget/chat.js';
+      s.async = true;
+      document.body.appendChild(s);
+      const c = document.createElement('link');
+      c.rel = 'stylesheet';
+      c.href = './widget/chat.css';
+      document.head.appendChild(c);
     };
-    (window.requestIdleCallback? requestIdleCallback(loadChat): setTimeout(loadChat, 1500));
-    addEventListener('pointerdown', loadChat, {once:true});
+    (window.requestIdleCallback ? requestIdleCallback(loadChat) : setTimeout(loadChat, 1200));
+    addEventListener('pointerdown', loadChat, { once: true });
   </script>
 </body>
 </html>
