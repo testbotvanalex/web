@@ -1,56 +1,104 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8" />
-  <title>BotMatic — FAQ</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="widget/chat.css" />
-  <script defer src="script.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FAQ — BotMatic</title>
+  <meta name="description" content="Veelgestelde vragen over BotMatic: kanalen, GDPR, doorlooptijd, prijzen en integraties." />
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./widget/chat.css" />
 </head>
-<body data-lang="nl">
-  <header class="site-header">
-    <nav class="nav container">
-      <a class="logo" href="index.html"><img src="assets/logo.svg" class="logo-img" alt="BotMatic" /><span>BotMatic</span></a>
-      <div class="links">
-        <a href="index.html" data-i18n="nav_home">Home</a>
-        <a href="sectors.html" data-i18n="nav_sectors">Sectoren</a>
-        <a href="pricing.html" data-i18n="nav_pricing">Tarieven</a>
-        <a href="how.html" data-i18n="nav_how">How it works</a>
-        <a href="faq.html" class="active" data-i18n="nav_faq">FAQ</a>
-        <a href="about.html" data-i18n="nav_about">Over ons</a>
-        <a href="contact.html" data-i18n="nav_contact">Contact</a>
-        <a href="blog.html" data-i18n="nav_blog">Blog</a>
-      </div>
-      <div class="lang-switch"><button data-lang="nl">NL</button><button data-lang="fr">FR</button><button data-lang="en">EN</button></div>
-    </nav>
+<body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="container nav">
+      <a class="logo" href="./index.html">BotMatic</a>
+      <nav class="menu">
+        <a href="./index.html">Home</a>
+        <a href="./sectors.html">Sectoren</a>
+        <a href="./pricing.html">Tarieven</a>
+        <a href="./about.html">Over ons</a>
+        <a href="./faq.html" aria-current="page">FAQ</a>
+        <a href="./contact.html">Contact</a>
+      </nav>
+      <div class="actions"><a class="btn btn-cta" href="./contact.html">Plan een demo</a></div>
+    </div>
   </header>
 
-  <main class="container">
-    <h1 data-i18n="faq_h1">Veelgestelde vragen</h1>
-    <div class="faq">
-      <details open>
-        <summary data-i18n="fq1_q">Hoe snel zijn we live?</summary>
-        <p data-i18n="fq1_a">Binnen 7 dagen na intake en aanlevering gegevens.</p>
-      </details>
-      <details>
-        <summary data-i18n="fq2_q">Wat moet ik aanleveren?</summary>
-        <p data-i18n="fq2_a">BTW-nummer/KvK, bedrijfsnaam, WhatsApp-nummer (indien Basic+), logo en openingsuren.</p>
-      </details>
-      <details>
-        <summary data-i18n="fq3_q">Zijn berichten onbeperkt?</summary>
-        <p data-i18n="fq3_a">Ja, fair-use. WhatsApp rekent conversaties volgens Meta-tarieven (niet inbegrepen).</p>
-      </details>
-      <details>
-        <summary data-i18n="fq4_q">Kan ik maandelijks opzeggen?</summary>
-        <p data-i18n="fq4_a">Ja, contract is maandelijks opzegbaar.</p>
-      </details>
-    </div>
+  <!-- Page header -->
+  <main class="container" style="padding:32px 16px;">
+    <h1 style="margin-bottom:8px;">FAQ</h1>
+    <p class="sub" style="margin-bottom:16px;">Korte en duidelijke antwoorden. Staat je vraag er niet tussen? <a href="./contact.html">Contacteer ons</a>.</p>
+
+    <!-- FAQ list -->
+    <section class="faq">
+      <div class="faq-list">
+        <details>
+          <summary>Hoe snel kunnen we live?</summary>
+          <div>Standaard flows (salon, horeca, auto) gaan meestal live binnen <b>3 werkdagen</b>. Complexere integraties (betalingen, CRM) duren iets langer.</div>
+        </details>
+
+        <details>
+          <summary>Welke kanalen ondersteunen jullie?</summary>
+          <div>WhatsApp, Instagram, Messenger, Telegram en een website-widget. Je kiest wat je nodig hebt; we kunnen later makkelijk uitbreiden.</div>
+        </details>
+
+        <details>
+          <summary>Werkt het meertalig?</summary>
+          <div>Ja. NL/FR/EN standaard. Andere talen zijn mogelijk per project (bijv. ES/DE). We detecteren voorkeurstaal van de gebruiker waar mogelijk.</div>
+        </details>
+
+        <details>
+          <summary>Is het GDPR-proof?</summary>
+          <div>Ja. We verwerken minimale data, vragen expliciete toestemming en hosten binnen de EU. Zie ook <a href="./privacy.html">Privacy &amp; GDPR</a>.</div>
+        </details>
+
+        <details>
+          <summary>Welke integraties bieden jullie?</summary>
+          <div>Stripe-betalingen, Google Agenda/Sheets, e-mail, basale CRM-exports (CSV/naar e-mail). Op aanvraag: Zapier/Make-koppelingen.</div>
+        </details>
+
+        <details>
+          <summary>Wat kost het?</summary>
+          <div>Plannen vanaf <b>€29/m</b>. Zie <a href="./pricing.html">Tarieven</a> voor Basic/Standard/Premium en wat er inbegrepen is.</div>
+        </details>
+
+        <details>
+          <summary>Hoe ziet onboarding eruit?</summary>
+          <div>Korte intake (30 min), we zetten flows op, koppelen kanalen en testen. Daarna gaat het live. We leveren scripts/teksten mee, jij geeft finale OK.</div>
+        </details>
+
+        <details>
+          <summary>Kan ik later opzeggen?</summary>
+          <div>Ja. Maandelijks opzegbaar. Je kunt data-export (leads/gesprekken) opvragen vóór beëindiging.</div>
+        </details>
+      </div>
+
+      <div class="faq-cta">
+        <a class="btn btn-cta" href="./contact.html">Plan een demo</a>
+        <a class="btn btn-outline-dark" href="./pricing.html" style="margin-left:8px;">Bekijk tarieven</a>
+      </div>
+    </section>
   </main>
 
-  <footer class="site-footer"><div class="container">© <span id="year"></span> BotMatic</div></footer>
+  <!-- Footer -->
+  <footer class="foot">
+    <div class="container foot-inner">
+      <span>© <span id="year"></span> BotMatic</span>
+      <a href="./privacy.html">Privacy & GDPR</a>
+    </div>
+  </footer>
 
-  <script defer src="widget/chat.js"></script>
+  <!-- Chat (лениво) + скрипты -->
+  <script defer src="./script.js"></script>
+  <script>
+    const loadChat = () => {
+      if (window.__bmChatLoaded) return; window.__bmChatLoaded = true;
+      const s = document.createElement('script'); s.src = './widget/chat.js'; s.async = true; document.body.appendChild(s);
+      const c = document.createElement('link'); c.rel='stylesheet'; c.href='./widget/chat.css'; document.head.appendChild(c);
+    };
+    (window.requestIdleCallback? requestIdleCallback(loadChat): setTimeout(loadChat, 1500));
+    addEventListener('pointerdown', loadChat, {once:true});
+  </script>
 </body>
 </html>

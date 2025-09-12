@@ -5,13 +5,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>BotMatic — Chatbots voor bedrijven</title>
   <meta name="description" content="Boekingen in 1 klik. WhatsApp, Instagram, Messenger & website — intake, afspraken en betalingen automatisch. Plan een demo." />
-  <!-- Критично малый CSS одним файлом -->
-  <link rel="preload" href="./styles.css" as="style" />
   <link rel="stylesheet" href="./styles.css" />
-  <!-- Подсказки браузеру: ничего внешнего не грузим (шрифты — системные) -->
+  <link rel="stylesheet" href="./widget/chat.css" />
 </head>
 <body>
-  <!-- Topbar -->
+  <!-- Topbar (compact) -->
   <header class="topbar">
     <div class="container nav">
       <a class="logo" href="./index.html">BotMatic</a>
@@ -20,13 +18,14 @@
         <a href="./sectors.html">Sectoren</a>
         <a href="./pricing.html">Tarieven</a>
         <a href="./about.html">Over ons</a>
+        <a href="./faq.html">FAQ</a>
         <a href="./contact.html">Contact</a>
       </nav>
       <div class="actions"><a class="btn btn-cta" href="./contact.html">Plan een demo</a></div>
     </div>
   </header>
 
-  <!-- HERO: текст + CTA. Никаких тяжелых фонов -->
+  <!-- HERO (compact) -->
   <section class="hero container reveal hero-min hero-min--compact">
     <div class="min-copy">
       <h1>Boekingen in 1 klik.</h1>
@@ -43,20 +42,27 @@
         <li>Live binnen 3 dagen</li>
       </ul>
 
-      <!-- Каналы с легкими inline-иконками (SVG tiny) -->
       <div class="channels channels--tight">
-        <span class="tag"><span class="icon wa" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 8.6 15l-1 3.7-3.7-1A10 10 0 0 1 12 2Zm3.8 6.2c-.3-.7-.6-.7-1-.7h-.8c-.2 0-.6.1-.9.5-.3.3-1 1-1 2.5s1.2 3 2.7 3.9c1.3.8 2 .8 2.3.7.3 0 1.1-.5 1.3-1 .2-.6.2-1 .1-1.1-.1-.1-.3-.2-.7-.4s-1.1-.5-1.2-.6c-.2-.1-.4-.1-.6.2-.2.3-.7 1-1 .9-.3 0-.7-.3-1.3-1-.7-.8-.9-1.4-1-1.6-.1-.2 0-.4.1-.5.1-.1.3-.3.4-.5.1-.2.1-.3.2-.5 0-.1 0-.4-.1-.6Z"/></svg></span>WhatsApp</span>
+        <span class="tag"><span class="icon wa" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 8.6 15l-1 3.7-3.7-1A10 10 0 0 1 12 2Zm3.8 6.2c-.3-.7-.6-.7-1-.7h-.8c-.2 0-.6.1-.9.5-.3.3-1 1-1 2.5s1.2 3 2.7 3.9c1.3.8 2 .8 2.3.7.3 0 1.1-.5 1.3-1 .2-.6.2-1 .1-1.1-.1-.1-.3-.2-.7-.4s-1.1-.5-1.2-.6c-.2-.1-.4-.1-.6.2-.2.3-.7 1-1 .9-.3 0-.7-.3-1.3-1-.7-.8-.9-1.4-1-1.6-.1-.2 0-.4.1-.5.1-.1.3-.3.4-.5.1-.2.1-.3.2-.5 0-.1 0-.4-.1-.6Z"/></svg>
+        </span>WhatsApp</span>
         <span class="dot">•</span>
-        <span class="tag"><span class="icon ig" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm5 4a6 6 0 1 0 0 12 6 6 0 0 0 0-12Zm0 2.2a3.8 3.8 0 1 1 0 7.6 3.8 3.8 0 0 1 0-7.6Zm6-1.7a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Z"/></svg></span>Instagram</span>
+        <span class="tag"><span class="icon ig" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm5 4a6 6 0 1 0 0 12 6 6 0 0 0 0-12Zm0 2.2a3.8 3.8 0 1 1 0 7.6 3.8 3.8 0 0 1 0-7.6Zm6-1.7a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Z"/></svg>
+        </span>Instagram</span>
         <span class="dot">•</span>
-        <span class="tag"><span class="icon ms" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2 4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H8l-5 5v-5H4a2 2 0 0 1-2-2V4Zm2 0v11h16V4H4Z"/></svg></span>Messenger</span>
+        <span class="tag"><span class="icon ms" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M2 4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H8l-5 5v-5H4a2 2 0 0 1-2-2V4Zm2 0v11h16V4H4Z"/></svg>
+        </span>Messenger</span>
         <span class="dot">•</span>
-        <span class="tag"><span class="icon tg" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21.5 3.5 2.9 11.1c-1 .4-.9 1.8.1 2l4.7 1.2 1.7 5.2c.3 1 1.6 1.1 2 .1l2.5-5.3 5 3.7c.9.7 2.2.2 2.4-1l2-12.2c.2-1.1-.9-2-1.9-1.7Z"/></svg></span>Telegram</span>
+        <span class="tag"><span class="icon tg" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M21.5 3.5 2.9 11.1c-1 .4-.9 1.8.1 2l4.7 1.2 1.7 5.2c.3 1 1.6 1.1 2 .1l2.5-5.3 5 3.7c.9.7 2.2.2 2.4-1l2-12.2c.2-1.1-.9-2-1.9-1.7Z"/></svg>
+        </span>Telegram</span>
       </div>
     </div>
   </section>
 
-  <!-- Секции (контент лёгкий, без изображений) -->
+  <!-- Before/After -->
   <section class="container ba ba--compact reveal">
     <div class="ba-card">
       <h3>Before</h3>
@@ -76,43 +82,7 @@
     </div>
   </section>
 
-  <section class="container reveal sectors">
-    <h2 class="section-title">Sectoren</h2>
-    <div class="sector">
-      <div class="sector-head"><div class="pill">Auto</div><h3>Meer werkplaats-boekingen</h3></div>
-      <div class="sector-grid">
-        <div class="sector-card"><h4>Zonder bot</h4><ul><li>Geen antwoord na sluitingstijd</li><li>Lange intake → afhakers</li><li>Geen structuur</li></ul></div>
-        <div class="sector-card pos"><h4>Met BotMatic</h4><ul><li>WhatsApp intake 24/7</li><li>Bevestiging + reminders</li><li>Agenda/CRM koppeling</li></ul></div>
-      </div>
-    </div>
-    <div class="sector">
-      <div class="sector-head"><div class="pill">Beauty</div><h3>Minder gaten in de agenda</h3></div>
-      <div class="sector-grid">
-        <div class="sector-card"><h4>Zonder bot</h4><ul><li>DM’s blijven liggen</li><li>Veel herhaalvragen</li><li>Late afzeggingen</li></ul></div>
-        <div class="sector-card pos"><h4>Met BotMatic</h4><ul><li>Antwoord op IG/Messenger</li><li>1-klik bevestiging</li><li>−40% no-shows</li></ul></div>
-      </div>
-    </div>
-    <div class="sector">
-      <div class="sector-head"><div class="pill">Horeca</div><h3>Reserveringen zonder telefoon</h3></div>
-      <div class="sector-grid">
-        <div class="sector-card"><h4>Zonder bot</h4><ul><li>Langzame e-mail</li><li>Gemiste terugbelletjes</li><li>Geen data</li></ul></div>
-        <div class="sector-card pos"><h4>Met BotMatic</h4><ul><li>Tafel in 30 sec</li><li>Bevestiging + upsell</li><li>Klantprofiel (GDPR)</li></ul></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Mini-FAQ на <details> (0 JS) -->
-  <section class="container reveal faq">
-    <h2 class="section-title">FAQ</h2>
-    <div class="faq-list">
-      <details><summary>Hoe snel kunnen we live?</summary><div>Standaard flows vaak binnen <b>3 werkdagen</b>.</div></details>
-      <details><summary>Welke kanalen?</summary><div>WhatsApp, Instagram, Messenger, Telegram en website-widget.</div></details>
-      <details><summary>GDPR?</summary><div>Minimale data, duidelijke toestemming, EU-hosting. Zie <a href="./privacy.html">Privacy &amp; GDPR</a>.</div></details>
-      <details><summary>Kosten?</summary><div>Plannen vanaf <b>€29/m</b> — zie <a href="./pricing.html">Tarieven</a>.</div></details>
-    </div>
-    <div class="faq-cta"><a class="btn btn-cta" href="./contact.html">Plan een demo</a></div>
-  </section>
-
+  <!-- Footer -->
   <footer class="foot">
     <div class="container foot-inner">
       <span>© <span id="year"></span> BotMatic</span>
@@ -120,14 +90,15 @@
     </div>
   </footer>
 
-  <!-- Sticky CTA (mobile) -->
+  <!-- Sticky CTA (mobile only) -->
   <div class="sticky-cta">
-    <a href="./contact.html" class="btn btn-cta" style="width:100%;justify-content:center;">Plan een demo</a>
+    <a href="./contact.html" class="btn btn-cta" style="width:100%;justify-content:center;">
+      Plan een demo
+    </a>
   </div>
 
-  <!-- Мини-bootstrap JS: reveal + год + отложенная загрузка чата -->
+  <!-- Scripts -->
   <script defer src="./script.js"></script>
-  <!-- Чат грузим лениво после idle/взаимодействия, чтобы не мешать LCP -->
   <script>
     const loadChat = () => {
       if (window.__bmChatLoaded) return; window.__bmChatLoaded = true;
