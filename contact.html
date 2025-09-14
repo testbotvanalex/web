@@ -8,60 +8,66 @@
   <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
-<header class="hero-bg sticky top-0 z-50 shadow-md">
+<header class="header sticky top-0 z-50">
   <nav class="container mx-auto px-6 py-4 flex items-center justify-between" data-nav aria-label="Hoofdnavigatie">
-    <a href="index.html" class="text-white text-2xl font-extrabold">BotMatic</a>
+    <a href="index.html" class="text-xl font-extrabold">BotMatic</a>
     <div class="hidden md:flex items-center gap-8">
-      <a href="index.html" class="text-white/90 hover:text-white" data-lang-key="nav_home">Home</a>
-      <a href="features.html" class="text-white/90 hover:text-white" data-lang-key="nav_features">Kenmerken</a>
-      <a href="use-cases.html" class="text-white/90 hover:text-white" data-lang-key="nav_usecases">Use cases</a>
-      <a href="pricing.html" class="text-white/90 hover:text-white" data-lang-key="nav_pricing">Prijzen</a>
-      <a href="demo.html" class="text-white/90 hover:text-white" data-lang-key="nav_demo">Demo</a>
-      <a href="contact.html" class="text-white/90 hover:text-white" data-lang-key="nav_contact">Contact</a>
-      <a href="faq.html" class="text-white/90 hover:text-white" data-lang-key="nav_faq">FAQ</a>
+      <a href="index.html" class="hover:underline" data-lang-key="nav_home">Home</a>
+      <a href="features.html" class="hover:underline" data-lang-key="nav_features">Kenmerken</a>
+      <a href="use-cases.html" class="hover:underline" data-lang-key="nav_usecases">Use cases</a>
+      <a href="pricing.html" class="hover:underline" data-lang-key="nav_pricing">Prijzen</a>
+      <a href="demo.html" class="hover:underline" data-lang-key="nav_demo">Demo</a>
+      <a href="contact.html" class="hover:underline nav-active" data-lang-key="nav_contact">Contact</a>
+      <a href="faq.html" class="hover:underline" data-lang-key="nav_faq">FAQ</a>
     </div>
-    <div class="hidden sm:flex bg-white/10 rounded-full p-1 lang-pill" role="group" aria-label="Kies taal">
-      <button class="lang-btn bg-white text-indigo-600 text-xs font-semibold rounded-full px-3 py-1" data-lang="nl" type="button">NL</button>
-      <button class="lang-btn text-white/80 text-xs font-semibold rounded-full px-3 py-1" data-lang="fr" type="button">FR</button>
-      <button class="lang-btn text-white/80 text-xs font-semibold rounded-full px-3 py-1" data-lang="en" type="button">EN</button>
+    <div class="hidden sm:flex lang-pill rounded-full p-1" role="group" aria-label="Kies taal">
+      <button class="lang-btn bg-white text-[var(--accent)] text-xs font-semibold rounded-full px-3 py-1" data-lang="nl" type="button">NL</button>
+      <button class="lang-btn text-black/60 text-xs font-semibold rounded-full px-3 py-1" data-lang="fr" type="button">FR</button>
+      <button class="lang-btn text-black/60 text-xs font-semibold rounded-full px-3 py-1" data-lang="en" type="button">EN</button>
     </div>
+    <button id="menuBtn" class="md:hidden" aria-label="Menu" aria-expanded="false" aria-controls="mobileMenu" type="button">☰</button>
   </nav>
+  <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-[var(--border)]">
+    <a href="features.html" class="block px-6 py-2">Kenmerken</a>
+    <a href="use-cases.html" class="block px-6 py-2">Use cases</a>
+    <a href="pricing.html" class="block px-6 py-2">Prijzen</a>
+    <a href="demo.html" class="block px-6 py-2">Demo</a>
+    <a href="contact.html" class="block px-6 py-2">Contact</a>
+    <a href="faq.html" class="block px-6 py-2">FAQ</a>
+  </div>
 </header>
 
 <main class="py-16">
   <div class="container mx-auto px-6 fade-in">
     <h1 class="section-title" data-lang-key="contact_title">Klaar om te starten?</h1>
-    <p class="text-center max-w-2xl mx-auto -mt-2 mb-6 text-slate-600" data-lang-key="contact_blurb">
+    <p class="text-center max-w-2xl mx-auto -mt-2 mb-6 text-[var(--muted)]" data-lang-key="contact_blurb">
       Plan een demo of start je proefperiode. We reageren dezelfde dag.
     </p>
 
     <form class="max-w-xl mx-auto" data-lead novalidate>
       <div class="mb-3 text-left">
         <label for="cName" class="block text-sm font-medium" data-lang-key="form_name">Naam</label>
-        <input id="cName" name="name" type="text" required aria-required="true"
-               class="w-full p-4 rounded-md bg-white border border-slate-200" />
+        <input id="cName" name="name" type="text" required aria-required="true" class="w-full p-4"/>
       </div>
       <div class="mb-3 text-left">
         <label for="cEmail" class="block text-sm font-medium" data-lang-key="form_email">E-mail</label>
-        <input id="cEmail" name="email" type="email" required aria-required="true"
-               class="w-full p-4 rounded-md bg-white border border-slate-200" />
+        <input id="cEmail" name="email" type="email" required aria-required="true" class="w-full p-4"/>
       </div>
       <div class="mb-4 text-left">
         <label for="cMsg" class="block text-sm font-medium" data-lang-key="form_msg">Vertel ons over je project…</label>
-        <textarea id="cMsg" name="message" rows="4"
-                  class="w-full p-4 rounded-md bg-white border border-slate-200"></textarea>
+        <textarea id="cMsg" name="message" rows="4" class="w-full p-4"></textarea>
       </div>
-      <button class="cta bg-indigo-600 text-white font-semibold rounded-full py-4 px-10" data-lang-key="cta_send">Verzoek indienen</button>
+      <button class="cta cta-primary rounded-full py-4 px-10" data-lang-key="cta_send">Verzoek indienen</button>
       <p class="formStatus text-sm text-green-600 mt-3" aria-live="polite"></p>
     </form>
 
-    <div class="mt-8 text-center text-sm text-slate-600">
+    <div class="mt-8 text-center text-sm text-[var(--muted)]">
       <p>BotMatic BV · KVK / BTW: NL000000000B01 · Amsterdam</p>
     </div>
   </div>
 </main>
 
-<footer class="bg-slate-950 text-slate-400 py-8 text-center">
+<footer class="bg-white border-t border-[var(--border)] text-gray-600 py-8 text-center">
   <p>&copy; 2025 BotMatic. <span data-lang-key="rights">Alle rechten voorbehouden.</span></p>
 </footer>
 <script src="assets/main.js"></script>

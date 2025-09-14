@@ -8,52 +8,64 @@
   <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
-<header class="hero-bg sticky top-0 z-50 shadow-md">
+<header class="header sticky top-0 z-50">
   <nav class="container mx-auto px-6 py-4 flex items-center justify-between" data-nav aria-label="Hoofdnavigatie">
-    <a href="index.html" class="text-white text-2xl font-extrabold">BotMatic</a>
+    <a href="index.html" class="text-xl font-extrabold">BotMatic</a>
     <div class="hidden md:flex items-center gap-8">
-      <a href="index.html" class="text-white/90 hover:text-white" data-lang-key="nav_home">Home</a>
-      <a href="features.html" class="text-white/90 hover:text-white" data-lang-key="nav_features">Kenmerken</a>
-      <a href="use-cases.html" class="text-white/90 hover:text-white" data-lang-key="nav_usecases">Use cases</a>
-      <a href="pricing.html" class="text-white/90 hover:text-white" data-lang-key="nav_pricing">Prijzen</a>
-      <a href="demo.html" class="text-white/90 hover:text-white" data-lang-key="nav_demo">Demo</a>
-      <a href="contact.html" class="text-white/90 hover:text-white" data-lang-key="nav_contact">Contact</a>
-      <a href="faq.html" class="text-white/90 hover:text-white" data-lang-key="nav_faq">FAQ</a>
+      <a href="index.html" class="hover:underline" data-lang-key="nav_home">Home</a>
+      <a href="features.html" class="hover:underline" data-lang-key="nav_features">Kenmerken</a>
+      <a href="use-cases.html" class="hover:underline nav-active" data-lang-key="nav_usecases">Use cases</a>
+      <a href="pricing.html" class="hover:underline" data-lang-key="nav_pricing">Prijzen</a>
+      <a href="demo.html" class="hover:underline" data-lang-key="nav_demo">Demo</a>
+      <a href="contact.html" class="hover:underline" data-lang-key="nav_contact">Contact</a>
+      <a href="faq.html" class="hover:underline" data-lang-key="nav_faq">FAQ</a>
     </div>
-    <div class="hidden sm:flex bg-white/10 rounded-full p-1 lang-pill" role="group" aria-label="Kies taal">
-      <button class="lang-btn bg-white text-indigo-600 text-xs font-semibold rounded-full px-3 py-1" data-lang="nl" type="button">NL</button>
-      <button class="lang-btn text-white/80 text-xs font-semibold rounded-full px-3 py-1" data-lang="fr" type="button">FR</button>
-      <button class="lang-btn text-white/80 text-xs font-semibold rounded-full px-3 py-1" data-lang="en" type="button">EN</button>
+    <div class="hidden sm:flex lang-pill rounded-full p-1" role="group" aria-label="Kies taal">
+      <button class="lang-btn bg-white text-[var(--accent)] text-xs font-semibold rounded-full px-3 py-1" data-lang="nl" type="button">NL</button>
+      <button class="lang-btn text-black/60 text-xs font-semibold rounded-full px-3 py-1" data-lang="fr" type="button">FR</button>
+      <button class="lang-btn text-black/60 text-xs font-semibold rounded-full px-3 py-1" data-lang="en" type="button">EN</button>
     </div>
+    <button id="menuBtn" class="md:hidden" aria-label="Menu" aria-expanded="false" aria-controls="mobileMenu" type="button">☰</button>
   </nav>
+  <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-[var(--border)]">
+    <a href="features.html" class="block px-6 py-2">Kenmerken</a>
+    <a href="use-cases.html" class="block px-6 py-2">Use cases</a>
+    <a href="pricing.html" class="block px-6 py-2">Prijzen</a>
+    <a href="demo.html" class="block px-6 py-2">Demo</a>
+    <a href="contact.html" class="block px-6 py-2">Contact</a>
+    <a href="faq.html" class="block px-6 py-2">FAQ</a>
+  </div>
 </header>
 
 <main class="py-16">
   <div class="container mx-auto px-6">
     <h1 class="section-title">Use cases per sector</h1>
     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8" role="list">
-      <div class="bg-white p-6 rounded-lg shadow" role="listitem">
+      <div class="card p-6" role="listitem">
         <h3 class="font-bold mb-2">Schoonheid</h3>
-        <p>Auto-booking, herinneringen, upsells.</p>
+        <p class="text-[var(--muted)]">Auto-booking, herinneringen, upsells.</p>
       </div>
-      <div class="bg-white p-6 rounded-lg shadow" role="listitem">
+      <div class="card p-6" role="listitem">
         <h3 class="font-bold mb-2">Autoservice</h3>
-        <p>Intake, offertes, statusupdates.</p>
+        <p class="text-[var(--muted)]">Intake, offertes, statusupdates.</p>
       </div>
-      <div class="bg-white p-6 rounded-lg shadow" role="listitem">
+      <div class="card p-6" role="listitem">
         <h3 class="font-bold mb-2">Vastgoed</h3>
-        <p>Bezichtigingen + leadkwalificatie.</p>
+        <p class="text-[var(--muted)]">Bezichtigingen + leadkwalificatie.</p>
       </div>
-      <div class="bg-white p-6 rounded-lg shadow" role="listitem">
+      <div class="card p-6" role="listitem">
         <h3 class="font-bold mb-2">Horeca</h3>
-        <p>Reserveringen, allergeneninfo, tafels.</p>
+        <p class="text-[var(--muted)]">Reserveringen, allergeneninfo, tafels.</p>
       </div>
     </div>
   </div>
 </main>
 
-<footer class="bg-slate-950 text-slate-400 py-8 text-center">
-  <p>&copy; 2025 BotMatic. <span data-lang-key="rights">Alle rechten voorbehouden.</span></p>
+<footer class="bg-white border-t border-[var(--border)] text-gray-600 py-8 text-center">
+  <p>&copy; 2025 BotMatic. <span data-lang-key="rights">Alle rechten voorbehouden.</span>
+    · <a href="privacy.html" class="hover:underline" data-lang-key="link_privacy">Privacy</a>
+    · <a href="terms.html" class="hover:underline" data-lang-key="link_terms">Voorwaarden</a>
+  </p>
 </footer>
 <script src="assets/main.js"></script>
 </body>

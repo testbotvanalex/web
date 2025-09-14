@@ -8,17 +8,17 @@
   <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
-<header class="hero-bg sticky top-0 z-50 shadow-md">
+<header class="header sticky top-0 z-50">
   <nav class="container mx-auto px-6 py-4 flex items-center justify-between" data-nav aria-label="Hoofdnavigatie">
-    <a href="index.html" class="text-white text-2xl font-extrabold">BotMatic</a>
+    <a href="index.html" class="text-xl font-extrabold">BotMatic</a>
     <div class="hidden md:flex items-center gap-8">
-      <a href="index.html" class="text-white/90 hover:text-white" data-lang-key="nav_home">Home</a>
-      <a href="features.html" class="text-white/90 hover:text-white" data-lang-key="nav_features">Kenmerken</a>
-      <a href="use-cases.html" class="text-white/90 hover:text-white" data-lang-key="nav_usecases">Use cases</a>
-      <a href="pricing.html" class="text-white/90 hover:text-white" data-lang-key="nav_pricing">Prijzen</a>
-      <a href="demo.html" class="text-white/90 hover:text-white" data-lang-key="nav_demo">Demo</a>
-      <a href="contact.html" class="text-white/90 hover:text-white" data-lang-key="nav_contact">Contact</a>
-      <a href="faq.html" class="text-white/90 hover:text-white" data-lang-key="nav_faq">FAQ</a>
+      <a href="index.html" class="hover:underline" data-lang-key="nav_home">Home</a>
+      <a href="features.html" class="hover:underline" data-lang-key="nav_features">Kenmerken</a>
+      <a href="use-cases.html" class="hover:underline" data-lang-key="nav_usecases">Use cases</a>
+      <a href="pricing.html" class="hover:underline" data-lang-key="nav_pricing">Prijzen</a>
+      <a href="demo.html" class="hover:underline" data-lang-key="nav_demo">Demo</a>
+      <a href="contact.html" class="hover:underline" data-lang-key="nav_contact">Contact</a>
+      <a href="faq.html" class="hover:underline" data-lang-key="nav_faq">FAQ</a>
     </div>
   </nav>
 </header>
@@ -26,7 +26,7 @@
 <main class="py-12">
   <div class="container mx-auto px-6 prose max-w-3xl">
     <h1 class="section-title" data-lang-key="privacy_title">Privacybeleid</h1>
-    <p class="text-sm text-slate-500" id="updated">
+    <p class="text-sm text-gray-500" id="updated">
       <span data-lang-key="privacy_updated">Laatst bijgewerkt</span>: 2025-09-14
     </p>
 
@@ -36,7 +36,7 @@
     <h2>Welke gegevens verzamelen we</h2>
     <ul>
       <li>Contactgegevens (naam, e-mail, telefoon) bij formulieren.</li>
-      <li>Interacties met chatbots (berichten, tijdstемпы).</li>
+      <li>Interacties met chatbots (berichten, tijdstempels).</li>
       <li>Technische gegevens (IP, browser, cookies/analytics).</li>
     </ul>
 
@@ -46,9 +46,6 @@
       <li>Verbetering van product en veiligheid.</li>
       <li>Marketingcommunicatie (met opt-out).</li>
     </ul>
-
-    <h2>Rechtsgrond</h2>
-    <p>Toestemming, uitvoering van overeenkomst, gerechtvaardigd belang, wettelijke verplichting.</p>
 
     <h2 id="gdpr">Rechten onder GDPR</h2>
     <ul>
@@ -65,7 +62,7 @@
     <p>We gebruiken vertrouwde verwerkers (hosting, analytics, e-mail). Doorgifte buiten EER met passende waarborgen (SCC’s).</p>
 
     <h2>Cookies & analytics</h2>
-    <p>Functioneel en optioneel analytics. Je kunt cookies beheren via je browser. Bij implementatie van GA4/Tag Manager tonen we een cookiebanner.</p>
+    <p>Functioneel en optioneel analytics. Je kunt cookies beheren via je browser. Bij implementatie van GA4 tonen we een cookiebanner.</p>
 
     <h2>Beveiliging</h2>
     <p>Versleuteling in transit, rolgebaseerde toegang, logging, back-ups.</p>
@@ -75,13 +72,13 @@
   </div>
 </main>
 
-<footer class="bg-slate-950 text-slate-400 py-8">
+<footer class="bg-white border-t border-[var(--border)] text-gray-600 py-8">
   <div class="container mx-auto px-6 flex items-center justify-between">
     <p>&copy; 2025 BotMatic. <span data-lang-key="rights">Alle rechten voorbehouden.</span></p>
     <div class="flex gap-4 text-sm">
-      <a href="privacy.html" class="hover:text-white" data-lang-key="link_privacy">Privacy</a>
-      <a href="terms.html" class="hover:text-white" data-lang-key="link_terms">Voorwaarden</a>
-      <a href="privacy.html#gdpr" class="hover:text-white" data-lang-key="link_gdpr">GDPR</a>
+      <a href="privacy.html" class="hover:underline" data-lang-key="link_privacy">Privacy</a>
+      <a href="terms.html" class="hover:underline" data-lang-key="link_terms">Voorwaarden</a>
+      <a href="privacy.html#gdpr" class="hover:underline" data-lang-key="link_gdpr">GDPR</a>
     </div>
   </div>
 </footer>
