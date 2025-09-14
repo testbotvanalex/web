@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
@@ -10,10 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    :root{
-      --brand:#ff7a1a; --brand-600:#ff6a00;
-      --ink:#0f172a; --muted:#475569; --bg:#f8fafc;
-    }
+    :root{ --brand:#ff7a1a; --brand-600:#ff6a00; --ink:#0f172a; --muted:#475569; --bg:#f8fafc; }
     html,body{scroll-behavior:smooth}
     body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink)}
     .btn{display:inline-flex;align-items:center;justify-content:center;border-radius:9999px;padding:.75rem 1.25rem;font-weight:700}
@@ -24,7 +21,7 @@
     .badge{font-size:.75rem;border-radius:9999px;padding:.25rem .6rem}
     .badge-new{background:#fff;color:var(--brand);border:1px solid var(--brand)}
     .focus-ring:focus{outline:3px solid var(--brand);outline-offset:2px}
-    /* Chat widget */
+    /* Chat */
     #chat-container{position:fixed;bottom:6rem;right:1.5rem;width:100%;max-width:380px;height:480px;z-index:100;background:#fff;border-radius:1rem;box-shadow:0 10px 40px rgba(2,6,23,.1);display:flex;flex-direction:column;transform:translateY(20px);opacity:0;pointer-events:none;transition:all .3s}
     #chat-container.open{transform:translateY(0);opacity:1;pointer-events:auto}
     .chat-message{padding:.6rem .8rem;max-width:80%;font-size:.9rem;border-radius:1rem;box-shadow:0 1px 2px rgba(0,0,0,.04)}
@@ -87,21 +84,9 @@
         </div>
 
         <div class="mt-12 grid md:grid-cols-3 gap-6">
-          <div class="card p-6 text-left">
-            <div class="text-3xl">⚡</div>
-            <h3 class="font-semibold mt-2">Antwoord in seconden</h3>
-            <p class="text-slate-600 text-sm mt-1">24/7 direct reactie. Geen gemiste leads ’s avonds.</p>
-          </div>
-          <div class="card p-6 text-left">
-            <div class="text-3xl">📅</div>
-            <h3 class="font-semibold mt-2">Auto-planning</h3>
-            <p class="text-slate-600 text-sm mt-1">Boekingen rechtstreeks in je agenda of systeem.</p>
-          </div>
-          <div class="card p-6 text-left">
-            <div class="text-3xl">💬</div>
-            <h3 class="font-semibold mt-2">WhatsApp-first</h3>
-            <p class="text-slate-600 text-sm mt-1">Werk waar je klanten al zijn. Simpel.</p>
-          </div>
+          <div class="card p-6 text-left"><div class="text-3xl">⚡</div><h3 class="font-semibold mt-2">Antwoord in seconden</h3><p class="text-slate-600 text-sm mt-1">24/7 direct reactie. Geen gemiste leads ’s avonds.</p></div>
+          <div class="card p-6 text-left"><div class="text-3xl">📅</div><h3 class="font-semibold mt-2">Auto-planning</h3><p class="text-slate-600 text-sm mt-1">Boekingen rechtstreeks in je agenda of systeem.</p></div>
+          <div class="card p-6 text-left"><div class="text-3xl">💬</div><h3 class="font-semibold mt-2">WhatsApp-first</h3><p class="text-slate-600 text-sm mt-1">Werk waar je klanten al zijn. Simpel.</p></div>
         </div>
       </div>
     </section>
@@ -143,34 +128,26 @@
             <h3 class="text-2xl font-bold text-center mb-1">Instap</h3>
             <p class="text-sm text-slate-500 text-center mb-4">Voor kleine teams</p>
             <p class="text-4xl font-extrabold text-center text-[var(--brand)] mb-2">€29<span class="text-base text-slate-500 font-semibold"> / maand</span></p>
-            <ul class="text-slate-700 text-sm space-y-2 mt-4">
-              <li>✓ 1 taak automatiseren</li><li>✓ 1 platform</li><li>✓ Basis support</li>
-            </ul>
+            <ul class="text-slate-700 text-sm space-y-2 mt-4"><li>✓ 1 taak automatiseren</li><li>✓ 1 platform</li><li>✓ Basis support</li></ul>
           </div>
           <a href="#" class="btn btn-ghost mt-6" onclick="showPage('contact');return false;">Kies Instap</a>
         </div>
-
         <div class="card p-6 border-2 border-[var(--brand)] relative flex flex-col">
           <span class="absolute -top-3 left-1/2 -translate-x-1/2 badge bg-[var(--brand)] text-white">Meest gekozen</span>
           <div>
             <h3 class="text-2xl font-bold text-center mb-1">Standaard</h3>
             <p class="text-sm text-slate-500 text-center mb-4">Beste waarde</p>
             <p class="text-4xl font-extrabold text-center text-[var(--brand)] mb-2">€99<span class="text-base text-slate-500 font-semibold"> / maand</span></p>
-            <ul class="text-slate-700 text-sm space-y-2 mt-4">
-              <li>✓ Meerdere taken</li><li>✓ 2 platforms</li><li>✓ Prioritaire support & updates</li>
-            </ul>
+            <ul class="text-slate-700 text-sm space-y-2 mt-4"><li>✓ Meerdere taken</li><li>✓ 2 platforms</li><li>✓ Prioritaire support & updates</li></ul>
           </div>
           <a href="#" class="btn btn-primary mt-6" onclick="showPage('contact');return false;">Kies Standaard</a>
         </div>
-
         <div class="card p-6 flex flex-col">
           <div>
             <h3 class="text-2xl font-bold text-center mb-1">Premium</h3>
             <p class="text-sm text-slate-500 text-center mb-4">Voor groei & maatwerk</p>
             <p class="text-4xl font-extrabold text-center text-[var(--brand)] mb-2">€299<span class="text-base text-slate-500 font-semibold"> / maand</span></p>
-            <ul class="text-slate-700 text-sm space-y-2 mt-4">
-              <li>✓ Maatwerk AI-flows</li><li>✓ Koppelingen met CRM/ERP</li><li>✓ Toegewijde projectmanager</li>
-            </ul>
+            <ul class="text-slate-700 text-sm space-y-2 mt-4"><li>✓ Maatwerk AI-flows</li><li>✓ Koppelingen met CRM/ERP</li><li>✓ Toegewijde projectmanager</li></ul>
           </div>
           <a href="#" class="btn btn-ghost mt-6" onclick="showPage('contact');return false;">Kies Premium</a>
         </div>
@@ -184,8 +161,6 @@
         <h2 class="text-3xl font-bold">Blog</h2>
         <p class="text-slate-600 max-w-2xl mx-auto mt-2">Laatste nieuws en inzichten in automatisering.</p>
       </div>
-
-      <!-- Generator UI (via jouw backend, geen sleutel in front) -->
       <div class="card p-6 mb-8">
         <h3 class="text-lg font-semibold mb-2">✨ Genereer een blogpost met AI</h3>
         <p class="text-sm text-slate-600 mb-4">Geef een onderwerp, wij schrijven via onze backend.</p>
@@ -195,7 +170,6 @@
         </div>
         <div id="blog-loading" class="mt-4 text-center text-slate-500 hidden">De AI schrijft... een momentje</div>
       </div>
-
       <div id="blog-posts-container" class="grid md:grid-cols-2 gap-6"></div>
     </section>
 
@@ -206,14 +180,8 @@
         <p class="text-slate-600 max-w-3xl mx-auto mt-2">BotMatic is een Belgisch team dat no-nonsense chatbots bouwt. Snel live, helder in prijs, en gericht op resultaat.</p>
       </div>
       <div class="grid md:grid-cols-2 gap-6">
-        <div class="card p-6 border-l-4 border-[var(--brand)]">
-          <h3 class="text-xl font-semibold mb-2">Onafhankelijk</h3>
-          <p class="text-slate-600">We zijn geen onderdeel van gelijknamige bedrijven in de VS of India. Eigen team, eigen standaard.</p>
-        </div>
-        <div class="card p-6">
-          <h3 class="text-xl font-semibold mb-2">GDPR-proof</h3>
-          <p class="text-slate-600">Privacy eerst. Duidelijke datastromen en bewaartermijnen. Jij blijft eigenaar van de data.</p>
-        </div>
+        <div class="card p-6 border-l-4 border-[var(--brand)]"><h3 class="text-xl font-semibold mb-2">Onafhankelijk</h3><p class="text-slate-600">We zijn geen onderdeel van gelijknamige bedrijven in de VS of India. Eigen team, eigen standaard.</p></div>
+        <div class="card p-6"><h3 class="text-xl font-semibold mb-2">GDPR-proof</h3><p class="text-slate-600">Privacy eerst. Duidelijke datastromen en bewaartermijnen. Jij blijft eigenaar van de data.</p></div>
       </div>
     </section>
 
@@ -258,11 +226,9 @@
     </div>
   </footer>
 
-  <!-- Live Chat Widget -->
+  <!-- Chat widget -->
   <div id="chat-widget" class="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50">
-    <button id="chat-toggle-btn" class="bg-[var(--brand)] text-white p-4 rounded-full shadow-lg hover:bg-[var(--brand-600)] transition-colors focus:outline-none focus:ring-4 focus:ring-[var(--brand)] focus:ring-opacity-50" aria-label="Open chat">
-      <!-- icon -->💬
-    </button>
+    <button id="chat-toggle-btn" class="bg-[var(--brand)] text-white p-4 rounded-full shadow-lg hover:bg-[var(--brand-600)] transition-colors focus:outline-none focus:ring-4 focus:ring-[var(--brand)] focus:ring-opacity-50" aria-label="Open chat">💬</button>
   </div>
   <div id="chat-container" class="md:right-8" aria-live="polite">
     <div class="p-4 bg-[var(--brand)] text-white flex justify-between items-center rounded-t-lg">
@@ -279,35 +245,12 @@
     </div>
   </div>
 
+  <!-- Main logic -->
   <script type="module">
-    // ---------- Firebase (front only voor data; GEEN AI-sleutels in front) ----------
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, doc, collection, addDoc, onSnapshot, query, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-    // Deze globals vul je via je bundler of inlined script voor deploy:
-    // window.__app_id, window.__firebase_config
-    const appId = typeof window.__app_id !== 'undefined' ? window.__app_id : 'default-app-id';
-    const firebaseConfig = typeof window.__firebase_config !== 'undefined' ? window.__firebase_config : null;
-
-    let app=null, auth=null, db=null, authed=false;
-
-    if (firebaseConfig && Object.keys(firebaseConfig).length) {
-      app = initializeApp(firebaseConfig);
-      auth = getAuth(app);
-      db = getFirestore(app);
-      onAuthStateChanged(auth, (user) => {
-        authed = !!user;
-        if (!user) signInAnonymously(auth).catch(console.error);
-        if (user) startApp(user.uid);
-      });
-    } else {
-      console.warn("Firebase config ontbreekt. Firestore functionaliteit uitgeschakeld.");
-    }
-
-    // ---------- SPA nav ----------
+    // ===== SPA NAV =====
     const pages = document.querySelectorAll('.page-section');
     const navLinks = document.querySelectorAll('.nav-link');
+
     function setActive(pageId){
       navLinks.forEach(l=>{
         const isActive = l.getAttribute('data-page') === pageId;
@@ -315,61 +258,33 @@
         if(isActive){ l.setAttribute('aria-current','page'); } else { l.removeAttribute('aria-current'); }
       });
     }
+
     function showPage(pageId){
       pages.forEach(p=>p.classList.add('hidden'));
       const el = document.getElementById(`${pageId}-page`);
-      if(el) el.classList.remove('hidden');
+      if(el){ el.classList.remove('hidden'); }
       setActive(pageId);
-      history.replaceState(null,'',`#${pageId}`);
+      if(location.hash !== `#${pageId}`){ history.replaceState(null,'',`#${pageId}`); }
     }
+
     function toggleMenu(forceClose=false){
       const m=document.getElementById('mobile-menu');
+      if(!m) return;
       if(forceClose){ m.classList.add('hidden'); return; }
       m.classList.toggle('hidden');
     }
 
-    // ---------- Contact form (opslaan in Firestore; mailen via backend) ----------
-    const form = document.getElementById('contact-form');
-    const submitBtn = document.getElementById('submit-btn');
-    const successMsg = document.getElementById('form-success-message');
+    // make available for inline onclick handlers (critical fix)
+    window.showPage = showPage;
+    window.toggleMenu = toggleMenu;
 
-    if(form){
-      form.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        const hp = document.getElementById('company').value; // honeypot
-        if(hp) return;
-        if(!form.reportValidity()) return;
+    // hash navigation support (e.g. /#pricing)
+    window.addEventListener('hashchange', ()=>{
+      const id = (location.hash||'#home').slice(1);
+      showPage(id);
+    });
 
-        submitBtn.textContent='Bezig met versturen...';
-        submitBtn.disabled=true;
-
-        const payload = {
-          name: document.getElementById('name').value.trim(),
-          email: document.getElementById('email').value.trim(),
-          message: document.getElementById('message').value.trim(),
-          timestamp: (db ? serverTimestamp() : new Date().toISOString())
-        };
-
-        try{
-          if(db){
-            await addDoc(collection(db, `/artifacts/${appId}/public/data/contacts`), payload);
-          }
-          // daarnaast naar je backend sturen (mail/slack/etc.)
-          fetch('/api/contact', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)}).catch(()=>{});
-          form.classList.add('hidden');
-          successMsg.classList.remove('hidden');
-          form.reset();
-        }catch(err){
-          console.error(err);
-          alert('Er ging iets mis. Probeer later opnieuw.');
-        }finally{
-          submitBtn.textContent='Verstuur';
-          submitBtn.disabled=false;
-        }
-      });
-    }
-
-    // ---------- Live Chat (front → backend proxy) ----------
+    // ===== Chat minimal (UI only demo) =====
     const chatToggleBtn = document.getElementById('chat-toggle-btn');
     const chatCloseBtn = document.getElementById('chat-close-btn');
     const chatContainer = document.getElementById('chat-container');
@@ -378,7 +293,6 @@
     const chatInput = document.getElementById('chat-input');
     const chatSendBtn = document.getElementById('chat-send-btn');
     const chatLoading = document.getElementById('chat-loading');
-    let lastSentAt = 0;
 
     function addMessage(text, role){
       const div=document.createElement('div');
@@ -388,147 +302,48 @@
       chatMessages.scrollTop=chatMessages.scrollHeight;
     }
 
-    chatToggleBtn.addEventListener('click', ()=> chatContainer.classList.toggle('open'));
-    chatCloseBtn.addEventListener('click', ()=> chatContainer.classList.remove('open'));
+    chatToggleBtn?.addEventListener('click', ()=> chatContainer.classList.toggle('open'));
+    chatCloseBtn?.addEventListener('click', ()=> chatContainer.classList.remove('open'));
+    chatForm?.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const text=(chatInput.value||'').trim();
+      if(!text) return;
+      addMessage(text,'user');
+      chatInput.value='';
+      chatInput.disabled=true; chatSendBtn.disabled=true; chatLoading.classList.remove('hidden');
+      // demo antwoord
+      await new Promise(r=>setTimeout(r,600));
+      addMessage('Dank je! We nemen snel contact op.','bot');
+      chatInput.disabled=false; chatSendBtn.disabled=false; chatLoading.classList.add('hidden'); chatInput.focus();
+    });
 
-    if(chatForm){
-      chatForm.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        const now=Date.now();
-        if(now-lastSentAt<1200) return; // простейший rate-limit
-        const text = chatInput.value.trim();
-        if(!text) return;
+    // ===== Contact form (demo) =====
+    const form = document.getElementById('contact-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const successMsg = document.getElementById('form-success-message');
+    form?.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      if(document.getElementById('company').value) return; // honeypot
+      if(!form.reportValidity()) return;
+      submitBtn.textContent='Bezig met versturen...';
+      submitBtn.disabled=true;
+      await new Promise(r=>setTimeout(r,500));
+      form.classList.add('hidden');
+      successMsg.classList.remove('hidden');
+      submitBtn.textContent='Verstuur';
+      submitBtn.disabled=false;
+    });
 
-        addMessage(text,'user');
-        chatInput.value='';
-        lastSentAt=now;
-        chatInput.disabled=true; chatSendBtn.disabled=true; chatLoading.classList.remove('hidden');
-
-        try{
-          // ВСЕ ИИ-запросы идут на твой БЕКЕНД (он уже дергает Gemini/OpenAI и прячет ключи)
-          const r = await fetch('/api/ai/chat', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ appId, text })});
-          const data = await r.json();
-          addMessage((data && data.reply) ? data.reply : 'Geen antwoord ontvangen.', 'bot');
-        }catch(err){
-          console.error(err);
-          addMessage('Er is een fout opgetreden. Probeer later opnieuw.', 'bot');
-        }finally{
-          chatInput.disabled=false; chatSendBtn.disabled=false; chatLoading.classList.add('hidden'); chatInput.focus();
-        }
-      });
-    }
-
-    // ---------- Blog (list + generate via backend) ----------
-    const blogContainer = document.getElementById('blog-posts-container');
-    const generateBlogBtn = document.getElementById('generate-blog-btn');
-    const blogTopicInput = document.getElementById('blog-topic-input');
-    const blogLoading = document.getElementById('blog-loading');
-
-    function sanitizeBasic(html){
-      // Простая защита: удаляем <script>, on* handlers, iframe; разрешаем базовые теги
-      const tmp=document.createElement('div'); tmp.innerHTML=html||'';
-      const scripts=tmp.querySelectorAll('script,iframe,object,embed');
-      scripts.forEach(n=>n.remove());
-      tmp.querySelectorAll('*').forEach(el=>{
-        [...el.attributes].forEach(a=>{
-          const n=a.name.toLowerCase();
-          if(n.startsWith('on') || n==='style') el.removeAttribute(a.name);
-        });
-      });
-      return tmp.innerHTML;
-    }
-
-    function renderBlogPosts(posts){
-      if(!blogContainer) return;
-      blogContainer.innerHTML='';
-      posts.forEach(post=>{
-        const date = post.timestamp && post.timestamp.seconds
-          ? new Date(post.timestamp.seconds*1000)
-          : (post.timestamp ? new Date(post.timestamp) : new Date());
-        const d = date.toLocaleDateString('nl-NL',{day:'numeric',month:'long',year:'numeric'});
-        const card=document.createElement('div');
-        card.className='blog-post-card';
-        card.innerHTML=`
-          <p class="text-sm text-slate-500 mb-1">${d}</p>
-          <h3 class="font-semibold text-xl mb-2"></h3>
-          <div class="prose prose-slate max-w-none text-[15px] leading-7"></div>
-        `;
-        card.querySelector('h3').textContent = post.titel || 'Zonder titel';
-        card.querySelector('.prose').innerHTML = sanitizeBasic(post.inhoud || '');
-        blogContainer.appendChild(card);
-      });
-    }
-
-    async function fetchBlogFromBackend(){
-      try{
-        const r = await fetch(`/api/blog?appId=${encodeURIComponent(appId)}`);
-        if(r.ok){
-          const posts=await r.json();
-          renderBlogPosts(Array.isArray(posts)?posts:[]);
-        }
-      }catch(e){ console.warn('Blog fetch failed',e); }
-    }
-
-    if(generateBlogBtn){
-      generateBlogBtn.addEventListener('click', async ()=>{
-        const topic = (blogTopicInput.value||'').trim();
-        if(!topic){ blogTopicInput.focus(); return; }
-        generateBlogBtn.disabled=true; generateBlogBtn.textContent='Genereren...'; blogLoading.classList.remove('hidden');
-        try{
-          const r = await fetch('/api/ai/blog', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ appId, topic })});
-          if(!r.ok){ throw new Error('API fout'); }
-          // backend zelf schrijft in Firestore/DB; мы просто перезагрузим список
-          await new Promise(res=>setTimeout(res,400));
-          if(db){ /* wachten op snapshot */ } else { await fetchBlogFromBackend(); }
-          blogTopicInput.value='';
-        }catch(err){
-          console.error(err); alert('Kon geen blogpost genereren. Probeer opnieuw.');
-        }finally{
-          generateBlogBtn.disabled=false; generateBlogBtn.textContent='Genereer post'; blogLoading.classList.add('hidden');
-        }
-      });
-    }
-
-    // ---------- Firestore listeners ----------
-    function startApp(uid){
-      // Chat history (laatste 50, op tijd)
-      if(db){
-        const chatQ = query(collection(db, `/artifacts/${appId}/public/data/chat-history`), orderBy('timestamp','asc'), limit(50));
-        onSnapshot(chatQ, snap=>{
-          // render simpel: wis en перерисуй (чтобы не дублировать)
-          chatMessages.innerHTML='';
-          snap.forEach(docSnap=>{
-            const d=docSnap.data();
-            addMessage(d.text||'', d.role==='user'?'user':'bot');
-          });
-        });
-        // Blog posts live
-        const blogQ = query(collection(db, `/artifacts/${appId}/public/data/blog-posts`), orderBy('timestamp','desc'), limit(20));
-        onSnapshot(blogQ, snap=>{
-          const posts=snap.docs.map(d=>d.data());
-          renderBlogPosts(posts);
-        });
-        // Welkomstное сообщение (только если нет записей)
-        setTimeout(async ()=>{
-          if(chatMessages.children.length===0){
-            addMessage('Hallo! Welkom bij BotMatic. Hoe kan ik je vandaag helpen?','bot');
-          }
-        },600);
-      } else {
-        // Fallback zonder Firestore
-        fetchBlogFromBackend();
-      }
-    }
-
-    // ---------- Init ----------
+    // ===== Init =====
     document.addEventListener('DOMContentLoaded', ()=>{
-      const hash=(location.hash||'#home').replace('#',''); showPage(hash);
+      const id = (location.hash||'#home').slice(1);
+      showPage(id);
       document.getElementById('year').textContent=new Date().getFullYear();
     });
   </script>
 
+  <!-- keep toggleAnswer global for FAQ inline onclick -->
   <script>
-    // Kleine helpers die niet in module должны быть
     function toggleAnswer(btn){
       const answer = btn.nextElementSibling;
       const icon = btn.querySelector('span:last-child');
@@ -537,6 +352,8 @@
       answer.classList.toggle('hidden');
       if(icon) icon.textContent = open ? '–' : '+';
     }
+    // expose just in case
+    window.toggleAnswer = toggleAnswer;
   </script>
 </body>
 </html>
