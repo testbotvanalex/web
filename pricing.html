@@ -1,56 +1,145 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>BotMatic — Tarieven</title>
-  <link rel="stylesheet" href="./styles.css" />
-  <link rel="stylesheet" href="./widget/chat.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-lang-key="meta_title">BotMatic | Prijzen</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
-  <header class="topbar">
-    <div class="container nav">
-      <a class="logo" href="./index.html">BotMatic</a>
-      <nav class="menu">
-        <a href="./index.html">Home</a>
-        <a href="./sectors.html">Sectoren</a>
-        <a href="./pricing.html" aria-current="page">Tarieven</a>
-        <a href="./about.html">Over ons</a>
-        <a href="./contact.html">Contact</a>
-      </nav>
-      <div class="actions"><a class="btn btn-cta" href="./contact.html">Vraag demo</a></div>
+<header class="header sticky top-0 z-50">
+  <nav class="container mx-auto px-6 py-4 flex items-center justify-between" data-nav aria-label="Hoofdnavigatie">
+    <a href="index.html" class="text-xl font-extrabold">BotMatic</a>
+    <div class="hidden md:flex items-center gap-8">
+      <a href="index.html" class="hover:underline" data-lang-key="nav_home">Home</a>
+      <a href="features.html" class="hover:underline" data-lang-key="nav_features">Kenmerken</a>
+      <a href="use-cases.html" class="hover:underline" data-lang-key="nav_usecases">Use cases</a>
+      <a href="pricing.html" class="hover:underline nav-active" data-lang-key="nav_pricing">Prijzen</a>
+      <a href="demo.html" class="hover:underline" data-lang-key="nav_demo">Demo</a>
+      <a href="contact.html" class="hover:underline" data-lang-key="nav_contact">Contact</a>
+      <a href="faq.html" class="hover:underline" data-lang-key="nav_faq">FAQ</a>
     </div>
-  </header>
+    <div class="hidden sm:flex lang-pill rounded-full p-1" role="group" aria-label="Kies taal">
+      <button class="lang-btn bg-white text-[var(--accent)] text-xs font-semibold rounded-full px-3 py-1" data-lang="nl" type="button">NL</button>
+      <button class="lang-btn text-black/60 text-xs font-semibold rounded-full px-3 py-1" data-lang="fr" type="button">FR</button>
+      <button class="lang-btn text-black/60 text-xs font-semibold rounded-full px-3 py-1" data-lang="en" type="button">EN</button>
+    </div>
+    <button id="menuBtn" class="md:hidden" aria-label="Menu" aria-expanded="false" aria-controls="mobileMenu" type="button">☰</button>
+  </nav>
+  <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-[var(--border)]">
+    <a href="features.html" class="block px-6 py-2">Kenmerken</a>
+    <a href="use-cases.html" class="block px-6 py-2">Use cases</a>
+    <a href="pricing.html" class="block px-6 py-2">Prijzen</a>
+    <a href="demo.html" class="block px-6 py-2">Demo</a>
+    <a href="contact.html" class="block px-6 py-2">Contact</a>
+    <a href="faq.html" class="block px-6 py-2">FAQ</a>
+  </div>
+</header>
 
-  <main class="container pricing">
-    <h1>Tarieven</h1>
-    <div class="plans">
-      <div class="plan card">
-        <h3>Basic</h3>
-        <p class="price">€29<span>/m</span></p>
-        <ul class="feat"><li>Website-widget</li><li>FAQ + intake</li><li>Leadrapport per e-mail</li></ul>
-        <a class="btn btn-cta" href="./contact.html">Start proef</a>
+<main class="py-16">
+  <div class="container mx-auto px-6 fade-in">
+    <h1 class="section-title" data-lang-key="nav_pricing">Prijzen</h1>
+
+    <!-- Toggle: Monthly / Yearly (-15%) -->
+    <div class="flex items-center justify-center mb-10">
+      <div class="toggle" role="tablist" aria-label="Billing period">
+        <button id="btn-monthly" class="btn" role="tab" aria-selected="true" data-lang-key="billing_m">Maandelijks</button>
+        <button id="btn-yearly"  class="btn" role="tab" aria-selected="false" data-lang-key="billing_y">Jaarlijks</button>
       </div>
-      <div class="plan card highlight">
-        <h3>Standard</h3>
-        <p class="price">€99<span>/m</span></p>
-        <ul class="feat"><li>WhatsApp/Telegram</li><li>Afspraken + kalender</li><li>Meertalig</li></ul>
-        <a class="btn btn-cta" href="./contact.html">Start proef</a>
-        <span class="badge">Meest gekozen</span>
+      <span class="ml-3 text-sm text-green-700">−15%</span>
+    </div>
+
+    <!-- Plans -->
+    <div class="grid lg:grid-cols-3 gap-8 max-w-5xl mx-auto items-stretch">
+      <div class="card p-8 flex flex-col">
+        <h3 class="text-xl font-bold" data-lang-key="p1_t">Start</h3>
+        <p class="text-4xl font-extrabold mt-2">
+          <span class="price" data-base="199">€199</span>
+          <span class="text-gray-500 text-lg" data-lang-key="per">/maand</span>
+        </p>
+        <ul class="mt-4 space-y-2 text-[var(--muted)] flex-1">
+          <li>✔️ Basis dialogen</li>
+          <li>✔️ 1000 actieve gebruikers</li>
+          <li>✔️ 1 website</li>
+          <li>✔️ Basisanalyses</li>
+          <li>✔️ E-mailsupport</li>
+        </ul>
+        <a href="contact.html" class="mt-6 cta cta-ghost px-6 py-3 rounded-full font-semibold" data-lang-key="choose">Kies plan</a>
       </div>
-      <div class="plan card">
-        <h3>Premium</h3>
-        <p class="price">€299<span>/m</span></p>
-        <ul class="feat"><li>Custom AI</li><li>Betaalflows</li><li>Integraties (CRM/API)</li></ul>
-        <a class="btn btn-cta" href="./contact.html">Start proef</a>
+
+      <div class="card border-2 p-8 relative flex flex-col" style="border-color: var(--accent);">
+        <span class="absolute -top-3 left-1/2 -translate-x-1/2 text-xs font-bold px-3 py-1 rounded-full"
+              style="background: var(--accent); color:#fff;" data-lang-key="popular">Populair</span>
+        <h3 class="text-xl font-bold" data-lang-key="p2_t">Zakelijk</h3>
+        <p class="text-4xl font-extrabold mt-2">
+          <span class="price" data-base="499">€499</span>
+          <span class="text-gray-500 text-lg" data-lang-key="per">/maand</span>
+        </p>
+        <ul class="mt-4 space-y-2 text-[var(--muted)] flex-1">
+          <li>✔️ Geavanceerde scenario's</li>
+          <li>✔️ 5000 actieve gebruikers</li>
+          <li>✔️ Integraties berichten-apps</li>
+          <li>✔️ CRM-integratie</li>
+          <li>✔️ Prioriteitsondersteuning</li>
+        </ul>
+        <a href="contact.html" class="mt-6 cta cta-primary px-6 py-3 rounded-full font-semibold" data-lang-key="choose">Kies plan</a>
+      </div>
+
+      <div class="card p-8 flex flex-col">
+        <h3 class="text-xl font-bold" data-lang-key="p3_t">Enterprise</h3>
+        <p class="text-4xl font-extrabold mt-2">Op maat</p>
+        <ul class="mt-4 space-y-2 text-[var(--muted)] flex-1">
+          <li>✔️ Oplossingen op maat</li>
+          <li>✔️ Onbeperkt gebruikers</li>
+          <li>✔️ Integratie met elke API</li>
+          <li>✔️ AI & ML</li>
+          <li>✔️ Dedicated manager</li>
+        </ul>
+        <a href="contact.html" class="mt-6 cta cta-ghost px-6 py-3 rounded-full font-semibold">Neem contact op</a>
       </div>
     </div>
-    <p class="muted small">Alle plannen: 14 dagen gratis. Maandelijks opzegbaar.</p>
-  </main>
 
-  <footer class="foot"><div class="container foot-inner"><span>© <span id="year"></span> BotMatic</span><a href="./privacy.html">Privacy & GDPR</a></div></footer>
+    <!-- ROI -->
+    <section class="py-16">
+      <h2 class="section-title" data-lang-key="roi_title">Bereken uw besparing</h2>
+      <div class="card p-6 md:p-10 max-w-5xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <label class="block mb-2 font-medium" for="q" data-lang-key="roi_q">Verzoeken per maand: <span id="qv" class="text-[var(--accent)] font-bold">500</span></label>
+            <input id="q" class="range mb-6" type="range" min="100" max="10000" step="100" value="500" />
+            <label class="block mb-2 font-medium" for="t" data-lang-key="roi_t">Gem. tijd per verzoek (min): <span id="tv" class="text-[var(--accent)] font-bold">5</span></label>
+            <input id="t" class="range mb-6" type="range" min="1" max="30" value="5" />
+            <label class="block mb-2 font-medium" for="c" data-lang-key="roi_c">Uurloon medewerker (€): <span id="cv" class="text-[var(--accent)] font-bold">10</span></label>
+            <input id="c" class="range mb-6" type="range" min="1" max="100" value="10" />
+            <label class="block mb-2 font-medium" for="a" data-lang-key="roi_a">% geautomatiseerd: <span id="av" class="text-[var(--accent)] font-bold">80</span></label>
+            <input id="a" class="range" type="range" min="10" max="100" value="80" />
+          </div>
+          <div class="rounded-lg p-8 text-center" style="background:#fff7ec; border:1px solid #ffe2bf;">
+            <p class="text-[var(--muted)]" data-lang-key="roi_res_lbl">Uw potentiële besparing</p>
+            <p id="res" class="text-5xl font-extrabold my-2">€0</p>
+            <p class="text-[var(--muted)]" data-lang-key="roi_per">per maand</p>
+            <p class="text-gray-500 text-sm mt-3" data-lang-key="roi_note">Schatting ter illustratie van potentiële voordelen.</p>
+            <a href="contact.html" class="mt-6 inline-block cta cta-primary px-6 py-3 rounded-full" data-lang-key="roi_cta">Vraag demo aan</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
 
-  <script src="./widget/chat.js"></script>
-  <script src="./script.js"></script>
+<footer class="bg-white border-t border-[var(--border)] text-gray-600 py-8">
+  <div class="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+    <p>&copy; 2025 BotMatic. <span data-lang-key="rights">Alle rechten voorbehouden.</span></p>
+    <div class="flex items-center gap-4 text-sm">
+      <a href="privacy.html" class="hover:underline" data-lang-key="link_privacy">Privacy</a>
+      <a href="terms.html" class="hover:underline" data-lang-key="link_terms">Voorwaarden</a>
+      <a href="privacy.html#gdpr" class="hover:underline" data-lang-key="link_gdpr">GDPR</a>
+    </div>
+    <a href="contact.html" class="cta cta-primary px-5 py-2 rounded-full" data-lang-key="cta_footer">Start gratis proef</a>
+  </div>
+</footer>
+
+<script src="assets/main.js"></script>
 </body>
 </html>

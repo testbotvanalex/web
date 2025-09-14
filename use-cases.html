@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-lang-key="meta_title">BotMatic | Contact</title>
+  <title data-lang-key="meta_title">BotMatic | Use cases</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="assets/styles.css">
 </head>
@@ -29,34 +29,25 @@
 </header>
 
 <main class="py-16">
-  <div class="container mx-auto px-6 fade-in">
-    <h1 class="section-title" data-lang-key="contact_title">Klaar om te starten?</h1>
-    <p class="text-center max-w-2xl mx-auto -mt-2 mb-6 text-slate-600" data-lang-key="contact_blurb">
-      Plan een demo of start je proefperiode. We reageren dezelfde dag.
-    </p>
-
-    <form class="max-w-xl mx-auto" data-lead novalidate>
-      <div class="mb-3 text-left">
-        <label for="cName" class="block text-sm font-medium" data-lang-key="form_name">Naam</label>
-        <input id="cName" name="name" type="text" required aria-required="true"
-               class="w-full p-4 rounded-md bg-white border border-slate-200" />
+  <div class="container mx-auto px-6">
+    <h1 class="section-title">Use cases per sector</h1>
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8" role="list">
+      <div class="bg-white p-6 rounded-lg shadow" role="listitem">
+        <h3 class="font-bold mb-2">Schoonheid</h3>
+        <p>Auto-booking, herinneringen, upsells.</p>
       </div>
-      <div class="mb-3 text-left">
-        <label for="cEmail" class="block text-sm font-medium" data-lang-key="form_email">E-mail</label>
-        <input id="cEmail" name="email" type="email" required aria-required="true"
-               class="w-full p-4 rounded-md bg-white border border-slate-200" />
+      <div class="bg-white p-6 rounded-lg shadow" role="listitem">
+        <h3 class="font-bold mb-2">Autoservice</h3>
+        <p>Intake, offertes, statusupdates.</p>
       </div>
-      <div class="mb-4 text-left">
-        <label for="cMsg" class="block text-sm font-medium" data-lang-key="form_msg">Vertel ons over je project…</label>
-        <textarea id="cMsg" name="message" rows="4"
-                  class="w-full p-4 rounded-md bg-white border border-slate-200"></textarea>
+      <div class="bg-white p-6 rounded-lg shadow" role="listitem">
+        <h3 class="font-bold mb-2">Vastgoed</h3>
+        <p>Bezichtigingen + leadkwalificatie.</p>
       </div>
-      <button class="cta bg-indigo-600 text-white font-semibold rounded-full py-4 px-10" data-lang-key="cta_send">Verzoek indienen</button>
-      <p class="formStatus text-sm text-green-600 mt-3" aria-live="polite"></p>
-    </form>
-
-    <div class="mt-8 text-center text-sm text-slate-600">
-      <p>BotMatic BV · KVK / BTW: NL000000000B01 · Amsterdam</p>
+      <div class="bg-white p-6 rounded-lg shadow" role="listitem">
+        <h3 class="font-bold mb-2">Horeca</h3>
+        <p>Reserveringen, allergeneninfo, tafels.</p>
+      </div>
     </div>
   </div>
 </main>
