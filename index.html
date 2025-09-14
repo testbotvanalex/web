@@ -1,118 +1,302 @@
 <!DOCTYPE html>
-<html lang="nl" class="scroll-smooth">
+<html lang="nl">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title data-lang-key="meta_title">BotMatic | AI-chatbots die omzet en support versnellen</title>
-  <meta name="description" content="Automatiseer klantenservice, kwalificeer leads en boost omzet met AI-chatbots."/>
-  <meta name="theme-color" content="#FF8A00"/>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="assets/styles.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BotMatic: Jouw Maatwerk Chatbot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Neutral Blue -->
+    <!-- Application Structure Plan: Dit is een gesimuleerde multi-pagina SPA ontworpen voor verkoop. De structuur bestaat uit afzonderlijke, verborgen secties voor 'Home', 'Functies', 'Prijzen', 'Over Ons', 'Contact', 'Succesverhalen' en 'FAQ'. Een navigatiebalk bovenin de pagina stelt de gebruiker in staat om tussen deze secties te schakelen via JavaScript, wat zorgt voor een intuïtieve en schone gebruikerservaring. Deze opzet is gekozen omdat het de nadruk legt op de verschillende verkoopargumenten (product, voordelen, prijs) in hun eigen dedicated ruimtes en een duidelijke manier biedt om contact op te nemen. De flow is niet-lineair, waardoor de gebruiker vrij kan navigeren op basis van hun behoeften. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Bedrijfsoverzicht, diensten, business model, onderscheid. -> Doel: Verkopen en informeren. -> Viz/Methode: 
+            - Home: Grote, uitnodigende hero-sectie met een duidelijke CTA (HTML/CSS).
+            - Functies: Lijst van kernfuncties en ondersteunde platforms met icons (HTML/CSS). Dit breekt informatie af in gemakkelijk te consumeren stukjes.
+            - Prijzen: Duidelijke, vergelijkende prijzentabel (HTML/CSS) in plaats van een grafiek om direct de verschillende opties te presenteren.
+            - Over Ons: Duidelijke tekstuele sectie om de bedrijfshistorie en onderscheid te verhelderen.
+            - Contact: Een eenvoudig formulier met een succespagina (HTML/CSS + JS). Dit stimuleert leadgeneratie.
+            - Succesverhalen: Een sectie met testimonials en citaten van tevreden klanten. Dit bouwt vertrouwen op en dient als sociaal bewijs.
+            - FAQ: Een lijst met vragen en antwoorden die openen en sluiten (HTML/CSS + JS). Dit maakt de informatie toegankelijker.
+            - Navigatie: Dynamische JS-logica om secties te tonen/verbergen.
+        - Interactie: Klikbare navigatielinks. Hover-effecten op knoppen en kaarten voor een responsieve, professionele feel. -> Justificatie: De nieuwe structuur is geoptimaliseerd voor leadgeneratie en verkoop, wat beter past bij de wens van de gebruiker. -> Methode: Tailwind CSS, Vanilla JS. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+    </style>
 </head>
-<body>
-  <!-- Header -->
-  <header class="header sticky top-0 z-50">
-    <nav class="container mx-auto px-6 py-4 flex items-center justify-between" data-nav aria-label="Hoofdnavigatie">
-      <a href="index.html" class="text-xl font-extrabold">BotMatic</a>
-      <div class="hidden md:flex items-center gap-8">
-        <a href="index.html" class="hover:underline nav-active" data-lang-key="nav_home">Home</a>
-        <a href="features.html" class="hover:underline" data-lang-key="nav_features">Kenmerken</a>
-        <a href="use-cases.html" class="hover:underline" data-lang-key="nav_usecases">Use cases</a>
-        <a href="pricing.html" class="hover:underline" data-lang-key="nav_pricing">Prijzen</a>
-        <a href="demo.html" class="hover:underline" data-lang-key="nav_demo">Demo</a>
-        <a href="contact.html" class="hover:underline" data-lang-key="nav_contact">Contact</a>
-        <a href="faq.html" class="hover:underline" data-lang-key="nav_faq">FAQ</a>
-      </div>
-      <div class="hidden sm:flex lang-pill rounded-full p-1" role="group" aria-label="Kies taal">
-        <button class="lang-btn bg-white text-[var(--accent)] text-xs font-semibold rounded-full px-3 py-1" data-lang="nl" type="button">NL</button>
-        <button class="lang-btn text-black/60 text-xs font-semibold rounded-full px-3 py-1" data-lang="fr" type="button">FR</button>
-        <button class="lang-btn text-black/60 text-xs font-semibold rounded-full px-3 py-1" data-lang="en" type="button">EN</button>
-      </div>
-      <button id="menuBtn" class="md:hidden" aria-label="Menu" aria-expanded="false" aria-controls="mobileMenu" type="button">☰</button>
-    </nav>
-    <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-[var(--border)]">
-      <a href="features.html" class="block px-6 py-2" data-lang-key="nav_features">Kenmerken</a>
-      <a href="use-cases.html" class="block px-6 py-2" data-lang-key="nav_usecases">Use cases</a>
-      <a href="pricing.html" class="block px-6 py-2" data-lang-key="nav_pricing">Prijzen</a>
-      <a href="demo.html" class="block px-6 py-2" data-lang-key="nav_demo">Demo</a>
-      <a href="contact.html" class="block px-6 py-2" data-lang-key="nav_contact">Contact</a>
-      <a href="faq.html" class="block px-6 py-2" data-lang-key="nav_faq">FAQ</a>
-    </div>
-  </header>
+<body class="text-slate-800">
 
-  <main id="main">
-    <!-- Hero -->
-    <section class="hero-bg py-16 md:py-24">
-      <div class="container mx-auto px-6 text-center">
-        <h1 class="text-4xl md:text-6xl font-extrabold leading-tight" data-lang-key="hero_title">
-          Automatiseer uw bedrijf met AI-chatbots
-        </h1>
-        <p class="mt-4 text-lg md:text-xl max-w-3xl mx-auto" data-lang-key="hero_sub">
-          +30% conversie, −70% supportbelasting. Bots voor WhatsApp, Instagram, Telegram en je website.
-        </p>
-        <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-          <a href="pricing.html" class="cta cta-primary rounded-full py-4 px-8" data-lang-key="cta_primary">Probeer 14 dagen gratis</a>
-          <a href="demo.html" class="cta cta-ghost rounded-full py-4 px-8" data-lang-key="cta_secondary">Bekijk demo</a>
+    <header class="bg-white shadow-sm sticky top-0 z-10">
+        <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-slate-900" onclick="showPage('home'); return false;">BotMatic</a>
+            <div class="space-x-4">
+                <a href="#" class="text-slate-600 hover:text-sky-500 transition-colors" onclick="showPage('home'); return false;">Home</a>
+                <a href="#" class="text-slate-600 hover:text-sky-500 transition-colors" onclick="showPage('features'); return false;">Functies</a>
+                <a href="#" class="text-slate-600 hover:text-sky-500 transition-colors" onclick="showPage('pricing'); return false;">Prijzen</a>
+                <a href="#" class="text-slate-600 hover:text-sky-500 transition-colors" onclick="showPage('about'); return false;">Over Ons</a>
+                <a href="#" class="text-slate-600 hover:text-sky-500 transition-colors" onclick="showPage('testimonials'); return false;">Succesverhalen</a>
+                <a href="#" class="text-slate-600 hover:text-sky-500 transition-colors" onclick="showPage('contact'); return false;">Contact</a>
+                <a href="#" class="text-slate-600 hover:text-sky-500 transition-colors" onclick="showPage('faq'); return false;">FAQ</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+        <section id="home-page" class="page-section">
+            <div class="text-center py-16 md:py-24">
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900 leading-tight mb-4">
+                    Laat de Robot het Werk Doen, Focus op Je Bedrijf.
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-600 max-w-3xl mx-auto mb-8">
+                    Wij bouwen chatbots die saaie taken overnemen. Denk aan het verwerken van bestellingen, plannen van afspraken en beantwoorden van vragen. Zo bespaar je tijd en geld.
+                </p>
+                <a href="#" class="inline-block bg-sky-500 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-sky-600 transition-colors duration-300" onclick="showPage('contact'); return false;">
+                    Vraag een Vrijblijvend Gesprek aan
+                </a>
+            </div>
+        </section>
+
+        <section id="features-page" class="page-section hidden">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold">Hoe Onze Chatbots Je Bedrijf Helpen</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto mt-2">
+                    Onze chatbots zijn ontworpen om specifieke taken over te nemen binnen jouw bedrijf, 24 uur per dag, 7 dagen per week.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                    <span class="text-3xl">📝</span>
+                    <h3 class="text-xl font-semibold mt-2">Formulieren Invullen</h3>
+                    <p class="text-slate-600 text-sm mt-1">Laat de chatbot informatie verzamelen en invullen, zoals aanmeldingen of klantgegevens.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                    <span class="text-3xl">📅</span>
+                    <h3 class="text-xl font-semibold mt-2">Afspraken Plannen</h3>
+                    <p class="text-slate-600 text-sm mt-1">De chatbot plant afspraken in je agenda, zonder dat je er zelf aan hoeft te denken.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                    <span class="text-3xl">💡</span>
+                    <h3 class="text-xl font-semibold mt-2">Vragen Beantwoorden</h3>
+                    <p class="text-slate-600 text-sm mt-1">De chatbot geeft direct antwoord op de meest voorkomende vragen, zodat jij je kunt richten op complexere zaken.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                    <span class="text-3xl">📦</span>
+                    <h3 class="text-xl font-semibold mt-2">Bestellingen Verwerken</h3>
+                    <p class="text-slate-600 text-sm mt-1">Laat de chatbot bestellingen aannemen en doorsturen naar je verkoopteam.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing-page" class="page-section hidden">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold">Kies Jouw Perfecte Oplossing</h2>
+                <p class="text-slate-600 max-w-3xl mx-auto mt-2">
+                    Elk abonnement start met een gratis proefperiode van 14 dagen!
+                </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8 items-stretch">
+                <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col justify-between transition-transform duration-300 hover:scale-105">
+                    <div>
+                        <h3 class="text-2xl font-bold text-center mb-2">Instap</h3>
+                        <p class="text-sm text-slate-500 text-center mb-4">Voor kleine teams</p>
+                        <p class="text-4xl font-bold text-center text-sky-500 mb-2">€29<span class="text-base text-slate-500 font-normal"> /maand</span></p>
+                        <ul class="text-slate-600 text-sm space-y-2 mt-4">
+                            <li>✓ Automatisering van één taak</li>
+                            <li>✓ Eenvoudige integratie (1 platform)</li>
+                            <li>✓ Eenvoudige ondersteuning</li>
+                        </ul>
+                    </div>
+                    <a href="#" class="block text-center mt-6 bg-slate-100 text-slate-700 px-4 py-2 rounded-full font-semibold hover:bg-slate-200 transition-colors">Kies dit pakket</a>
+                </div>
+                <div class="bg-sky-500 p-6 rounded-lg shadow-lg text-white flex flex-col justify-between transition-transform duration-300 hover:scale-105">
+                    <div>
+                        <h3 class="text-2xl font-bold text-center mb-2">Standaard</h3>
+                        <p class="text-sm text-sky-200 text-center mb-4">Meest populair</p>
+                        <p class="text-4xl font-bold text-center text-white mb-2">€99<span class="text-base text-sky-200 font-normal"> /maand</span></p>
+                        <ul class="text-sky-100 text-sm space-y-2 mt-4">
+                            <li>✓ Meerdere taken automatiseren</li>
+                            <li>✓ Integratie op 2 platforms</li>
+                            <li>✓ Prioritaire ondersteuning & updates</li>
+                        </ul>
+                    </div>
+                    <a href="#" class="block text-center mt-6 bg-white text-sky-500 px-4 py-2 rounded-full font-semibold hover:bg-sky-50 transition-colors">Kies dit pakket</a>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col justify-between transition-transform duration-300 hover:scale-105">
+                    <div>
+                        <h3 class="text-2xl font-bold text-center mb-2">Premium</h3>
+                        <p class="text-sm text-slate-500 text-center mb-4">Voor grote organisaties</p>
+                        <p class="text-4xl font-bold text-center text-sky-500 mb-2">€299<span class="text-base text-slate-500 font-normal"> /maand</span></p>
+                        <ul class="text-slate-600 text-sm space-y-2 mt-4">
+                            <li>✓ Maatwerk AI-oplossing</li>
+                            <li>✓ Integratie met CRM, ERP en meer</li>
+                            <li>✓ Toegewijde projectmanager</li>
+                        </ul>
+                    </div>
+                    <a href="#" class="block text-center mt-6 bg-slate-100 text-slate-700 px-4 py-2 rounded-full font-semibold hover:bg-slate-200 transition-colors">Kies dit pakket</a>
+                </div>
+            </div>
+        </section>
+        
+        <section id="about-page" class="page-section hidden">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold">Over Ons</h2>
+                <p class="text-slate-600 max-w-3xl mx-auto mt-2">
+                    BotMatic is een Belgisch bedrijf, gespecialiseerd in het bouwen van op maat gemaakte chatbots. Onze expertise ligt in het creëren van geautomatiseerde communicatieoplossingen die perfect aansluiten bij de behoeften van jouw bedrijf.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="bg-white p-6 rounded-lg border-l-4 border-red-500 shadow-lg">
+                    <h3 class="text-xl font-semibold text-red-800 mb-2">Geen link met het Amerikaanse bedrijf</h3>
+                    <p class="text-slate-600">Wij zijn een onafhankelijk Belgisch bedrijf. Verwar ons niet met een gelijknamig, 'deadpooled' Amerikaans chatbotbedrijf.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg border-l-4 border-amber-500 shadow-lg">
+                    <h3 class="text-xl font-semibold text-amber-800 mb-2">Geen link met het Indiase bedrijf</h3>
+                    <p class="text-slate-600">Evenzo zijn we geen onderdeel van het Indiase bedrijf dat zich richt op fintech en financiële automatiseringsoplossingen.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials-page" class="page-section hidden">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold">Succesverhalen van Klanten</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto mt-2">
+                    Ontdek hoe onze chatbots de dagelijkse werkzaamheden bij diverse bedrijven hebben veranderd.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="bg-sky-100 p-6 rounded-lg shadow-lg">
+                    <p class="text-slate-800 italic mb-4">"De chatbot van BotMatic heeft de tijd die we besteden aan het inplannen van afspraken met 70% verminderd. We kunnen ons nu volledig richten op onze klanten!"</p>
+                    <p class="font-semibold text-right text-slate-700">- Pieter G., Tandartspraktijk</p>
+                </div>
+                <div class="bg-sky-100 p-6 rounded-lg shadow-lg">
+                    <p class="text-slate-800 italic mb-4">"We kregen zo veel vragen via WhatsApp. Nu handelt de chatbot de simpele vragen af, en onze medewerkers kunnen zich focussen op de complexe problemen. De efficiency is enorm gestegen."</p>
+                    <p class="font-semibold text-right text-slate-700">- Sarah V., E-commerce Winkel</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact-page" class="page-section hidden">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold">Neem Contact Met Ons Op</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto mt-2">
+                    Wil je de werkroutine van je bedrijf versnellen? Vraag een vrijblijvend gesprek aan om te bespreken hoe een chatbot kan helpen.
+                </p>
+            </div>
+            <div class="bg-white p-8 rounded-lg shadow-lg max-w-xl mx-auto">
+                <form id="contact-form" class="space-y-6">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-slate-700">Naam</label>
+                        <input type="text" id="name" name="name" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-sky-300 focus:ring focus:ring-sky-200 focus:ring-opacity-50 p-2">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-slate-700">E-mailadres</label>
+                        <input type="email" id="email" name="email" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-sky-300 focus:ring focus:ring-sky-200 focus:ring-opacity-50 p-2">
+                    </div>
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-slate-700">Vertel ons kort wat je wilt automatiseren</label>
+                        <textarea id="message" name="message" rows="4" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-sky-300 focus:ring focus:ring-sky-200 focus:ring-opacity-50 p-2"></textarea>
+                    </div>
+                    <div id="form-success-message" class="hidden text-green-700 bg-green-100 p-3 rounded-md text-center">
+                        Bedankt! Je aanvraag is verzonden. We nemen spoedig contact met je op.
+                    </div>
+                    <button type="submit" class="w-full bg-sky-500 text-white px-4 py-2 rounded-full font-semibold hover:bg-sky-600 transition-colors duration-300">
+                        Verstuur Bericht
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <section id="faq-page" class="page-section hidden">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold">Veelgestelde Vragen</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto mt-2">
+                    Hier vind je antwoorden op de meestvoorkomende vragen over onze chatbots en diensten.
+                </p>
+            </div>
+            <div class="bg-white p-8 rounded-lg shadow-lg max-w-3xl mx-auto space-y-4">
+                <div class="border-b border-slate-200 pb-4">
+                    <button class="w-full text-left font-semibold text-lg py-2 flex justify-between items-center" onclick="toggleAnswer(this)">
+                        <span>Hoe helpt een chatbot mijn bedrijf?</span>
+                        <span>+</span>
+                    </button>
+                    <div class="text-slate-600 mt-2 hidden">
+                        Een chatbot kan repeterende taken overnemen, zoals het verwerken van formulieren of het beantwoorden van standaardvragen. Hierdoor bespaar je tijd en kunnen je medewerkers zich concentreren op complexer werk.
+                    </div>
+                </div>
+                <div class="border-b border-slate-200 pb-4">
+                    <button class="w-full text-left font-semibold text-lg py-2 flex justify-between items-center" onclick="toggleAnswer(this)">
+                        <span>Wat kost een chatbot?</span>
+                        <span>+</span>
+                    </button>
+                    <div class="text-slate-600 mt-2 hidden">
+                        Onze prijzen hangen af van de complexiteit en het aantal taken dat je wilt automatiseren. We bieden verschillende pakketten die je op onze prijzenpagina kunt bekijken.
+                    </div>
+                </div>
+                <div class="border-b border-slate-200 pb-4">
+                    <button class="w-full text-left font-semibold text-lg py-2 flex justify-between items-center" onclick="toggleAnswer(this)">
+                        <span>Moet ik technische kennis hebben?</span>
+                        <span>+</span>
+                    </button>
+                    <div class="text-slate-600 mt-2 hidden">
+                        Nee, helemaal niet! Wij zorgen voor de volledige bouw, integratie en het onderhoud van de chatbot. Jij hoeft alleen te vertellen wat je wilt automatiseren.
+                    </div>
+                </div>
+                <div>
+                    <button class="w-full text-left font-semibold text-lg py-2 flex justify-between items-center" onclick="toggleAnswer(this)">
+                        <span>Op welke systemen werkt de chatbot?</span>
+                        <span>+</span>
+                    </button>
+                    <div class="text-slate-600 mt-2 hidden">
+                        Onze chatbots kunnen naadloos worden gekoppeld aan je bestaande platforms, zoals WhatsApp, Slack of je eigen bedrijfssystemen (CRM, ERP).
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 py-6 mt-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-sm">Ontworpen en gebouwd door BotMatic.</p>
         </div>
-        <div class="mt-10 opacity-90">
-          <p class="text-gray-500 text-sm mb-3" data-lang-key="logos_caption">Vertrouwd door ondernemers in beauty, auto, vastgoed en horeca</p>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto">
-            <div class="card p-3 text-center">SalonPro</div>
-            <div class="card p-3 text-center">AutoFix</div>
-            <div class="card p-3 text-center">MakelaarsNL</div>
-            <div class="card p-3 text-center">BistroOne</div>
-          </div>
-        </div>
-      </div>
-    </section>
+    </footer>
 
-    <!-- Teaser -->
-    <section class="py-16">
-      <div class="container mx-auto px-6 fade-in">
-        <h2 class="section-title">Waarom BotMatic werkt</h2>
-        <div class="grid md:grid-cols-3 gap-6">
-          <div class="card p-6">
-            <div class="text-3xl mb-3" aria-hidden="true">⚡️</div>
-            <h3 class="font-semibold mb-1">Antwoorden in seconden</h3>
-            <p class="text-[var(--muted)]">24/7 reacties op FAQ en orders.</p>
-          </div>
-          <div class="card p-6">
-            <div class="text-3xl mb-3" aria-hidden="true">🧠</div>
-            <h3 class="font-semibold mb-1">Slimme kwalificatie</h3>
-            <p class="text-[var(--muted)]">Vraagt door, verzamelt gegevens, plant afspraken.</p>
-          </div>
-          <div class="card p-6">
-            <div class="text-3xl mb-3" aria-hidden="true">🔗</div>
-            <h3 class="font-semibold mb-1">Integraties</h3>
-            <p class="text-[var(--muted)]">WhatsApp, Instagram, CRM, agenda.</p>
-          </div>
-        </div>
-        <div class="text-center mt-8">
-          <a href="features.html" class="cta cta-primary px-6 py-3 rounded-full">Bekijk alle kenmerken</a>
-        </div>
-      </div>
-    </section>
-  </main>
+    <script>
+        const pages = document.querySelectorAll('.page-section');
+        
+        function showPage(pageId) {
+            pages.forEach(page => {
+                page.classList.add('hidden');
+            });
+            document.getElementById(`${pageId}-page`).classList.remove('hidden');
+        }
 
-  <!-- Footer -->
-  <footer class="bg-white border-t border-[var(--border)] text-gray-600 py-8">
-    <div class="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
-      <p>&copy; 2025 BotMatic. <span data-lang-key="rights">Alle rechten voorbehouden.</span></p>
-      <div class="flex items-center gap-4 text-sm">
-        <a href="privacy.html" class="hover:underline" data-lang-key="link_privacy">Privacy</a>
-        <a href="terms.html" class="hover:underline" data-lang-key="link_terms">Voorwaarden</a>
-        <a href="privacy.html#gdpr" class="hover:underline" data-lang-key="link_gdpr">GDPR</a>
-      </div>
-      <a href="pricing.html" class="cta cta-primary px-5 py-2 rounded-full" data-lang-key="cta_footer">Start gratis proef</a>
-    </div>
-  </footer>
+        document.getElementById('contact-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            document.getElementById('contact-form').classList.add('hidden');
+            document.getElementById('form-success-message').classList.remove('hidden');
+        });
+        
+        function toggleAnswer(button) {
+            const answer = button.nextElementSibling;
+            const icon = button.querySelector('span:last-child');
+            if (answer.classList.contains('hidden')) {
+                answer.classList.remove('hidden');
+                icon.textContent = '-';
+            } else {
+                answer.classList.add('hidden');
+                icon.textContent = '+';
+            }
+        }
 
-  <!-- WhatsApp CTA -->
-  <a class="floating-wa cta cta-primary rounded-full px-5 py-3 inline-flex items-center gap-2"
-     href="https://wa.me/yourphonenumber" target="_blank" rel="noopener">
-    <span>WhatsApp</span>
-  </a>
-
-  <script src="assets/main.js"></script>
+        document.addEventListener('DOMContentLoaded', () => {
+            showPage('home');
+        });
+    </script>
 </body>
 </html>
