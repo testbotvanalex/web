@@ -1,359 +1,520 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BotMatic – Jouw Maatwerk Chatbot</title>
-  <meta name="description" content="Bouw minder, verkoop meer. BotMatic maakt chatbots die afspraken plannen, vragen beantwoorden en bestellingen aannemen. 14 dagen gratis." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    :root{ --brand:#ff7a1a; --brand-600:#ff6a00; --ink:#0f172a; --muted:#475569; --bg:#f8fafc; }
-    html,body{scroll-behavior:smooth}
-    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink)}
-    .btn{display:inline-flex;align-items:center;justify-content:center;border-radius:9999px;padding:.75rem 1.25rem;font-weight:700}
-    .btn-primary{background:var(--brand);color:#fff}.btn-primary:hover{background:var(--brand-600)}
-    .btn-ghost{background:#0b12241a;color:var(--ink)}
-    .nav-link.active{color:var(--brand)!important}
-    .card{background:#fff;border-radius:1rem;box-shadow:0 8px 30px rgba(2,6,23,.06)}
-    .badge{font-size:.75rem;border-radius:9999px;padding:.25rem .6rem}
-    .badge-new{background:#fff;color:var(--brand);border:1px solid var(--brand)}
-    .focus-ring:focus{outline:3px solid var(--brand);outline-offset:2px}
-    /* Chat */
-    #chat-container{position:fixed;bottom:6rem;right:1.5rem;width:100%;max-width:380px;height:480px;z-index:100;background:#fff;border-radius:1rem;box-shadow:0 10px 40px rgba(2,6,23,.1);display:flex;flex-direction:column;transform:translateY(20px);opacity:0;pointer-events:none;transition:all .3s}
-    #chat-container.open{transform:translateY(0);opacity:1;pointer-events:auto}
-    .chat-message{padding:.6rem .8rem;max-width:80%;font-size:.9rem;border-radius:1rem;box-shadow:0 1px 2px rgba(0,0,0,.04)}
-    .chat-message.bot{background:#e2e8f0;border-radius:1rem 1rem 1rem 0;align-self:flex-start}
-    .chat-message.user{background:var(--brand);color:#fff;border-radius:1rem 1rem 0 1rem;align-self:flex-end}
-    #chat-loading{font-style:italic;color:var(--muted);align-self:flex-start;font-size:.875rem;padding-left:.75rem}
-    /* Blog */
-    .blog-post-card{background:#fff;padding:1.5rem;border-radius:1rem;box-shadow:0 8px 30px rgba(2,6,23,.06)}
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BotMatic – Jouw Maatwerk Chatbot</title>
+    <meta name="description" content="Bouw minder, verkoop meer. BotMatic maakt chatbots die afspraken plannen, vragen beantwoorden en bestellingen aannemen. 14 dagen gratis." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root{ --brand:#ff7a1a; --brand-600:#ff6a00; --ink:#0f172a; --muted:#475569; --bg:#f8fafc; }
+        html,body{scroll-behavior:smooth}
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink)}
+        .btn{display:inline-flex;align-items:center;justify-content:center;border-radius:9999px;padding:.75rem 1.25rem;font-weight:700}
+        .btn-primary{background:var(--brand);color:#fff}.btn-primary:hover{background:var(--brand-600)}
+        .btn-ghost{background:#0b12241a;color:var(--ink)}
+        .nav-link.active{color:var(--brand)!important}
+        .card{background:#fff;border-radius:1rem;box-shadow:0 8px 30px rgba(2,6,23,.06)}
+        .badge{font-size:.75rem;border-radius:9999px;padding:.25rem .6rem}
+        .badge-new{background:#fff;color:var(--brand);border:1px solid var(--brand)}
+        .focus-ring:focus{outline:3px solid var(--brand);outline-offset:2px}
+        /* Chat */
+        #chat-container{position:fixed;bottom:6rem;right:1.5rem;width:100%;max-width:380px;height:480px;z-index:100;background:#fff;border-radius:1rem;box-shadow:0 10px 40px rgba(2,6,23,.1);display:flex;flex-direction:column;transform:translateY(20px);opacity:0;pointer-events:none;transition:all .3s}
+        #chat-container.open{transform:translateY(0);opacity:1;pointer-events:auto}
+        .chat-message{padding:.6rem .8rem;max-width:80%;font-size:.9rem;border-radius:1rem;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+        .chat-message.bot{background:#e2e8f0;border-radius:1rem 1rem 1rem 0;align-self:flex-start}
+        .chat-message.user{background:var(--brand);color:#fff;border-radius:1rem 1rem 0 1rem;align-self:flex-end}
+        #chat-loading{font-style:italic;color:var(--muted);align-self:flex-start;font-size:.875rem;padding-left:.75rem}
+        /* Blog */
+        .blog-post-card{background:#fff;padding:1.5rem;border-radius:1rem;box-shadow:0 8px 30px rgba(2,6,23,.06)}
+    </style>
 </head>
 <body class="text-slate-800">
 
-  <!-- Header -->
-  <header class="bg-white/80 backdrop-blur sticky top-0 z-50 border-b border-slate-100">
-    <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between" aria-label="Hoofdmenu">
-      <a href="#" class="text-2xl font-extrabold tracking-tight" onclick="showPage('home');return false;">BotMatic</a>
-      <div class="hidden md:flex items-center gap-5">
-        <a href="#" class="nav-link text-slate-600 hover:text-[var(--brand)]" data-page="home" onclick="showPage('home');return false;">Home</a>
-        <a href="#" class="nav-link text-slate-600 hover:text-[var(--brand)]" data-page="features" onclick="showPage('features');return false;">Functies</a>
-        <a href="#" class="nav-link text-slate-600 hover:text-[var(--brand)]" data-page="pricing" onclick="showPage('pricing');return false;">Prijzen</a>
-        <a href="#" class="nav-link text-slate-600 hover:text-[var(--brand)]" data-page="blog" onclick="showPage('blog');return false;">Blog</a>
-        <a href="#" class="nav-link text-slate-600 hover:text-[var(--brand)]" data-page="about" onclick="showPage('about');return false;">Over ons</a>
-        <a href="#" class="nav-link text-slate-600 hover:text-[var(--brand)]" data-page="testimonials" onclick="showPage('testimonials');return false;">Succesverhalen</a>
-        <a href="#" class="nav-link text-slate-600 hover:text-[var(--brand)]" data-page="faq" onclick="showPage('faq');return false;">FAQ</a>
-        <a href="#" class="btn btn-primary focus-ring" onclick="showPage('contact');return false;">Plan een gesprek</a>
-      </div>
-      <button class="md:hidden btn btn-ghost focus-ring" aria-label="Open menu" onclick="toggleMenu()">Menu</button>
-    </nav>
-    <div id="mobile-menu" class="md:hidden hidden border-t border-slate-200 bg-white">
-      <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col gap-2">
-        <a href="#" class="nav-link" data-page="home" onclick="showPage('home');toggleMenu(true);return false;">Home</a>
-        <a href="#" class="nav-link" data-page="features" onclick="showPage('features');toggleMenu(true);return false;">Functies</a>
-        <a href="#" class="nav-link" data-page="pricing" onclick="showPage('pricing');toggleMenu(true);return false;">Prijzen</a>
-        <a href="#" class="nav-link" data-page="blog" onclick="showPage('blog');toggleMenu(true);return false;">Blog</a>
-        <a href="#" class="nav-link" data-page="about" onclick="showPage('about');toggleMenu(true);return false;">Over ons</a>
-        <a href="#" class="nav-link" data-page="testimonials" onclick="showPage('testimonials');toggleMenu(true);return false;">Succesverhalen</a>
-        <a href="#" class="nav-link" data-page="faq" onclick="showPage('faq');toggleMenu(true);return false;">FAQ</a>
-        <a href="#" class="btn btn-primary mt-2" onclick="showPage('contact');toggleMenu(true);return false;">Plan een gesprek</a>
-      </div>
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur sticky top-0 z-50 border-b border-slate-100">
+        <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between" aria-label="Hoofdmenu">
+            <a href="#" class="text-2xl font-extrabold tracking-tight" onclick="showPage('home');return false;">BotMatic</a>
+            <div class="hidden md:flex items-center gap-5">
+                <a href="#" class="nav-link text-slate-600 hover:text-[var(--brand)]" data-page="home" onclick="showPage('home');return false;">Home</a>
+                <a href="#" class="nav-link text-slate-600 hover:text-[var(--brand)]" data-page="features" onclick="showPage('features');return false;">Functies</a>
+                <a href="#" class="nav-link text-slate-600 hover:text-[var(--brand)]" data-page="pricing" onclick="showPage('pricing');return false;">Prijzen</a>
+                <a href="#" class="nav-link text-slate-600 hover:text-[var(--brand)]" data-page="blog" onclick="showPage('blog');return false;">Blog</a>
+                <a href="#" class="nav-link text-slate-600 hover:text-[var(--brand)]" data-page="about" onclick="showPage('about');return false;">Over ons</a>
+                <a href="#" class="nav-link text-slate-600 hover:text-[var(--brand)]" data-page="testimonials" onclick="showPage('testimonials');return false;">Succesverhalen</a>
+                <a href="#" class="nav-link text-slate-600 hover:text-[var(--brand)]" data-page="faq" onclick="showPage('faq');return false;">FAQ</a>
+                <a href="#" class="btn btn-primary focus-ring" onclick="showPage('contact');return false;">Plan een gesprek</a>
+            </div>
+            <button class="md:hidden btn btn-ghost focus-ring" aria-label="Open menu" onclick="toggleMenu()">Menu</button>
+        </nav>
+        <div id="mobile-menu" class="md:hidden hidden border-t border-slate-200 bg-white">
+            <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col gap-2">
+                <a href="#" class="nav-link" data-page="home" onclick="showPage('home');toggleMenu(true);return false;">Home</a>
+                <a href="#" class="nav-link" data-page="features" onclick="showPage('features');toggleMenu(true);return false;">Functies</a>
+                <a href="#" class="nav-link" data-page="pricing" onclick="showPage('pricing');toggleMenu(true);return false;">Prijzen</a>
+                <a href="#" class="nav-link" data-page="blog" onclick="showPage('blog');toggleMenu(true);return false;">Blog</a>
+                <a href="#" class="nav-link" data-page="about" onclick="showPage('about');toggleMenu(true);return false;">Over ons</a>
+                <a href="#" class="nav-link" data-page="testimonials" onclick="showPage('testimonials');toggleMenu(true);return false;">Succesverhalen</a>
+                <a href="#" class="nav-link" data-page="faq" onclick="showPage('faq');toggleMenu(true);return false;">FAQ</a>
+                <a href="#" class="btn btn-primary mt-2" onclick="showPage('contact');toggleMenu(true);return false;">Plan een gesprek</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
+        <!-- HOME -->
+        <section id="home-page" class="page-section">
+            <div class="text-center py-10 md:py-16">
+                <div class="inline-flex items-center gap-2 mb-4">
+                    <span class="badge badge-new">14 dagen gratis</span>
+                    <span class="text-sm text-slate-500">Geen creditcard nodig</span>
+                </div>
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight">
+                    Laat de bot de routine doen.<br class="hidden sm:block" />Jij focust op de zaken.
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-600 max-w-3xl mx-auto mt-4">
+                    BotMatic bouwt chatbots die afspraken plannen, vragen beantwoorden en bestellingen opnemen. Minder werk. Meer omzet.
+                </p>
+                <div class="mt-8 flex items-center justify-center gap-3">
+                    <a href="#" class="btn btn-primary focus-ring" onclick="showPage('contact');return false;">Vraag een vrijblijvend gesprek aan</a>
+                    <a href="#" class="btn btn-ghost focus-ring" onclick="showPage('features');return false;">Bekijk functies</a>
+                </div>
+
+                <div class="mt-12 max-w-3xl mx-auto space-y-6">
+                    <h2 class="text-3xl font-bold text-center">Drie redenen om voor BotMatic te kiezen</h2>
+                    <p class="text-center text-slate-600 max-w-2xl mx-auto mt-2">Onze chatbots zijn ontworpen om direct resultaat te leveren, met de focus op efficiëntie, schaalbaarheid en gebruiksgemak.</p>
+                    <div class="mt-8 space-y-6">
+                        <a href="#features" class="flex items-start gap-4 p-6 card transition-shadow duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--brand)]" onclick="showPage('features'); return false;">
+                            <div class="text-3xl flex-shrink-0">⚡</div>
+                            <div>
+                                <h3 class="font-semibold text-lg">Antwoord in seconden</h3>
+                                <p class="text-slate-600 text-sm mt-1">Onze bots reageren 24/7 direct. Geen gemiste leads of lange wachttijden meer, zelfs 's avonds en in het weekend.</p>
+                            </div>
+                        </a>
+                        <a href="#features" class="flex items-start gap-4 p-6 card transition-shadow duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--brand)]" onclick="showPage('features'); return false;">
+                            <div class="text-3xl flex-shrink-0">📅</div>
+                            <div>
+                                <h3 class="font-semibold text-lg">Auto-planning</h3>
+                                <p class="text-slate-600 text-sm mt-1">De bot kan afspraken rechtstreeks in je agenda of systeem boeken, wat de administratie aanzienlijk vermindert.</p>
+                            </div>
+                        </a>
+                        <a href="#features" class="flex items-start gap-4 p-6 card transition-shadow duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--brand)]" onclick="showPage('features'); return false;">
+                            <div class="text-3xl flex-shrink-0">💬</div>
+                            <div>
+                                <h3 class="font-semibold text-lg">WhatsApp-first</h3>
+                                <p class="text-slate-600 text-sm mt-1">Bereik je klanten waar ze al zijn. De bot integreert naadloos met WhatsApp voor een simpele en directe communicatie.</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURES -->
+        <section id="features-page" class="page-section hidden">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold">Wat de bot voor je doet</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto mt-2">Concreet, duidelijk, zonder poespas.</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="card p-6 text-center"><span class="text-3xl">📝</span><h3 class="text-lg font-semibold mt-2">Formulieren invullen</h3><p class="text-slate-600 text-sm mt-1">Inschrijvingen, klantdata en intake – automatisch verzameld.</p></div>
+                <div class="card p-6 text-center"><span class="text-3xl">📅</span><h3 class="text-lg font-semibold mt-2">Afspraken plannen</h3><p class="text-slate-600 text-sm mt-1">Realtime beschikbaarheid. Bevestiging en herinnering erbij.</p></div>
+                <div class="card p-6 text-center"><span class="text-3xl">💡</span><h3 class="text-lg font-semibold mt-2">Vragen beantwoorden</h3><p class="text-slate-600 text-sm mt-1">FAQ direct beantwoord. Complex? Dan schakelt de bot door.</p></div>
+                <div class="card p-6 text-center"><span class="text-3xl">📦</span><h3 class="text-lg font-semibold mt-2">Bestellingen verwerken</h3><p class="text-slate-600 text-sm mt-1">Orders aannemen en doorzetten naar je team of webshop.</p></div>
+            </div>
+            <div class="mt-10 card p-6">
+                <h3 class="font-semibold mb-2">Werkt met</h3>
+                <div class="flex flex-wrap gap-2">
+                    <span class="badge bg-slate-100">WhatsApp</span>
+                    <span class="badge bg-slate-100">Instagram</span>
+                    <span class="badge bg-slate-100">Telegram</span>
+                    <span class="badge bg-slate-100">Website-widget</span>
+                    <span class="badge bg-slate-100">CRM / ERP</span>
+                    <span class="badge bg-slate-100">Google Calendar</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRICING -->
+        <section id="pricing-page" class="page-section hidden">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold">Kies je plan</h2>
+                <p class="text-slate-600 max-w-3xl mx-auto mt-2">Elke formule start met <strong>14 dagen gratis</strong>. Stoppen kan altijd.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6 items-stretch">
+                <div class="card p-6 flex flex-col">
+                    <div>
+                        <h3 class="text-2xl font-bold text-center mb-1">Instap</h3>
+                        <p class="text-sm text-slate-500 text-center mb-4">Voor kleine teams</p>
+                        <p class="text-4xl font-extrabold text-center text-[var(--brand)] mb-2">€29<span class="text-base text-slate-500 font-semibold"> / maand</span></p>
+                        <ul class="text-slate-700 text-sm space-y-2 mt-4"><li>✓ 1 taak automatiseren</li><li>✓ 1 platform</li><li>✓ Basis support</li></ul>
+                    </div>
+                    <a href="#" class="btn btn-ghost mt-6" onclick="showPage('contact');return false;">Kies Instap</a>
+                </div>
+                <div class="card p-6 border-2 border-[var(--brand)] relative flex flex-col">
+                    <span class="absolute -top-3 left-1/2 -translate-x-1/2 badge bg-[var(--brand)] text-white">Meest gekozen</span>
+                    <div>
+                        <h3 class="text-2xl font-bold text-center mb-1">Standaard</h3>
+                        <p class="text-sm text-slate-500 text-center mb-4">Beste waarde</p>
+                        <p class="text-4xl font-extrabold text-center text-[var(--brand)] mb-2">€99<span class="text-base text-slate-500 font-semibold"> / maand</span></p>
+                        <ul class="text-slate-700 text-sm space-y-2 mt-4"><li>✓ Meerdere taken</li><li>✓ 2 platforms</li><li>✓ Prioritaire support & updates</li></ul>
+                    </div>
+                    <a href="#" class="btn btn-primary mt-6" onclick="showPage('contact');return false;">Kies Standaard</a>
+                </div>
+                <div class="card p-6 flex flex-col">
+                    <div>
+                        <h3 class="text-2xl font-bold text-center mb-1">Premium</h3>
+                        <p class="text-sm text-slate-500 text-center mb-4">Voor groei & maatwerk</p>
+                        <p class="text-4xl font-extrabold text-center text-[var(--brand)] mb-2">€299<span class="text-base text-slate-500 font-semibold"> / maand</span></p>
+                        <ul class="text-slate-700 text-sm space-y-2 mt-4"><li>✓ Maatwerk AI-flows</li><li>✓ Koppelingen met CRM/ERP</li><li>✓ Toegewijde projectmanager</li></ul>
+                    </div>
+                    <a href="#" class="btn btn-ghost mt-6" onclick="showPage('contact');return false;">Kies Premium</a>
+                </div>
+            </div>
+            <p class="text-center text-sm text-slate-500 mt-4">Prijzen excl. btw. Integratie- en nummerkosten kunnen variëren.</p>
+        </section>
+
+        <!-- BLOG -->
+        <section id="blog-page" class="page-section hidden">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold">Blog</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto mt-2">Laatste nieuws en inzichten in automatisering.</p>
+            </div>
+            <div class="card p-6 mb-8">
+                <h3 class="text-lg font-semibold mb-2">✨ Genereer een blogpost met AI</h3>
+                <p class="text-sm text-slate-600 mb-4">Geef een onderwerp, wij schrijven via onze backend.</p>
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <input type="text" id="blog-topic-input" class="flex-grow p-2 rounded-md border border-slate-300 shadow-sm focus:border-[var(--brand)] focus:ring-[var(--brand)] text-sm" placeholder="Voer hier een onderwerp in...">
+                    <button id="generate-blog-btn" class="btn btn-primary focus-ring">Genereer post</button>
+                </div>
+                <div id="blog-loading" class="mt-4 text-center text-slate-500 hidden">BotMatic schrijft... een momentje</div>
+            </div>
+            <div id="blog-posts-container" class="grid md:grid-cols-2 gap-6"></div>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about-page" class="page-section hidden">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold">Over ons</h2>
+                <p class="text-slate-600 max-w-3xl mx-auto mt-2">BotMatic is een Belgisch team dat no-nonsense chatbots bouwt. Snel live, helder in prijs, en gericht op resultaat.</p></div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="card p-6 border-l-4 border-[var(--brand)]"><h3 class="text-xl font-semibold mb-2">Onafhankelijk</h3><p class="text-slate-600">We zijn geen onderdeel van gelijknamige bedrijven in de VS of India. Eigen team, eigen standaard.</p></div>
+                <div class="card p-6"><h3 class="text-xl font-semibold mb-2">GDPR-proof</h3><p class="text-slate-600">Privacy eerst. Duidelijke datastromen en bewaartermijnen. Jij blijft eigenaar van de data.</p></div>
+            </div>
+        </section>
+
+        <!-- TESTIMONIALS -->
+        <section id="testimonials-page" class="page-section hidden">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold">Succesverhalen</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto mt-2">Echte tijdswinst. Echte omzet.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="card p-6"><p class="italic mb-3">“Onze planningstijd daalde met 70%. Team blij, klanten blij.”</p><p class="font-semibold text-right">— Pieter G., Tandartspraktijk</p></div>
+                <div class="card p-6"><p class="italic mb-3">“WhatsApp-vragen worden automatisch afgehandeld. Support werkt nu aan de moeilijke cases.”</p><p class="font-semibold text-right">— Sarah V., E-commerce</p></div>
+            </div>
+        </section>
+        
+        <!-- FAQ -->
+        <section id="faq-page" class="page-section hidden">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold">Veelgestelde vragen</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto mt-2">Hier zijn de antwoorden op de meest voorkomende vragen over onze service.</p>
+            </div>
+            <div class="max-w-3xl mx-auto space-y-4">
+                <div class="card p-6">
+                    <button class="flex justify-between items-center w-full text-left font-semibold text-lg" onclick="toggleAnswer(this)">
+                        Wat is een chatbot en waarom heb ik er een nodig?
+                        <span class="text-xl font-bold text-[var(--brand)] transition-transform duration-300 transform rotate-0">+</span>
+                    </button>
+                    <div class="mt-2 text-slate-600 hidden">Een chatbot is een programma dat automatisch met je klanten kan communiceren. Het kan 24/7 vragen beantwoorden, afspraken inplannen en leads verzamelen, zodat jij je kunt focussen op je kernactiviteiten.</div>
+                </div>
+                <div class="card p-6">
+                    <button class="flex justify-between items-center w-full text-left font-semibold text-lg" onclick="toggleAnswer(this)">
+                        Hoe lang duurt het om een chatbot te implementeren?
+                        <span class="text-xl font-bold text-[var(--brand)] transition-transform duration-300 transform rotate-0">+</span>
+                    </button>
+                    <div class="mt-2 text-slate-600 hidden">We kunnen de meeste chatbots al in 1 tot 3 werkdagen live krijgen, afhankelijk van de complexiteit van de taken die het moet uitvoeren. Onze aanpak is snel en efficiënt.</div>
+                </div>
+                <div class="card p-6">
+                    <button class="flex justify-between items-center w-full text-left font-semibold text-lg" onclick="toggleAnswer(this)">
+                        Kan een chatbot koppelen met mijn bestaande systemen?
+                        <span class="text-xl font-bold text-[var(--brand)] transition-transform duration-300 transform rotate-0">+</span>
+                    </button>
+                    <div class="mt-2 text-slate-600 hidden">Ja, onze chatbots kunnen integreren met de meeste CRM-systemen, agenda-apps (zoals Google Calendar) en e-commerceplatforms via API's. Dit zorgt voor een naadloze datastroom en volledige automatisering.</div>
+                </div>
+                <div class="card p-6">
+                    <button class="flex justify-between items-center w-full text-left font-semibold text-lg" onclick="toggleAnswer(this)">
+                        Wat zijn de kosten voor een chatbot van BotMatic?
+                        <span class="text-xl font-bold text-[var(--brand)] transition-transform duration-300 transform rotate-0">+</span>
+                    </button>
+                    <div class="mt-2 text-slate-600 hidden">Onze prijzen variëren op basis van je behoeften. We bieden verschillende pakketten die geschikt zijn voor zowel kleine teams als grote bedrijven. Een gedetailleerd overzicht vind je op onze <a href="#pricing" class="text-[var(--brand)] hover:underline" onclick="showPage('pricing');return false;">prijzenpagina</a>.</div>
+                </div>
+                <div class="card p-6">
+                    <button class="flex justify-between items-center w-full text-left font-semibold text-lg" onclick="toggleAnswer(this)">
+                        Hoe is de beveiliging en privacy van mijn gegevens geregeld?
+                        <span class="text-xl font-bold text-[var(--brand)] transition-transform duration-300 transform rotate-0">+</span>
+                    </button>
+                    <div class="mt-2 text-slate-600 hidden">We nemen de privacy van je gegevens uiterst serieus. Al onze oplossingen zijn GDPR-proof. We garanderen dat jouw data veilig en beveiligd wordt opgeslagen en verwerkt.</div>
+                </div>
+                <div class="card p-6">
+                    <button class="flex justify-between items-center w-full text-left font-semibold text-lg" onclick="toggleAnswer(this)">
+                        Welke soorten bedrijven profiteren het meest van een chatbot?
+                        <span class="text-xl font-bold text-[var(--brand)] transition-transform duration-300 transform rotate-0">+</span>
+                    </button>
+                    <div class="mt-2 text-slate-600 hidden">Chatbots zijn bijzonder nuttig voor bedrijven met een groot volume aan herhaalde vragen, afspraken of bestellingen. Denk aan vastgoedmakelaars, tandartspraktijken, webshops en dienstverlenende bedrijven.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact-page" class="page-section hidden">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold">Neem contact op</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto mt-2">Vertel kort wat je wil automatiseren. We denken mee.</p>
+            </div>
+            <div class="card p-8 max-w-xl mx-auto">
+                <form id="contact-form" class="space-y-5" novalidate>
+                    <div><label for="name" class="block text-sm font-medium">Naam</label><input id="name" name="name" type="text" class="mt-1 w-full rounded-md border-slate-300 shadow-sm focus:border-[var(--brand)] focus:ring-[var(--brand)] p-2" required></div>
+                    <div><label for="email" class="block text-sm font-medium">E-mail</label><input id="email" name="email" type="email" class="mt-1 w-full rounded-md border-slate-300 shadow-sm focus:border-[var(--brand)] focus:ring-[var(--brand)] p-2" required></div>
+                    <div><label for="message" class="block text-sm font-medium">Wat wil je automatiseren?</label><textarea id="message" name="message" rows="4" class="mt-1 w-full rounded-md border-slate-300 shadow-sm focus:border-[var(--brand)] focus:ring-[var(--brand)] p-2" required></textarea></div>
+                    <input type="text" id="company" name="company" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true">
+                    <div class="flex items-center gap-2 text-sm"><input id="consent" type="checkbox" class="rounded border-slate-300 text-[var(--brand)] focus:ring-[var(--brand)]" required><label for="consent">Ik ga akkoord met het verwerken van mijn gegevens om contact op te nemen.</label></div>
+                    <div id="form-success-message" class="hidden text-green-700 bg-green-100 p-3 rounded-md text-center">Bedankt! Je aanvraag is verzonden. We nemen snel contact op.</div>
+                    <button id="submit-btn" type="submit" class="btn btn-primary w-full">Verstuur</button>
+                </form>
+                <div class="mt-6 text-center text-sm text-slate-600">Liever direct? <a href="https://wa.me/0000000000" class="text-[var(--brand)] font-semibold hover:underline">WhatsApp ons</a> of bel <a href="tel:+32000000000" class="hover:underline">+32 000 00 00 00</a>.</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-300 py-8 mt-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-2">
+            <p class="text-sm">© <span id="year"></span> BotMatic. Alle rechten voorbehouden.</p>
+            <p class="text-xs text-slate-400">Made in Belgium · GDPR-proof</p>
+        </div>
+    </footer>
+
+    <!-- Chat widget -->
+    <div id="chat-widget" class="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50">
+        <button id="chat-toggle-btn" class="bg-[var(--brand)] text-white p-4 rounded-full shadow-lg hover:bg-[var(--brand-600)] transition-colors focus:outline-none focus:ring-4 focus:ring-[var(--brand)] focus:ring-opacity-50" aria-label="Open chat">💬</button>
     </div>
-  </header>
-
-  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
-    <!-- HOME -->
-    <section id="home-page" class="page-section">
-      <div class="text-center py-10 md:py-16">
-        <div class="inline-flex items-center gap-2 mb-4">
-          <span class="badge badge-new">14 dagen gratis</span>
-          <span class="text-sm text-slate-500">Geen creditcard nodig</span>
+    <div id="chat-container" class="md:right-8" aria-live="polite">
+        <div class="p-4 bg-[var(--brand)] text-white flex justify-between items-center rounded-t-lg">
+            <h3 class="font-bold">BotMatic Chat</h3>
+            <button id="chat-close-btn" class="p-1 rounded-full hover:bg-white/20 transition-colors" aria-label="Sluit chat">✕</button>
         </div>
-        <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight">
-          Laat de bot de routine doen.<br class="hidden sm:block" />Jij focust op de zaken.
-        </h1>
-        <p class="text-lg sm:text-xl text-slate-600 max-w-3xl mx-auto mt-4">
-          BotMatic bouwt chatbots die afspraken plannen, vragen beantwoorden en bestellingen opnemen. Minder werk. Meer omzet.
-        </p>
-        <div class="mt-8 flex items-center justify-center gap-3">
-          <a href="#" class="btn btn-primary focus-ring" onclick="showPage('contact');return false;">Vraag een vrijblijvend gesprek aan</a>
-          <a href="#" class="btn btn-ghost focus-ring" onclick="showPage('features');return false;">Bekijk functies</a>
+        <div id="chat-messages" class="flex-grow p-4 overflow-y-auto space-y-3"></div>
+        <div class="p-4 border-t border-slate-200">
+            <form id="chat-form" class="flex gap-2">
+                <input type="text" id="chat-input" class="flex-grow p-2 rounded-full border border-slate-300 focus:border-[var(--brand)] focus:ring-[var(--brand)] text-sm" placeholder="Typ je bericht..." autocomplete="off">
+                <button type="submit" id="chat-send-btn" class="btn btn-primary p-2 w-10 h-10 rounded-full" aria-label="Stuur">➤</button>
+            </form>
+            <div id="chat-loading" class="mt-2 hidden">BotMatic typt...</div>
         </div>
-
-        <div class="mt-12 grid md:grid-cols-3 gap-6">
-          <div class="card p-6 text-left"><div class="text-3xl">⚡</div><h3 class="font-semibold mt-2">Antwoord in seconden</h3><p class="text-slate-600 text-sm mt-1">24/7 direct reactie. Geen gemiste leads ’s avonds.</p></div>
-          <div class="card p-6 text-left"><div class="text-3xl">📅</div><h3 class="font-semibold mt-2">Auto-planning</h3><p class="text-slate-600 text-sm mt-1">Boekingen rechtstreeks in je agenda of systeem.</p></div>
-          <div class="card p-6 text-left"><div class="text-3xl">💬</div><h3 class="font-semibold mt-2">WhatsApp-first</h3><p class="text-slate-600 text-sm mt-1">Werk waar je klanten al zijn. Simpel.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FEATURES -->
-    <section id="features-page" class="page-section hidden">
-      <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold">Wat de bot voor je doet</h2>
-        <p class="text-slate-600 max-w-2xl mx-auto mt-2">Concreet, duidelijk, zonder poespas.</p>
-      </div>
-      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="card p-6 text-center"><span class="text-3xl">📝</span><h3 class="text-lg font-semibold mt-2">Formulieren invullen</h3><p class="text-slate-600 text-sm mt-1">Inschrijvingen, klantdata en intake – automatisch verzameld.</p></div>
-        <div class="card p-6 text-center"><span class="text-3xl">📅</span><h3 class="text-lg font-semibold mt-2">Afspraken plannen</h3><p class="text-slate-600 text-sm mt-1">Realtime beschikbaarheid. Bevestiging en herinnering erbij.</p></div>
-        <div class="card p-6 text-center"><span class="text-3xl">💡</span><h3 class="text-lg font-semibold mt-2">Vragen beantwoorden</h3><p class="text-slate-600 text-sm mt-1">FAQ direct beantwoord. Complex? Dan schakelt de bot door.</p></div>
-        <div class="card p-6 text-center"><span class="text-3xl">📦</span><h3 class="text-lg font-semibold mt-2">Bestellingen verwerken</h3><p class="text-slate-600 text-sm mt-1">Orders aannemen en doorzetten naar je team of webshop.</p></div>
-      </div>
-      <div class="mt-10 card p-6">
-        <h3 class="font-semibold mb-2">Werkt met</h3>
-        <div class="flex flex-wrap gap-2">
-          <span class="badge bg-slate-100">WhatsApp</span>
-          <span class="badge bg-slate-100">Instagram</span>
-          <span class="badge bg-slate-100">Telegram</span>
-          <span class="badge bg-slate-100">Website-widget</span>
-          <span class="badge bg-slate-100">CRM / ERP</span>
-          <span class="badge bg-slate-100">Google Calendar</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- PRICING -->
-    <section id="pricing-page" class="page-section hidden">
-      <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold">Kies je plan</h2>
-        <p class="text-slate-600 max-w-3xl mx-auto mt-2">Elke formule start met <strong>14 dagen gratis</strong>. Stoppen kan altijd.</p>
-      </div>
-      <div class="grid md:grid-cols-3 gap-6 items-stretch">
-        <div class="card p-6 flex flex-col">
-          <div>
-            <h3 class="text-2xl font-bold text-center mb-1">Instap</h3>
-            <p class="text-sm text-slate-500 text-center mb-4">Voor kleine teams</p>
-            <p class="text-4xl font-extrabold text-center text-[var(--brand)] mb-2">€29<span class="text-base text-slate-500 font-semibold"> / maand</span></p>
-            <ul class="text-slate-700 text-sm space-y-2 mt-4"><li>✓ 1 taak automatiseren</li><li>✓ 1 platform</li><li>✓ Basis support</li></ul>
-          </div>
-          <a href="#" class="btn btn-ghost mt-6" onclick="showPage('contact');return false;">Kies Instap</a>
-        </div>
-        <div class="card p-6 border-2 border-[var(--brand)] relative flex flex-col">
-          <span class="absolute -top-3 left-1/2 -translate-x-1/2 badge bg-[var(--brand)] text-white">Meest gekozen</span>
-          <div>
-            <h3 class="text-2xl font-bold text-center mb-1">Standaard</h3>
-            <p class="text-sm text-slate-500 text-center mb-4">Beste waarde</p>
-            <p class="text-4xl font-extrabold text-center text-[var(--brand)] mb-2">€99<span class="text-base text-slate-500 font-semibold"> / maand</span></p>
-            <ul class="text-slate-700 text-sm space-y-2 mt-4"><li>✓ Meerdere taken</li><li>✓ 2 platforms</li><li>✓ Prioritaire support & updates</li></ul>
-          </div>
-          <a href="#" class="btn btn-primary mt-6" onclick="showPage('contact');return false;">Kies Standaard</a>
-        </div>
-        <div class="card p-6 flex flex-col">
-          <div>
-            <h3 class="text-2xl font-bold text-center mb-1">Premium</h3>
-            <p class="text-sm text-slate-500 text-center mb-4">Voor groei & maatwerk</p>
-            <p class="text-4xl font-extrabold text-center text-[var(--brand)] mb-2">€299<span class="text-base text-slate-500 font-semibold"> / maand</span></p>
-            <ul class="text-slate-700 text-sm space-y-2 mt-4"><li>✓ Maatwerk AI-flows</li><li>✓ Koppelingen met CRM/ERP</li><li>✓ Toegewijde projectmanager</li></ul>
-          </div>
-          <a href="#" class="btn btn-ghost mt-6" onclick="showPage('contact');return false;">Kies Premium</a>
-        </div>
-      </div>
-      <p class="text-center text-sm text-slate-500 mt-4">Prijzen excl. btw. Integratie- en nummerkosten kunnen variëren.</p>
-    </section>
-
-    <!-- BLOG -->
-    <section id="blog-page" class="page-section hidden">
-      <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold">Blog</h2>
-        <p class="text-slate-600 max-w-2xl mx-auto mt-2">Laatste nieuws en inzichten in automatisering.</p>
-      </div>
-      <div class="card p-6 mb-8">
-        <h3 class="text-lg font-semibold mb-2">✨ Genereer een blogpost met AI</h3>
-        <p class="text-sm text-slate-600 mb-4">Geef een onderwerp, wij schrijven via onze backend.</p>
-        <div class="flex flex-col sm:flex-row gap-2">
-          <input type="text" id="blog-topic-input" class="flex-grow p-2 rounded-md border border-slate-300 shadow-sm focus:border-[var(--brand)] focus:ring-[var(--brand)] text-sm" placeholder="Voer hier een onderwerp in...">
-          <button id="generate-blog-btn" class="btn btn-primary focus-ring">Genereer post</button>
-        </div>
-        <div id="blog-loading" class="mt-4 text-center text-slate-500 hidden">De AI schrijft... een momentje</div>
-      </div>
-      <div id="blog-posts-container" class="grid md:grid-cols-2 gap-6"></div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about-page" class="page-section hidden">
-      <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold">Over ons</h2>
-        <p class="text-slate-600 max-w-3xl mx-auto mt-2">BotMatic is een Belgisch team dat no-nonsense chatbots bouwt. Snel live, helder in prijs, en gericht op resultaat.</p>
-      </div>
-      <div class="grid md:grid-cols-2 gap-6">
-        <div class="card p-6 border-l-4 border-[var(--brand)]"><h3 class="text-xl font-semibold mb-2">Onafhankelijk</h3><p class="text-slate-600">We zijn geen onderdeel van gelijknamige bedrijven in de VS of India. Eigen team, eigen standaard.</p></div>
-        <div class="card p-6"><h3 class="text-xl font-semibold mb-2">GDPR-proof</h3><p class="text-slate-600">Privacy eerst. Duidelijke datastromen en bewaartermijnen. Jij blijft eigenaar van de data.</p></div>
-      </div>
-    </section>
-
-    <!-- TESTIMONIALS -->
-    <section id="testimonials-page" class="page-section hidden">
-      <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold">Succesverhalen</h2>
-        <p class="text-slate-600 max-w-2xl mx-auto mt-2">Echte tijdswinst. Echte omzet.</p>
-      </div>
-      <div class="grid md:grid-cols-2 gap-6">
-        <div class="card p-6"><p class="italic mb-3">“Onze planningstijd daalde met 70%. Team blij, klanten blij.”</p><p class="font-semibold text-right">— Pieter G., Tandartspraktijk</p></div>
-        <div class="card p-6"><p class="italic mb-3">“WhatsApp-vragen worden automatisch afgehandeld. Support werkt nu aan de moeilijke cases.”</p><p class="font-semibold text-right">— Sarah V., E-commerce</p></div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact-page" class="page-section hidden">
-      <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold">Neem contact op</h2>
-        <p class="text-slate-600 max-w-2xl mx-auto mt-2">Vertel kort wat je wil automatiseren. We denken mee.</p>
-      </div>
-      <div class="card p-8 max-w-xl mx-auto">
-        <form id="contact-form" class="space-y-5" novalidate>
-          <div><label for="name" class="block text-sm font-medium">Naam</label><input id="name" name="name" type="text" class="mt-1 w-full rounded-md border-slate-300 shadow-sm focus:border-[var(--brand)] focus:ring-[var(--brand)] p-2" required></div>
-          <div><label for="email" class="block text-sm font-medium">E-mail</label><input id="email" name="email" type="email" class="mt-1 w-full rounded-md border-slate-300 shadow-sm focus:border-[var(--brand)] focus:ring-[var(--brand)] p-2" required></div>
-          <div><label for="message" class="block text-sm font-medium">Wat wil je automatiseren?</label><textarea id="message" name="message" rows="4" class="mt-1 w-full rounded-md border-slate-300 shadow-sm focus:border-[var(--brand)] focus:ring-[var(--brand)] p-2" required></textarea></div>
-          <input type="text" id="company" name="company" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true">
-          <div class="flex items-center gap-2 text-sm"><input id="consent" type="checkbox" class="rounded border-slate-300 text-[var(--brand)] focus:ring-[var(--brand)]" required><label for="consent">Ik ga akkoord met het verwerken van mijn gegevens om contact op te nemen.</label></div>
-          <div id="form-success-message" class="hidden text-green-700 bg-green-100 p-3 rounded-md text-center">Bedankt! Je aanvraag is verzonden. We nemen snel contact op.</div>
-          <button id="submit-btn" type="submit" class="btn btn-primary w-full">Verstuur</button>
-        </form>
-        <div class="mt-6 text-center text-sm text-slate-600">Liever direct? <a href="https://wa.me/0000000000" class="text-[var(--brand)] font-semibold hover:underline">WhatsApp ons</a> of bel <a href="tel:+32000000000" class="hover:underline">+32 000 00 00 00</a>.</div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer class="bg-slate-900 text-slate-300 py-8 mt-12">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-2">
-      <p class="text-sm">© <span id="year"></span> BotMatic. Alle rechten voorbehouden.</p>
-      <p class="text-xs text-slate-400">Made in Belgium · GDPR-proof</p>
     </div>
-  </footer>
 
-  <!-- Chat widget -->
-  <div id="chat-widget" class="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50">
-    <button id="chat-toggle-btn" class="bg-[var(--brand)] text-white p-4 rounded-full shadow-lg hover:bg-[var(--brand-600)] transition-colors focus:outline-none focus:ring-4 focus:ring-[var(--brand)] focus:ring-opacity-50" aria-label="Open chat">💬</button>
-  </div>
-  <div id="chat-container" class="md:right-8" aria-live="polite">
-    <div class="p-4 bg-[var(--brand)] text-white flex justify-between items-center rounded-t-lg">
-      <h3 class="font-bold">BotMatic Chat</h3>
-      <button id="chat-close-btn" class="p-1 rounded-full hover:bg-white/20 transition-colors" aria-label="Sluit chat">✕</button>
-    </div>
-    <div id="chat-messages" class="flex-grow p-4 overflow-y-auto space-y-3"></div>
-    <div class="p-4 border-t border-slate-200">
-      <form id="chat-form" class="flex gap-2">
-        <input type="text" id="chat-input" class="flex-grow p-2 rounded-full border border-slate-300 focus:border-[var(--brand)] focus:ring-[var(--brand)] text-sm" placeholder="Typ je bericht..." autocomplete="off">
-        <button type="submit" id="chat-send-btn" class="btn btn-primary p-2 w-10 h-10 rounded-full" aria-label="Stuur">➤</button>
-      </form>
-      <div id="chat-loading" class="mt-2 hidden">BotMatic typt...</div>
-    </div>
-  </div>
+    <!-- Main logic -->
+    <script type="module">
+        // ===== SPA NAV =====
+        const pages = document.querySelectorAll('.page-section');
+        const navLinks = document.querySelectorAll('.nav-link');
 
-  <!-- Main logic -->
-  <script type="module">
-    // ===== SPA NAV =====
-    const pages = document.querySelectorAll('.page-section');
-    const navLinks = document.querySelectorAll('.nav-link');
+        function setActive(pageId){
+            navLinks.forEach(l=>{
+                const isActive = l.getAttribute('data-page') === pageId;
+                l.classList.toggle('active', isActive);
+                if(isActive){ l.setAttribute('aria-current','page'); } else { l.removeAttribute('aria-current'); }
+            });
+        }
 
-    function setActive(pageId){
-      navLinks.forEach(l=>{
-        const isActive = l.getAttribute('data-page') === pageId;
-        l.classList.toggle('active', isActive);
-        if(isActive){ l.setAttribute('aria-current','page'); } else { l.removeAttribute('aria-current'); }
-      });
-    }
+        function showPage(pageId){
+            pages.forEach(p=>p.classList.add('hidden'));
+            const el = document.getElementById(`${pageId}-page`);
+            if(el){ el.classList.remove('hidden'); }
+            setActive(pageId);
+            if(location.hash !== `#${pageId}`){ history.replaceState(null,'',`#${pageId}`); }
+        }
 
-    function showPage(pageId){
-      pages.forEach(p=>p.classList.add('hidden'));
-      const el = document.getElementById(`${pageId}-page`);
-      if(el){ el.classList.remove('hidden'); }
-      setActive(pageId);
-      if(location.hash !== `#${pageId}`){ history.replaceState(null,'',`#${pageId}`); }
-    }
+        function toggleMenu(forceClose=false){
+            const m=document.getElementById('mobile-menu');
+            if(!m) return;
+            if(forceClose){ m.classList.add('hidden'); return; }
+            m.classList.toggle('hidden');
+        }
 
-    function toggleMenu(forceClose=false){
-      const m=document.getElementById('mobile-menu');
-      if(!m) return;
-      if(forceClose){ m.classList.add('hidden'); return; }
-      m.classList.toggle('hidden');
-    }
+        // make available for inline onclick handlers (critical fix)
+        window.showPage = showPage;
+        window.toggleMenu = toggleMenu;
 
-    // make available for inline onclick handlers (critical fix)
-    window.showPage = showPage;
-    window.toggleMenu = toggleMenu;
+        // hash navigation support (e.g. /#pricing)
+        window.addEventListener('hashchange', ()=>{
+            const id = (location.hash||'#home').slice(1);
+            showPage(id);
+        });
 
-    // hash navigation support (e.g. /#pricing)
-    window.addEventListener('hashchange', ()=>{
-      const id = (location.hash||'#home').slice(1);
-      showPage(id);
-    });
+        // ===== AI Chatbot =====
+        const chatToggleBtn = document.getElementById('chat-toggle-btn');
+        const chatCloseBtn = document.getElementById('chat-close-btn');
+        const chatContainer = document.getElementById('chat-container');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatForm = document.getElementById('chat-form');
+        const chatInput = document.getElementById('chat-input');
+        const chatSendBtn = document.getElementById('chat-send-btn');
+        const chatLoading = document.getElementById('chat-loading');
+        
+        const chatHistory = [{
+            role: "user",
+            parts: [{text: "Stel jezelf voor als een chatbot die je bezoeker helpt bij het begrijpen van de diensten van BotMatic. Je bent vriendelijk, behulpzaam en richt je op de zakelijke voordelen. Vat je antwoord samen in twee korte zinnen."}]
+        }, {
+            role: "model",
+            parts: [{text: "Hallo! Ik ben BotMatic, je virtuele assistent. Ik help je graag met al je vragen over onze AI-oplossingen voor jouw bedrijf, van verhoogde efficiëntie tot meer omzet."}]
+        }];
 
-    // ===== Chat minimal (UI only demo) =====
-    const chatToggleBtn = document.getElementById('chat-toggle-btn');
-    const chatCloseBtn = document.getElementById('chat-close-btn');
-    const chatContainer = document.getElementById('chat-container');
-    const chatMessages = document.getElementById('chat-messages');
-    const chatForm = document.getElementById('chat-form');
-    const chatInput = document.getElementById('chat-input');
-    const chatSendBtn = document.getElementById('chat-send-btn');
-    const chatLoading = document.getElementById('chat-loading');
+        function addMessage(text, role){
+            const div=document.createElement('div');
+            div.className=`chat-message ${role}`;
+            div.textContent=text;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop=chatMessages.scrollHeight;
+        }
 
-    function addMessage(text, role){
-      const div=document.createElement('div');
-      div.className=`chat-message ${role}`;
-      div.textContent=text;
-      chatMessages.appendChild(div);
-      chatMessages.scrollTop=chatMessages.scrollHeight;
-    }
+        chatToggleBtn?.addEventListener('click', ()=> chatContainer.classList.toggle('open'));
+        chatCloseBtn?.addEventListener('click', ()=> chatContainer.classList.remove('open'));
+        chatForm?.addEventListener('submit', async (e)=>{
+            e.preventDefault();
+            const text=(chatInput.value||'').trim();
+            if(!text) return;
+            addMessage(text,'user');
+            chatHistory.push({role: "user", parts: [{text: text}]});
+            chatInput.value='';
+            chatInput.disabled=true; chatSendBtn.disabled=true; chatLoading.classList.remove('hidden');
+            
+            const systemPrompt = "Je bent een behulpzame chatbot van BotMatic. Geef bondige, concrete antwoorden over de diensten en functies van BotMatic. Stuur de gebruiker door naar de juiste pagina als dat nuttig is, zoals de contactpagina.";
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
-    chatToggleBtn?.addEventListener('click', ()=> chatContainer.classList.toggle('open'));
-    chatCloseBtn?.addEventListener('click', ()=> chatContainer.classList.remove('open'));
-    chatForm?.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      const text=(chatInput.value||'').trim();
-      if(!text) return;
-      addMessage(text,'user');
-      chatInput.value='';
-      chatInput.disabled=true; chatSendBtn.disabled=true; chatLoading.classList.remove('hidden');
-      // demo antwoord
-      await new Promise(r=>setTimeout(r,600));
-      addMessage('Dank je! We nemen snel contact op.','bot');
-      chatInput.disabled=false; chatSendBtn.disabled=false; chatLoading.classList.add('hidden'); chatInput.focus();
-    });
+            const payload = {
+                contents: chatHistory,
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+            };
+            
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                const botResponse = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+                
+                if (botResponse) {
+                    addMessage(botResponse, 'bot');
+                    chatHistory.push({role: "model", parts: [{text: botResponse}]});
+                } else {
+                    addMessage("Sorry, ik kan nu niet antwoorden. Probeer het later nog eens.", 'bot');
+                }
+            } catch (error) {
+                console.error('Fout bij het aanroepen van de Gemini API:', error);
+                addMessage("Er is een probleem opgetreden. Probeer het opnieuw.", 'bot');
+            } finally {
+                chatInput.disabled=false; chatSendBtn.disabled=false; chatLoading.classList.add('hidden'); chatInput.focus();
+            }
+        });
 
-    // ===== Contact form (demo) =====
-    const form = document.getElementById('contact-form');
-    const submitBtn = document.getElementById('submit-btn');
-    const successMsg = document.getElementById('form-success-message');
-    form?.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      if(document.getElementById('company').value) return; // honeypot
-      if(!form.reportValidity()) return;
-      submitBtn.textContent='Bezig met versturen...';
-      submitBtn.disabled=true;
-      await new Promise(r=>setTimeout(r,500));
-      form.classList.add('hidden');
-      successMsg.classList.remove('hidden');
-      submitBtn.textContent='Verstuur';
-      submitBtn.disabled=false;
-    });
+        // Initialize chat with a welcome message
+        document.addEventListener('DOMContentLoaded', () => {
+            addMessage(chatHistory[1].parts[0].text, 'bot');
+        });
 
-    // ===== Init =====
-    document.addEventListener('DOMContentLoaded', ()=>{
-      const id = (location.hash||'#home').slice(1);
-      showPage(id);
-      document.getElementById('year').textContent=new Date().getFullYear();
-    });
-  </script>
+        // ===== AI Blog Generator =====
+        const blogTopicInput = document.getElementById('blog-topic-input');
+        const generateBlogBtn = document.getElementById('generate-blog-btn');
+        const blogLoading = document.getElementById('blog-loading');
+        const blogPostsContainer = document.getElementById('blog-posts-container');
+        
+        generateBlogBtn?.addEventListener('click', async () => {
+            const topic = blogTopicInput.value.trim();
+            if (!topic) return;
 
-  <!-- keep toggleAnswer global for FAQ inline onclick -->
-  <script>
-    function toggleAnswer(btn){
-      const answer = btn.nextElementSibling;
-      const icon = btn.querySelector('span:last-child');
-      const open = answer && answer.classList.contains('hidden');
-      if(!answer) return;
-      answer.classList.toggle('hidden');
-      if(icon) icon.textContent = open ? '–' : '+';
-    }
-    // expose just in case
-    window.toggleAnswer = toggleAnswer;
-  </script>
+            blogLoading.classList.remove('hidden');
+            generateBlogBtn.disabled = true;
+
+            const prompt = `Schrijf een blogpost van ongeveer 300 woorden over '${topic}'. Gebruik een bondige, zakelijke toon. Formatteer de tekst met HTML-tags, inclusief een H3-titel, P-paragrafen en indien passend een UL-lijst. Zorg voor een pakkende titel die de blogpost inleidt.`;
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                const generatedContent = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (generatedContent) {
+                    const postCard = document.createElement('div');
+                    postCard.className = 'blog-post-card';
+                    // Convert markdown to basic HTML for display
+                    let htmlContent = generatedContent.replace(/### (.*)/g, '<h3>$1</h3>');
+                    htmlContent = htmlContent.replace(/\n\n/g, '</p><p>');
+                    htmlContent = `<p>${htmlContent}</p>`;
+                    htmlContent = htmlContent.replace(/<p><\/p>/g, '');
+                    postCard.innerHTML = htmlContent;
+                    blogPostsContainer.prepend(postCard);
+                }
+            } catch (error) {
+                console.error('Fout bij het genereren van de blogpost:', error);
+            } finally {
+                blogLoading.classList.add('hidden');
+                generateBlogBtn.disabled = false;
+            }
+        });
+
+        // ===== Contact form (demo) =====
+        const form = document.getElementById('contact-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const successMsg = document.getElementById('form-success-message');
+        form?.addEventListener('submit', async (e)=>{
+            e.preventDefault();
+            if(document.getElementById('company').value) return; // honeypot
+            if(!form.reportValidity()) return;
+            submitBtn.textContent='Bezig met versturen...';
+            submitBtn.disabled=true;
+            await new Promise(r=>setTimeout(r,500));
+            form.classList.add('hidden');
+            successMsg.classList.remove('hidden');
+            submitBtn.textContent='Verstuur';
+            submitBtn.disabled=false;
+        });
+
+        // ===== Init =====
+        document.addEventListener('DOMContentLoaded', ()=>{
+            const id = (location.hash||'#home').slice(1);
+            showPage(id);
+            document.getElementById('year').textContent=new Date().getFullYear();
+        });
+
+        // keep toggleAnswer global for FAQ inline onclick
+        window.toggleAnswer = (btn) => {
+            const answer = btn.nextElementSibling;
+            const icon = btn.querySelector('span:last-child');
+            const open = answer && answer.classList.contains('hidden');
+            if(!answer) return;
+            answer.classList.toggle('hidden');
+            if(icon) icon.textContent = open ? '–' : '+';
+        };
+    </script>
 </body>
 </html>
