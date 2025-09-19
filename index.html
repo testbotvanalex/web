@@ -11,7 +11,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
-    <!-- FIX: Laadt Firebase-bibliotheken via traditionele script-tags om CORS-fouten te voorkomen -->
+    <!-- Laadt Firebase-bibliotheken via traditionele script-tags -->
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"></script>
@@ -104,7 +104,7 @@
             <!-- Tekst Kolom -->
             <div class="text-center lg:text-left">
                 <h1 class="text-4xl md:text-6xl font-extrabold text-ink leading-tight">
-                    Automatiseer je klantenservice. 
+                    Automatiseer je klantenservice.
                 </h1>
                 <p class="mt-4 text-xl text-muted max-w-2xl lg:max-w-none mx-auto lg:mx-0">
                     Laat BotMatic het werk doen. Onze AI-gebaseerde chatbots beantwoorden FAQ's en verwerken routinevragen, zodat je team zich kan richten op de groei van je bedrijf.
@@ -563,7 +563,7 @@
                 <p class="mt-4 text-lg text-muted max-w-3xl mx-auto">
                     Beheer hier alle inzendingen die via het contactformulier zijn binnengekomen.
                     <br>
-                    <span class="font-bold text-gray-800">Jouw gebruikers-ID:</span> <span id="userIdDisplay" class="font-mono text-sm break-all">Laden...</span>
+                    <span class="font-bold text-gray-800">Je gebruikers-ID:</span> <span id="userIdDisplay" class="font-mono text-sm break-all">Laden...</span>
                 </p>
             </div>
             <div class="mt-8 overflow-x-auto rounded-lg shadow-xl">
@@ -612,60 +612,79 @@
         </div>
     </div>
 
+    <!-- Firebase Beveiligingsregels die je nodig hebt in je eigen project -->
+    <!-- Kopieer dit naar het 'Rules' tabblad in je Firebase Console -->
+    <!--
+    rules_version = '2';
+    service cloud.firestore {
+      match /databases/{database}/documents {
+        match /contact-submissions/{documentId} {
+          allow read, create;
+        }
+      }
+    }
+    -->
 
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
-            // FIX: Gebruik de globaal geladen Firebase-objecten in plaats van import
-            if (typeof firebase === 'undefined' || typeof firebase.firestore === 'undefined') {
-                console.error("Firebase is niet correct geladen. Controleer de script-tags in de head.");
-                return;
-            }
+            // Stap 1: Kopieer hier je eigen Firebase-configuratie
+            // Ga naar je Firebase Console > Project settings > Your apps
+            // Kopieer het 'firebaseConfig' object en plak het hieronder.
+            // **BELANGRIJK: Verwijder de '//' van de regel hieronder om het te activeren**
+            const firebaseConfig = {
+              apiKey: "JOUW_API_KEY",
+              authDomain: "JOUW_AUTH_DOMAIN",
+              projectId: "JOUW_PROJECT_ID",
+              storageBucket: "JOUW_STORAGE_BUCKET",
+              messagingSenderId: "JOUW_MESSAGING_SENDER_ID",
+              appId: "JOUW_APP_ID"
+            };
+
+            // Stap 2: Activeer de code hieronder nadat je de configuratie hebt toegevoegd
+            // ///////////////////////////////////////////////////////////////////////////
+            // Zodra je de configuratie hebt toegevoegd, verwijder je de commentaar
+            // van deze regel:
+            // const app = firebase.initializeApp(firebaseConfig);
+            // Je kunt dan de regel hieronder met de Canvas-variabelen verwijderen.
+            const app = firebase.initializeApp(firebaseConfig); // Dit is de lijn die je moet activeren
+
+            // Standaard Canvas-configuratie (verwijderen als je de bovenstaande regel activeert)
+            // const __firebase_config = JSON.stringify({});
+            // const app = firebase.initializeApp(JSON.parse(__firebase_config));
             
             // Set log level for debugging
-            const { initializeApp } = firebase;
-            const { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } = firebase.auth;
+            const { getAuth, signInAnonymously, onAuthStateChanged } = firebase.auth;
             const { getFirestore, collection, addDoc, onSnapshot, query, setLogLevel } = firebase.firestore;
             
-            // Functies voor de pagina
             setLogLevel('debug'); // Toon Firebase-logboeken in de console
 
             // Firebase initialisatie
-            const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-            const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
-            const app = initializeApp(firebaseConfig);
             const db = getFirestore(app);
             const auth = getAuth(app);
-
-            let userId = null;
+            let userId = 'anonieme_gebruiker'; // Standaard ID, wordt bijgewerkt bij inloggen
 
             // Wacht tot de authenticatiestatus is opgeladen
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
                     userId = user.uid;
-                    document.getElementById('userIdDisplay').textContent = userId;
-                    // Start de real-time luisteraar na succesvolle authenticatie
-                    startSubmissionsListener();
                 } else {
-                    // Anoniem inloggen als er geen token is
-                    if (initialAuthToken) {
-                        try {
-                            await signInWithCustomToken(auth, initialAuthToken);
-                        } catch (error) {
-                            console.error("Fout bij het inloggen met custom token:", error);
-                            await signInAnonymously(auth);
-                        }
-                    } else {
+                    // Log in als anonieme gebruiker, wat genoeg is voor dit formulier
+                    try {
                         await signInAnonymously(auth);
+                        userId = auth.currentUser.uid;
+                    } catch (error) {
+                        console.error("Fout bij anoniem inloggen:", error);
                     }
                 }
+                 document.getElementById('userIdDisplay').textContent = userId;
+                 startSubmissionsListener();
             });
 
             // Functie om de real-time luisteraar te starten
             const startSubmissionsListener = () => {
                 const submissionsTableBody = document.getElementById('submissions-table-body');
-                const collectionPath = `artifacts/${appId}/users/${userId}/contact-submissions`;
+                // We gebruiken een simpele collectie genaamd 'contact-submissions'
+                const collectionPath = `contact-submissions`;
 
                 // Real-time luisteraar voor inzendingen
                 const q = query(collection(db, collectionPath));
@@ -736,7 +755,7 @@
                 const data = Object.fromEntries(formData.entries());
 
                 try {
-                    const collectionPath = `artifacts/${appId}/users/${userId}/contact-submissions`;
+                    const collectionPath = `contact-submissions`;
                     await addDoc(collection(db, collectionPath), {
                         ...data,
                         timestamp: new Date()
