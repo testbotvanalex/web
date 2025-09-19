@@ -9,8 +9,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root{ --brand:#ff7a1a; --brand-600:#ff6a00; --ink:#0f172a; --muted:#475569; --bg:#f8fafc; }
+        :root{ --brand:#ff7a1a; --brand-600:#ff6a00; --ink:#0f172a; --muted:#475569; --bg:#f8fafc; --pro-bg: #28a745; --pro-btn: #ffffff;}
         html,body{scroll-behavior:smooth}
         body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink)}
         .btn{display:inline-flex;align-items:center;justify-content:center;border-radius:9999px;padding:.75rem 1.25rem;font-weight:700}
@@ -26,18 +27,32 @@
         .faq-question{display:flex;justify-content:space-between;align-items:center;font-weight:600;color:var(--ink)}
         .faq-answer{color:var(--muted);padding-top:1rem;margin-top:1rem;border-top:1px solid #e2e8f0}
         .hidden{display:none}
+        .toggle-active {
+            background-color: var(--ink) !important;
+            color: #fff !important;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+        }
     </style>
 </head>
 <body class="antialiased">
+
     <!-- Navbar -->
     <header class="py-6 sticky top-0 z-50 bg-white shadow-sm">
         <nav class="container mx-auto px-4 flex items-center justify-between">
             <a href="#home" class="font-extrabold text-3xl text-ink">BotMatic</a>
             <div id="nav-menu" class="hidden md:flex md:items-center space-x-2">
                 <a href="#features" class="nav-link">Functies</a>
+                <a href="#who-we-are" class="nav-link">Voor wie?</a>
+                <a href="#calculator-page" class="nav-link">Calculator</a>
                 <a href="#pricing" class="nav-link">Prijzen</a>
+                <a href="#demo" class="nav-link">Demo</a>
                 <a href="#faq" class="nav-link">FAQ</a>
-                <a href="#contact" class="nav-link btn-primary ml-4">Start Nu</a>
+                <a href="#contact" class="nav-link">Contact</a>
+                <a href="#dashboard" class="nav-link btn-primary ml-4">Dashboard</a>
             </div>
             <button id="nav-toggle" class="md:hidden text-ink text-2xl">☰</button>
         </nav>
@@ -96,49 +111,217 @@
             </div>
         </section>
 
-        <!-- Pricing Page -->
-        <section id="pricing" class="page py-20 px-4 bg-gray-50">
+        <!-- New: Who We Are Section -->
+        <section id="who-we-are" class="page py-20 px-4">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-ink">
+                    Perfect voor bedrijven zoals de jouwe
+                </h2>
+                <p class="mt-4 text-lg text-muted max-w-2xl mx-auto">
+                    BotMatic is ideaal voor servicegerichte bedrijven die hun klantcommunicatie willen stroomlijnen.
+                </p>
+                <div class="mt-12 grid md:grid-cols-3 gap-8">
+                    <div class="flex flex-col items-center text-center p-6 bg-white rounded-xl shadow-md">
+                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-4xl mb-4">🏠</div>
+                        <h3 class="text-xl font-bold text-ink">Vastgoedbeheer</h3>
+                        <p class="mt-2 text-muted">
+                            Automatiseer huuraanvragen, plan bezichtigingen en beantwoord vragen over onderhoud.
+                        </p>
+                    </div>
+                    <div class="flex flex-col items-center text-center p-6 bg-white rounded-xl shadow-md">
+                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-4xl mb-4">💇</div>
+                        <h3 class="text-xl font-bold text-ink">Kapsalons & Schoonheidssalons</h3>
+                        <p class="mt-2 text-muted">
+                            Laat klanten zelf afspraken maken, hun afspraak bevestigen of annuleren, en herinneringen sturen.
+                        </p>
+                    </div>
+                    <div class="flex flex-col items-center text-center p-6 bg-white rounded-xl shadow-md">
+                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-4xl mb-4">🛒</div>
+                        <h3 class="text-xl font-bold text-ink">E-commerce</h3>
+                        <p class="mt-2 text-muted">
+                            Verwerk vragen over bestellingen, levering en productinformatie. Verhoog je verkoop en klanttevredenheid.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Page (Static met dynamische highlights)-->
+        <section id="pricing" class="page py-20 px-4 bg-white">
             <div class="container mx-auto">
                 <h2 class="text-3xl md:text-4xl font-extrabold text-center text-ink">
-                    Eenvoudige prijzen, geen verrassingen
+                    Vind het perfecte plan voor jouw bedrijf
                 </h2>
                 <p class="mt-4 text-lg text-muted text-center max-w-2xl mx-auto">
-                    Kies het plan dat het beste bij jouw bedrijf past en start met een gratis proefperiode van 14 dagen.
+                    Kies het plan dat het beste bij uw behoeften past.
                 </p>
-                <div class="mt-12 grid md:grid-cols-3 gap-8 items-center">
-                    <div class="bg-white rounded-2xl p-8 text-center shadow-lg">
-                        <h3 class="text-2xl font-bold text-ink">Starter</h3>
-                        <p class="mt-4 text-muted">Voor kleine teams die net beginnen.</p>
-                        <p class="mt-4 text-4xl font-extrabold text-ink">€29<span class="text-lg text-muted font-normal">/maand</span></p>
-                        <a href="#contact" class="mt-6 btn btn-primary w-full">Start Nu</a>
-                        <ul class="mt-6 text-left space-y-2 text-muted">
-                            <li class="flex items-center"><span class="text-green-500 mr-2">✔</span> 1 chatbot</li>
-                            <li class="flex items-center"><span class="text-green-500 mr-2">✔</span> 1.000 chats per maand</li>
-                            <li class="flex items-center"><span class="text-green-500 mr-2">✔</span> Standaard integraties</li>
+                <div class="mt-12 grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                    <!-- Starter Plan -->
+                    <div id="plan-starter" class="p-8 rounded-2xl text-center border-2 border-gray-200 transition-all duration-300">
+                        <span class="text-sm font-bold uppercase tracking-wider bg-orange-200 text-orange-800 px-4 py-1.5 rounded-full">Starter</span>
+                        <p class="mt-4 text-5xl font-extrabold">€89<span class="text-lg font-normal text-muted">/mnd</span></p>
+                        <p class="mt-2 text-muted">1 kanaal — WhatsApp / Telegram / Instagram / Website</p>
+                        <ul class="mt-6 text-left space-y-3">
+                            <li class="flex items-center space-x-2">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="text-gray-600">Snelle FAQ-flows & basis afspraken</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="text-gray-600">Hosting & updates</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="text-gray-600">Basissupport</span>
+                            </li>
                         </ul>
+                        <a href="#contact" class="mt-8 w-full btn bg-gray-800 text-white hover:bg-gray-700">
+                            Start met Starter
+                        </a>
                     </div>
-                    <div class="bg-brand text-white rounded-2xl p-8 text-center shadow-xl transform scale-105">
-                        <h3 class="text-2xl font-bold">Pro</h3>
-                        <p class="mt-4 opacity-80">Voor groeiende bedrijven met meer verkeer.</p>
-                        <p class="mt-4 text-4xl font-extrabold">€79<span class="text-lg font-normal opacity-80">/maand</span></p>
-                        <a href="#contact" class="mt-6 btn bg-white text-brand w-full">Start Nu</a>
-                        <ul class="mt-6 text-left space-y-2 opacity-80">
-                            <li class="flex items-center"><span class="mr-2">✔</span> 5 chatbots</li>
-                            <li class="flex items-center"><span class="mr-2">✔</span> 10.000 chats per maand</li>
-                            <li class="flex items-center"><span class="mr-2">✔</span> Alle integraties</li>
-                            <li class="flex items-center"><span class="mr-2">✔</span> Prioritaire ondersteuning</li>
+                    <!-- Pro Plan -->
+                    <div id="plan-pro" class="p-8 rounded-2xl text-center border-4 border-brand shadow-lg transition-all duration-300">
+                        <span class="text-sm font-bold uppercase tracking-wider bg-green-200 text-green-800 px-4 py-1.5 rounded-full">Pro</span>
+                        <p class="mt-4 text-5xl font-extrabold">€149<span class="text-lg font-normal text-muted">/mnd</span></p>
+                        <p class="mt-2 text-muted">2 kanalen + AI-dialogen en integraties</p>
+                        <ul class="mt-6 text-left space-y-3">
+                            <li class="flex items-center space-x-2">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="text-gray-600">AI-dialogen & intent-herkenning</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="text-gray-600">Afsprakenplanning & reminders</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="text-gray-600">CRM-integraties</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="text-gray-600">Prioritaire support</span>
+                            </li>
                         </ul>
+                        <a href="#contact" class="mt-8 w-full btn bg-brand text-white hover:bg-brand-600">
+                            Start met Pro
+                        </a>
                     </div>
-                    <div class="bg-white rounded-2xl p-8 text-center shadow-lg">
-                        <h3 class="text-2xl font-bold text-ink">Enterprise</h3>
-                        <p class="mt-4 text-muted">Voor grote bedrijven met specifieke behoeften.</p>
-                        <p class="mt-4 text-4xl font-extrabold text-ink">Op aanvraag</p>
-                        <a href="#contact" class="mt-6 btn btn-secondary w-full">Contacteer Ons</a>
-                        <ul class="mt-6 text-left space-y-2 text-muted">
-                            <li class="flex items-center"><span class="text-green-500 mr-2">✔</span> Onbeperkt chatbots</li>
-                            <li class="flex items-center"><span class="text-green-500 mr-2">✔</span> Onbeperkt chats</li>
-                            <li class="flex items-center"><span class="text-green-500 mr-2">✔</span> Maatwerk oplossingen</li>
+                    <!-- Business Plan -->
+                    <div id="plan-business" class="p-8 rounded-2xl text-center border-2 border-gray-200 transition-all duration-300">
+                        <span class="text-sm font-bold uppercase tracking-wider bg-green-200 text-green-800 px-4 py-1.5 rounded-full">Business</span>
+                        <p class="mt-4 text-5xl font-extrabold">€249<span class="text-lg font-normal text-muted">/mnd</span></p>
+                        <p class="mt-2 text-muted">Alle kanalen, maatwerk & SLA</p>
+                        <ul class="mt-6 text-left space-y-3">
+                            <li class="flex items-center space-x-2">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="text-gray-600">Onbeperkte flows & meertalige AI</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="text-gray-600">Dashboard & rapportages</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="text-gray-600">Maatwerk integraties</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="text-gray-600">Dedicated support & onboarding</span>
+                            </li>
                         </ul>
+                        <a href="#contact" class="mt-8 w-full btn bg-gray-800 text-white hover:bg-gray-700">
+                            Start met Business
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- New: Interactive Demo Section -->
+        <section id="demo" class="page py-20 px-4">
+            <div class="container mx-auto">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-extrabold">Hoe werkt het in de praktijk?</h2>
+                    <p class="mt-4 text-lg text-muted max-w-3xl mx-auto">
+                        Deze interactieve demo laat zien hoe BotMatic gesprekken voert in verschillende bedrijfssituaties.
+                    </p>
+                </div>
+                <div class="mt-8 max-w-2xl mx-auto bg-white rounded-3xl p-8 shadow-xl">
+                    <div class="mb-4">
+                        <label for="scenarioSelector" class="block text-sm font-medium text-gray-700">Kies een demo scenario:</label>
+                        <select id="scenarioSelector" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-brand focus:border-brand sm:text-sm rounded-md"></select>
+                    </div>
+                    <div id="chat-container" class="bg-gray-50 p-4 rounded-lg h-80 overflow-y-auto space-y-4"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- New: Voordeel Calculator Section (op aparte pagina) -->
+        <section id="calculator-page" class="page py-20 px-4 bg-gray-50">
+            <div class="container mx-auto max-w-4xl">
+                <div class="grid md:grid-cols-2 gap-12 items-center bg-white rounded-3xl p-8 shadow-xl">
+                    <div>
+                        <h2 class="text-3xl font-extrabold">Jouw Voordeel Calculator</h2>
+                        <p class="mt-2 text-muted">
+                            Bereken hieronder direct hoeveel tijd en geld je kunt besparen door BotMatic te gebruiken voor je meest voorkomende taken.
+                        </p>
+                        <div class="mt-6 space-y-6">
+                            <div>
+                                <label for="weeklyQueries" class="block font-semibold">Aantal klantvragen per week: <span id="weeklyQueriesValue" class="text-brand font-bold">50</span></label>
+                                <input type="range" id="weeklyQueries" min="10" max="500" value="50" step="10" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                            <div>
+                                <label for="timePerQuery" class="block font-semibold">Gemiddelde tijd per vraag (minuten): <span id="timePerQueryValue" class="text-brand font-bold">5</span></label>
+                                <input type="range" id="timePerQuery" min="1" max="15" value="5" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                            <div>
+                                <label for="hourlyRate" class="block font-semibold">Jouw geschatte uurtarief (€): <span id="hourlyRateValue" class="text-brand font-bold">40</span></label>
+                                <input type="range" id="hourlyRate" min="20" max="150" value="40" step="5" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="text-xl font-bold mb-4">Jouw geschatte besparing:</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-gray-50 p-6 rounded-lg">
+                                <p class="text-sm text-muted">Bespaarde Uren/week</p>
+                                <p id="hoursSaved" class="text-4xl font-extrabold text-brand">3.3</p>
+                            </div>
+                            <div class="bg-gray-50 p-6 rounded-lg">
+                                <p class="text-sm text-muted">Bespaarde Kosten/mnd</p>
+                                <p id="costSaved" class="text-4xl font-extrabold text-brand">€572</p>
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                             <div class="chart-container h-64 md:h-64">
+                                <canvas id="savingsChart"></canvas>
+                            </div>
+                        </div>
+                        <div id="planRecommendation" class="mt-6 p-4 bg-green-50 text-green-800 rounded-lg font-semibold">
+                            Aanbevolen Plan: <span id="recommendedPlan" class="font-bold">Pro</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -195,7 +378,7 @@
         </section>
 
         <!-- Contact Page -->
-        <section id="contact" class="page py-20 px-4 bg-white">
+        <section id="contact" class="page py-20 px-4 bg-gray-50">
             <div class="container mx-auto max-w-2xl">
                 <h2 class="text-3xl md:text-4xl font-extrabold text-center text-ink">
                     Klaar om te beginnen?
@@ -214,7 +397,7 @@
                     </div>
                     <div>
                         <label for="message" class="block text-sm font-medium text-muted">Bericht</label>
-                        <textarea id="message" name="message" rows="4" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-3 focus:ring-brand focus:border-brand"></textarea>
+                        <textarea id="message" name="message" rows="4" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-3 focus:ring-brand focus:border-border"></textarea>
                     </div>
                     <div class="hidden">
                         <label for="company" class="block text-sm font-medium text-muted">Bedrijf (laat leeg)</label>
@@ -230,80 +413,398 @@
                 </div>
             </div>
         </section>
+
+        <!-- New: Dashboard Section -->
+        <section id="dashboard" class="page py-20 px-4 bg-white">
+            <div class="container mx-auto max-w-4xl">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-extrabold">Inzendingen</h2>
+                    <p class="mt-4 text-lg text-muted max-w-3xl mx-auto">
+                        Beheer hier alle inzendingen die via het contactformulier zijn binnengekomen.
+                        <br>
+                        <span class="font-bold text-gray-800">Jouw gebruikers-ID:</span> <span id="userIdDisplay" class="font-mono text-sm break-all">Laden...</span>
+                    </p>
+                </div>
+                <div class="mt-8 overflow-x-auto rounded-lg shadow-xl">
+                    <table class="w-full text-sm text-left text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                            <tr>
+                                <th scope="col" class="py-3 px-6">Naam</th>
+                                <th scope="col" class="py-3 px-6">E-mail</th>
+                                <th scope="col" class="py-3 px-6">Bericht</th>
+                                <th scope="col" class="py-3 px-6">Verstuurd op</th>
+                            </tr>
+                        </thead>
+                        <tbody id="submissions-table-body">
+                            <!-- Inzendingen worden hier geladen door JavaScript -->
+                            <tr class="bg-white border-b hover:bg-gray-50">
+                                <td class="py-4 px-6 text-center" colspan="4">Laden...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
     </div>
 
     <!-- Footer -->
-    <footer class="py-12 bg-ink text-white text-center px-4">
-        <p class="text-sm opacity-70">
-            &copy; <span id="year"></span> BotMatic. Alle rechten voorbehouden.
-        </p>
+    <footer class="bg-ink text-white py-12 px-4">
+        <div class="container mx-auto text-center">
+            <div class="flex flex-col md:flex-row justify-center md:justify-between items-center space-y-4 md:space-y-0">
+                <p class="text-xl font-extrabold">&copy; 2024 BotMatic. Alle rechten voorbehouden.</p>
+                <div class="flex space-x-4 text-xl">
+                    <a href="#" class="hover:text-brand transition-colors">Twitter</a>
+                    <a href="#" class="hover:text-brand transition-colors">LinkedIn</a>
+                    <a href="#" class="hover:text-brand transition-colors">Facebook</a>
+                </div>
+            </div>
+        </div>
     </footer>
 
-    <!-- Scripts -->
-    <script>
-        // State and DOM elements
-        const pages = document.querySelectorAll('.page');
-        const navToggle = document.getElementById('nav-toggle');
-        const navMenu = document.getElementById('nav-menu');
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Functions
-        const showPage = (id) => {
-            pages.forEach(page => {
-                page.style.display = 'none';
-                if(page.id === id) {
-                    page.style.display = 'block';
-                }
-            });
-        };
+        // Functies voor de pagina
+        document.addEventListener('DOMContentLoaded', async () => {
+            const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+            const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
-        const bindNavClicks = () => {
-            document.querySelectorAll('#nav-menu a').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    const id = e.target.getAttribute('href').slice(1);
-                    showPage(id);
-                    if (window.innerWidth < 768) {
-                        navMenu.classList.add('hidden');
-                    }
-                });
-            });
+            const app = initializeApp(firebaseConfig);
+            const db = getFirestore(app);
+            const auth = getAuth(app);
+
+            if (initialAuthToken) {
+                await signInWithCustomToken(auth, initialAuthToken);
+            } else {
+                await signInAnonymously(auth);
+            }
+            
+            const userIdDisplay = document.getElementById('userIdDisplay');
+            const submissionsTableBody = document.getElementById('submissions-table-body');
+            const collectionPath = `artifacts/${appId}/users/${auth.currentUser.uid}/contact-submissions`;
+
+            userIdDisplay.textContent = auth.currentUser.uid;
+
+            // Navigatie-toggle
+            const navToggle = document.getElementById('nav-toggle');
+            const navMenu = document.getElementById('nav-menu');
             navToggle.addEventListener('click', () => {
                 navMenu.classList.toggle('hidden');
             });
-        };
 
-        const form = document.getElementById('contact-form');
-        const submitBtn = document.getElementById('submit-btn');
-        const successMsg = document.getElementById('form-success-message');
-        form?.addEventListener('submit', async (e)=>{
-            e.preventDefault();
-            if(document.getElementById('company').value) return; // honeypot
-            if(!form.reportValidity()) return;
-            submitBtn.textContent='Bezig met versturen...';
-            submitBtn.disabled=true;
-            await new Promise(r=>setTimeout(r,500));
-            form.classList.add('hidden');
-            successMsg.classList.remove('hidden');
-            submitBtn.textContent='Verstuur';
-            submitBtn.disabled=false;
+            // Functie om de faq antwoorden te tonen
+            window.toggleAnswer = (button) => {
+                const answer = button.nextElementSibling;
+                const icon = button.querySelector('span');
+                const isHidden = answer.classList.contains('hidden');
+                answer.classList.toggle('hidden');
+                icon.textContent = isHidden ? '-' : '+';
+            };
+
+            // Formulierinzending verwerken
+            const contactForm = document.getElementById('contact-form');
+            contactForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                document.getElementById('submit-btn').textContent = 'Versturen...';
+                
+                const formData = new FormData(contactForm);
+                const data = Object.fromEntries(formData.entries());
+
+                try {
+                    await addDoc(collection(db, collectionPath), {
+                        ...data,
+                        timestamp: new Date()
+                    });
+
+                    contactForm.reset();
+                    contactForm.classList.add('hidden');
+                    document.getElementById('form-success-message').classList.remove('hidden');
+                } catch (error) {
+                    console.error("Error writing document: ", error);
+                    // Toon een foutmelding aan de gebruiker
+                    document.getElementById('submit-btn').textContent = 'Versturen mislukt';
+                }
+            });
+
+            // Real-time luisteraar voor inzendingen
+            const q = query(collection(db, collectionPath));
+            onSnapshot(q, (querySnapshot) => {
+                submissionsTableBody.innerHTML = '';
+                if (querySnapshot.empty) {
+                    submissionsTableBody.innerHTML = `
+                        <tr class="bg-white border-b hover:bg-gray-50">
+                            <td class="py-4 px-6 text-center text-gray-400" colspan="4">Nog geen inzendingen.</td>
+                        </tr>`;
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const submission = doc.data();
+                    const row = document.createElement('tr');
+                    row.classList.add('bg-white', 'border-b', 'hover:bg-gray-50');
+
+                    const timestamp = submission.timestamp.toDate ? submission.timestamp.toDate().toLocaleString('nl-NL') : submission.timestamp;
+
+                    row.innerHTML = `
+                        <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">${submission.name}</td>
+                        <td class="py-4 px-6">${submission.email}</td>
+                        <td class="py-4 px-6 max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">${submission.message}</td>
+                        <td class="py-4 px-6">${timestamp}</td>
+                    `;
+                    submissionsTableBody.appendChild(row);
+                });
+            });
+
+            // Voordeel Calculator Logica
+            const weeklyQueriesInput = document.getElementById('weeklyQueries');
+            const timePerQueryInput = document.getElementById('timePerQuery');
+            const hourlyRateInput = document.getElementById('hourlyRate');
+            const weeklyQueriesValue = document.getElementById('weeklyQueriesValue');
+            const timePerQueryValue = document.getElementById('timePerQueryValue');
+            const hourlyRateValue = document.getElementById('hourlyRateValue');
+            const hoursSaved = document.getElementById('hoursSaved');
+            const costSaved = document.getElementById('costSaved');
+            const planRecommendation = document.getElementById('planRecommendation');
+            const recommendedPlan = document.getElementById('recommendedPlan');
+
+            const planStarterCard = document.getElementById('plan-starter');
+            const planProCard = document.getElementById('plan-pro');
+            const planBusinessCard = document.getElementById('plan-business');
+
+            // Data voor de prijzen en plannen
+            const plans = {
+                starter: {
+                    price: 89,
+                    title: 'Starter'
+                },
+                pro: {
+                    price: 149,
+                    title: 'Pro'
+                },
+                business: {
+                    price: 249,
+                    title: 'Business'
+                }
+            };
+
+            const calculateSavings = () => {
+                const queries = parseInt(weeklyQueriesInput.value);
+                const time = parseInt(timePerQueryInput.value);
+                const rate = parseInt(hourlyRateInput.value);
+
+                const totalMinutes = queries * time;
+                const totalHours = totalMinutes / 60;
+                const monthlyCost = totalHours * 4 * rate; // 4 weken per maand
+
+                hoursSaved.textContent = totalHours.toFixed(1);
+                costSaved.textContent = '€' + monthlyCost.toFixed(0);
+
+                // Update recommendations and highlight card
+                let recommended = 'Starter';
+                let priceRecommendation = plans.starter.price;
+
+                // Reset all highlights
+                planStarterCard.classList.remove('border-4', 'border-brand', 'shadow-lg');
+                planProCard.classList.remove('border-4', 'border-brand', 'shadow-lg');
+                planBusinessCard.classList.remove('border-4', 'border-brand', 'shadow-lg');
+                planStarterCard.classList.add('border-2', 'border-gray-200');
+                planProCard.classList.add('border-2', 'border-gray-200');
+                planBusinessCard.classList.add('border-2', 'border-gray-200');
+
+
+                if (monthlyCost >= 1000) {
+                    recommended = 'Business';
+                    priceRecommendation = plans.business.price;
+                    planBusinessCard.classList.remove('border-2', 'border-gray-200');
+                    planBusinessCard.classList.add('border-4', 'border-brand', 'shadow-lg');
+                } else if (monthlyCost >= 500) {
+                    recommended = 'Pro';
+                    priceRecommendation = plans.pro.price;
+                    planProCard.classList.remove('border-2', 'border-gray-200');
+                    planProCard.classList.add('border-4', 'border-brand', 'shadow-lg');
+                } else {
+                     planStarterCard.classList.remove('border-2', 'border-gray-200');
+                    planStarterCard.classList.add('border-4', 'border-brand', 'shadow-lg');
+                }
+                recommendedPlan.textContent = recommended;
+
+
+                updateChart(totalHours, monthlyCost, priceRecommendation);
+            };
+
+            // Functie om de staafdiagram te updaten
+            const ctx = document.getElementById('savingsChart').getContext('2d');
+            let savingsChart;
+            const updateChart = (hours, cost, planPrice) => {
+                if (savingsChart) {
+                    savingsChart.destroy();
+                }
+
+                savingsChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Bespaarde kosten', 'Kosten plan'],
+                        datasets: [{
+                            label: 'Kosten/Besparing (€)',
+                            data: [cost, planPrice],
+                            backgroundColor: [
+                                'rgba(56, 189, 248, 0.8)', // Bespaarde kosten
+                                'rgba(255, 122, 26, 0.8)' // Kosten plan
+                            ],
+                            borderColor: [
+                                'rgba(56, 189, 248, 1)',
+                                'rgba(255, 122, 26, 1)'
+                            ],
+                            borderWidth: 1,
+                            borderRadius: 8,
+                            barPercentage: 0.6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false,
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.raw.toFixed(0) + ' €';
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    callback: function(value, index, values) {
+                                        return value + ' €';
+                                    }
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+            };
+
+            // Event listeners voor de sliders
+            weeklyQueriesInput.addEventListener('input', () => {
+                weeklyQueriesValue.textContent = weeklyQueriesInput.value;
+                calculateSavings();
+            });
+            timePerQueryInput.addEventListener('input', () => {
+                timePerQueryValue.textContent = timePerQueryInput.value;
+                calculateSavings();
+            });
+            hourlyRateInput.addEventListener('input', () => {
+                hourlyRateValue.textContent = hourlyRateInput.value;
+                calculateSavings();
+            });
+
+            // Initiele berekening
+            calculateSavings();
+
+            // Interactieve Demo Logica
+            const scenarioSelector = document.getElementById('scenarioSelector');
+            const chatContainer = document.getElementById('chat-container');
+
+            const scenarios = [
+                {
+                    name: 'Vastgoedbeheer',
+                    messages: [
+                        { sender: 'user', text: 'Ik heb een lekkende kraan in mijn appartement. Wat moet ik doen?' },
+                        { sender: 'bot', text: 'Oh nee, dat is vervelend! Kunt u alstublieft uw adres en de urgentie van het probleem bevestigen? BotMatic zal direct een melding doorsturen naar de juiste monteur.' },
+                        { sender: 'user', text: 'Adres is Hoofdstraat 5, en het is redelijk urgent.' },
+                        { sender: 'bot', text: 'Melding ontvangen! De aanvraag voor een monteur is verstuurd. U ontvangt een sms-bevestiging zodra een monteur is toegewezen. Bedankt!' }
+                    ]
+                },
+                {
+                    name: 'Kapsalon Afspraak',
+                    messages: [
+                        { sender: 'user', text: 'Hoi, kan ik een afspraak maken voor een knipbeurt?' },
+                        { sender: 'bot', text: 'Hallo! Ik help u graag. Op welke dag en rond welk tijdstip zou u graag een afspraak willen maken?' },
+                        { sender: 'user', text: 'Dinsdagmiddag, rond 14:00.' },
+                        { sender: 'bot', text: 'Ja, dinsdag om 14:15 hebben we nog een plekje vrij voor een knipbeurt van 30 minuten. Past dat?' },
+                        { sender: 'user', text: 'Ja, perfect!' },
+                        { sender: 'bot', text: 'Geweldig! De afspraak staat vast. U ontvangt een bevestiging in uw e-mail.' }
+                    ]
+                },
+                {
+                    name: 'E-commerce Ondersteuning',
+                    messages: [
+                        { sender: 'user', text: 'Mijn bestelling is nog niet binnengekomen.' },
+                        { sender: 'bot', text: 'Excuses hiervoor. Kunt u alstublieft uw bestelnummer opgeven, dan controleer ik direct de status.' },
+                        { sender: 'user', text: 'Mijn bestelnummer is #XYZ1234.' },
+                        { sender: 'bot', text: 'Dank u wel. Ik zie dat uw pakket onderweg is en vandaag of uiterlijk morgen wordt bezorgd. Excuses voor de vertraging!' }
+                    ]
+                }
+            ];
+
+            const addMessageToChat = (message) => {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('p-3', 'rounded-lg', 'max-w-[80%]', 'break-words');
+                
+                const span = document.createElement('span');
+                span.classList.add('block', 'font-bold', 'text-sm', 'mb-1');
+                
+                const p = document.createElement('p');
+                p.classList.add('text-gray-800', 'text-md');
+                p.textContent = message.text;
+
+                if (message.sender === 'user') {
+                    messageDiv.classList.add('ml-auto', 'bg-blue-100');
+                    span.textContent = 'Jij';
+                } else {
+                    messageDiv.classList.add('mr-auto', 'bg-gray-200');
+                    span.textContent = 'BotMatic';
+                }
+                
+                messageDiv.appendChild(span);
+                messageDiv.appendChild(p);
+                chatContainer.appendChild(messageDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            };
+
+            const runDemoScenario = () => {
+                chatContainer.innerHTML = '';
+                const selectedScenario = scenarios.find(s => s.name === scenarioSelector.value);
+
+                if (selectedScenario) {
+                    let delay = 0;
+                    selectedScenario.messages.forEach(message => {
+                        setTimeout(() => {
+                            addMessageToChat(message);
+                        }, delay);
+                        delay += 1000;
+                    });
+                }
+            };
+
+            // Populate the dropdown and run the first scenario
+            scenarios.forEach(scenario => {
+                const option = document.createElement('option');
+                option.value = scenario.name;
+                option.textContent = scenario.name;
+                scenarioSelector.appendChild(option);
+            });
+
+            scenarioSelector.addEventListener('change', runDemoScenario);
+            runDemoScenario();
         });
-
-        // ===== Init =====
-        document.addEventListener('DOMContentLoaded', ()=>{
-            bindNavClicks();
-            const id = (location.hash||'#home').slice(1);
-            showPage(id);
-            document.getElementById('year').textContent=new Date().getFullYear();
-        });
-
-        // keep toggleAnswer global for FAQ inline onclick
-        window.toggleAnswer = (btn) => {
-            const answer = btn.nextElementSibling;
-            const icon = btn.querySelector('span:last-child');
-            const open = answer && answer.classList.contains('hidden');
-            if(!answer) return;
-            answer.classList.toggle('hidden');
-            if(icon) icon.textContent = open ? '–' : '+';
-        };
     </script>
 </body>
 </html>
