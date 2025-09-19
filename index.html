@@ -1,87 +1,90 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="ru">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>BotMatic – Nooit meer dezelfde vragen beantwoorden</title>
-    <meta name="description" content="Ben je het zat om telkens dezelfde vragen te beantwoorden? BotMatic automatiseert je FAQ en routinevragen, zodat je team zich kan richten op de groei. Start vandaag nog met een gratis proefperiode." />
+    <title>BotMatic – Никогда больше не отвечайте на одни и те же вопросы</title>
+    <meta name="description" content="Устали отвечать на одни и те же вопросы? BotMatic автоматизирует ответы на часто задаваемые вопросы, чтобы ваша команда могла сосредоточиться на росте. Начните с бесплатного пробного периода уже сегодня." />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Laadt Firebase-bibliotheken via de moderne, modulaire CDN-links -->
+    <!-- Загружаем библиотеки Firebase через современные, модульные CDN-ссылки -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, setLogLevel } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
 
         document.addEventListener('DOMContentLoaded', async () => {
-            // Stap 1: Kopieer hier je eigen Firebase-configuratie
-            // Ga naar je Firebase Console > Project settings > Your apps
-            // Kopieer het 'firebaseConfig' object en plak het hieronder.
-            // **BELANGRIJK: Verwijder de '//' van de regel hieronder om het te activeren**
-            const firebaseConfig = {
-              apiKey: "JOUW_API_KEY",
-              authDomain: "JOUW_AUTH_DOMAIN",
-              projectId: "JOUW_PROJECT_ID",
-              storageBucket: "JOUW_STORAGE_BUCKET",
-              messagingSenderId: "JOUW_MESSAGING_SENDER_ID",
-              appId: "JOUW_APP_ID"
-            };
+            // Устанавливаем уровень логирования для отладки
+            setLogLevel('debug'); // Показать логи Firebase в консоли
 
-            // Stap 2: Activeer de code hieronder nadat je de configuratie hebt toegevoegd
-            // ///////////////////////////////////////////////////////////////////////////
-            // Zodra je de configuratie hebt toegevoegd, verwijder je de commentaar
-            // van deze regel:
-            // const app = firebase.initializeApp(firebaseConfig);
-            // Je kunt dan de regel hieronder met de Canvas-variabelen verwijderen.
+            let firebaseConfig;
+            let initialAuthToken;
+            let appId;
+
+            try {
+                // Пытаемся получить переменные, предоставленные средой Canvas
+                if (typeof __firebase_config !== 'undefined' && typeof __initial_auth_token !== 'undefined' && typeof __app_id !== 'undefined') {
+                    firebaseConfig = JSON.parse(__firebase_config);
+                    initialAuthToken = __initial_auth_token;
+                    appId = __app_id;
+                }
+            } catch (e) {
+                console.error("Ошибка при получении глобальных переменных Firebase:", e);
+                // Заглушки, если переменные не существуют
+                firebaseConfig = {};
+                initialAuthToken = null;
+                appId = 'default-app-id';
+            }
+
+            if (!firebaseConfig || Object.keys(firebaseConfig).length === 0) {
+                 console.error("Не удалось загрузить конфигурацию Firebase. Пожалуйста, убедитесь, что ваш проект правильно настроен.");
+                 return;
+            }
+
+            // Инициализация Firebase
             const app = initializeApp(firebaseConfig);
-
-            // Standaard Canvas-configuratie (verwijderen als je de bovenstaande regel activeert)
-            // const __firebase_config = JSON.stringify({});
-            // const app = initializeApp(JSON.parse(__firebase_config));
-
-            // Set log level for debugging
-            setLogLevel('debug'); // Toon Firebase-logboeken in de console
-
-            // Firebase initialisatie
             const db = getFirestore(app);
             const auth = getAuth(app);
-            let userId = 'anonieme_gebruiker'; // Standaard ID, wordt bijgewerkt bij inloggen
-
-            // Wacht tot de authenticatiestatus is opgeladen
+            let userId = 'анонимный_пользователь'; // ID по умолчанию, обновляется при входе
+            
+            // Ждем загрузки статуса аутентификации
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
+                    // Если пользователь успешно аутентифицирован
                     userId = user.uid;
+                    document.getElementById('userIdDisplay').textContent = userId;
+                    startSubmissionsListener(); // Запускаем слушатель после успешной аутентификации
                 } else {
-                    // Log in als anonieme gebruiker, wat genoeg is voor dit formulier
+                    // Вход в систему, если пользователь не аутентифицирован
                     try {
-                        await signInAnonymously(auth);
-                        userId = auth.currentUser.uid;
+                        if (initialAuthToken) {
+                            await signInWithCustomToken(auth, initialAuthToken);
+                        } else {
+                            await signInAnonymously(auth);
+                        }
                     } catch (error) {
-                        console.error("Fout bij anoniem inloggen:", error);
+                        console.error("Ошибка входа:", error);
                     }
                 }
-                 document.getElementById('userIdDisplay').textContent = userId;
-                 startSubmissionsListener();
             });
 
-            // Functie om de real-time luisteraar te starten
+            // Функция для запуска слушателя в реальном времени
             const startSubmissionsListener = () => {
                 const submissionsTableBody = document.getElementById('submissions-table-body');
-                // We gebruiken een simpele collectie genaamd 'contact-submissions'
-                const collectionPath = `contact-submissions`;
+                // ИСПОЛЬЗУЕМ КОРРЕКТНЫЙ ПУТЬ ДЛЯ ОБЩЕСТВЕННЫХ ДАННЫХ
+                const collectionPath = `artifacts/${appId}/public/data/contact-submissions`;
 
-                // Real-time luisteraar voor inzendingen
                 const q = query(collection(db, collectionPath));
                 onSnapshot(q, (querySnapshot) => {
                     submissionsTableBody.innerHTML = '';
                     if (querySnapshot.empty) {
                         submissionsTableBody.innerHTML = `
                             <tr class="bg-white border-b hover:bg-gray-50">
-                                <td class="py-4 px-6 text-center text-gray-400" colspan="4">Nog geen inzendingen.</td>
+                                <td class="py-4 px-6 text-center text-gray-400" colspan="4">Пока нет заявок.</td>
                             </tr>`;
                         return;
                     }
@@ -91,7 +94,7 @@
                         const row = document.createElement('tr');
                         row.classList.add('bg-white', 'border-b', 'hover:bg-gray-50');
 
-                        const timestamp = submission.timestamp.toDate ? submission.timestamp.toDate().toLocaleString('nl-NL') : new Date(submission.timestamp).toLocaleString('nl-NL');
+                        const timestamp = submission.timestamp.toDate ? submission.timestamp.toDate().toLocaleString('ru-RU') : new Date(submission.timestamp).toLocaleString('ru-RU');
 
                         row.innerHTML = `
                             <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">${submission.name}</td>
@@ -104,7 +107,7 @@
                 });
             };
 
-            // Functie voor paginanavigatie
+            // Функция для навигации по страницам
             const showPage = (hash) => {
                 document.querySelectorAll('.page').forEach(page => {
                     page.classList.remove('active');
@@ -118,6 +121,18 @@
                 window.scrollTo(0, 0);
             };
 
+            // *** ИСПРАВЛЕНИЕ: Добавляем слушатель кликов для надежной навигации ***
+            document.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const href = e.target.getAttribute('href');
+                    if (href && href.startsWith('#')) {
+                        e.preventDefault();
+                        showPage(href);
+                    }
+                });
+            });
+
+            // Слушаем изменения хэша URL (для кнопок "назад"/"вперед")
             window.addEventListener('hashchange', () => {
                 const newHash = window.location.hash || '#home';
                 showPage(newHash);
@@ -126,24 +141,25 @@
             const initialHash = window.location.hash || '#home';
             showPage(initialHash);
 
-            // Navigatie-toggle
+            // Переключатель навигации
             const navToggle = document.getElementById('nav-toggle');
             const navMenu = document.getElementById('nav-menu');
             navToggle.addEventListener('click', () => {
                 navMenu.classList.toggle('hidden');
             });
 
-            // Formulierinzending verwerken
+            // Обработка отправки формы
             const contactForm = document.getElementById('contact-form');
             contactForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                document.getElementById('submit-btn').textContent = 'Versturen...';
+                document.getElementById('submit-btn').textContent = 'Отправка...';
 
                 const formData = new FormData(contactForm);
                 const data = Object.fromEntries(formData.entries());
 
                 try {
-                    const collectionPath = `contact-submissions`;
+                    // ИСПОЛЬЗУЕМ КОРРЕКТНЫЙ ПУТЬ ДЛЯ ОБЩЕСТВЕННЫХ ДАННЫХ
+                    const collectionPath = `artifacts/${appId}/public/data/contact-submissions`;
                     await addDoc(collection(db, collectionPath), {
                         ...data,
                         timestamp: new Date()
@@ -153,12 +169,12 @@
                     contactForm.classList.add('hidden');
                     document.getElementById('form-success-message').classList.remove('hidden');
                 } catch (error) {
-                    console.error("Fout bij het schrijven van het document: ", error);
-                    document.getElementById('submit-btn').textContent = 'Versturen mislukt';
+                    console.error("Ошибка при записи документа: ", error);
+                    document.getElementById('submit-btn').textContent = 'Ошибка отправки';
                 }
             });
 
-            // FAQ-logica
+            // Логика FAQ
             window.toggleAnswer = (button) => {
                 const answer = button.nextElementSibling;
                 const icon = button.querySelector('span');
@@ -167,7 +183,7 @@
                 icon.textContent = isHidden ? '-' : '+';
             };
 
-            // Voordeel Calculator Logica
+            // Логика калькулятора преимуществ
             const weeklyQueriesInput = document.getElementById('weeklyQueries');
             const timePerQueryInput = document.getElementById('timePerQuery');
             const hourlyRateInput = document.getElementById('hourlyRate');
@@ -184,9 +200,9 @@
             const planBusinessCard = document.getElementById('plan-business');
 
             const plans = {
-                starter: { price: 89, title: 'Starter' },
-                pro: { price: 149, title: 'Pro' },
-                business: { price: 249, title: 'Business' }
+                starter: { price: 89, title: 'Стартовый' },
+                pro: { price: 149, title: 'Про' },
+                business: { price: 249, title: 'Бизнес' }
             };
 
             const calculateSavings = () => {
@@ -201,19 +217,19 @@
                 hoursSaved.textContent = totalHours.toFixed(1);
                 costSaved.textContent = '€' + monthlyCost.toFixed(0);
 
-                let recommended = 'Starter';
+                let recommended = 'Стартовый';
                 let priceRecommendation = plans.starter.price;
 
                 [planStarterCard, planProCard, planBusinessCard].forEach(card => card.classList.remove('border-4', 'border-brand', 'shadow-lg'));
                 [planStarterCard, planProCard, planBusinessCard].forEach(card => card.classList.add('border-2', 'border-gray-200'));
 
                 if (monthlyCost >= 1000) {
-                    recommended = 'Business';
+                    recommended = 'Бизнес';
                     priceRecommendation = plans.business.price;
                     planBusinessCard.classList.remove('border-2', 'border-gray-200');
                     planBusinessCard.classList.add('border-4', 'border-brand', 'shadow-lg');
                 } else if (monthlyCost >= 500) {
-                    recommended = 'Pro';
+                    recommended = 'Про';
                     priceRecommendation = plans.pro.price;
                     planProCard.classList.remove('border-2', 'border-gray-200');
                     planProCard.classList.add('border-4', 'border-brand', 'shadow-lg');
@@ -236,9 +252,9 @@
                 savingsChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: ['Bespaarde kosten', 'Kosten plan'],
+                        labels: ['Сэкономленные затраты', 'Стоимость плана'],
                         datasets: [{
-                            label: 'Kosten/Besparing (€)',
+                            label: 'Затраты/Экономия (€)',
                             data: [cost, planPrice],
                             backgroundColor: ['rgba(56, 189, 248, 0.8)', 'rgba(255, 122, 26, 0.8)'],
                             borderColor: ['rgba(56, 189, 248, 1)', 'rgba(255, 122, 26, 1)'],
@@ -261,13 +277,13 @@
             hourlyRateInput.addEventListener('input', () => { hourlyRateValue.textContent = hourlyRateInput.value; calculateSavings(); });
             calculateSavings();
 
-            // Interactieve Demo Logica
+            // Логика интерактивного демо
             const scenarioSelector = document.getElementById('scenarioSelector');
             const chatContainer = document.getElementById('chat-container');
             const scenarios = [
-                { name: 'Vastgoedbeheer', messages: [{ sender: 'user', text: 'Ik heb een lekkende kraan in mijn appartement. Wat moet ik doen?' }, { sender: 'bot', text: 'Oh nee, dat is vervelend! Kunt u alstublieft uw adres en de urgentie van het probleem bevestigen? BotMatic zal direct een melding doorsturen naar de juiste monteur.' }, { sender: 'user', text: 'Adres is Hoofdstraat 5, en het is redelijk urgent.' }, { sender: 'bot', text: 'Melding ontvangen! De aanvraag voor een monteur is verstuurd. U ontvangt een sms-bevestiging zodra een monteur is toegewezen. Bedankt!' }]},
-                { name: 'Kapsalon Afspraak', messages: [{ sender: 'user', text: 'Hoi, kan ik een afspraak maken voor een knipbeurt?' }, { sender: 'bot', text: 'Hallo! Ik help u graag. Op welke dag en rond welk tijdstip zou u graag een afspraak willen maken?' }, { sender: 'user', text: 'Dinsdagmiddag, rond 14:00.' }, { sender: 'bot', text: 'Ja, dinsdag om 14:15 hebben we nog een plekje vrij voor een knipbeurt van 30 minuten. Past dat?' }, { sender: 'user', text: 'Ja, perfect!' }, { sender: 'bot', text: 'Geweldig! De afspraak staat vast. U ontvangt een bevestiging in uw e-mail.' }]},
-                { name: 'E-commerce Ondersteuning', messages: [{ sender: 'user', text: 'Mijn bestelling is nog niet binnengekomen.' }, { sender: 'bot', text: 'Excuses hiervoor. Kunt u alstublieft uw bestelnummer opgeven, dan controleer ik direct de status.' }, { sender: 'user', text: 'Mijn bestelnummer is #XYZ1234.' }, { sender: 'bot', text: 'Dank u wel. Ik zie dat uw pakket onderweg is en vandaag of uiterlijk morgen wordt bezorgd. Excuses voor de vertraging!' }]}
+                { name: 'Управление недвижимостью', messages: [{ sender: 'user', text: 'У меня течет кран в квартире. Что мне делать?' }, { sender: 'bot', text: 'О нет, это неприятно! Пожалуйста, подтвердите ваш адрес и срочность проблемы. BotMatic немедленно отправит уведомление нужному сантехнику.' }, { sender: 'user', text: 'Адрес — Главная улица, 5, и это довольно срочно.' }, { sender: 'bot', text: 'Уведомление получено! Заявка на сантехника отправлена. Вы получите SMS-подтверждение, как только сантехник будет назначен. Спасибо!' }]},
+                { name: 'Запись в парикмахерскую', messages: [{ sender: 'user', text: 'Привет, я могу записаться на стрижку?' }, { sender: 'bot', text: 'Здравствуйте! Я с радостью вам помогу. В какой день и примерно в какое время вы бы хотели записаться?' }, { sender: 'user', text: 'Вторник днем, около 14:00.' }, { sender: 'bot', text: 'Да, во вторник в 14:15 у нас еще есть место для 30-минутной стрижки. Вам подходит?' }, { sender: 'user', text: 'Да, отлично!' }, { sender: 'bot', text: 'Отлично! Запись подтверждена. Вы получите подтверждение на свою электронную почту.' }]},
+                { name: 'Поддержка электронной коммерции', messages: [{ sender: 'user', text: 'Мой заказ еще не прибыл.' }, { sender: 'bot', text: 'Приносим извинения. Пожалуйста, сообщите ваш номер заказа, и я немедленно проверю его статус.' }, { sender: 'user', text: 'Мой номер заказа — #XYZ1234.' }, { sender: 'bot', text: 'Спасибо. Я вижу, что ваша посылка в пути и будет доставлена сегодня или завтра. Приносим извинения за задержку!' }]}
             ];
             const addMessageToChat = (message) => {
                 const messageDiv = document.createElement('div');
@@ -277,7 +293,7 @@
                 const p = document.createElement('p');
                 p.classList.add('text-gray-800', 'text-md');
                 p.textContent = message.text;
-                if (message.sender === 'user') { messageDiv.classList.add('ml-auto', 'bg-blue-100'); span.textContent = 'Jij'; } else { messageDiv.classList.add('mr-auto', 'bg-gray-200'); span.textContent = 'BotMatic'; }
+                if (message.sender === 'user') { messageDiv.classList.add('ml-auto', 'bg-blue-100'); span.textContent = 'Вы'; } else { messageDiv.classList.add('mr-auto', 'bg-gray-200'); span.textContent = 'BotMatic'; }
                 messageDiv.appendChild(span);
                 messageDiv.appendChild(p);
                 chatContainer.appendChild(messageDiv);
@@ -299,7 +315,7 @@
             scenarioSelector.addEventListener('change', runDemoScenario);
             runDemoScenario();
 
-            // Cookie banner logica
+            // Логика баннера файлов cookie
             const cookieBanner = document.getElementById('cookie-banner');
             window.acceptCookies = () => {
                 localStorage.setItem('cookie_consent', 'accepted');
@@ -381,251 +397,251 @@
 </head>
 <body class="antialiased">
 
-    <!-- Navbar -->
+    <!-- Панель навигации -->
     <header class="py-6 sticky top-0 z-50 bg-white shadow-sm">
         <nav class="container mx-auto px-4 flex items-center justify-between">
             <a href="#home" class="font-extrabold text-3xl text-ink">BotMatic</a>
             <div id="nav-menu" class="hidden md:flex md:items-center space-x-2">
-                <a href="#features" class="nav-link">Functies</a>
-                <a href="#who-we-are" class="nav-link">Voor wie?</a>
-                <a href="#testimonials" class="nav-link">Getuigenissen</a>
-                <a href="#calculator-page" class="nav-link">Calculator</a>
-                <a href="#pricing" class="nav-link">Prijzen</a>
-                <a href="#demo" class="nav-link">Demo</a>
-                <a href="#faq" class="nav-link">FAQ</a>
-                <a href="#contact" class="nav-link">Contact</a>
-                <a href="#dashboard" class="nav-link btn-primary ml-4">Dashboard</a>
+                <a href="#features" class="nav-link">Функции</a>
+                <a href="#who-we-are" class="nav-link">Для кого?</a>
+                <a href="#testimonials" class="nav-link">Отзывы</a>
+                <a href="#calculator-page" class="nav-link">Калькулятор</a>
+                <a href="#pricing" class="nav-link">Цены</a>
+                <a href="#demo" class="nav-link">Демо</a>
+                <a href="#faq" class="nav-link">Частые вопросы</a>
+                <a href="#contact" class="nav-link">Связь</a>
+                <a href="#dashboard" class="nav-link btn-primary ml-4">Панель управления</a>
             </div>
             <button id="nav-toggle" class="md:hidden text-ink text-2xl">☰</button>
         </nav>
     </header>
 
-    <!-- Homepage: Grote Hero Sectie met 2 Kolommen -->
+    <!-- Главная страница: большой раздел Hero с 2 колонками -->
     <section id="home" class="page min-h-[calc(100vh-80px)] flex items-center justify-center py-20 px-4 active">
         <div class="container mx-auto grid lg:grid-cols-2 gap-12 items-center">
-            <!-- Tekst Kolom -->
+            <!-- Текстовая колонка -->
             <div class="text-center lg:text-left">
                 <h1 class="text-4xl md:text-6xl font-extrabold text-ink leading-tight">
-                    Automatiseer je klantenservice.
+                    Автоматизируйте свою клиентскую поддержку.
                 </h1>
                 <p class="mt-4 text-xl text-muted max-w-2xl lg:max-w-none mx-auto lg:mx-0">
-                    Laat BotMatic het werk doen. Onze AI-gebaseerde chatbots beantwoorden FAQ's en verwerken routinevragen, zodat je team zich kan richten op de groei van je bedrijf.
+                    Пусть BotMatic сделает всю работу. Наши чат-боты на основе ИИ отвечают на часто задаваемые вопросы и обрабатывают рутинные запросы, чтобы ваша команда могла сосредоточиться на росте вашего бизнеса.
                 </p>
                 <div class="mt-8 flex justify-center lg:justify-start space-x-4">
-                    <a href="#contact" class="btn btn-primary text-xl px-8 py-4">Gratis Proberen</a>
-                    <a href="#features" class="btn btn-secondary text-xl px-8 py-4">Meer Leren</a>
+                    <a href="#contact" class="btn btn-primary text-xl px-8 py-4">Попробовать бесплатно</a>
+                    <a href="#features" class="btn btn-secondary text-xl px-8 py-4">Узнать больше</a>
                 </div>
             </div>
 
-            <!-- Afbeelding Kolom (Placeholder) -->
+            <!-- Колонка с изображением (заполнитель) -->
             <div class="hidden lg:flex justify-center items-center">
                 <div class="w-full max-w-xl h-96 bg-gray-200 rounded-3xl shadow-xl flex items-center justify-center p-8">
-                    <img src="https://placehold.co/800x600/E2E8F0/1E293B?text=BotMatic+Dashboard" alt="Representatie van het BotMatic dashboard" class="w-full h-full object-cover rounded-2xl" />
+                    <img src="https://placehold.co/800x600/E2E8F0/1E293B?text=Панель+управления+BotMatic" alt="Представление панели управления BotMatic" class="w-full h-full object-cover rounded-2xl" />
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Features Page -->
+    <!-- Страница функций -->
     <section id="features" class="page py-20 px-4 bg-white">
         <div class="container mx-auto">
             <h2 class="text-3xl md:text-4xl font-extrabold text-center text-ink">
-                Slimme functies die het verschil maken
+                Умные функции, которые меняют правила игры
             </h2>
             <p class="mt-4 text-lg text-muted text-center max-w-2xl mx-auto">
-                Van geautomatiseerde verkoop tot klantenservice, BotMatic maakt je bedrijf efficiënter.
+                От автоматизированных продаж до клиентской поддержки, BotMatic делает ваш бизнес более эффективным.
             </p>
             <div class="mt-12 grid md:grid-cols-3 gap-8">
                 <div class="feature-card">
                     <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-3xl text-brand">💬</div>
-                    <h3 class="mt-6 text-xl font-bold text-ink">Beantwoord FAQ's 24/7</h3>
+                    <h3 class="mt-6 text-xl font-bold text-ink">Отвечайте на частые вопросы 24/7</h3>
                     <p class="mt-2 text-muted">
-                        Laat je chatbot direct antwoord geven op veelgestelde vragen, zodat je klanten nooit hoeven te wachten.
+                        Пусть ваш чат-бот мгновенно отвечает на часто задаваемые вопросы, чтобы вашим клиентам никогда не приходилось ждать.
                     </p>
                 </div>
                 <div class="feature-card">
                     <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-3xl text-brand">🤖</div>
-                    <h3 class="mt-6 text-xl font-bold text-ink">Verwerk Dagelijkse Vragen</h3>
+                    <h3 class="mt-6 text-xl font-bold text-ink">Обрабатывайте ежедневные запросы</h3>
                     <p class="mt-2 text-muted">
-                        De bot neemt de meest voorkomende, repetitieve vragen over, waardoor je team tijd en energie bespaart.
+                        Бот берет на себя наиболее распространенные, повторяющиеся вопросы, что экономит время и энергию вашей команды.
                     </p>
                 </div>
                 <div class="feature-card">
                     <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-3xl text-brand">🗓️</div>
-                    <h3 class="mt-6 text-xl font-bold text-ink">Afspraken Plannen</h3>
+                    <h3 class="mt-6 text-xl font-bold text-ink">Планируйте встречи</h3>
                     <p class="mt-2 text-muted">
-                        Integreer met je agenda en laat de chatbot afspraken plannen en herinneringen sturen.
+                        Интегрируйте с вашим календарем и позвольте чат-боту планировать встречи и отправлять напоминания.
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- New: Testimonials Section -->
+    <!-- Новый раздел: Отзывы -->
     <section id="testimonials" class="page py-20 px-4 bg-gray-50">
         <div class="container mx-auto">
             <h2 class="text-3xl md:text-4xl font-extrabold text-center text-ink">
-                Wat onze klanten zeggen
+                Что говорят наши клиенты
             </h2>
             <p class="mt-4 text-lg text-muted text-center max-w-2xl mx-auto">
-                Echte resultaten, echte verhalen. Ontdek hoe BotMatic een verschil maakt in het dagelijkse leven van onze gebruikers.
+                Реальные результаты, реальные истории. Узнайте, как BotMatic меняет повседневную жизнь наших пользователей.
             </p>
             <div class="mt-12 grid lg:grid-cols-2 gap-8">
-                <!-- Testimonial 1 -->
+                <!-- Отзыв 1 -->
                 <div class="testimonial-card">
                     <div class="flex items-center mb-4">
-                        <img class="w-16 h-16 rounded-full object-cover mr-4" src="https://placehold.co/64x64/E2E8F0/1E293B?text=👤" alt="Profiel van Mark de Vries" />
+                        <img class="w-16 h-16 rounded-full object-cover mr-4" src="https://placehold.co/64x64/E2E8F0/1E293B?text=👤" alt="Профиль Марка де Вриса" />
                         <div>
-                            <h4 class="font-bold text-ink">Mark de Vries</h4>
-                            <p class="text-sm text-muted">Beheerder, Vastgoed 'De Nieuwe Huizen'</p>
+                            <h4 class="font-bold text-ink">Марк де Врис</h4>
+                            <p class="text-sm text-muted">Менеджер, Недвижимость «Новые Дома»</p>
                         </div>
                     </div>
                     <p class="italic text-lg text-gray-700">
-                        “Onderhoudsvragen zijn nu volledig geautomatiseerd, van de melding tot de afspraak met de monteur. Vroeger kostte dit uren, nu doet BotMatic het in een paar minuten. Onze huurders zijn tevredener en ons team kan zich richten op complexere zaken.”
+                        “Запросы на обслуживание теперь полностью автоматизированы, от уведомления до встречи с сантехником. Раньше это занимало часы, теперь BotMatic делает это за несколько минут. Наши арендаторы стали более довольны, а наша команда может сосредоточиться на более сложных задачах.”
                     </p>
                 </div>
-                <!-- Testimonial 2 -->
+                <!-- Отзыв 2 -->
                 <div class="testimonial-card">
                     <div class="flex items-center mb-4">
-                        <img class="w-16 h-16 rounded-full object-cover mr-4" src="https://placehold.co/64x64/E2E8F0/1E293B?text=👤" alt="Profiel van Linda Bakker" />
+                        <img class="w-16 h-16 rounded-full object-cover mr-4" src="https://placehold.co/64x64/E2E8F0/1E293B?text=👤" alt="Профиль Линды Баккер" />
                         <div>
-                            <h4 class="font-bold text-ink">Linda Bakker</h4>
-                            <p class="text-sm text-muted">Oprichter, Webshop 'De Goede Deal'</p>
+                            <h4 class="font-bold text-ink">Линда Баккер</h4>
+                            <p class="text-sm text-muted">Основатель, Интернет-магазин «Хорошая сделка»</p>
                         </div>
                     </div>
                     <p class="italic text-lg text-gray-700">
-                        “De klantenservice van onze webshop is enorm verbeterd sinds we BotMatic gebruiken. De bot beantwoordt direct vragen over bestelstatussen en retouren, en dat resulteert in veel minder ontevreden klanten.”
+                        “Клиентская поддержка нашего интернет-магазина значительно улучшилась с тех пор, как мы используем BotMatic. Бот мгновенно отвечает на вопросы о статусе заказа и возвратах, что приводит к гораздо меньшему количеству недовольных клиентов.”
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Pricing Page (Static met dynamische highlights)-->
+    <!-- Страница цен (статическая с динамическими выделениями)-->
     <section id="pricing" class="page py-20 px-4 bg-white">
         <div class="container mx-auto">
             <h2 class="text-3xl md:text-4xl font-extrabold text-center text-ink">
-                Vind het perfecte plan voor jouw bedrijf
+                Найдите идеальный план для вашего бизнеса
             </h2>
             <p class="mt-4 text-lg text-muted text-center max-w-2xl mx-auto">
-                Kies het plan dat het beste bij uw behoeften past.
+                Выберите план, который лучше всего соответствует вашим потребностям.
             </p>
             <div class="mt-12 grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-                <!-- Starter Plan -->
+                <!-- Стартовый план -->
                 <div id="plan-starter" class="p-8 rounded-2xl text-center border-2 border-gray-200 transition-all duration-300">
-                    <span class="text-sm font-bold uppercase tracking-wider bg-orange-200 text-orange-800 px-4 py-1.5 rounded-full">Starter</span>
-                    <p class="mt-4 text-5xl font-extrabold">€89<span class="text-lg font-normal text-muted">/mnd</span></p>
-                    <p class="mt-2 text-muted">1 kanaal — WhatsApp / Telegram / Instagram / Website</p>
+                    <span class="text-sm font-bold uppercase tracking-wider bg-orange-200 text-orange-800 px-4 py-1.5 rounded-full">Стартовый</span>
+                    <p class="mt-4 text-5xl font-extrabold">€89<span class="text-lg font-normal text-muted">/мес</span></p>
+                    <p class="mt-2 text-muted">1 канал — WhatsApp / Telegram / Instagram / Веб-сайт</p>
                     <ul class="mt-6 text-left space-y-3">
                         <li class="flex items-center space-x-2">
                             <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
-                            <span class="text-gray-600">Snelle FAQ-flows & basis afspraken</span>
+                            <span class="text-gray-600">Быстрые потоки FAQ и базовые встречи</span>
                         </li>
                         <li class="flex items-center space-x-2">
                             <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
-                            <span class="text-gray-600">Hosting & updates</span>
+                            <span class="text-gray-600">Хостинг и обновления</span>
                         </li>
                         <li class="flex items-center space-x-2">
                             <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
-                            <span class="text-gray-600">Basissupport</span>
+                            <span class="text-gray-600">Базовая поддержка</span>
                         </li>
                     </ul>
                     <a href="#contact" class="mt-8 w-full btn bg-gray-800 text-white hover:bg-gray-700">
-                        Start met Starter
+                        Начать со Стартового
                     </a>
                 </div>
-                <!-- Pro Plan -->
+                <!-- План Про -->
                 <div id="plan-pro" class="p-8 rounded-2xl text-center border-4 border-brand shadow-lg transition-all duration-300">
-                    <span class="text-sm font-bold uppercase tracking-wider bg-green-200 text-green-800 px-4 py-1.5 rounded-full">Pro</span>
-                    <p class="mt-4 text-5xl font-extrabold">€149<span class="text-lg font-normal text-muted">/mnd</span></p>
-                    <p class="mt-2 text-muted">2 kanalen + AI-dialogen en integraties</p>
+                    <span class="text-sm font-bold uppercase tracking-wider bg-green-200 text-green-800 px-4 py-1.5 rounded-full">Про</span>
+                    <p class="mt-4 text-5xl font-extrabold">€149<span class="text-lg font-normal text-muted">/мес</span></p>
+                    <p class="mt-2 text-muted">2 канала + диалоги ИИ и интеграции</p>
                     <ul class="mt-6 text-left space-y-3">
                         <li class="flex items-center space-x-2">
                             <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
-                            <span class="text-gray-600">AI-dialogen & intent-herkenning</span>
+                            <span class="text-gray-600">Диалоги ИИ и распознавание намерений</span>
                         </li>
                         <li class="flex items-center space-x-2">
                             <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
-                            <span class="text-gray-600">Afsprakenplanning & reminders</span>
+                            <span class="text-gray-600">Планирование встреч и напоминания</span>
                         </li>
                         <li class="flex items-center space-x-2">
                             <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
-                            <span class="text-gray-600">CRM-integraties</span>
+                            <span class="text-gray-600">Интеграции с CRM</span>
                         </li>
                         <li class="flex items-center space-x-2">
                             <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
-                            <span class="text-gray-600">Prioritaire support</span>
+                            <span class="text-gray-600">Приоритетная поддержка</span>
                         </li>
                     </ul>
                     <a href="#contact" class="mt-8 w-full btn bg-brand text-white hover:bg-brand-600">
-                        Start met Pro
+                        Начать с Про
                     </a>
                 </div>
-                <!-- Business Plan -->
+                <!-- План Бизнес -->
                 <div id="plan-business" class="p-8 rounded-2xl text-center border-2 border-gray-200 transition-all duration-300">
-                    <span class="text-sm font-bold uppercase tracking-wider bg-green-200 text-green-800 px-4 py-1.5 rounded-full">Business</span>
-                    <p class="mt-4 text-5xl font-extrabold">€249<span class="text-lg font-normal text-muted">/mnd</span></p>
-                    <p class="mt-2 text-muted">Alle kanalen, maatwerk & SLA</p>
+                    <span class="text-sm font-bold uppercase tracking-wider bg-green-200 text-green-800 px-4 py-1.5 rounded-full">Бизнес</span>
+                    <p class="mt-4 text-5xl font-extrabold">€249<span class="text-lg font-normal text-muted">/мес</span></p>
+                    <p class="mt-2 text-muted">Все каналы, индивидуальные настройки и SLA</p>
                     <ul class="mt-6 text-left space-y-3">
                         <li class="flex items-center space-x-2">
                             <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
-                            <span class="text-gray-600">Onbeperkte flows & meertalige AI</span>
+                            <span class="text-gray-600">Неограниченные потоки и многоязычный ИИ</span>
                         </li>
                         <li class="flex items-center space-x-2">
                             <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
-                            <span class="text-gray-600">Dashboard & rapportages</span>
+                            <span class="text-gray-600">Панель управления и отчеты</span>
                         </li>
                         <li class="flex items-center space-x-2">
                             <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
-                            <span class="text-gray-600">Maatwerk integraties</span>
+                            <span class="text-gray-600">Индивидуальные интеграции</span>
                         </li>
                         <li class="flex items-center space-x-2">
                             <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
-                            <span class="text-gray-600">Dedicated support & onboarding</span>
+                            <span class="text-gray-600">Выделенная поддержка и онбординг</span>
                         </li>
                     </ul>
                     <a href="#contact" class="mt-8 w-full btn bg-gray-800 text-white hover:bg-gray-700">
-                        Start met Business
+                        Начать с Бизнес
                     </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- New: Interactive Demo Section -->
+    <!-- Новый раздел: Интерактивное демо -->
     <section id="demo" class="page py-20 px-4">
         <div class="container mx-auto">
             <div class="text-center">
-                <h2 class="text-3xl md:text-4xl font-extrabold">Hoe werkt het in de praktijk?</h2>
+                <h2 class="text-3xl md:text-4xl font-extrabold">Как это работает на практике?</h2>
                 <p class="mt-4 text-lg text-muted max-w-3xl mx-auto">
-                    Deze interactieve demo laat zien hoe BotMatic gesprekken voert in verschillende bedrijfssituaties.
+                    Это интерактивное демо показывает, как BotMatic ведет диалоги в различных бизнес-ситуациях.
                 </p>
             </div>
             <div class="mt-8 max-w-2xl mx-auto bg-white rounded-3xl p-8 shadow-xl">
                 <div class="mb-4">
-                    <label for="scenarioSelector" class="block text-sm font-medium text-gray-700">Kies een demo scenario:</label>
+                    <label for="scenarioSelector" class="block text-sm font-medium text-gray-700">Выберите сценарий демо:</label>
                     <select id="scenarioSelector" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-brand focus:border-brand sm:text-sm rounded-md"></select>
                 </div>
                 <div id="chat-container" class="bg-gray-50 p-4 rounded-lg h-80 overflow-y-auto space-y-4"></div>
@@ -633,39 +649,39 @@
         </div>
     </section>
 
-    <!-- New: Voordeel Calculator Section (op aparte pagina)-->
+    <!-- Новый раздел: Калькулятор преимуществ (на отдельной странице)-->
     <section id="calculator-page" class="page py-20 px-4 bg-gray-50">
         <div class="container mx-auto max-w-4xl">
             <div class="grid md:grid-cols-2 gap-12 items-center bg-white rounded-3xl p-8 shadow-xl">
                 <div>
-                    <h2 class="text-3xl font-extrabold">Jouw Voordeel Calculator</h2>
+                    <h2 class="text-3xl font-extrabold">Калькулятор вашей выгоды</h2>
                     <p class="mt-2 text-muted">
-                        Bereken hieronder direct hoeveel tijd en geld je kunt besparen door BotMatic te gebruiken voor je meest voorkomende taken.
+                        Рассчитайте прямо сейчас, сколько времени и денег вы сможете сэкономить, используя BotMatic для ваших самых частых задач.
                     </p>
                     <div class="mt-6 space-y-6">
                         <div>
-                            <label for="weeklyQueries" class="block font-semibold">Aantal klantvragen per week: <span id="weeklyQueriesValue" class="text-brand font-bold">50</span></label>
+                            <label for="weeklyQueries" class="block font-semibold">Количество запросов клиентов в неделю: <span id="weeklyQueriesValue" class="text-brand font-bold">50</span></label>
                             <input type="range" id="weeklyQueries" min="10" max="500" value="50" step="10" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
                         </div>
                         <div>
-                            <label for="timePerQuery" class="block font-semibold">Gemiddelde tijd per vraag (minuten): <span id="timePerQueryValue" class="text-brand font-bold">5</span></label>
+                            <label for="timePerQuery" class="block font-semibold">Среднее время на запрос (минуты): <span id="timePerQueryValue" class="text-brand font-bold">5</span></label>
                             <input type="range" id="timePerQuery" min="1" max="15" value="5" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
                         </div>
                         <div>
-                            <label for="hourlyRate" class="block font-semibold">Jouw geschatte uurtarief (€): <span id="hourlyRateValue" class="text-brand font-bold">40</span></label>
+                            <label for="hourlyRate" class="block font-semibold">Ваша примерная почасовая ставка (€): <span id="hourlyRateValue" class="text-brand font-bold">40</span></label>
                             <input type="range" id="hourlyRate" min="20" max="150" value="40" step="5" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
                         </div>
                     </div>
                 </div>
                 <div class="text-center">
-                    <h3 class="text-xl font-bold mb-4">Jouw geschatte besparing:</h3>
+                    <h3 class="text-xl font-bold mb-4">Ваша предполагаемая экономия:</h3>
                     <div class="grid grid-cols-2 gap-4">
                         <div class="bg-gray-50 p-6 rounded-lg">
-                            <p class="text-sm text-muted">Bespaarde Uren/week</p>
+                            <p class="text-sm text-muted">Сэкономленные часы/неделя</p>
                             <p id="hoursSaved" class="text-4xl font-extrabold text-brand">3.3</p>
                         </div>
                         <div class="bg-gray-50 p-6 rounded-lg">
-                            <p class="text-sm text-muted">Bespaarde Kosten/mnd</p>
+                            <p class="text-sm text-muted">Сэкономленные затраты/мес</p>
                             <p id="costSaved" class="text-4xl font-extrabold text-brand">€572</p>
                         </div>
                     </div>
@@ -675,177 +691,177 @@
                             </div>
                     </div>
                     <div id="planRecommendation" class="mt-6 p-4 bg-green-50 text-green-800 rounded-lg font-semibold">
-                        Aanbevolen Plan: <span id="recommendedPlan" class="font-bold">Pro</span>
+                        Рекомендуемый план: <span id="recommendedPlan" class="font-bold">Про</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- FAQ Page -->
+    <!-- Страница FAQ -->
     <section id="faq" class="page py-20 px-4">
         <div class="container mx-auto">
             <h2 class="text-3xl md:text-4xl font-extrabold text-center text-ink">
-                Veelgestelde Vragen
+                Частые вопросы
             </h2>
             <p class="mt-4 text-lg text-muted text-center max-w-2xl mx-auto">
-                Vragen over BotMatic? We hebben de antwoorden.
+                Вопросы о BotMatic? У нас есть ответы.
             </p>
             <div class="mt-12 max-w-3xl mx-auto">
                 <div class="faq-item">
                     <button class="faq-question w-full text-left" onclick="toggleAnswer(this)">
-                        Wat is een chatbot en hoe werkt het?
+                        Что такое чат-бот и как он работает?
                         <span>+</span>
                     </button>
                     <div class="faq-answer hidden">
-                        Een chatbot is een software die geautomatiseerd met je websitebezoekers kan communiceren. BotMatic gebruikt geavanceerde technologie om gesprekken te voeren die aanvoelen als een menselijk contact, wat leidt tot meer verkoop en efficiëntie.
+                        Чат-бот — это программное обеспечение, которое может автоматически взаимодействовать с посетителями вашего сайта. BotMatic использует передовые технологии для ведения диалогов, которые ощущаются как человеческое общение, что приводит к увеличению продаж и эффективности.
                     </div>
                 </div>
                 <div class="faq-item">
                     <button class="faq-question w-full text-left" onclick="toggleAnswer(this)">
-                        Kan BotMatic met mijn website integreren?
+                        Может ли BotMatic интегрироваться с моим сайтом?
                         <span>+</span>
                     </button>
                     <div class="faq-answer hidden">
-                        Absoluut. BotMatic is ontworpen om naadloos te integreren met de meeste websites en e-commerce platforms. Je kunt hem eenvoudig toevoegen met een klein stukje code.
+                        Абсолютно. BotMatic разработан для бесшовной интеграции с большинством сайтов и платформ электронной коммерции. Вы можете легко добавить его, используя небольшой фрагмент кода.
                     </div>
                 </div>
                 <div class="faq-item">
                     <button class="faq-question w-full text-left" onclick="toggleAnswer(this)">
-                        Is er een gratis proefperiode?
+                        Есть ли бесплатный пробный период?
                         <span>+</span>
                     </button>
                     <div class="faq-answer hidden">
-                        Ja, we bieden een gratis proefperiode van 14 dagen aan. Je hebt toegang tot alle functies om te zien hoe BotMatic je bedrijf kan transformeren, zonder enige verplichting.
+                        Да, мы предлагаем 14-дневный бесплатный пробный период. У вас будет доступ ко всем функциям, чтобы увидеть, как BotMatic может преобразить ваш бизнес, без каких-либо обязательств.
                     </div>
                 </div>
                 <div class="faq-item">
                     <button class="faq-question w-full text-left" onclick="toggleAnswer(this)">
-                        Wat gebeurt er na de proefperiode?
+                        Что происходит после пробного периода?
                         <span>+</span>
                     </button>
                     <div class="faq-answer hidden">
-                        Aan het einde van je 14 dagen gratis proefperiode vragen we je om een van onze betaalde plannen te kiezen. Je kunt je abonnement op elk moment opzeggen.
+                        В конце 14-дневного бесплатного пробного периода мы попросим вас выбрать один из наших платных планов. Вы можете отменить подписку в любое время.
                     </div>
                 </div>
                 <div class="faq-item">
                     <button class="faq-question w-full text-left" onclick="toggleAnswer(this)">
-                        Welke cookies gebruiken jullie?
+                        Какие файлы cookie вы используете?
                         <span>+</span>
                     </button>
                     <div class="faq-answer hidden">
-                        Om je voorkeuren te onthouden en de prestaties van onze website te verbeteren, gebruiken wij de volgende cookies:
+                        Чтобы запомнить ваши предпочтения и улучшить производительность нашего сайта, мы используем следующие файлы cookie:
                         <ul class="list-disc list-inside mt-2 space-y-1">
-                            <li>**Essentiële cookies:** Noodzakelijk voor de basisfunctionaliteit van de website.</li>
-                            <li>**Analytische cookies:** Helpen ons de website te verbeteren door te begrijpen hoe gebruikers ermee omgaan.</li>
-                            <li>**Marketingcookies:** Worden gebruikt om relevante advertenties te tonen.</li>
-                        </li>
+                            <li>**Обязательные файлы cookie:** Необходимы для базовой функциональности сайта.</li>
+                            <li>**Аналитические файлы cookie:** Помогают нам улучшать сайт, понимая, как пользователи с ним взаимодействуют.</li>
+                            <li>**Маркетинговые файлы cookie:** Используются для показа релевантной рекламы.</li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Nieuwe sectie voor Cookiebeleid -->
+    <!-- Новый раздел: Политика использования файлов cookie -->
     <section id="cookie-policy" class="page py-20 px-4 bg-gray-50">
         <div class="container mx-auto max-w-3xl">
-            <h2 class="text-3xl md:text-4xl font-extrabold text-center text-ink">Cookiebeleid</h2>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-center text-ink">Политика использования файлов cookie</h2>
             <p class="mt-4 text-lg text-muted text-center">
-                Hier vind je gedetailleerde informatie over hoe wij cookies gebruiken op deze website.
+                Здесь вы найдете подробную информацию о том, как мы используем файлы cookie на этом сайте.
             </p>
 
             <div class="mt-12 space-y-8 text-gray-700">
-                <p>Deze website gebruikt cookies om je de beste ervaring te bieden. Cookies zijn kleine tekstbestanden die op je computer of mobiele apparaat worden opgeslagen wanneer je een website bezoekt. Ze zorgen ervoor dat de website goed functioneert en geven ons inzicht in hoe de website wordt gebruikt.</p>
+                <p>Этот сайт использует файлы cookie, чтобы предоставить вам лучший опыт. Файлы cookie — это небольшие текстовые файлы, которые сохраняются на вашем компьютере или мобильном устройстве, когда вы посещаете сайт. Они обеспечивают правильное функционирование сайта и дают нам представление о том, как он используется.</p>
 
                 <div>
-                    <h3 class="text-2xl font-bold text-ink mb-2">Soorten cookies</h3>
-                    <p>We gebruiken verschillende soorten cookies voor verschillende doeleinden:</p>
+                    <h3 class="text-2xl font-bold text-ink mb-2">Типы файлов cookie</h3>
+                    <p>Мы используем различные типы файлов cookie для разных целей:</p>
                     <ul class="list-disc list-inside mt-4 space-y-2">
                         <li>
-                            <p class="font-bold">Essentiële cookies:</p> Deze cookies zijn strikt noodzakelijk voor het functioneren van de website. Zonder deze cookies kunnen bepaalde diensten (zoals het onthouden van je cookievoorkeuren) niet worden geleverd.
+                            <p class="font-bold">Обязательные файлы cookie:</p> Эти файлы cookie строго необходимы для функционирования сайта. Без них некоторые услуги (например, запоминание ваших предпочтений) не могут быть предоставлены.
                         </li>
                         <li>
-                            <p class="font-bold">Analytische cookies:</p> Deze cookies verzamelen informatie over hoe bezoekers onze website gebruiken, zoals welke pagina's het vaakst worden bezocht. Deze gegevens helpen ons de website te verbeteren.
+                            <p class="font-bold">Аналитические файлы cookie:</p> Эти файлы cookie собирают информацию о том, как посетители используют наш сайт, например, какие страницы посещаются чаще всего. Эти данные помогают нам улучшать сайт.
                         </li>
                         <li>
-                            <p class="font-bold">Marketingcookies:</p> Deze cookies worden gebruikt om advertenties relevanter te maken voor jou en je interesses. Ze kunnen ook worden gebruikt om de effectiviteit van een advertentiecampagne te meten.
+                            <p class="font-bold">Маркетинговые файлы cookie:</p> Эти файлы cookie используются для того, чтобы сделать рекламу более релевантной для вас и ваших интересов. Их также можно использовать для измерения эффективности рекламной кампании.
                         </li>
                     </ul>
                 </div>
 
                 <div>
-                    <h3 class="text-2xl font-bold text-ink mb-2">Jouw voorkeuren beheren</h3>
-                    <p>Je hebt altijd de controle over welke cookies je accepteert. Je kunt je voorkeuren wijzigen via de knop hieronder.</p>
+                    <h3 class="text-2xl font-bold text-ink mb-2">Управление вашими предпочтениями</h3>
+                    <p>Вы всегда контролируете, какие файлы cookie вы принимаете. Вы можете изменить свои предпочтения, используя кнопку ниже.</p>
                     <div class="mt-6 text-center">
-                        <button onclick="openCookieBanner()" class="btn btn-secondary px-6 py-3">Cookie-instellingen wijzigen</button>
+                        <button onclick="openCookieBanner()" class="btn btn-secondary px-6 py-3">Изменить настройки файлов cookie</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Page -->
+    <!-- Страница связи -->
     <section id="contact" class="page py-20 px-4 bg-gray-50">
         <div class="container mx-auto max-w-2xl">
             <h2 class="text-3xl md:text-4xl font-extrabold text-center text-ink">
-                Klaar om te beginnen?
+                Готовы начать?
             </h2>
             <p class="mt-4 text-lg text-muted text-center">
-                Vul het formulier in en we nemen zo snel mogelijk contact met je op.
+                Заполните форму, и мы свяжемся с вами как можно скорее.
             </p>
             <form id="contact-form" class="mt-12 space-y-6">
                 <div>
-                    <label for="name" class="block text-sm font-medium text-muted">Naam</label>
+                    <label for="name" class="block text-sm font-medium text-muted">Имя</label>
                     <input type="text" id="name" name="name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-3 focus:ring-brand focus:border-brand" />
                 </div>
                 <div>
-                    <label for="email" class="block text-sm font-medium text-muted">E-mailadres</label>
+                    <label for="email" class="block text-sm font-medium text-muted">Электронная почта</label>
                     <input type="email" id="email" name="email" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-3 focus:ring-brand focus:border-brand" />
                 </div>
                 <div>
-                    <label for="message" class="block text-sm font-medium text-muted">Bericht</label>
+                    <label for="message" class="block text-sm font-medium text-muted">Сообщение</label>
                     <textarea id="message" name="message" rows="4" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-3 focus:ring-brand focus:border-border"></textarea>
                 </div>
                 <div class="hidden">
-                    <label for="company" class="block text-sm font-medium text-muted">Bedrijf (laat leeg)</label>
+                    <label for="company" class="block text-sm font-medium text-muted">Компания (оставьте пустым)</label>
                     <input type="text" id="company" name="company" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-3" />
                 </div>
                 <div class="text-center">
-                    <button type="submit" id="submit-btn" class="btn btn-primary px-8 py-4">Verstuur</button>
+                    <button type="submit" id="submit-btn" class="btn btn-primary px-8 py-4">Отправить</button>
                 </div>
             </form>
             <div id="form-success-message" class="hidden text-center mt-12 bg-green-100 text-green-800 p-8 rounded-xl">
-                <h3 class="text-2xl font-bold">Bedankt!</h3>
-                <p class="mt-2">Je bericht is succesvol verstuurd. We nemen spoedig contact met je op.</p>
+                <h3 class="text-2xl font-bold">Спасибо!</h3>
+                <p class="mt-2">Ваше сообщение успешно отправлено. Мы скоро свяжемся с вами.</p>
             </div>
         </div>
     </section>
 
-    <!-- New: Dashboard Section -->
+    <!-- Новый раздел: Панель управления -->
     <section id="dashboard" class="page py-20 px-4 bg-white">
         <div class="container mx-auto max-w-4xl">
             <div class="text-center">
-                <h2 class="text-3xl md:text-4xl font-extrabold">Inzendingen</h2>
+                <h2 class="text-3xl md:text-4xl font-extrabold">Заявки</h2>
                 <p class="mt-4 text-lg text-muted max-w-3xl mx-auto">
-                    Beheer hier alle inzendingen die via het contactformulier zijn binnengekomen.
+                    Управляйте всеми заявками, полученными через форму обратной связи.
                     <br>
-                    <span class="font-bold text-gray-800">Je gebruikers-ID:</span> <span id="userIdDisplay" class="font-mono text-sm break-all">Laden...</span>
+                    <span class="font-bold text-gray-800">Ваш ID пользователя:</span> <span id="userIdDisplay" class="font-mono text-sm break-all">Загрузка...</span>
                 </p>
             </div>
             <div class="mt-8 overflow-x-auto rounded-lg shadow-xl">
                 <table class="w-full text-sm text-left text-gray-500">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-100">
                         <tr>
-                            <th scope="col" class="py-3 px-6">Naam</th>
-                            <th scope="col" class="py-3 px-6">E-mail</th>
-                            <th scope="col" class="py-3 px-6">Bericht</th>
-                            <th scope="col" class="py-3 px-6">Verstuurd op</th>
+                            <th scope="col" class="py-3 px-6">Имя</th>
+                            <th scope="col" class="py-3 px-6">Электронная почта</th>
+                            <th scope="col" class="py-3 px-6">Сообщение</th>
+                            <th scope="col" class="py-3 px-6">Отправлено</th>
                         </tr>
                     </thead>
                     <tbody id="submissions-table-body">
-                        <!-- Inzendingen worden hier geladen door JavaScript -->
+                        <!-- Заявки будут загружены сюда с помощью JavaScript -->
                         <tr class="bg-white border-b hover:bg-gray-50">
-                            <td class="py-4 px-6 text-center" colspan="4">Laden...</td>
+                            <td class="py-4 px-6 text-center" colspan="4">Загрузка...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -853,11 +869,11 @@
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- Нижний колонтитул -->
     <footer class="bg-ink text-white py-12 px-4">
         <div class="container mx-auto text-center">
             <div class="flex flex-col md:flex-row justify-center md:justify-between items-center space-y-4 md:space-y-0">
-                <p class="text-xl font-extrabold">&copy; 2024 BotMatic. Alle rechten voorbehouden.</p>
+                <p class="text-xl font-extrabold">&copy; 2024 BotMatic. Все права защищены.</p>
                 <div class="flex space-x-4 text-xl">
                     <a href="#" class="hover:text-brand transition-colors">Twitter</a>
                     <a href="#" class="hover:text-brand transition-colors">LinkedIn</a>
@@ -867,25 +883,26 @@
         </div>
     </footer>
 
-    <!-- Cookie Consent Banner -->
+    <!-- Баннер согласия на использование файлов cookie -->
     <div id="cookie-banner" class="cookie-banner hidden">
         <div class="flex-1 text-gray-700">
-            <p>Wij gebruiken cookies om je ervaring te verbeteren, onze website te analyseren en de relevantie van advertenties te optimaliseren. Lees ons <a href="#cookie-policy" class="text-brand font-bold hover:underline">Cookiebeleid</a> voor meer details.</p>
+            <p>Мы используем файлы cookie, чтобы улучшить ваш опыт, анализировать наш сайт и оптимизировать релевантность рекламы. Подробнее читайте в нашей <a href="#cookie-policy" class="text-brand font-bold hover:underline">Политике использования файлов cookie</a>.</p>
         </div>
         <div class="flex space-x-2 mt-4 md:mt-0">
-            <button onclick="acceptCookies()" class="btn btn-primary whitespace-nowrap">Alles accepteren</button>
-            <button onclick="declineCookies()" class="btn btn-secondary whitespace-nowrap">Alles weigeren</button>
+            <button onclick="acceptCookies()" class="btn btn-primary whitespace-nowrap">Принять все</button>
+            <button onclick="declineCookies()" class="btn btn-secondary whitespace-nowrap">Отклонить все</button>
         </div>
     </div>
 
-    <!-- Firebase Beveiligingsregels die je nodig hebt in je eigen project -->
-    <!-- Kopieer dit naar het 'Rules' tabblad in je Firebase Console -->
+    <!-- Правила безопасности Firebase, которые вам нужны в вашем собственном проекте -->
+    <!-- Скопируйте это на вкладку 'Правила' в вашей Firebase Console -->
     <!--
     rules_version = '2';
     service cloud.firestore {
       match /databases/{database}/documents {
-        match /contact-submissions/{documentId} {
-          allow read, create;
+        // Убедитесь, что эта коллекция является общедоступной, поскольку все пользователи могут просматривать эти данные
+        match /artifacts/{appId}/public/data/contact-submissions/{documentId} {
+          allow read, create: if request.auth != null;
         }
       }
     }
