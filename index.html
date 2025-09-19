@@ -10,11 +10,313 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <!-- Laadt Firebase-bibliotheken via traditionele script-tags -->
-    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"></script>
+
+    <!-- Laadt Firebase-bibliotheken via de moderne, modulaire CDN-links -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, setLogLevel } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Stap 1: Kopieer hier je eigen Firebase-configuratie
+            // Ga naar je Firebase Console > Project settings > Your apps
+            // Kopieer het 'firebaseConfig' object en plak het hieronder.
+            // **BELANGRIJK: Verwijder de '//' van de regel hieronder om het te activeren**
+            const firebaseConfig = {
+              apiKey: "JOUW_API_KEY",
+              authDomain: "JOUW_AUTH_DOMAIN",
+              projectId: "JOUW_PROJECT_ID",
+              storageBucket: "JOUW_STORAGE_BUCKET",
+              messagingSenderId: "JOUW_MESSAGING_SENDER_ID",
+              appId: "JOUW_APP_ID"
+            };
+
+            // Stap 2: Activeer de code hieronder nadat je de configuratie hebt toegevoegd
+            // ///////////////////////////////////////////////////////////////////////////
+            // Zodra je de configuratie hebt toegevoegd, verwijder je de commentaar
+            // van deze regel:
+            // const app = firebase.initializeApp(firebaseConfig);
+            // Je kunt dan de regel hieronder met de Canvas-variabelen verwijderen.
+            const app = initializeApp(firebaseConfig);
+
+            // Standaard Canvas-configuratie (verwijderen als je de bovenstaande regel activeert)
+            // const __firebase_config = JSON.stringify({});
+            // const app = initializeApp(JSON.parse(__firebase_config));
+
+            // Set log level for debugging
+            setLogLevel('debug'); // Toon Firebase-logboeken in de console
+
+            // Firebase initialisatie
+            const db = getFirestore(app);
+            const auth = getAuth(app);
+            let userId = 'anonieme_gebruiker'; // Standaard ID, wordt bijgewerkt bij inloggen
+
+            // Wacht tot de authenticatiestatus is opgeladen
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    userId = user.uid;
+                } else {
+                    // Log in als anonieme gebruiker, wat genoeg is voor dit formulier
+                    try {
+                        await signInAnonymously(auth);
+                        userId = auth.currentUser.uid;
+                    } catch (error) {
+                        console.error("Fout bij anoniem inloggen:", error);
+                    }
+                }
+                 document.getElementById('userIdDisplay').textContent = userId;
+                 startSubmissionsListener();
+            });
+
+            // Functie om de real-time luisteraar te starten
+            const startSubmissionsListener = () => {
+                const submissionsTableBody = document.getElementById('submissions-table-body');
+                // We gebruiken een simpele collectie genaamd 'contact-submissions'
+                const collectionPath = `contact-submissions`;
+
+                // Real-time luisteraar voor inzendingen
+                const q = query(collection(db, collectionPath));
+                onSnapshot(q, (querySnapshot) => {
+                    submissionsTableBody.innerHTML = '';
+                    if (querySnapshot.empty) {
+                        submissionsTableBody.innerHTML = `
+                            <tr class="bg-white border-b hover:bg-gray-50">
+                                <td class="py-4 px-6 text-center text-gray-400" colspan="4">Nog geen inzendingen.</td>
+                            </tr>`;
+                        return;
+                    }
+
+                    querySnapshot.forEach((doc) => {
+                        const submission = doc.data();
+                        const row = document.createElement('tr');
+                        row.classList.add('bg-white', 'border-b', 'hover:bg-gray-50');
+
+                        const timestamp = submission.timestamp.toDate ? submission.timestamp.toDate().toLocaleString('nl-NL') : new Date(submission.timestamp).toLocaleString('nl-NL');
+
+                        row.innerHTML = `
+                            <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">${submission.name}</td>
+                            <td class="py-4 px-6">${submission.email}</td>
+                            <td class="py-4 px-6 max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">${submission.message}</td>
+                            <td class="py-4 px-6">${timestamp}</td>
+                        `;
+                        submissionsTableBody.appendChild(row);
+                    });
+                });
+            };
+
+            // Functie voor paginanavigatie
+            const showPage = (hash) => {
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                    page.style.display = 'none';
+                });
+                const targetPage = document.querySelector(hash);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                    targetPage.style.display = 'block';
+                }
+                window.scrollTo(0, 0);
+            };
+
+            window.addEventListener('hashchange', () => {
+                const newHash = window.location.hash || '#home';
+                showPage(newHash);
+            });
+
+            const initialHash = window.location.hash || '#home';
+            showPage(initialHash);
+
+            // Navigatie-toggle
+            const navToggle = document.getElementById('nav-toggle');
+            const navMenu = document.getElementById('nav-menu');
+            navToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('hidden');
+            });
+
+            // Formulierinzending verwerken
+            const contactForm = document.getElementById('contact-form');
+            contactForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                document.getElementById('submit-btn').textContent = 'Versturen...';
+
+                const formData = new FormData(contactForm);
+                const data = Object.fromEntries(formData.entries());
+
+                try {
+                    const collectionPath = `contact-submissions`;
+                    await addDoc(collection(db, collectionPath), {
+                        ...data,
+                        timestamp: new Date()
+                    });
+
+                    contactForm.reset();
+                    contactForm.classList.add('hidden');
+                    document.getElementById('form-success-message').classList.remove('hidden');
+                } catch (error) {
+                    console.error("Fout bij het schrijven van het document: ", error);
+                    document.getElementById('submit-btn').textContent = 'Versturen mislukt';
+                }
+            });
+
+            // FAQ-logica
+            window.toggleAnswer = (button) => {
+                const answer = button.nextElementSibling;
+                const icon = button.querySelector('span');
+                const isHidden = answer.classList.contains('hidden');
+                answer.classList.toggle('hidden');
+                icon.textContent = isHidden ? '-' : '+';
+            };
+
+            // Voordeel Calculator Logica
+            const weeklyQueriesInput = document.getElementById('weeklyQueries');
+            const timePerQueryInput = document.getElementById('timePerQuery');
+            const hourlyRateInput = document.getElementById('hourlyRate');
+            const weeklyQueriesValue = document.getElementById('weeklyQueriesValue');
+            const timePerQueryValue = document.getElementById('timePerQueryValue');
+            const hourlyRateValue = document.getElementById('hourlyRateValue');
+            const hoursSaved = document.getElementById('hoursSaved');
+            const costSaved = document.getElementById('costSaved');
+            const planRecommendation = document.getElementById('planRecommendation');
+            const recommendedPlan = document.getElementById('recommendedPlan');
+
+            const planStarterCard = document.getElementById('plan-starter');
+            const planProCard = document.getElementById('plan-pro');
+            const planBusinessCard = document.getElementById('plan-business');
+
+            const plans = {
+                starter: { price: 89, title: 'Starter' },
+                pro: { price: 149, title: 'Pro' },
+                business: { price: 249, title: 'Business' }
+            };
+
+            const calculateSavings = () => {
+                const queries = parseInt(weeklyQueriesInput.value);
+                const time = parseInt(timePerQueryInput.value);
+                const rate = parseInt(hourlyRateInput.value);
+
+                const totalMinutes = queries * time;
+                const totalHours = totalMinutes / 60;
+                const monthlyCost = totalHours * 4 * rate;
+
+                hoursSaved.textContent = totalHours.toFixed(1);
+                costSaved.textContent = '€' + monthlyCost.toFixed(0);
+
+                let recommended = 'Starter';
+                let priceRecommendation = plans.starter.price;
+
+                [planStarterCard, planProCard, planBusinessCard].forEach(card => card.classList.remove('border-4', 'border-brand', 'shadow-lg'));
+                [planStarterCard, planProCard, planBusinessCard].forEach(card => card.classList.add('border-2', 'border-gray-200'));
+
+                if (monthlyCost >= 1000) {
+                    recommended = 'Business';
+                    priceRecommendation = plans.business.price;
+                    planBusinessCard.classList.remove('border-2', 'border-gray-200');
+                    planBusinessCard.classList.add('border-4', 'border-brand', 'shadow-lg');
+                } else if (monthlyCost >= 500) {
+                    recommended = 'Pro';
+                    priceRecommendation = plans.pro.price;
+                    planProCard.classList.remove('border-2', 'border-gray-200');
+                    planProCard.classList.add('border-4', 'border-brand', 'shadow-lg');
+                } else {
+                     planStarterCard.classList.remove('border-2', 'border-gray-200');
+                    planStarterCard.classList.add('border-4', 'border-brand', 'shadow-lg');
+                }
+                recommendedPlan.textContent = recommended;
+
+                updateChart(totalHours, monthlyCost, priceRecommendation);
+            };
+
+            const ctx = document.getElementById('savingsChart').getContext('2d');
+            let savingsChart;
+            const updateChart = (hours, cost, planPrice) => {
+                if (savingsChart) {
+                    savingsChart.destroy();
+                }
+
+                savingsChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Bespaarde kosten', 'Kosten plan'],
+                        datasets: [{
+                            label: 'Kosten/Besparing (€)',
+                            data: [cost, planPrice],
+                            backgroundColor: ['rgba(56, 189, 248, 0.8)', 'rgba(255, 122, 26, 0.8)'],
+                            borderColor: ['rgba(56, 189, 248, 1)', 'rgba(255, 122, 26, 1)'],
+                            borderWidth: 1,
+                            borderRadius: 8,
+                            barPercentage: 0.6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { return context.raw.toFixed(0) + ' €'; }}}},
+                        scales: { y: { beginAtZero: true, grid: { display: false }, ticks: { callback: function(value, index, values) { return value + ' €'; }}}, x: { grid: { display: false }}}
+                    }
+                });
+            };
+
+            weeklyQueriesInput.addEventListener('input', () => { weeklyQueriesValue.textContent = weeklyQueriesInput.value; calculateSavings(); });
+            timePerQueryInput.addEventListener('input', () => { timePerQueryValue.textContent = timePerQueryInput.value; calculateSavings(); });
+            hourlyRateInput.addEventListener('input', () => { hourlyRateValue.textContent = hourlyRateInput.value; calculateSavings(); });
+            calculateSavings();
+
+            // Interactieve Demo Logica
+            const scenarioSelector = document.getElementById('scenarioSelector');
+            const chatContainer = document.getElementById('chat-container');
+            const scenarios = [
+                { name: 'Vastgoedbeheer', messages: [{ sender: 'user', text: 'Ik heb een lekkende kraan in mijn appartement. Wat moet ik doen?' }, { sender: 'bot', text: 'Oh nee, dat is vervelend! Kunt u alstublieft uw adres en de urgentie van het probleem bevestigen? BotMatic zal direct een melding doorsturen naar de juiste monteur.' }, { sender: 'user', text: 'Adres is Hoofdstraat 5, en het is redelijk urgent.' }, { sender: 'bot', text: 'Melding ontvangen! De aanvraag voor een monteur is verstuurd. U ontvangt een sms-bevestiging zodra een monteur is toegewezen. Bedankt!' }]},
+                { name: 'Kapsalon Afspraak', messages: [{ sender: 'user', text: 'Hoi, kan ik een afspraak maken voor een knipbeurt?' }, { sender: 'bot', text: 'Hallo! Ik help u graag. Op welke dag en rond welk tijdstip zou u graag een afspraak willen maken?' }, { sender: 'user', text: 'Dinsdagmiddag, rond 14:00.' }, { sender: 'bot', text: 'Ja, dinsdag om 14:15 hebben we nog een plekje vrij voor een knipbeurt van 30 minuten. Past dat?' }, { sender: 'user', text: 'Ja, perfect!' }, { sender: 'bot', text: 'Geweldig! De afspraak staat vast. U ontvangt een bevestiging in uw e-mail.' }]},
+                { name: 'E-commerce Ondersteuning', messages: [{ sender: 'user', text: 'Mijn bestelling is nog niet binnengekomen.' }, { sender: 'bot', text: 'Excuses hiervoor. Kunt u alstublieft uw bestelnummer opgeven, dan controleer ik direct de status.' }, { sender: 'user', text: 'Mijn bestelnummer is #XYZ1234.' }, { sender: 'bot', text: 'Dank u wel. Ik zie dat uw pakket onderweg is en vandaag of uiterlijk morgen wordt bezorgd. Excuses voor de vertraging!' }]}
+            ];
+            const addMessageToChat = (message) => {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('p-3', 'rounded-lg', 'max-w-[80%]', 'break-words');
+                const span = document.createElement('span');
+                span.classList.add('block', 'font-bold', 'text-sm', 'mb-1');
+                const p = document.createElement('p');
+                p.classList.add('text-gray-800', 'text-md');
+                p.textContent = message.text;
+                if (message.sender === 'user') { messageDiv.classList.add('ml-auto', 'bg-blue-100'); span.textContent = 'Jij'; } else { messageDiv.classList.add('mr-auto', 'bg-gray-200'); span.textContent = 'BotMatic'; }
+                messageDiv.appendChild(span);
+                messageDiv.appendChild(p);
+                chatContainer.appendChild(messageDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            };
+
+            const runDemoScenario = () => {
+                chatContainer.innerHTML = '';
+                const selectedScenario = scenarios.find(s => s.name === scenarioSelector.value);
+                if (selectedScenario) {
+                    let delay = 0;
+                    selectedScenario.messages.forEach(message => {
+                        setTimeout(() => { addMessageToChat(message); }, delay);
+                        delay += 1000;
+                    });
+                }
+            };
+            scenarios.forEach(scenario => { const option = document.createElement('option'); option.value = scenario.name; option.textContent = scenario.name; scenarioSelector.appendChild(option); });
+            scenarioSelector.addEventListener('change', runDemoScenario);
+            runDemoScenario();
+
+            // Cookie banner logica
+            const cookieBanner = document.getElementById('cookie-banner');
+            window.acceptCookies = () => {
+                localStorage.setItem('cookie_consent', 'accepted');
+                cookieBanner.classList.add('hidden');
+            };
+            window.declineCookies = () => {
+                localStorage.setItem('cookie_consent', 'declined');
+                cookieBanner.classList.add('hidden');
+            };
+            window.openCookieBanner = () => {
+                 cookieBanner.classList.remove('hidden');
+            };
+            if (localStorage.getItem('cookie_consent') === null) {
+                cookieBanner.classList.remove('hidden');
+            }
+        });
+    </script>
 
     <style>
         :root{ --brand:#ff7a1a; --brand-600:#ff6a00; --ink:#0f172a; --muted:#475569; --bg:#f8fafc; --pro-bg: #28a745; --pro-btn: #ffffff;}
@@ -153,41 +455,6 @@
                     <h3 class="mt-6 text-xl font-bold text-ink">Afspraken Plannen</h3>
                     <p class="mt-2 text-muted">
                         Integreer met je agenda en laat de chatbot afspraken plannen en herinneringen sturen.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Who We Are Section -->
-    <section id="who-we-are" class="page py-20 px-4">
-        <div class="container mx-auto text-center">
-            <h2 class="text-3xl md::text-4xl font-extrabold text-ink">
-                Perfect voor bedrijven zoals de jouwe
-            </h2>
-            <p class="mt-4 text-lg text-muted max-w-2xl mx-auto">
-                BotMatic is ideaal voor servicegerichte bedrijven die hun klantcommunicatie willen stroomlijnen.
-            </p>
-            <div class="mt-12 grid md:grid-cols-3 gap-8">
-                <div class="flex flex-col items-center text-center p-6 bg-white rounded-xl shadow-md">
-                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-4xl mb-4">🏠</div>
-                    <h3 class="text-xl font-bold text-ink">Vastgoedbeheer</h3>
-                    <p class="mt-2 text-muted">
-                        Automatiseer huuraanvragen, plan bezichtigingen en beantwoord vragen over onderhoud.
-                    </p>
-                </div>
-                <div class="flex flex-col items-center text-center p-6 bg-white rounded-xl shadow-md">
-                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-4xl mb-4">💇</div>
-                    <h3 class="text-xl font-bold text-ink">Kapsalons & Schoonheidssalons</h3>
-                    <p class="mt-2 text-muted">
-                        Laat klanten zelf afspraken maken, hun afspraak bevestigen of annuleren, en herinneringen sturen.
-                    </p>
-                </div>
-                <div class="flex flex-col items-center text-center p-6 bg-white rounded-xl shadow-md">
-                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-4xl mb-4">🛒</div>
-                    <h3 class="text-xl font-bold text-ink">E-commerce</h3>
-                    <p class="mt-2 text-muted">
-                        Verwerk vragen over bestellingen, levering en productinformatie. Verhoog je verkoop en klanttevredenheid.
                     </p>
                 </div>
             </div>
@@ -472,8 +739,7 @@
                             <li>**Essentiële cookies:** Noodzakelijk voor de basisfunctionaliteit van de website.</li>
                             <li>**Analytische cookies:** Helpen ons de website te verbeteren door te begrijpen hoe gebruikers ermee omgaan.</li>
                             <li>**Marketingcookies:** Worden gebruikt om relevante advertenties te tonen.</li>
-                        </ul>
-                        Je kunt je voorkeuren op elk moment wijzigen via de <a href="#cookie-policy" class="text-brand hover:underline">cookiebeleidspagina</a>.
+                        </li>
                     </div>
                 </div>
             </div>
@@ -624,310 +890,5 @@
       }
     }
     -->
-
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Stap 1: Kopieer hier je eigen Firebase-configuratie
-            // Ga naar je Firebase Console > Project settings > Your apps
-            // Kopieer het 'firebaseConfig' object en plak het hieronder.
-            // **BELANGRIJK: Verwijder de '//' van de regel hieronder om het te activeren**
-            const firebaseConfig = {
-              apiKey: "JOUW_API_KEY",
-              authDomain: "JOUW_AUTH_DOMAIN",
-              projectId: "JOUW_PROJECT_ID",
-              storageBucket: "JOUW_STORAGE_BUCKET",
-              messagingSenderId: "JOUW_MESSAGING_SENDER_ID",
-              appId: "JOUW_APP_ID"
-            };
-
-            // Stap 2: Activeer de code hieronder nadat je de configuratie hebt toegevoegd
-            // ///////////////////////////////////////////////////////////////////////////
-            // Zodra je de configuratie hebt toegevoegd, verwijder je de commentaar
-            // van deze regel:
-            // const app = firebase.initializeApp(firebaseConfig);
-            // Je kunt dan de regel hieronder met de Canvas-variabelen verwijderen.
-            const app = firebase.initializeApp(firebaseConfig); // Dit is de lijn die je moet activeren
-
-            // Standaard Canvas-configuratie (verwijderen als je de bovenstaande regel activeert)
-            // const __firebase_config = JSON.stringify({});
-            // const app = firebase.initializeApp(JSON.parse(__firebase_config));
-            
-            // Set log level for debugging
-            const { getAuth, signInAnonymously, onAuthStateChanged } = firebase.auth;
-            const { getFirestore, collection, addDoc, onSnapshot, query, setLogLevel } = firebase.firestore;
-            
-            setLogLevel('debug'); // Toon Firebase-logboeken in de console
-
-            // Firebase initialisatie
-            const db = getFirestore(app);
-            const auth = getAuth(app);
-            let userId = 'anonieme_gebruiker'; // Standaard ID, wordt bijgewerkt bij inloggen
-
-            // Wacht tot de authenticatiestatus is opgeladen
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    userId = user.uid;
-                } else {
-                    // Log in als anonieme gebruiker, wat genoeg is voor dit formulier
-                    try {
-                        await signInAnonymously(auth);
-                        userId = auth.currentUser.uid;
-                    } catch (error) {
-                        console.error("Fout bij anoniem inloggen:", error);
-                    }
-                }
-                 document.getElementById('userIdDisplay').textContent = userId;
-                 startSubmissionsListener();
-            });
-
-            // Functie om de real-time luisteraar te starten
-            const startSubmissionsListener = () => {
-                const submissionsTableBody = document.getElementById('submissions-table-body');
-                // We gebruiken een simpele collectie genaamd 'contact-submissions'
-                const collectionPath = `contact-submissions`;
-
-                // Real-time luisteraar voor inzendingen
-                const q = query(collection(db, collectionPath));
-                onSnapshot(q, (querySnapshot) => {
-                    submissionsTableBody.innerHTML = '';
-                    if (querySnapshot.empty) {
-                        submissionsTableBody.innerHTML = `
-                            <tr class="bg-white border-b hover:bg-gray-50">
-                                <td class="py-4 px-6 text-center text-gray-400" colspan="4">Nog geen inzendingen.</td>
-                            </tr>`;
-                        return;
-                    }
-
-                    querySnapshot.forEach((doc) => {
-                        const submission = doc.data();
-                        const row = document.createElement('tr');
-                        row.classList.add('bg-white', 'border-b', 'hover:bg-gray-50');
-
-                        const timestamp = submission.timestamp.toDate ? submission.timestamp.toDate().toLocaleString('nl-NL') : new Date(submission.timestamp).toLocaleString('nl-NL');
-
-                        row.innerHTML = `
-                            <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">${submission.name}</td>
-                            <td class="py-4 px-6">${submission.email}</td>
-                            <td class="py-4 px-6 max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">${submission.message}</td>
-                            <td class="py-4 px-6">${timestamp}</td>
-                        `;
-                        submissionsTableBody.appendChild(row);
-                    });
-                });
-            };
-
-            // Functie voor paginanavigatie
-            const showPage = (hash) => {
-                document.querySelectorAll('.page').forEach(page => {
-                    page.classList.remove('active');
-                    page.style.display = 'none';
-                });
-                const targetPage = document.querySelector(hash);
-                if (targetPage) {
-                    targetPage.classList.add('active');
-                    targetPage.style.display = 'block';
-                }
-                window.scrollTo(0, 0);
-            };
-
-            window.addEventListener('hashchange', () => {
-                const newHash = window.location.hash || '#home';
-                showPage(newHash);
-            });
-
-            const initialHash = window.location.hash || '#home';
-            showPage(initialHash);
-            
-            // Navigatie-toggle
-            const navToggle = document.getElementById('nav-toggle');
-            const navMenu = document.getElementById('nav-menu');
-            navToggle.addEventListener('click', () => {
-                navMenu.classList.toggle('hidden');
-            });
-
-            // Formulierinzending verwerken
-            const contactForm = document.getElementById('contact-form');
-            contactForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                document.getElementById('submit-btn').textContent = 'Versturen...';
-                
-                const formData = new FormData(contactForm);
-                const data = Object.fromEntries(formData.entries());
-
-                try {
-                    const collectionPath = `contact-submissions`;
-                    await addDoc(collection(db, collectionPath), {
-                        ...data,
-                        timestamp: new Date()
-                    });
-
-                    contactForm.reset();
-                    contactForm.classList.add('hidden');
-                    document.getElementById('form-success-message').classList.remove('hidden');
-                } catch (error) {
-                    console.error("Fout bij het schrijven van het document: ", error);
-                    document.getElementById('submit-btn').textContent = 'Versturen mislukt';
-                }
-            });
-
-            // FAQ-logica
-            window.toggleAnswer = (button) => {
-                const answer = button.nextElementSibling;
-                const icon = button.querySelector('span');
-                const isHidden = answer.classList.contains('hidden');
-                answer.classList.toggle('hidden');
-                icon.textContent = isHidden ? '-' : '+';
-            };
-
-            // Voordeel Calculator Logica
-            const weeklyQueriesInput = document.getElementById('weeklyQueries');
-            const timePerQueryInput = document.getElementById('timePerQuery');
-            const hourlyRateInput = document.getElementById('hourlyRate');
-            const weeklyQueriesValue = document.getElementById('weeklyQueriesValue');
-            const timePerQueryValue = document.getElementById('timePerQueryValue');
-            const hourlyRateValue = document.getElementById('hourlyRateValue');
-            const hoursSaved = document.getElementById('hoursSaved');
-            const costSaved = document.getElementById('costSaved');
-            const planRecommendation = document.getElementById('planRecommendation');
-            const recommendedPlan = document.getElementById('recommendedPlan');
-
-            const planStarterCard = document.getElementById('plan-starter');
-            const planProCard = document.getElementById('plan-pro');
-            const planBusinessCard = document.getElementById('plan-business');
-
-            const plans = {
-                starter: { price: 89, title: 'Starter' },
-                pro: { price: 149, title: 'Pro' },
-                business: { price: 249, title: 'Business' }
-            };
-
-            const calculateSavings = () => {
-                const queries = parseInt(weeklyQueriesInput.value);
-                const time = parseInt(timePerQueryInput.value);
-                const rate = parseInt(hourlyRateInput.value);
-
-                const totalMinutes = queries * time;
-                const totalHours = totalMinutes / 60;
-                const monthlyCost = totalHours * 4 * rate;
-
-                hoursSaved.textContent = totalHours.toFixed(1);
-                costSaved.textContent = '€' + monthlyCost.toFixed(0);
-
-                let recommended = 'Starter';
-                let priceRecommendation = plans.starter.price;
-                
-                [planStarterCard, planProCard, planBusinessCard].forEach(card => card.classList.remove('border-4', 'border-brand', 'shadow-lg'));
-                [planStarterCard, planProCard, planBusinessCard].forEach(card => card.classList.add('border-2', 'border-gray-200'));
-
-                if (monthlyCost >= 1000) {
-                    recommended = 'Business';
-                    priceRecommendation = plans.business.price;
-                    planBusinessCard.classList.remove('border-2', 'border-gray-200');
-                    planBusinessCard.classList.add('border-4', 'border-brand', 'shadow-lg');
-                } else if (monthlyCost >= 500) {
-                    recommended = 'Pro';
-                    priceRecommendation = plans.pro.price;
-                    planProCard.classList.remove('border-2', 'border-gray-200');
-                    planProCard.classList.add('border-4', 'border-brand', 'shadow-lg');
-                } else {
-                     planStarterCard.classList.remove('border-2', 'border-gray-200');
-                    planStarterCard.classList.add('border-4', 'border-brand', 'shadow-lg');
-                }
-                recommendedPlan.textContent = recommended;
-                
-                updateChart(totalHours, monthlyCost, priceRecommendation);
-            };
-
-            const ctx = document.getElementById('savingsChart').getContext('2d');
-            let savingsChart;
-            const updateChart = (hours, cost, planPrice) => {
-                if (savingsChart) {
-                    savingsChart.destroy();
-                }
-
-                savingsChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Bespaarde kosten', 'Kosten plan'],
-                        datasets: [{
-                            label: 'Kosten/Besparing (€)',
-                            data: [cost, planPrice],
-                            backgroundColor: ['rgba(56, 189, 248, 0.8)', 'rgba(255, 122, 26, 0.8)'],
-                            borderColor: ['rgba(56, 189, 248, 1)', 'rgba(255, 122, 26, 1)'],
-                            borderWidth: 1,
-                            borderRadius: 8,
-                            barPercentage: 0.6
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { return context.raw.toFixed(0) + ' €'; }}}},
-                        scales: { y: { beginAtZero: true, grid: { display: false }, ticks: { callback: function(value, index, values) { return value + ' €'; }}}, x: { grid: { display: false }}}
-                    }
-                });
-            };
-
-            weeklyQueriesInput.addEventListener('input', () => { weeklyQueriesValue.textContent = weeklyQueriesInput.value; calculateSavings(); });
-            timePerQueryInput.addEventListener('input', () => { timePerQueryValue.textContent = timePerQueryInput.value; calculateSavings(); });
-            hourlyRateInput.addEventListener('input', () => { hourlyRateValue.textContent = hourlyRateInput.value; calculateSavings(); });
-            calculateSavings();
-
-            // Interactieve Demo Logica
-            const scenarioSelector = document.getElementById('scenarioSelector');
-            const chatContainer = document.getElementById('chat-container');
-            const scenarios = [
-                { name: 'Vastgoedbeheer', messages: [{ sender: 'user', text: 'Ik heb een lekkende kraan in mijn appartement. Wat moet ik doen?' }, { sender: 'bot', text: 'Oh nee, dat is vervelend! Kunt u alstublieft uw adres en de urgentie van het probleem bevestigen? BotMatic zal direct een melding doorsturen naar de juiste monteur.' }, { sender: 'user', text: 'Adres is Hoofdstraat 5, en het is redelijk urgent.' }, { sender: 'bot', text: 'Melding ontvangen! De aanvraag voor een monteur is verstuurd. U ontvangt een sms-bevestiging zodra een monteur is toegewezen. Bedankt!' }]},
-                { name: 'Kapsalon Afspraak', messages: [{ sender: 'user', text: 'Hoi, kan ik een afspraak maken voor een knipbeurt?' }, { sender: 'bot', text: 'Hallo! Ik help u graag. Op welke dag en rond welk tijdstip zou u graag een afspraak willen maken?' }, { sender: 'user', text: 'Dinsdagmiddag, rond 14:00.' }, { sender: 'bot', text: 'Ja, dinsdag om 14:15 hebben we nog een plekje vrij voor een knipbeurt van 30 minuten. Past dat?' }, { sender: 'user', text: 'Ja, perfect!' }, { sender: 'bot', text: 'Geweldig! De afspraak staat vast. U ontvangt een bevestiging in uw e-mail.' }]},
-                { name: 'E-commerce Ondersteuning', messages: [{ sender: 'user', text: 'Mijn bestelling is nog niet binnengekomen.' }, { sender: 'bot', text: 'Excuses hiervoor. Kunt u alstublieft uw bestelnummer opgeven, dan controleer ik direct de status.' }, { sender: 'user', text: 'Mijn bestelnummer is #XYZ1234.' }, { sender: 'bot', text: 'Dank u wel. Ik zie dat uw pakket onderweg is en vandaag of uiterlijk morgen wordt bezorgd. Excuses voor de vertraging!' }]}
-            ];
-            const addMessageToChat = (message) => {
-                const messageDiv = document.createElement('div');
-                messageDiv.classList.add('p-3', 'rounded-lg', 'max-w-[80%]', 'break-words');
-                const span = document.createElement('span');
-                span.classList.add('block', 'font-bold', 'text-sm', 'mb-1');
-                const p = document.createElement('p');
-                p.classList.add('text-gray-800', 'text-md');
-                p.textContent = message.text;
-                if (message.sender === 'user') { messageDiv.classList.add('ml-auto', 'bg-blue-100'); span.textContent = 'Jij'; } else { messageDiv.classList.add('mr-auto', 'bg-gray-200'); span.textContent = 'BotMatic'; }
-                messageDiv.appendChild(span);
-                messageDiv.appendChild(p);
-                chatContainer.appendChild(messageDiv);
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            };
-
-            const runDemoScenario = () => {
-                chatContainer.innerHTML = '';
-                const selectedScenario = scenarios.find(s => s.name === scenarioSelector.value);
-                if (selectedScenario) {
-                    let delay = 0;
-                    selectedScenario.messages.forEach(message => {
-                        setTimeout(() => { addMessageToChat(message); }, delay);
-                        delay += 1000;
-                    });
-                }
-            };
-            scenarios.forEach(scenario => { const option = document.createElement('option'); option.value = scenario.name; option.textContent = scenario.name; scenarioSelector.appendChild(option); });
-            scenarioSelector.addEventListener('change', runDemoScenario);
-            runDemoScenario();
-
-            // Cookie banner logica
-            const cookieBanner = document.getElementById('cookie-banner');
-            window.acceptCookies = () => {
-                localStorage.setItem('cookie_consent', 'accepted');
-                cookieBanner.classList.add('hidden');
-            };
-            window.declineCookies = () => {
-                localStorage.setItem('cookie_consent', 'declined');
-                cookieBanner.classList.add('hidden');
-            };
-            window.openCookieBanner = () => {
-                 cookieBanner.classList.remove('hidden');
-            };
-            if (localStorage.getItem('cookie_consent') === null) {
-                cookieBanner.classList.remove('hidden');
-            }
-        });
-    </script>
 </body>
 </html>
