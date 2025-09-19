@@ -25,7 +25,7 @@
         .feature-card:hover{transform:translateY(-.5rem)}
         .faq-item{background:white;border-radius:.75rem;padding:1.5rem;margin-bottom:1rem;cursor:pointer;box-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)}
         .faq-question{display:flex;justify-content:space-between;align-items:center;font-weight:600;color:var(--ink)}
-        .faq-answer{color:var(--muted);padding-top:1rem;margin-top:1rem;border-top:1px solid #e2e8f0}
+        .faq-answer{color:var(--muted);padding-top:1rem;margin-top:1rem;border-top:1px solid #e2e8f0;font-weight: 400; font-size: 0.95rem; line-height: 1.6;}
         .page { display: none; }
         .page.active { display: block; }
         .toggle-active {
@@ -47,6 +47,27 @@
         .testimonial-card:hover {
             transform: translateY(-.5rem);
             box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        .cookie-banner {
+            position: fixed;
+            bottom: 1rem;
+            left: 1rem;
+            right: 1rem;
+            background: #fff;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        @media (min-width: 768px) {
+            .cookie-banner {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
         }
     </style>
 </head>
@@ -71,18 +92,28 @@
         </nav>
     </header>
 
-    <!-- Home Page -->
-    <section id="home" class="page min-h-[calc(100vh-80px)] flex items-center justify-center text-center py-20 px-4 active">
-        <div class="max-w-4xl mx-auto">
-            <h1 class="text-4xl md:text-6xl font-extrabold text-ink leading-tight">
-                Ben je het zat om telkens dezelfde vragen te beantwoorden?
-            </h1>
-            <p class="mt-4 text-xl text-muted text-center max-w-2xl mx-auto">
-                Laat BotMatic het werk doen. Wij bouwen chatbots die direct antwoord geven op FAQ's en routinevragen, zodat je team zich kan richten op de groei van je bedrijf.
-            </p>
-            <div class="mt-8 flex justify-center space-x-4">
-                <a href="#contact" class="btn btn-primary text-xl px-8 py-4">Gratis Proberen</a>
-                <a href="#features" class="btn btn-secondary text-xl px-8 py-4">Meer Leren</a>
+    <!-- Homepage: Grote Hero Sectie met 2 Kolommen -->
+    <section id="home" class="page min-h-[calc(100vh-80px)] flex items-center justify-center py-20 px-4 active">
+        <div class="container mx-auto grid lg:grid-cols-2 gap-12 items-center">
+            <!-- Tekst Kolom -->
+            <div class="text-center lg:text-left">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-ink leading-tight">
+                    Automatiseer je klantenservice. 
+                </h1>
+                <p class="mt-4 text-xl text-muted max-w-2xl lg:max-w-none mx-auto lg:mx-0">
+                    Laat BotMatic het werk doen. Onze AI-gebaseerde chatbots beantwoorden FAQ's en verwerken routinevragen, zodat je team zich kan richten op de groei van je bedrijf.
+                </p>
+                <div class="mt-8 flex justify-center lg:justify-start space-x-4">
+                    <a href="#contact" class="btn btn-primary text-xl px-8 py-4">Gratis Proberen</a>
+                    <a href="#features" class="btn btn-secondary text-xl px-8 py-4">Meer Leren</a>
+                </div>
+            </div>
+
+            <!-- Afbeelding Kolom (Placeholder) -->
+            <div class="hidden lg:flex justify-center items-center">
+                <div class="w-full max-w-xl h-96 bg-gray-200 rounded-3xl shadow-xl flex items-center justify-center p-8">
+                    <img src="https://placehold.co/800x600/E2E8F0/1E293B?text=BotMatic+Dashboard" alt="Representatie van het BotMatic dashboard" class="w-full h-full object-cover rounded-2xl" />
+                </div>
             </div>
         </div>
     </section>
@@ -125,7 +156,7 @@
     <!-- Who We Are Section -->
     <section id="who-we-are" class="page py-20 px-4">
         <div class="container mx-auto text-center">
-            <h2 class="text-3xl md:text-4xl font-extrabold text-ink">
+            <h2 class="text-3xl md::text-4xl font-extrabold text-ink">
                 Perfect voor bedrijven zoals de jouwe
             </h2>
             <p class="mt-4 text-lg text-muted max-w-2xl mx-auto">
@@ -424,6 +455,59 @@
                         Aan het einde van je 14 dagen gratis proefperiode vragen we je om een van onze betaalde plannen te kiezen. Je kunt je abonnement op elk moment opzeggen.
                     </div>
                 </div>
+                <div class="faq-item">
+                    <button class="faq-question w-full text-left" onclick="toggleAnswer(this)">
+                        Welke cookies gebruiken jullie?
+                        <span>+</span>
+                    </button>
+                    <div class="faq-answer hidden">
+                        Om je voorkeuren te onthouden en de prestaties van onze website te verbeteren, gebruiken wij de volgende cookies:
+                        <ul class="list-disc list-inside mt-2 space-y-1">
+                            <li>**Essentiële cookies:** Noodzakelijk voor de basisfunctionaliteit van de website.</li>
+                            <li>**Analytische cookies:** Helpen ons de website te verbeteren door te begrijpen hoe gebruikers ermee omgaan.</li>
+                            <li>**Marketingcookies:** Worden gebruikt om relevante advertenties te tonen.</li>
+                        </ul>
+                        Je kunt je voorkeuren op elk moment wijzigen via de <a href="#cookie-policy" class="text-brand hover:underline">cookiebeleidspagina</a>.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nieuwe sectie voor Cookiebeleid -->
+    <section id="cookie-policy" class="page py-20 px-4 bg-gray-50">
+        <div class="container mx-auto max-w-3xl">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-center text-ink">Cookiebeleid</h2>
+            <p class="mt-4 text-lg text-muted text-center">
+                Hier vind je gedetailleerde informatie over hoe wij cookies gebruiken op deze website.
+            </p>
+
+            <div class="mt-12 space-y-8 text-gray-700">
+                <p>Deze website gebruikt cookies om je de beste ervaring te bieden. Cookies zijn kleine tekstbestanden die op je computer of mobiele apparaat worden opgeslagen wanneer je een website bezoekt. Ze zorgen ervoor dat de website goed functioneert en geven ons inzicht in hoe de website wordt gebruikt.</p>
+
+                <div>
+                    <h3 class="text-2xl font-bold text-ink mb-2">Soorten cookies</h3>
+                    <p>We gebruiken verschillende soorten cookies voor verschillende doeleinden:</p>
+                    <ul class="list-disc list-inside mt-4 space-y-2">
+                        <li>
+                            <p class="font-bold">Essentiële cookies:</p> Deze cookies zijn strikt noodzakelijk voor het functioneren van de website. Zonder deze cookies kunnen bepaalde diensten (zoals het onthouden van je cookievoorkeuren) niet worden geleverd.
+                        </li>
+                        <li>
+                            <p class="font-bold">Analytische cookies:</p> Deze cookies verzamelen informatie over hoe bezoekers onze website gebruiken, zoals welke pagina's het vaakst worden bezocht. Deze gegevens helpen ons de website te verbeteren.
+                        </li>
+                        <li>
+                            <p class="font-bold">Marketingcookies:</p> Deze cookies worden gebruikt om advertenties relevanter te maken voor jou en je interesses. Ze kunnen ook worden gebruikt om de effectiviteit van een advertentiecampagne te meten.
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-bold text-ink mb-2">Jouw voorkeuren beheren</h3>
+                    <p>Je hebt altijd de controle over welke cookies je accepteert. Je kunt je voorkeuren wijzigen via de knop hieronder.</p>
+                    <div class="mt-6 text-center">
+                        <button onclick="openCookieBanner()" class="btn btn-secondary px-6 py-3">Cookie-instellingen wijzigen</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -511,13 +595,28 @@
         </div>
     </footer>
 
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-banner" class="cookie-banner hidden">
+        <div class="flex-1 text-gray-700">
+            <p>Wij gebruiken cookies om je ervaring te verbeteren, onze website te analyseren en de relevantie van advertenties te optimaliseren. Lees ons <a href="#cookie-policy" class="text-brand font-bold hover:underline">Cookiebeleid</a> voor meer details.</p>
+        </div>
+        <div class="flex space-x-2 mt-4 md:mt-0">
+            <button onclick="acceptCookies()" class="btn btn-primary whitespace-nowrap">Alles accepteren</button>
+            <button onclick="declineCookies()" class="btn btn-secondary whitespace-nowrap">Alles weigeren</button>
+        </div>
+    </div>
+
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // Functies voor de pagina
         document.addEventListener('DOMContentLoaded', async () => {
+            setLogLevel('debug'); // Toon Firebase-logboeken in de console
+
+            // Firebase initialisatie
             const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
             const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
             const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
@@ -526,66 +625,93 @@
             const db = getFirestore(app);
             const auth = getAuth(app);
 
-            if (initialAuthToken) {
-                await signInWithCustomToken(auth, initialAuthToken);
-            } else {
-                await signInAnonymously(auth);
-            }
+            let userId = null;
+
+            // Wacht tot de authenticatiestatus is opgeladen
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    userId = user.uid;
+                    document.getElementById('userIdDisplay').textContent = userId;
+                    // Start de real-time luisteraar na succesvolle authenticatie
+                    startSubmissionsListener();
+                } else {
+                    // Anoniem inloggen als er geen token is
+                    if (initialAuthToken) {
+                        try {
+                            await signInWithCustomToken(auth, initialAuthToken);
+                        } catch (error) {
+                            console.error("Fout bij het inloggen met custom token:", error);
+                            await signInAnonymously(auth);
+                        }
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                }
+            });
+
+            // Functie om de real-time luisteraar te starten
+            const startSubmissionsListener = () => {
+                const submissionsTableBody = document.getElementById('submissions-table-body');
+                const collectionPath = `artifacts/${appId}/users/${userId}/contact-submissions`;
+
+                // Real-time luisteraar voor inzendingen
+                const q = query(collection(db, collectionPath));
+                onSnapshot(q, (querySnapshot) => {
+                    submissionsTableBody.innerHTML = '';
+                    if (querySnapshot.empty) {
+                        submissionsTableBody.innerHTML = `
+                            <tr class="bg-white border-b hover:bg-gray-50">
+                                <td class="py-4 px-6 text-center text-gray-400" colspan="4">Nog geen inzendingen.</td>
+                            </tr>`;
+                        return;
+                    }
+
+                    querySnapshot.forEach((doc) => {
+                        const submission = doc.data();
+                        const row = document.createElement('tr');
+                        row.classList.add('bg-white', 'border-b', 'hover:bg-gray-50');
+
+                        const timestamp = submission.timestamp.toDate ? submission.timestamp.toDate().toLocaleString('nl-NL') : new Date(submission.timestamp).toLocaleString('nl-NL');
+
+                        row.innerHTML = `
+                            <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">${submission.name}</td>
+                            <td class="py-4 px-6">${submission.email}</td>
+                            <td class="py-4 px-6 max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">${submission.message}</td>
+                            <td class="py-4 px-6">${timestamp}</td>
+                        `;
+                        submissionsTableBody.appendChild(row);
+                    });
+                });
+            };
+
+            // Functie voor paginanavigatie
+            const showPage = (hash) => {
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                    page.style.display = 'none';
+                });
+                const targetPage = document.querySelector(hash);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                    targetPage.style.display = 'block';
+                }
+                window.scrollTo(0, 0);
+            };
+
+            window.addEventListener('hashchange', () => {
+                const newHash = window.location.hash || '#home';
+                showPage(newHash);
+            });
+
+            const initialHash = window.location.hash || '#home';
+            showPage(initialHash);
             
-            const userIdDisplay = document.getElementById('userIdDisplay');
-            const submissionsTableBody = document.getElementById('submissions-table-body');
-            const collectionPath = `artifacts/${appId}/users/${auth.currentUser.uid}/contact-submissions`;
-
-            userIdDisplay.textContent = auth.currentUser.uid;
-
             // Navigatie-toggle
             const navToggle = document.getElementById('nav-toggle');
             const navMenu = document.getElementById('nav-menu');
             navToggle.addEventListener('click', () => {
                 navMenu.classList.toggle('hidden');
             });
-
-            // Functie om de faq antwoorden te tonen
-            window.toggleAnswer = (button) => {
-                const answer = button.nextElementSibling;
-                const icon = button.querySelector('span');
-                const isHidden = answer.classList.contains('hidden');
-                answer.classList.toggle('hidden');
-                icon.textContent = isHidden ? '-' : '+';
-            };
-
-            // Functie voor paginanavigatie
-            const showPage = (hash) => {
-                // Verberg alle pagina's
-                document.querySelectorAll('.page').forEach(page => {
-                    page.classList.remove('active');
-                    page.style.display = 'none';
-                });
-
-                // Toon de geselecteerde pagina
-                const targetPage = document.querySelector(hash);
-                if (targetPage) {
-                    targetPage.classList.add('active');
-                    targetPage.style.display = 'block';
-                }
-
-                // Scroll naar de top van de pagina
-                window.scrollTo(0, 0);
-
-                // Verberg het mobiele menu na een klik
-                navMenu.classList.add('hidden');
-            };
-
-            // Luister naar hash-veranderingen in de URL (terug/vooruit knoppen)
-            window.addEventListener('hashchange', () => {
-                const newHash = window.location.hash || '#home';
-                showPage(newHash);
-            });
-
-            // Toon de juiste pagina bij het initialiseren van de pagina
-            const initialHash = window.location.hash || '#home';
-            showPage(initialHash);
-
 
             // Formulierinzending verwerken
             const contactForm = document.getElementById('contact-form');
@@ -597,6 +723,7 @@
                 const data = Object.fromEntries(formData.entries());
 
                 try {
+                    const collectionPath = `artifacts/${appId}/users/${userId}/contact-submissions`;
                     await addDoc(collection(db, collectionPath), {
                         ...data,
                         timestamp: new Date()
@@ -606,40 +733,19 @@
                     contactForm.classList.add('hidden');
                     document.getElementById('form-success-message').classList.remove('hidden');
                 } catch (error) {
-                    console.error("Error writing document: ", error);
-                    // Toon een foutmelding aan de gebruiker
+                    console.error("Fout bij het schrijven van het document: ", error);
                     document.getElementById('submit-btn').textContent = 'Versturen mislukt';
                 }
             });
 
-            // Real-time luisteraar voor inzendingen
-            const q = query(collection(db, collectionPath));
-            onSnapshot(q, (querySnapshot) => {
-                submissionsTableBody.innerHTML = '';
-                if (querySnapshot.empty) {
-                    submissionsTableBody.innerHTML = `
-                        <tr class="bg-white border-b hover:bg-gray-50">
-                            <td class="py-4 px-6 text-center text-gray-400" colspan="4">Nog geen inzendingen.</td>
-                        </tr>`;
-                    return;
-                }
-
-                querySnapshot.forEach((doc) => {
-                    const submission = doc.data();
-                    const row = document.createElement('tr');
-                    row.classList.add('bg-white', 'border-b', 'hover:bg-gray-50');
-
-                    const timestamp = submission.timestamp.toDate ? submission.timestamp.toDate().toLocaleString('nl-NL') : submission.timestamp;
-
-                    row.innerHTML = `
-                        <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">${submission.name}</td>
-                        <td class="py-4 px-6">${submission.email}</td>
-                        <td class="py-4 px-6 max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">${submission.message}</td>
-                        <td class="py-4 px-6">${timestamp}</td>
-                    `;
-                    submissionsTableBody.appendChild(row);
-                });
-            });
+            // FAQ-logica
+            window.toggleAnswer = (button) => {
+                const answer = button.nextElementSibling;
+                const icon = button.querySelector('span');
+                const isHidden = answer.classList.contains('hidden');
+                answer.classList.toggle('hidden');
+                icon.textContent = isHidden ? '-' : '+';
+            };
 
             // Voordeel Calculator Logica
             const weeklyQueriesInput = document.getElementById('weeklyQueries');
@@ -657,20 +763,10 @@
             const planProCard = document.getElementById('plan-pro');
             const planBusinessCard = document.getElementById('plan-business');
 
-            // Data voor de prijzen en plannen
             const plans = {
-                starter: {
-                    price: 89,
-                    title: 'Starter'
-                },
-                pro: {
-                    price: 149,
-                    title: 'Pro'
-                },
-                business: {
-                    price: 249,
-                    title: 'Business'
-                }
+                starter: { price: 89, title: 'Starter' },
+                pro: { price: 149, title: 'Pro' },
+                business: { price: 249, title: 'Business' }
             };
 
             const calculateSavings = () => {
@@ -680,23 +776,16 @@
 
                 const totalMinutes = queries * time;
                 const totalHours = totalMinutes / 60;
-                const monthlyCost = totalHours * 4 * rate; // 4 weken per maand
+                const monthlyCost = totalHours * 4 * rate;
 
                 hoursSaved.textContent = totalHours.toFixed(1);
                 costSaved.textContent = '€' + monthlyCost.toFixed(0);
 
-                // Update recommendations and highlight card
                 let recommended = 'Starter';
                 let priceRecommendation = plans.starter.price;
-
-                // Reset all highlights
-                planStarterCard.classList.remove('border-4', 'border-brand', 'shadow-lg');
-                planProCard.classList.remove('border-4', 'border-brand', 'shadow-lg');
-                planBusinessCard.classList.remove('border-4', 'border-brand', 'shadow-lg');
-                planStarterCard.classList.add('border-2', 'border-gray-200');
-                planProCard.classList.add('border-2', 'border-gray-200');
-                planBusinessCard.classList.add('border-2', 'border-gray-200');
-
+                
+                [planStarterCard, planProCard, planBusinessCard].forEach(card => card.classList.remove('border-4', 'border-brand', 'shadow-lg'));
+                [planStarterCard, planProCard, planBusinessCard].forEach(card => card.classList.add('border-2', 'border-gray-200'));
 
                 if (monthlyCost >= 1000) {
                     recommended = 'Business';
@@ -713,12 +802,12 @@
                     planStarterCard.classList.add('border-4', 'border-brand', 'shadow-lg');
                 }
                 recommendedPlan.textContent = recommended;
-
-
+                
+                // OPGELOST: De fout was dat 'planPrice' niet was gedefinieerd. 
+                // We gebruiken nu de correcte variabele 'priceRecommendation' om de grafiek te updaten.
                 updateChart(totalHours, monthlyCost, priceRecommendation);
             };
 
-            // Functie om de staafdiagram te updaten
             const ctx = document.getElementById('savingsChart').getContext('2d');
             let savingsChart;
             const updateChart = (hours, cost, planPrice) => {
@@ -733,14 +822,8 @@
                         datasets: [{
                             label: 'Kosten/Besparing (€)',
                             data: [cost, planPrice],
-                            backgroundColor: [
-                                'rgba(56, 189, 248, 0.8)', // Bespaarde kosten
-                                'rgba(255, 122, 26, 0.8)' // Kosten plan
-                            ],
-                            borderColor: [
-                                'rgba(56, 189, 248, 1)',
-                                'rgba(255, 122, 26, 1)'
-                            ],
+                            backgroundColor: ['rgba(56, 189, 248, 0.8)', 'rgba(255, 122, 26, 0.8)'],
+                            borderColor: ['rgba(56, 189, 248, 1)', 'rgba(255, 122, 26, 1)'],
                             borderWidth: 1,
                             borderRadius: 8,
                             barPercentage: 0.6
@@ -749,112 +832,34 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false,
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        return context.raw.toFixed(0) + ' €';
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: {
-                                    display: false
-                                },
-                                ticks: {
-                                    callback: function(value, index, values) {
-                                        return value + ' €';
-                                    }
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    display: false
-                                }
-                            }
-                        }
+                        plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { return context.raw.toFixed(0) + ' €'; }}}},
+                        scales: { y: { beginAtZero: true, grid: { display: false }, ticks: { callback: function(value, index, values) { return value + ' €'; }}}, x: { grid: { display: false }}}
                     }
                 });
             };
 
-            // Event listeners voor de sliders
-            weeklyQueriesInput.addEventListener('input', () => {
-                weeklyQueriesValue.textContent = weeklyQueriesInput.value;
-                calculateSavings();
-            });
-            timePerQueryInput.addEventListener('input', () => {
-                timePerQueryValue.textContent = timePerQueryInput.value;
-                calculateSavings();
-            });
-            hourlyRateInput.addEventListener('input', () => {
-                hourlyRateValue.textContent = hourlyRateInput.value;
-                calculateSavings();
-            });
-
-            // Initiele berekening
+            weeklyQueriesInput.addEventListener('input', () => { weeklyQueriesValue.textContent = weeklyQueriesInput.value; calculateSavings(); });
+            timePerQueryInput.addEventListener('input', () => { timePerQueryValue.textContent = timePerQueryInput.value; calculateSavings(); });
+            hourlyRateInput.addEventListener('input', () => { hourlyRateValue.textContent = hourlyRateInput.value; calculateSavings(); });
             calculateSavings();
 
             // Interactieve Demo Logica
             const scenarioSelector = document.getElementById('scenarioSelector');
             const chatContainer = document.getElementById('chat-container');
-
             const scenarios = [
-                {
-                    name: 'Vastgoedbeheer',
-                    messages: [
-                        { sender: 'user', text: 'Ik heb een lekkende kraan in mijn appartement. Wat moet ik doen?' },
-                        { sender: 'bot', text: 'Oh nee, dat is vervelend! Kunt u alstublieft uw adres en de urgentie van het probleem bevestigen? BotMatic zal direct een melding doorsturen naar de juiste monteur.' },
-                        { sender: 'user', text: 'Adres is Hoofdstraat 5, en het is redelijk urgent.' },
-                        { sender: 'bot', text: 'Melding ontvangen! De aanvraag voor een monteur is verstuurd. U ontvangt een sms-bevestiging zodra een monteur is toegewezen. Bedankt!' }
-                    ]
-                },
-                {
-                    name: 'Kapsalon Afspraak',
-                    messages: [
-                        { sender: 'user', text: 'Hoi, kan ik een afspraak maken voor een knipbeurt?' },
-                        { sender: 'bot', text: 'Hallo! Ik help u graag. Op welke dag en rond welk tijdstip zou u graag een afspraak willen maken?' },
-                        { sender: 'user', text: 'Dinsdagmiddag, rond 14:00.' },
-                        { sender: 'bot', text: 'Ja, dinsdag om 14:15 hebben we nog een plekje vrij voor een knipbeurt van 30 minuten. Past dat?' },
-                        { sender: 'user', text: 'Ja, perfect!' },
-                        { sender: 'bot', text: 'Geweldig! De afspraak staat vast. U ontvangt een bevestiging in uw e-mail.' }
-                    ]
-                },
-                {
-                    name: 'E-commerce Ondersteuning',
-                    messages: [
-                        { sender: 'user', text: 'Mijn bestelling is nog niet binnengekomen.' },
-                        { sender: 'bot', text: 'Excuses hiervoor. Kunt u alstublieft uw bestelnummer opgeven, dan controleer ik direct de status.' },
-                        { sender: 'user', text: 'Mijn bestelnummer is #XYZ1234.' },
-                        { sender: 'bot', text: 'Dank u wel. Ik zie dat uw pakket onderweg is en vandaag of uiterlijk morgen wordt bezorgd. Excuses voor de vertraging!' }
-                    ]
-                }
+                { name: 'Vastgoedbeheer', messages: [{ sender: 'user', text: 'Ik heb een lekkende kraan in mijn appartement. Wat moet ik doen?' }, { sender: 'bot', text: 'Oh nee, dat is vervelend! Kunt u alstublieft uw adres en de urgentie van het probleem bevestigen? BotMatic zal direct een melding doorsturen naar de juiste monteur.' }, { sender: 'user', text: 'Adres is Hoofdstraat 5, en het is redelijk urgent.' }, { sender: 'bot', text: 'Melding ontvangen! De aanvraag voor een monteur is verstuurd. U ontvangt een sms-bevestiging zodra een monteur is toegewezen. Bedankt!' }]},
+                { name: 'Kapsalon Afspraak', messages: [{ sender: 'user', text: 'Hoi, kan ik een afspraak maken voor een knipbeurt?' }, { sender: 'bot', text: 'Hallo! Ik help u graag. Op welke dag en rond welk tijdstip zou u graag een afspraak willen maken?' }, { sender: 'user', text: 'Dinsdagmiddag, rond 14:00.' }, { sender: 'bot', text: 'Ja, dinsdag om 14:15 hebben we nog een plekje vrij voor een knipbeurt van 30 minuten. Past dat?' }, { sender: 'user', text: 'Ja, perfect!' }, { sender: 'bot', text: 'Geweldig! De afspraak staat vast. U ontvangt een bevestiging in uw e-mail.' }]},
+                { name: 'E-commerce Ondersteuning', messages: [{ sender: 'user', text: 'Mijn bestelling is nog niet binnengekomen.' }, { sender: 'bot', text: 'Excuses hiervoor. Kunt u alstublieft uw bestelnummer opgeven, dan controleer ik direct de status.' }, { sender: 'user', text: 'Mijn bestelnummer is #XYZ1234.' }, { sender: 'bot', text: 'Dank u wel. Ik zie dat uw pakket onderweg is en vandaag of uiterlijk morgen wordt bezorgd. Excuses voor de vertraging!' }]}
             ];
-
             const addMessageToChat = (message) => {
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('p-3', 'rounded-lg', 'max-w-[80%]', 'break-words');
-                
                 const span = document.createElement('span');
                 span.classList.add('block', 'font-bold', 'text-sm', 'mb-1');
-                
                 const p = document.createElement('p');
                 p.classList.add('text-gray-800', 'text-md');
                 p.textContent = message.text;
-
-                if (message.sender === 'user') {
-                    messageDiv.classList.add('ml-auto', 'bg-blue-100');
-                    span.textContent = 'Jij';
-                } else {
-                    messageDiv.classList.add('mr-auto', 'bg-gray-200');
-                    span.textContent = 'BotMatic';
-                }
-                
+                if (message.sender === 'user') { messageDiv.classList.add('ml-auto', 'bg-blue-100'); span.textContent = 'Jij'; } else { messageDiv.classList.add('mr-auto', 'bg-gray-200'); span.textContent = 'BotMatic'; }
                 messageDiv.appendChild(span);
                 messageDiv.appendChild(p);
                 chatContainer.appendChild(messageDiv);
@@ -864,28 +869,34 @@
             const runDemoScenario = () => {
                 chatContainer.innerHTML = '';
                 const selectedScenario = scenarios.find(s => s.name === scenarioSelector.value);
-
                 if (selectedScenario) {
                     let delay = 0;
                     selectedScenario.messages.forEach(message => {
-                        setTimeout(() => {
-                            addMessageToChat(message);
-                        }, delay);
+                        setTimeout(() => { addMessageToChat(message); }, delay);
                         delay += 1000;
                     });
                 }
             };
-
-            // Populate the dropdown and run the first scenario
-            scenarios.forEach(scenario => {
-                const option = document.createElement('option');
-                option.value = scenario.name;
-                option.textContent = scenario.name;
-                scenarioSelector.appendChild(option);
-            });
-
+            scenarios.forEach(scenario => { const option = document.createElement('option'); option.value = scenario.name; option.textContent = scenario.name; scenarioSelector.appendChild(option); });
             scenarioSelector.addEventListener('change', runDemoScenario);
             runDemoScenario();
+
+            // Cookie banner logica
+            const cookieBanner = document.getElementById('cookie-banner');
+            window.acceptCookies = () => {
+                localStorage.setItem('cookie_consent', 'accepted');
+                cookieBanner.classList.add('hidden');
+            };
+            window.declineCookies = () => {
+                localStorage.setItem('cookie_consent', 'declined');
+                cookieBanner.classList.add('hidden');
+            };
+            window.openCookieBanner = () => {
+                 cookieBanner.classList.remove('hidden');
+            };
+            if (localStorage.getItem('cookie_consent') === null) {
+                cookieBanner.classList.remove('hidden');
+            }
         });
     </script>
 </body>
