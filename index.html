@@ -10,6 +10,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- FIX: Laadt Firebase-bibliotheken via traditionele script-tags om CORS-fouten te voorkomen -->
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"></script>
+
     <style>
         :root{ --brand:#ff7a1a; --brand-600:#ff6a00; --ink:#0f172a; --muted:#475569; --bg:#f8fafc; --pro-bg: #28a745; --pro-btn: #ffffff;}
         html,body{scroll-behavior:smooth}
@@ -607,13 +613,20 @@
     </div>
 
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Functies voor de pagina
+    <script>
         document.addEventListener('DOMContentLoaded', async () => {
+            // FIX: Gebruik de globaal geladen Firebase-objecten in plaats van import
+            if (typeof firebase === 'undefined' || typeof firebase.firestore === 'undefined') {
+                console.error("Firebase is niet correct geladen. Controleer de script-tags in de head.");
+                return;
+            }
+            
+            // Set log level for debugging
+            const { initializeApp } = firebase;
+            const { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } = firebase.auth;
+            const { getFirestore, collection, addDoc, onSnapshot, query, setLogLevel } = firebase.firestore;
+            
+            // Functies voor de pagina
             setLogLevel('debug'); // Toon Firebase-logboeken in de console
 
             // Firebase initialisatie
@@ -803,8 +816,6 @@
                 }
                 recommendedPlan.textContent = recommended;
                 
-                // OPGELOST: De fout was dat 'planPrice' niet was gedefinieerd. 
-                // We gebruiken nu de correcte variabele 'priceRecommendation' om de grafiek te updaten.
                 updateChart(totalHours, monthlyCost, priceRecommendation);
             };
 
