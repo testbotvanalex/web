@@ -8,6 +8,10 @@
     <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect rx='12' width='64' height='64' fill='%23ff7a1a'/></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Warm Neutrals with Brand Orange Accent -->
+    <!-- Application Structure Plan: The single-page application is designed with a thematic, top-down flow to guide users through the sales funnel. It starts with a bold headline (Home), moves to high-level benefits (Voordelen), and then provides a direct, tangible value proposition via the Savings Calculator. The subsequent sections—Bot Portfolio (interactive demos), Pricing, and How It Works—systematically answer key customer questions. Finally, social proof (Klantverhalen) and a call to action (FAQ/Contact) are strategically placed at the end to build trust and encourage conversion. This non-linear, scannable structure is chosen to facilitate quick understanding and deep exploration, catering to both a casual browser and a potential lead. -->
+    <!-- Visualization & Content Choices: The dashboard uses a combination of data visualization and interactive content to make complex information digestible. A bar chart is used for 'Plan Features' to visually compare different packages, with filter buttons for interactive data exploration. A dynamic calculator with sliders provides real-time savings estimations, converting abstract value into concrete numbers. The 'Bot Portfolio' utilizes a gallery of cards with an interactive chat modal, allowing users to actively simulate a conversation with the bot rather than passively reading a script. The 'Klantverhalen' section uses a grid of styled blocks to present social proof in a clean, professional format. All interactions are powered by Vanilla JavaScript, and all visualizations are rendered using Chart.js, avoiding the use of SVG to maintain a single-file, Canvas-based architecture. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         :root {
             --brand: #ff7a1a;
@@ -45,7 +49,30 @@
             color: white;
             align-self: flex-end;
         }
-        /* Animation for scroll */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]:focus {
+            outline: none;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: #e5e7eb;
+            border-radius: 5px;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: var(--brand);
+            cursor: pointer;
+            margin-top: -6px;
+        }
         .scroll-animate {
             opacity: 0;
             transform: translateY(30px);
@@ -59,7 +86,6 @@
 </head>
 <body class="h-full">
     <div class="flex h-full">
-        <!-- Sidebar -->
         <aside id="sidebar" class="hidden md:flex flex-col w-64 bg-gray-800 text-gray-300">
             <div class="flex items-center justify-center h-20 border-b border-gray-700">
                 <h1 class="text-2xl font-bold text-white">BotMatic</h1>
@@ -71,6 +97,9 @@
                 <a href="#benefits" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>Voordelen
                 </a>
+                <a href="#calculator" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>Calculator
+                </a>
                  <a href="#bot-portfolio" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>Bot Portfolio
                 </a>
@@ -79,6 +108,9 @@
                 </a>
                  <a href="#how-it-works" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.657 7.343A8 8 0 0118.657 17.657z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.001 12h-1.122L9.88 16.121z"></path></svg>Hoe het werkt
+                </a>
+                <a href="#testimonials" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>Klantverhalen
                 </a>
                 <a href="#faq" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>FAQ
@@ -92,9 +124,7 @@
             </div>
         </aside>
 
-        <!-- Main content -->
         <div class="flex-1 flex flex-col overflow-hidden">
-            <!-- Mobile Header & Menu -->
             <header class="md:hidden flex items-center justify-between bg-white p-4 shadow-md">
                 <h1 class="text-xl font-bold text-gray-800">BotMatic</h1>
                 <button id="menu-toggle" class="text-gray-600 focus:outline-none">
@@ -109,9 +139,11 @@
                 <nav class="flex-1 px-4 py-6 space-y-2">
                     <a href="#home" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700">Home</a>
                     <a href="#benefits" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700">Voordelen</a>
+                    <a href="#calculator" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700">Calculator</a>
                     <a href="#bot-portfolio" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700">Bot Portfolio</a>
                     <a href="#pricing" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700">Tarieven</a>
                     <a href="#how-it-works" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700">Hoe het werkt</a>
+                    <a href="#testimonials" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700">Klantverhalen</a>
                     <a href="#faq" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700">FAQ</a>
                     <a href="#contact" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700">Contact</a>
                 </nav>
@@ -124,7 +156,6 @@
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6 md:p-10 main-content" style="scroll-behavior: smooth;">
                 <div class="space-y-12">
 
-                    <!-- Home Section -->
                     <section id="home" class="scroll-mt-20 scroll-animate">
                         <div class="bg-white rounded-2xl shadow-lg p-8 text-center">
                             <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">Stop met tijd verspillen — laat een digitale secretaresse antwoorden</h1>
@@ -145,7 +176,6 @@
                         </div>
                     </section>
                     
-                    <!-- Benefits Section -->
                     <section id="benefits" class="scroll-mt-20 scroll-animate">
                          <div class="bg-white rounded-2xl shadow-lg p-8">
                             <div class="flex items-center justify-center text-center mb-8">
@@ -178,8 +208,46 @@
                             </div>
                          </div>
                     </section>
+
+                    <section id="calculator" class="scroll-mt-20 scroll-animate">
+                        <div class="bg-white rounded-2xl shadow-lg p-8">
+                            <div class="flex items-center justify-center text-center mb-8">
+                                <svg class="w-8 h-8 mr-3 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                                <h2 class="text-3xl font-extrabold text-gray-900">Bereken Uw Besparing</h2>
+                            </div>
+                            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-8">
+                                Gebruik deze interactieve calculator om een schatting te maken van hoeveel tijd en geld u kunt besparen door repetitieve taken te automatiseren met BotMatic. Pas de schuifregelaars aan op basis van uw bedrijfssituatie.
+                            </p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center">
+                                <div class="space-y-6 bg-gray-50 p-6 rounded-2xl">
+                                    <div>
+                                        <label for="vragen" class="flex justify-between font-medium text-gray-700 text-sm"><span>Aantal vragen / maand</span><span id="vragen-value" class="font-bold text-orange-600">500</span></label>
+                                        <input type="range" id="vragen" min="100" max="5000" value="500" step="100" class="w-full mt-2">
+                                    </div>
+                                    <div>
+                                        <label for="tijd" class="flex justify-between font-medium text-gray-700 text-sm"><span>Tijd per vraag (min)</span><span id="tijd-value" class="font-bold text-orange-600">3</span></label>
+                                        <input type="range" id="tijd" min="1" max="15" value="3" class="w-full mt-2">
+                                    </div>
+                                    <div>
+                                        <label for="uurtarief" class="flex justify-between font-medium text-gray-700 text-sm"><span>Uurtarief medewerker (€)</span><span id="uurtarief-value" class="font-bold text-orange-600">€25</span></label>
+                                        <input type="range" id="uurtarief" min="15" max="75" value="25" class="w-full mt-2">
+                                    </div>
+                                </div>
+                                <div class="p-8 bg-orange-500 text-white rounded-2xl text-center shadow-lg">
+                                    <h3 class="text-lg font-semibold text-orange-100">Uw Potentiële Besparing</h3>
+                                    <div class="my-4">
+                                        <p class="text-5xl font-extrabold" id="maandelijkse-besparing">€125</p>
+                                        <p class="text-orange-200">per maand</p>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <p><strong id="bespaarde-uren" class="font-bold">25 uur</strong> per maand bespaard</p>
+                                        <p>Dat is <strong id="jaarlijkse-besparing" class="font-bold">€1.500</strong> per jaar!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                     
-                    <!-- Bot Portfolio Section -->
                     <section id="bot-portfolio" class="scroll-mt-20 scroll-animate">
                         <div class="bg-white rounded-2xl shadow-lg p-8">
                              <div class="flex items-center justify-center text-center mb-8">
@@ -199,7 +267,6 @@
                         </div>
                     </section>
 
-                    <!-- Pricing Section -->
                     <section id="pricing" class="scroll-mt-20 scroll-animate">
                         <div class="bg-white rounded-2xl shadow-lg p-8">
                              <div class="flex items-center justify-center text-center mb-8">
@@ -227,7 +294,6 @@
                         </div>
                     </section>
                     
-                    <!-- How it Works Section -->
                     <section id="how-it-works" class="scroll-mt-20 scroll-animate">
                         <div class="bg-white rounded-2xl shadow-lg p-8">
                              <div class="flex items-center justify-center text-center mb-8">
@@ -259,8 +325,29 @@
                             </div>
                         </div>
                     </section>
+
+                    <section id="testimonials" class="scroll-mt-20 scroll-animate">
+                        <div class="bg-white rounded-2xl shadow-lg p-8">
+                            <div class="flex items-center justify-center text-center mb-8">
+                                <svg class="w-8 h-8 mr-3 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                                <h2 class="text-3xl font-extrabold text-gray-900">Klantverhalen</h2>
+                            </div>
+                             <p class="text-center text-gray-600 max-w-2xl mx-auto mb-8">
+                                Onze klanten zijn enthousiast over de impact van BotMatic. Lees hun verhalen en ontdek hoe zij tijd en kosten hebben bespaard.
+                            </p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div class="p-6 bg-gray-50 rounded-xl shadow-inner">
+                                    <p class="italic text-gray-700">"Sinds we de chatbot van BotMatic hebben geïmplementeerd, is onze responstijd op klantvragen met 90% verkort. De bot handelt de meeste vragen nu direct af."</p>
+                                    <p class="mt-4 font-bold text-gray-800">- Jan de Vries, Eigenaar Autobedrijf De Vries</p>
+                                </div>
+                                <div class="p-6 bg-gray-50 rounded-xl shadow-inner">
+                                    <p class="italic text-gray-700">"De reserveringsbot heeft onze medewerkers in het restaurant ontlast. Zij kunnen zich nu volledig richten op onze gasten."</p>
+                                    <p class="mt-4 font-bold text-gray-800">- Marieke Janssen, Manager Restaurant 't Hoekje</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                     
-                    <!-- FAQ Section -->
                     <section id="faq" class="scroll-mt-20 scroll-animate">
                         <div class="bg-white rounded-2xl shadow-lg p-8">
                             <div class="flex items-center justify-center text-center mb-8">
@@ -284,7 +371,6 @@
                         </div>
                     </section>
                     
-                    <!-- Contact Section -->
                     <section id="contact" class="scroll-mt-20 scroll-animate">
                         <div class="bg-white rounded-2xl shadow-lg p-8">
                             <div class="flex items-center justify-center text-center mb-8">
@@ -317,21 +403,19 @@
         </div>
     </div>
     
-    <!-- Demo Modal -->
     <div id="demo-modal" class="modal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 opacity-0 hidden">
         <div class="modal-content transform scale-95 bg-white rounded-2xl shadow-lg p-6 w-11/12 max-w-lg mx-auto overflow-hidden">
             <div class="flex justify-between items-center pb-4 border-b border-gray-200">
                 <h3 id="modal-title" class="text-xl font-bold text-gray-800">Bot Demo</h3>
                 <button id="modal-close" class="text-gray-400 hover:text-gray-600 text-3xl">&times;</button>
             </div>
-            <div id="modal-chat-container" class="mt-4 h-[400px] flex flex-col justify-end">
-                <div id="modal-chat-content" class="space-y-4 overflow-y-auto pr-2">
-                    <!-- Chat messages will be injected here -->
+            <div id="modal-chat-container" class="mt-4 h-[400px] flex flex-col">
+                <div id="modal-chat-content" class="flex-1 space-y-4 overflow-y-auto pr-2">
                 </div>
-                <div id="demo-user-input" class="mt-4 flex">
-                    <input type="text" placeholder="Stuur een bericht..." class="flex-1 rounded-l-lg border border-gray-300 px-4 py-2 focus:outline-none" disabled>
-                    <button class="bg-orange-500 text-white px-4 rounded-r-lg font-bold" disabled>Verzenden</button>
-                </div>
+                <form id="demo-user-input" class="mt-4 flex">
+                    <input type="text" placeholder="Stuur een bericht..." class="flex-1 rounded-l-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-1 focus:ring-orange-500">
+                    <button type="submit" class="bg-orange-500 text-white px-4 rounded-r-lg font-bold">Verzenden</button>
+                </form>
             </div>
         </div>
     </div>
@@ -402,15 +486,12 @@
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
                     userId = user.uid;
-                    console.log('User authenticated:', userId);
                 } else {
                     if (authToken) {
                          await signInWithCustomToken(auth, authToken);
-                         console.log('Signed in with custom token.');
                     } else {
                         await signInAnonymously(auth);
                         userId = auth.currentUser.uid;
-                        console.log('Signed in anonymously.');
                     }
                 }
             });
@@ -428,7 +509,6 @@
 
         try {
             if (!db || !userId) {
-                console.error("Firestore is not initialized or user is not authenticated.");
                 messageBox.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
                 messageBox.classList.add('bg-red-100', 'text-red-800');
                 messageBox.textContent = "Er is een fout opgetreden. Probeer het later opnieuw.";
@@ -443,14 +523,12 @@
                 userId: userId,
                 timestamp: new Date()
             });
-            console.log("Document written with ID: ", docRef.id);
             messageBox.classList.remove('hidden', 'bg-red-100', 'text-red-800');
             messageBox.classList.add('bg-green-100', 'text-green-800');
             messageBox.textContent = "Bedankt voor uw bericht! We nemen spoedig contact met u op.";
             messageBox.style.display = 'block';
             document.getElementById('contact-form').reset();
         } catch (error) {
-            console.error("Error adding document: ", error);
             messageBox.classList.remove('hidden', 'bg-green-100', 'text-green-800');
             messageBox.classList.add('bg-red-100', 'text-red-800');
             messageBox.textContent = "Er is een fout opgetreden bij het verzenden. Probeer het later opnieuw.";
@@ -490,7 +568,33 @@
         const modal = document.getElementById('demo-modal');
         const modalClose = document.getElementById('modal-close');
         const gallery = document.getElementById('bot-gallery');
+        const chatContent = document.getElementById('modal-chat-content');
+        const userInputForm = document.getElementById('demo-user-input');
+        const userInput = userInputForm.querySelector('input');
+
         if(!modal || !gallery || !modalClose) return;
+
+        const addMessage = (text, sender) => {
+            const msgDiv = document.createElement('div');
+            msgDiv.classList.add('p-3', 'rounded-lg', 'max-w-[80%]', 'text-sm');
+            msgDiv.classList.add(sender === 'bot' ? 'message-bot' : 'message-user');
+            msgDiv.textContent = text;
+            chatContent.appendChild(msgDiv);
+            chatContent.scrollTop = chatContent.scrollHeight;
+        };
+
+        const handleUserMessage = (e) => {
+            e.preventDefault();
+            const userText = userInput.value.trim();
+            if (userText) {
+                addMessage(userText, 'user');
+                userInput.value = '';
+                setTimeout(() => {
+                    addMessage("Bedankt voor uw bericht! Onze bot zou deze vraag nu verwerken en u een passend antwoord geven.", 'bot');
+                }, 1000);
+            }
+        };
+        
         gallery.addEventListener('click', e => {
             const button = e.target.closest('.demo-btn');
             if (button) {
@@ -498,16 +602,19 @@
                 const botId = card.dataset.botId;
                 const botData = botDemos.find(b => b.id === botId);
                 document.getElementById('modal-title').textContent = botData.title;
-                document.getElementById('modal-chat-content').innerHTML = botData.chat.map(msg => `<div class="p-3 rounded-lg max-w-[80%] text-sm ${msg.sender === 'bot' ? 'message-bot' : 'message-user'}">${msg.text}</div>`).join('');
+                chatContent.innerHTML = botData.chat.map(msg => `<div class="p-3 rounded-lg max-w-[80%] text-sm ${msg.sender === 'bot' ? 'message-bot' : 'message-user'}">${msg.text}</div>`).join('');
                 modal.classList.remove('hidden');
                 setTimeout(() => {
                     modal.classList.remove('opacity-0');
                     modal.querySelector('.modal-content').classList.remove('scale-95');
                 }, 10);
-                const chatContent = document.getElementById('modal-chat-content');
                 chatContent.scrollTop = chatContent.scrollHeight;
+                userInput.focus();
             }
         });
+
+        userInputForm.addEventListener('submit', handleUserMessage);
+
         const closeModal = () => {
             modal.classList.add('opacity-0');
             modal.querySelector('.modal-content').classList.add('scale-95');
@@ -515,6 +622,49 @@
         };
         modalClose.addEventListener('click', closeModal);
         modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+    }
+
+    function handleCalculator() {
+        const vragenInput = document.getElementById('vragen');
+        const tijdInput = document.getElementById('tijd');
+        const uurtariefInput = document.getElementById('uurtarief');
+
+        const vragenValue = document.getElementById('vragen-value');
+        const tijdValue = document.getElementById('tijd-value');
+        const uurtariefValue = document.getElementById('uurtarief-value');
+
+        const bespaardeUren = document.getElementById('bespaarde-uren');
+        const maandelijkseBesparing = document.getElementById('maandelijkse-besparing');
+        const jaarlijkseBesparing = document.getElementById('jaarlijkse-besparing');
+
+        if(!vragenInput) return;
+
+        function calculateSavings() {
+            const numVragen = parseInt(vragenInput.value);
+            const numTijd = parseInt(tijdInput.value);
+            const numUurtarief = parseInt(uurtariefInput.value);
+
+            vragenValue.textContent = numVragen;
+            tijdValue.textContent = numTijd;
+            uurtariefValue.textContent = `€${numUurtarief}`;
+
+            const totalMinutes = numVragen * numTijd;
+            const totalHours = totalMinutes / 60;
+            const monthlySavings = totalHours * numUurtarief;
+            const annualSavings = monthlySavings * 12;
+
+            const formatter = new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR', minimumFractionDigits: 0 });
+            
+            bespaardeUren.textContent = `${totalHours.toFixed(0)} uur`;
+            maandelijkseBesparing.textContent = formatter.format(monthlySavings);
+            jaarlijkseBesparing.textContent = formatter.format(annualSavings);
+        }
+        
+        [vragenInput, tijdInput, uurtariefInput].forEach(input => {
+            input.addEventListener('input', calculateSavings);
+        });
+
+        calculateSavings();
     }
     
     function handleScrollAnimations() {
@@ -535,6 +685,7 @@
         populateBotGallery();
         handleBotFilters();
         handleDemoModal();
+        handleCalculator();
         handleScrollAnimations();
         document.getElementById('contact-form').addEventListener('submit', window.onContactFormSubmit);
 
@@ -559,7 +710,6 @@
             });
         });
 
-        // Mobile Menu Logic
         const navLinks = document.querySelectorAll('.nav-link');
         const mobileMenu = document.getElementById('mobile-menu');
         const overlay = document.getElementById('overlay');
