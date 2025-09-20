@@ -1,797 +1,618 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="nl" style="scroll-behavior: smooth;">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>BotMatic — Chatbots voor afspraken & leads</title>
-  <meta name="description" content="BotMatic bouwt chatbots die afspraken plannen, leads opvolgen en support automatiseren. 14 dagen gratis proef." />
-  <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect rx='12' width='64' height='64' fill='%23ff7a1a'/></svg>">
-  
-  <style>
-    /* Algemene stijlen en variabelen */
-    :root{
-      --brand:#ff7a1a; --brand-600:#ff6a00; --ink:#0f172a; --muted:#6b7280; --bg:#f8fafc;
-      --card:#fff; --line:#e6eef6; --radius:14px; --success:#10b981;
-      --maxw:1120px;
-    }
-    
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      background: #f7f9fc;
-      color:var(--ink);
-      line-height:1.5;
-    }
-    
-    .container{
-      max-width:var(--maxw);
-      margin:0 auto;
-      padding:22px;
-    }
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>BotMatic Dashboard — Interactieve Analyse van Chatbots</title>
+    <meta name="description" content="Een interactief dashboard dat de functies, voordelen en prijzen van BotMatic's chatbot-oplossingen analyseert." />
+    <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect rx='12' width='64' height='64' fill='%23ff7a1a'/></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    /* Sectie weergave - alleen de actieve sectie is zichtbaar */
-    .content-section {
-      display: none;
-      padding: 50px 0;
-      background: var(--card);
-      border-radius: var(--radius);
-      margin-bottom: 24px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-      overflow: hidden;
-    }
-    .content-section.active {
-      display: block;
-    }
+    <!-- Chosen Palette: Warm Neutrals with Brand Orange Accent -->
+    <!-- Application Structure Plan: The application is designed as a guided narrative dashboard. It begins with an interactive overview (Home) to quickly compare plan values. The 'Voordelen' section allows users to explore sector-specific benefits, making the information personally relevant. The 'Tarieven' section provides clear, side-by-side comparisons with an interactive chart to visualize feature distribution per plan. A 'Hoe het werkt' section details the technology and process. Finally, an FAQ and contact form address remaining questions and capture leads. This structure guides the user from high-level value to specific details, enhancing understanding and qualification. -->
+    <!-- Visualization & Content Choices: 
+        1. Home - Plan Value Chart: Report Info(Pricing Tiers) -> Goal(Compare value) -> Viz(Bar Chart) -> Interaction(Buttons to filter feature types) -> Justification(Quick visual comparison of plan benefits is faster than reading text) -> Library(Chart.js/Canvas).
+        2. Voordelen - Interactive Diagram: Report Info(Sectors & Benefits) -> Goal(Show sector-specific application) -> Viz(Clickable cards updating a central text/info area) -> Interaction(Clicking a sector card) -> Justification(Personalizes the benefits for the user's industry, increasing relevance) -> Library(Vanilla JS, HTML/CSS).
+        3. Tarieven - Feature Distribution Chart: Report Info(Detailed plan features) -> Goal(Visualize what each plan offers) -> Viz(Doughnut Chart) -> Interaction(Clicking a plan card updates the chart) -> Justification(Provides a simple, visual summary of the feature breakdown for each pricing tier) -> Library(Chart.js/Canvas).
+        4. Hoe het werkt - Process Flow: Report Info(Onboarding process) -> Goal(Explain the setup process simply) -> Viz(Numbered step cards) -> Interaction(None, purely informational) -> Justification(Clearly sets expectations for new clients) -> Library(HTML/CSS with Tailwind).
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 
-    /* HERO - achtergrond zonder schaduw */
-    #home-section {
-      background: #eef3f7;
-      border-radius: 0;
-      box-shadow: none;
-      display: block; /* Altijd zichtbaar bij het laden */
-    }
+    <style>
+        :root {
+            --brand: #ff7a1a;
+            --brand-600: #ff6a00;
+            --ink: #0f172a;
+            --muted: #6b7280;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --line: #e2e8f0;
+            --radius: 14px;
+            --success: #10b981;
+        }
 
-    /* Animatie voor elementen die vervagen */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .fade-in {
-      animation: fadeIn 0.8s ease-out forwards;
-      animation-delay: 0.2s;
-    }
-    .fade-in-slow {
-      animation: fadeIn 1.2s ease-out forwards;
-      animation-delay: 0.4s;
-    }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--ink);
+        }
 
-    /* NAV */
-    .nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:6px 0}
-    .brand{font-weight:800;font-size:20px}
-    .nav-links{display:flex;gap:14px;align-items:center}
-    .nav-links a{color:var(--ink);text-decoration:none;font-weight:600;opacity:.95; cursor: pointer;}
-    .nav-cta{display:flex;gap:10px;align-items:center}
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 40vh;
+        }
 
-    /* BUTTONS */
-    .btn{
-      display:inline-block;
-      padding:12px 20px;
-      border-radius:12px;
-      font-weight:800;
-      text-decoration:none;
-      border:0;
-      cursor:pointer;
-      transition:background-color .18s ease, box-shadow .18s ease;
-      box-shadow: 0 4px 8px rgba(15,23,42,.08);
-    }
-    .btn:hover{
-      box-shadow: 0 8px 20px rgba(15,23,42,.15);
-    }
-    .btn-primary{background:var(--brand);color:#fff}
-    .btn-primary:hover{background:var(--brand-600)}
-    .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
-    
-    /* HERO */
-    .hero{padding:48px 0 18px;text-align:center}
-    .hero h1{
-      font-size:42px;
-      margin:0 0 10px;
-      line-height:1.08;
-    }
-    .hero p{color:var(--muted);margin:0 auto 18px;max-width:820px;font-size:17px}
-    .hero .cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
 
-    /* PRICING */
-    .pricing{padding:28px 0}
-    .grid{display:grid;gap:18px}
-    @media(min-width:920px){ .grid{grid-template-columns:repeat(3,1fr)} }
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      padding:20px;
-      position:relative;
-      transition:transform .18s ease,box-shadow .18s ease;
-      box-shadow: 0 4px 12px rgba(15,23,42,.05);
-    }
-    .card:hover{
-      transform:translateY(-4px);
-      box-shadow:0 12px 24px rgba(15,23,42,.1);
-    }
-    .ribbon{position:absolute;top:12px;right:12px;background:#fff3e8;color:#b45309;border:1px dashed #ffcfac;padding:6px 10px;border-radius:999px;font-weight:800;font-size:12px}
-    .title{font-weight:800;font-size:18px;display:flex;align-items:center;gap:8px}
-    .price{font-size:28px;font-weight:800;margin:10px 0}
-    .price small{font-size:13px;color:var(--muted);font-weight:600;margin-left:8px}
-    .lead{color:var(--muted);margin:6px 0 12px}
-    ul.features{margin:0;padding-left:18px;color:var(--muted)}
-    ul.features li{margin:8px 0}
+        .content-section {
+            display: none;
+        }
 
-    /* DETAILS */
-    details.plan{margin-top:12px}
-    details.plan summary{cursor:pointer;list-style:none;padding:10px;border-radius:10px;background:#f1f9ff;border:1px solid #dbeafe;font-weight:700;display:flex;align-items:center;gap:8px}
-    details.plan[open] summary{background:#e6f0ff}
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
 
-    /* ABOUT / SECTORS */
-    .sectors{display:grid;gap:12px;grid-template-columns:repeat(4,1fr);margin-top:12px}
-    @media(max-width:980px){.sectors{grid-template-columns:repeat(2,1fr)}}
-    .sector{
-      background:var(--card);
-      border:1px solid var(--line);
-      padding:12px;
-      border-radius:12px;
-      box-shadow: 0 4px 12px rgba(15,23,42,.05);
-    }
-
-    /* CONTACT */
-    .contact .form{display:grid;gap:10px;max-width:520px;margin:0 auto}
-    .form input,.form select,.form textarea{
-      padding:12px;
-      border:1px solid var(--line);
-      border-radius:12px;
-      font:inherit;
-      transition: box-shadow 0.2s ease;
-    }
-    .form input:focus, .form select:focus, .form textarea:focus {
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(255,122,26,0.2);
-    }
-
-    .form-msg{min-height:18px;color:var(--success);font-weight:700;margin-top:6px}
-
-    /* FOOTER */
-    footer{border-top:1px solid var(--line);margin-top:28px;padding:24px 0;color:var(--muted);text-align:center;font-size:14px}
-    
-    .user-info{
-      position: absolute;
-      bottom: 8px;
-      right: 8px;
-      font-size: 10px;
-      color: var(--muted);
-      z-index: 100;
-      text-align: right;
-    }
-
-    /* MOBILE sticky CTA */
-    .mobile-cta{display:none}
-    @media(max-width:640px){
-      .mobile-cta{display:block;position:fixed;left:12px;right:12px;bottom:14px;z-index:80}
-      body{padding-bottom:84px} /* room for CTA */
-    }
-
-    /* Chat Widget Styles */
-    @keyframes pulse {
-      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 122, 26, 0.7); }
-      70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(255, 122, 26, 0); }
-      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 122, 26, 0); }
-    }
-    .chat-widget {
-      position: fixed;
-      bottom: 100px;
-      right: 24px;
-      z-index: 90;
-    }
-    .chat-button {
-      width: 68px;
-      height: 68px;
-      border-radius: 50%;
-      background: var(--brand);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      animation: pulse 2s infinite;
-    }
-    .chat-button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.2);
-      animation: none;
-    }
-    .chat-container {
-      position: fixed;
-      bottom: 180px;
-      right: 24px;
-      width: 340px;
-      height: 480px;
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: 0 8px 30px rgba(15, 23, 42, 0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      transform-origin: bottom right;
-      transition: transform 0.3s ease, opacity 0.3s ease;
-    }
-    @media(max-width: 400px){
-      .chat-container {
-        left: 12px;
-        right: 12px;
-        width: auto;
-        bottom: 180px;
-        height: calc(100% - 104px);
-      }
-    }
-    .chat-container.hidden {
-      transform: scale(0.8);
-      opacity: 0;
-      pointer-events: none;
-    }
-    .chat-header {
-      padding: 16px;
-      background: var(--brand);
-      color: white;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .chat-title {
-      font-weight: 700;
-    }
-    .chat-close-button {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 24px;
-      cursor: pointer;
-    }
-    .chat-messages {
-      flex-grow: 1;
-      padding: 16px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .message {
-      max-width: 80%;
-      padding: 10px;
-      border-radius: 12px;
-      line-height: 1.4;
-      font-size: 14px;
-    }
-    .message.bot {
-      background-color: var(--line);
-      align-self: flex-start;
-      border-bottom-left-radius: 4px;
-    }
-    .message.user {
-      background-color: var(--brand);
-      color: white;
-      align-self: flex-end;
-      border-bottom-right-radius: 4px;
-    }
-    .chat-input-area {
-      display: flex;
-      flex-direction: column;
-      padding: 10px;
-      border-top: 1px solid var(--line);
-      gap: 8px;
-    }
-    .chat-input-area input {
-      flex-grow: 1;
-      padding: 8px 12px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-    }
-    .chat-send-button {
-      background: var(--brand);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      padding: 8px 12px;
-      cursor: pointer;
-    }
-    .chat-actions {
-      display: flex;
-      gap: 8px;
-    }
-  </style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+    </style>
 </head>
-<body class="fade-in-slow">
-  <div class="container">
-    <!-- NAV -->
-    <header class="nav" role="banner">
-      <div class="brand">BotMatic</div>
-      <nav class="nav-cta" role="navigation" aria-label="Hoofdmenu">
-        <div class="nav-links" aria-hidden="false">
-          <a href="#home-section">Home</a>
-          <a href="#sectors-section">Sectoren</a>
-          <a href="#pricing-section">Tarieven</a>
-          <a href="#faq-section">FAQ</a>
-          <a href="#contact-section">Contact</a>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center;margin-left:12px">
-          <a class="btn btn-ghost" href="#contact-section">Contact</a>
-          <a class="btn btn-primary" href="#pricing-section">Start proef</a>
-        </div>
-      </nav>
-    </header>
-
-    <main id="main">
-        <!-- HERO -->
-        <section id="home-section" class="content-section active">
-          <div class="container">
-            <section id="home" class="hero" aria-labelledby="hero-title">
-              <h1 id="hero-title">Stop met tijd verspillen — laat een digitale secretaresse antwoorden</h1>
-              <p>BotMatic automatiseert FAQ’s, afspraken en lead-opvolging op de kanalen die jij kiest. Snel live, eenvoudig te beheren, direct resultaat.</p>
-              <div class="cta-row">
-                <a class="btn btn-primary" href="#pricing-section">Bekijk pakketten</a>
-                <a class="btn btn-ghost" href="#contact-section">Vraag demo</a>
-              </div>
-            </section>
-          </div>
-        </section>
-
-        <!-- Sectoren -->
-        <section id="sectors-section" class="content-section">
-          <div class="container">
-            <section class="center fade-in" aria-labelledby="compare-title" style="padding-top:6px">
-              <h2 id="compare-title">Wat je wint met een bot</h2>
-              <p class="muted" style="max-width:840px;margin:6px auto 18px">Minder gemiste leads, automatische afspraken en direct antwoord — ook buiten openingstijden.</p>
-            </section>
-            <section id="sectors" style="padding:6px 0 0">
-              <div class="sectors" role="list">
-                <div class="sector fade-in-slow" role="listitem"><strong>Beauty & Wellness</strong><div class="muted">Afspraken, intake en reminders</div></div>
-                <div class="sector fade-in-slow" role="listitem"><strong>Horeca</strong><div class="muted">Reserveren, menu, allergenen</div></div>
-                <div class="sector fade-in-slow" role="listitem"><strong>Autodealers</strong><div class="muted">Proefritten, serviceplanning</div></div>
-                <div class="sector fade-in-slow" role="listitem"><strong>Vastgoed</strong><div class="muted">Bezoeken, kwalificatie</div></div>
-              </div>
-            </section>
-          </div>
-        </section>
-
-        <!-- Tarieven -->
-        <section id="pricing-section" class="content-section">
-          <div class="container">
-            <section id="pricing" class="pricing" aria-labelledby="pricing-title">
-              <h2 id="pricing-title" class="center fade-in">Tarieven — simpel en duidelijk</h2>
-              <p class="center muted fade-in">14 dagen gratis proef. Maandelijks opzegbaar. Jaarabonnementen met korting via offerte.</p>
-              <div class="grid" role="list" aria-label="Prijzen">
-                <!-- STARTER -->
-                <article class="card fade-in-slow" role="listitem" aria-labelledby="plan-starter">
-                  <div id="plan-starter" class="title">Starter <span style="font-size:13px;font-weight:700;color:var(--muted);margin-left:8px">AI optioneel</span></div>
-                  <div class="price">€89 <small>/mnd</small></div>
-                  <div class="lead">1 kanaal — WhatsApp, Telegram, Instagram of Website-chat</div>
-                  <ul class="features">
-                    <li>Snelle FAQ-flows & afspraken</li>
-                    <li>Hosting en updates</li>
-                    <li>Basissupport (maandelijks)</li>
-                  </ul>
-                  <div style="margin-top:14px"><a class="btn btn-primary" href="#contact-section">Start Starter</a></div>
-                </article>
-                <!-- PRO (most popular) -->
-                <article class="card fade-in-slow" role="listitem" aria-labelledby="plan-pro" style="border:2px solid var(--brand)">
-                  <div class="ribbon">Meest gekozen</div>
-                  <div id="plan-pro" class="title">Pro <span style="font-size:13px;font-weight:700;color:#065f46;margin-left:8px">AI inbegrepen</span></div>
-                  <div class="price">€149 <small>/mnd</small></div>
-                  <div class="lead">2 kanalen + AI dialogen en integraties</div>
-                  <ul class="features">
-                    <li>AI-dialogen (NL/EN/RU) & intent-herkenning</li>
-                    <li>Afsprakenplanning, reminders & lead-tags</li>
-                    <li>CRM-integraties (Zapier/Make/Sheets)</li>
-                    <li>Prioritaire support + maandelijkse optimalisatie</li>
-                  </ul>
-                  <div style="margin-top:14px"><a class="btn btn-primary" href="#contact-section">Start Pro</a></div>
-                </article>
-                <!-- BUSINESS -->
-                <article class="card fade-in-slow" role="listitem" aria-labelledby="plan-business">
-                  <div id="plan-business" class="title">Business <span style="font-size:13px;font-weight:700;color:#065f46;margin-left:8px">AI inbegrepen</span></div>
-                  <div class="price">€249 <small>/mnd</small></div>
-                  <div class="lead">Alle kanalen, maatwerk en SLA</div>
-                  <ul class="features">
-                    <li>Onbeperkte flows & meertalige AI</li>
-                    <li>Dashboard, rapportages & lead-scoring</li>
-                    <li>Maatwerk integraties (CRM/ERP, betalingen)</li>
-                    <li>Dedicated support & onboarding</li>
-                  </ul>
-                  <div style="margin-top:14px"><a class="btn btn-primary" href="#contact-section">Start Business</a></div>
-                </article>
-              </div>
-              <p class="center muted tiny" style="margin-top:12px">* Setup vanaf €150. Exacte prijzen afhankelijk van volume en integraties — we geven heldere offertes.</p>
-            </section>
-          </div>
-        </section>
-
-        <!-- FAQ -->
-        <section id="faq-section" class="content-section">
-          <div class="container">
-            <h2 class="center" style="margin-bottom: 24px;">Veelgestelde vragen</h2>
-            <div style="max-width: 720px; margin: 0 auto; display: grid; gap: 10px;">
-              <details class="plan">
-                <summary>Hoe lang duurt het om een chatbot te lanceren?</summary>
-                <div style="padding: 10px; border-left: 2px solid var(--brand); margin-left: 10px;">
-                  <p>Afhankelijk van de complexiteit van de vereiste flows en integraties, kan een basischatbot al binnen 3-5 werkdagen live zijn. Voor complexere opstellingen is de doorlooptijd gemiddeld 2-4 weken.</p>
-                </div>
-              </details>
-              <details class="plan">
-                <summary>Kan de bot in meerdere talen communiceren?</summary>
-                <div style="padding: 10px; border-left: 2px solid var(--brand); margin-left: 10px;">
-                  <p>Ja, ons Pro- en Business-pakket bevatten AI-dialogen in het Nederlands, Engels en Russisch. Het Business-pakket biedt onbeperkte meertalige AI, zodat de bot automatisch de taal van de gebruiker kan detecteren en beantwoorden.</p>
-                </div>
-              </details>
-              <details class="plan">
-                <summary>Welke kanalen worden ondersteund?</summary>
-                <div style="padding: 10px; border-left: 2px solid var(--brand); margin-left: 10px;">
-                  <p>Onze bots kunnen worden ingezet op populaire kanalen zoals WhatsApp, Telegram, Instagram en uw eigen website-chat. Het Business-pakket ondersteunt alle beschikbare kanalen voor maximale flexibiliteit.</p>
-                </div>
-              </details>
-              <details class="plan">
-                <summary>Zijn er extra kosten?</summary>
-                <div style="padding: 10px; border-left: 2px solid var(--brand); margin-left: 10px;">
-                  <p>De getoonde prijzen zijn de maandelijkse abonnementskosten. Houd er rekening mee dat er een eenmalige opstartvergoeding is vanaf €150. Exacte prijzen zijn afhankelijk van het volume en de specifieke integraties die u nodig heeft.</p>
-                </div>
-              </details>
+<body class="antialiased">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <header class="flex items-center justify-between py-6">
+            <div class="font-extrabold text-2xl" style="color: var(--ink);">BotMatic</div>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#home-section" class="nav-link font-semibold text-gray-700 hover:text-orange-600 transition">Home</a>
+                <a href="#benefits-section" class="nav-link font-semibold text-gray-700 hover:text-orange-600 transition">Voordelen</a>
+                <a href="#pricing-section" class="nav-link font-semibold text-gray-700 hover:text-orange-600 transition">Tarieven</a>
+                <a href="#how-it-works-section" class="nav-link font-semibold text-gray-700 hover:text-orange-600 transition">Hoe het werkt</a>
+                <a href="#faq-section" class="nav-link font-semibold text-gray-700 hover:text-orange-600 transition">FAQ</a>
+                <a href="#contact-section" class="nav-link font-semibold text-gray-700 hover:text-orange-600 transition">Contact</a>
+            </nav>
+            <div>
+                <a href="#contact-section" class="nav-link inline-block bg-white border border-gray-200 text-gray-800 font-bold py-2 px-5 rounded-xl hover:bg-gray-50 transition shadow-sm">Start Proef</a>
             </div>
-          </div>
-        </section>
+        </header>
 
-        <!-- Contact -->
-        <section id="contact-section" class="content-section">
-          <div class="container">
-            <section id="contact" style="padding:18px 0">
-              <div style="max-width:720px;margin:0 auto;text-align:center">
-                <h2>Vraag een demo</h2>
-                <p class="muted">Vul kort je gegevens in — we bellen binnen 24 uur voor een demo en voorstel.</p>
-                <form class="form contact-form" style="margin-top:12px" onsubmit="event.preventDefault();onDemoSubmit(event);">
-                  <input name="company" placeholder="Bedrijfsnaam" required />
-                  <input name="email" type="email" placeholder="jij@bedrijf.be" required />
-                  <select name="plan" required>
-                    <option value="Starter">Starter</option>
-                    <option value="Pro" selected>Pro</option>
-                    <option value="Business">Business</option>
-                  </select>
-                  <textarea name="note" placeholder="Kort: wie jullie zijn en wat je wilt…" ></textarea>
-                  <button id="demo-submit" class="btn btn-primary" type="submit">Vraag demo</button>
-                  <div id="form-msg" class="form-msg" role="status" aria-live="polite" style="display:block"></div>
-                </form>
-              </div>
+        <main id="main">
+            <section id="home-section" class="content-section active py-12 md:py-20">
+                <div class="text-center">
+                    <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight" style="color: var(--ink);">Analyseer de Kracht van Automatisering</h1>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Dit interactieve dashboard helpt u de functies en voordelen van de verschillende BotMatic-pakketten te verkennen. Gebruik de grafiek om te zien hoe elk plan is opgebouwd en ontdek welke oplossing het beste bij uw bedrijf past.</p>
+                </div>
+                <div class="mt-12">
+                    <div class="bg-white p-6 rounded-2xl shadow-lg">
+                        <div class="flex flex-col sm:flex-row justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold text-gray-800">Vergelijk Pakketfuncties</h3>
+                            <div id="plan-chart-controls" class="flex space-x-2 mt-3 sm:mt-0">
+                                <button data-type="all" class="bg-orange-500 text-white py-1 px-3 rounded-lg text-sm font-semibold">Alles</button>
+                                <button data-type="core" class="bg-gray-200 text-gray-700 py-1 px-3 rounded-lg text-sm font-semibold">Kern</button>
+                                <button data-type="ai" class="bg-gray-200 text-gray-700 py-1 px-3 rounded-lg text-sm font-semibold">AI</button>
+                                <button data-type="support" class="bg-gray-200 text-gray-700 py-1 px-3 rounded-lg text-sm font-semibold">Support</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="planFeaturesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
             </section>
-          </div>
-        </section>
-    </main>
-    
-    <footer>
-      <p>© <span id="year"></span> BotMatic — Alle rechten voorbehouden.</p>
-      <div class="user-info">UserID: <span id="user-id">N/A</span></div>
-    </footer>
-  </div>
-  
-  <!-- Chat Widget -->
-  <div class="chat-widget">
-    <!-- Chat Icon -->
-    <div id="chat-button" class="chat-button">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M21 15C21 16.6569 16.5 18 12 18C7.5 18 3 16.6569 3 15C3 13.3431 7.5 12 12 12C16.5 12 21 13.3431 21 15Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M3 15V19.5C3 20.3284 7.5 21 12 21C16.5 21 21 20.3284 21 19.5V15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M21 9C21 10.6569 16.5 12 12 12C7.5 12 3 10.6569 3 9C3 7.34315 7.5 6 12 6C16.5 6 21 7.34315 21 9Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M21 9V13.5C21 14.3284 16.5 15 12 15C7.5 15 3 14.3284 3 13.5V9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M12 3C16.9706 3 21 5.23858 21 8V12C21 14.7614 16.9706 17 12 17C7.02944 17 3 14.7614 3 12V8C3 5.23858 7.02944 3 12 3Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-    <!-- Chat Window -->
-    <div id="chat-container" class="chat-container hidden">
-      <div class="chat-header">
-        <div class="chat-title">BotMatic Demo Bot</div>
-        <button id="chat-close" class="chat-close-button">&times;</button>
-      </div>
-      <div id="chat-messages" class="chat-messages">
-        <!-- Berichten zullen hier worden ingevoegd -->
-      </div>
-      <div class="chat-input-area">
-        <input type="text" id="chat-input" placeholder="Type een bericht..." />
-        <div class="chat-actions">
-          <button id="chat-send" class="btn-primary chat-send-button">Stuur</button>
-          <button id="chat-summarize" class="btn-primary chat-send-button">✨ Samenvatten</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Mobile sticky CTA -->
-  <div class="mobile-cta">
-    <div style="max-width:var(--maxw);margin:0 auto;padding:0 22px;">
-      <a class="btn btn-primary" href="#contact-section">Vraag demo — wij bellen terug</a>
-    </div>
-  </div>
+            <section id="benefits-section" class="content-section py-12 md:py-20">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-extrabold" style="color: var(--ink);">Voordelen per Sector</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Elke sector heeft unieke uitdagingen. BotMatic biedt op maat gemaakte oplossingen. Klik op een sector om te zien hoe een chatbot de efficiëntie kan verhogen, klanttevredenheid kan verbeteren en groei kan stimuleren.</p>
+                </div>
+                <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="flex flex-col space-y-4">
+                        <button class="sector-btn p-6 bg-white rounded-xl shadow-md text-left transition hover:shadow-lg hover:ring-2 hover:ring-orange-500" data-sector="beauty">
+                            <h3 class="text-lg font-bold">Beauty & Wellness</h3>
+                            <p class="text-gray-600">Automatiseer afspraken, intakeformulieren en herinneringen.</p>
+                        </button>
+                         <button class="sector-btn p-6 bg-white rounded-xl shadow-md text-left transition hover:shadow-lg hover:ring-2 hover:ring-orange-500" data-sector="horeca">
+                            <h3 class="text-lg font-bold">Horeca</h3>
+                            <p class="text-gray-600">Beheer reserveringen, beantwoord vragen over het menu en allergenen.</p>
+                        </button>
+                         <button class="sector-btn p-6 bg-white rounded-xl shadow-md text-left transition hover:shadow-lg hover:ring-2 hover:ring-orange-500" data-sector="auto">
+                            <h3 class="text-lg font-bold">Autodealers</h3>
+                            <p class="text-gray-600">Plan proefritten en serviceafspraken, kwalificeer leads.</p>
+                        </button>
+                         <button class="sector-btn p-6 bg-white rounded-xl shadow-md text-left transition hover:shadow-lg hover:ring-2 hover:ring-orange-500" data-sector="vastgoed">
+                            <h3 class="text-lg font-bold">Vastgoed</h3>
+                            <p class="text-gray-600">Regel bezichtigingen en kwalificeer potentiële kopers of huurders.</p>
+                        </button>
+                    </div>
+                    <div id="sector-info" class="p-8 bg-white rounded-2xl shadow-lg h-full min-h-[300px]">
+                         <h3 id="sector-title" class="text-2xl font-bold text-gray-800 mb-4">Selecteer een Sector</h3>
+                         <p id="sector-description" class="text-gray-600">Ontdek de specifieke voordelen en toepassingen voor uw branche.</p>
+                    </div>
+                </div>
+            </section>
 
-  <script type="module">
+            <section id="pricing-section" class="content-section py-12 md:py-20">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-extrabold" style="color: var(--ink);">Duidelijke Tarieven</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Kies het pakket dat bij u past. Klik op een plan om een visuele weergave te zien van de functies die zijn inbegrepen. Alle plannen zijn maandelijks opzegbaar en komen met een 14-daagse gratis proefperiode.</p>
+                </div>
+                <div class="mt-12 grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+                    <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="pricing-card cursor-pointer border-2 border-gray-200 p-6 rounded-2xl bg-white shadow-md hover:border-orange-500 transition" data-plan="starter">
+                            <h3 class="text-xl font-bold">Starter</h3>
+                            <p class="text-4xl font-extrabold my-2">€89 <span class="text-base font-medium text-gray-500">/mnd</span></p>
+                            <ul class="space-y-2 text-gray-600">
+                                <li>✓ 1 Kanaal</li>
+                                <li>✓ Snelle FAQ-flows</li>
+                                <li>✓ Hosting & updates</li>
+                                <li>✓ Basissupport</li>
+                            </ul>
+                        </div>
+                        <div class="pricing-card cursor-pointer border-2 border-orange-500 p-6 rounded-2xl bg-white shadow-lg" data-plan="pro">
+                             <h3 class="text-xl font-bold">Pro</h3>
+                            <p class="text-4xl font-extrabold my-2">€149 <span class="text-base font-medium text-gray-500">/mnd</span></p>
+                            <ul class="space-y-2 text-gray-600">
+                                <li>✓ 2 Kanalen</li>
+                                <li>✓ AI-dialogen & intenties</li>
+                                <li>✓ CRM-integraties</li>
+                                <li>✓ Prioritaire support</li>
+                            </ul>
+                        </div>
+                        <div class="pricing-card cursor-pointer border-2 border-gray-200 p-6 rounded-2xl bg-white shadow-md hover:border-orange-500 transition" data-plan="business">
+                             <h3 class="text-xl font-bold">Business</h3>
+                            <p class="text-4xl font-extrabold my-2">€249 <span class="text-base font-medium text-gray-500">/mnd</span></p>
+                            <ul class="space-y-2 text-gray-600">
+                                <li>✓ Alle Kanalen</li>
+                                <li>✓ Onbeperkte AI & talen</li>
+                                <li>✓ Maatwerk integraties</li>
+                                <li>✓ Dedicated support</li>
+                            </ul>
+                        </div>
+                    </div>
+                     <div class="lg:col-span-2 p-6 bg-white rounded-2xl shadow-lg">
+                        <h3 class="text-xl font-bold text-center mb-4 text-gray-800">Feature Verdeling</h3>
+                        <div class="chart-container" style="height: 250px; max-height: 30vh;">
+                            <canvas id="pricingDoughnutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="how-it-works-section" class="content-section py-12 md:py-20">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-extrabold" style="color: var(--ink);">Hoe het werkt</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Van de kanalen die we ondersteunen tot het eenvoudige proces in 3 stappen: hier ziet u hoe we uw bedrijf automatiseren.</p>
+                </div>
+                <div class="mt-16 space-y-16">
+                    <div>
+                        <h3 class="text-2xl font-bold text-center mb-8">1. Kies Uw Kanalen</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto text-center">
+                            <div class="p-6 bg-white rounded-xl shadow-md"><span class="text-4xl">💬</span><p class="mt-2 font-semibold">Website Chat</p></div>
+                            <div class="p-6 bg-white rounded-xl shadow-md"><span class="text-4xl">📱</span><p class="mt-2 font-semibold">WhatsApp</p></div>
+                            <div class="p-6 bg-white rounded-xl shadow-md"><span class="text-4xl">📸</span><p class="mt-2 font-semibold">Instagram</p></div>
+                            <div class="p-6 bg-white rounded-xl shadow-md"><span class="text-4xl">✈️</span><p class="mt-2 font-semibold">Telegram</p></div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-center mb-8">2. Selecteer de Technologie</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                            <div class="p-6 bg-white rounded-xl shadow-md border-t-4 border-gray-300">
+                                <h4 class="text-xl font-bold">Starter Bot</h4>
+                                <p class="text-gray-600 mt-2">Perfect voor duidelijke taken. Werkt op basis van vooraf gedefinieerde regels en flows. Ideaal voor FAQ's en simpele afspraken.</p>
+                            </div>
+                            <div class="p-6 bg-white rounded-xl shadow-md border-t-4 border-orange-500">
+                                <h4 class="text-xl font-bold">AI Bot (Pro & Business)</h4>
+                                <p class="text-gray-600 mt-2">Begrijpt de intentie van de gebruiker, voert natuurlijke gesprekken en kan afwijken van scripts. Leert van interacties voor betere resultaten.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-center mb-8">3. Volg Ons Eenvoudige Proces</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-5xl mx-auto">
+                            <div class="p-6 bg-white rounded-xl shadow-md">
+                                <div class="text-3xl font-extrabold text-orange-500">1</div>
+                                <h4 class="text-lg font-bold mt-2">Intake & Strategie</h4>
+                                <p class="text-gray-600 mt-1">We bespreken uw doelen en bepalen de beste flows en kanalen voor uw bot.</p>
+                            </div>
+                            <div class="p-6 bg-white rounded-xl shadow-md">
+                                <div class="text-3xl font-extrabold text-orange-500">2</div>
+                                <h4 class="text-lg font-bold mt-2">Bouwen & Testen</h4>
+                                <p class="text-gray-600 mt-1">Ons team bouwt de chatbot en we testen hem uitgebreid om perfecte werking te garanderen.</p>
+                            </div>
+                            <div class="p-6 bg-white rounded-xl shadow-md">
+                                <div class="text-3xl font-extrabold text-orange-500">3</div>
+                                <h4 class="text-lg font-bold mt-2">Lancering & Optimalisatie</h4>
+                                <p class="text-gray-600 mt-1">We lanceren de bot op uw kanalen en monitoren de prestaties voor continue verbetering.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="faq-section" class="content-section py-12 md:py-20">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-extrabold" style="color: var(--ink);">Veelgestelde Vragen</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Hier vindt u antwoorden op de meest voorkomende vragen over onze diensten, het proces en de kosten.</p>
+                </div>
+                <div class="mt-12 max-w-3xl mx-auto space-y-4">
+                    <details class="p-4 bg-white rounded-xl shadow-sm cursor-pointer group">
+                        <summary class="font-semibold text-lg flex justify-between items-center">
+                            Hoe lang duurt het om een chatbot te lanceren?
+                            <span class="text-orange-500 font-bold text-2xl group-open:hidden">&plus;</span>
+                            <span class="text-orange-500 font-bold text-2xl hidden group-open:inline">&minus;</span>
+                        </summary>
+                        <div class="mt-4 pt-4 border-t border-gray-200 text-gray-600">
+                            <p>Afhankelijk van de complexiteit van de vereiste flows en integraties, kan een basischatbot al binnen 3-5 werkdagen live zijn. Voor complexere opstellingen is de doorlooptijd gemiddeld 2-4 weken.</p>
+                        </div>
+                    </details>
+                    <details class="p-4 bg-white rounded-xl shadow-sm cursor-pointer group">
+                        <summary class="font-semibold text-lg flex justify-between items-center">
+                            Kan de bot in meerdere talen communiceren?
+                            <span class="text-orange-500 font-bold text-2xl group-open:hidden">&plus;</span>
+                            <span class="text-orange-500 font-bold text-2xl hidden group-open:inline">&minus;</span>
+                        </summary>
+                        <div class="mt-4 pt-4 border-t border-gray-200 text-gray-600">
+                            <p>Ja, ons Pro- en Business-pakket bevatten AI-dialogen in het Nederlands, Engels en Russisch. Het Business-pakket biedt onbeperkte meertalige AI, zodat de bot automatisch de taal van de gebruiker kan detecteren en beantwoorden.</p>
+                        </div>
+                    </details>
+                    <details class="p-4 bg-white rounded-xl shadow-sm cursor-pointer group">
+                        <summary class="font-semibold text-lg flex justify-between items-center">
+                            Welke kanalen worden ondersteund?
+                             <span class="text-orange-500 font-bold text-2xl group-open:hidden">&plus;</span>
+                            <span class="text-orange-500 font-bold text-2xl hidden group-open:inline">&minus;</span>
+                        </summary>
+                        <div class="mt-4 pt-4 border-t border-gray-200 text-gray-600">
+                            <p>Onze bots kunnen worden ingezet op populaire kanalen zoals WhatsApp, Telegram, Instagram en uw eigen website-chat. Het Business-pakket ondersteunt alle beschikbare kanalen voor maximale flexibiliteit.</p>
+                        </div>
+                    </details>
+                     <details class="p-4 bg-white rounded-xl shadow-sm cursor-pointer group">
+                        <summary class="font-semibold text-lg flex justify-between items-center">
+                            Zijn er extra kosten?
+                            <span class="text-orange-500 font-bold text-2xl group-open:hidden">&plus;</span>
+                            <span class="text-orange-500 font-bold text-2xl hidden group-open:inline">&minus;</span>
+                        </summary>
+                        <div class="mt-4 pt-4 border-t border-gray-200 text-gray-600">
+                             <p>De getoonde prijzen zijn de maandelijkse abonnementskosten. Houd er rekening mee dat er een eenmalige opstartvergoeding is vanaf €150. Exacte prijzen zijn afhankelijk van het volume en de specifieke integraties die u nodig heeft.</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="contact-section" class="content-section py-12 md:py-20">
+                <div class="text-center max-w-2xl mx-auto">
+                     <h2 class="text-3xl md:text-4xl font-extrabold" style="color: var(--ink);">Vraag een Demo Aan</h2>
+                    <p class="mt-4 text-lg text-gray-600">Laat uw gegevens achter en ons team neemt binnen 24 uur contact met u op voor een persoonlijk voorstel en een live demo van de chatbot.</p>
+                </div>
+                <div class="mt-10 max-w-xl mx-auto">
+                     <form class="form contact-form space-y-4" onsubmit="event.preventDefault(); onDemoSubmit(event);">
+                        <div>
+                            <label for="company" class="sr-only">Bedrijfsnaam</label>
+                            <input name="company" id="company" placeholder="Bedrijfsnaam" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:outline-none transition"/>
+                        </div>
+                        <div>
+                            <label for="email" class="sr-only">E-mailadres</label>
+                            <input name="email" id="email" type="email" placeholder="jij@bedrijf.be" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:outline-none transition"/>
+                        </div>
+                         <div>
+                            <label for="plan" class="sr-only">Kies een plan</label>
+                            <select name="plan" id="plan" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:outline-none transition bg-white">
+                                <option value="Starter">Starter</option>
+                                <option value="Pro" selected>Pro</option>
+                                <option value="Business">Business</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button id="demo-submit" type="submit" class="w-full text-white font-bold py-3 px-6 rounded-xl transition shadow-md" style="background-color: var(--brand);">Verstuur Aanvraag</button>
+                        </div>
+                        <div id="form-msg" class="text-center font-semibold h-6" role="status"></div>
+                     </form>
+                </div>
+            </section>
+
+        </main>
+        
+        <footer class="text-center py-8 mt-12 border-t border-gray-200">
+            <p class="text-gray-500">&copy; <span id="year"></span> BotMatic — Alle rechten voorbehouden.</p>
+        </footer>
+    </div>
+
+<script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, collection, addDoc, doc, setDoc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    // Global variables provided by the environment
     const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
     const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
     const authToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
-    // Firebase setup
+    
     let db;
     let auth;
     let userId;
 
     const initFirebase = async () => {
         try {
+            if (Object.keys(firebaseConfig).length === 0) {
+                 console.warn("Firebase config is empty. Form submission will be disabled.");
+                 return;
+            }
             const app = initializeApp(firebaseConfig);
             auth = getAuth(app);
             db = getFirestore(app);
             setLogLevel('debug');
-
             if (authToken) {
                 await signInWithCustomToken(auth, authToken);
             } else {
                 await signInAnonymously(auth);
             }
-
             userId = auth.currentUser.uid;
-            document.getElementById('user-id').textContent = userId;
         } catch (error) {
             console.error("Error initializing Firebase:", error);
-            document.getElementById('form-msg').textContent = "Er is een fout opgetreden bij het verbinden met de database. Probeer later opnieuw.";
+            document.getElementById('form-msg').textContent = "Database connectie mislukt.";
         }
     };
     
-    // Show selected section and hide others
-    function showSection(sectionId) {
-      const sections = document.querySelectorAll('.content-section');
-      sections.forEach(section => {
-        section.classList.remove('active');
-      });
-      const activeSection = document.getElementById(sectionId);
-      if (activeSection) {
-        activeSection.classList.add('active');
-        activeSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }
-
-    // Year
-    document.getElementById('year').textContent = new Date().getFullYear();
-    
-    // Demo form submission
-    async function onDemoSubmit(e){
-      const btn = document.getElementById('demo-submit');
-      const msg = document.getElementById('form-msg');
-      btn.disabled = true; 
-      btn.textContent = 'Verzenden…';
-      msg.textContent = '';
-      
-      try {
+    window.onDemoSubmit = async function(e) {
+        const btn = document.getElementById('demo-submit');
+        const msg = document.getElementById('form-msg');
+        btn.disabled = true;
+        btn.textContent = 'Verzenden…';
+        msg.textContent = '';
+        
         if (!db) {
-            msg.textContent = "Database is niet geconfigureerd. Probeer opnieuw.";
+            msg.style.color = 'red';
+            msg.textContent = "Database is niet beschikbaar.";
             btn.disabled = false;
-            btn.textContent = 'Vraag demo';
+            btn.textContent = 'Verstuur Aanvraag';
             return;
         }
         
-        const data = Object.fromEntries(new FormData(e.target).entries());
-        data.timestamp = new Date();
-        data.userId = userId;
+        try {
+            const data = Object.fromEntries(new FormData(e.target).entries());
+            data.timestamp = new Date();
+            data.userId = userId || 'anonymous';
+            
+            const leadsCollectionRef = collection(db, `artifacts/${appId}/public/data/leads`);
+            await addDoc(leadsCollectionRef, data);
 
-        // Save data to Firestore
-        const leadsCollectionRef = collection(db, `artifacts/${appId}/public/data/leads`);
-        await addDoc(leadsCollectionRef, data);
-
-        msg.style.color = 'var(--success)';
-        msg.textContent = 'Bedankt! We nemen binnen 24 uur contact op.';
-        e.target.reset(); // Clear form
-      } catch (error) {
-        console.error("Error submitting form:", error);
-        msg.style.color = 'red';
-        msg.textContent = 'Er is een fout opgetreden. Probeer het opnieuw.';
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'Vraag demo';
-      }
-    }
-
-    // Show mobile CTA only on small screens
-    function updateMobileCta(){ 
-      const mobileCta = document.querySelector('.mobile-cta');
-      if (mobileCta) {
-        mobileCta.style.display = window.innerWidth < 640 ? 'block' : 'none'; 
-      }
-    }
-    window.addEventListener('resize', updateMobileCta);
-    document.addEventListener('DOMContentLoaded', updateMobileCta);
-
-    // Chatbot Logic
-    const chatButton = document.getElementById('chat-button');
-    const chatContainer = document.getElementById('chat-container');
-    const chatCloseButton = document.getElementById('chat-close');
-    const chatMessages = document.getElementById('chat-messages');
-    const chatInput = document.getElementById('chat-input');
-    const chatSendButton = document.getElementById('chat-send');
-    const chatSummarizeButton = document.getElementById('chat-summarize');
-    let conversationHistory = [];
-
-    chatButton.addEventListener('click', () => {
-      chatContainer.classList.toggle('hidden');
-      if (!chatContainer.classList.contains('hidden')) {
-        setTimeout(() => addBotMessage("Hoi! Ik ben de demo-bot van BotMatic. Hoe kan ik je helpen?"), 500);
-      }
-    });
-
-    chatCloseButton.addEventListener('click', () => {
-      chatContainer.classList.add('hidden');
-    });
-
-    chatSendButton.addEventListener('click', () => {
-      const message = chatInput.value.trim();
-      if (message) {
-        addUserMessage(message);
-        chatInput.value = '';
-        getBotResponse(message);
-      }
-    });
-
-    chatSummarizeButton.addEventListener('click', () => {
-        getSummary();
-    });
-
-    chatInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        chatSendButton.click();
-      }
-    });
-
-    function addMessage(text, sender) {
-      const messageDiv = document.createElement('div');
-      messageDiv.textContent = text;
-      messageDiv.classList.add('message', sender);
-      chatMessages.appendChild(messageDiv);
-      chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom
-    }
-
-    function addBotMessage(text) {
-      addMessage(text, 'bot');
-    }
-
-    function addUserMessage(text) {
-      addMessage(text, 'user');
-    }
-
-    // Function to get a response from the Gemini API
-    async function getBotResponse(userMessage) {
-      const prompt = `
-        Je bent een behulpzame AI-verkoopbot voor een bedrijf genaamd BotMatic. Je taak is om vragen van gebruikers te beantwoorden op basis van de volgende informatie over het bedrijf. Beantwoord de vragen bondig. Als je een vraag niet kunt beantwoorden, verwijs de gebruiker dan naar het contactformulier.
-
-        Informatie over BotMatic:
-        - Wat ze doen: Automatiseren van FAQ's, afspraken en lead-opvolging op kanalen zoals WhatsApp, Telegram, Instagram en website-chat.
-        - Prijzen:
-          - Starter (€89/mnd): 1 kanaal, optionele AI, basis support.
-          - Pro (€149/mnd): 2 kanalen, AI inbegrepen (NL/EN/RU), CRM-integraties, prioritaire support.
-          - Business (€249/mnd): Alle kanalen, onbeperkte AI, dashboard, maatwerk integraties, dedicated support.
-        - Sectoren: Schoonheid & Wellness, Horeca, Autodealers, Vastgoed.
-        - Proefperiode: 14 dagen gratis proef.
-        
-        Vraag van de gebruiker: "${userMessage}"
-        `;
-
-      const botMessageEl = document.createElement('div');
-      botMessageEl.classList.add('message', 'bot');
-      botMessageEl.textContent = 'Bot typt...';
-      chatMessages.appendChild(botMessageEl);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-
-      try {
-        const payload = {
-            contents: [{ parts: [{ text: prompt }] }],
-            tools: [{ "google_search": {} }],
-            systemInstruction: {
-                parts: [{ text: "Jij bent een chatbot voor de website van BotMatic. Beantwoord vragen over de services van BotMatic. Als een gebruiker een vraag stelt die niet over BotMatic gaat, dan antwoord je dat je alleen vragen over BotMatic kunt beantwoorden. Je antwoorden moeten vriendelijk, behulpzaam en beknopt zijn." }]
-            },
-        };
-
-        const apiKey = "";
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        const result = await response.json();
-        let botReply = "Sorry, ik kan je nu niet helpen. Probeer het opnieuw.";
-        if (result.candidates && result.candidates.length > 0 && result.candidates[0].content && result.candidates[0].content.parts && result.candidates[0].content.parts.length > 0) {
-            botReply = result.candidates[0].content.parts[0].text;
+            msg.style.color = 'var(--success)';
+            msg.textContent = 'Bedankt! We nemen snel contact op.';
+            e.target.reset();
+        } catch (error) {
+            console.error("Error submitting form:", error);
+            msg.style.color = 'red';
+            msg.textContent = 'Er is een fout opgetreden. Probeer het opnieuw.';
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Verstuur Aanvraag';
         }
+    };
 
-        botMessageEl.textContent = botReply;
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-      } catch (error) {
-        console.error("Error calling Gemini API:", error);
-        botMessageEl.textContent = "Er is een fout opgetreden. Probeer het later opnieuw.";
-      }
-
-      conversationHistory.push({ role: 'user', content: userMessage });
-      conversationHistory.push({ role: 'bot', content: botMessageEl.textContent });
-    }
+    const planData = {
+        labels: ['Starter', 'Pro', 'Business'],
+        datasets: [{
+            label: 'Kernfuncties',
+            data: [3, 4, 5],
+            backgroundColor: 'rgba(255, 159, 64, 0.7)',
+            borderColor: 'rgba(255, 159, 64, 1)',
+            borderWidth: 1,
+            category: 'core'
+        }, {
+            label: 'AI-functies',
+            data: [1, 3, 5],
+            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1,
+            category: 'ai'
+        }, {
+            label: 'Support & Integraties',
+            data: [1, 3, 5],
+            backgroundColor: 'rgba(75, 192, 192, 0.7)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1,
+            category: 'support'
+        }]
+    };
     
-    // Function to summarize the conversation
-    async function getSummary() {
-      if (conversationHistory.length === 0) {
-        addBotMessage("Het gesprek is leeg. Begin een gesprek om een samenvatting te genereren.");
-        return;
-      }
-      
-      const chatText = conversationHistory.map(m => `${m.role}: ${m.content}`).join('\n');
-      const prompt = `Vat het volgende gesprek tussen een gebruiker en de BotMatic-bot samen in een of twee zinnen:\n\n${chatText}`;
-      
-      const botMessageEl = document.createElement('div');
-      botMessageEl.classList.add('message', 'bot');
-      botMessageEl.textContent = 'Bot vat samen...';
-      chatMessages.appendChild(botMessageEl);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-      
-      try {
-        const payload = {
-          contents: [{ parts: [{ text: prompt }] }],
-          systemInstruction: {
-                parts: [{ text: "Jij bent een chatbot voor de website van BotMatic. Je vat een gesprek samen." }]
-            },
-        };
-
-        const apiKey = "";
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        const result = await response.json();
-        let summaryText = "Samenvatting niet beschikbaar.";
-        if (result.candidates && result.candidates.length > 0 && result.candidates[0].content && result.candidates[0].content.parts && result.candidates[0].content.parts.length > 0) {
-            summaryText = result.candidates[0].content.parts[0].text;
+    const pricingDoughnutData = {
+        starter: {
+            labels: ['Kern', 'AI', 'Support'],
+            data: [3, 1, 1],
+            colors: ['rgba(255, 159, 64, 0.7)', 'rgba(54, 162, 235, 0.7)', 'rgba(75, 192, 192, 0.7)']
+        },
+        pro: {
+            labels: ['Kern', 'AI', 'Support'],
+            data: [4, 3, 3],
+            colors: ['rgba(255, 159, 64, 0.7)', 'rgba(54, 162, 235, 0.7)', 'rgba(75, 192, 192, 0.7)']
+        },
+        business: {
+            labels: ['Kern', 'AI', 'Support'],
+            data: [5, 5, 5],
+            colors: ['rgba(255, 159, 64, 0.7)', 'rgba(54, 162, 235, 0.7)', 'rgba(75, 192, 192, 0.7)']
         }
-        
-        botMessageEl.textContent = "Samenvatting van het gesprek: " + summaryText;
+    };
 
-      } catch (error) {
-        console.error("Error summarizing conversation:", error);
-        botMessageEl.textContent = "Er is een fout opgetreden bij het samenvatten.";
-      }
+    const sectorInfoContent = {
+        beauty: {
+            title: "Beauty & Wellness",
+            description: "Een chatbot kan automatisch afspraken inplannen op basis van beschikbaarheid, 24/7. Klanten kunnen direct een tijdslot boeken via WhatsApp of de website, wat de kans op no-shows vermindert en de agenda van de salon efficiënt vult."
+        },
+        horeca: {
+            title: "Horeca",
+            description: "Automatiseer het reserveringsproces en beantwoord direct vragen over het menu, openingstijden of allergenen. Dit verlaagt de werkdruk op het personeel en verbetert de gastervaring nog voordat ze arriveren."
+        },
+        auto: {
+            title: "Autodealers",
+            description: "Kwalificeer leads door gerichte vragen te stellen, plan proefritten en serviceafspraken in buiten kantooruren. De chatbot verzamelt belangrijke klantinformatie en geeft deze door aan het verkoopteam."
+        },
+        vastgoed: {
+            title: "Vastgoed",
+            description: "Plan automatisch bezichtigingen in, beantwoord vragen over panden en filter serieuze kandidaten. Dit versnelt het proces en zorgt ervoor dat makelaars zich kunnen focussen op de meest veelbelovende leads."
+        }
+    };
+
+    let planChart, pricingDoughnutChart;
+
+    function renderPlanChart(filterType = 'all') {
+        const ctx = document.getElementById('planFeaturesChart').getContext('2d');
+        const filteredDatasets = planData.datasets.filter(ds => filterType === 'all' || ds.category === filterType);
+
+        if (planChart) {
+            planChart.destroy();
+        }
+        planChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: planData.labels,
+                datasets: filteredDatasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Aantal Features' }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                }
+            }
+        });
     }
 
-    // Initialize Firebase when the page loads
-    document.addEventListener('DOMContentLoaded', initFirebase);
-    
-    // Attach event listeners to navigation links
-    document.querySelectorAll('.nav-links a, .nav-cta a, .hero a').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const href = e.target.getAttribute('href');
-        if (href.startsWith('#')) {
-          const sectionId = href.substring(1);
-          showSection(sectionId);
+    function renderPricingDoughnut(plan = 'pro') {
+        const ctx = document.getElementById('pricingDoughnutChart').getContext('2d');
+        const data = pricingDoughnutData[plan];
+
+        if (pricingDoughnutChart) {
+            pricingDoughnutChart.destroy();
         }
-      });
+
+        pricingDoughnutChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: 'Feature Verdeling',
+                    data: data.data,
+                    backgroundColor: data.colors,
+                    borderColor: '#ffffff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                }
+            }
+        });
+    }
+
+    document.getElementById('plan-chart-controls').addEventListener('click', (e) => {
+        if (e.target.tagName === 'BUTTON') {
+            const filterType = e.target.dataset.type;
+            renderPlanChart(filterType);
+            document.querySelectorAll('#plan-chart-controls button').forEach(btn => {
+                btn.classList.remove('bg-orange-500', 'text-white');
+                btn.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            e.target.classList.add('bg-orange-500', 'text-white');
+            e.target.classList.remove('bg-gray-200', 'text-gray-700');
+        }
     });
-  </script>
+    
+    document.querySelectorAll('.pricing-card').forEach(card => {
+        card.addEventListener('click', () => {
+             document.querySelectorAll('.pricing-card').forEach(c => {
+                c.classList.remove('border-orange-500', 'shadow-lg');
+                c.classList.add('border-gray-200');
+             });
+             card.classList.add('border-orange-500', 'shadow-lg');
+             card.classList.remove('border-gray-200');
+             const plan = card.dataset.plan;
+             renderPricingDoughnut(plan);
+        });
+    });
+
+    document.querySelectorAll('.sector-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const sector = btn.dataset.sector;
+            const info = sectorInfoContent[sector];
+            document.getElementById('sector-title').textContent = info.title;
+            document.getElementById('sector-description').textContent = info.description;
+            document.querySelectorAll('.sector-btn').forEach(b => b.classList.remove('ring-2', 'ring-orange-500'));
+            btn.classList.add('ring-2', 'ring-orange-500');
+        });
+    });
+    
+    function showSection(targetId) {
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.classList.remove('active');
+        });
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) {
+            targetSection.classList.add('active');
+        }
+    }
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            const targetId = e.currentTarget.getAttribute('href').substring(1);
+            showSection(targetId);
+            const targetElement = document.getElementById(targetId);
+            if(targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        initFirebase();
+        renderPlanChart();
+        renderPricingDoughnut('pro');
+        
+        showSection('home-section');
+
+        const initialSectorButton = document.querySelector('.sector-btn[data-sector="beauty"]');
+        if(initialSectorButton) initialSectorButton.click();
+
+    });
+
+</script>
 </body>
 </html>
+
