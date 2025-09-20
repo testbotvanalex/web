@@ -8,46 +8,21 @@
     <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect rx='12' width='64' height='64' fill='%23ff7a1a'/></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- Chosen Palette: Warm Neutrals with Brand Orange Accent -->
-    <!-- Application Structure Plan: The application is now a two-column dashboard. A fixed left sidebar provides persistent navigation, giving it an 'app-like' feel. The main content area on the right is a single, scrollable view containing all sections as distinct cards or widgets. This allows users to either get a full overview by scrolling or jump to specific sections using the sidebar. This structure is more professional, improves navigation, and provides a more holistic view of the product compared to the previous linear, section-by-section layout. -->
-    <!-- Visualization & Content Choices: Content remains the same as the previous version, but is now presented within a dashboard layout. The charts and interactive elements are integrated as widgets in the main content feed. This change is purely structural and enhances usability without altering the core informational components. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-
     <style>
         :root {
             --brand: #ff7a1a;
-            --brand-600: #ff6a00;
-            --ink: #0f172a;
-            --muted: #6b7280;
-            --sidebar-bg: #1f2937;
-            --sidebar-text: #d1d5db;
-            --sidebar-hover: #374151;
-            --sidebar-active: #ff7a1a;
         }
         body {
-            font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            font-family: 'Inter', system-ui, sans-serif;
         }
         .chart-container {
             position: relative;
             width: 100%;
             height: 400px;
         }
-        /* Custom scrollbar for webkit browsers */
-        .main-content::-webkit-scrollbar {
-            width: 8px;
-        }
-        .main-content::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        .main-content::-webkit-scrollbar-thumb {
-            background: #ccc;
-            border-radius: 4px;
-        }
-        .main-content::-webkit-scrollbar-thumb:hover {
-            background: #aaa;
-        }
-        /* For mobile menu transition */
+        .main-content::-webkit-scrollbar { width: 8px; }
+        .main-content::-webkit-scrollbar-track { background: #f1f1f1; }
+        .main-content::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
         .mobile-menu {
             transform: translateX(-100%);
             transition: transform 0.3s ease-in-out;
@@ -55,152 +30,195 @@
         .mobile-menu.open {
             transform: translateX(0);
         }
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+        .message-bot {
+            background-color: #f1f5f9;
+            align-self: flex-start;
+        }
+        .message-user {
+            background-color: var(--brand);
+            color: white;
+            align-self: flex-end;
+        }
+        /* Animation for scroll */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .scroll-animate.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="h-full">
     <div class="flex h-full">
         <!-- Sidebar -->
-        <aside id="sidebar" class="hidden md:flex flex-col w-64 bg-gray-800 text-gray-300 transition-all duration-300">
+        <aside id="sidebar" class="hidden md:flex flex-col w-64 bg-gray-800 text-gray-300">
             <div class="flex items-center justify-center h-20 border-b border-gray-700">
                 <h1 class="text-2xl font-bold text-white">BotMatic</h1>
             </div>
             <nav class="flex-1 px-4 py-6 space-y-2">
-                <a href="#home" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                    Home
+                <a href="#home" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>Home
                 </a>
-                <a href="#benefits" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    Voordelen
+                <a href="#benefits" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>Voordelen
                 </a>
-                <a href="#pricing" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01"></path></svg>
-                    Tarieven
+                 <a href="#bot-portfolio" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>Bot Portfolio
                 </a>
-                 <a href="#how-it-works" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.657 7.343A8 8 0 0118.657 17.657z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.001 12h-1.122L9.88 16.121z"></path></svg>
-                    Hoe het werkt
+                <a href="#pricing" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01"></path></svg>Tarieven
                 </a>
-                <a href="#faq" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    FAQ
+                 <a href="#how-it-works" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.657 7.343A8 8 0 0118.657 17.657z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.001 12h-1.122L9.88 16.121z"></path></svg>Hoe het werkt
+                </a>
+                <a href="#faq" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>FAQ
+                </a>
+                 <a href="#contact" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>Contact
                 </a>
             </nav>
             <div class="px-4 py-6 border-t border-gray-700">
-                <a href="#contact" class="nav-link w-full text-center bg-orange-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-orange-700 transition-colors">
-                    Start Proefperiode
-                </a>
+                <a href="#contact" class="nav-link w-full text-center bg-orange-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-orange-700 transition-transform hover:scale-105 duration-200">Start Proefperiode</a>
             </div>
         </aside>
 
         <!-- Main content -->
         <div class="flex-1 flex flex-col overflow-hidden">
-            <!-- Mobile Header -->
-            <header class="md:hidden flex items-center justify-between bg-white p-4 shadow">
+            <!-- Mobile Header & Menu -->
+            <header class="md:hidden flex items-center justify-between bg-white p-4 shadow-md">
                 <h1 class="text-xl font-bold text-gray-800">BotMatic</h1>
                 <button id="menu-toggle" class="text-gray-600 focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
             </header>
-             <!-- Mobile Menu -->
             <aside id="mobile-menu" class="mobile-menu fixed inset-y-0 left-0 w-64 bg-gray-800 text-gray-300 z-30 md:hidden">
-                 <div class="flex items-center justify-between h-20 border-b border-gray-700 px-4">
+                <div class="flex items-center justify-between h-20 border-b border-gray-700 px-4">
                     <h1 class="text-2xl font-bold text-white">BotMatic</h1>
-                    <button id="menu-close" class="text-gray-300">&times;</button>
+                    <button id="menu-close" class="text-gray-300 text-3xl">&times;</button>
                 </div>
                 <nav class="flex-1 px-4 py-6 space-y-2">
                     <a href="#home" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700">Home</a>
                     <a href="#benefits" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700">Voordelen</a>
+                    <a href="#bot-portfolio" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700">Bot Portfolio</a>
                     <a href="#pricing" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700">Tarieven</a>
                     <a href="#how-it-works" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700">Hoe het werkt</a>
                     <a href="#faq" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700">FAQ</a>
+                    <a href="#contact" class="nav-link flex items-center px-4 py-2 rounded-lg hover:bg-gray-700">Contact</a>
                 </nav>
                  <div class="px-4 py-6 border-t border-gray-700">
                     <a href="#contact" class="nav-link w-full text-center bg-orange-600 text-white font-bold py-3 px-4 rounded-lg">Start Proefperiode</a>
                 </div>
             </aside>
-            <div id="overlay" class="fixed inset-0 bg-black opacity-50 z-20 hidden md:hidden"></div>
+            <div id="overlay" class="fixed inset-0 bg-black opacity-50 z-20 hidden"></div>
 
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6 md:p-10 main-content" style="scroll-behavior: smooth;">
-                <div class="space-y-10">
+                <div class="space-y-12">
 
                     <!-- Home Section -->
-                    <section id="home" class="scroll-mt-20">
+                    <section id="home" class="scroll-mt-20 scroll-animate">
                         <div class="bg-white rounded-2xl shadow-lg p-8 text-center">
                             <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">Stop met tijd verspillen — laat een digitale secretaresse antwoorden</h1>
                             <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">BotMatic automatiseert FAQ’s, afspraken en lead-opvolging op de kanalen die jij kiest. Snel live, eenvoudig te beheren, direct resultaat.</p>
                         </div>
                          <div class="mt-8 bg-white p-6 rounded-2xl shadow-lg">
-                            <div class="text-center mb-6">
+                            <div class="flex items-center justify-center mb-6 text-center">
+                                <svg class="w-8 h-8 mr-3 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
                                 <h3 class="text-2xl font-bold text-gray-800">Vergelijk Pakketfuncties Visueel</h3>
-                                <p class="text-gray-600 max-w-2xl mx-auto mt-2">Gebruik de knoppen om te filteren op feature-type en ontdek welk plan de juiste mix van functies voor u heeft.</p>
                             </div>
                             <div id="plan-chart-controls" class="flex flex-wrap justify-center gap-2 mb-4">
-                               <button data-type="all" class="bg-orange-500 text-white py-1 px-3 rounded-lg text-sm font-semibold">Alles</button>
-                               <button data-type="core" class="bg-gray-200 text-gray-700 py-1 px-3 rounded-lg text-sm font-semibold">Kern</button>
-                               <button data-type="ai" class="bg-gray-200 text-gray-700 py-1 px-3 rounded-lg text-sm font-semibold">AI</button>
-                               <button data-type="support" class="bg-gray-200 text-gray-700 py-1 px-3 rounded-lg text-sm font-semibold">Support</button>
+                               <button data-type="all" class="bg-orange-500 text-white py-1 px-3 rounded-lg text-sm font-semibold transition-transform hover:scale-105">Alles</button>
+                               <button data-type="core" class="bg-gray-200 text-gray-700 py-1 px-3 rounded-lg text-sm font-semibold transition-transform hover:scale-105">Kern</button>
+                               <button data-type="ai" class="bg-gray-200 text-gray-700 py-1 px-3 rounded-lg text-sm font-semibold transition-transform hover:scale-105">AI</button>
+                               <button data-type="support" class="bg-gray-200 text-gray-700 py-1 px-3 rounded-lg text-sm font-semibold transition-transform hover:scale-105">Support</button>
                             </div>
-                            <div class="chart-container mx-auto">
-                                <canvas id="planFeaturesChart"></canvas>
-                            </div>
+                            <div class="chart-container mx-auto"><canvas id="planFeaturesChart"></canvas></div>
                         </div>
                     </section>
                     
                     <!-- Benefits Section -->
-                    <section id="benefits" class="scroll-mt-20">
-                        <div class="bg-white rounded-2xl shadow-lg p-8">
-                            <div class="text-center mb-8">
-                                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">Voordelen per Sector</h2>
-                                <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Ontdek hoe BotMatic waarde toevoegt in uw specifieke branche.</p>
+                    <section id="benefits" class="scroll-mt-20 scroll-animate">
+                         <div class="bg-white rounded-2xl shadow-lg p-8">
+                            <div class="flex items-center justify-center text-center mb-8">
+                                <svg class="w-8 h-8 mr-3 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                                <h2 class="text-3xl font-extrabold text-gray-900">Voordelen per Sector</h2>
                             </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                               <div class="flex flex-col space-y-4">
-                                   <button class="sector-btn p-6 bg-gray-50 rounded-xl ring-2 ring-orange-500 text-left transition" data-sector="beauty">
-                                       <h3 class="text-lg font-bold">Beauty & Wellness</h3>
-                                       <p class="text-gray-600 text-sm">Automatiseer afspraken, intake en herinneringen.</p>
-                                   </button>
-                                    <button class="sector-btn p-6 bg-gray-50 rounded-xl text-left transition" data-sector="horeca">
-                                       <h3 class="text-lg font-bold">Horeca</h3>
-                                       <p class="text-gray-600 text-sm">Beheer reserveringen, menu- en allergievragen.</p>
-                                   </button>
-                                    <button class="sector-btn p-6 bg-gray-50 rounded-xl text-left transition" data-sector="auto">
-                                       <h3 class="text-lg font-bold">Autodealers</h3>
-                                       <p class="text-gray-600 text-sm">Plan proefritten en service, kwalificeer leads.</p>
-                                   </button>
-                                    <button class="sector-btn p-6 bg-gray-50 rounded-xl text-left transition" data-sector="vastgoed">
-                                       <h3 class="text-lg font-bold">Vastgoed</h3>
-                                       <p class="text-gray-600 text-sm">Regel bezichtigingen en kwalificeer kandidaten.</p>
-                                   </button>
-                               </div>
-                               <div id="sector-info" class="p-8 bg-gray-100 rounded-2xl h-full min-h-[300px]">
-                                    <h3 id="sector-title" class="text-2xl font-bold text-gray-800 mb-4">Selecteer een Sector</h3>
-                                    <p id="sector-description" class="text-gray-600">Ontdek de specifieke voordelen en toepassingen voor uw branche.</p>
-                               </div>
-                           </div>
+                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                                <div class="flex flex-col space-y-4">
+                                    <button class="sector-btn p-6 bg-gray-50 rounded-xl ring-2 ring-orange-500 text-left transition-all duration-200 hover:shadow-md" data-sector="beauty">
+                                        <h3 class="text-lg font-bold">Beauty & Wellness</h3>
+                                        <p class="text-gray-600 text-sm">Automatiseer afspraken, intake en herinneringen.</p>
+                                    </button>
+                                     <button class="sector-btn p-6 bg-gray-50 rounded-xl text-left transition-all duration-200 hover:shadow-md" data-sector="horeca">
+                                        <h3 class="text-lg font-bold">Horeca</h3>
+                                        <p class="text-gray-600 text-sm">Beheer reserveringen, menu- en allergievragen.</p>
+                                    </button>
+                                     <button class="sector-btn p-6 bg-gray-50 rounded-xl text-left transition-all duration-200 hover:shadow-md" data-sector="auto">
+                                        <h3 class="text-lg font-bold">Autodealers</h3>
+                                        <p class="text-gray-600 text-sm">Plan proefritten en service, kwalificeer leads.</p>
+                                    </button>
+                                     <button class="sector-btn p-6 bg-gray-50 rounded-xl text-left transition-all duration-200 hover:shadow-md" data-sector="vastgoed">
+                                        <h3 class="text-lg font-bold">Vastgoed</h3>
+                                        <p class="text-gray-600 text-sm">Regel bezichtigingen en kwalificeer kandidaten.</p>
+                                    </button>
+                                </div>
+                                <div id="sector-info" class="p-8 bg-gray-100 rounded-2xl h-full min-h-[300px]">
+                                     <h3 id="sector-title" class="text-2xl font-bold text-gray-800 mb-4">Selecteer een Sector</h3>
+                                     <p id="sector-description" class="text-gray-600">Ontdek de specifieke voordelen en toepassingen voor uw branche.</p>
+                                </div>
+                            </div>
+                         </div>
+                    </section>
+                    
+                    <!-- Bot Portfolio Section -->
+                    <section id="bot-portfolio" class="scroll-mt-20 scroll-animate">
+                        <div class="bg-white rounded-2xl shadow-lg p-8">
+                             <div class="flex items-center justify-center text-center mb-8">
+                                <svg class="w-8 h-8 mr-3 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                <h2 class="text-3xl font-extrabold text-gray-900">Onze Bots in Actie</h2>
+                            </div>
+                            <div id="bot-filters" class="flex flex-wrap justify-center gap-2 mb-8">
+                                <button data-filter="all" class="bot-filter-btn bg-orange-500 text-white py-2 px-4 rounded-full text-sm font-semibold transition-transform hover:scale-105">Alles</button>
+                                <button data-filter="horeca" class="bot-filter-btn bg-gray-200 text-gray-700 py-2 px-4 rounded-full text-sm font-semibold transition-transform hover:scale-105">Horeca</button>
+                                <button data-filter="beauty" class="bot-filter-btn bg-gray-200 text-gray-700 py-2 px-4 rounded-full text-sm font-semibold transition-transform hover:scale-105">Beauty</button>
+                                <button data-filter="vastgoed" class="bot-filter-btn bg-gray-200 text-gray-700 py-2 px-4 rounded-full text-sm font-semibold transition-transform hover:scale-105">Vastgoed</button>
+                                <button data-filter="auto" class="bot-filter-btn bg-gray-200 text-gray-700 py-2 px-4 rounded-full text-sm font-semibold transition-transform hover:scale-105">Auto</button>
+                            </div>
+                            <div id="bot-gallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                <!-- Bot cards will be injected here by JavaScript -->
+                            </div>
                         </div>
                     </section>
 
                     <!-- Pricing Section -->
-                    <section id="pricing" class="scroll-mt-20">
-                         <div class="bg-white rounded-2xl shadow-lg p-8">
-                            <div class="text-center mb-8">
-                                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">Duidelijke Tarieven</h2>
-                                <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Kies het pakket dat bij u past. Alle plannen zijn maandelijks opzegbaar.</p>
+                    <section id="pricing" class="scroll-mt-20 scroll-animate">
+                        <div class="bg-white rounded-2xl shadow-lg p-8">
+                             <div class="flex items-center justify-center text-center mb-8">
+                                <svg class="w-8 h-8 mr-3 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                <h2 class="text-3xl font-extrabold text-gray-900">Duidelijke Tarieven</h2>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                 <div class="pricing-card border-2 border-gray-200 p-6 rounded-2xl bg-gray-50" data-plan="starter">
+                                <div class="pricing-card border border-gray-200 p-6 rounded-2xl bg-gray-50 transition-transform hover:scale-105 duration-300">
                                     <h3 class="text-xl font-bold">Starter</h3>
                                     <p class="text-4xl font-extrabold my-2">€89 <span class="text-base font-medium text-gray-500">/mnd</span></p>
                                     <ul class="space-y-2 text-gray-600"><li>✓ 1 Kanaal</li><li>✓ Snelle FAQ-flows</li><li>✓ Hosting & updates</li><li>✓ Basissupport</li></ul>
                                 </div>
-                                <div class="pricing-card border-2 border-orange-500 p-6 rounded-2xl bg-gray-50 relative" data-plan="pro">
+                                <div class="pricing-card border-2 border-orange-500 p-6 rounded-2xl bg-white relative shadow-2xl transform md:scale-105 transition-transform hover:scale-110 duration-300">
                                     <div class="absolute top-0 right-4 -mt-4 bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full">Meest Gekozen</div>
                                     <h3 class="text-xl font-bold">Pro</h3>
                                     <p class="text-4xl font-extrabold my-2">€149 <span class="text-base font-medium text-gray-500">/mnd</span></p>
                                     <ul class="space-y-2 text-gray-600"><li>✓ 2 Kanalen</li><li>✓ AI-dialogen & intenties</li><li>✓ CRM-integraties</li><li>✓ Prioritaire support</li></ul>
                                 </div>
-                                <div class="pricing-card border-2 border-gray-200 p-6 rounded-2xl bg-gray-50" data-plan="business">
+                                <div class="pricing-card border border-gray-200 p-6 rounded-2xl bg-gray-50 transition-transform hover:scale-105 duration-300">
                                     <h3 class="text-xl font-bold">Business</h3>
                                     <p class="text-4xl font-extrabold my-2">€249 <span class="text-base font-medium text-gray-500">/mnd</span></p>
                                     <ul class="space-y-2 text-gray-600"><li>✓ Alle Kanalen</li><li>✓ Onbeperkte AI & talen</li><li>✓ Maatwerk integraties</li><li>✓ Dedicated support</li></ul>
@@ -208,99 +226,133 @@
                             </div>
                         </div>
                     </section>
-
-                     <!-- How it Works Section -->
-                    <section id="how-it-works" class="scroll-mt-20">
-                         <div class="bg-white rounded-2xl shadow-lg p-8">
-                             <div class="text-center mb-12">
-                                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">Hoe het werkt</h2>
-                                <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Ons proces is ontworpen om snel en efficiënt te zijn.</p>
+                    
+                    <!-- How it Works Section -->
+                    <section id="how-it-works" class="scroll-mt-20 scroll-animate">
+                        <div class="bg-white rounded-2xl shadow-lg p-8">
+                             <div class="flex items-center justify-center text-center mb-8">
+                                <svg class="w-8 h-8 mr-3 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.657 7.343A8 8 0 0118.657 17.657z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.001 12h-1.122L9.88 16.121z"></path></svg>
+                                <h2 class="text-3xl font-extrabold text-gray-900">Hoe het werkt</h2>
                             </div>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-5xl mx-auto">
-                                <div class="p-6">
-                                    <div class="flex items-center justify-center h-16 w-16 mx-auto bg-orange-100 text-orange-600 rounded-full text-3xl font-extrabold">1</div>
-                                    <h4 class="text-lg font-bold mt-4">Intake & Strategie</h4>
-                                    <p class="text-gray-600 mt-1">We bespreken uw doelen en bepalen de beste flows en kanalen voor uw bot.</p>
+                             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                                <div class="p-6 bg-gray-50 rounded-xl shadow-inner">
+                                    <div class="mx-auto w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center mb-4">
+                                        <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                                    </div>
+                                    <h3 class="text-xl font-bold text-gray-800">1. Kies uw Bot</h3>
+                                    <p class="text-gray-600 text-sm mt-2">Selecteer een van onze kant-en-klare oplossingen of werk samen met ons aan een maatwerkbot.</p>
                                 </div>
-                                <div class="p-6">
-                                    <div class="flex items-center justify-center h-16 w-16 mx-auto bg-orange-100 text-orange-600 rounded-full text-3xl font-extrabold">2</div>
-                                    <h4 class="text-lg font-bold mt-4">Bouwen & Testen</h4>
-                                    <p class="text-gray-600 mt-1">Ons team bouwt de chatbot en we testen hem uitgebreid om perfecte werking te garanderen.</p>
+                                <div class="p-6 bg-gray-50 rounded-xl shadow-inner">
+                                    <div class="mx-auto w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center mb-4">
+                                        <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                    </div>
+                                    <h3 class="text-xl font-bold text-gray-800">2. Wij Trainen de Bot</h3>
+                                    <p class="text-gray-600 text-sm mt-2">U levert de informatie en wij trainen de bot. We integreren met uw systemen en kanalen.</p>
                                 </div>
-                                <div class="p-6">
-                                    <div class="flex items-center justify-center h-16 w-16 mx-auto bg-orange-100 text-orange-600 rounded-full text-3xl font-extrabold">3</div>
-                                    <h4 class="text-lg font-bold mt-4">Lancering & Optimalisatie</h4>
-                                    <p class="text-gray-600 mt-1">We lanceren de bot op uw kanalen en monitoren de prestaties voor continue verbetering.</p>
+                                <div class="p-6 bg-gray-50 rounded-xl shadow-inner">
+                                    <div class="mx-auto w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center mb-4">
+                                        <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.01 12.01 0 002.944 12c.38 2.083.923 4.125 1.704 6a14.025 14.025 0 004.873 4.904c.956.45 2.016.673 3.111.673s2.155-.223 3.111-.673a14.025 14.025 0 004.873-4.904c.781-1.875 1.324-3.917 1.704-6A12.01 12.01 0 0021.056 12z"></path></svg>
+                                    </div>
+                                    <h3 class="text-xl font-bold text-gray-800">3. Wij Gaan Live</h3>
+                                    <p class="text-gray-600 text-sm mt-2">De bot is operationeel op uw website of gewenste platform. Wij beheren de hosting en updates.</p>
                                 </div>
                             </div>
-                         </div>
+                        </div>
                     </section>
-
+                    
                     <!-- FAQ Section -->
-                    <section id="faq" class="scroll-mt-20">
-                         <div class="bg-white rounded-2xl shadow-lg p-8">
-                            <div class="text-center mb-8">
-                                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">Veelgestelde Vragen</h2>
+                    <section id="faq" class="scroll-mt-20 scroll-animate">
+                        <div class="bg-white rounded-2xl shadow-lg p-8">
+                            <div class="flex items-center justify-center text-center mb-8">
+                                <svg class="w-8 h-8 mr-3 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <h2 class="text-3xl font-extrabold text-gray-900">Veelgestelde Vragen</h2>
                             </div>
-                            <div class="max-w-3xl mx-auto space-y-4">
-                               <details class="p-4 bg-gray-50 rounded-xl cursor-pointer group">
-                                   <summary class="font-semibold text-lg list-none flex justify-between items-center">Hoe lang duurt het om een chatbot te lanceren?<span class="text-orange-500 font-bold text-2xl group-open:hidden">&plus;</span><span class="text-orange-500 font-bold text-2xl hidden group-open:inline">&minus;</span></summary>
-                                   <div class="mt-4 pt-4 border-t border-gray-200 text-gray-600"><p>Afhankelijk van de complexiteit kan een basischatbot binnen 3-5 werkdagen live zijn. Complexere opstellingen duren gemiddeld 2-4 weken.</p></div>
-                               </details>
-                               <details class="p-4 bg-gray-50 rounded-xl cursor-pointer group">
-                                   <summary class="font-semibold text-lg list-none flex justify-between items-center">Kan de bot in meerdere talen communiceren?<span class="text-orange-500 font-bold text-2xl group-open:hidden">&plus;</span><span class="text-orange-500 font-bold text-2xl hidden group-open:inline">&minus;</span></summary>
-                                   <div class="mt-4 pt-4 border-t border-gray-200 text-gray-600"><p>Ja, ons Pro- en Business-pakket ondersteunen Nederlands, Engels en Russisch. Het Business-pakket biedt onbeperkte meertalige AI.</p></div>
-                               </details>
-                               <details class="p-4 bg-gray-50 rounded-xl cursor-pointer group">
-                                   <summary class="font-semibold text-lg list-none flex justify-between items-center">Welke kanalen worden ondersteund?<span class="text-orange-500 font-bold text-2xl group-open:hidden">&plus;</span><span class="text-orange-500 font-bold text-2xl hidden group-open:inline">&minus;</span></summary>
-                                   <div class="mt-4 pt-4 border-t border-gray-200 text-gray-600"><p>We ondersteunen WhatsApp, Telegram, Instagram en website-chat. Het Business-pakket omvat alle kanalen.</p></div>
-                               </details>
-                                <details class="p-4 bg-gray-50 rounded-xl cursor-pointer group">
-                                   <summary class="font-semibold text-lg list-none flex justify-between items-center">Zijn er extra kosten?<span class="text-orange-500 font-bold text-2xl group-open:hidden">&plus;</span><span class="text-orange-500 font-bold text-2xl hidden group-open:inline">&minus;</span></summary>
-                                   <div class="mt-4 pt-4 border-t border-gray-200 text-gray-600"><p>Naast de maandelijkse kosten is er een eenmalige opstartvergoeding vanaf €150, afhankelijk van de complexiteit.</p></div>
-                               </details>
+                            <div class="space-y-6">
+                                <div class="p-6 bg-gray-50 rounded-xl">
+                                    <h3 class="font-bold text-lg text-gray-800">Hoe lang duurt het om een bot te implementeren?</h3>
+                                    <p class="text-gray-600 mt-2">Afhankelijk van de complexiteit kan een eenvoudige FAQ-bot binnen 3 werkdagen live zijn. Maatwerkoplossingen duren langer, maar we streven ernaar om u snel te helpen.</p>
+                                </div>
+                                <div class="p-6 bg-gray-50 rounded-xl">
+                                    <h3 class="font-bold text-lg text-gray-800">Welke kanalen worden ondersteund?</h3>
+                                    <p class="text-gray-600 mt-2">Wij ondersteunen website-integratie, WhatsApp, Facebook Messenger, Instagram, en meer. De kanalen variëren per pakket.</p>
+                                </div>
+                                <div class="p-6 bg-gray-50 rounded-xl">
+                                    <h3 class="font-bold text-lg text-gray-800">Is er technische kennis nodig om de bot te beheren?</h3>
+                                    <p class="text-gray-600 mt-2">Nee, u ontvangt een eenvoudig beheerdashboard om de gespreksgeschiedenis te bekijken, de bot te trainen en content aan te passen. Geen technische kennis vereist.</p>
+                                </div>
                             </div>
-                         </div>
+                        </div>
                     </section>
                     
                     <!-- Contact Section -->
-                    <section id="contact" class="scroll-mt-20">
+                    <section id="contact" class="scroll-mt-20 scroll-animate">
                         <div class="bg-white rounded-2xl shadow-lg p-8">
-                             <div class="text-center max-w-2xl mx-auto">
-                                 <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">Vraag een Demo Aan</h2>
-                                <p class="mt-4 text-lg text-gray-600">Laat uw gegevens achter en ons team neemt binnen 24 uur contact met u op voor een persoonlijk voorstel en een live demo.</p>
+                            <div class="flex items-center justify-center text-center mb-8">
+                                <svg class="w-8 h-8 mr-3 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                <h2 class="text-3xl font-extrabold text-gray-900">Neem Contact Op</h2>
                             </div>
-                            <div class="mt-10 max-w-xl mx-auto">
-                                 <form class="space-y-4" onsubmit="event.preventDefault(); window.onDemoSubmit(event);">
-                                    <input name="company" placeholder="Bedrijfsnaam" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:outline-none transition"/>
-                                    <input name="email" type="email" placeholder="jij@bedrijf.be" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:outline-none transition"/>
-                                    <select name="plan" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:outline-none transition bg-white">
-                                        <option value="Starter">Starter</option><option value="Pro" selected>Pro</option><option value="Business">Business</option>
-                                    </select>
-                                    <button id="demo-submit" type="submit" class="w-full text-white font-bold py-3 px-6 rounded-xl transition shadow-md bg-orange-600 hover:bg-orange-700">Verstuur Aanvraag</button>
-                                    <div id="form-msg" class="text-center font-semibold h-6" role="status"></div>
-                                 </form>
-                            </div>
+                            <form id="contact-form" class="max-w-xl mx-auto space-y-4">
+                                <p class="text-gray-600 text-center">Laat uw gegevens achter en we nemen binnen 24 uur contact met u op.</p>
+                                <div>
+                                    <label for="name" class="block text-sm font-medium text-gray-700">Naam</label>
+                                    <input type="text" id="name" name="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500" required>
+                                </div>
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-gray-700">E-mailadres</label>
+                                    <input type="email" id="email" name="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500" required>
+                                </div>
+                                <div>
+                                    <label for="message" class="block text-sm font-medium text-gray-700">Bericht</label>
+                                    <textarea id="message" name="message" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500" required></textarea>
+                                </div>
+                                <div class="flex justify-center">
+                                    <button type="submit" class="w-full md:w-auto bg-orange-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-orange-700 transition-transform hover:scale-105 duration-200">Verzend Bericht</button>
+                                </div>
+                            </form>
+                             <div id="contact-message-box" class="mt-4 p-4 rounded-lg text-center font-bold hidden"></div>
                         </div>
                     </section>
                 </div>
             </main>
         </div>
     </div>
+    
+    <!-- Demo Modal -->
+    <div id="demo-modal" class="modal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 opacity-0 hidden">
+        <div class="modal-content transform scale-95 bg-white rounded-2xl shadow-lg p-6 w-11/12 max-w-lg mx-auto overflow-hidden">
+            <div class="flex justify-between items-center pb-4 border-b border-gray-200">
+                <h3 id="modal-title" class="text-xl font-bold text-gray-800">Bot Demo</h3>
+                <button id="modal-close" class="text-gray-400 hover:text-gray-600 text-3xl">&times;</button>
+            </div>
+            <div id="modal-chat-container" class="mt-4 h-[400px] flex flex-col justify-end">
+                <div id="modal-chat-content" class="space-y-4 overflow-y-auto pr-2">
+                    <!-- Chat messages will be injected here -->
+                </div>
+                <div id="demo-user-input" class="mt-4 flex">
+                    <input type="text" placeholder="Stuur een bericht..." class="flex-1 rounded-l-lg border border-gray-300 px-4 py-2 focus:outline-none" disabled>
+                    <button class="bg-orange-500 text-white px-4 rounded-r-lg font-bold" disabled>Verzenden</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
     import { getFirestore, collection, addDoc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+    setLogLevel('debug');
     const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-    const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
     const authToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-    
-    let db;
-    let auth;
-    let userId;
-    let planChart;
+    let db, auth, userId, planChart;
+
+    const botDemos = [
+        { id: 'resto-reservering', sector: 'horeca', title: 'Restaurant Reserveringsbot', description: 'Handelt tafelreserveringen af.', chat: [ { sender: 'user', text: 'Hoi, kan ik een tafel voor 2 reserveren?' }, { sender: 'bot', text: 'Zeker! Voor welke datum en tijd?' }, { sender: 'user', text: 'Aanstaande zaterdag om 19:30.' }, { sender: 'bot', text: 'Perfect. Ik heb een tafel voor 2 op zaterdag om 19:30. Mag ik uw naam en telefoonnummer?' }, { sender: 'user', text: 'Jan Janssen, 0612345678' }, { sender: 'bot', text: 'Bedankt, Jan! Uw reservering is bevestigd. Tot zaterdag!' } ]},
+        { id: 'salon-afspraak', sector: 'beauty', title: 'Salon Afsprakenplanner', description: 'Boekt behandelingen en stuurt herinneringen.', chat: [ { sender: 'bot', text: 'Welkom bij Salon Mooi! Welke behandeling wilt u boeken?' }, { sender: 'user', text: 'Ik wil graag mijn haar laten knippen.' }, { sender: 'bot', text: 'Oké, knippen. Heeft u een voorkeur voor een kapster?' }, { sender: 'user', text: 'Nee, geen voorkeur.' }, { sender: 'bot', text: 'Ik heb beschikbaarheid op woensdag om 14:00 of donderdag om 11:00. Wat schikt u?' }, { sender: 'user', text: 'Woensdag 14:00 is prima.' }, { sender: 'bot', text: 'Top! Uw afspraak staat genoteerd. U ontvangt een dag van tevoren een herinnering.' } ]},
+        { id: 'vastgoed-lead', sector: 'vastgoed', title: 'Vastgoed Lead-Kwalificatie', description: 'Filtert serieuze kopers en plant bezichtigingen.', chat: [ { sender: 'bot', text: 'Hallo! Ik zie dat u geïnteresseerd bent in het pand aan de Kerkstraat 12. Klopt dat?' }, { sender: 'user', text: 'Ja, dat klopt. Is het nog beschikbaar?' }, { sender: 'bot', text: 'Jazeker. Bent u op zoek naar een woning voor uzelf of als investering?' }, { sender: 'user', text: 'Voor mezelf.' }, { sender: 'bot', text: 'Goed om te weten. Heeft u al een goedgekeurde hypotheek?' }, { sender: 'user', text: 'Ja, die heb ik.' }, { sender: 'bot', text: 'Fantastisch. Dat maakt u een sterke kandidaat. Wilt u een bezichtiging inplannen?' } ]},
+        { id: 'auto-proefrit', sector: 'auto', title: 'Proefrit Planner', description: 'Plant proefritten in voor specifieke modellen.', chat: [ { sender: 'bot', text: 'Welkom bij AutoDeal! In welk model bent u geïnteresseerd voor een proefrit?' }, { sender: 'user', text: 'De nieuwe elektrische SUV.' }, { sender: 'bot', text: 'Goede keuze! Op welke locatie wilt u de proefrit maken?' }, { sender: 'user', text: 'Amsterdam' }, { sender: 'bot', text: 'Oké, Amsterdam. Ik zie beschikbare slots op vrijdagmiddag en zaterdagochtend. Wat heeft uw voorkeur?' }, { sender: 'user', text: 'Zaterdagochtend graag.' }, { sender: 'bot', text: 'Genoteerd! Ik heb alleen nog uw contactgegevens nodig.' } ]}
+    ];
 
     const planData = {
         labels: ['Starter', 'Pro', 'Business'],
@@ -323,16 +375,19 @@
     function renderPlanChart(filterType = 'all') {
         const ctx = document.getElementById('planFeaturesChart')?.getContext('2d');
         if (!ctx) return;
-        const filteredDatasets = planData.datasets.filter(ds => filterType === 'all' || ds.category === filterType);
-        if (planChart instanceof Chart) {
+        if (planChart) {
             planChart.destroy();
         }
+        const filteredDatasets = planData.datasets.filter(ds => filterType === 'all' || ds.category === filterType);
         planChart = new Chart(ctx, {
             type: 'bar',
             data: { labels: planData.labels, datasets: filteredDatasets },
             options: {
                 responsive: true, maintainAspectRatio: false,
-                scales: { y: { beginAtZero: true, title: { display: true, text: 'Aantal Features' } } },
+                animation: { duration: 800, easing: 'easeInOutQuart' },
+                scales: { 
+                    y: { beginAtZero: true, title: { display: true, text: 'Aantal Features' } }
+                },
                 plugins: { tooltip: { mode: 'index', intersect: false } }
             }
         });
@@ -340,47 +395,148 @@
 
     const initFirebase = async () => {
         try {
-            if (Object.keys(firebaseConfig).length === 0) { console.warn("Firebase config is empty."); return; }
             const app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
             db = getFirestore(app);
-            setLogLevel('debug');
-            if (authToken) { await signInWithCustomToken(auth, authToken); } else { await signInAnonymously(auth); }
-            userId = auth.currentUser.uid;
+            auth = getAuth(app);
+
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    userId = user.uid;
+                    console.log('User authenticated:', userId);
+                } else {
+                    if (authToken) {
+                         await signInWithCustomToken(auth, authToken);
+                         console.log('Signed in with custom token.');
+                    } else {
+                        await signInAnonymously(auth);
+                        userId = auth.currentUser.uid;
+                        console.log('Signed in anonymously.');
+                    }
+                }
+            });
         } catch (error) {
-            console.error("Firebase init error:", error);
-            document.getElementById('form-msg').textContent = "Database connectie mislukt.";
+            console.error("Firebase initialization failed:", error);
         }
     };
     
-    window.onDemoSubmit = async function(e) {
-        const btn = document.getElementById('demo-submit');
-        const msg = document.getElementById('form-msg');
-        btn.disabled = true;
-        btn.textContent = 'Verzenden…';
-        msg.textContent = '';
-        if (!db) {
-            msg.style.color = 'red'; msg.textContent = "Database niet beschikbaar.";
-            btn.disabled = false; btn.textContent = 'Verstuur Aanvraag'; return;
-        }
+    window.onContactFormSubmit = async function(e) {
+        e.preventDefault();
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const message = document.getElementById('message').value;
+        const messageBox = document.getElementById('contact-message-box');
+
         try {
-            const data = Object.fromEntries(new FormData(e.target).entries());
-            data.timestamp = new Date();
-            data.userId = userId || 'anonymous';
-            await addDoc(collection(db, `artifacts/${appId}/public/data/leads`), data);
-            msg.style.color = 'var(--success)'; msg.textContent = 'Bedankt! We nemen contact op.';
-            e.target.reset();
+            if (!db || !userId) {
+                console.error("Firestore is not initialized or user is not authenticated.");
+                messageBox.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+                messageBox.classList.add('bg-red-100', 'text-red-800');
+                messageBox.textContent = "Er is een fout opgetreden. Probeer het later opnieuw.";
+                messageBox.style.display = 'block';
+                return;
+            }
+
+            const docRef = await addDoc(collection(db, `artifacts/${appId}/public/data/contact_form_submissions`), {
+                name: name,
+                email: email,
+                message: message,
+                userId: userId,
+                timestamp: new Date()
+            });
+            console.log("Document written with ID: ", docRef.id);
+            messageBox.classList.remove('hidden', 'bg-red-100', 'text-red-800');
+            messageBox.classList.add('bg-green-100', 'text-green-800');
+            messageBox.textContent = "Bedankt voor uw bericht! We nemen spoedig contact met u op.";
+            messageBox.style.display = 'block';
+            document.getElementById('contact-form').reset();
         } catch (error) {
-            console.error("Form submission error:", error);
-            msg.style.color = 'red'; msg.textContent = 'Er is een fout opgetreden.';
-        } finally {
-            btn.disabled = false; btn.textContent = 'Verstuur Aanvraag';
+            console.error("Error adding document: ", error);
+            messageBox.classList.remove('hidden', 'bg-green-100', 'text-green-800');
+            messageBox.classList.add('bg-red-100', 'text-red-800');
+            messageBox.textContent = "Er is een fout opgetreden bij het verzenden. Probeer het later opnieuw.";
+            messageBox.style.display = 'block';
         }
     };
-        
+
+    function populateBotGallery() {
+        const gallery = document.getElementById('bot-gallery');
+        if(!gallery) return;
+        gallery.innerHTML = botDemos.map(bot => `
+            <div class="bot-card bg-gray-50 p-6 rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1" data-sector="${bot.sector}" data-bot-id="${bot.id}">
+                <div class="text-3xl">${{horeca: '🍔', beauty: '💅', vastgoed: '🏠', auto: '🚗'}[bot.sector]}</div>
+                <h3 class="font-bold text-lg mt-2">${bot.title}</h3>
+                <p class="text-gray-600 text-sm mt-1">${bot.description}</p>
+                <button class="demo-btn mt-4 text-sm font-bold text-orange-600 hover:underline">Bekijk Demo &rarr;</button>
+            </div>
+        `).join('');
+    }
+
+    function handleBotFilters() {
+        const filterButtons = document.querySelectorAll('.bot-filter-btn');
+        const botCards = document.querySelectorAll('.bot-card');
+        if(!filterButtons.length) return;
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const filter = button.dataset.filter;
+                setActiveButton(button, '.bot-filter-btn', 'bg-orange-500 text-white', 'bg-gray-200 text-gray-700');
+                botCards.forEach(card => {
+                    card.style.display = (filter === 'all' || card.dataset.sector === filter) ? 'block' : 'none';
+                });
+            });
+        });
+    }
+    
+    function handleDemoModal() {
+        const modal = document.getElementById('demo-modal');
+        const modalClose = document.getElementById('modal-close');
+        const gallery = document.getElementById('bot-gallery');
+        if(!modal || !gallery || !modalClose) return;
+        gallery.addEventListener('click', e => {
+            const button = e.target.closest('.demo-btn');
+            if (button) {
+                const card = button.closest('.bot-card');
+                const botId = card.dataset.botId;
+                const botData = botDemos.find(b => b.id === botId);
+                document.getElementById('modal-title').textContent = botData.title;
+                document.getElementById('modal-chat-content').innerHTML = botData.chat.map(msg => `<div class="p-3 rounded-lg max-w-[80%] text-sm ${msg.sender === 'bot' ? 'message-bot' : 'message-user'}">${msg.text}</div>`).join('');
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    modal.querySelector('.modal-content').classList.remove('scale-95');
+                }, 10);
+                const chatContent = document.getElementById('modal-chat-content');
+                chatContent.scrollTop = chatContent.scrollHeight;
+            }
+        });
+        const closeModal = () => {
+            modal.classList.add('opacity-0');
+            modal.querySelector('.modal-content').classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        };
+        modalClose.addEventListener('click', closeModal);
+        modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+    }
+    
+    function handleScrollAnimations() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.scroll-animate').forEach(el => observer.observe(el));
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         initFirebase();
         renderPlanChart();
+        populateBotGallery();
+        handleBotFilters();
+        handleDemoModal();
+        handleScrollAnimations();
+        document.getElementById('contact-form').addEventListener('submit', window.onContactFormSubmit);
 
         const initialSectorButton = document.querySelector('.sector-btn[data-sector="beauty"]');
         if(initialSectorButton) {
@@ -403,40 +559,35 @@
             });
         });
 
+        // Mobile Menu Logic
         const navLinks = document.querySelectorAll('.nav-link');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const overlay = document.getElementById('overlay');
+        const menuToggle = document.getElementById('menu-toggle');
+        const menuClose = document.getElementById('menu-close');
+        
+        const closeMenu = () => {
+            mobileMenu.classList.remove('open');
+            overlay.classList.add('hidden');
+        };
+
         navLinks.forEach(link => {
             link.addEventListener('click', e => {
                 e.preventDefault();
                 const targetId = e.currentTarget.getAttribute('href').substring(1);
                 document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
-                
-                // Close mobile menu on click
-                const mobileMenu = document.getElementById('mobile-menu');
-                const overlay = document.getElementById('overlay');
                 if(mobileMenu.classList.contains('open')) {
-                    mobileMenu.classList.remove('open');
-                    overlay.classList.add('hidden');
+                    closeMenu();
                 }
             });
         });
 
-        // Mobile menu toggle
-        const menuToggle = document.getElementById('menu-toggle');
-        const menuClose = document.getElementById('menu-close');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const overlay = document.getElementById('overlay');
         menuToggle.addEventListener('click', () => {
             mobileMenu.classList.add('open');
             overlay.classList.remove('hidden');
         });
-        menuClose.addEventListener('click', () => {
-            mobileMenu.classList.remove('open');
-            overlay.classList.add('hidden');
-        });
-        overlay.addEventListener('click', () => {
-            mobileMenu.classList.remove('open');
-            overlay.classList.add('hidden');
-        });
+        menuClose.addEventListener('click', closeMenu);
+        overlay.addEventListener('click', closeMenu);
     });
 
     function updateSectorInfo(sector) {
@@ -457,4 +608,3 @@
 </script>
 </body>
 </html>
-
