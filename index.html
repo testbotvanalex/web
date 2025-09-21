@@ -158,6 +158,19 @@
         .scroll-to-top.show {
             transform: scale(1);
         }
+        /* Cookie Banner */
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 60;
+            transform: translateY(100%);
+            transition: transform 0.5s ease-in-out;
+        }
+        .cookie-banner.show {
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="h-full">
@@ -517,6 +530,74 @@
     <button id="scroll-to-top" class="scroll-to-top p-4 bg-gray-800 text-white rounded-full shadow-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
     </button>
+    
+    <!-- Nieuwe Secties voor Footer Inhoud -->
+    <section id="sitemap" class="scroll-mt-20 scroll-animate p-8 bg-white rounded-2xl shadow-lg mt-12">
+        <h2 class="text-3xl font-extrabold text-gray-900 mb-4 text-center">Sitemap</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-center">
+            <a href="#home" class="text-orange-600 hover:underline">Home</a>
+            <a href="#metrics" class="text-orange-600 hover:underline">Kerncijfers</a>
+            <a href="#benefits" class="text-orange-600 hover:underline">Voordelen</a>
+            <a href="#bot-portfolio" class="text-orange-600 hover:underline">Bot Portfolio</a>
+            <a href="#pricing" class="text-orange-600 hover:underline">Tarieven</a>
+            <a href="#how-it-works" class="text-orange-600 hover:underline">Hoe het werkt</a>
+            <a href="#faq" class="text-orange-600 hover:underline">FAQ</a>
+            <a href="#contact" class="text-orange-600 hover:underline">Contact</a>
+            <a href="#terms-privacy" class="text-orange-600 hover:underline">Algemene Voorwaarden & Privacy</a>
+            <a href="#cookies" class="text-orange-600 hover:underline">Cookiebeleid</a>
+        </div>
+    </section>
+
+    <section id="terms-privacy" class="scroll-mt-20 scroll-animate p-8 bg-white rounded-2xl shadow-lg mt-12">
+        <h2 class="text-3xl font-extrabold text-gray-900 mb-4 text-center">Algemene Voorwaarden & Privacybeleid</h2>
+        <div class="text-gray-600 space-y-4">
+            <h3 class="text-xl font-bold">1. Algemene Voorwaarden</h3>
+            <p>De volgende voorwaarden regelen uw gebruik van onze website en diensten. Door de website te gebruiken, stemt u in met deze voorwaarden. BotMatic behoudt zich het recht voor om de voorwaarden te allen tijde te wijzigen. Het is uw verantwoordelijkheid om regelmatig te controleren op updates.</p>
+            <p>Onze diensten zijn bedoeld om uw bedrijfsvoering te automatiseren en efficiënter te maken. Elk oneigenlijk gebruik van de chatbots is strikt verboden en kan leiden tot onmiddellijke beëindiging van uw account. U bent verantwoordelijk voor de content die via uw chatbot wordt gedeeld.</p>
+            
+            <h3 class="text-xl font-bold">2. Privacybeleid</h3>
+            <p>Uw privacy is van het grootste belang voor ons. Dit beleid beschrijft hoe wij uw persoonlijke gegevens verzamelen, gebruiken en beschermen. Wij verzamelen alleen gegevens die strikt noodzakelijk zijn voor de werking van onze diensten en voor het verbeteren van de gebruikerservaring.</p>
+            <p>Wij delen uw gegevens nooit met derden zonder uw uitdrukkelijke toestemming, tenzij dit wettelijk verplicht is. Alle gegevens worden versleuteld en beveiligd opgeslagen. U hebt het recht om uw gegevens in te zien, te corrigeren of te laten verwijderen.</p>
+        </div>
+    </section>
+
+    <section id="cookies" class="scroll-mt-20 scroll-animate p-8 bg-white rounded-2xl shadow-lg mt-12">
+        <h2 class="text-3xl font-extrabold text-gray-900 mb-4 text-center">Cookiebeleid</h2>
+        <div class="text-gray-600 space-y-4">
+            <p>Deze website maakt gebruik van cookies om de functionaliteit en de gebruikerservaring te verbeteren. Cookies zijn kleine tekstbestanden die op uw apparaat worden opgeslagen. Ze helpen ons uw voorkeuren te onthouden, anonieme statistieken bij te houden en de inhoud te personaliseren.</p>
+            <p>Door onze website te blijven gebruiken, stemt u in met het gebruik van deze cookies. U kunt uw cookie-instellingen te allen tijde aanpassen in de instellingen van uw browser.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-400 py-8 mt-12">
+        <div class="container mx-auto px-4 md:px-10 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0">
+                <h3 class="text-2xl font-bold text-white">BotMatic</h3>
+                <p class="text-sm">Automatiseer uw bedrijf.</p>
+            </div>
+            <div class="flex flex-wrap justify-center md:justify-end space-x-4">
+                <a href="#sitemap" class="text-gray-400 hover:text-white transition-colors">Sitemap</a>
+                <a href="#terms-privacy" class="text-gray-400 hover:text-white transition-colors">Algemene Voorwaarden</a>
+                <a href="#terms-privacy" class="text-gray-400 hover:text-white transition-colors">Privacybeleid</a>
+                <button id="cookie-settings-btn" class="text-gray-400 hover:text-white transition-colors">Cookie-instellingen</button>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-banner" class="cookie-banner p-6 bg-gray-900 text-white flex flex-col md:flex-row items-center justify-between shadow-lg">
+        <div class="text-center md:text-left md:mr-4 mb-4 md:mb-0">
+            <p class="text-sm font-semibold">
+                Deze website gebruikt cookies om uw ervaring te verbeteren.
+            </p>
+        </div>
+        <div class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2">
+            <button id="accept-cookies-btn" class="w-full md:w-auto px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors">Accepteren</button>
+            <button id="decline-cookies-btn" class="w-full md:w-auto px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors">Weigeren</button>
+        </div>
+    </div>
+
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -854,6 +935,7 @@
         animateCounters();
         populateBenefitsCards();
         handleHowItWorksAnimation();
+        handleCookieConsent();
 
         // FAQ Accordion
         document.querySelectorAll('.faq-item').forEach(item => {
@@ -995,6 +1077,48 @@
         });
         activeBtn.classList.add(...activeClasses.split(' '));
         if(inactiveClasses) activeBtn.classList.remove(...inactiveClasses.split(' '));
+    }
+    
+    function handleCookieConsent() {
+        const cookieBanner = document.getElementById('cookie-banner');
+        const acceptBtn = document.getElementById('accept-cookies-btn');
+        const declineBtn = document.getElementById('decline-cookies-btn');
+        const cookieSettingsBtn = document.getElementById('cookie-settings-btn');
+        
+        const hasConsent = localStorage.getItem('cookieConsent') === 'true';
+
+        if (!hasConsent) {
+            setTimeout(() => {
+                if (cookieBanner) {
+                    cookieBanner.classList.add('show');
+                }
+            }, 1000);
+        }
+
+        if (acceptBtn) {
+            acceptBtn.addEventListener('click', () => {
+                localStorage.setItem('cookieConsent', 'true');
+                if (cookieBanner) {
+                    cookieBanner.classList.remove('show');
+                }
+            });
+        }
+        
+        if (declineBtn) {
+            declineBtn.addEventListener('click', () => {
+                localStorage.setItem('cookieConsent', 'false');
+                if (cookieBanner) {
+                    cookieBanner.classList.remove('show');
+                }
+            });
+        }
+        
+        if (cookieSettingsBtn) {
+            cookieSettingsBtn.addEventListener('click', () => {
+                // Hier zou een meer uitgebreide modal voor instellingen geopend kunnen worden
+                window.scrollTo({ top: document.getElementById('cookies')?.offsetTop, behavior: 'smooth' });
+            });
+        }
     }
 </script>
 </body>
