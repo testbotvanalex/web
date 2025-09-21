@@ -55,6 +55,15 @@
             opacity: 1;
             transform: translateY(0);
         }
+        .how-it-works-step {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .how-it-works-step.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
         /* Nieuwe animatie voor de homepage */
         @keyframes pulse-gradient {
@@ -113,6 +122,42 @@
         .faq-item.open .faq-icon {
             transform: rotate(45deg);
         }
+        .chat-widget {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 50;
+        }
+        .chat-header {
+            background-color: var(--brand);
+        }
+        .chat-messages {
+            overflow-y: auto;
+            max-height: 300px;
+        }
+        .chat-input {
+            border-top: 1px solid #e5e7eb;
+        }
+        .chat-message-bot {
+            background-color: #f1f5f9;
+            align-self: flex-start;
+        }
+        .chat-message-user {
+            background-color: var(--brand);
+            color: white;
+            align-self: flex-end;
+        }
+        .scroll-to-top {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            z-index: 40;
+            transition: all 0.3s ease-in-out;
+            transform: scale(0);
+        }
+        .scroll-to-top.show {
+            transform: scale(1);
+        }
     </style>
 </head>
 <body class="h-full">
@@ -153,7 +198,7 @@
         <!-- Main content -->
         <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Mobile Header & Menu -->
-            <header class="md:hidden flex items-center justify-between bg-white p-4 shadow-md">
+            <header id="mobile-header" class="md:hidden flex items-center justify-between bg-white p-4 shadow-md transition-shadow duration-300">
                 <h1 class="text-xl font-bold text-gray-800">BotMatic</h1>
                 <button id="menu-toggle" class="text-gray-600 focus:outline-none">
                      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
@@ -212,19 +257,19 @@
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                                 <div class="bg-gray-50 p-6 rounded-2xl border border-gray-200 flex flex-col items-center justify-center transition-transform hover:scale-105 duration-300">
                                     <svg class="w-12 h-12 text-orange-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01"></path></svg>
-                                    <p class="text-4xl font-extrabold text-gray-900">45%</p>
+                                    <p class="text-4xl font-extrabold text-gray-900" data-target="45">0%</p>
                                     <p class="text-lg font-bold text-gray-800 mt-2">Conversies</p>
                                     <p class="text-sm text-gray-500">Omzetting van bezoekers naar leads</p>
                                 </div>
                                 <div class="bg-gray-50 p-6 rounded-2xl border border-gray-200 flex flex-col items-center justify-center transition-transform hover:scale-105 duration-300">
                                     <svg class="w-12 h-12 text-orange-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    <p class="text-4xl font-extrabold text-gray-900">300+</p>
+                                    <p class="text-4xl font-extrabold text-gray-900" data-target="300">0+</p>
                                     <p class="text-lg font-bold text-gray-800 mt-2">Bespaarde Uren</p>
                                     <p class="text-sm text-gray-500">Jaarlijkse tijdsbesparing per afdeling</p>
                                 </div>
                                 <div class="bg-gray-50 p-6 rounded-2xl border border-gray-200 flex flex-col items-center justify-center transition-transform hover:scale-105 duration-300">
                                     <svg class="w-12 h-12 text-orange-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    <p class="text-4xl font-extrabold text-gray-900">95%</p>
+                                    <p class="text-4xl font-extrabold text-gray-900" data-target="95">0%</p>
                                     <p class="text-lg font-bold text-gray-800 mt-2">Tevredenheidsscore</p>
                                     <p class="text-sm text-gray-500">Positieve feedback van uw klanten</p>
                                 </div>
@@ -232,7 +277,7 @@
                         </div>
                     </section>
                     
-                    <!-- Benefits Section -->
+                    <!-- Benefits Section (Updated to a card-based layout) -->
                     <section id="benefits" class="scroll-mt-20 scroll-animate">
                          <div class="bg-white rounded-2xl shadow-lg p-8">
                             <div class="flex items-center justify-center text-center mb-8">
@@ -241,24 +286,10 @@
                             </div>
                              <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                                 <div class="flex flex-col space-y-4">
-                                    <button class="sector-btn p-6 bg-gray-50 rounded-xl ring-2 ring-orange-500 text-left transition-all duration-200 hover:shadow-md" data-sector="beauty">
-                                        <h3 class="text-lg font-bold">Beauty & Wellness</h3>
-                                        <p class="text-gray-600 text-sm">Automatiseer afspraken, intake en herinneringen.</p>
-                                    </button>
-                                     <button class="sector-btn p-6 bg-gray-50 rounded-xl text-left transition-all duration-200 hover:shadow-md" data-sector="horeca">
-                                        <h3 class="text-lg font-bold">Horeca</h3>
-                                        <p class="text-gray-600 text-sm">Beheer reserveringen, menu- en allergievragen.</p>
-                                    </button>
-                                     <button class="sector-btn p-6 bg-gray-50 rounded-xl text-left transition-all duration-200 hover:shadow-md" data-sector="auto">
-                                        <h3 class="text-lg font-bold">Autodealers</h3>
-                                        <p class="text-gray-600 text-sm">Plan proefritten en service, kwalificeer leads.</p>
-                                    </button>
-                                     <button class="sector-btn p-6 bg-gray-50 rounded-xl text-left transition-all duration-200 hover:shadow-md" data-sector="vastgoed">
-                                        <h3 class="text-lg font-bold">Vastgoed</h3>
-                                        <p class="text-gray-600 text-sm">Regel bezichtigingen en kwalificeer kandidaten.</p>
-                                    </button>
+                                     <!-- Benefits cards will be generated by JS -->
+                                     <div id="benefits-cards" class="flex flex-col space-y-4"></div>
                                 </div>
-                                <div id="sector-info" class="p-8 bg-gray-100 rounded-2xl h-full min-h-[300px]">
+                                <div id="sector-info" class="p-8 bg-gray-100 rounded-2xl h-full min-h-[300px] transition-all duration-300 ease-in-out">
                                      <h3 id="sector-title" class="text-2xl font-bold text-gray-800 mb-4">Selecteer een Sector</h3>
                                      <p id="sector-description" class="text-gray-600">Ontdek de specifieke voordelen en toepassingen voor uw branche.</p>
                                 </div>
@@ -337,21 +368,21 @@
                                 <h2 class="text-3xl font-extrabold text-gray-900">Hoe het werkt</h2>
                             </div>
                              <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                                <div class="flex flex-col items-center">
+                                <div class="flex flex-col items-center how-it-works-step">
                                     <div class="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center mb-4">
                                         <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.484 9.498 5 8 5c-1.502 0-2.832.484-4 1.253m16 0c-1.168-.769-2.502-1.253-4-1.253s-2.832.484-4 1.253m-4 12v-13m4 13v-13"></path></svg>
                                     </div>
                                     <h3 class="text-xl font-bold text-gray-800">1. Kies uw Bot</h3>
                                     <p class="text-gray-600 mt-2">Selecteer een kant-en-klare bot uit ons portfolio of laat er een op maat maken.</p>
                                 </div>
-                                <div class="flex flex-col items-center">
+                                <div class="flex flex-col items-center how-it-works-step">
                                     <div class="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center mb-4">
                                         <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                                     </div>
                                     <h3 class="text-xl font-bold text-gray-800">2. Integreer</h3>
                                     <p class="text-gray-600 mt-2">Voeg de code toe aan uw website of verbind uw sociale mediakanalen in een paar klikken.</p>
                                 </div>
-                                <div class="flex flex-col items-center">
+                                <div class="flex flex-col items-center how-it-works-step">
                                     <div class="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center mb-4">
                                         <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.01 12.01 0 003 12c0 2.83 1.134 5.407 2.944 7.346L12 22.944l7.056-3.598A12.01 12.01 0 0021 12a12.001 12.001 0 00-2.382-6.016z"></path></svg>
                                     </div>
@@ -366,7 +397,7 @@
                     <section id="faq" class="scroll-mt-20 scroll-animate">
                         <div class="bg-white rounded-2xl shadow-lg p-8">
                             <div class="flex items-center justify-center text-center mb-8">
-                                <svg class="w-8 h-8 mr-3 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <svg class="w-8 h-8 mr-3 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 <h2 class="text-3xl font-extrabold text-gray-900">Veelgestelde Vragen</h2>
                             </div>
                             <div class="space-y-4">
@@ -463,6 +494,30 @@
         </div>
     </div>
 
+    <!-- Live Chat Widget -->
+    <div id="chat-widget" class="chat-widget hidden md:block">
+        <div id="chat-toggle" class="w-16 h-16 bg-orange-600 text-white rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-orange-700 transition-transform hover:scale-110 duration-200">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M16 10h.01M9 20h6a2 2 0 002-2V6a2 2 0 00-2-2H9a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+        </div>
+        <div id="chat-window" class="hidden w-80 bg-white rounded-xl shadow-2xl overflow-hidden mb-4 transform scale-y-0 origin-bottom transition-transform duration-300">
+            <div class="chat-header text-white font-bold p-4 flex justify-between items-center rounded-t-xl">
+                <span>BotMatic Chat</span>
+                <button id="chat-close" class="text-white hover:text-gray-200">&times;</button>
+            </div>
+            <div id="chat-messages" class="chat-messages flex flex-col p-4 space-y-3">
+                <div class="p-3 rounded-xl max-w-xs text-sm chat-message-bot">Hallo, hoe kan ik u helpen?</div>
+            </div>
+            <div class="chat-input p-4">
+                <input type="text" id="chat-input" class="w-full rounded-lg border border-gray-300 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Typ uw bericht...">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scroll to Top Button -->
+    <button id="scroll-to-top" class="scroll-to-top p-4 bg-gray-800 text-white rounded-full shadow-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+    </button>
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -478,10 +533,10 @@
 
     // Data for the chatbot demos
     const botDemos = [
-        { id: 'resto-reservering', sector: 'horeca', title: 'Restaurant Reserveringsbot', description: 'Handelt tafelreserveringen af.', icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-orange-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>`, chat: [ { sender: 'bot', text: 'Welkom bij Eetpaleis de Smaak! Kan ik u helpen met een reservering?' }, { sender: 'user', text: 'Hoi, kan ik een tafel voor 2 reserveren?' }, { sender: 'bot', text: 'Zeker! Voor welke datum en tijd?' }, { sender: 'user', text: 'Aanstaande zaterdag om 19:30.' }, { sender: 'bot', text: 'Perfect. Ik heb een tafel voor 2 op zaterdag om 19:30. Mag ik uw naam en telefoonnummer?' }, { sender: 'user', text: 'Jan Janssen, 0612345678' }, { sender: 'bot', text: 'Bedankt, Jan! Uw reservering is bevestigd. Tot zaterdag!' } ]},
-        { id: 'salon-afspraak', sector: 'beauty', title: 'Salon Afsprakenplanner', description: 'Boekt behandelingen en stuurt herinneringen.', icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-orange-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673m-4.673 0A9 9 0 0112 8a9 9 0 012.663 9H12a9 9 0 01-2.337 0zM12 21a9 9 0 01-9-9 9 9 0 019-9h0a9 9 0 019 9 9 9 0 01-9 9z" /></svg>`, chat: [ { sender: 'bot', text: 'Welkom bij Salon Mooi! Welke behandeling wilt u boeken?' }, { sender: 'user', text: 'Ik wil graag mijn haar laten knippen.' }, { sender: 'bot', text: 'Oké, knippen. Heeft u een voorkeur voor een kapster?' }, { sender: 'user', text: 'Nee, geen voorkeur.' }, { sender: 'bot', text: 'Ik heb beschikbaarheid op woensdag om 14:00 of donderdag om 11:00. Wat schikt u?' }, { sender: 'user', text: 'Woensdag 14:00 is prima.' }, { sender: 'bot', text: 'Top! Uw afspraak staat genoteerd. U ontvangt een dag van tevoren een herinnering.' } ]},
+        { id: 'resto-reservering', sector: 'horeca', title: 'Restaurant Reserveringsbot', description: 'Handelt tafelreserveringen af.', icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-orange-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10a2 2 0 012-2h14a2 2 0 012 2v7a2 2 0 01-2 2H5a2 2 0 01-2-2v-7zm0 0h18" /><path stroke-linecap="round" stroke-linejoin="round" d="M7 8V6a2 2 0 012-2h6a2 2 0 012 2v2M8 12h.01M16 12h.01M12 12h.01" /></svg>`, chat: [ { sender: 'bot', text: 'Welkom bij Eetpaleis de Smaak! Kan ik u helpen met een reservering?' }, { sender: 'user', text: 'Hoi, kan ik een tafel voor 2 reserveren?' }, { sender: 'bot', text: 'Zeker! Voor welke datum en tijd?' }, { sender: 'user', text: 'Aanstaande zaterdag om 19:30.' }, { sender: 'bot', text: 'Perfect. Ik heb een tafel voor 2 op zaterdag om 19:30. Mag ik uw naam en telefoonnummer?' }, { sender: 'user', text: 'Jan Janssen, 0612345678' }, { sender: 'bot', text: 'Bedankt, Jan! Uw reservering is bevestigd. Tot zaterdag!' } ]},
+        { id: 'salon-afspraak', sector: 'beauty', title: 'Salon Afsprakenplanner', description: 'Boekt behandelingen en stuurt herinneringen.', icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-orange-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 13a3 3 0 100-6 3 3 0 000 6zM17 13a3 3 0 100-6 3 3 0 000 6zM11 20H7a5 5 0 01-5-5V9a5 5 0 015-5h10a5 5 0 015 5v6a5 5 0 01-5 5h-4" /></svg>`, chat: [ { sender: 'bot', text: 'Welkom bij Salon Mooi! Welke behandeling wilt u boeken?' }, { sender: 'user', text: 'Ik wil graag mijn haar laten knippen.' }, { sender: 'bot', text: 'Oké, knippen. Heeft u een voorkeur voor een kapster?' }, { sender: 'user', text: 'Nee, geen voorkeur.' }, { sender: 'bot', text: 'Ik heb beschikbaarheid op woensdag om 14:00 of donderdag om 11:00. Wat schikt u?' }, { sender: 'user', text: 'Woensdag 14:00 is prima.' }, { sender: 'bot', text: 'Top! Uw afspraak staat genoteerd. U ontvangt een dag van tevoren een herinnering.' } ]},
         { id: 'vastgoed-lead', sector: 'vastgoed', title: 'Vastgoed Lead-Kwalificatie', description: 'Filtert serieuze kopers en plant bezichtigingen.', icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-orange-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>`, chat: [ { sender: 'bot', text: 'Hallo! Ik zie dat u geïnteresseerd bent in het pand aan de Kerkstraat 12. Klopt dat?' }, { sender: 'user', text: 'Ja, dat klopt. Is het nog beschikbaar?' }, { sender: 'bot', text: 'Jazeker. Bent u op zoek naar een woning voor uzelf of als investering?' }, { sender: 'user', text: 'Voor mezelf.' }, { sender: 'bot', text: 'Goed om te weten. Heeft u al een goedgekeurde hypotheek?' }, { sender: 'user', text: 'Ja, die heb ik.' }, { sender: 'bot', text: 'Fantastisch. Dat maakt u een sterke kandidaat. Wilt u een bezichtiging inplannen?' } ]},
-        { id: 'auto-proefrit', sector: 'auto', title: 'Proefrit Planner', description: 'Plant proefritten in voor specifieke modellen.', icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-orange-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>`, chat: [ { sender: 'bot', text: 'Welkom bij AutoDeal! In welk model bent u geïnteresseerd voor een proefrit?' }, { sender: 'user', text: 'De nieuwe elektrische SUV.' }, { sender: 'bot', text: 'Goede keuze! Op welke locatie wilt u de proefrit maken?' }, { sender: 'user', text: 'Amsterdam' }, { sender: 'bot', text: 'Oké, Amsterdam. Ik zie beschikbare slots op vrijdagmiddag en zaterdagochtend. Wat heeft uw voorkeur?' }, { sender: 'user', text: 'Zaterdagochtend graag.' }, { sender: 'bot', text: 'Genoteerd! Ik heb alleen nog uw contactgegevens nodig.' } ]}
+        { id: 'auto-proefrit', sector: 'auto', title: 'Proefrit Planner', description: 'Plant proefritten in voor specifieke modellen.', icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-orange-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.657 7.343A8 8 0 0118.657 17.657z" /><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 16.121A3 3 0 1012.001 12h-1.122L9.88 16.121z" /></svg>`, chat: [ { sender: 'bot', text: 'Welkom bij AutoDeal! In welk model bent u geïnteresseerd voor een proefrit?' }, { sender: 'user', text: 'De nieuwe elektrische SUV.' }, { sender: 'bot', text: 'Goede keuze! Op welke locatie wilt u de proefrit maken?' }, { sender: 'user', text: 'Amsterdam' }, { sender: 'bot', text: 'Oké, Amsterdam. Ik zie beschikbare slots op vrijdagmiddag en zaterdagochtend. Wat heeft uw voorkeur?' }, { sender: 'user', text: 'Zaterdagochtend graag.' }, { sender: 'bot', text: 'Genoteerd! Ik heb alleen nog uw contactgegevens nodig.' } ]}
     ];
 
     const planData = {
@@ -566,8 +621,7 @@
         if (!db || !userId) {
             console.error("Firestore is not initialized.");
             formMessage.textContent = 'Er is een fout opgetreden. Probeer het opnieuw.';
-            formMessage.classList.remove('hidden', 'text-green-600');
-            formMessage.classList.add('text-red-600');
+            formMessage.className = 'text-center mt-4 text-sm font-medium text-red-600 animated-message';
             return;
         }
 
@@ -580,15 +634,24 @@
             });
 
             formMessage.textContent = 'Bericht succesvol verzonden!';
-            formMessage.classList.remove('hidden', 'text-red-600');
-            formMessage.classList.add('text-green-600');
+            formMessage.className = 'text-center mt-4 text-sm font-medium text-green-600 animated-message';
             form.reset();
         } catch (error) {
             console.error("Error writing document:", error);
             formMessage.textContent = `Er is een fout opgetreden: ${error.message}`;
-            formMessage.classList.remove('hidden', 'text-green-600');
-            formMessage.classList.add('text-red-600');
+            formMessage.className = 'text-center mt-4 text-sm font-medium text-red-600 animated-message';
         }
+        
+        // Animatie van bericht
+        formMessage.classList.add('opacity-0', 'transition-opacity');
+        formMessage.classList.remove('hidden');
+        setTimeout(() => {
+            formMessage.classList.remove('opacity-0');
+        }, 10);
+        setTimeout(() => {
+            formMessage.classList.add('opacity-0');
+            setTimeout(() => formMessage.classList.add('hidden'), 500);
+        }, 5000);
     };
     
     // Listen for real-time updates on contact messages
@@ -623,9 +686,9 @@
         if(!gallery) return;
         gallery.innerHTML = botDemos.map(bot => `
             <div class="bot-card bg-gray-50 p-6 rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1" data-sector="${bot.sector}" data-bot-id="${bot.id}">
-                ${bot.icon}
+                <div class="flex-shrink-0 mb-4">${bot.icon}</div>
                 <h3 class="font-bold text-lg mt-2">${bot.title}</h3>
-                <p class="text-gray-600 text-sm mt-1">${bot.description}</p>
+                <p class="text-gray-600 text-sm mt-1 break-words">${bot.description}</p>
                 <button class="demo-btn mt-4 text-sm font-bold text-orange-600 hover:underline">Bekijk Demo &rarr;</button>
             </div>
         `).join('');
@@ -691,6 +754,69 @@
         modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
     }
     
+    // New function to handle metric counter animation
+    function animateCounters() {
+        const counters = document.querySelectorAll('#metrics [data-target]');
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counter = entry.target;
+                    const target = +counter.dataset.target;
+                    let current = 0;
+                    const increment = target / 200; // Snelheid van de animatie
+                    const isPercentage = counter.textContent.includes('%');
+                    const isPlus = counter.textContent.includes('+');
+                    
+                    const updateCounter = setInterval(() => {
+                        current += increment;
+                        if (current < target) {
+                            counter.textContent = Math.ceil(current) + (isPercentage ? '%' : '') + (isPlus ? '+' : '');
+                        } else {
+                            counter.textContent = target + (isPercentage ? '%' : '') + (isPlus ? '+' : '');
+                            clearInterval(updateCounter);
+                        }
+                    }, 5);
+                    observer.unobserve(counter);
+                }
+            });
+        }, { threshold: 0.5 });
+        counters.forEach(counter => observer.observe(counter));
+    }
+    
+    function populateBenefitsCards() {
+        const benefitsContainer = document.getElementById('benefits-cards');
+        if (!benefitsContainer) return;
+        const benefitSectors = ['beauty', 'horeca', 'auto', 'vastgoed'];
+        
+        // Genereer de HTML voor alle kaarten
+        const cardsHtml = benefitSectors.map(sector => {
+            const info = sectorInfoContent[sector];
+            return `
+                <button class="sector-btn p-6 bg-gray-50 rounded-xl text-left transition-all duration-200 hover:shadow-md hover:-translate-y-1" data-sector="${sector}">
+                    <h3 class="text-lg font-bold">${info.title}</h3>
+                    <p class="text-gray-600 text-sm">${info.description}</p>
+                </button>
+            `;
+        }).join('');
+        
+        benefitsContainer.innerHTML = cardsHtml;
+        
+        // Activeer de eerste knop na het renderen en voeg event listeners toe
+        const buttons = document.querySelectorAll('.sector-btn');
+        if (buttons.length > 0) {
+            updateSectorInfo(buttons[0].dataset.sector);
+            setActiveButton(buttons[0], '.sector-btn', 'ring-2 ring-orange-500');
+        }
+        
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const sector = btn.dataset.sector;
+                updateSectorInfo(sector);
+                setActiveButton(btn, '.sector-btn', 'ring-2 ring-orange-500');
+            });
+        });
+    }
+
     function handleScrollAnimations() {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -702,6 +828,22 @@
         }, { threshold: 0.1 });
         document.querySelectorAll('.scroll-animate').forEach(el => observer.observe(el));
     }
+    
+    // Functie voor geanimeerde "Hoe het werkt" sectie
+    function handleHowItWorksAnimation() {
+        const steps = document.querySelectorAll('.how-it-works-step');
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('is-visible');
+                    }, index * 200); // Staggered delay
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        steps.forEach(step => observer.observe(step));
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
         initFirebase();
@@ -709,27 +851,20 @@
         handleBotFilters();
         handleDemoModal();
         handleScrollAnimations();
+        animateCounters();
+        populateBenefitsCards();
+        handleHowItWorksAnimation();
 
-        const initialSectorButton = document.querySelector('.sector-btn[data-sector="beauty"]');
-        if(initialSectorButton) {
-            updateSectorInfo('beauty');
-            setActiveButton(initialSectorButton, '.sector-btn', 'ring-2 ring-orange-500');
-        }
-        
         // FAQ Accordion
         document.querySelectorAll('.faq-item').forEach(item => {
             const question = item.querySelector('.faq-question');
-            const answer = item.querySelector('.faq-answer');
             if (question) {
                 question.addEventListener('click', () => {
-                    // Sluit alle andere items
                     document.querySelectorAll('.faq-item.open').forEach(openItem => {
                         if (openItem !== item) {
                             openItem.classList.remove('open');
                         }
                     });
-                    
-                    // Toggle het huidige item
                     item.classList.toggle('open');
                 });
             }
@@ -745,14 +880,6 @@
                 }
             });
         }
-
-        document.querySelectorAll('.sector-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const sector = btn.dataset.sector;
-                updateSectorInfo(sector);
-                setActiveButton(btn, '.sector-btn', 'ring-2 ring-orange-500');
-            });
-        });
 
         // Mobile Menu Logic
         const navLinks = document.querySelectorAll('.nav-link');
@@ -785,6 +912,72 @@
         }
         if (menuClose) menuClose.addEventListener('click', closeMenu);
         if (overlay) overlay.addEventListener('click', closeMenu);
+        
+        // Live Chat Widget Logic
+        const chatToggle = document.getElementById('chat-toggle');
+        const chatWindow = document.getElementById('chat-window');
+        const chatClose = document.getElementById('chat-close');
+        const chatInput = document.getElementById('chat-input');
+        const chatMessages = document.getElementById('chat-messages');
+
+        if (chatToggle && chatWindow && chatClose && chatInput && chatMessages) {
+            chatToggle.addEventListener('click', () => {
+                chatWindow.classList.toggle('hidden');
+                chatWindow.classList.toggle('scale-y-0');
+            });
+
+            chatClose.addEventListener('click', () => {
+                chatWindow.classList.add('scale-y-0');
+                setTimeout(() => chatWindow.classList.add('hidden'), 300);
+            });
+
+            chatInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && chatInput.value.trim() !== '') {
+                    const userMessage = chatInput.value.trim();
+                    chatInput.value = '';
+                    
+                    const userMsgEl = document.createElement('div');
+                    userMsgEl.className = 'p-3 rounded-xl max-w-xs text-sm chat-message-user break-words self-end';
+                    userMsgEl.textContent = userMessage;
+                    chatMessages.appendChild(userMsgEl);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                    // Simulate bot response
+                    setTimeout(() => {
+                        const botResponses = {
+                            "hallo": "Hallo! Hoe kan ik u van dienst zijn?",
+                            "hoe werkt het": "Onze bot integreert naadloos met uw website en sociale media om vragen te beantwoorden.",
+                            "wat kost het": "U vindt onze tarieven in de sectie 'Tarieven' op deze pagina. Ze beginnen bij €89 per maand.",
+                            "ik wil een demo": "Geweldig! U kunt een demo bekijken in het 'Bot Portfolio' of contact met ons opnemen via het formulier hieronder.",
+                            "bedankt": "Graag gedaan! Als u nog vragen heeft, laat het me weten."
+                        };
+                        
+                        const botMessageText = botResponses[userMessage.toLowerCase()] || "Excuses, ik heb uw vraag niet begrepen. Kunt u het anders formuleren?";
+
+                        const botMsgEl = document.createElement('div');
+                        botMsgEl.className = 'p-3 rounded-xl max-w-xs text-sm chat-message-bot break-words self-start';
+                        botMsgEl.textContent = botMessageText;
+                        chatMessages.appendChild(botMsgEl);
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }, 1000);
+                }
+            });
+        }
+        
+        // Scroll to top logic
+        const scrollToTopBtn = document.getElementById('scroll-to-top');
+        if (scrollToTopBtn) {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    scrollToTopBtn.classList.add('show');
+                } else {
+                    scrollToTopBtn.classList.remove('show');
+                }
+            });
+            scrollToTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
     });
 
     function updateSectorInfo(sector) {
