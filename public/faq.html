@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Veelgestelde vragen – BotMatic</title>
+  <meta name="description" content="Veelgestelde vragen over BotMatic: chatbots, prijzen, installatie, support en meer." />
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: '#7c3aed',
+            brand2: '#22d3ee',
+            ink: '#0f172a'
+          },
+          boxShadow: {
+            glow: '0 0 0 3px rgba(124, 58, 237, .25)'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .gradient-text {
+      background: linear-gradient(90deg, #7c3aed, #22d3ee);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    .accordion-item.open .accordion-content {
+      max-height: 300px;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 selection:bg-brand/20 selection:text-ink">
+  <!-- Header -->
+  <header class="sticky top-0 z-40 backdrop-blur bg-white/80 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="/index.html" class="flex items-center gap-3 font-extrabold text-xl">
+          <img src="/assets/logo.svg" alt="BotMatic" class="h-8 w-auto" />
+        </a>
+        <nav class="hidden md:flex items-center gap-6">
+          <a class="hover:text-brand" href="/index.html">Home</a>
+          <a class="hover:text-brand" href="/oplossing.html">Oplossing</a>
+          <a class="hover:text-brand" href="/functies.html">Functies</a>
+          <a class="hover:text-brand" href="/prijzen.html">Prijzen</a>
+          <a class="hover:text-brand" href="/cases.html">Cases</a>
+          <a class="hover:text-brand font-semibold text-brand" href="/faq.html">FAQ</a>
+          <a class="hover:text-brand" href="/over.html">Over ons</a>
+          <a class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-ink text-white hover:shadow-glow" href="/contact.html">
+            <span>Contact</span>
+          </a>
+        </nav>
+        <button id="menu-btn" class="md:hidden inline-flex items-center justify-center rounded-lg p-2 border">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- FAQ Content -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h1 class="text-4xl md:text-5xl font-extrabold gradient-text mb-10 text-center">Veelgestelde vragen</h1>
+
+    <div class="space-y-4">
+
+      <!-- FAQ ITEM -->
+      <div class="accordion-item bg-white border rounded-2xl shadow-sm p-5">
+        <button class="accordion-toggle flex justify-between w-full text-left font-semibold text-lg">
+          <span>Hoe lang duurt het om een chatbot te installeren?</span>
+          <span>+</span>
+        </button>
+        <div class="accordion-content text-slate-600 mt-3">
+          <p>Gemiddeld duurt het 3 tot 5 werkdagen vanaf onze kick-off tot jouw chatbot live staat. Complexere projecten (met CRM-integraties of betalingen) kunnen iets langer duren.</p>
+        </div>
+      </div>
+
+      <div class="accordion-item bg-white border rounded-2xl shadow-sm p-5">
+        <button class="accordion-toggle flex justify-between w-full text-left font-semibold text-lg">
+          <span>Op welke kanalen kan de chatbot actief zijn?</span>
+          <span>+</span>
+        </button>
+        <div class="accordion-content text-slate-600 mt-3">
+          <p>BotMatic werkt op WhatsApp, Telegram, je website en via integraties ook op andere platformen zoals Instagram en Facebook Messenger.</p>
+        </div>
+      </div>
+
+      <div class="accordion-item bg-white border rounded-2xl shadow-sm p-5">
+        <button class="accordion-toggle flex justify-between w-full text-left font-semibold text-lg">
+          <span>Heb ik technische kennis nodig om het te gebruiken?</span>
+          <span>+</span>
+        </button>
+        <div class="accordion-content text-slate-600 mt-3">
+          <p>Nee! Wij bouwen en configureren alles voor jou. Jij krijgt een gebruiksvriendelijke interface om gesprekken en resultaten te volgen.</p>
+        </div>
+      </div>
+
+      <div class="accordion-item bg-white border rounded-2xl shadow-sm p-5">
+        <button class="accordion-toggle flex justify-between w-full text-left font-semibold text-lg">
+          <span>Kan de chatbot integreren met mijn agenda of CRM?</span>
+          <span>+</span>
+        </button>
+        <div class="accordion-content text-slate-600 mt-3">
+          <p>Ja, we koppelen moeiteloos met Google Calendar, Outlook, HubSpot, Pipedrive en andere systemen. Ook maatwerk-API-integraties zijn mogelijk.</p>
+        </div>
+      </div>
+
+      <div class="accordion-item bg-white border rounded-2xl shadow-sm p-5">
+        <button class="accordion-toggle flex justify-between w-full text-left font-semibold text-lg">
+          <span>Wat kost het en kan ik later upgraden?</span>
+          <span>+</span>
+        </button>
+        <div class="accordion-content text-slate-600 mt-3">
+          <p>Onze abonnementen starten vanaf €29 per maand. Je kunt op elk moment upgraden naar een groter plan als je bedrijf groeit.</p>
+        </div>
+      </div>
+
+      <div class="accordion-item bg-white border rounded-2xl shadow-sm p-5">
+        <button class="accordion-toggle flex justify-between w-full text-left font-semibold text-lg">
+          <span>Is mijn data veilig en voldoen jullie aan de GDPR?</span>
+          <span>+</span>
+        </button>
+        <div class="accordion-content text-slate-600 mt-3">
+          <p>Ja. BotMatic voldoet volledig aan de GDPR. Alle gegevens worden veilig opgeslagen en nooit gedeeld met derden zonder jouw toestemming.</p>
+        </div>
+      </div>
+
+      <div class="accordion-item bg-white border rounded-2xl shadow-sm p-5">
+        <button class="accordion-toggle flex justify-between w-full text-left font-semibold text-lg">
+          <span>Bieden jullie support na de installatie?</span>
+          <span>+</span>
+        </button>
+        <div class="accordion-content text-slate-600 mt-3">
+          <p>Absoluut. In elk abonnement zit basis support inbegrepen. Bij het Standard en Premium plan krijg je ook maandelijkse optimalisaties en rapportages.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CTA -->
+    <div class="mt-16 text-center bg-gradient-to-r from-brand/10 to-brand2/10 p-10 rounded-2xl border">
+      <h2 class="text-2xl font-bold mb-3">Nog vragen?</h2>
+      <p class="text-slate-600 mb-6">Ons team helpt je graag persoonlijk verder. Klik hieronder om contact op te nemen.</p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="/contact.html" class="px-6 py-3 bg-ink text-white rounded-xl hover:shadow-glow">Contactformulier</a>
+        <a href="https://wa.me/32400000000?text=Hallo%20BotMatic%2C%20ik%20heb%20een%20vraag." class="px-6 py-3 border rounded-xl hover:shadow-glow">WhatsApp</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-24 border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid md:grid-cols-3 gap-8">
+      <div>
+        <img src="/assets/logo.svg" class="h-10 w-auto mb-3" alt="BotMatic" />
+        <p class="text-slate-600">Conversaties die converteren. WhatsApp, Telegram, website — één slimme chatbot.</p>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Navigatie</h4>
+        <ul class="space-y-2 text-slate-700">
+          <li><a href="/oplossing.html" class="hover:text-brand">Waarom chatbots</a></li>
+          <li><a href="/functies.html" class="hover:text-brand">Functies</a></li>
+          <li><a href="/prijzen.html" class="hover:text-brand">Prijzen</a></li>
+          <li><a href="/cases.html" class="hover:text-brand">Cases</a></li>
+          <li><a href="/faq.html" class="hover:text-brand">FAQ</a></li>
+          <li><a href="/over.html" class="hover:text-brand">Over ons</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Contact</h4>
+        <ul class="space-y-2 text-slate-700">
+          <li><a href="mailto:hello@botmatic.be" class="hover:text-brand">hello@botmatic.be</a></li>
+          <li><a href="https://wa.me/32400000000" class="hover:text-brand">WhatsApp</a></li>
+          <li>België</li>
+        </ul>
+      </div>
+    </div>
+    <div class="py-6 text-center text-sm text-slate-500">© BotMatic 2025. Alle rechten voorbehouden.</div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.accordion-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.parentElement;
+        item.classList.toggle('open');
+      });
+    });
+  </script>
+</body>
+</html>

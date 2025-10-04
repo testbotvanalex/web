@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cases – BotMatic</title>
+  <meta name="description" content="Succesverhalen met BotMatic: beauty salon, auto dealer en retail. Bekijk resultaten en aanpak." />
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { brand:'#7c3aed', brand2:'#22d3ee', ink:'#0f172a' },
+          boxShadow: { glow:'0 0 0 3px rgba(124,58,237,.25)' }
+        }
+      }
+    }
+  </script>
+  <style>
+    .gradient-text{background:linear-gradient(90deg,#7c3aed,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .hero-bg{background:
+      radial-gradient(1200px 600px at 20% -20%, rgba(124,58,237,.18), transparent),
+      radial-gradient(1200px 600px at 120% 20%, rgba(34,211,238,.18), transparent)}
+    .kpi{display:inline-block; padding:.35rem .6rem; border-radius:.75rem; background:rgba(124,58,237,.08)}
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 selection:bg-brand/20 selection:text-ink">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 backdrop-blur bg-white/80 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="/index.html" class="flex items-center gap-3 font-extrabold text-xl">
+          <img src="/assets/logo.svg" alt="BotMatic" class="h-8 w-auto" />
+        </a>
+        <nav class="hidden md:flex items-center gap-6">
+          <a class="hover:text-brand" href="/index.html">Home</a>
+          <a class="hover:text-brand" href="/oplossing.html">Oplossing</a>
+          <a class="hover:text-brand" href="/functies.html">Functies</a>
+          <a class="hover:text-brand" href="/prijzen.html">Prijzen</a>
+          <a class="hover:text-brand font-semibold text-brand" href="/cases.html">Cases</a>
+          <a class="hover:text-brand" href="/faq.html">FAQ</a>
+          <a class="hover:text-brand" href="/over.html">Over ons</a>
+          <a class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-ink text-white hover:shadow-glow" href="/contact.html">Contact</a>
+        </nav>
+        <button id="menu-btn" class="md:hidden inline-flex items-center justify-center rounded-lg p-2 border" aria-label="Menu">☰</button>
+      </div>
+      <div id="mobile-menu" class="md:hidden hidden pb-4">
+        <div class="flex flex-col gap-3">
+          <a class="py-1" href="/index.html">Home</a>
+          <a class="py-1" href="/oplossing.html">Oplossing</a>
+          <a class="py-1" href="/functies.html">Functies</a>
+          <a class="py-1" href="/prijzen.html">Prijzen</a>
+          <a class="py-1" href="/cases.html">Cases</a>
+          <a class="py-1" href="/faq.html">FAQ</a>
+          <a class="py-1" href="/over.html">Over ons</a>
+          <a class="py-2 rounded-lg bg-ink text-white text-center" href="/contact.html">Contact</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero-bg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-8">
+      <h1 class="text-4xl md:text-5xl font-extrabold gradient-text">Cases</h1>
+      <p class="mt-3 text-slate-600 max-w-3xl">Concrete resultaten met BotMatic. We bouwen chatbots die <b>meer afspraken</b> genereren, <b>support versnellen</b> en <b>omzet laten groeien</b>.</p>
+    </div>
+  </section>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+
+    <!-- Case 1: Beauty Salon -->
+    <section class="mt-8 grid md:grid-cols-2 gap-8 items-stretch">
+      <div class="p-6 bg-white border rounded-2xl shadow-sm">
+        <h3 class="text-xl font-bold">Beauty Salon — WhatsApp intake</h3>
+        <p class="mt-2 text-slate-600">De salon miste afspraken buiten openingstijden. We hebben een WhatsApp-bot gebouwd die intake doet, beschikbaarheid toont en afspraken vastlegt.</p>
+        <ul class="mt-4 space-y-2 text-slate-700">
+          <li>• Kanaal: WhatsApp + Website widget</li>
+          <li>• Integratie: Google Agenda</li>
+          <li>• Flow: intake → kwalificatie → tijdslot → bevestiging</li>
+        </ul>
+        <div class="mt-4 flex flex-wrap gap-2 text-sm">
+          <span class="kpi">+42% afspraken / 30 dagen</span>
+          <span class="kpi">−55% gemiste belletjes</span>
+          <span class="kpi">⏱️ 48u naar live</span>
+        </div>
+      </div>
+      <div class="p-6 bg-gradient-to-br from-brand/10 to-brand2/10 border rounded-2xl">
+        <h4 class="font-semibold">Aanpak</h4>
+        <ol class="mt-2 list-decimal list-inside text-slate-700 space-y-1">
+          <li>Quick-scan van FAQ & diensten</li>
+          <li>WhatsApp flow met agenda-slots</li>
+          <li>Automatische bevestiging & reminders</li>
+        </ol>
+        <div class="mt-6">
+          <a href="/contact.html" class="inline-block px-6 py-3 rounded-xl bg-ink text-white hover:shadow-glow">Start gelijkaardig project</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Case 2: Auto Dealer -->
+    <section class="mt-8 grid md:grid-cols-2 gap-8 items-stretch">
+      <div class="p-6 bg-white border rounded-2xl shadow-sm">
+        <h3 class="text-xl font-bold">Auto Dealer — Leadkwalificatie & proefritten</h3>
+        <p class="mt-2 text-slate-600">Veel ongerichte vragen via webformulier. De bot kwalificeert leads, plant proefritten en stuurt warme leads naar sales.</p>
+        <ul class="mt-4 space-y-2 text-slate-700">
+          <li>• Kanalen: Website + Telegram</li>
+          <li>• Integraties: HubSpot (deals), Google Agenda</li>
+          <li>• Flow: model → budget → ruilwagen → proefrit</li>
+        </ul>
+        <div class="mt-4 flex flex-wrap gap-2 text-sm">
+          <span class="kpi">+31% gekwalificeerde leads</span>
+          <span class="kpi">−28% tijd tot afspraak</span>
+          <span class="kpi">+19% conversie proefrit → verkoop</span>
+        </div>
+      </div>
+      <div class="p-6 bg-gradient-to-br from-brand/10 to-brand2/10 border rounded-2xl">
+        <h4 class="font-semibold">Aanpak</h4>
+        <ol class="mt-2 list-decimal list-inside text-slate-700 space-y-1">
+          <li>Lead scoring in de flow</li>
+          <li>Automatische agenda-blokkering</li>
+          <li>Sync naar HubSpot met tags</li>
+        </ol>
+        <div class="mt-6">
+          <a href="/contact.html" class="inline-block px-6 py-3 rounded-xl bg-ink text-white hover:shadow-glow">Vraag een demo</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Case 3: Retail -->
+    <section class="mt-8 grid md:grid-cols-2 gap-8 items-stretch">
+      <div class="p-6 bg-white border rounded-2xl shadow-sm">
+        <h3 class="text-xl font-bold">Retail — FAQ & voorraadvragen</h3>
+        <p class="mt-2 text-slate-600">Supportteam overspoeld met herhaalde vragen. De bot beantwoordt FAQ, checkt eenvoudige voorraad en verwijst door naar winkel.</p>
+        <ul class="mt-4 space-y-2 text-slate-700">
+          <li>• Kanalen: Website widget + WhatsApp</li>
+          <li>• Integraties: Pipedrive (leads), e-mail alerts</li>
+          <li>• Flow: productvraag → beschikbaarheid → winkel / bestel</li>
+        </ul>
+        <div class="mt-4 flex flex-wrap gap-2 text-sm">
+          <span class="kpi">−63% e-mails naar support</span>
+          <span class="kpi">+22% doorverwijzingen naar aankoop</span>
+          <span class="kpi">CSAT 4.6/5</span>
+        </div>
+      </div>
+      <div class="p-6 bg-gradient-to-br from-brand/10 to-brand2/10 border rounded-2xl">
+        <h4 class="font-semibold">Aanpak</h4>
+        <ol class="mt-2 list-decimal list-inside text-slate-700 space-y-1">
+          <li>FAQ-extractie + training</li>
+          <li>Lead-capture bij koopintentie</li>
+          <li>Rapportage op drop-offs</li>
+        </ol>
+        <div class="mt-6">
+          <a href="/contact.html" class="inline-block px-6 py-3 rounded-xl bg-ink text-white hover:shadow-glow">Bespreek jouw case</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="mt-12 rounded-2xl border bg-gradient-to-r from-brand/10 to-brand2/10 p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div>
+        <h3 class="text-xl font-bold">📅 Plan een gratis demo</h3>
+        <p class="text-slate-600">Zie binnen 20 minuten wat mogelijk is voor jouw sector.</p>
+      </div>
+      <div class="flex gap-3">
+        <a href="https://wa.me/32400000000?text=Hallo%20BotMatic%2C%20ik%20wil%20een%20gratis%20demo%20plannen." class="px-6 py-3 rounded-xl border hover:shadow-glow">WhatsApp</a>
+        <a href="/contact.html" class="px-6 py-3 rounded-xl bg-ink text-white hover:shadow-glow">Contact</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-24 border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid md:grid-cols-3 gap-8">
+      <div>
+        <img src="/assets/logo.svg" class="h-10 w-auto mb-3" alt="BotMatic" />
+        <p class="text-slate-600">Conversaties die converteren. WhatsApp, Telegram, website — één slimme chatbot.</p>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Navigatie</h4>
+        <ul class="space-y-2 text-slate-700">
+          <li><a href="/oplossing.html" class="hover:text-brand">Waarom chatbots</a></li>
+          <li><a href="/functies.html" class="hover:text-brand">Functies</a></li>
+          <li><a href="/prijzen.html" class="hover:text-brand">Prijzen</a></li>
+          <li><a href="/cases.html" class="hover:text-brand">Cases</a></li>
+          <li><a href="/faq.html" class="hover:text-brand">FAQ</a></li>
+          <li><a href="/over.html" class="hover:text-brand">Over ons</a></li>
+          <li><a href="/privacy.html" class="hover:text-brand">Privacybeleid</a></li>
+          <li><a href="/cookies.html" class="hover:text-brand">Cookiebeleid</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Contact</h4>
+        <ul class="space-y-2 text-slate-700">
+          <li><a href="mailto:info@botmatic.be" class="hover:text-brand">info@botmatic.be</a></li>
+          <li><a href="https://wa.me/32400000000" class="hover:text-brand">WhatsApp</a></li>
+          <li>Oostende, België</li>
+        </ul>
+      </div>
+    </div>
+    <div class="py-6 text-center text-sm text-slate-500">© BotMatic 2025. Alle rechten voorbehouden.</div>
+  </footer>
+
+  <script>
+    const menuBtn=document.getElementById('menu-btn');const mobileMenu=document.getElementById('mobile-menu');
+    if(menuBtn&&mobileMenu){menuBtn.addEventListener('click',()=>mobileMenu.classList.toggle('hidden'))}
+  </script>
+
+  <!-- Cookie banner -->
+  <script>
+    (function(){
+      const key='bm_cookie_consent'; if(localStorage.getItem(key)) return;
+      const b=document.createElement('div');
+      b.className='fixed bottom-0 inset-x-0 bg-white border-t border-slate-300 shadow-md z-50';
+      b.innerHTML=`<div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-700">
+        <div>Wij gebruiken cookies voor basisfunctionaliteit, statistieken en marketing. <a class="text-brand underline" href="/cookies.html">Lees meer</a>.</div>
+        <div class="flex gap-2">
+          <button id="cookie-accept" class="px-4 py-2 rounded-xl bg-ink text-white">Accepteer alles</button>
+          <button id="cookie-decline" class="px-4 py-2 rounded-xl border">Weiger</button>
+        </div></div>`;
+      document.body.appendChild(b);
+      b.querySelector('#cookie-accept').onclick=()=>{localStorage.setItem(key,JSON.stringify({necessary:true,analytics:true,marketing:true,ts:Date.now()}));b.remove();}
+      b.querySelector('#cookie-decline').onclick=()=>{localStorage.setItem(key,JSON.stringify({necessary:true,analytics:false,marketing:false,ts:Date.now()}));b.remove();}
+    })();
+  </script>
+</body>
+</html>

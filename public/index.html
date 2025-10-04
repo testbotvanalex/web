@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Home – BotMatic</title>
+  <meta name="description" content="BotMatic — Chatbots die verkopen. Automatiseer afspraken, leads en support op WhatsApp, Telegram en je website." />
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: '#7c3aed',
+            brand2: '#22d3ee',
+            ink: '#0f172a'
+          },
+          boxShadow: {
+            glow: '0 0 0 3px rgba(124, 58, 237, .25)'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .gradient-text {
+      background: linear-gradient(90deg, #7c3aed, #22d3ee);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero-bg {
+      background: radial-gradient(1200px 600px at 20% -20%, rgba(124,58,237,.25), transparent),
+                  radial-gradient(1200px 600px at 120% 20%, rgba(34,211,238,.25), transparent);
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-800 bg-slate-50 selection:bg-brand/20 selection:text-ink">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 backdrop-blur bg-white/80 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="/index.html" class="flex items-center gap-3 font-extrabold text-xl">
+          <img src="/assets/logo.svg" alt="BotMatic logo" class="h-8 w-auto" />
+        </a>
+        <nav class="hidden md:flex items-center gap-6">
+          <a class="hover:text-brand" href="/index.html">Home</a>
+          <a class="hover:text-brand" href="/oplossing.html">Oplossing</a>
+          <a class="hover:text-brand" href="/functies.html">Functies</a>
+          <a class="hover:text-brand" href="/prijzen.html">Prijzen</a>
+          <a class="hover:text-brand" href="/cases.html">Cases</a>
+          <a class="hover:text-brand" href="/faq.html">FAQ</a>
+          <a class="hover:text-brand" href="/over.html">Over ons</a>
+          <a class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-ink text-white hover:shadow-glow" href="/contact.html">Contact</a>
+        </nav>
+        <button id="menu-btn" class="md:hidden inline-flex items-center justify-center rounded-lg p-2 border" aria-label="Menu">☰</button>
+      </div>
+      <div id="mobile-menu" class="md:hidden hidden pb-4">
+        <div class="flex flex-col gap-3">
+          <a class="py-1" href="/index.html">Home</a>
+          <a class="py-1" href="/oplossing.html">Oplossing</a>
+          <a class="py-1" href="/functies.html">Functies</a>
+          <a class="py-1" href="/prijzen.html">Prijzen</a>
+          <a class="py-1" href="/cases.html">Cases</a>
+          <a class="py-1" href="/faq.html">FAQ</a>
+          <a class="py-1" href="/over.html">Over ons</a>
+          <a class="py-2 rounded-lg bg-ink text-white text-center" href="/contact.html">Contact</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main class="hero-bg">
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 md:pt-24">
+      <div class="grid md:grid-cols-2 gap-10 items-center">
+        <div data-animate>
+          <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">
+            <span class="gradient-text">Chatbots die verkopen</span><br/>
+            Meer afspraken. Minder werk.
+          </h1>
+          <p class="mt-6 text-lg text-slate-600">Zet je klantcommunicatie op autopilot op WhatsApp, Telegram en website. Binnen 48 uur live.</p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="https://wa.me/32400000000?text=Hallo%20BotMatic%2C%20ik%20wil%20een%20demo%20van%20de%20chatbot." class="px-6 py-3 rounded-xl bg-brand text-white hover:opacity-90">Vraag een demo aan</a>
+            <a href="/prijzen.html" class="px-6 py-3 rounded-xl border border-slate-300 hover:shadow-glow">Bekijk prijzen</a>
+          </div>
+          <div class="mt-6 text-sm text-slate-500">14 dagen gratis proef • Geen technische kennis nodig</div>
+        </div>
+
+        <!-- ✅ Live Chat Bot -->
+        <div class="relative" data-animate>
+          <div class="absolute -top-6 -left-6 h-40 w-40 rounded-full bg-brand/20 blur-2xl"></div>
+          <div class="absolute -bottom-6 -right-6 h-40 w-40 rounded-full bg-brand2/20 blur-2xl"></div>
+          <div class="relative rounded-2xl bg-white shadow-xl border p-6" id="bm-chat">
+            <div class="flex items-center justify-between">
+              <div class="font-semibold">Conversatie</div>
+              <div class="text-xs text-slate-500">live</div>
+            </div>
+
+            <div id="bm-messages" class="mt-4 space-y-3 max-h-80 overflow-y-auto pr-1"></div>
+
+            <form id="bm-form" class="mt-4 flex gap-2">
+              <input id="bm-input" class="flex-1 rounded-xl border px-3 py-2" placeholder="Stel je vraag over BotMatic..." autocomplete="off" />
+              <button class="px-4 py-2 rounded-xl bg-brand text-white">Stuur</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- USP sectie -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="p-6 rounded-2xl bg-white border shadow-sm" data-animate>
+          <h3 class="font-bold text-xl">Meer afspraken</h3>
+          <p class="mt-2 text-slate-600">24/7 intake, kwalificatie en planning. Geen gemiste leads meer.</p>
+        </div>
+        <div class="p-6 rounded-2xl bg-white border shadow-sm" data-animate>
+          <h3 class="font-bold text-xl">Snelle support</h3>
+          <p class="mt-2 text-slate-600">Antwoorden op veelgestelde vragen in seconden — op elk kanaal.</p>
+        </div>
+        <div class="p-6 rounded-2xl bg-white border shadow-sm" data-animate>
+          <h3 class="font-bold text-xl">Omzetgroei</h3>
+          <p class="mt-2 text-slate-600">Slimme upsells en follow-ups voor meer verkoop zonder extra werk.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
+      <div class="rounded-2xl border bg-gradient-to-r from-brand/10 to-brand2/10 p-8 flex flex-col md:flex-row items-center justify-between gap-6" data-animate>
+        <div>
+          <h3 class="text-2xl font-bold">Klaar om te starten?</h3>
+          <p class="text-slate-600 mt-1">Plan een gratis demo. We laten je binnen 20 minuten zien wat mogelijk is.</p>
+        </div>
+        <div class="flex gap-3">
+          <a href="https://wa.me/32400000000?text=Hallo%20BotMatic%2C%20ik%20wil%20een%20demo%20van%20de%20chatbot." class="px-6 py-3 rounded-xl bg-ink text-white hover:shadow-glow">WhatsApp</a>
+          <a href="/contact.html" class="px-6 py-3 rounded-xl border border-slate-300 hover:shadow-glow">Contact</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-24 border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid md:grid-cols-3 gap-8">
+      <div>
+        <img src="/assets/logo.svg" class="h-10 w-auto mb-3" alt="BotMatic" />
+        <p class="text-slate-600">Conversaties die converteren. WhatsApp, Telegram, website — één slimme chatbot.</p>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Navigatie</h4>
+        <ul class="space-y-2 text-slate-700">
+          <li><a href="/oplossing.html" class="hover:text-brand">Waarom chatbots</a></li>
+          <li><a href="/functies.html" class="hover:text-brand">Functies</a></li>
+          <li><a href="/prijzen.html" class="hover:text-brand">Prijzen</a></li>
+          <li><a href="/cases.html" class="hover:text-brand">Cases</a></li>
+          <li><a href="/faq.html" class="hover:text-brand">FAQ</a></li>
+          <li><a href="/over.html" class="hover:text-brand">Over ons</a></li>
+          <li><a href="/privacy.html" class="hover:text-brand">Privacybeleid</a></li>
+          <li><a href="/cookies.html" class="hover:text-brand">Cookiebeleid</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Contact</h4>
+        <ul class="space-y-2 text-slate-700">
+          <li><a href="mailto:info@botmatic.be" class="hover:text-brand">info@botmatic.be</a></li>
+          <li><a href="https://wa.me/32400000000" class="hover:text-brand">WhatsApp</a></li>
+          <li>België</li>
+        </ul>
+      </div>
+    </div>
+    <div class="py-6 text-center text-sm text-slate-500">© BotMatic 2025. Alle rechten voorbehouden.</div>
+  </footer>
+
+  <!-- ✅ Scripts -->
+  <script src="/js/main.js"></script>
+  <script src="/js/chatbot.js"></script>
+
+  <!-- ✅ Cookie Consent Banner -->
+  <script>
+    (function(){
+      const key = 'bm_cookie_consent';
+      const hasConsent = localStorage.getItem(key);
+      if(hasConsent) return;
+      const banner = document.createElement('div');
+      banner.className = 'fixed bottom-0 inset-x-0 bg-white border-t border-slate-300 shadow-md z-50';
+      banner.innerHTML = `
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-700">
+          <div>Wij gebruiken cookies voor basisfunctionaliteit, statistieken en marketing. <a href="/cookies.html" class="text-brand underline">Lees meer</a>.</div>
+          <div class="flex gap-2">
+            <button id="cookie-accept" class="px-4 py-2 rounded-xl bg-ink text-white">Accepteer alles</button>
+            <button id="cookie-decline" class="px-4 py-2 rounded-xl border">Weiger</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(banner);
+      banner.querySelector('#cookie-accept').onclick = () => {
+        localStorage.setItem(key, JSON.stringify({necessary:true,analytics:true,marketing:true,ts:Date.now()}));
+        banner.remove();
+      };
+      banner.querySelector('#cookie-decline').onclick = () => {
+        localStorage.setItem(key, JSON.stringify({necessary:true,analytics:false,marketing:false,ts:Date.now()}));
+        banner.remove();
+      };
+    })();
+  </script>
+
+</body>
+</html>
