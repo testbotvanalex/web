@@ -93,7 +93,7 @@
 
   <script>
     const API_URL = "https://dc48e8fe707f.ngrok-free.app/api/form/submit";
-    const BOT_NUMBER = "32488883927"; // WhatsApp Business номер бота Sofia
+    const BOT_NUMBER = "32488883927";
     const params = new URLSearchParams(window.location.search);
     const waid = params.get("waid") || "";
 
@@ -102,7 +102,6 @@
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-
       const data = Object.fromEntries(new FormData(form));
       const payload = { ...data, waid };
 
@@ -118,7 +117,6 @@
 
         if (!res.ok) throw new Error("Ошибка при отправке формы");
         
-        // После успешной отправки — экран "спасибо"
         card.innerHTML = `
           <h2>💖 Спасибо, ${data.name || "друг"}!</h2>
           <p class="thankyou">
