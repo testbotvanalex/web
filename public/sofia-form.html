@@ -92,8 +92,11 @@
   </div>
 
   <script>
-    const API_URL = "https://dc48e8fe707f.ngrok-free.app/api/form/submit";
-    const BOT_NUMBER = "32488883927";
+    // ✅ Настройки
+    const API_URL = "https://dc48e8fe707f.ngrok-free.app/api/form/submit"; // твой backend (ngrok)
+    const BOT_NUMBER = "32456862886"; // твой реальный номер бота (без +)
+
+    // 🔍 Извлекаем waid (номер клиента из query ?waid=...)
     const params = new URLSearchParams(window.location.search);
     const waid = params.get("waid") || "";
 
@@ -109,6 +112,7 @@
       form.querySelector("button").textContent = "Отправка...";
 
       try {
+        console.log("📤 Отправка данных:", payload);
         const res = await fetch(API_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -117,6 +121,9 @@
 
         if (!res.ok) throw new Error("Ошибка при отправке формы");
         
+        console.log("✅ Форма успешно отправлена!");
+
+        // 🎉 Экран "спасибо"
         card.innerHTML = `
           <h2>💖 Спасибо, ${data.name || "друг"}!</h2>
           <p class="thankyou">
@@ -126,12 +133,15 @@
           <button id="backBtn">🔙 Вернуться в WhatsApp</button>
         `;
 
+        // 🟢 Возврат в чат с ботом
         document.getElementById("backBtn").addEventListener("click", () => {
-          const url = \`https://wa.me/\${BOT_NUMBER}?text=\${encodeURIComponent("Готово, я прошла диагностику ✅")}\`;
+          const url = `https://wa.me/${BOT_NUMBER}?text=${encodeURIComponent("Готово, я прошла диагностику ✅")}`;
+          console.log("🔗 Редирект:", url);
           window.location.href = url;
         });
 
       } catch (err) {
+        console.error("❌ Ошибка:", err);
         alert("❌ Ошибка: " + err.message);
         form.querySelector("button").disabled = false;
         form.querySelector("button").textContent = "Отправить";
