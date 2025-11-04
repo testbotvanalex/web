@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🧪 Мини-диагностика — Sofia</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #ffe4ec 0%, #fff5f8 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 6px 16px rgba(255, 102, 178, 0.2);
+      padding: 30px;
+      width: 90%;
+      max-width: 420px;
+      text-align: center;
+      animation: fadeIn 0.6s ease;
+    }
+    h1 {
+      color: #ff66b2;
+      margin-bottom: 10px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      text-align: left;
+      color: #444;
+      font-weight: 500;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      margin-top: 5px;
+      font-size: 15px;
+      box-sizing: border-box;
+      resize: none;
+    }
+    button {
+      background: linear-gradient(90deg, #ff66b2, #ff85c1);
+      border: none;
+      border-radius: 10px;
+      padding: 12px 18px;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+      width: 100%;
+      transition: 0.3s;
+    }
+    button:hover {
+      opacity: 0.9;
+      transform: scale(1.02);
+    }
+    .thankyou {
+      font-size: 18px;
+      color: #333;
+      line-height: 1.5;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card" id="formCard">
+    <img src="https://i.imgur.com/XPfJcZx.png" alt="Sofia" width="100" style="margin-bottom:10px;">
+    <h1>🧪 Мини-диагностика</h1>
+    <form id="sofiaForm">
+      <label>Имя:</label>
+      <input type="text" name="name" required />
+
+      <label>Возраст:</label>
+      <input type="number" name="age" required />
+
+      <label>Что вас беспокоит:</label>
+      <textarea name="concerns" required></textarea>
+
+      <button type="submit">Отправить</button>
+    </form>
+  </div>
+
+  <script>
+    const API_URL = "https://dc48e8fe707f.ngrok-free.app/api/form/submit";
+    const BOT_NUMBER = "32488883927"; // WhatsApp Business номер бота Sofia
+    const params = new URLSearchParams(window.location.search);
+    const waid = params.get("waid") || "";
+
+    const form = document.getElementById("sofiaForm");
+    const card = document.getElementById("formCard");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const data = Object.fromEntries(new FormData(form));
+      const payload = { ...data, waid };
+
+      form.querySelector("button").disabled = true;
+      form.querySelector("button").textContent = "Отправка...";
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) throw new Error("Ошибка при отправке формы");
+        
+        // После успешной отправки — экран "спасибо"
+        card.innerHTML = `
+          <h2>💖 Спасибо, ${data.name || "друг"}!</h2>
+          <p class="thankyou">
+            Я получила ваши ответы и уже анализирую результаты 💆‍♀️<br><br>
+            Нажмите ниже, чтобы вернуться в WhatsApp — Sofia скоро ответит 🌸
+          </p>
+          <button id="backBtn">🔙 Вернуться в WhatsApp</button>
+        `;
+
+        document.getElementById("backBtn").addEventListener("click", () => {
+          const url = \`https://wa.me/\${BOT_NUMBER}?text=\${encodeURIComponent("Готово, я прошла диагностику ✅")}\`;
+          window.location.href = url;
+        });
+
+      } catch (err) {
+        alert("❌ Ошибка: " + err.message);
+        form.querySelector("button").disabled = false;
+        form.querySelector("button").textContent = "Отправить";
+      }
+    });
+  </script>
+</body>
+</html>
