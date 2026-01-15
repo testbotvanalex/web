@@ -1,238 +1,508 @@
 <!DOCTYPE html>
 <html lang="nl">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Functies – BotMatic</title>
-  <meta name="description" content="Alle functies voor chatbots die verkopen: intake, afspraken, betalingen, CRM, analytics, handover en meer." />
+  <meta name="description" content="Alles wat je nodig hebt om gesprekken te automatiseren en te laten converteren." />
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: { brand:'#7c3aed', brand2:'#22d3ee', ink:'#0f172a' },
-          boxShadow: { glow:'0 0 0 3px rgba(124,58,237,.25)' }
-        }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #FFFFFF;
+      --text: #000000;
+      --text-muted: #666666;
+      --accent: #10B981;
+      --border: #E5E5E5;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 20px;
+      color: black;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: black;
+    }
+
+    .nav-cta {
+      background: black;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+
+    .nav-cta:hover {
+      background: #333;
+    }
+
+    .hero {
+      padding: 120px 24px 60px;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: clamp(40px, 6vw, 56px);
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--text-muted);
+    }
+
+    .features {
+      padding: 60px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 32px;
+    }
+
+    .feature-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      transition: all 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+      border-color: var(--accent);
+    }
+
+    .feature-card h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .feature-icon {
+      font-size: 24px;
+    }
+
+    .feature-card p {
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .feature-list {
+      list-style: none;
+      margin-top: 12px;
+    }
+
+    .feature-list li {
+      color: var(--text-muted);
+      font-size: 14px;
+      padding-left: 20px;
+      position: relative;
+      margin-bottom: 6px;
+    }
+
+    .feature-list li:before {
+      content: "•";
+      color: var(--accent);
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+    }
+
+    .steps {
+      padding: 80px 24px;
+      background: #FAFAFA;
+    }
+
+    .steps h2 {
+      text-align: center;
+      font-size: 36px;
+      font-weight: 800;
+      margin-bottom: 48px;
+    }
+
+    .steps-grid {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 32px;
+    }
+
+    .step-card {
+      text-align: center;
+      padding: 32px;
+    }
+
+    .step-number {
+      width: 48px;
+      height: 48px;
+      background: var(--accent);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 20px;
+      margin: 0 auto 16px;
+    }
+
+    .step-card h4 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .step-card p {
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+
+    .cta-section {
+      padding: 80px 24px;
+      text-align: center;
+    }
+
+    .cta-section h3 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .cta-section p {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-whatsapp {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #25D366;
+      color: white;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+
+    .btn-whatsapp:hover {
+      background: #20BA5A;
+      transform: translateY(-2px);
+    }
+
+    .btn-contact {
+      display: inline-flex;
+      background: black;
+      color: white;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+
+    .btn-contact:hover {
+      background: #333;
+      transform: translateY(-2px);
+    }
+
+    footer {
+      padding: 60px 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-in {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 32px;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: black;
+    }
+
+    @media (max-width: 900px) {
+      .nav-links {
+        display: none;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
       }
     }
-  </script>
-  <style>
-    .gradient-text{background:linear-gradient(90deg,#7c3aed,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}
-    .hero-bg{background:
-      radial-gradient(1200px 600px at 20% -20%, rgba(124,58,237,.18), transparent),
-      radial-gradient(1200px 600px at 120% 20%, rgba(34,211,238,.18), transparent)}
-    .card{transition:transform .2s ease, box-shadow .2s ease}
-    .card:hover{transform:translateY(-2px)}
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 10px;
+    }
+
+    .hamburger span {
+      width: 24px;
+      height: 2px;
+      background: black;
+      transition: 0.3s;
+    }
+
+    @media (max-width: 900px) {
+      .hamburger {
+        display: flex;
+      }
+    }
   </style>
 </head>
-<body class="min-h-screen bg-slate-50 text-slate-800 selection:bg-brand/20 selection:text-ink">
 
-  <!-- Header -->
-  <header class="sticky top-0 z-40 backdrop-blur bg-white/80 border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        <a href="/index.html" class="flex items-center gap-3 font-extrabold text-xl">
-          <img src="/assets/logo.svg" alt="BotMatic" class="h-8 w-auto" />
-        </a>
-        <nav class="hidden md:flex items-center gap-6">
-          <a class="hover:text-brand" href="/index.html">Home</a>
-          <a class="hover:text-brand" href="/oplossing.html">Oplossing</a>
-          <a class="hover:text-brand font-semibold text-brand" href="/functies.html">Functies</a>
-          <a class="hover:text-brand" href="/prijzen.html">Prijzen</a>
-          <a class="hover:text-brand" href="/cases.html">Cases</a>
-          <a class="hover:text-brand" href="/faq.html">FAQ</a>
-          <a class="hover:text-brand" href="/over.html">Over ons</a>
-          <a class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-ink text-white hover:shadow-glow" href="/contact.html">Contact</a>
-        </nav>
-        <button id="menu-btn" class="md:hidden inline-flex items-center justify-center rounded-lg p-2 border" aria-label="Menu">☰</button>
-      </div>
-      <div id="mobile-menu" class="md:hidden hidden pb-4">
-        <div class="flex flex-col gap-3">
-          <a class="py-1" href="/index.html">Home</a>
-          <a class="py-1" href="/oplossing.html">Oplossing</a>
-          <a class="py-1" href="/functies.html">Functies</a>
-          <a class="py-1" href="/prijzen.html">Prijzen</a>
-          <a class="py-1" href="/cases.html">Cases</a>
-          <a class="py-1" href="/faq.html">FAQ</a>
-          <a class="py-1" href="/over.html">Over ons</a>
-          <a class="py-2 rounded-lg bg-ink text-white text-center" href="/contact.html">Contact</a>
-        </div>
-      </div>
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">BotMatic</a>
+      <ul class="nav-links">
+        <li><a href="/functies.html" class="active">Platforms</a></li>
+        <li><a href="/cases.html">Cases</a></li>
+        <li><a href="/faq.html">FAQ</a></li>
+        <li><a href="/prijzen.html">Prijzen</a></li>
+      </ul>
+      <button class="hamburger">
+        <span></span><span></span><span></span>
+      </button>
+      <a href="/contact.html" class="nav-cta">Contact</a>
     </div>
-  </header>
+  </nav>
 
-  <!-- Hero -->
-  <section class="hero-bg">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-8">
-      <h1 class="text-4xl md:text-5xl font-extrabold gradient-text">Functies</h1>
-      <p class="mt-3 text-slate-600 max-w-3xl">Alles wat je nodig hebt om gesprekken te automatiseren en te laten converteren — van intake tot betaling en rapportage.</p>
-    </div>
+  <section class="hero">
+    <h1>Functies</h1>
+    <p>Alles wat je nodig hebt om gesprekken te automatiseren en te laten converteren — van intake tot betaling en
+      rapportage.</p>
   </section>
 
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+  <section class="features">
+    <div class="features-grid">
 
-    <!-- Grid of features -->
-    <section class="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-      <!-- Multichannel -->
-      <div class="card p-6 bg-white border rounded-2xl shadow-sm">
-        <h3 class="font-semibold text-lg">Multichannel</h3>
-        <p class="text-slate-600 mt-1">WhatsApp, Telegram en website-widget in één oplossing.</p>
-        <p class="text-slate-600 mt-3 text-sm"><b>Voordeel:</b> bereik klanten waar ze al zijn. <b>Voorbeeld:</b> websitebezoeker start chat → vervolgt in WhatsApp.</p>
+      <div class="feature-card">
+        <h3><span class="feature-icon">💬</span> Multichannel</h3>
+        <p>WhatsApp, Telegram en website-widget in één oplossing.</p>
+        <p><strong>Voordeel:</strong> bereik klanten waar ze al zijn. Voorbeeld: websitebezoeker start chat → vervolgt
+          in WhatsApp.</p>
       </div>
 
-      <!-- Afspraken & Agenda -->
-      <div class="card p-6 bg-white border rounded-2xl shadow-sm">
-        <h3 class="font-semibold text-lg">Afspraken & agenda</h3>
-        <p class="text-slate-600 mt-1">Realtime tijdsloten en automatische bevestigingen.</p>
-        <ul class="text-slate-600 mt-3 text-sm list-disc pl-5">
-          <li>Integraties: <b>Google Calendar</b>, <b>Microsoft Outlook</b></li>
+      <div class="feature-card">
+        <h3><span class="feature-icon">📅</span> Afspraken & agenda</h3>
+        <p>Realtime tijdsloten en automatische bevestigingen.</p>
+        <ul class="feature-list">
+          <li>Integraties: Google Calendar, Microsoft Outlook</li>
           <li>Bevestigingen + reminders via WhatsApp/e-mail</li>
         </ul>
       </div>
 
-      <!-- FAQ & Kennisbank -->
-      <div class="card p-6 bg-white border rounded-2xl shadow-sm">
-        <h3 class="font-semibold text-lg">FAQ & kennisbank</h3>
-        <p class="text-slate-600 mt-1">Antwoorden in seconden met context en fallback naar mens.</p>
-        <p class="text-slate-600 mt-3 text-sm"><b>Voordeel:</b> −60% herhaalvragen. <b>Voorbeeld:</b> openingstijden, prijzen, productinfo.</p>
+      <div class="feature-card">
+        <h3><span class="feature-icon">❓</span> FAQ & kennisbank</h3>
+        <p>Antwoorden in seconden met context en fallback naar mens.</p>
+        <p><strong>Voordeel:</strong> −60% herhaalvragen. Voorbeeld: openingstijden, prijzen, productinfo.</p>
       </div>
 
-      <!-- Betalingen -->
-      <div class="card p-6 bg-white border rounded-2xl shadow-sm">
-        <h3 class="font-semibold text-lg">Betalingen</h3>
-        <p class="text-slate-600 mt-1">Aanbetalingen en bestellingen via veilige links.</p>
-        <ul class="text-slate-600 mt-3 text-sm list-disc pl-5">
-          <li>Integraties: <b>Stripe</b> (betalingslinks), Mollie</li>
+      <div class="feature-card">
+        <h3><span class="feature-icon">💳</span> Betalingen</h3>
+        <p>Aanbetalingen en bestellingen via veilige links.</p>
+        <ul class="feature-list">
+          <li>Integraties: Stripe (betalingslinks), Mollie</li>
           <li>Use-cases: reserveringsfee, aanbetaling, snelle verkoop</li>
         </ul>
       </div>
 
-      <!-- CRM-koppelingen -->
-      <div class="card p-6 bg-white border rounded-2xl shadow-sm">
-        <h3 class="font-semibold text-lg">CRM-koppelingen</h3>
-        <p class="text-slate-600 mt-1">Leads automatisch door naar je salesproces.</p>
-        <ul class="text-slate-600 mt-3 text-sm list-disc pl-5">
-          <li>Integraties: <b>HubSpot</b>, <b>Pipedrive</b> (deals + labels)</li>
+      <div class="feature-card">
+        <h3><span class="feature-icon">🔗</span> CRM-koppelingen</h3>
+        <p>Leads automatisch door naar je salesproces.</p>
+        <ul class="feature-list">
+          <li>Integraties: HubSpot, Pipedrive (deals + labels)</li>
           <li>Export: CSV/e-mail voor eenvoudige setups</li>
         </ul>
       </div>
 
-      <!-- Analytics -->
-      <div class="card p-6 bg-white border rounded-2xl shadow-sm">
-        <h3 class="font-semibold text-lg">Analytics</h3>
-        <p class="text-slate-600 mt-1">Conversies, drop-offs en verbeterpunten in één dashboard.</p>
-        <p class="text-slate-600 mt-3 text-sm"><b>Voordeel:</b> optimaliseer flows op basis van data. <b>Voorbeeld:</b> stap met hoogste uitval → A/B-test.</p>
+      <div class="feature-card">
+        <h3><span class="feature-icon">📊</span> Analytics</h3>
+        <p>Conversies, drop-offs en verbeterpunten in één dashboard.</p>
+        <p><strong>Voordeel:</strong> optimaliseer flows op basis van data. Voorbeeld: stap met hoogste uitval →
+          A/B-test.</p>
       </div>
 
-      <!-- Handover -->
-      <div class="card p-6 bg-white border rounded-2xl shadow-sm">
-        <h3 class="font-semibold text-lg">Menselijke handover</h3>
-        <p class="text-slate-600 mt-1">Naadloze overdracht naar medewerker via mail of WhatsApp-thread.</p>
-        <p class="text-slate-600 mt-3 text-sm"><b>Voordeel:</b> bot doet het volume, mens pakt uitzonderingen.</p>
+      <div class="feature-card">
+        <h3><span class="feature-icon">👤</span> Menselijke handover</h3>
+        <p>Naadloze overdracht naar medewerker via mail of WhatsApp-thread.</p>
+        <p><strong>Voordeel:</strong> bot doet het volume, mens pakt uitzonderingen.</p>
       </div>
 
-      <!-- GDPR & Consent -->
-      <div class="card p-6 bg-white border rounded-2xl shadow-sm">
-        <h3 class="font-semibold text-lg">GDPR & consent</h3>
-        <p class="text-slate-600 mt-1">Transparant toestemming beheren en veilig omgaan met data.</p>
-        <p class="text-slate-600 mt-3 text-sm"><b>Voorbeeld:</b> cookie-banner, opt-ins per kanaal, dataverzoek.</p>
+      <div class="feature-card">
+        <h3><span class="feature-icon">🔒</span> GDPR & consent</h3>
+        <p>Transparant toestemming beheren en veilig omgaan met data.</p>
+        <p><strong>Voorbeeld:</strong> cookie-banner, opt-ins per kanaal, dataverzoek.</p>
       </div>
 
-      <!-- Meertalig -->
-      <div class="card p-6 bg-white border rounded-2xl shadow-sm">
-        <h3 class="font-semibold text-lg">Meertalig</h3>
-        <p class="text-slate-600 mt-1">NL, FR, EN en meer. Taalkeuze per kanaal en doelgroep.</p>
-        <p class="text-slate-600 mt-3 text-sm"><b>Voordeel:</b> betere klantbeleving, hogere conversie.</p>
+      <div class="feature-card">
+        <h3><span class="feature-icon">🌍</span> Meertalig</h3>
+        <p>NL, FR, EN en meer. Taalkeuze per kanaal en doelgroep.</p>
+        <p><strong>Voordeel:</strong> betere klantbeleving, hogere conversie.</p>
       </div>
-    </section>
 
-    <!-- How it works -->
-    <section class="mt-12 p-6 bg-white border rounded-2xl shadow-sm">
-      <h2 class="text-2xl font-bold">Zo werkt het in 3 stappen</h2>
-      <div class="mt-6 grid md:grid-cols-3 gap-6">
-        <div class="p-5 rounded-xl border">
-          <h4 class="font-semibold">1) Kick-off</h4>
-          <p class="text-slate-600 mt-1">Doel, kanalen, tone-of-voice en integraties bepalen.</p>
-        </div>
-        <div class="p-5 rounded-xl border">
-          <h4 class="font-semibold">2) Bouw & koppelingen</h4>
-          <p class="text-slate-600 mt-1">Flows, Google/Outlook agenda, Stripe, HubSpot/Pipedrive.</p>
-        </div>
-        <div class="p-5 rounded-xl border">
-          <h4 class="font-semibold">3) Live & optimalisatie</h4>
-          <p class="text-slate-600 mt-1">Monitoring, rapportage, A/B-tests en doorontwikkeling.</p>
-        </div>
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Bottom CTA -->
-    <section class="mt-12 rounded-2xl border bg-gradient-to-r from-brand/10 to-brand2/10 p-6 flex flex-col md:flex-row items-center justify-between gap-4">
-      <div>
-        <h3 class="text-xl font-bold">📅 Plan een gratis demo</h3>
-        <p class="text-slate-600">We tonen in 20 min exact wat mogelijk is voor jouw organisatie.</p>
+  <section class="steps">
+    <h2>Zo werkt het in 3 stappen</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h4>Kick-off</h4>
+        <p>Doel, kanalen, tone-of-voice en integraties bepalen.</p>
       </div>
-      <div class="flex gap-3">
-        <a href="https://wa.me/32400000000?text=Hallo%20BotMatic%2C%20ik%20wil%20een%20gratis%20demo%20plannen." class="px-6 py-3 rounded-xl border hover:shadow-glow">WhatsApp</a>
-        <a href="/contact.html" class="px-6 py-3 rounded-xl bg-ink text-white hover:shadow-glow">Contact</a>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h4>Bouw & koppelingen</h4>
+        <p>Flows, Google/Outlook agenda, Stripe, HubSpot/Pipedrive.</p>
       </div>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer class="mt-24 border-t border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid md:grid-cols-3 gap-8">
-      <div>
-        <img src="/assets/logo.svg" class="h-10 w-auto mb-3" alt="BotMatic" />
-        <p class="text-slate-600">Conversaties die converteren. WhatsApp, Telegram, website — één slimme chatbot.</p>
-      </div>
-      <div>
-        <h4 class="font-semibold mb-3">Navigatie</h4>
-        <ul class="space-y-2 text-slate-700">
-          <li><a href="/oplossing.html" class="hover:text-brand">Waarom chatbots</a></li>
-          <li><a href="/functies.html" class="hover:text-brand">Functies</a></li>
-          <li><a href="/prijzen.html" class="hover:text-brand">Prijzen</a></li>
-          <li><a href="/cases.html" class="hover:text-brand">Cases</a></li>
-          <li><a href="/faq.html" class="hover:text-brand">FAQ</a></li>
-          <li><a href="/over.html" class="hover:text-brand">Over ons</a></li>
-          <li><a href="/privacy.html" class="hover:text-brand">Privacybeleid</a></li>
-          <li><a href="/cookies.html" class="hover:text-brand">Cookiebeleid</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="font-semibold mb-3">Contact</h4>
-        <ul class="space-y-2 text-slate-700">
-          <li><a href="mailto:info@botmatic.be" class="hover:text-brand">info@botmatic.be</a></li>
-          <li><a href="https://wa.me/32400000000" class="hover:text-brand">WhatsApp</a></li>
-          <li>Oostende, België</li>
-        </ul>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h4>Live & optimalisatie</h4>
+        <p>Monitoring, rapportage, A/B-tests en doorontwikkeling.</p>
       </div>
     </div>
-    <div class="py-6 text-center text-sm text-slate-500">© BotMatic 2025. Alle rechten voorbehouden.</div>
+  </section>
+
+  <section class="cta-section">
+    <h3>📅 Plan een gratis demo</h3>
+    <p>We tonen in 20 min exact wat mogelijk is voor jouw organisatie.</p>
+    <div class="cta-buttons">
+      <a href="https://wa.me/32400000000?text=Hallo%20BotMatic%2C%20ik%20wil%20een%20gratis%20demo%20plannen."
+        class="btn-whatsapp">
+        WhatsApp
+      </a>
+      <a href="/contact.html" class="btn-contact">
+        Contact
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-in">
+      <div class="logo">BotMatic</div>
+      <div class="footer-links">
+        <a href="/privacy.html">Privacy</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/prijzen.html">Prijzen</a>
+      </div>
+    </div>
   </footer>
 
-  <script>
-    const menuBtn=document.getElementById('menu-btn');const mobileMenu=document.getElementById('mobile-menu');
-    if(menuBtn&&mobileMenu){menuBtn.addEventListener('click',()=>mobileMenu.classList.toggle('hidden'))}
-  </script>
-
-  <!-- Cookie banner -->
-  <script>
-    (function(){
-      const key='bm_cookie_consent'; if(localStorage.getItem(key)) return;
-      const b=document.createElement('div');
-      b.className='fixed bottom-0 inset-x-0 bg-white border-t border-slate-300 shadow-md z-50';
-      b.innerHTML=`<div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-700">
-        <div>Wij gebruiken cookies voor basisfunctionaliteit, statistieken en marketing. <a class="text-brand underline" href="/cookies.html">Lees meer</a>.</div>
-        <div class="flex gap-2">
-          <button id="cookie-accept" class="px-4 py-2 rounded-xl bg-ink text-white">Accepteer alles</button>
-          <button id="cookie-decline" class="px-4 py-2 rounded-xl border">Weiger</button>
-        </div></div>`;
-      document.body.appendChild(b);
-      b.querySelector('#cookie-accept').onclick=()=>{localStorage.setItem(key,JSON.stringify({necessary:true,analytics:true,marketing:true,ts:Date.now()}));b.remove();}
-      b.querySelector('#cookie-decline').onclick=()=>{localStorage.setItem(key,JSON.stringify({necessary:true,analytics:false,marketing:false,ts:Date.now()}));b.remove();}
-    })();
-  </script>
+  <script src="/js/cookie-banner.js"></script>
 </body>
+
 </html>

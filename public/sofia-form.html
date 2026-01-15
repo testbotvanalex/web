@@ -1,152 +1,84 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="nl">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🧪 Мини-диагностика — Sofia</title>
+  <meta charset="UTF-8">
+  <title>Sofia Form – BotMatic</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
   <style>
     body {
-      margin: 0;
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, #ffe4ec 0%, #fff5f8 100%);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: white;
+      color: #020617;
+      padding: 40px;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
     }
+
     .card {
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 6px 16px rgba(255, 102, 178, 0.2);
-      padding: 30px;
-      width: 90%;
-      max-width: 420px;
+      width: 100%;
+      max-width: 500px;
+      padding: 40px;
+      border: 1px solid #E2E8F0;
+      border-radius: 24px;
       text-align: center;
-      animation: fadeIn 0.6s ease;
     }
+
     h1 {
-      color: #ff66b2;
-      margin-bottom: 10px;
+      margin-bottom: 24px;
+      font-weight: 800;
     }
-    label {
-      display: block;
-      margin-top: 15px;
-      text-align: left;
-      color: #444;
-      font-weight: 500;
-    }
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-      margin-top: 5px;
-      font-size: 15px;
-      box-sizing: border-box;
-      resize: none;
-    }
+
+    input,
     button {
-      background: linear-gradient(90deg, #ff66b2, #ff85c1);
-      border: none;
-      border-radius: 10px;
-      padding: 12px 18px;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 20px;
       width: 100%;
-      transition: 0.3s;
+      padding: 16px;
+      margin-bottom: 16px;
+      border-radius: 12px;
+      font-family: inherit;
     }
+
+    input {
+      border: 2px solid #E2E8F0;
+      background: #F8FAFC;
+    }
+
+    button {
+      background: #10B981;
+      color: white;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
     button:hover {
-      opacity: 0.9;
-      transform: scale(1.02);
+      background: #059669;
     }
-    .thankyou {
-      font-size: 18px;
-      color: #333;
-      line-height: 1.5;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+
+    a {
+      color: #64748B;
+      text-decoration: none;
+      font-size: 14px;
     }
   </style>
 </head>
+
 <body>
-
-  <div class="card" id="formCard">
-    <img src="https://i.imgur.com/XPfJcZx.png" alt="Sofia" width="100" style="margin-bottom:10px;">
-    <h1>🧪 Мини-диагностика</h1>
-    <form id="sofiaForm">
-      <label>Имя:</label>
-      <input type="text" name="name" required />
-
-      <label>Возраст:</label>
-      <input type="number" name="age" required />
-
-      <label>Что вас беспокоит:</label>
-      <textarea name="concerns" required></textarea>
-
-      <button type="submit">Отправить</button>
+  <div class="card">
+    <h1>Sofia Aanvraag</h1>
+    <form>
+      <input type="email" placeholder="Jouw e-mailadres" required />
+      <input type="text" placeholder="Bedrijfsnaam" />
+      <button type="submit">Versturen</button>
     </form>
+    <a href="/">← Terug naar home</a>
   </div>
-
-  <script>
-    // ✅ Настройки
-    const API_URL = "https://dc48e8fe707f.ngrok-free.app/api/form/submit"; // твой backend (ngrok)
-    const BOT_NUMBER = "32456862886"; // твой реальный номер бота (без +)
-
-    // 🔍 Извлекаем waid (номер клиента из query ?waid=...)
-    const params = new URLSearchParams(window.location.search);
-    const waid = params.get("waid") || "";
-
-    const form = document.getElementById("sofiaForm");
-    const card = document.getElementById("formCard");
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const data = Object.fromEntries(new FormData(form));
-      const payload = { ...data, waid };
-
-      form.querySelector("button").disabled = true;
-      form.querySelector("button").textContent = "Отправка...";
-
-      try {
-        console.log("📤 Отправка данных:", payload);
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-
-        if (!res.ok) throw new Error("Ошибка при отправке формы");
-        
-        console.log("✅ Форма успешно отправлена!");
-
-        // 🎉 Экран "спасибо"
-        card.innerHTML = `
-          <h2>💖 Спасибо, ${data.name || "друг"}!</h2>
-          <p class="thankyou">
-            Я получила ваши ответы и уже анализирую результаты 💆‍♀️<br><br>
-            Нажмите ниже, чтобы вернуться в WhatsApp — Sofia скоро ответит 🌸
-          </p>
-          <button id="backBtn">🔙 Вернуться в WhatsApp</button>
-        `;
-
-        // 🟢 Возврат в чат с ботом
-        document.getElementById("backBtn").addEventListener("click", () => {
-          const url = `https://wa.me/${BOT_NUMBER}?text=${encodeURIComponent("Готово, я прошла диагностику ✅")}`;
-          console.log("🔗 Редирект:", url);
-          window.location.href = url;
-        });
-
-      } catch (err) {
-        console.error("❌ Ошибка:", err);
-        alert("❌ Ошибка: " + err.message);
-        form.querySelector("button").disabled = false;
-        form.querySelector("button").textContent = "Отправить";
-      }
-    });
-  </script>
 </body>
+
 </html>

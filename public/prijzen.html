@@ -1,331 +1,423 @@
 <!DOCTYPE html>
 <html lang="nl">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Prijzen – BotMatic</title>
-  <meta name="description" content="Transparante prijzen voor BotMatic chatbots. Kies Basic, Standard of Premium. Maandelijks of Jaarlijks (-20%)." />
+  <meta name="description" content="Transparante prijzen voor elk bedrijf. Geen verborgen kosten." />
+
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: { brand: '#7c3aed', brand2: '#22d3ee', ink: '#0f172a' },
-          boxShadow: { glow: '0 0 0 3px rgba(124, 58, 237, .25)' }
-        }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #FFFFFF;
+      --text: #000000;
+      --text-muted: #666666;
+      --accent: #10B981;
+      --border: #E5E5E5;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Nav */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 20px;
+      color: black;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: black;
+    }
+
+    .nav-cta {
+      background: black;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+
+    .nav-cta:hover {
+      background: #333;
+    }
+
+    /* Header */
+    .header {
+      padding: 140px 32px 60px;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .header h1 {
+      font-size: clamp(40px, 6vw, 56px);
+      font-weight: 800;
+      margin-bottom: 20px;
+      color: black;
+    }
+
+    .header p {
+      font-size: 20px;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Pricing Grid */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 32px 100px;
+    }
+
+    .price-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .price-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+      border-color: var(--accent);
+    }
+
+    .plan-name {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .plan-desc {
+      color: var(--text-muted);
+      font-size: 15px;
+      margin-bottom: 32px;
+      min-height: 44px;
+    }
+
+    .price {
+      margin-bottom: 32px;
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+
+    .amount {
+      font-size: 48px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+
+    .period {
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .btn-plan {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.2s;
+      background: #FAFAFA;
+      color: black;
+      border: 1px solid var(--border);
+    }
+
+    .btn-plan:hover {
+      background: #F0F0F0;
+    }
+
+    .features {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .feat {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      color: var(--text-muted);
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .check {
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 18px;
+    }
+
+    /* Popular Card */
+    .price-card.popular {
+      background: #ECFDF5;
+      border: 2px solid var(--accent);
+      transform: scale(1.02);
+      box-shadow: 0 8px 16px rgba(16, 185, 129, 0.15);
+    }
+
+    .price-card.popular:hover {
+      transform: scale(1.04);
+    }
+
+    .popular-tag {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 99px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);
+    }
+
+    .price-card.popular .btn-plan {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .price-card.popular .btn-plan:hover {
+      background: #059669;
+    }
+
+    /* Footer */
+    footer {
+      padding: 80px 32px 40px;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-in {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-in a {
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-left: 24px;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .footer-in a:hover {
+      color: black;
+    }
+
+    @media(max-width: 900px) {
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .price-card.popular {
+        transform: none;
+      }
+
+      .nav-links {
+        display: none;
       }
     }
-  </script>
-  <style>
-    .gradient-text { background: linear-gradient(90deg, #7c3aed, #22d3ee); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .hero-bg { background:
-      radial-gradient(1200px 600px at 20% -20%, rgba(124,58,237,.20), transparent),
-      radial-gradient(1200px 600px at 120% 20%, rgba(34,211,238,.20), transparent); }
-    .badge { font-size:.70rem }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 10px;
+    }
+
+    .hamburger span {
+      width: 24px;
+      height: 2px;
+      background: black;
+      transition: 0.3s;
+    }
+
+    @media (max-width: 900px) {
+      .hamburger {
+        display: flex;
+      }
+    }
   </style>
+  <script>function toggleMenu() { document.getElementById('nav-links').classList.toggle('active'); }</script>
 </head>
-<body class="min-h-screen bg-slate-50 text-slate-800 selection:bg-brand/20 selection:text-ink">
 
-  <!-- Header -->
-  <header class="sticky top-0 z-40 backdrop-blur bg-white/80 border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        <a href="/index.html" class="flex items-center gap-3 font-extrabold text-xl">
-          <img src="/assets/logo.svg" alt="BotMatic" class="h-8 w-auto" />
-        </a>
-        <nav class="hidden md:flex items-center gap-6">
-          <a class="hover:text-brand" href="/index.html">Home</a>
-          <a class="hover:text-brand" href="/oplossing.html">Oplossing</a>
-          <a class="hover:text-brand" href="/functies.html">Functies</a>
-          <a class="hover:text-brand font-semibold text-brand" href="/prijzen.html">Prijzen</a>
-          <a class="hover:text-brand" href="/cases.html">Cases</a>
-          <a class="hover:text-brand" href="/faq.html">FAQ</a>
-          <a class="hover:text-brand" href="/over.html">Over ons</a>
-          <a class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-ink text-white hover:shadow-glow" href="/contact.html">Contact</a>
-        </nav>
-        <button id="menu-btn" class="md:hidden inline-flex items-center justify-center rounded-lg p-2 border" aria-label="Menu">☰</button>
-      </div>
-      <div id="mobile-menu" class="md:hidden hidden pb-4">
-        <div class="flex flex-col gap-3">
-          <a class="py-1" href="/index.html">Home</a>
-          <a class="py-1" href="/oplossing.html">Oplossing</a>
-          <a class="py-1" href="/functies.html">Functies</a>
-          <a class="py-1" href="/prijzen.html">Prijzen</a>
-          <a class="py-1" href="/cases.html">Cases</a>
-          <a class="py-1" href="/faq.html">FAQ</a>
-          <a class="py-1" href="/over.html">Over ons</a>
-          <a class="py-2 rounded-lg bg-ink text-white text-center" href="/contact.html">Contact</a>
-        </div>
-      </div>
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">BotMatic</a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="/functies.html">Platforms</a></li>
+        <li><a href="/cases.html">Cases</a></li>
+        <li><a href="/faq.html">FAQ</a></li>
+        <li><a href="/prijzen.html" class="active">Prijzen</a></li>
+        <li><a href="/contact.html">Contact</a></li>
+      </ul>
+      <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+      <a href="/contact.html" class="cta">Start nu</a>
     </div>
-  </header>
+  </nav>
 
-  <!-- Hero -->
-  <section class="hero-bg">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-8">
-      <h1 class="text-4xl md:text-5xl font-extrabold gradient-text">Prijzen</h1>
-      <p class="mt-3 text-slate-600 max-w-2xl">Kies het plan dat bij je past. Maandelijks opzegbaar of jaarlijks met 20% korting. Onze chatbots leveren je <b>meer klanten</b>, <b>minder werk</b> en <b>automatisering zonder gedoe</b>.</p>
+  <div class="header">
+    <h1>Kies jouw plan.</h1>
+    <p>Schaalbare prijzen voor groeiende bedrijven.</p>
+  </div>
 
-      <!-- Billing toggle -->
-      <div class="mt-6 inline-flex items-center gap-2 rounded-xl border bg-white p-2">
-        <button id="btn-monthly" class="px-4 py-2 rounded-lg bg-ink text-white">Maandelijks</button>
-        <button id="btn-yearly" class="px-4 py-2 rounded-lg">Jaarlijks <span class="ml-1 badge rounded bg-brand/10 text-brand px-2 py-0.5">-20%</span></button>
+
+
+  <div class="pricing-grid">
+
+    <!-- STARTER -->
+    <div class="price-card">
+      <div class="plan-name">Starter</div>
+      <div class="plan-desc">Voor individuen en hobbyisten.</div>
+      <div class="price">
+        <span class="amount">€49</span>
+        <span class="period">/mnd</span>
       </div>
-      <div class="text-slate-500 mt-2 text-sm" id="billing-note">Toon prijzen per maand. Jaarlijks = 20% korting (jaarlijks gefactureerd).</div>
-    </div>
-  </section>
-
-  <!-- Pricing Cards -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-    <div class="grid md:grid-cols-3 gap-6 mt-8">
-
-      <!-- BASIC -->
-      <div class="p-6 rounded-2xl border bg-white shadow-sm">
-        <div class="flex items-center justify-between">
-          <h3 class="font-bold text-xl">Basic</h3>
-          <span class="badge rounded-full bg-slate-100 text-slate-700 px-2 py-1">Start</span>
-        </div>
-        <div class="mt-3">
-          <div class="text-3xl font-extrabold">
-            <span class="price" data-monthly="€39/mnd" data-yearly="€31/mnd">€39/mnd</span>
-          </div>
-          <div class="text-slate-500 text-sm" id="basic-sub">of <span class="annual" data-annual="€374/jaar">€374/jaar</span></div>
-        </div>
-        <ul class="mt-4 space-y-2 text-slate-700">
-          <li>• 1 kanaal (Website Chat)</li>
-          <li>• Slimme FAQ & leads-formulier</li>
-          <li>• E-mailnotificaties</li>
-          <li>• Basis-rapportage</li>
-        </ul>
-        <div class="mt-6 space-y-2 text-slate-600 text-sm">
-          <div>🎯 Focus: <b>meer leads zonder extra werk</b></div>
-          <div>⚡ Setup in <b>48 uur</b></div>
-        </div>
-        <a href="/contact.html" class="mt-6 inline-block w-full text-center px-5 py-3 rounded-xl border hover:shadow-glow">Start nu</a>
-      </div>
-
-      <!-- STANDARD (popular) -->
-      <div class="p-6 rounded-2xl border-2 border-brand bg-white shadow-sm relative">
-        <span class="absolute -top-3 right-4 px-3 py-1 rounded-full text-xs bg-brand text-white">Populair</span>
-        <div class="flex items-center justify-between">
-          <h3 class="font-bold text-xl">Standard</h3>
-          <span class="badge rounded-full bg-brand/10 text-brand px-2 py-1">Beste keuze</span>
-        </div>
-        <div class="mt-3">
-          <div class="text-3xl font-extrabold">
-            <span class="price" data-monthly="€119/mnd" data-yearly="€95/mnd">€119/mnd</span>
-          </div>
-          <div class="text-slate-500 text-sm" id="std-sub">of <span class="annual" data-annual="€1.142/jaar">€1.142/jaar</span></div>
-        </div>
-        <ul class="mt-4 space-y-2 text-slate-700">
-          <li>• 2 kanalen (WhatsApp of Telegram + Website)</li>
-          <li>• Afspraken & agenda-koppeling</li>
-          <li>• Basis-CRM export (CSV/Email)</li>
-          <li>• Maandelijkse optimalisatie</li>
-        </ul>
-        <div class="mt-6 space-y-2 text-slate-600 text-sm">
-          <div>📈 Focus: <b>meer klanten + tijd besparen</b></div>
-          <div>🤖 Automatisering zonder gedoe</div>
-        </div>
-        <a href="/contact.html" class="mt-6 inline-block w-full text-center px-5 py-3 rounded-xl bg-brand text-white hover:opacity-90">Start nu</a>
-      </div>
-
-      <!-- PREMIUM -->
-      <div class="p-6 rounded-2xl border bg-white shadow-sm">
-        <div class="flex items-center justify-between">
-          <h3 class="font-bold text-xl">Premium</h3>
-          <span class="badge rounded-full bg-slate-100 text-slate-700 px-2 py-1">Groei</span>
-        </div>
-        <div class="mt-3">
-          <div class="text-3xl font-extrabold">
-            <span class="price" data-monthly="€349/mnd" data-yearly="€279/mnd">€349/mnd</span>
-          </div>
-          <div class="text-slate-500 text-sm" id="prem-sub">of <span class="annual" data-annual="€3.350/jaar">€3.350/jaar</span></div>
-        </div>
-        <ul class="mt-4 space-y-2 text-slate-700">
-          <li>• Omnichannel (WhatsApp, Telegram, Website)</li>
-          <li>• CRM-integraties + betaal-links</li>
-          <li>• Uitgebreide analytics & dashboards</li>
-          <li>• Prioritaire support & SLA</li>
-        </ul>
-        <div class="mt-6 space-y-2 text-slate-600 text-sm">
-          <div>🚀 Focus: <b>omzetgroei en schaalbaarheid</b></div>
-          <div>🧩 Maatwerk integraties</div>
-        </div>
-        <a href="/contact.html" class="mt-6 inline-block w-full text-center px-5 py-3 rounded-xl border hover:shadow-glow">Start nu</a>
+      <a href="/contact.html" class="btn-plan">Start gratis</a>
+      <div class="features">
+        <div class="feat"><span class="check">✓</span> 1 Chatbot</div>
+        <div class="feat"><span class="check">✓</span> 500 gesprekken/mnd</div>
+        <div class="feat"><span class="check">✓</span> Basis support</div>
+        <div class="feat"><span class="check">✓</span> Geen branding</div>
       </div>
     </div>
 
-    <!-- Guarantees / trust -->
-    <div class="mt-10 grid md:grid-cols-3 gap-6">
-      <div class="p-5 rounded-2xl border bg-white text-slate-700">✅ 14 dagen gratis proef — zonder kredietkaart</div>
-      <div class="p-5 rounded-2xl border bg-white text-slate-700">🔐 GDPR-proof & veilige data</div>
-      <div class="p-5 rounded-2xl border bg-white text-slate-700">🛟 Echte support door specialisten</div>
+    <!-- PRO (Highlight) -->
+    <div class="price-card popular">
+      <div class="popular-tag">Meest Gekozen</div>
+      <div class="plan-name">Pro</div>
+      <div class="plan-desc">Voor groeiende bedrijven.</div>
+      <div class="price">
+        <span class="amount">€199</span>
+        <span class="period">/mnd</span>
+      </div>
+      <a href="/contact.html" class="btn-plan">Start Pro Trial</a>
+      <div class="features">
+        <div class="feat"><span class="check">✓</span> 3 Chatbots</div>
+        <div class="feat"><span class="check">✓</span> Onbeperkt gesprekken</div>
+        <div class="feat"><span class="check">✓</span> Priority Support</div>
+        <div class="feat"><span class="check">✓</span> API Toegang</div>
+        <div class="feat"><span class="check">✓</span> Custom Integraties</div>
+      </div>
     </div>
 
-    <!-- Feature comparison -->
-    <section class="mt-16">
-      <h2 class="text-2xl font-bold">Functies per plan</h2>
-      <div class="mt-6 overflow-x-auto rounded-2xl border bg-white">
-        <table class="min-w-full text-sm">
-          <thead class="bg-slate-50 text-slate-600">
-            <tr>
-              <th class="text-left p-4">Functie</th>
-              <th class="p-4">Basic</th>
-              <th class="p-4">Standard</th>
-              <th class="p-4">Premium</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y">
-            <tr>
-              <td class="p-4">Kanalen</td>
-              <td class="p-4">Website</td>
-              <td class="p-4">WhatsApp/Telegram + Website</td>
-              <td class="p-4">Omnichannel</td>
-            </tr>
-            <tr>
-              <td class="p-4">FAQ & kennisbank</td>
-              <td class="p-4">✓</td>
-              <td class="p-4">✓✓</td>
-              <td class="p-4">✓✓✓</td>
-            </tr>
-            <tr>
-              <td class="p-4">Afspraken & agenda</td>
-              <td class="p-4">–</td>
-              <td class="p-4">✓</td>
-              <td class="p-4">✓ (geavanceerd)</td>
-            </tr>
-            <tr>
-              <td class="p-4">Betalingen (aanbetalingen/links)</td>
-              <td class="p-4">–</td>
-              <td class="p-4">Optioneel</td>
-              <td class="p-4">✓</td>
-            </tr>
-            <tr>
-              <td class="p-4">CRM-integraties</td>
-              <td class="p-4">CSV/Email export</td>
-              <td class="p-4">Basis (HubSpot/Pipedrive)</td>
-              <td class="p-4">Volledig + maatwerk</td>
-            </tr>
-            <tr>
-              <td class="p-4">Analytics</td>
-              <td class="p-4">Basis</td>
-              <td class="p-4">Standaard</td>
-              <td class="p-4">Uitgebreid + dashboards</td>
-            </tr>
-            <tr>
-              <td class="p-4">Support</td>
-              <td class="p-4">Email</td>
-              <td class="p-4">Email + maandelijkse optimalisatie</td>
-              <td class="p-4">Prioritair + SLA</td>
-            </tr>
-          </tbody>
-        </table>
+    <!-- BUSINESS -->
+    <div class="price-card">
+      <div class="plan-name">Business</div>
+      <div class="plan-desc">Voor grote teams en volumes.</div>
+      <div class="price">
+        <span class="amount">€499</span>
+        <span class="period">/mnd</span>
       </div>
-      <div class="mt-6 rounded-2xl border bg-gradient-to-r from-brand/10 to-brand2/10 p-6 flex flex-col md:flex-row items-center justify-between gap-4">
-        <div>
-          <h3 class="text-xl font-bold">Weet je niet welk plan te kiezen?</h3>
-          <p class="text-slate-600">Plan een korte call — we adviseren eerlijk wat het beste past.</p>
-        </div>
-        <a href="/contact.html" class="px-6 py-3 rounded-xl bg-ink text-white hover:shadow-glow">Vraag advies</a>
+      <a href="/contact.html" class="btn-plan">Neem contact op</a>
+      <div class="features">
+        <div class="feat"><span class="check">✓</span> Onbeperkt Chatbots</div>
+        <div class="feat"><span class="check">✓</span> Dedicated Manager</div>
+        <div class="feat"><span class="check">✓</span> SLA Contract</div>
+        <div class="feat"><span class="check">✓</span> On-premise optie</div>
       </div>
-    </section>
-  </main>
+    </div>
 
-  <!-- Footer -->
-  <footer class="mt-24 border-t border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid md:grid-cols-3 gap-8">
+  </div>
+
+  <footer>
+    <div class="footer-in">
+      <div style="font-weight:800; color:black;">BotMatic</div>
       <div>
-        <img src="/assets/logo.svg" class="h-10 w-auto mb-3" alt="BotMatic" />
-        <p class="text-slate-600">Conversaties die converteren. WhatsApp, Telegram, website — één slimme chatbot.</p>
-      </div>
-      <div>
-        <h4 class="font-semibold mb-3">Navigatie</h4>
-        <ul class="space-y-2 text-slate-700">
-          <li><a href="/oplossing.html" class="hover:text-brand">Waarom chatbots</a></li>
-          <li><a href="/functies.html" class="hover:text-brand">Functies</a></li>
-          <li><a href="/prijzen.html" class="hover:text-brand">Prijzen</a></li>
-          <li><a href="/cases.html" class="hover:text-brand">Cases</a></li>
-          <li><a href="/faq.html" class="hover:text-brand">FAQ</a></li>
-          <li><a href="/over.html" class="hover:text-brand">Over ons</a></li>
-          <li><a href="/privacy.html" class="hover:text-brand">Privacybeleid</a></li>
-          <li><a href="/cookies.html" class="hover:text-brand">Cookiebeleid</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="font-semibold mb-3">Contact</h4>
-        <ul class="space-y-2 text-slate-700">
-          <li><a href="mailto:info@botmatic.be" class="hover:text-brand">info@botmatic.be</a></li>
-          <li><a href="https://wa.me/32400000000" class="hover:text-brand">WhatsApp</a></li>
-          <li>België</li>
-        </ul>
+        <a href="/privacy.html">Privacy</a>
+        <a href="/contact.html">Contact</a>
       </div>
     </div>
-    <div class="py-6 text-center text-sm text-slate-500">© BotMatic 2025. Alle rechten voorbehouden.</div>
   </footer>
 
-  <!-- Scripts -->
-  <script>
-    // Mobile menu
-    const menuBtn = document.getElementById('menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    if (menuBtn && mobileMenu) menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+  <a href="https://wa.me/32400000000" class="whatsapp-float">
+    <svg viewBox="0 0 24 24" width="28" height="28" fill="white">
+      <path
+        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+    </svg>
+  </a>
 
-    // Billing toggle
-    const btnM = document.getElementById('btn-monthly');
-    const btnY = document.getElementById('btn-yearly');
-    const prices = document.querySelectorAll('.price');
-    const annuals = document.querySelectorAll('.annual');
-    const note = document.getElementById('billing-note');
-    let yearly = false;
-
-    function renderPrices(){
-      prices.forEach(el => {
-        el.textContent = yearly ? el.dataset.yearly : el.dataset.monthly;
-      });
-      annuals.forEach(el => {
-        el.textContent = el.dataset.annual; // blijft gelijk, informatief
-      });
-      btnM.classList.toggle('bg-ink', !yearly);
-      btnM.classList.toggle('text-white', !yearly);
-      btnY.classList.toggle('bg-ink', yearly);
-      btnY.classList.toggle('text-white', yearly);
-      note.textContent = yearly
-        ? "Toon prijzen per maand (jaarlijks gefactureerd met 20% korting)."
-        : "Toon prijzen per maand. Jaarlijks = 20% korting (jaarlijks gefactureerd).";
-    }
-    btnM.addEventListener('click', () => { yearly = false; renderPrices(); });
-    btnY.addEventListener('click', () => { yearly = true; renderPrices(); });
-    renderPrices();
-  </script>
-
-  <!-- ✅ Cookie Consent Banner -->
-  <script>
-    (function(){
-      const key = 'bm_cookie_consent';
-      const has = localStorage.getItem(key);
-      if(has) return;
-      const banner = document.createElement('div');
-      banner.className = 'fixed bottom-0 inset-x-0 bg-white border-t border-slate-300 shadow-md z-50';
-      banner.innerHTML = `
-        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-700">
-          <div>Wij gebruiken cookies voor basisfunctionaliteit, statistieken en marketing. <a href="/cookies.html" class="text-brand underline">Lees meer</a>.</div>
-          <div class="flex gap-2">
-            <button id="cookie-accept" class="px-4 py-2 rounded-xl bg-ink text-white">Accepteer alles</button>
-            <button id="cookie-decline" class="px-4 py-2 rounded-xl border">Weiger</button>
-          </div>
-        </div>`;
-      document.body.appendChild(banner);
-      banner.querySelector('#cookie-accept').onclick = () => {
-        localStorage.setItem(key, JSON.stringify({necessary:true,analytics:true,marketing:true,ts:Date.now()}));
-        banner.remove();
-      };
-      banner.querySelector('#cookie-decline').onclick = () => {
-        localStorage.setItem(key, JSON.stringify({necessary:true,analytics:false,marketing:false,ts:Date.now()}));
-        banner.remove();
-      };
-    })();
-  </script>
+  <script src="/js/cookie-banner.js"></script>
 </body>
+
 </html>

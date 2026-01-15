@@ -1,137 +1,242 @@
 <!DOCTYPE html>
 <html lang="nl">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Oplossing – BotMatic</title>
-  <meta name="description" content="Waarom chatbots? BotMatic automatiseert intake, afspraken en support zodat je sneller groeit." />
+  <title>Oplossingen – BotMatic</title>
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: '#7c3aed',
-            brand2: '#22d3ee',
-            ink: '#0f172a'
-          },
-          boxShadow: {
-            glow: '0 0 0 3px rgba(124, 58, 237, .25)'
-          }
-        }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-body: #ffffff;
+      --text-main: #020617;
+      --text-muted: #334155;
+      --accent: #10B981;
+      --border: #E2E8F0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg-body);
+      color: var(--text-main);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      background: rgba(255, 255, 255, 0.95);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 24px;
+      color: black;
+      display: flex;
+      gap: 12px;
+      text-decoration: none;
+      align-items: center;
+    }
+
+    .logo div {
+      width: 36px;
+      height: 36px;
+      background: black;
+      color: white;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .nav-links a:hover {
+      color: black;
+    }
+
+    .cta {
+      background: black;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 99px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .hero {
+      padding: 180px 24px 100px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 800;
+      margin-bottom: 24px;
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      font-size: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 120px;
+    }
+
+    .card {
+      padding: 40px;
+      background: #F8FAFC;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+    }
+
+    .card h3 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .card p {
+      color: var(--text-muted);
+    }
+
+    footer {
+      padding: 80px 24px;
+      background: #F8FAFC;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-in {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .footer-in a {
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-left: 24px;
+      font-weight: 600;
+    }
+
+    @media(max-width: 900px) {
+      .nav-links {
+        display: none;
       }
     }
-  </script>
-  <style>
-    .gradient-text {
-      background: linear-gradient(90deg, #7c3aed, #22d3ee);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 10px;
     }
-    .hero-bg {
-      background: radial-gradient(1200px 600px at 20% -20%, rgba(124,58,237,.25), transparent),
-                  radial-gradient(1200px 600px at 120% 20%, rgba(34,211,238,.25), transparent);
+
+    .hamburger span {
+      width: 24px;
+      height: 2px;
+      background: black;
+      transition: 0.3s;
     }
   </style>
+  <script>function toggleMenu() { document.getElementById('nav-links').classList.toggle('active'); }</script>
 </head>
-<body class="min-h-screen text-slate-800 bg-slate-50 selection:bg-brand/20 selection:text-ink">
-  <header class="sticky top-0 z-40 backdrop-blur bg-white/80 border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        <a href="/index.html" class="flex items-center gap-3 font-extrabold text-xl">
-          <img src="/assets/logo.svg" alt="BotMatic" class="h-8 w-auto" />
-        </a>
-        <nav class="hidden md:flex items-center gap-6">
-          <a class="hover:text-brand" href="/index.html">Home</a>
-          <a class="hover:text-brand" href="/oplossing.html">Oplossing</a>
-          <a class="hover:text-brand" href="/functies.html">Functies</a>
-          <a class="hover:text-brand" href="/prijzen.html">Prijzen</a>
-          <a class="hover:text-brand" href="/cases.html">Cases</a>
-          <a class="hover:text-brand" href="/over.html">Over ons</a>
-          <a class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-ink text-white hover:shadow-glow" href="/contact.html">
-            <span>Contact</span>
-          </a>
-        </nav>
-        <button id="menu-btn" class="md:hidden inline-flex items-center justify-center rounded-lg p-2 border">
-          <span class="sr-only">Menu</span>
-          ☰
-        </button>
-      </div>
-      <div id="mobile-menu" class="md:hidden hidden pb-4">
-        <div class="flex flex-col gap-3">
-          <a class="py-1" href="/index.html">Home</a>
-          <a class="py-1" href="/oplossing.html">Oplossing</a>
-          <a class="py-1" href="/functies.html">Functies</a>
-          <a class="py-1" href="/prijzen.html">Prijzen</a>
-          <a class="py-1" href="/cases.html">Cases</a>
-          <a class="py-1" href="/over.html">Over ons</a>
-          <a class="py-2 rounded-lg bg-ink text-white text-center" href="/contact.html">Contact</a>
-        </div>
+
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <div>▲</div>BotMatic
+      </a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="/functies.html">Platforms</a></li>
+        <li><a href="/cases.html">Cases</a></li>
+        <li><a href="/faq.html">FAQ</a></li>
+        <li><a href="/prijzen.html">Prijzen</a></li>
+        <li><a href="/contact.html">Contact</a></li>
+      </ul>
+      <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+      <a href="/contact.html" class="cta">Start nu</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <h1>Onze Oplossingen</h1>
+    <p>Voor elk probleem een slimme bot.</p>
+  </section>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Klantenservice</h3>
+      <p>Automatiseer 80% van de eerstelijns vragen en verlaag de druk op je support team.</p>
+    </div>
+    <div class="card">
+      <h3>Sales & Lead Gen</h3>
+      <p>Kwalificeer leads automatisch en boek meetings direct in je agenda.</p>
+    </div>
+    <div class="card">
+      <h3>E-commerce</h3>
+      <p>Help klanten de juiste producten te vinden en verhoog je conversie.</p>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-in">
+      <div style="font-weight:800; color:black;">BotMatic</div>
+      <div>
+        <a href="/privacy.html">Privacy</a>
+        <a href="/contact.html">Contact</a>
       </div>
     </div>
-  </header>
-
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
-    <section class="md:text-center">
-      <h1 class="text-4xl md:text-5xl font-extrabold gradient-text" data-animate>Waarom BotMatic?</h1>
-      <p class="mt-4 text-lg text-slate-600" data-animate>Bedrijven verliezen conversies door traag antwoord, onduidelijke info en geen follow-up.
-      BotMatic vangt leads op, kwalificeert, plant afspraken en beantwoordt vragen — 24/7.</p>
-    </section>
-    <section class="mt-12 grid md:grid-cols-3 gap-6">
-      <div class="p-6 bg-white rounded-2xl border shadow-sm" data-animate>
-        <h3 class="font-bold text-xl">24/7 beschikbaar</h3>
-        <p class="mt-2 text-slate-600">Reageer altijd binnen seconden op WhatsApp, Telegram en website.</p>
-      </div>
-      <div class="p-6 bg-white rounded-2xl border shadow-sm" data-animate>
-        <h3 class="font-bold text-xl">Leadkwalificatie</h3>
-        <p class="mt-2 text-slate-600">Slimme vragen filteren wie echt klaar is om te kopen of te boeken.</p>
-      </div>
-      <div class="p-6 bg-white rounded-2xl border shadow-sm" data-animate>
-        <h3 class="font-bold text-xl">Automatische planning</h3>
-        <p class="mt-2 text-slate-600">Koppelingen met je agenda of formulier zorgen dat afspraken meteen vastliggen.</p>
-      </div>
-    </section>
-    <section class="mt-16">
-      <div class="rounded-2xl p-8 bg-white border shadow-sm" data-animate>
-        <h3 class="text-2xl font-bold">In 3 stappen live</h3>
-        <ol class="mt-4 space-y-3 text-slate-700 list-decimal list-inside">
-          <li>Kick-off: doel, kanalen en tone-of-voice bepalen</li>
-          <li>Flows & integraties: intake, FAQ, agenda, betalingen</li>
-          <li>Go-live: monitoren, bijsturen en optimaliseren</li>
-        </ol>
-      </div>
-    </section>
-  </main>
-
-  <footer class="mt-24 border-t border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid md:grid-cols-3 gap-8">
-      <div>
-        <img src="/assets/logo.svg" class="h-10 w-auto mb-3" alt="BotMatic" />
-        <p class="text-slate-600">Conversaties die converteren. WhatsApp, Telegram, website — één slimme chatbot.</p>
-      </div>
-      <div>
-        <h4 class="font-semibold mb-3">Navigatie</h4>
-        <ul class="space-y-2 text-slate-700">
-          <li><a href="/oplossing.html" class="hover:text-brand">Waarom chatbots</a></li>
-          <li><a href="/functies.html" class="hover:text-brand">Functies</a></li>
-          <li><a href="/prijzen.html" class="hover:text-brand">Prijzen</a></li>
-          <li><a href="/cases.html" class="hover:text-brand">Cases</a></li>
-          <li><a href="/over.html" class="hover:text-brand">Over ons</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="font-semibold mb-3">Contact</h4>
-        <ul class="space-y-2 text-slate-700">
-          <li><a href="mailto:hello@botmatic.be" class="hover:text-brand">hello@botmatic.be</a></li>
-          <li><a href="https://wa.me/32400000000?text=Hallo%20BotMatic%2C%20ik%20wil%20een%20demo%20van%20de%20chatbot." class="hover:text-brand">WhatsApp</a></li>
-          <li>België</li>
-        </ul>
-      </div>
-    </div>
-    <div class="py-6 text-center text-sm text-slate-500">© BotMatic 2025. Alle rechten voorbehouden.</div>
   </footer>
-  <script src="/js/main.js"></script>
+  <script src="/js/cookie-banner.js"></script>
 </body>
+
 </html>

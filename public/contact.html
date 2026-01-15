@@ -1,187 +1,288 @@
 <!DOCTYPE html>
 <html lang="nl">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Contact – BotMatic</title>
-  <meta name="description" content="Contacteer BotMatic. Stuur een bericht, WhatsApp ons of plan een gratis demo. Snel antwoord." />
+  <meta name="description" content="Neem contact op met BotMatic. Start vandaag nog met je gratis trial." />
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: { brand:'#7c3aed', brand2:'#22d3ee', ink:'#0f172a' },
-          boxShadow: { glow:'0 0 0 3px rgba(124,58,237,.25)' }
-        }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #FFFFFF;
+      --text: #000000;
+      --text-muted: #666666;
+      --accent: #10B981;
+      --border: #E5E5E5;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 20px;
+      color: black;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: black;
+    }
+
+    .nav-cta {
+      background: black;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .contact-section {
+      padding: 120px 24px 80px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .contact-section h1 {
+      font-size: clamp(40px, 6vw, 56px);
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .contact-section p {
+      font-size: 18px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 14px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: black;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.2s;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--accent);
+      color: white;
+      padding: 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    footer {
+      padding: 60px 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-in {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 32px;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: black;
+    }
+
+    @media (max-width: 900px) {
+      .nav-links {
+        display: none;
       }
     }
-  </script>
-  <style>
-    .gradient-text{background:linear-gradient(90deg,#7c3aed,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}
-    .hero-bg{background:
-      radial-gradient(1200px 600px at 20% -20%, rgba(124,58,237,.18), transparent),
-      radial-gradient(1200px 600px at 120% 20%, rgba(34,211,238,.18), transparent)}
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 10px;
+    }
+
+    .hamburger span {
+      width: 24px;
+      height: 2px;
+      background: black;
+      transition: 0.3s;
+    }
+
+    @media (max-width: 900px) {
+      .hamburger {
+        display: flex;
+      }
+    }
   </style>
 </head>
-<body class="min-h-screen bg-slate-50 text-slate-800 selection:bg-brand/20 selection:text-ink">
 
-  <!-- Header -->
-  <header class="sticky top-0 z-40 backdrop-blur bg-white/80 border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        <a href="/index.html" class="flex items-center gap-3 font-extrabold text-xl">
-          <img src="/assets/logo.svg" alt="BotMatic" class="h-8 w-auto" />
-        </a>
-        <nav class="hidden md:flex items-center gap-6">
-          <a class="hover:text-brand" href="/index.html">Home</a>
-          <a class="hover:text-brand" href="/oplossing.html">Oplossing</a>
-          <a class="hover:text-brand" href="/functies.html">Functies</a>
-          <a class="hover:text-brand" href="/prijzen.html">Prijzen</a>
-          <a class="hover:text-brand" href="/cases.html">Cases</a>
-          <a class="hover:text-brand" href="/faq.html">FAQ</a>
-          <a class="hover:text-brand" href="/over.html">Over ons</a>
-          <a class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-ink text-white hover:shadow-glow" href="/contact.html">Contact</a>
-        </nav>
-        <button id="menu-btn" class="md:hidden inline-flex items-center justify-center rounded-lg p-2 border" aria-label="Menu">☰</button>
-      </div>
-      <div id="mobile-menu" class="md:hidden hidden pb-4">
-        <div class="flex flex-col gap-3">
-          <a class="py-1" href="/index.html">Home</a>
-          <a class="py-1" href="/oplossing.html">Oplossing</a>
-          <a class="py-1" href="/functies.html">Functies</a>
-          <a class="py-1" href="/prijzen.html">Prijzen</a>
-          <a class="py-1" href="/cases.html">Cases</a>
-          <a class="py-1" href="/faq.html">FAQ</a>
-          <a class="py-1" href="/over.html">Over ons</a>
-          <a class="py-2 rounded-lg bg-ink text-white text-center" href="/contact.html">Contact</a>
-        </div>
-      </div>
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">BotMatic</a>
+      <ul class="nav-links">
+        <li><a href="/functies.html">Platforms</a></li>
+        <li><a href="/cases.html">Cases</a></li>
+        <li><a href="/faq.html">FAQ</a></li>
+        <li><a href="/prijzen.html">Prijzen</a></li>
+      </ul>
+      <button class="hamburger">
+        <span></span><span></span><span></span>
+      </button>
+      <a href="/contact.html" class="nav-cta active">Contact</a>
     </div>
-  </header>
+  </nav>
 
-  <!-- Hero -->
-  <section class="hero-bg">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-10">
-      <h1 class="text-4xl md:text-5xl font-extrabold gradient-text">Contact</h1>
-      <p class="mt-3 text-slate-600 max-w-2xl">Stel je vraag, WhatsApp ons of plan een gratis demo. We reageren doorgaans binnen enkele uren.</p>
-    </div>
+  <section class="contact-section">
+    <h1>Start vandaag.</h1>
+    <p>Vul het formulier in en we nemen binnen 24 uur contact met je op.</p>
+
+    <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <div class="form-group">
+        <label for="name">Naam *</label>
+        <input type="text" id="name" name="name" required placeholder="Je naam">
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email *</label>
+        <input type="email" id="email" name="email" required placeholder="je@bedrijf.nl">
+      </div>
+
+      <div class="form-group">
+        <label for="company">Bedrijf</label>
+        <input type="text" id="company" name="company" placeholder="Je bedrijfsnaam">
+      </div>
+
+      <div class="form-group">
+        <label for="message">Bericht *</label>
+        <textarea id="message" name="message" required placeholder="Vertel ons over je project..."></textarea>
+      </div>
+
+      <button type="submit" class="btn-submit">Verstuur bericht</button>
+    </form>
   </section>
 
-  <!-- Content -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-    <div class="grid md:grid-cols-2 gap-8 mt-6">
-      <!-- Form -->
-      <form class="p-6 bg-white rounded-2xl border shadow-sm space-y-4" action="mailto:info@botmatic.be" method="post" enctype="text/plain">
-        <div>
-          <label class="block text-sm mb-1">Naam</label>
-          <input name="name" required class="w-full rounded-xl border px-3 py-2" />
-        </div>
-        <div>
-          <label class="block text-sm mb-1">E-mail</label>
-          <input type="email" name="email" required class="w-full rounded-xl border px-3 py-2" />
-        </div>
-        <div>
-          <label class="block text-sm mb-1">Bericht</label>
-          <textarea name="message" rows="5" required class="w-full rounded-xl border px-3 py-2"></textarea>
-        </div>
-        <div class="flex flex-wrap gap-3">
-          <button type="submit" class="px-6 py-3 rounded-xl bg-brand text-white hover:opacity-90">Verstuur</button>
-          <a href="https://wa.me/32400000000?text=Hallo%20BotMatic%2C%20ik%20wil%20een%20vraag%20stellen." class="px-6 py-3 rounded-xl border hover:shadow-glow">WhatsApp</a>
-        </div>
-        <p class="text-xs text-slate-500">Door te verzenden ga je akkoord met onze <a href="/privacy.html" class="text-brand underline">Privacyvoorwaarden</a>.</p>
-      </form>
-
-      <!-- Info & CTA -->
-      <div class="p-6 bg-white rounded-2xl border shadow-sm space-y-4">
-        <h3 class="text-xl font-bold">Snel contact</h3>
-        <p><a class="hover:text-brand" href="mailto:info@botmatic.be">info@botmatic.be</a></p>
-        <p><a class="hover:text-brand" href="https://wa.me/32400000000?text=Hallo%20BotMatic%2C%20ik%20wil%20een%20demo%20plannen.">WhatsApp</a></p>
-        <p class="text-slate-600">Oostende, België</p>
-
-        <div class="pt-2">
-          <h4 class="font-semibold">📅 Plan een gratis demo</h4>
-          <p class="text-slate-600">20 minuten — we tonen exact wat mogelijk is voor jouw business.</p>
-          <a href="https://wa.me/32400000000?text=Hallo%20BotMatic%2C%20ik%20wil%20een%20gratis%20demo%20plannen." class="mt-3 inline-block px-6 py-3 rounded-xl bg-ink text-white hover:shadow-glow">Plan een demo via WhatsApp</a>
-        </div>
-
-        <div class="pt-2">
-          <h4 class="font-semibold">Waarom wij</h4>
-          <ul class="mt-1 space-y-1 text-slate-700">
-            <li>• 48u naar live</li>
-            <li>• Conversiegericht</li>
-            <li>• GDPR-proof</li>
-          </ul>
-        </div>
+  <footer>
+    <div class="footer-in">
+      <div class="logo">BotMatic</div>
+      <div class="footer-links">
+        <a href="/privacy.html">Privacy</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/prijzen.html">Prijzen</a>
       </div>
     </div>
-
-    <!-- Bottom CTA -->
-    <section class="mt-12 rounded-2xl border bg-gradient-to-r from-brand/10 to-brand2/10 p-6 flex flex-col md:flex-row items-center justify-between gap-4">
-      <div>
-        <h3 class="text-xl font-bold">Nog vragen?</h3>
-        <p class="text-slate-600">Wij helpen je graag persoonlijk verder.</p>
-      </div>
-      <div class="flex gap-3">
-        <a href="https://wa.me/32400000000?text=Hallo%20BotMatic%2C%20ik%20heb%20een%20vraag." class="px-6 py-3 rounded-xl border hover:shadow-glow">WhatsApp</a>
-        <a href="/faq.html" class="px-6 py-3 rounded-xl bg-ink text-white hover:shadow-glow">Bekijk FAQ</a>
-      </div>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer class="mt-24 border-t border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid md:grid-cols-3 gap-8">
-      <div>
-        <img src="/assets/logo.svg" class="h-10 w-auto mb-3" alt="BotMatic" />
-        <p class="text-slate-600">Conversaties die converteren. WhatsApp, Telegram, website — één slimme chatbot.</p>
-      </div>
-      <div>
-        <h4 class="font-semibold mb-3">Navigatie</h4>
-        <ul class="space-y-2 text-slate-700">
-          <li><a href="/oplossing.html" class="hover:text-brand">Waarom chatbots</a></li>
-          <li><a href="/functies.html" class="hover:text-brand">Functies</a></li>
-          <li><a href="/prijzen.html" class="hover:text-brand">Prijzen</a></li>
-          <li><a href="/cases.html" class="hover:text-brand">Cases</a></li>
-          <li><a href="/faq.html" class="hover:text-brand">FAQ</a></li>
-          <li><a href="/over.html" class="hover:text-brand">Over ons</a></li>
-          <li><a href="/privacy.html" class="hover:text-brand">Privacybeleid</a></li>
-          <li><a href="/cookies.html" class="hover:text-brand">Cookiebeleid</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="font-semibold mb-3">Contact</h4>
-        <ul class="space-y-2 text-slate-700">
-          <li><a href="mailto:info@botmatic.be" class="hover:text-brand">info@botmatic.be</a></li>
-          <li><a href="https://wa.me/32400000000" class="hover:text-brand">WhatsApp</a></li>
-          <li>Oostende, België</li>
-        </ul>
-      </div>
-    </div>
-    <div class="py-6 text-center text-sm text-slate-500">© BotMatic 2025. Alle rechten voorbehouden.</div>
   </footer>
 
-  <script>
-    const menuBtn=document.getElementById('menu-btn');const mobileMenu=document.getElementById('mobile-menu');
-    if(menuBtn&&mobileMenu){menuBtn.addEventListener('click',()=>mobileMenu.classList.toggle('hidden'))}
-  </script>
-
-  <!-- Cookie banner -->
-  <script>
-    (function(){
-      const key='bm_cookie_consent'; if(localStorage.getItem(key)) return;
-      const b=document.createElement('div');
-      b.className='fixed bottom-0 inset-x-0 bg-white border-t border-slate-300 shadow-md z-50';
-      b.innerHTML=`<div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-700">
-        <div>Wij gebruiken cookies voor basisfunctionaliteit, statistieken en marketing. <a class="text-brand underline" href="/cookies.html">Lees meer</a>.</div>
-        <div class="flex gap-2">
-          <button id="cookie-accept" class="px-4 py-2 rounded-xl bg-ink text-white">Accepteer alles</button>
-          <button id="cookie-decline" class="px-4 py-2 rounded-xl border">Weiger</button>
-        </div></div>`;
-      document.body.appendChild(b);
-      b.querySelector('#cookie-accept').onclick=()=>{localStorage.setItem(key,JSON.stringify({necessary:true,analytics:true,marketing:true,ts:Date.now()}));b.remove();}
-      b.querySelector('#cookie-decline').onclick=()=>{localStorage.setItem(key,JSON.stringify({necessary:true,analytics:false,marketing:false,ts:Date.now()}));b.remove();}
-    })();
-  </script>
+  <script src="/js/cookie-banner.js"></script>
 </body>
+
 </html>
