@@ -1,0 +1,821 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Календарь — твой год под контролем</title>
+    <meta name="description"
+        content="Обои-календарь для iPhone, обновляющиеся автоматически через Команды (Shortcuts).">
+    <meta name="theme-color" content="#07090d">
+    <style>
+        :root {
+            --bg: #07090d;
+            --panel: #0d1018;
+            --panel2: #0a0c12;
+            --border: rgba(255, 255, 255, .10);
+            --border2: rgba(255, 255, 255, .08);
+            --border3: rgba(255, 243, 238, 0.08);
+            --text: #f3f4f6;
+            --muted: rgba(243, 244, 246, .68);
+            --muted2: rgba(243, 244, 246, .52);
+            --accent: #7c5cff;
+            --accent2: #ff7a2f;
+            --radius: 20px;
+            --shadow: 0 18px 55px rgba(0, 0, 0, .55);
+            --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            --sans: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--sans);
+            color: var(--text);
+            background: var(--bg);
+            background:
+                radial-gradient(1200px 700px at 25% -10%, rgba(124, 92, 255, .20), transparent 60%),
+                radial-gradient(900px 600px at 80% 10%, rgba(255, 122, 47, .14), transparent 55%),
+                linear-gradient(180deg, #05070b 0%, #07090d 60%, #06070a 100%);
+        }
+
+        a {
+            color: inherit
+        }
+
+        .wrap {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 22px 18px 72px;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 2px 18px;
+            color: var(--muted2);
+            font-size: 13px;
+        }
+
+        .brand {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            box-shadow: 0 0 18px rgba(124, 92, 255, .35);
+        }
+
+        .hero {
+            padding: 58px 4px 24px;
+            display: grid;
+            gap: 18px;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: clamp(34px, 4.4vw, 62px);
+            line-height: 1.02;
+            letter-spacing: -.02em;
+        }
+
+        .hero p {
+            margin: 0;
+            max-width: 720px;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .ctaRow {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .03));
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
+            cursor: pointer;
+            user-select: none;
+            text-decoration: none;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .btn:hover {
+            filter: brightness(1.06)
+        }
+
+        .btn:active {
+            transform: scale(0.96);
+            filter: brightness(0.9);
+        }
+
+        .btn.secondary {
+            background: transparent;
+            border-color: var(--border2);
+            box-shadow: none;
+            color: var(--muted);
+        }
+
+        .leftStack {
+            display: grid;
+            gap: 32px;
+        }
+
+        .grid {
+            margin-top: 22px;
+            display: grid;
+            grid-template-columns: 1.1fr .9fr;
+            gap: 16px;
+            align-items: start;
+        }
+
+        @media (max-width:980px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .02));
+            border: 1px solid var(--border2);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .cardHead {
+            padding: clamp(16px, 2.4vw, 24px) clamp(20px, 3.2vw, 32px) 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .cardTitle {
+            font-size: 14px;
+            color: var(--muted2);
+            letter-spacing: .02em;
+            text-transform: uppercase;
+        }
+
+        .cardBody {
+            padding: clamp(16px, 2.4vw, 24px) clamp(20px, 3.2vw, 32px) clamp(16px, 2.4vw, 24px);
+        }
+
+        .form {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px;
+        }
+
+        @media (max-width:640px) {
+            .form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            color: var(--muted2);
+            margin: 0 0 6px;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px 12px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            background: rgba(0, 0, 0, .22);
+            color: var(--text);
+            outline: none;
+            appearance: none;
+        }
+
+        select:focus {
+            border-color: rgba(124, 92, 255, .55);
+            box-shadow: 0 0 0 4px rgba(124, 92, 255, .12);
+        }
+
+        .row {
+            margin-top: 12px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .urlBox {
+            margin-top: 24px;
+            padding: 12px;
+            border-radius: 14px;
+            border: 1px dashed rgba(255, 255, 255, .16);
+            background: rgba(0, 0, 0, .22);
+            font-family: var(--mono);
+            font-size: 12px;
+            line-height: 1.45;
+            word-break: break-all;
+        }
+
+        .miniPreview {
+            margin-top: 18px;
+            padding: 12px;
+            border-radius: 16px;
+            border: 1px solid var(--border2);
+            background: rgba(0, 0, 0, .18);
+        }
+
+        .miniLabel {
+            font-size: 12px;
+            color: var(--muted2);
+            letter-spacing: .02em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .miniCanvas {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .urlActions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--border2);
+            background: rgba(255, 255, 255, .03);
+            color: var(--muted);
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .pill:hover {
+            filter: brightness(1.06);
+            background: rgba(255, 255, 255, .05);
+        }
+
+        .pill:active {
+            transform: scale(0.96);
+            background: rgba(255, 255, 255, .08);
+        }
+
+        .pill.primary {
+            color: var(--text);
+            border-color: rgba(124, 92, 255, .35);
+            background: radial-gradient(120% 160% at 20% 10%, rgba(124, 92, 255, .18), rgba(255, 255, 255, .03));
+        }
+
+        .previewWrap {
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .preview {
+            width: 100%;
+            max-width: 400px;
+            /* Limit width for aesthetics */
+            position: relative;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, .10);
+            background: rgba(0, 0, 0, .22);
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Shine Effect */
+        .preview::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 18px;
+            background: linear-gradient(125deg,
+                    rgba(255, 255, 255, 0) 0%,
+                    rgba(255, 255, 255, 0.05) 40%,
+                    rgba(255, 255, 255, 0.2) 50%,
+                    rgba(255, 255, 255, 0.05) 60%,
+                    rgba(255, 255, 255, 0) 100%);
+            opacity: 0;
+            /* Hidden by default */
+            mix-blend-mode: overlay;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            z-index: 10;
+        }
+
+        .preview:hover::after {
+            opacity: 1;
+        }
+
+        /* Responsive canvas */
+        .preview img,
+        .preview canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .previewOverlay {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        /* Removed glass overlays to let our accurate canvas shine,
+           or we can keep them if we want to mimic the phone frame look.
+           For now, let's keep them hidden or subtle. */
+        .previewGlass {
+            position: absolute;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .08);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+            backdrop-filter: blur(6px) saturate(140%);
+            display: none;
+            /* Hidden by default effectively, can enable if desired */
+        }
+
+        .steps {
+            padding: 0 16px 16px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .step {
+            display: grid;
+            grid-template-columns: 28px 1fr;
+            gap: 12px;
+            align-items: start;
+            padding: 12px;
+            border-radius: 16px;
+            border: 1px solid var(--border2);
+            background: rgba(0, 0, 0, .18);
+        }
+
+        .num {
+            width: 28px;
+            height: 28px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, .08);
+            border: 1px solid rgba(255, 255, 255, .10);
+            color: var(--text);
+            font-weight: 800;
+        }
+
+        .step p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.5
+        }
+
+        .step b {
+            color: var(--text)
+        }
+
+        .about {
+            margin-top: 16px;
+            padding: 16px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .about h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .about p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.55
+        }
+
+        .socials {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .socials a {
+            color: var(--text)
+        }
+
+        .small {
+            font-size: 12px;
+            color: var(--muted2)
+        }
+
+        .bio {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .bio .avatar {
+            flex: 0 0 auto;
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, var(--accent), #7aa0ff);
+            color: #fff;
+            font-weight: 800;
+            font-size: 28px;
+            letter-spacing: .5px;
+            user-select: none;
+            overflow: hidden;
+        }
+
+        .bio .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Custom Input Styling */
+        #customFooterInput input {
+            transition: all 0.2s;
+        }
+
+        #customFooterInput input:focus {
+            border-color: rgba(124, 92, 255, .55);
+            box-shadow: 0 0 0 4px rgba(124, 92, 255, .12);
+        }
+
+        /* Segmented Control */
+        .segmented-control {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        .segmented-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            font-family: inherit;
+        }
+
+        .segmented-btn.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .segmented-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="topbar">
+            <div class="brand">
+                <span class="dot"></span>
+                <span>Pro Calendar · Генератор обоев</span>
+            </div>
+            <div class="small">Ежедневное обновление · Обои на iPhone</div>
+        </div>
+
+        <section class="hero">
+            <h1 data-i18n="hero_title">Календарь — твой год под контролем.</h1>
+            <p data-i18n="hero_subtitle">Обои-календарь, которые обновляются автоматически, показывают твой прогресс и
+                мотивируют каждый день.</p>
+
+            <div class="ctaRow">
+                <a class="btn" href="#generator" data-i18n="btn_generate">Сгенерировать ссылку</a>
+                <a class="btn secondary" href="#how" data-i18n="btn_how_to">Как настроить на iPhone</a>
+            </div>
+        </section>
+
+        <section class="grid" id="generator">
+            <div class="leftStack">
+
+                <!-- Left: Generator -->
+                <div class="card">
+                    <div class="cardHead">
+                        <div class="cardTitle" data-i18n="card_title_settings">1 · Настройки</div>
+                        <div class="small" data-i18n="card_subtitle_preview">Мгновенный просмотр</div>
+                    </div>
+
+                    <div class="cardBody">
+                        <div class="form">
+                            <div>
+                                <label data-i18n="label_model">Модель iPhone</label>
+                                <select id="model">
+                                    <option value="iphone_17_pro_max">iPhone 17 Pro Max</option>
+                                    <option value="iphone_17_pro">iPhone 17 Pro</option>
+                                    <option value="iphone_17">iPhone 17</option>
+                                    <option value="iphone_17_air">iPhone 17 Air</option>
+                                    <option value="iphone_16_pro_max">iPhone 16 Pro Max</option>
+                                    <option value="iphone_16_pro">iPhone 16 Pro</option>
+                                    <option value="iphone_16_plus">iPhone 16 Plus</option>
+                                    <option value="iphone_16">iPhone 16</option>
+                                    <option value="iphone_16e">iPhone 16e</option>
+                                    <option value="iphone_15_pro_max">iPhone 15 Pro Max</option>
+                                    <option value="iphone_15_pro" selected>iPhone 15 Pro</option>
+                                    <option value="iphone_15_plus">iPhone 15 Plus</option>
+                                    <option value="iphone_15">iPhone 15</option>
+                                    <option value="iphone_14_pro_max">iPhone 14 Pro Max</option>
+                                    <option value="iphone_14_pro">iPhone 14 Pro</option>
+                                    <option value="iphone_14_plus">iPhone 14 Plus</option>
+                                    <option value="iphone_14">iPhone 14</option>
+                                    <option value="iphone_13_pro_max">iPhone 13 Pro Max</option>
+                                    <option value="iphone_13_pro">iPhone 13 Pro</option>
+                                    <option value="iphone_13">iPhone 13</option>
+                                    <option value="iphone_13_mini">iPhone 13 mini</option>
+                                    <option value="iphone_12_pro_max">iPhone 12 Pro Max</option>
+                                    <option value="iphone_12_pro">iPhone 12 Pro</option>
+                                    <option value="iphone_12">iPhone 12</option>
+                                    <option value="iphone_12_mini">iPhone 12 mini</option>
+                                    <option value="iphone_11_pro_max">iPhone 11 Pro Max</option>
+                                    <option value="iphone_11_pro">iPhone 11 Pro</option>
+                                    <option value="iphone_11">iPhone 11</option>
+                                    <option value="iphone_xs_max">iPhone XS Max</option>
+                                    <option value="iphone_xr">iPhone XR</option>
+                                    <option value="iphone_xs">iPhone XS</option>
+                                    <option value="iphone_x">iPhone X</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label data-i18n="label_style">Стиль</label>
+                                <select id="style">
+                                    <option value="dots" selected>Dots (Точки)</option>
+                                    <option value="squares">Squares (Квадраты)</option>
+                                    <option value="bars">Bars (Полоски)</option>
+                                    <option value="rings">Rings (Кольца)</option>
+                                    <option value="numbers">Numbers (Числа)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label data-i18n="label_size">Размер календаря</label>
+                                <select id="calendarSize">
+                                    <option value="standard" selected data-i18n="opt_standard">Стандартный</option>
+                                    <option value="large" data-i18n="opt_large">Большой</option>
+                                    <option value="large_no_top" data-i18n="opt_large_no_top">Большой без верхних
+                                        виджетов</option>
+                                    <option value="large_no_bottom" data-i18n="opt_large_no_bottom">Большой без нижних
+                                        виджетов</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label data-i18n="label_weekend">Выходные</label>
+                                <select id="weekendMode">
+                                    <option value="weekends_only" selected data-i18n="opt_weekends_only">Только выходные
+                                    </option>
+                                    <option value="production_calendar" data-i18n="opt_prod_calendar">Производственный
+                                        календарь</option>
+                                    <option value="none" data-i18n="opt_no_weekend">Не отмечать</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label data-i18n="label_week_start">Начало недели</label>
+                                <div class="segmented-control">
+                                    <button class="segmented-btn active" data-value="monday"
+                                        data-i18n="opt_mon">Пн</button>
+                                    <button class="segmented-btn" data-value="sunday" data-i18n="opt_sun">Вс</button>
+                                </div>
+                                <input type="hidden" id="weekStart" value="monday">
+                            </div>
+
+                            <div>
+                                <label data-i18n="label_theme">Тема</label>
+                                <select id="theme">
+                                    <option value="graphite_orange" selected>Graphite Orange</option>
+                                    <option value="graphite_orange_oled">Graphite Orange (OLED)</option>
+                                    <option value="midnight_blue">Midnight Blue</option>
+                                    <option value="midnight_blue_oled">Midnight Blue (OLED)</option>
+                                    <option value="forest_green">Forest Green</option>
+                                    <option value="forest_green_oled">Forest Green (OLED)</option>
+                                    <option value="sand_terracotta">Sand & Terracotta</option>
+                                    <option value="sand_terracotta_oled">Sand & Terracotta (OLED)</option>
+                                    <option value="violet_focus">Violet Focus</option>
+                                    <option value="violet_focus_oled">Violet Focus (OLED)</option>
+                                    <option value="minimal_red">Minimal Red</option>
+                                    <option value="minimal_red_oled">Minimal Red (OLED)</option>
+                                    <!-- New Light Themes -->
+                                    <option value="sky_blue">Sky Blue ☀️</option>
+                                    <option value="lavender">Lavender 🌸</option>
+                                    <option value="peach">Peach 🍑</option>
+                                    <option value="clean_white">Clean White (Light)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label data-i18n="label_view_mode">Режим</label>
+                                <div class="segmented-control" id="viewModeControl">
+                                    <button class="segmented-btn active" data-value="year"
+                                        data-i18n="btn_year">Год</button>
+                                    <button class="segmented-btn" data-value="month"
+                                        data-i18n="btn_month">Месяц</button>
+                                    <button class="segmented-btn" data-value="week" data-i18n="btn_week">Неделя</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label data-i18n="label_language">Язык / Language</label>
+                                <div class="segmented-control" id="langControl">
+                                    <button class="segmented-btn active" data-value="ru">🇷🇺 RU</button>
+                                    <button class="segmented-btn" data-value="en">🇺🇸 EN</button>
+                                    <button class="segmented-btn" data-value="nl">🇳🇱 NL</button>
+                                </div>
+                                <select id="lang" style="display:none;">
+                                    <!-- Hidden but kept for logic if needed, or we'll remove it -->
+                                    <option value="ru" selected>Русский</option>
+                                    <option value="en">English</option>
+                                    <option value="nl">Dutch</option>
+                                </select>
+                            </div>
+
+
+                            <div>
+                                <label data-i18n="label_footer">Надпись внизу</label>
+                                <select id="footer">
+                                    <option value="days_left_percent_left" selected data-i18n="opt_days_percent">
+                                        Осталось дней + % осталось</option>
+                                    <option value="days_left_percent_done" data-i18n="opt_days_percent_done">Осталось
+                                        дней + % прошло</option>
+                                    <option value="days_left" data-i18n="opt_days_only">Осталось дней</option>
+                                    <option value="quote" data-i18n="opt_quote">Мотивирующая цитата</option>
+                                    <option value="custom" data-i18n="opt_custom">Свой текст</option>
+                                    <option value="none" data-i18n="opt_none">Ничего</option>
+                                </select>
+                            </div>
+
+                            <div id="customFooterInput" style="display:none; grid-column: span 2;">
+                                <label data-i18n="label_custom_text">Ваш текст</label>
+                                <input type="text" id="customText" placeholder="Напишите что-то вдохновляющее..."
+                                    data-i18n-placeholder="placeholder_custom_text"
+                                    style="width: 100%; padding: 12px; border-radius: 14px; border: 1px solid var(--border3); background: rgba(0, 0, 0, .3); color: var(--text); outline: none;">
+                            </div>
+                        </div>
+
+
+                        <div class="urlBox" id="urlBox">Link will appear here...</div>
+
+                        <div class="urlActions">
+                            <button class="pill primary" id="copyLinkBtn" data-i18n="btn_copy">Скопировать
+                                ссылку</button>
+                            <a class="pill" id="openPng" href="#" target="_blank" data-i18n="btn_download">Скачать /
+                                Открыть PNG</a>
+                            <a class="pill" id="openShortcuts" href="shortcuts://"
+                                data-i18n="btn_open_shortcuts">Открыть “Команды”</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3) How-to -->
+                <div class="card" id="how">
+                    <div class="cardHead">
+                        <div class="cardTitle" data-i18n="card_title_howto">2 · Как настроить на iPhone</div>
+                        <div class="small" data-i18n="card_subtitle_time">5–7 минут</div>
+                    </div>
+
+                    <div class="steps">
+                        <div class="step">
+                            <div class="num">1</div>
+                            <p data-i18n="step1">
+                                Открой <b>Команды</b> → <b>Автоматизация</b> → <b>Новая автоматизация</b> →
+                                <b>Время суток</b> → выбери <b>06:00</b> → <b>Ежедневно</b> →
+                                включи <b>Запускать немедленно</b>.
+                            </p>
+                        </div>
+
+                        <div class="step">
+                            <div class="num">2</div>
+                            <p data-i18n="step2">
+                                Нажми <b>Создать новую быструю команду</b> и добавь действия:
+                                <b>«Получить содержимое URL»</b> → затем <b>«Установить фото как обои»</b>.
+                            </p>
+                        </div>
+
+                        <div class="step">
+                            <div class="num">3</div>
+                            <p data-i18n="step3">
+                                Вставь ссылку выше в <b>«Получить содержимое URL»</b>.
+                                В <b>«Установить фото как обои»</b> выбери <b>Экран блокировки</b>.
+                            </p>
+                        </div>
+
+                        <div class="step">
+                            <div class="num">4</div>
+                            <p data-i18n="step4">
+                                В <b>«Установить фото как обои»</b> нажмите стрелку (>) и <b>выключите</b>:
+                                «Показать предпросмотр» и «Обрезать до объекта».
+                            </p>
+                        </div>
+
+                        <div class="step">
+                            <div class="num">5</div>
+                            <p data-i18n="step5">Готово! Обои будут обновляться каждое утро.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="cardHead">
+                        <div class="cardTitle" data-i18n="card_title_author">Автор</div>
+                    </div>
+                    <div class="cardBody">
+                        <div class="bio">
+                            <div class="avatar">
+                                USER
+                            </div>
+                            <div>
+                                <h3>Pro Calendar</h3>
+                                <p class="subtitle" data-i18n="author_subtitle">Улучшенная версия</p>
+                            </div>
+                        </div>
+                        <div style="margin-top:12px; font-size:13px; color:var(--muted);" data-i18n="author_note">
+                            Этот генератор работает локально и поддерживает кастомный текст.
+                        </div>
+                    </div>
+                </div>
+
+            </div><!--.leftStack-->
+
+            <!-- Right: Preview -->
+            <div class="card">
+                <div class="cardHead">
+                    <div class="cardTitle" data-i18n="preview_title">Предпросмотр</div>
+                    <div class="small" data-i18n="preview_subtitle">Обновляется в реальном времени</div>
+                </div>
+
+                <div class="previewWrap">
+                    <div class="preview">
+                        <!-- We use our Canvas here as the image source/placeholder -->
+                        <img id="previewImg" src="" alt="Wallpaper preview" style="display:block;">
+                        <!-- Hidden main canvas used for generation -->
+                        <canvas id="wallpaper-canvas" style="display:none;"></canvas>
+
+                        <div class="previewOverlay" aria-hidden="true">
+                            <div class="previewGlass previewWidgetTop"></div>
+                            <div class="previewGlass previewWidgetBottom"></div>
+                        </div>
+                    </div>
+                    <div class="small" style="margin-top:10px; text-align:center;" data-i18n="preview_note">
+                        Картинка генерируется браузером мгновенно.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
