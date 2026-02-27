@@ -1,288 +1,109 @@
 <!DOCTYPE html>
 <html lang="nl">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Contact – BotMatic</title>
-  <meta name="description" content="Neem contact op met BotMatic. Start vandaag nog met je gratis trial." />
+  <title>Contact | BotMatic</title>
+  <meta name="description" content="Neem contact op via WhatsApp of e-mail en bekijk snel een demo." />
+  <link rel="canonical" href="https://www.botmatic.be/contact.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Contact" />
+  <meta property="og:description" content="Stuur een bericht en bekijk meteen een demo." />
+  <meta property="og:url" content="https://www.botmatic.be/contact.html" />
+  <meta property="og:image" content="https://www.botmatic.be/assets/og.png" />
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    :root {
-      --bg: #FFFFFF;
-      --text: #000000;
-      --text-muted: #666666;
-      --accent: #10B981;
-      --border: #E5E5E5;
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .nav-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 24px;
-    }
-
-    .logo {
-      font-weight: 700;
-      font-size: 20px;
-      color: black;
-      text-decoration: none;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 32px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 15px;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover,
-    .nav-links a.active {
-      color: black;
-    }
-
-    .nav-cta {
-      background: black;
-      color: white;
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.2s;
-    }
-
-    .contact-section {
-      padding: 120px 24px 80px;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .contact-section h1 {
-      font-size: clamp(40px, 6vw, 56px);
-      font-weight: 800;
-      margin-bottom: 16px;
-    }
-
-    .contact-section p {
-      font-size: 18px;
-      color: var(--text-muted);
-      margin-bottom: 40px;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 8px;
-      font-size: 14px;
-    }
-
-    input,
-    textarea {
-      width: 100%;
-      padding: 14px;
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: black;
-      font-size: 15px;
-      font-family: 'Inter', sans-serif;
-      transition: all 0.2s;
-    }
-
-    input:focus,
-    textarea:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
-
-    textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
-
-    .btn-submit {
-      width: 100%;
-      background: var(--accent);
-      color: white;
-      padding: 16px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 16px;
-      border: none;
-      cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-    }
-
-    .btn-submit:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
-    }
-
-    footer {
-      padding: 60px 24px;
-      border-top: 1px solid var(--border);
-    }
-
-    .footer-in {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 32px;
-    }
-
-    .footer-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-
-    .footer-links a:hover {
-      color: black;
-    }
-
-    @media (max-width: 900px) {
-      .nav-links {
-        display: none;
-      }
-    }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 6px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 10px;
-    }
-
-    .hamburger span {
-      width: 24px;
-      height: 2px;
-      background: black;
-      transition: 0.3s;
-    }
-
-    @media (max-width: 900px) {
-      .hamburger {
-        display: flex;
-      }
-    }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
 </head>
-
 <body>
-  <nav>
-    <div class="nav-inner">
-      <a href="/" class="logo">BotMatic</a>
-      <ul class="nav-links">
-        <li><a href="/functies.html">Platforms</a></li>
-        <li><a href="/cases.html">Cases</a></li>
-        <li><a href="/faq.html">FAQ</a></li>
-        <li><a href="/prijzen.html">Prijzen</a></li>
-      </ul>
-      <button class="hamburger">
-        <span></span><span></span><span></span>
-      </button>
-      <a href="/contact.html" class="nav-cta active">Contact</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="/">BotMatic</a>
+      <nav class="site-nav" aria-label="Hoofdmenu">
+        <a href="/hoe-werkt-het.html">Hoe werkt het</a>
+        <a href="/voor-wie.html">Voor wie</a>
+        <a href="/prijzen.html">Prijzen</a>
+        <a href="/cases.html">Cases</a>
+        <a href="/vergelijking.html">Vergelijking</a>
+        <a href="/faq.html">FAQ</a>
+        <a class="active" href="/contact.html">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <a class="btn btn-primary wa-link" href="#">Bekijk demo via WhatsApp</a>
+        <button class="menu-toggle" aria-label="Menu" aria-expanded="false"><span></span></button>
+      </div>
     </div>
-  </nav>
+  </header>
 
-  <section class="contact-section">
-    <h1>Start vandaag.</h1>
-    <p>Vul het formulier in en we nemen binnen 24 uur contact met je op.</p>
-
-    <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-      <div class="form-group">
-        <label for="name">Naam *</label>
-        <input type="text" id="name" name="name" required placeholder="Je naam">
+  <main class="page">
+    <section class="page-title-block">
+      <div class="container">
+        <span class="eyebrow">Contact</span>
+        <h1>Plan je demo in enkele minuten</h1>
+        <p class="lead">WhatsApp is het snelst. E-mail kan ook.</p>
       </div>
+    </section>
 
-      <div class="form-group">
-        <label for="email">Email *</label>
-        <input type="email" id="email" name="email" required placeholder="je@bedrijf.nl">
+    <section class="section">
+      <div class="container editorial-columns">
+        <div>
+          <h2 style="font-size:1.9rem;max-width:none">Start via WhatsApp</h2>
+          <p class="sub">Stuur een kort bericht. We antwoorden snel en duidelijk.</p>
+          <a class="btn btn-primary wa-link" href="#">Bekijk demo via WhatsApp</a>
+          <div class="editorial-block" style="margin-top:1.5rem">
+            <h3>Liever e-mail?</h3>
+            <p class="sub" style="margin-bottom:.6rem">Stuur ons je vraag op.</p>
+            <a class="text-link" href="mailto:info@botmatic.be">info@botmatic.be →</a>
+          </div>
+        </div>
+
+        <div class="soft-panel">
+          <h3 style="margin-bottom:.8rem">Kort formulier</h3>
+          <form class="form-grid" action="mailto:info@botmatic.be" method="post" enctype="text/plain">
+            <div>
+              <label for="naam">Naam</label>
+              <input id="naam" name="Naam" type="text" required />
+            </div>
+            <div>
+              <label for="bedrijf">Bedrijf</label>
+              <input id="bedrijf" name="Bedrijf" type="text" required />
+            </div>
+            <div>
+              <label for="telefoon">Telefoon</label>
+              <input id="telefoon" name="Telefoon" type="tel" />
+            </div>
+            <div>
+              <label for="bericht">Bericht</label>
+              <textarea id="bericht" name="Bericht" required></textarea>
+            </div>
+            <button class="btn btn-primary" type="submit">Verstuur via e-mail</button>
+          </form>
+        </div>
       </div>
+    </section>
 
-      <div class="form-group">
-        <label for="company">Bedrijf</label>
-        <input type="text" id="company" name="company" placeholder="Je bedrijfsnaam">
+    <section class="section cta-band">
+      <div class="container cta-box">
+        <h2>Meer rust in je WhatsApp?</h2>
+        <p>Vraag een demo en zie meteen hoe BotMatic je team ontlast.</p>
+        <a class="btn btn-primary wa-link" href="#">Bekijk demo via WhatsApp</a>
       </div>
+    </section>
+  </main>
 
-      <div class="form-group">
-        <label for="message">Bericht *</label>
-        <textarea id="message" name="message" required placeholder="Vertel ons over je project..."></textarea>
-      </div>
-
-      <button type="submit" class="btn-submit">Verstuur bericht</button>
-    </form>
-  </section>
-
-  <footer>
-    <div class="footer-in">
-      <div class="logo">BotMatic</div>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="small">BotMatic voor KMO’s in België</div>
       <div class="footer-links">
         <a href="/privacy.html">Privacy</a>
+        <a href="/cookies.html">Cookies</a>
         <a href="/contact.html">Contact</a>
-        <a href="/prijzen.html">Prijzen</a>
       </div>
     </div>
   </footer>
 
-  <script src="/js/cookie-banner.js"></script>
+  <script src="/js/site.js"></script>
 </body>
-
 </html>

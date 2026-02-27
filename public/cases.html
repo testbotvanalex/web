@@ -1,535 +1,107 @@
 <!DOCTYPE html>
 <html lang="nl">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cases – BotMatic</title>
-  <meta name="description" content="Ontdek hoe bedrijven groeien met onze chatbots. Echte resultaten." />
-
+  <title>Cases | BotMatic</title>
+  <meta name="description" content="Drie KMO-cases over werkdruk verlichten met een rustige, op maat gemaakte WhatsApp-opvolging." />
+  <link rel="canonical" href="https://www.botmatic.be/cases.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Cases" />
+  <meta property="og:description" content="Voor/na-cases met meer rust, focus en continuïteit voor Belgische teams." />
+  <meta property="og:url" content="https://www.botmatic.be/cases.html" />
+  <meta property="og:image" content="https://www.botmatic.be/assets/og.png" />
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
-    rel="stylesheet">
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    :root {
-      /* HIGH CONTRAST LIGHT THEME */
-      --bg-body: #ffffff;
-      --text-main: #020617;
-      --text-muted: #334155;
-      --accent: #10B981;
-      --border: #CBD5E1;
-      --phone-border: #1E293B;
-    }
-
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background: var(--bg-body);
-      color: var(--text-main);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    nav {
-      position: fixed;
-      top: 0;
-      right: 0;
-      left: 0;
-      background: rgba(255, 255, 255, 0.95);
-      border-bottom: 1px solid var(--border);
-      z-index: 100;
-    }
-
-    .nav-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      height: 80px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 24px;
-    }
-
-    .logo {
-      font-weight: 800;
-      font-size: 24px;
-      color: black;
-      display: flex;
-      gap: 12px;
-      text-decoration: none;
-      align-items: center;
-    }
-
-    .logo div {
-      width: 36px;
-      height: 36px;
-      background: black;
-      color: white;
-      border-radius: 8px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 32px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 16px;
-    }
-
-    .nav-links a:hover,
-    .nav-links a.active {
-      color: black;
-    }
-
-    .cta {
-      background: black;
-      color: white;
-      padding: 12px 24px;
-      border-radius: 99px;
-      text-decoration: none;
-      font-weight: 700;
-    }
-
-    /* Page Header */
-    .page-header {
-      padding: 160px 24px 80px;
-      text-align: center;
-    }
-
-    .page-header h1 {
-      font-size: clamp(40px, 6vw, 64px);
-      font-weight: 800;
-      margin-bottom: 24px;
-      color: black;
-    }
-
-    .page-header p {
-      font-size: 20px;
-      color: var(--text-muted);
-      max-width: 600px;
-      margin: 0 auto;
-      font-weight: 500;
-    }
-
-    /* Cases List */
-    .cases-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 24px 100px;
-      display: flex;
-      flex-direction: column;
-      gap: 140px;
-    }
-
-    .case-item {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: center;
-    }
-
-    .case-item.reverse {
-      direction: rtl;
-    }
-
-    .case-item.reverse>* {
-      direction: ltr;
-    }
-
-    .case-content max-width: 500px;
-    }
-
-    .industry-badge {
-      display: inline-block;
-      padding: 8px 16px;
-      background: #ECFDF5;
-      color: #059669;
-      border-radius: 99px;
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      margin-bottom: 24px;
-    }
-
-    .case-content h2 {
-      font-size: 36px;
-      font-weight: 800;
-      margin-bottom: 16px;
-      color: black;
-      line-height: 1.2;
-    }
-
-    .case-content p {
-      font-size: 18px;
-      color: var(--text-muted);
-      margin-bottom: 32px;
-      font-weight: 500;
-    }
-
-    .case-stats {
-      display: flex;
-      gap: 40px;
-      margin-bottom: 32px;
-      border-top: 1px solid var(--border);
-      padding-top: 24px;
-    }
-
-    .stat h3 {
-      font-size: 28px;
-      font-weight: 800;
-      color: black;
-      margin-bottom: 4px;
-    }
-
-    .stat span {
-      font-size: 14px;
-      color: var(--text-muted);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .case-link {
-      color: #10B981;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 16px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .case-link:hover {
-      text-decoration: underline;
-    }
-
-    /* iPhone Style Mockup */
-    .case-visual {
-      position: relative;
-      display: flex;
-      justify-content: center;
-    }
-
-    .phone-frame {
-      width: 300px;
-      height: 600px;
-      background: white;
-      border: 12px solid var(--phone-border);
-      border-radius: 48px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.25);
-    }
-
-    /* Dynamic Notch */
-    .phone-frame::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 120px;
-      height: 30px;
-      background: var(--phone-border);
-      border-bottom-left-radius: 20px;
-      border-bottom-right-radius: 20px;
-      z-index: 20;
-    }
-
-    .chat-screen {
-      background: #F1F5F9;
-      /* Light Grey Chat BG */
-      height: 100%;
-      padding: 60px 20px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .chat-bubble {
-      padding: 14px 18px;
-      border-radius: 18px;
-      font-size: 14px;
-      line-height: 1.5;
-      max-width: 85%;
-      font-weight: 500;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    }
-
-    .chat-bubble.bot {
-      background: white;
-      color: black;
-      /* Bot: White bubble, Black text */
-      border-bottom-left-radius: 4px;
-      align-self: flex-start;
-      border: 1px solid #E2E8F0;
-    }
-
-    .chat-bubble.user {
-      background: #10B981;
-      color: white;
-      /* User: Green bubble, White text */
-      border-bottom-right-radius: 4px;
-      align-self: flex-end;
-    }
-
-    /* Footer */
-    footer {
-      padding: 80px 24px;
-      background: #F8FAFC;
-      border-top: 1px solid var(--border);
-    }
-
-    .footer-in {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .footer-in a {
-      color: var(--text-muted);
-      text-decoration: none;
-      margin-left: 24px;
-      font-weight: 600;
-    }
-
-    @media(max-width: 900px) {
-
-      .case-item,
-      .case-item.reverse {
-        grid-template-columns: 1fr;
-        direction: ltr;
-      }
-
-      .case-visual {
-        order: -1;
-        margin-bottom: 40px;
-      }
-
-      .nav-links {
-        display: none;
-      }
-
-      .phone-frame {
-        width: 280px;
-        height: 560px;
-      }
-    }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 6px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 10px;
-    }
-
-    .hamburger span {
-      width: 24px;
-      height: 2px;
-      background: black;
-      transition: 0.3s;
-    }
-
-    @media (max-width: 900px) {
-      .hamburger {
-        display: flex;
-      }
-
-      .nav-links {
-        position: fixed;
-        top: 80px;
-        left: 0;
-        right: 0;
-        background: white;
-        flex-direction: column;
-        padding: 24px;
-        border-bottom: 1px solid #E2E8F0;
-        transform: translateY(-100%);
-        opacity: 0;
-        pointer-events: none;
-        transition: 0.3s;
-        z-index: 90;
-      }
-
-      .nav-links.active {
-        transform: translateY(0);
-        opacity: 1;
-        pointer-events: all;
-        display: flex;
-      }
-    }
-
-    .whatsapp-float {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      width: 60px;
-      height: 60px;
-      background: #10B981;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
-      z-index: 99;
-      transition: 0.3s;
-    }
-  </style>
-  <script>function toggleMenu() { document.getElementById('nav-links').classList.toggle('active'); }</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
 </head>
-
 <body>
-  <nav>
-    <div class="nav-inner">
-      <a href="/" class="logo">
-        <div>▲</div>BotMatic
-      </a>
-      <ul class="nav-links" id="nav-links">
-        <li><a href="/functies.html">Platforms</a></li>
-        <li><a href="/cases.html" class="active">Cases</a></li>
-        <li><a href="/faq.html">FAQ</a></li>
-        <li><a href="/prijzen.html">Prijzen</a></li>
-        <li><a href="/contact.html">Contact</a></li>
-      </ul>
-      <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
-      <a href="/contact.html" class="cta">Start nu</a>
-    </div>
-  </nav>
-
-  <section class="page-header">
-    <h1>Echte <span style="color:#10B981">Resultaten.</span></h1>
-    <p>Ontdek hoe wij bedrijven helpen groeien met AI.</p>
-  </section>
-
-  <div class="cases-container">
-
-    <!-- Case 1: Salon -->
-    <div class="case-item">
-      <div class="case-content">
-        <div class="industry-badge">Beauty & Wellness</div>
-        <h2>Afspraken op <br>Automatische Piloot</h2>
-        <p>Luxe Salon had last van te veel telefoontjes tijdens behandelingen. Hun nieuwe WhatsApp bot beheert nu de
-          volledige agenda.</p>
-        <div class="case-stats">
-          <div class="stat">
-            <h3>+40%</h3><span>Meer boekingen</span>
-          </div>
-          <div class="stat">
-            <h3>-60%</h3><span>Minder telefoontjes</span>
-          </div>
-        </div>
-        <a href="/contact.html" class="case-link">Start ook een bot →</a>
-      </div>
-      <div class="case-visual">
-        <div class="phone-frame">
-          <div class="chat-screen">
-            <div class="chat-bubble bot">Welkom bij Luxe Salon! 👋<br>Wil je een afspraak maken?</div>
-            <div class="chat-bubble user">Ja graag, voor knippen.</div>
-            <div class="chat-bubble bot">Prima! Ik heb vandaag nog plek om 14:00 of 16:30.</div>
-            <div class="chat-bubble user">Doe maar 16:30.</div>
-            <div class="chat-bubble bot">Staat genoteerd! ✅ Tot straks.</div>
-          </div>
-        </div>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="/">BotMatic</a>
+      <nav class="site-nav" aria-label="Hoofdmenu">
+        <a href="/hoe-werkt-het.html">Hoe werkt het</a>
+        <a href="/voor-wie.html">Voor wie</a>
+        <a href="/prijzen.html">Prijzen</a>
+        <a class="active" href="/cases.html">Cases</a>
+        <a href="/vergelijking.html">Vergelijking</a>
+        <a href="/faq.html">FAQ</a>
+        <a href="/contact.html">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <a class="btn btn-primary wa-link" href="#">Bekijk demo via WhatsApp</a>
+        <button class="menu-toggle" aria-label="Menu" aria-expanded="false"><span></span></button>
       </div>
     </div>
+  </header>
 
-    <!-- Case 2: Auto Dealership -->
-    <div class="case-item reverse">
-      <div class="case-content">
-        <div class="industry-badge">Automotive</div>
-        <h2>Direct Leads <br>Kwalificeren</h2>
-        <p>Autoverkopers verloren tijd aan ongekwalificeerde leads. De bot stelt nu de juiste vragen vooraf.</p>
-        <div class="case-stats">
-          <div class="stat">
-            <h3>24/7</h3><span>Beschikbaar</span>
-          </div>
-          <div class="stat">
-            <h3>3x</h3><span>Meer conversie</span>
-          </div>
-        </div>
-        <a href="/contact.html" class="case-link">Start ook een bot →</a>
+  <main class="page">
+    <section class="page-title-block">
+      <div class="container">
+        <span class="eyebrow">Cases</span>
+        <h1>Wat dit in de praktijk oplevert</h1>
+        <p class="lead">Drie korte voor/na-verhalen uit Belgische KMO’s.</p>
       </div>
-      <div class="case-visual">
-        <div class="phone-frame">
-          <div class="chat-screen">
-            <div class="chat-bubble bot">Welkom! Zoek je een nieuwe wagen of occassie? 🚗</div>
-            <div class="chat-bubble user">Ik zoek een tweedehands SUV.</div>
-            <div class="chat-bubble bot">Wat is je budget ongeveer?</div>
-            <div class="chat-bubble user">Rond de €25.000.</div>
-            <div class="chat-bubble bot">Ik heb 3 perfecte wagens voor je gevonden! 👇</div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </section>
 
-    <!-- Case 3: E-commerce -->
-    <div class="case-item">
-      <div class="case-content">
-        <div class="industry-badge">E-commerce</div>
-        <h2>Support zonder <br>Wachttijd</h2>
-        <p>Webshop 'SneakerKing' kreeg dagelijks 100+ vragen over bestelstatussen. De bot lost dit nu direct op.</p>
-        <div class="case-stats">
-          <div class="stat">
-            <h3>90%</h3><span>Geautomatiseerd</span>
-          </div>
-          <div class="stat">
-            <h3>5 ★</h3><span>Klanttevredenheid</span>
-          </div>
-        </div>
-        <a href="/contact.html" class="case-link">Start ook een bot →</a>
-      </div>
-      <div class="case-visual">
-        <div class="phone-frame">
-          <div class="chat-screen">
-            <div class="chat-bubble bot">Hoi! Waarmee kan ik helpen? 👟</div>
-            <div class="chat-bubble user">Waar is mijn pakketje?</div>
-            <div class="chat-bubble bot">Wat is je ordernummer?</div>
-            <div class="chat-bubble user">#SK99281</div>
-            <div class="chat-bubble bot">Je pakketje wordt morgen bezorgd tussen 13:00 en 15:00! 🚚</div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <section class="section">
+      <div class="container editorial-columns">
+        <article class="editorial-block">
+          <span class="case-tag">Salon</span>
+          <h2 style="font-size:1.8rem;max-width:none">Situatie</h2>
+          <p class="sub">Afspraken en FAQ-vragen kwamen de hele dag door, zonder vaste lijn.</p>
+          <h3>Wat we deden</h3>
+          <p class="sub">We luisterden naar de werking en stemden opvolging op maat af op planning en afspraken.</p>
+          <h3>Resultaat</h3>
+          <p class="sub">Responstijd op terugkerende vragen ging van 1u47 naar 14 minuten. Minder onderbrekingen aan de balie.</p>
+        </article>
 
-  </div>
+        <article class="editorial-block">
+          <span class="case-tag">Garage</span>
+          <h2 style="font-size:1.8rem;max-width:none">Situatie</h2>
+          <p class="sub">Berichten kwamen binnen terwijl techniekers doorwerkten op de vloer.</p>
+          <h3>Wat we deden</h3>
+          <p class="sub">Terugkerende vragen werden eerst opgevangen; alleen relevante gesprekken gingen door naar het team.</p>
+          <h3>Resultaat</h3>
+          <p class="sub">Op drukke dagen zag het team 41% minder onderbrekingen op de vloer, met toch snelle opvolging.</p>
+        </article>
+      </div>
+    </section>
 
-  <footer>
-    <div class="footer-in">
-      <div style="font-weight:800; color:black;">BotMatic</div>
-      <div>
+    <section class="section section-alt">
+      <div class="container" style="max-width:900px">
+        <span class="case-tag">Praktijk</span>
+        <h2>Situatie</h2>
+        <p class="sub">Na werkuren bleven berichten openstaan, wat elke ochtend extra druk gaf.</p>
+        <h3>Wat we deden</h3>
+        <p class="sub">We zorgden voor een transparante lijn: terugkerende vragen werden opgevolgd, uitzonderingen doorgestuurd.</p>
+        <h3>Resultaat</h3>
+        <p class="sub" style="margin-bottom:0">Openstaande gesprekken bij dagstart daalden met 58%, waardoor de ochtend rustiger begon.</p>
+      </div>
+    </section>
+
+    <section class="section cta-band">
+      <div class="container cta-box">
+        <h2>Meer rust in je WhatsApp?</h2>
+        <p>Vraag een demo en zie meteen hoe BotMatic je team ontlast.</p>
+        <a class="btn btn-primary wa-link" href="#">Bekijk demo via WhatsApp</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="small">BotMatic voor KMO’s in België</div>
+      <div class="footer-links">
         <a href="/privacy.html">Privacy</a>
+        <a href="/cookies.html">Cookies</a>
         <a href="/contact.html">Contact</a>
       </div>
     </div>
   </footer>
 
-  <a href="https://wa.me/32400000000" class="whatsapp-float">
-    <svg viewBox="0 0 24 24" width="28" height="28" fill="white">
-      <path
-        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-    </svg>
-  </a>
-  <script src="/js/cookie-banner.js"></script>
+  <script src="/js/site.js"></script>
 </body>
-
 </html>

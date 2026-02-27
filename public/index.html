@@ -1,495 +1,319 @@
 <!DOCTYPE html>
 <html lang="nl">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BotMatic – AI Chatbots voor Bedrijven</title>
-  <meta name="description"
-    content="Automatiseer klantcontact met slimme AI chatbots. 24/7 beschikbaar op WhatsApp, Instagram en je website." />
-
-  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
-
-  <!-- Open Graph / Facebook -->
+  <title>BotMatic | WhatsApp & Instagram chatbot voor Belgische KMO's</title>
+  <meta name="description" content="De enige WhatsApp + Instagram chatbot speciaal voor Belgische KMO's. Klaar in 48 uur. Vanaf €49/maand. Geen technische kennis nodig." />
+  <link rel="canonical" href="https://www.botmatic.be/" />
   <meta property="og:type" content="website" />
+  <meta property="og:title" content="WhatsApp & Instagram chatbot voor Belgische KMO's | BotMatic" />
+  <meta property="og:description" content="Stop met dezelfde vragen te beantwoorden. BotMatic neemt je WhatsApp en Instagram DMs over — klaar in 48 uur, vanaf €49/maand." />
   <meta property="og:url" content="https://www.botmatic.be/" />
-  <meta property="og:title" content="BotMatic – AI Chatbots voor Bedrijven" />
-  <meta property="og:description"
-    content="Automatiseer klantcontact met slimme AI chatbots. 24/7 beschikbaar op WhatsApp, Instagram en je website." />
-  <meta property="og:image" content="https://www.botmatic.be/assets/og-image.png" />
-
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://www.botmatic.be/" />
-  <meta property="twitter:title" content="BotMatic – AI Chatbots voor Bedrijven" />
-  <meta property="twitter:description"
-    content="Automatiseer klantcontact met slimme AI chatbots. 24/7 beschikbaar op WhatsApp, Instagram en je website." />
-  <meta property="twitter:image" content="https://www.botmatic.be/assets/og-image.png" />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    :root {
-      --bg: #FFFFFF;
-      --text: #000000;
-      --text-muted: #666666;
-      --accent: #10B981;
-      --border: #E5E5E5;
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
-
-    /* Nav */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .nav-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 24px;
-    }
-
-    .logo {
-      font-weight: 700;
-      font-size: 20px;
-      color: black;
-      text-decoration: none;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 32px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 15px;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: black;
-    }
-
-    .nav-cta {
-      background: black;
-      color: white;
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: 0.2s;
-    }
-
-    .nav-cta:hover {
-      background: #333;
-    }
-
-    /* Hero */
-    .hero {
-      padding: 120px 24px 80px;
-      text-align: center;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .hero h1 {
-      font-size: clamp(48px, 8vw, 72px);
-      font-weight: 800;
-      line-height: 1.1;
-      margin-bottom: 24px;
-      letter-spacing: -0.02em;
-    }
-
-    .hero p {
-      font-size: 20px;
-      color: var(--text-muted);
-      margin-bottom: 40px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .hero-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--accent);
-      color: white;
-      padding: 16px 32px;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 16px;
-      text-decoration: none;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-      transition: all 0.2s;
-    }
-
-    .hero-cta:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
-    }
-
-    /* Features */
-    .features {
-      padding: 80px 24px;
-      background: #FAFAFA;
-    }
-
-    .features-grid {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 32px;
-    }
-
-    .feature-card {
-      background: white;
-      padding: 40px;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      transition: all 0.3s ease;
-    }
-
-    .feature-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
-      border-color: var(--accent);
-    }
-
-    .feature-icon {
-      width: 56px;
-      height: 56px;
-      background: #ECFDF5;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      margin-bottom: 20px;
-    }
-
-    .feature-card h3 {
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-
-    .feature-card p {
-      color: var(--text-muted);
-      font-size: 15px;
-      line-height: 1.6;
-    }
-
-    /* Stats */
-    .stats {
-      padding: 80px 24px;
-      text-align: center;
-    }
-
-    .stats-grid {
-      max-width: 900px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 48px;
-    }
-
-    .stat h4 {
-      font-size: 48px;
-      font-weight: 800;
-      color: var(--accent);
-      margin-bottom: 8px;
-    }
-
-    .stat p {
-      color: var(--text-muted);
-      font-size: 15px;
-    }
-
-    /* CTA Section */
-    .cta-section {
-      padding: 80px 24px;
-      background: #FAFAFA;
-      text-align: center;
-    }
-
-    .cta-section h2 {
-      font-size: clamp(32px, 5vw, 48px);
-      font-weight: 800;
-      margin-bottom: 20px;
-    }
-
-    .cta-section p {
-      font-size: 18px;
-      color: var(--text-muted);
-      margin-bottom: 32px;
-    }
-
-    .cta-btn {
-      display: inline-flex;
-      background: var(--accent);
-      color: white;
-      padding: 16px 32px;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 16px;
-      text-decoration: none;
-      transition: 0.2s;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-    }
-
-    .cta-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
-    }
-
-    /* Footer */
-    footer {
-      padding: 60px 24px;
-      border-top: 1px solid var(--border);
-    }
-
-    .footer-in {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 32px;
-    }
-
-    .footer-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-    }
-
-    .footer-links a:hover {
-      color: black;
-    }
-
-    /* Mobile */
-    @media (max-width: 900px) {
-      .nav-links {
-        display: none;
+  <meta property="og:image" content="https://www.botmatic.be/assets/og.png" />
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "BotMatic",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "description": "WhatsApp en Instagram chatbot voor Belgische KMO's. Automatische opvolging van terugkerende berichten, FAQ en afspraken.",
+        "offers": {
+          "@type": "AggregateOffer",
+          "lowPrice": "49",
+          "highPrice": "149",
+          "priceCurrency": "EUR",
+          "offerCount": "3"
+        },
+        "url": "https://www.botmatic.be"
+      },
+      {
+        "@type": "LocalBusiness",
+        "name": "BotMatic",
+        "description": "WhatsApp en Instagram chatbot voor Belgische KMO's",
+        "url": "https://www.botmatic.be",
+        "areaServed": { "@type": "Country", "name": "Belgium" },
+        "availableLanguage": ["Dutch", "French"]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Hoe snel is BotMatic live?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Binnen 48 uur na de intake staat BotMatic live in je dagelijkse werking." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is BotMatic GDPR-compliant?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Ja. Alle data wordt verwerkt binnen de EU en conform de GDPR-regelgeving." }
+          },
+          {
+            "@type": "Question",
+            "name": "Kan ik maandelijks opzeggen?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Ja, alle plannen zijn maandelijks opzegbaar. Geen lange contracten, geen verborgen kosten." }
+          },
+          {
+            "@type": "Question",
+            "name": "Werkt BotMatic ook voor Instagram DMs?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Ja, BotMatic werkt voor WhatsApp, Instagram DMs en Facebook Messenger." }
+          },
+          {
+            "@type": "Question",
+            "name": "Moet mijn team iets leren of installeren?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Nee. Je team werkt verder zoals vandaag. Wij regelen alles voor de start." }
+          }
+        ]
       }
-
-      .stats-grid {
-        grid-template-columns: 1fr;
-        gap: 32px;
-      }
-
-      .hero {
-        padding: 100px 24px 60px;
-      }
-
-      .hero h1 {
-        font-size: 40px;
-      }
-    }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 6px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 10px;
-    }
-
-    .hamburger span {
-      width: 24px;
-      height: 2px;
-      background: black;
-      transition: 0.3s;
-    }
-
-    @media (max-width: 900px) {
-      .hamburger {
-        display: flex;
-      }
-    }
-
-    /* Animations */
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .hero {
-      animation: fadeIn 0.8s ease;
-    }
-
-    .hero h1 {
-      animation: slideUp 0.8s ease 0.2s both;
-    }
-
-    .hero p {
-      animation: slideUp 0.8s ease 0.4s both;
-    }
-
-    .hero-cta {
-      animation: slideUp 0.8s ease 0.6s both;
-    }
-
-    .feature-card {
-      animation: fadeIn 0.6s ease both;
-    }
-
-    .feature-card:nth-child(1) {
-      animation-delay: 0.1s;
-    }
-
-    .feature-card:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-
-    .feature-card:nth-child(3) {
-      animation-delay: 0.3s;
-    }
-  </style>
+    ]
+  }
+  </script>
 </head>
-
 <body>
-  <nav>
-    <div class="nav-inner">
-      <a href="/" class="logo">BotMatic</a>
-      <ul class="nav-links">
-        <li><a href="/functies.html">Platforms</a></li>
-        <li><a href="/cases.html">Cases</a></li>
-        <li><a href="/faq.html">FAQ</a></li>
-        <li><a href="/prijzen.html">Prijzen</a></li>
-      </ul>
-      <button class="hamburger">
-        <span></span><span></span><span></span>
-      </button>
-      <a href="/contact.html" class="nav-cta">Contact</a>
-    </div>
-  </nav>
-
-  <section class="hero">
-    <h1>Automatiseer je klantcontact.</h1>
-    <p>
-      Slimme AI chatbots die 24/7 antwoorden geven, leads verzamelen en afspraken maken.
-      Op WhatsApp, Instagram en je website.
-    </p>
-    <a href="/contact.html" class="hero-cta">
-      Start gratis →
-    </a>
-  </section>
-
-  <section class="features">
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">⚡️</div>
-        <h3>Direct Antwoord</h3>
-        <p>Klanten krijgen binnen 1 seconde antwoord. Geen wachttijden, geen gemiste kansen.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🧠</div>
-        <h3>Slimme AI</h3>
-        <p>De bot begrijpt context en intentie. Natuurlijke gesprekken die écht helpen.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">📅</div>
-        <h3>Auto Booking</h3>
-        <p>Koppel je agenda en laat de bot afspraken inplannen. Volledig automatisch.</p>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="/">BotMatic</a>
+      <nav class="site-nav" aria-label="Hoofdmenu">
+        <a href="/hoe-werkt-het.html">Hoe werkt het</a>
+        <a href="/voor-wie.html">Voor wie</a>
+        <a href="/prijzen.html">Prijzen</a>
+        <a href="/cases.html">Cases</a>
+        <a href="/vergelijking.html">Vergelijking</a>
+        <a href="/faq.html">FAQ</a>
+        <a href="/contact.html">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <a class="btn btn-primary wa-link" href="#">Bekijk demo via WhatsApp</a>
+        <button class="menu-toggle" aria-label="Menu" aria-expanded="false"><span></span></button>
       </div>
     </div>
-  </section>
+  </header>
 
-  <section class="stats">
-    <div class="stats-grid">
-      <div class="stat">
-        <h4>98%</h4>
-        <p>WhatsApp open rate</p>
+  <main class="page">
+    <section class="section">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">De enige WhatsApp + Instagram chatbot voor Belgische KMO's</span>
+          <h1>Krijg jij veel aanvragen via WhatsApp of Instagram?</h1>
+          <p class="lead">Dan is dit voor jou.</p>
+          <ul class="hero-checklist">
+            <li>Je krijgt veel berichten via WhatsApp of Instagram DM</li>
+            <li>Je beantwoordt steeds dezelfde vragen opnieuw</li>
+            <li>Afspraken plan je nog manueel in</li>
+            <li>Je verliest reactietijd op drukke momenten</li>
+          </ul>
+          <p class="lead" style="margin-top:1rem">BotMatic neemt dat over — zodat jij je focust op wat écht telt.</p>
+          <div class="button-row">
+            <a class="btn btn-primary wa-link" href="#">Bekijk demo via WhatsApp</a>
+            <a class="text-link" href="/hoe-werkt-het.html">Hoe werkt het →</a>
+          </div>
+        </div>
+        <aside class="hero-visual hero-chat-wrap" aria-label="Voorbeeld gesprek">
+          <div class="chat-window">
+            <div class="chat-header">
+              <div class="chat-avatar">BM</div>
+              <div class="chat-meta">
+                <div class="chat-meta-name">BotMatic Assistent</div>
+                <div class="chat-meta-status">Online</div>
+              </div>
+            </div>
+            <div class="chat-body" id="heroChatBody"></div>
+          </div>
+        </aside>
       </div>
-      <div class="stat">
-        <h4>24/7</h4>
-        <p>Altijd beschikbaar</p>
-      </div>
-      <div class="stat">
-        <h4>80%</h4>
-        <p>Minder support vragen</p>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="cta-section">
-    <h2>Klaar om te starten?</h2>
-    <p>Probeer BotMatic gratis. Geen creditcard nodig.</p>
-    <a href="/contact.html" class="cta-btn">Start nu</a>
-  </section>
+    <section class="section section-tight">
+      <div class="container badge-strip trust-row">
+        <div class="badge">Belgisch bedrijf</div>
+        <div class="badge">Instap vanaf €49 / maand</div>
+        <div class="badge">Klaar in 48 uur</div>
+        <div class="badge">WhatsApp + Instagram + Messenger</div>
+      </div>
+    </section>
 
-  <footer>
-    <div class="footer-in">
-      <div class="logo">BotMatic</div>
+    <section class="section">
+      <div class="container editorial-columns">
+        <div>
+          <h2 style="font-size:2rem;max-width:none">WhatsApp stopt nooit</h2>
+          <p class="sub">Overdag, tussen klanten en zelfs na werkuren blijven berichten binnenkomen. Je team verliest focus door steeds opnieuw te schakelen.</p>
+          <ul class="editorial-list">
+            <li>Onderbrekingen tijdens je echte werk.</li>
+            <li>Steeds dezelfde vragen in de inbox.</li>
+            <li>Openstaande gesprekken bij de start van de dag.</li>
+          </ul>
+        </div>
+        <aside class="price-meta">
+          <h3>Wat BotMatic overneemt</h3>
+          <ul>
+            <li>Terugkerende FAQ-vragen en eerste intake.</li>
+            <li>Afspraken-opvolging in een rustige toon.</li>
+            <li>Filter: alleen belangrijke gesprekken naar je team.</li>
+            <li>Ook mogelijk via Instagram en Messenger.</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2>Jouw dag zonder BotMatic — en met</h2>
+        <div class="before-after-grid">
+          <div class="before-col">
+            <h3>Zonder BotMatic</h3>
+            <ul>
+              <li>Instagram DMs 's avonds gemist — klant boekt elders</li>
+              <li>45 minuten per dag: "Wat zijn jullie openingsuren?"</li>
+              <li>Maandag start je met 12 onbeantwoorde berichten</li>
+              <li>Afspraken inplannen via heen-en-weer WhatsApp</li>
+            </ul>
+          </div>
+          <div class="after-col">
+            <h3>Met BotMatic</h3>
+            <ul>
+              <li>Bot antwoordt automatisch in 30 seconden, ook om 23u</li>
+              <li>FAQ's worden afgehandeld zonder jouw tussenkomst</li>
+              <li>Maandag start je met een lege inbox en geen achterstand</li>
+              <li>Afspraken bevestigd — team enkel gebeld als het nodig is</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container">
+        <h2>Wat teams merken in de eerste maand</h2>
+        <div class="metrics-grid">
+          <article class="metric-item">
+            <p class="metric-number">-41%</p>
+            <p class="metric-label">minder onderbrekingen op drukke dagen</p>
+          </article>
+          <article class="metric-item">
+            <p class="metric-number">14 min</p>
+            <p class="metric-label">typische responstijd op terugkerende vragen</p>
+          </article>
+          <article class="metric-item">
+            <p class="metric-number">+58%</p>
+            <p class="metric-label">minder openstaande gesprekken bij dagstart</p>
+          </article>
+        </div>
+        <div style="margin-top:1rem">
+          <a class="text-link" href="/cases.html">Bekijk korte cases →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2>Wat klanten zeggen</h2>
+        <p class="sub">Korte reacties uit recente trajecten met Belgische KMO's.</p>
+        <div class="quote-grid">
+          <article class="quote-card">
+            <p class="quote-text">“Wij kregen eindelijk rust aan de balie. Vragen blijven niet meer liggen en klanten krijgen snel antwoord.”</p>
+            <p class="quote-author">Zaakvoerder, schoonheidssalon in Antwerpen</p>
+          </article>
+          <article class="quote-card">
+            <p class="quote-text">“Op drukke dagen is het verschil groot. Minder onderbrekingen in de garage, maar wel vlotte opvolging.”</p>
+            <p class="quote-author">Planner, garage in Oost-Vlaanderen</p>
+          </article>
+          <article class="quote-card">
+            <p class="quote-text">“Wij starten de ochtend zonder achterstand in berichten. Dat geeft direct meer focus voor het team.”</p>
+            <p class="quote-author">Praktijkmanager, groepspraktijk in Limburg</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section mid-cta-row">
+      <div class="container" style="text-align:center">
+        <p class="lead" style="margin-bottom:1rem">Benieuwd hoe dit voor jouw zaak werkt?</p>
+        <a class="btn btn-primary wa-link" href="#">Zie hoe BotMatic jouw inbox ontlast →</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <p class="sub" style="text-align:center;margin-bottom:1.5rem">Een parttime receptioniste kost <strong>€1.400+/maand</strong>. BotMatic neemt dezelfde repetitieve taken over voor een fractie van die prijs.</p>
+        <h2>Maandplannen die duidelijk blijven</h2>
+        <div class="pricing-grid">
+          <article class="pricing-card">
+            <span class="pricing-eyebrow">Starter</span>
+            <h3>Voor kleine teams</h3>
+            <p class="pricing-price">€ 49 / maand</p>
+          </article>
+          <article class="pricing-card featured">
+            <span class="pricing-eyebrow">Basis</span>
+            <h3>Meest gekozen</h3>
+            <p class="pricing-price">€ 95 / maand</p>
+          </article>
+          <article class="pricing-card">
+            <span class="pricing-eyebrow">Plus</span>
+            <h3>Voor hogere werkdruk</h3>
+            <p class="pricing-price">€ 149 / maand</p>
+          </article>
+        </div>
+        <div style="margin-top:1rem">
+          <a class="text-link" href="/prijzen.html">Bekijk alle prijsdetails →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container">
+        <h2>Veelgestelde vragen</h2>
+        <div class="faq-list" style="max-width:760px;margin-top:1rem">
+          <article class="faq-item"><button class="faq-trigger" aria-expanded="false">Hoe snel is BotMatic live?<span class="faq-icon">+</span></button><div class="faq-content"><p>Binnen 48 uur na de intake staat BotMatic live in je dagelijkse werking. Geen technische kennis nodig van jouw kant.</p></div></article>
+          <article class="faq-item"><button class="faq-trigger" aria-expanded="false">Is BotMatic GDPR-compliant?<span class="faq-icon">+</span></button><div class="faq-content"><p>Ja. Alle data wordt verwerkt binnen de EU en conform de GDPR-regelgeving. Meer info op onze <a href="/privacy.html">privacypagina</a>.</p></div></article>
+          <article class="faq-item"><button class="faq-trigger" aria-expanded="false">Kan ik maandelijks opzeggen?<span class="faq-icon">+</span></button><div class="faq-content"><p>Ja, alle plannen zijn maandelijks opzegbaar. Geen lange contracten, geen verborgen kosten.</p></div></article>
+          <article class="faq-item"><button class="faq-trigger" aria-expanded="false">Werkt BotMatic ook voor Instagram DMs?<span class="faq-icon">+</span></button><div class="faq-content"><p>Ja, BotMatic werkt voor WhatsApp, Instagram DMs en Facebook Messenger. Je kiest zelf welke kanalen je wil activeren.</p></div></article>
+          <article class="faq-item"><button class="faq-trigger" aria-expanded="false">Moet mijn team iets leren of installeren?<span class="faq-icon">+</span></button><div class="faq-content"><p>Nee. Je team werkt verder zoals vandaag. Wij regelen de volledige opzet en afstemming op jouw zaak.</p></div></article>
+          <article class="faq-item"><button class="faq-trigger" aria-expanded="false">Wat als de bot een vraag niet kan beantwoorden?<span class="faq-icon">+</span></button><div class="faq-content"><p>BotMatic geeft het gesprek discreet door aan je team. Zo mist je nooit een belangrijke vraag.</p></div></article>
+        </div>
+        <div style="margin-top:1rem">
+          <a class="text-link" href="/faq.html">Alle vragen bekijken →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="guarantee-box">
+          <div class="guarantee-icon">30</div>
+          <h2>Niet tevreden na 30 dagen? Geld terug.</h2>
+          <p>We vertrouwen op ons werk. Als BotMatic na 30 dagen niet de rust geeft die we beloven, krijg je je volledige investering terug — zonder vragen. Maandelijks opzegbaar, geen verborgen kosten.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section cta-band">
+      <div class="container cta-box">
+        <h2>Wil je meer rust in je WhatsApp?</h2>
+        <p>Stuur ons een bericht. Je ziet meteen hoe dit je team ontlast.</p>
+        <a class="btn btn-primary wa-link" href="#">Bekijk demo via WhatsApp</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="small">BotMatic voor KMO's in België</div>
       <div class="footer-links">
         <a href="/privacy.html">Privacy</a>
+        <a href="/cookies.html">Cookies</a>
         <a href="/contact.html">Contact</a>
       </div>
     </div>
   </footer>
 
-  <script src="/js/cookie-banner.js"></script>
+  <script src="/js/site.js"></script>
 </body>
-
 </html>

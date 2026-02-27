@@ -1,368 +1,111 @@
 <!DOCTYPE html>
 <html lang="nl">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>FAQ – BotMatic</title>
-  <meta name="description" content="Veelgestelde vragen over BotMatic AI chatbots." />
-
+  <title>FAQ | BotMatic</title>
+  <meta name="description" content="Antwoorden op de belangrijkste vragen over opstart, terugkerende taken en privacy." />
+  <link rel="canonical" href="https://www.botmatic.be/faq.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="FAQ" />
+  <meta property="og:description" content="Heldere antwoorden zonder omwegen." />
+  <meta property="og:url" content="https://www.botmatic.be/faq.html" />
+  <meta property="og:image" content="https://www.botmatic.be/assets/og.png" />
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    :root {
-      --bg: #FFFFFF;
-      --text: #000000;
-      --text-muted: #666666;
-      --accent: #10B981;
-      --border: #E5E5E5;
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .nav-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 24px;
-    }
-
-    .logo {
-      font-weight: 700;
-      font-size: 20px;
-      color: black;
-      text-decoration: none;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 32px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .nav-links a:hover {
-      color: black;
-    }
-
-    .nav-cta {
-      background: black;
-      color: white;
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: 0.2s;
-    }
-
-    .nav-cta:hover {
-      background: #333;
-    }
-
-    /* Header */
-    .header {
-      padding: 160px 24px 80px;
-      text-align: center;
-    }
-
-    .header h1 {
-      font-size: 48px;
-      font-weight: 800;
-      margin-bottom: 24px;
-    }
-
-    .header p {
-      color: var(--text-muted);
-      font-size: 20px;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    /* FAQ List */
-    .faq-container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 0 24px 120px;
-    }
-
-    .faq-item {
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      margin-bottom: 16px;
-      overflow: hidden;
-      background: white;
-    }
-
-    .faq-question {
-      width: 100%;
-      text-align: left;
-      padding: 24px;
-      background: none;
-      border: none;
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--text-main);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-      font-family: inherit;
-    }
-
-    .faq-question::after {
-      content: '+';
-      font-size: 24px;
-      color: var(--accent);
-    }
-
-    .faq-item.active .faq-question::after {
-      content: '−';
-    }
-
-    .faq-answer {
-      max-height: 0;
-      overflow: hidden;
-      padding: 0 24px;
-      color: var(--text-muted);
-      transition: all 0.3s;
-    }
-
-    .faq-item.active .faq-answer {
-      max-height: 300px;
-      padding: 0 24px 24px;
-    }
-
-    footer {
-      padding: 60px 24px;
-      border-top: 1px solid var(--border);
-    }
-
-    .footer-in {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .footer-in a {
-      color: var(--text-muted);
-      text-decoration: none;
-      margin-left: 24px;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-
-    .footer-in a:hover {
-      color: black;
-    }
-
-    @media(max-width: 900px) {
-      .nav-links {
-        display: none;
-      }
-    }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 6px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 10px;
-    }
-
-    .hamburger span {
-      width: 24px;
-      height: 2px;
-      background: black;
-      transition: 0.3s;
-    }
-
-    @media (max-width: 900px) {
-      .hamburger {
-        display: flex;
-      }
-
-      .nav-links {
-        position: fixed;
-        top: 80px;
-        left: 0;
-        right: 0;
-        background: white;
-        flex-direction: column;
-        padding: 24px;
-        border-bottom: 1px solid #E2E8F0;
-        transform: translateY(-100%);
-        opacity: 0;
-        pointer-events: none;
-        transition: 0.3s;
-        z-index: 90;
-      }
-
-      .nav-links.active {
-        transform: translateY(0);
-        opacity: 1;
-        pointer-events: all;
-        display: flex;
-      }
-    }
-
-    .whatsapp-float {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      width: 60px;
-      height: 60px;
-      background: #10B981;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
-      z-index: 99;
-      transition: 0.3s;
-    }
-  </style>
-  <script>
-    function toggleMenu() { document.getElementById('nav-links').classList.toggle('active'); }
-    function toggleFaq(el) { el.parentElement.classList.toggle('active'); }
-  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
 </head>
-
 <body>
-  <nav>
-    <div class="nav-inner">
-      <a href="/" class="logo">BotMatic</a>
-      <ul class="nav-links" id="nav-links">
-        <li><a href="/functies.html">Platforms</a></li>
-        <li><a href="/cases.html">Cases</a></li>
-        <li><a href="/faq.html">FAQ</a></li>
-        <li><a href="/prijzen.html">Prijzen</a></li>
-        <li><a href="/contact.html">Contact</a></li>
-      </ul>
-      <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
-      <a href="/contact.html" class="nav-cta">Contact</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="/">BotMatic</a>
+      <nav class="site-nav" aria-label="Hoofdmenu">
+        <a href="/hoe-werkt-het.html">Hoe werkt het</a>
+        <a href="/voor-wie.html">Voor wie</a>
+        <a href="/prijzen.html">Prijzen</a>
+        <a href="/cases.html">Cases</a>
+        <a href="/vergelijking.html">Vergelijking</a>
+        <a class="active" href="/faq.html">FAQ</a>
+        <a href="/contact.html">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <a class="btn btn-primary wa-link" href="#">Bekijk demo via WhatsApp</a>
+        <button class="menu-toggle" aria-label="Menu" aria-expanded="false"><span></span></button>
+      </div>
     </div>
-  </nav>
+  </header>
 
-  <div class="header">
-    <h1>Veelgestelde Vragen</h1>
-    <p>Alles wat je moet weten over onze AI chatbots.</p>
-  </div>
+  <main class="page">
+    <section class="page-title-block">
+      <div class="container">
+        <span class="eyebrow">FAQ</span>
+        <h1>Veelgestelde vragen</h1>
+        <p class="lead">Kort en duidelijk. Alles wat je team wil weten voor de start.</p>
+      </div>
+    </section>
 
-  <div class="faq-container">
-    <div class="faq-item">
-      <button class="faq-question" onclick="toggleFaq(this)">Werkt dit op mijn website?</button>
-      <div class="faq-answer">Ja! We hebben een 'copy-paste' widget die op elke website (WordPress, Shopify, Webflow)
-        werkt.</div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-question" onclick="toggleFaq(this)">Kan de bot afspraken maken?</button>
-      <div class="faq-answer">Zeker. De bot koppelt met Google Calendar of Outlook en plant afspraken direct in je
-        agenda.</div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-question" onclick="toggleFaq(this)">Wat als de bot het niet weet?</button>
-      <div class="faq-answer">Dan stuurt hij het gesprek door naar een menselijke medewerker via email of WhatsApp
-        notificatie.</div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-question" onclick="toggleFaq(this)">Is er een gratis proefperiode?</button>
-      <div class="faq-answer">Ja, we bieden een gratis account om de basisfunctionaliteit te testen. Geen creditcard
-        nodig.</div>
-    </div>
+    <section class="section">
+      <div class="container">
+        <h2>Wat is BotMatic?</h2>
+        <div class="faq-list">
+          <article class="faq-item"><button class="faq-trigger" aria-expanded="false">Wat doet BotMatic in de praktijk?<span class="faq-icon">+</span></button><div class="faq-content"><p>Via BotMatic krijg je een virtuele assistent die FAQ, afspraken en eerste vragen op WhatsApp overneemt.</p></div></article>
+          <article class="faq-item"><button class="faq-trigger" aria-expanded="false">Past dit voor kleine teams?<span class="faq-icon">+</span></button><div class="faq-content"><p>Ja. Vooral kleine en middelgrote teams merken snel meer rust.</p></div></article>
+        </div>
+      </div>
+    </section>
 
-    <div class="faq-item">
-      <button class="faq-question" onclick="toggleFaq(this)">Hoe lang duurt de implementatie?</button>
-      <div class="faq-answer">Gemiddeld 1-2 weken. Na de kick-off bouwen we de flows, koppelen integraties en testen
-        alles grondig voordat we live gaan.</div>
-    </div>
+    <section class="section">
+      <div class="container">
+        <h2>Hoe snel klaar?</h2>
+        <div class="faq-list">
+          <article class="faq-item"><button class="faq-trigger" aria-expanded="false">Hoe snel kunnen we live gaan?<span class="faq-icon">+</span></button><div class="faq-content"><p>Meestal staat alles klaar in enkele dagen.</p></div></article>
+          <article class="faq-item"><button class="faq-trigger" aria-expanded="false">Moeten we veel aanleveren?<span class="faq-icon">+</span></button><div class="faq-content"><p>Alleen wat nodig is: je FAQ, afspraken, toon en basisinfo over je werking.</p></div></article>
+        </div>
+      </div>
+    </section>
 
-    <div class="faq-item">
-      <button class="faq-question" onclick="toggleFaq(this)">Welke talen ondersteunt de bot?</button>
-      <div class="faq-answer">Nederlands, Frans, Engels en meer. De bot detecteert automatisch de taal van de klant en
-        past zich aan.</div>
-    </div>
+    <section class="section">
+      <div class="container">
+        <h2>Wat moet ik doen?</h2>
+        <div class="faq-list">
+          <article class="faq-item"><button class="faq-trigger" aria-expanded="false">Moet mijn team iets leren?<span class="faq-icon">+</span></button><div class="faq-content"><p>Nee. Je team blijft werken zoals vandaag.</p></div></article>
+          <article class="faq-item"><button class="faq-trigger" aria-expanded="false">Hoe houden we controle?<span class="faq-icon">+</span></button><div class="faq-content"><p>Je krijgt duidelijke afspraken en belangrijke gesprekken worden doorgestuurd.</p></div></article>
+        </div>
+      </div>
+    </section>
 
-    <div class="faq-item">
-      <button class="faq-question" onclick="toggleFaq(this)">Kan ik de bot zelf aanpassen?</button>
-      <div class="faq-answer">Ja! Je krijgt toegang tot een dashboard waar je flows kunt aanpassen, antwoorden kunt
-        updaten en statistieken kunt bekijken.</div>
-    </div>
+    <section class="section">
+      <div class="container">
+        <h2>Privacy</h2>
+        <div class="faq-list">
+          <article class="faq-item"><button class="faq-trigger" aria-expanded="false">Hoe gaan jullie om met gegevens?<span class="faq-icon">+</span></button><div class="faq-content"><p>We werken met duidelijke afspraken rond vertrouwelijkheid en correcte verwerking.</p></div></article>
+          <article class="faq-item"><button class="faq-trigger" aria-expanded="false">Waar lees ik meer?<span class="faq-icon">+</span></button><div class="faq-content"><p>Bekijk onze pagina’s <a href="/privacy.html">Privacy</a> en <a href="/cookies.html">Cookies</a>.</p></div></article>
+        </div>
+      </div>
+    </section>
 
-    <div class="faq-item">
-      <button class="faq-question" onclick="toggleFaq(this)">Wat kost het per extra gesprek?</button>
-      <div class="faq-answer">Ons Pro plan heeft onbeperkte gesprekken. Voor Starter geldt een limiet van 500/maand,
-        daarna €0.10 per gesprek.</div>
-    </div>
+    <section class="section cta-band">
+      <div class="container cta-box">
+        <h2>Meer rust in je WhatsApp?</h2>
+        <p>Vraag een demo en zie meteen hoe BotMatic je team ontlast.</p>
+        <a class="btn btn-primary wa-link" href="#">Bekijk demo via WhatsApp</a>
+      </div>
+    </section>
+  </main>
 
-    <div class="faq-item">
-      <button class="faq-question" onclick="toggleFaq(this)">Is mijn data veilig?</button>
-      <div class="faq-answer">Absoluut. We zijn GDPR-compliant, hosten in Europa en encrypteren alle data. Je behoudt
-        volledige controle over je gegevens.</div>
-    </div>
-
-    <div class="faq-item">
-      <button class="faq-question" onclick="toggleFaq(this)">Kan ik later upgraden of downgraden?</button>
-      <div class="faq-answer">Ja, je kunt op elk moment van plan wisselen. Wijzigingen gaan direct in en worden pro-rata
-        verrekend.</div>
-    </div>
-  </div>
-
-  <footer>
-    <div class="footer-in">
-      <div style="font-weight:800; color:black;">BotMatic</div>
-      <div>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="small">BotMatic voor KMO’s in België</div>
+      <div class="footer-links">
         <a href="/privacy.html">Privacy</a>
+        <a href="/cookies.html">Cookies</a>
         <a href="/contact.html">Contact</a>
       </div>
     </div>
   </footer>
 
-  <a href="https://wa.me/32400000000" class="whatsapp-float">
-    <svg viewBox="0 0 24 24" width="28" height="28" fill="white">
-      <path
-        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-    </svg>
-  </a>
-  <script src="/js/cookie-banner.js"></script>
+  <script src="/js/site.js"></script>
 </body>
-
 </html>

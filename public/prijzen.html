@@ -1,423 +1,187 @@
 <!DOCTYPE html>
 <html lang="nl">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prijzen – BotMatic</title>
-  <meta name="description" content="Transparante prijzen voor elk bedrijf. Geen verborgen kosten." />
-
+  <title>Prijzen | BotMatic</title>
+  <meta name="description" content="3 duidelijke maandplannen voor KMO's: €49, €95 of €149, met opties voor WhatsApp, Instagram en Messenger." />
+  <link rel="canonical" href="https://www.botmatic.be/prijzen.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Prijzen" />
+  <meta property="og:description" content="3 maandplannen: €49, €95 en €149. Transparante prijzen met uitbreiding naar Instagram en Messenger." />
+  <meta property="og:url" content="https://www.botmatic.be/prijzen.html" />
+  <meta property="og:image" content="https://www.botmatic.be/assets/og.png" />
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    :root {
-      --bg: #FFFFFF;
-      --text: #000000;
-      --text-muted: #666666;
-      --accent: #10B981;
-      --border: #E5E5E5;
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* Nav */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .nav-inner {
-      max-width: 1400px;
-      margin: 0 auto;
-      height: 72px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 32px;
-    }
-
-    .logo {
-      font-weight: 700;
-      font-size: 20px;
-      color: black;
-      text-decoration: none;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 40px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 15px;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover,
-    .nav-links a.active {
-      color: black;
-    }
-
-    .nav-cta {
-      background: black;
-      color: white;
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: 0.2s;
-    }
-
-    .nav-cta:hover {
-      background: #333;
-    }
-
-    /* Header */
-    .header {
-      padding: 140px 32px 60px;
-      text-align: center;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .header h1 {
-      font-size: clamp(40px, 6vw, 56px);
-      font-weight: 800;
-      margin-bottom: 20px;
-      color: black;
-    }
-
-    .header p {
-      font-size: 20px;
-      color: var(--text-muted);
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    /* Pricing Grid */
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 32px;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 32px 100px;
-    }
-
-    .price-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 40px;
-      transition: all 0.3s;
-      position: relative;
-    }
-
-    .price-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
-      border-color: var(--accent);
-    }
-
-    .plan-name {
-      font-size: 20px;
-      font-weight: 800;
-      margin-bottom: 12px;
-    }
-
-    .plan-desc {
-      color: var(--text-muted);
-      font-size: 15px;
-      margin-bottom: 32px;
-      min-height: 44px;
-    }
-
-    .price {
-      margin-bottom: 32px;
-      display: flex;
-      align-items: baseline;
-      gap: 4px;
-    }
-
-    .amount {
-      font-size: 48px;
-      font-weight: 900;
-      letter-spacing: -1px;
-    }
-
-    .period {
-      color: var(--text-muted);
-      font-weight: 600;
-      font-size: 16px;
-    }
-
-    .btn-plan {
-      display: block;
-      width: 100%;
-      text-align: center;
-      padding: 14px;
-      border-radius: 8px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: 0.2s;
-      background: #FAFAFA;
-      color: black;
-      border: 1px solid var(--border);
-    }
-
-    .btn-plan:hover {
-      background: #F0F0F0;
-    }
-
-    .features {
-      margin-top: 40px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .feat {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      color: var(--text-muted);
-      font-size: 15px;
-      font-weight: 500;
-    }
-
-    .check {
-      color: var(--accent);
-      font-weight: 800;
-      font-size: 18px;
-    }
-
-    /* Popular Card */
-    .price-card.popular {
-      background: #ECFDF5;
-      border: 2px solid var(--accent);
-      transform: scale(1.02);
-      box-shadow: 0 8px 16px rgba(16, 185, 129, 0.15);
-    }
-
-    .price-card.popular:hover {
-      transform: scale(1.04);
-    }
-
-    .popular-tag {
-      position: absolute;
-      top: -14px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--accent);
-      color: white;
-      padding: 6px 16px;
-      border-radius: 99px;
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);
-    }
-
-    .price-card.popular .btn-plan {
-      background: var(--accent);
-      color: white;
-      border-color: var(--accent);
-    }
-
-    .price-card.popular .btn-plan:hover {
-      background: #059669;
-    }
-
-    /* Footer */
-    footer {
-      padding: 80px 32px 40px;
-      border-top: 1px solid var(--border);
-    }
-
-    .footer-in {
-      max-width: 1400px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .footer-in a {
-      color: var(--text-muted);
-      text-decoration: none;
-      margin-left: 24px;
-      font-weight: 600;
-      transition: color 0.2s;
-    }
-
-    .footer-in a:hover {
-      color: black;
-    }
-
-    @media(max-width: 900px) {
-      .pricing-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .price-card.popular {
-        transform: none;
-      }
-
-      .nav-links {
-        display: none;
-      }
-    }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 6px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 10px;
-    }
-
-    .hamburger span {
-      width: 24px;
-      height: 2px;
-      background: black;
-      transition: 0.3s;
-    }
-
-    @media (max-width: 900px) {
-      .hamburger {
-        display: flex;
-      }
-    }
-  </style>
-  <script>function toggleMenu() { document.getElementById('nav-links').classList.toggle('active'); }</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
 </head>
-
 <body>
-  <nav>
-    <div class="nav-inner">
-      <a href="/" class="logo">BotMatic</a>
-      <ul class="nav-links" id="nav-links">
-        <li><a href="/functies.html">Platforms</a></li>
-        <li><a href="/cases.html">Cases</a></li>
-        <li><a href="/faq.html">FAQ</a></li>
-        <li><a href="/prijzen.html" class="active">Prijzen</a></li>
-        <li><a href="/contact.html">Contact</a></li>
-      </ul>
-      <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
-      <a href="/contact.html" class="cta">Start nu</a>
-    </div>
-  </nav>
-
-  <div class="header">
-    <h1>Kies jouw plan.</h1>
-    <p>Schaalbare prijzen voor groeiende bedrijven.</p>
-  </div>
-
-
-
-  <div class="pricing-grid">
-
-    <!-- STARTER -->
-    <div class="price-card">
-      <div class="plan-name">Starter</div>
-      <div class="plan-desc">Voor individuen en hobbyisten.</div>
-      <div class="price">
-        <span class="amount">€49</span>
-        <span class="period">/mnd</span>
-      </div>
-      <a href="/contact.html" class="btn-plan">Start gratis</a>
-      <div class="features">
-        <div class="feat"><span class="check">✓</span> 1 Chatbot</div>
-        <div class="feat"><span class="check">✓</span> 500 gesprekken/mnd</div>
-        <div class="feat"><span class="check">✓</span> Basis support</div>
-        <div class="feat"><span class="check">✓</span> Geen branding</div>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="/">BotMatic</a>
+      <nav class="site-nav" aria-label="Hoofdmenu">
+        <a href="/hoe-werkt-het.html">Hoe werkt het</a>
+        <a href="/voor-wie.html">Voor wie</a>
+        <a class="active" href="/prijzen.html">Prijzen</a>
+        <a href="/cases.html">Cases</a>
+        <a href="/vergelijking.html">Vergelijking</a>
+        <a href="/faq.html">FAQ</a>
+        <a href="/contact.html">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <a class="btn btn-primary wa-link" href="#">Bekijk demo via WhatsApp</a>
+        <button class="menu-toggle" aria-label="Menu" aria-expanded="false"><span></span></button>
       </div>
     </div>
+  </header>
 
-    <!-- PRO (Highlight) -->
-    <div class="price-card popular">
-      <div class="popular-tag">Meest Gekozen</div>
-      <div class="plan-name">Pro</div>
-      <div class="plan-desc">Voor groeiende bedrijven.</div>
-      <div class="price">
-        <span class="amount">€199</span>
-        <span class="period">/mnd</span>
+  <main class="page">
+    <section class="page-title-block">
+      <div class="container">
+        <span class="eyebrow">Prijzen</span>
+        <h1>Maandelijkse abonnementen voor KMO's</h1>
+        <p class="lead">Geen eenmalige formule. Je kiest een maandplan dat past bij je team en werkdruk.</p>
       </div>
-      <a href="/contact.html" class="btn-plan">Start Pro Trial</a>
-      <div class="features">
-        <div class="feat"><span class="check">✓</span> 3 Chatbots</div>
-        <div class="feat"><span class="check">✓</span> Onbeperkt gesprekken</div>
-        <div class="feat"><span class="check">✓</span> Priority Support</div>
-        <div class="feat"><span class="check">✓</span> API Toegang</div>
-        <div class="feat"><span class="check">✓</span> Custom Integraties</div>
-      </div>
-    </div>
+    </section>
 
-    <!-- BUSINESS -->
-    <div class="price-card">
-      <div class="plan-name">Business</div>
-      <div class="plan-desc">Voor grote teams en volumes.</div>
-      <div class="price">
-        <span class="amount">€499</span>
-        <span class="period">/mnd</span>
+    <section class="section section-tight">
+      <div class="container badge-strip" style="flex-wrap:wrap">
+        <div class="badge">3 maandplannen</div>
+        <div class="badge">Instap vanaf €49 / maand</div>
+        <div class="badge">Vrijblijvend kennismakingsgesprek</div>
+        <div class="badge">Opschalen wanneer nodig</div>
+        <div class="badge">Voor KMO's in België</div>
       </div>
-      <a href="/contact.html" class="btn-plan">Neem contact op</a>
-      <div class="features">
-        <div class="feat"><span class="check">✓</span> Onbeperkt Chatbots</div>
-        <div class="feat"><span class="check">✓</span> Dedicated Manager</div>
-        <div class="feat"><span class="check">✓</span> SLA Contract</div>
-        <div class="feat"><span class="check">✓</span> On-premise optie</div>
+    </section>
+
+    <section class="section section-tight">
+      <div class="container">
+        <p class="sub" style="margin-bottom:0">Ook mogelijk op aanvraag: opvolging via Instagram en Messenger in dezelfde toon als je WhatsApp-opvolging.</p>
+        <div style="margin-top:0.6rem"><a class="text-link" href="/vergelijking.html">Bekijk marktvergelijking →</a></div>
       </div>
-    </div>
+    </section>
 
-  </div>
+    <section class="section">
+      <div class="container pricing-grid">
+        <article class="pricing-card">
+          <span class="pricing-eyebrow">Maandplan</span>
+          <h2 style="font-size:1.9rem;max-width:none">Starter Lite</h2>
+          <p class="pricing-price">€ 49 / maand</p>
+          <p class="pricing-note">excl. btw</p>
+          <p class="pricing-note">Voor kleine teams met beperkte dagelijkse stroom.</p>
+          <ul class="check-list">
+            <li>Basisopvolging van FAQ en eerste vragen.</li>
+            <li>Eenvoudige afspraken-intake.</li>
+            <li>Doorsturen van urgente gesprekken.</li>
+            <li>Maandelijkse kleine bijsturing.</li>
+          </ul>
+          <a class="text-link wa-link" href="#">Start met Starter →</a>
+        </article>
 
-  <footer>
-    <div class="footer-in">
-      <div style="font-weight:800; color:black;">BotMatic</div>
-      <div>
+        <article class="pricing-card featured">
+          <span class="pricing-eyebrow">Maandplan</span>
+          <h2 style="font-size:1.9rem;max-width:none">Abonnement Basis</h2>
+          <p class="pricing-price">€ 95 / maand</p>
+          <p class="pricing-note">excl. btw</p>
+          <p class="pricing-note">Voor teams die dagelijks ontlasting willen op WhatsApp.</p>
+          <ul class="check-list">
+            <li>Opvolging van FAQ en terugkerende vragen.</li>
+            <li>Afsprakenbeheer en duidelijke intakevragen.</li>
+            <li>Doorsturen van belangrijke gesprekken naar je team.</li>
+            <li>Maandelijkse bijsturing op basis van je werking.</li>
+          </ul>
+          <a class="btn btn-primary wa-link" href="#">Start met Basis</a>
+        </article>
+
+        <article class="pricing-card">
+          <span class="pricing-eyebrow">Maandplan</span>
+          <h2 style="font-size:1.9rem;max-width:none">Abonnement Plus</h2>
+          <p class="pricing-price">€ 149 / maand</p>
+          <p class="pricing-note">excl. btw</p>
+          <p class="pricing-note">Voor teams met hogere werkdruk en extra kanalen.</p>
+          <ul class="check-list">
+            <li>Alles van Basis.</li>
+            <li>Snellere bijsturing in drukke periodes.</li>
+            <li>Uitbreiding mogelijk met Instagram en Messenger.</li>
+            <li>Prioritaire ondersteuning en vaste maandelijkse check-in.</li>
+          </ul>
+          <a class="text-link wa-link" href="#">Start met Plus →</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container editorial-columns">
+        <div>
+          <h2>Hoe bepalen we je prijs?</h2>
+          <p class="sub">Je kiest Starter, Basis of Plus. Daarna stemmen we toon, afspraken en opvolging af op jouw zaak.</p>
+          <ul class="editorial-list">
+            <li>Aantal berichten en ritme doorheen de week.</li>
+            <li>Hoeveel terugkerende vragen en afspraken je hebt.</li>
+            <li>Welke gesprekken meteen naar je team moeten.</li>
+            <li>Of je ook Instagram en Messenger wil laten opvolgen.</li>
+          </ul>
+        </div>
+        <aside class="price-meta">
+          <h3>Wat je altijd krijgt in je maandplan</h3>
+          <ul>
+            <li>Een aanpak op maat van je zaak.</li>
+            <li>Discreet en beleefd contact met klanten.</li>
+            <li>Duidelijke afspraken met je team.</li>
+            <li>Meer focus op je echte werk.</li>
+          </ul>
+          <p class="small" style="margin-top:0.8rem">Geen eenmalige opstartfactuur: je start direct met een maandabonnement.</p>
+          <p class="small" style="margin-top:0.45rem">Instagram of Messenger als extra kanaal: vanaf € 29 per maand per kanaal.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2>Korte vragen over prijzen</h2>
+        <div class="faq-list" style="max-width:900px">
+          <article class="faq-item">
+            <button class="faq-trigger" aria-expanded="false">Is er een eenmalige opstartkost?<span class="faq-icon">+</span></button>
+            <div class="faq-content"><p>Nee. We werken met maandabonnementen. Je start direct met Starter, Basis of Plus.</p></div>
+          </article>
+          <article class="faq-item">
+            <button class="faq-trigger" aria-expanded="false">Hebben jullie ook een lagere instapprijs?<span class="faq-icon">+</span></button>
+            <div class="faq-content"><p>Ja. Voor kleine teams is er Starter Lite aan € 49 per maand.</p></div>
+          </article>
+          <article class="faq-item">
+            <button class="faq-trigger" aria-expanded="false">Kunnen we later opschalen of afbouwen?<span class="faq-icon">+</span></button>
+            <div class="faq-content"><p>Ja. Je kan schakelen tussen Starter, Basis en Plus wanneer je situatie verandert.</p></div>
+          </article>
+          <article class="faq-item">
+            <button class="faq-trigger" aria-expanded="false">Doen jullie ook Instagram en Messenger?<span class="faq-icon">+</span></button>
+            <div class="faq-content"><p>Ja. Naast WhatsApp kunnen we ook opvolging via Instagram en Messenger voorzien.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section cta-band">
+      <div class="container cta-box">
+        <h2>Meer rust in je WhatsApp?</h2>
+        <p>Vraag een demo en zie meteen hoe BotMatic je team ontlast.</p>
+        <a class="btn btn-primary wa-link" href="#">Bekijk demo via WhatsApp</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="small">BotMatic voor KMO's in België</div>
+      <div class="footer-links">
         <a href="/privacy.html">Privacy</a>
+        <a href="/cookies.html">Cookies</a>
         <a href="/contact.html">Contact</a>
       </div>
     </div>
   </footer>
 
-  <a href="https://wa.me/32400000000" class="whatsapp-float">
-    <svg viewBox="0 0 24 24" width="28" height="28" fill="white">
-      <path
-        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-    </svg>
-  </a>
-
-  <script src="/js/cookie-banner.js"></script>
+  <script src="/js/site.js"></script>
 </body>
-
 </html>
