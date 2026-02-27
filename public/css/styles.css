@@ -1365,4 +1365,12 @@ textarea {
     border-left: 0;
     padding-left: 0;
   }
+
+  .section {
+    padding: 2.5rem 0;
+  }
+
+  .cta-band {
+    margin-top: 0;
+  }
 }
