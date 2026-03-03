@@ -35,21 +35,28 @@
   let isRestoring = false, stockDebounce = null, lastFound = [];
 
   DRINKS.forEach(function (d, idx) {
-    var card = document.createElement('div');
-    card.id = 'row_' + idx;
-    card.className = 'dk-card';
-    card.innerHTML = `<div class="dk-name">${d.short}</div>
-    <div class="dk-rows">
-      <div class="dk-row"><span class="dk-lbl">Doel</span><span class="dk-val"><input type="number" id="gew_${idx}" min="0" readonly class="readonly-input"> fl</span></div>
-      <div class="dk-row"><span class="dk-lbl">Bar</span><span class="dk-val"><input type="number" id="bar_${idx}" min="0" readonly class="readonly-input"> fl</span></div>
-      <div class="dk-row"><span class="dk-lbl">Stock</span><span class="dk-val"><input type="number" id="stock_${idx}" min="0" value="0"> fl</span></div>
-      <div class="dk-row" id="achterfl_row_${idx}" style="display:none"><span class="dk-lbl">Achter</span><span class="dk-val"><input type="number" id="achterfl_${idx}" readonly> fl</span></div>
+    var row = document.createElement('div');
+    row.id = 'row_' + idx;
+    row.className = 'dl-row';
+    row.innerHTML = `
+    <div class="dl-name">
+      <span class="dl-title">${d.short}</span>
+      <span class="dl-meta" id="dl-meta-${idx}"></span>
     </div>
+    <div class="dl-stock">
+      <input type="number" id="stock_${idx}" min="0" value="0" placeholder="0">
+      <span class="dl-unit">fl</span>
+    </div>
+    <div class="dl-badge-wrap">
+      <div class="dl-badge ok" id="bestelbadge_${idx}">✓ OK</div>
+    </div>
+    <input type="number" id="gew_${idx}" style="display:none" readonly>
+    <input type="number" id="bar_${idx}" style="display:none" readonly>
+    <input type="number" id="achterfl_${idx}" style="display:none" readonly>
     <input type="number" id="achterbak_${idx}" style="display:none" readonly>
     <input type="number" id="rest_${idx}" style="display:none" readonly>
-    <input type="number" id="bestel_${idx}" style="display:none" readonly>
-    <div class="dk-badge good" id="bestelbadge_${idx}">✓ OK</div>`;
-    document.getElementById('drankGrid').appendChild(card);
+    <input type="number" id="bestel_${idx}" style="display:none" readonly>`;
+    document.getElementById('drankGrid').appendChild(row);
   });
 
   function curHall() { return hallEl.value; }
@@ -151,18 +158,20 @@
       document.getElementById('bestel_' + idx).value = bestelBakken;
       var row = document.getElementById('row_' + idx);
       var badge = document.getElementById('bestelbadge_' + idx);
+      var meta = document.getElementById('dl-meta-' + idx);
+      if (meta) meta.textContent = 'Doel: ' + gewenst + ' | Bar: ' + bar;
       row.classList.remove('needs-order', 'ok', 'amber', 'zero-stock');
       if (bestelBakken > 0) {
         row.classList.add('needs-order');
-        badge.className = 'dk-badge order'; badge.textContent = '+' + bestelBakken + ' bak';
+        badge.className = 'dl-badge order'; badge.textContent = '+' + bestelBakken + ' bak';
       } else if (achterBakken === 0 && restFlessen === 0) {
         row.classList.add('zero-stock');
-        badge.className = 'dk-badge warn'; badge.textContent = '⚠ Leeg achter';
+        badge.className = 'dl-badge warn'; badge.textContent = '⚠ Leeg achter';
       } else {
         row.classList.add('ok');
-        badge.className = 'dk-badge good'; badge.textContent = '✓ OK';
+        badge.className = 'dl-badge ok'; badge.textContent = '✓ OK';
       }
-      if (lastFound[idx] === false) { row.classList.remove('ok'); row.classList.add('amber'); badge.className = 'dk-badge warn'; badge.textContent = '? Niet gevonden'; }
+      if (lastFound[idx] === false) { row.classList.remove('ok'); row.classList.add('amber'); badge.className = 'dl-badge warn'; badge.textContent = '? Niet gevonden'; }
       total += bestelBakken;
     });
     totalsEl.textContent = 'Totaal bestellen: ' + total + ' bak(ken)';

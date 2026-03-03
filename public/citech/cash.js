@@ -31,18 +31,28 @@
   }
 
   CASH_ITEMS.forEach(function (item, idx) {
-    var card = document.createElement('div');
-    card.id = 'cash_row_' + idx;
-    card.className = 'cs-card';
-    card.innerHTML = `<div class="cs-denom">${item.label}</div>
-    <div class="cs-rows">
-      <div class="cs-row"><span class="cs-lbl">Doel</span><span class="cs-val"><input type="number" id="cash_goal_${idx}" min="0" step="10"> €</span></div>
-      <div class="cs-row"><span class="cs-lbl">Stock</span><span class="cs-val"><input type="number" id="cash_stock_${idx}" min="0" step="10" readonly> €</span></div>
+    var row = document.createElement('div');
+    row.id = 'cash_row_' + idx;
+    row.className = 'dl-row';
+    row.innerHTML = `
+    <div class="dl-name">
+      <span class="dl-title">${item.label}</span>
+      <span class="dl-meta" id="cs-meta-${idx}"></span>
+    </div>
+    <div class="dl-stock">
+      <input type="number" id="cash_goal_${idx}" min="0" step="10" placeholder="doel">
+      <span class="dl-unit">€</span>
+    </div>
+    <div class="dl-stock" style="margin-left:4px">
+      <input type="number" id="cash_stock_${idx}" min="0" step="10" readonly>
+      <span class="dl-unit">stock</span>
+    </div>
+    <div class="dl-badge-wrap">
+      <div class="dl-badge ok" id="cashbadge_${idx}">✓ OK</div>
     </div>
     <input type="text" id="cash_order_eur_${idx}" style="display:none" readonly>
-    <input type="number" id="cash_order_units_${idx}" style="display:none" readonly>
-    <div class="cs-badge good" id="cashbadge_${idx}">✓ OK</div>`;
-    document.getElementById('cashGrid').appendChild(card);
+    <input type="number" id="cash_order_units_${idx}" style="display:none" readonly>`;
+    document.getElementById('cashGrid').appendChild(row);
   });
 
   function applyCashDefaults() {
@@ -138,11 +148,11 @@
       row.classList.remove('needs-order', 'ok');
       if (notes > 0) {
         row.classList.add('needs-order');
-        badge.className = 'cs-badge order';
+        badge.className = 'dl-badge order';
         badge.textContent = notes + ' st = ' + formatMoney(orderAmount) + ' euro';
       } else {
         row.classList.add('ok');
-        badge.className = 'cs-badge good';
+        badge.className = 'dl-badge ok';
         badge.textContent = '✓ Voldoende';
       }
       totalOrderUnits += notes; totalOrderAmount += orderAmount;

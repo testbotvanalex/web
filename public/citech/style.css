@@ -1123,3 +1123,39 @@ td.warn-val {
 .cs-badge{display:inline-block;margin-top:10px;width:100%;text-align:center;padding:6px 0;border-radius:8px;font-size:13px;font-weight:800}
 .cs-badge.order{background:#dc2626;color:white}
 .cs-badge.good{background:#dcfce7;color:#15803d}
+
+/* ── Drink / Cash list layout ── */
+#drankGrid, #cashGrid { display: flex; flex-direction: column; gap: 0; padding: 0 !important; }
+.dl-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 22px; border-bottom: 1px solid #f1f5f9;
+  transition: background .1s;
+}
+.dl-row:last-child { border-bottom: none; }
+.dl-row:hover { background: #f8fafc; }
+.dl-row.needs-order { background: #fff5f5; }
+.dl-row.ok { background: white; }
+.dl-row.zero-stock { background: #fff7ed; }
+.dl-row.amber { background: #fffbeb; }
+.dl-name { flex: 1; min-width: 0; }
+.dl-title { font-size: 14px; font-weight: 700; color: #1a1a2e; display: block; }
+.dl-meta { font-size: 11px; color: #94a3b8; margin-top: 1px; display: block; }
+.dl-stock {
+  display: flex; align-items: center; gap: 6px;
+}
+.dl-stock input[type="number"] {
+  width: 72px; border: 1.5px solid #e2e8f0; border-radius: 8px;
+  padding: 6px 8px; font-size: 14px; font-weight: 700; text-align: center;
+  outline: none; font-family: inherit; color: #1a1a2e;
+  transition: border-color .15s;
+}
+.dl-stock input[type="number"]:focus { border-color: #6366f1; }
+.dl-unit { font-size: 12px; color: #94a3b8; font-weight: 600; }
+.dl-badge-wrap { flex-shrink: 0; min-width: 110px; text-align: right; }
+.dl-badge {
+  display: inline-block; padding: 5px 14px; border-radius: 20px;
+  font-size: 13px; font-weight: 800; white-space: nowrap;
+}
+.dl-badge.order { background: #fee2e2; color: #dc2626; }
+.dl-badge.ok { background: #dcfce7; color: #15803d; }
+.dl-badge.warn { background: #fef9c3; color: #a16207; }
