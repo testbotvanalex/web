@@ -1089,3 +1089,37 @@ td.warn-val {
     font-size: 12px;
   }
 }
+/* ── Drink cards grid ── */
+.drink-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.dk-card{border-radius:12px;padding:14px;border:2px solid #e2e8f0;background:white;transition:all .15s;position:relative}
+.dk-card.needs-order{border-color:#fca5a5;background:#fff5f5}
+.dk-card.ok{border-color:#bbf7d0;background:#f0fdf4}
+.dk-card.amber{border-color:#fde68a;background:#fffbeb}
+.dk-card.zero-stock{border-color:#fb923c;background:#fff7ed}
+.dk-name{font-size:14px;font-weight:800;color:#1a1a2e;margin-bottom:10px}
+.dk-rows{display:flex;flex-direction:column;gap:5px}
+.dk-row{display:flex;justify-content:space-between;align-items:center;font-size:12px}
+.dk-lbl{color:#94a3b8;font-weight:600}
+.dk-val{font-weight:700;color:#334155}
+.dk-val input[type="number"]{width:60px;border:1.5px solid #e2e8f0;border-radius:6px;padding:3px 6px;font-size:12px;font-weight:700;text-align:right;outline:none;font-family:inherit;color:#1a1a2e}
+.dk-val input[type="number"]:focus{border-color:#6366f1}
+.dk-badge{display:inline-block;margin-top:10px;width:100%;text-align:center;padding:6px 0;border-radius:8px;font-size:13px;font-weight:800}
+.dk-badge.order{background:#dc2626;color:white}
+.dk-badge.good{background:#dcfce7;color:#15803d}
+.dk-badge.warn{background:#fef9c3;color:#a16207}
+
+/* ── Cash cards grid ── */
+.cash-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.cs-card{border-radius:12px;padding:14px;border:2px solid #e2e8f0;background:white;transition:all .15s}
+.cs-card.needs-order{border-color:#fca5a5;background:#fff5f5}
+.cs-card.ok{border-color:#bbf7d0;background:#f0fdf4}
+.cs-denom{font-size:22px;font-weight:800;color:#6366f1;margin-bottom:10px}
+.cs-rows{display:flex;flex-direction:column;gap:5px}
+.cs-row{display:flex;justify-content:space-between;align-items:center;font-size:12px}
+.cs-lbl{color:#94a3b8;font-weight:600}
+.cs-val{font-weight:700;color:#334155}
+.cs-val input[type="number"]{width:70px;border:1.5px solid #e2e8f0;border-radius:6px;padding:3px 6px;font-size:12px;font-weight:700;text-align:right;outline:none;font-family:inherit;color:#1a1a2e}
+.cs-val input[type="number"]:focus{border-color:#6366f1}
+.cs-badge{display:inline-block;margin-top:10px;width:100%;text-align:center;padding:6px 0;border-radius:8px;font-size:13px;font-weight:800}
+.cs-badge.order{background:#dc2626;color:white}
+.cs-badge.good{background:#dcfce7;color:#15803d}
