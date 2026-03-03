@@ -1306,3 +1306,5 @@ td.warn-val {
   .inv-table tbody td { padding: 10px 10px; }
   .tbl-input { width: 64px; font-size: 14px; }
 }
+
+.tbl-breakdown { display:block; font-size:10px; color:#94a3b8; font-weight:600; margin-top:3px; letter-spacing:.2px; }
