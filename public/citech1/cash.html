@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geld bestelling – Citech helper</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Hidden select for JS compatibility -->
+  <select id="hall" style="display:none">
+    <option value="nieuwpoort">GP Nieuwpoort</option>
+    <option value="blankenberge">GP Blankenberge</option>
+  </select>
+
+  <div class="topbar">
+    <div class="topbar-inner">
+
+      <div class="brand">
+        <span class="brand-icon">🎰</span>
+        <span class="brand-title">Citech helper</span>
+      </div>
+
+      <div class="topbar-center">
+        <div class="seg-group" id="hallToggle">
+          <button class="seg active" data-hall="nieuwpoort">Nieuwpoort</button>
+          <button class="seg" data-hall="blankenberge">Blankenberge</button>
+        </div>
+      </div>
+
+      <nav class="nav-tabs">
+        <a href="index.html" class="tab">🍺 Drank</a>
+        <a href="cash.html" class="tab active">💶 Geld</a>
+        <a href="machines.html" class="tab">🎰 Machines</a>
+      </nav>
+
+    </div>
+  </div>
+
+  <div class="app">
+    <header class="header">
+      <div>
+        <h1>Geld bestelling</h1>
+        <p class="subtitle">Plak de volledige cash-pagina uit Citech (ATM, cassettes, safe) — de tool berekent wat je
+          bij Brinks moet bestellen.</p>
+      </div>
+      <button class="btn btn-ghost small-btn" id="cashResetAllBtn">↺ Reset alles</button>
+    </header>
+
+    <main class="main">
+      <!-- STAP 1 -->
+      <section class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Stap 1 — Cash-rapport uit Citech plakken</h2>
+          <span class="status-pill" id="cashStatus">Nog niet berekend</span>
+        </div>
+        <p class="panel-sub">Gewoon alles kopiëren (ATM cassette configuration, counters, cassettes(€), safe(€)).</p>
+
+        <textarea id="cashInput" placeholder="Plak hier de cash-pagina uit Citech..."></textarea>
+
+        <div class="panel-actions">
+          <div class="panel-actions-left">
+            <button class="btn btn-primary" id="readCashBtn">▶ Lees STOCK &amp; bereken</button>
+            <button class="btn btn-ghost" id="sampleCashBtn">Voorbeeld</button>
+          </div>
+          <div class="panel-actions-right">
+            <button class="btn btn-ghost" id="clearCashBtn">Clear</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- STAP 2 -->
+      <section class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Stap 2 — Controleer bedragen per coupure</h2>
+          <div class="totals-pill" id="cashTotals">Totaal bestellen: 0 biljetten / €0,00</div>
+        </div>
+
+        <div class="table-wrapper">
+          <table id="cashTable">
+            <thead>
+              <tr>
+                <th>Naam</th>
+                <th>Gewenst<br>(€)</th>
+                <th>Stock<br>(€)</th>
+                <th>Te bestellen<br>(€)</th>
+                <th>Te bestellen<br>(biljetten)</th>
+              </tr>
+            </thead>
+            <tbody id="cashBody"></tbody>
+          </table>
+        </div>
+
+        <div class="panel-actions panel-actions-bottom">
+          <div class="panel-actions-left">
+            <button class="btn btn-primary" id="cashGenTextBtn">Genereer bestelling</button>
+            <button class="btn" id="cashGenCopyBtn">Genereer + Copy</button>
+          </div>
+          <div class="panel-actions-right">
+            <button class="btn" id="cashCopyBtn">COPY</button>
+            <button class="btn" id="cashPrintBtn">PRINT</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- MAIL TEKST -->
+      <section class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">E-mail tekst</h2>
+          <span class="panel-hint">Klaar om te mailen naar Brinks / bank.</span>
+        </div>
+        <div id="cashOutput" class="output"></div>
+        <div class="panel-actions">
+          <div class="panel-actions-left">
+            <button class="btn" id="copyCashTableBtn">Copy tabel (TSV)</button>
+          </div>
+        </div>
+      </section>
+
+      <div class="sticky-actions">
+        <button class="btn btn-primary" id="stickyCashGenCopyBtn">⚡ Genereer + Copy</button>
+      </div>
+    </main>
+
+    <footer class="footer">
+      Lokaal hulpmiddel – alle gegevens blijven in jouw browser.
+    </footer>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="cash.js"></script>
+  <script>
+    // Hall toggle
+    document.querySelectorAll('#hallToggle .seg').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#hallToggle .seg').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('hall').value = btn.dataset.hall;
+        document.getElementById('hall').dispatchEvent(new Event('change'));
+      });
+    });
+    // Sync on load
+    const savedHall = JSON.parse(localStorage.getItem('cash_state_v1') || '{}').hall;
+    if (savedHall) {
+      document.getElementById('hall').value = savedHall;
+      document.querySelectorAll('#hallToggle .seg').forEach(b => {
+        b.classList.toggle('active', b.dataset.hall === savedHall);
+      });
+    }
+  </script>
+</body>
+
+</html>

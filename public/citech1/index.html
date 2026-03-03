@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drank bestelling – Citech helper</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Hidden select for JS compatibility -->
+  <select id="hall" style="display:none">
+    <option value="nieuwpoort">GP Nieuwpoort</option>
+    <option value="blankenberge">GP Blankenberge</option>
+  </select>
+
+  <div class="topbar">
+    <div class="topbar-inner">
+
+      <div class="brand">
+        <span class="brand-icon">🎰</span>
+        <span class="brand-title">Citech helper</span>
+      </div>
+
+      <div class="topbar-center">
+        <div class="seg-group" id="hallToggle">
+          <button class="seg active" data-hall="nieuwpoort">Nieuwpoort</button>
+          <button class="seg" data-hall="blankenberge">Blankenberge</button>
+        </div>
+      </div>
+
+      <nav class="nav-tabs">
+        <a href="index.html" class="tab active">🍺 Drank</a>
+        <a href="cash.html" class="tab">💶 Geld</a>
+        <a href="machines.html" class="tab">🎰 Machines</a>
+      </nav>
+
+    </div>
+  </div>
+
+  <div class="app">
+    <header class="header">
+      <div>
+        <h1>Drank bestelling</h1>
+        <p class="subtitle">Plak de <strong>STOCK actuel</strong> tabel uit Citech — de tool rekent automatisch.</p>
+      </div>
+      <button class="btn btn-ghost small-btn" id="resetAllBtn">↺ Reset alles</button>
+    </header>
+
+    <main class="main">
+      <!-- STAP 1 -->
+      <section class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Stap 1 — STOCK actuel plakken</h2>
+          <span class="status-pill" id="stockStatus">Nog niet berekend</span>
+        </div>
+        <p class="panel-sub">Volledige tabel plakken, inclusief datum/uur – parser pakt zelf de juiste cijfers.</p>
+
+        <textarea id="stockInput" placeholder="Plak hier de STOCK actuel tabel van Citech..."></textarea>
+
+        <div class="panel-actions">
+          <div class="panel-actions-left">
+            <button class="btn btn-primary" id="readStockBtn">▶ Lees STOCK &amp; bereken</button>
+            <button class="btn btn-ghost" id="sampleStockBtn">Voorbeeld</button>
+          </div>
+          <div class="panel-actions-right">
+            <button class="btn btn-ghost" id="clearStockBtn">Clear</button>
+            <button class="btn btn-ghost" id="resetDefaultsBtn">Reset defaults</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- STAP 2 -->
+      <section class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Stap 2 — Controleer &amp; pas aan</h2>
+          <div class="totals-pill" id="totals">Totaal bestellen: 0 bak(ken)</div>
+        </div>
+
+        <div class="table-wrapper">
+          <table id="calcTable">
+            <thead>
+              <tr>
+                <th>Naam</th>
+                <th>Gewenst<br>(fl)</th>
+                <th>Bar<br>(fl)</th>
+                <th>Stock<br>(fl)</th>
+                <th>Achter<br>(fl)</th>
+                <th>Achter<br>(bak)</th>
+                <th>Aangebroken<br>(fl)</th>
+                <th>Te bestellen<br>(bak)</th>
+              </tr>
+            </thead>
+            <tbody id="calcBody"></tbody>
+          </table>
+        </div>
+
+        <div class="panel-actions panel-actions-bottom">
+          <div class="panel-actions-left">
+            <button class="btn btn-primary" id="genTextBtn">Genereer bestelling</button>
+            <button class="btn" id="genCopyBtn">Genereer + Copy</button>
+          </div>
+          <div class="panel-actions-right">
+            <button class="btn" id="copyBtn">COPY</button>
+            <button class="btn" id="printBtn">PRINT</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TEKST UITVOER -->
+      <section class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Bestellingstekst</h2>
+          <span class="panel-hint">Klaar om te plakken in mail of WhatsApp.</span>
+        </div>
+        <div id="output" class="output"></div>
+        <div class="panel-actions">
+          <div class="panel-actions-left">
+            <button class="btn" id="copyTableBtn">Copy tabel (TSV)</button>
+          </div>
+        </div>
+      </section>
+
+      <div class="sticky-actions">
+        <button class="btn btn-primary" id="stickyGenCopyBtn">⚡ Genereer + Copy</button>
+      </div>
+    </main>
+
+    <footer class="footer">
+      Lokaal hulpmiddel – alle gegevens blijven in jouw browser.
+    </footer>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // Hall toggle
+    document.querySelectorAll('#hallToggle .seg').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#hallToggle .seg').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('hall').value = btn.dataset.hall;
+        document.getElementById('hall').dispatchEvent(new Event('change'));
+      });
+    });
+    // Sync on load
+    const savedHall = JSON.parse(localStorage.getItem('drink_state_v1') || '{}').hall;
+    if (savedHall) {
+      document.getElementById('hall').value = savedHall;
+      document.querySelectorAll('#hallToggle .seg').forEach(b => {
+        b.classList.toggle('active', b.dataset.hall === savedHall);
+      });
+    }
+  </script>
+</body>
+
+</html>
