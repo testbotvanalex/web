@@ -43,8 +43,8 @@
       <td class="tbl-num"><span id="bar_txt_${idx}">—</span><input type="number" id="bar_${idx}" style="display:none" readonly></td>
       <td class="tbl-num">
         <input type="number" id="stock_${idx}" min="0" value="0" class="tbl-input">
-        <span class="tbl-breakdown" id="breakdown_${idx}"></span>
       </td>
+      <td class="tbl-num" id="bakken_${idx}" style="color:#64748b;font-size:13px">—</td>
       <td class="tbl-status"><span class="tbl-badge ok" id="bestelbadge_${idx}">✓ OK</span></td>
       <input type="number" id="achterfl_${idx}" style="display:none" readonly>
       <input type="number" id="achterbak_${idx}" style="display:none" readonly>
@@ -154,7 +154,7 @@
       var barTxt = document.getElementById('bar_txt_' + idx);
       if (gewTxt) gewTxt.textContent = gewenst;
       if (barTxt) barTxt.textContent = bar;
-      var breakdown = document.getElementById('breakdown_' + idx);
+      var breakdown = document.getElementById('bakken_' + idx);
       if (breakdown) {
         var volleBakken = Math.floor(stock / BOTTLES_PER_BAK);
         var restFl = stock % BOTTLES_PER_BAK;
