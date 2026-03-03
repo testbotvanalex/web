@@ -33,23 +33,19 @@
   CASH_ITEMS.forEach(function (item, idx) {
     var row = document.createElement('div');
     row.id = 'cash_row_' + idx;
-    row.className = 'dl-row';
+    row.className = 'inv-row cash-row status-ok';
     row.innerHTML = `
-    <div class="dl-name">
-      <span class="dl-title">${item.label}</span>
-      <span class="dl-meta" id="cs-meta-${idx}"></span>
+    <div class="inv-denom">${item.label}</div>
+    <div class="inv-name">
+      <span class="inv-title" id="cs-meta-${idx}" style="font-size:12px;font-weight:600;color:#94a3b8">—</span>
+      <div class="inv-bar-wrap"><div class="inv-bar-fill" id="cs-bar-${idx}" style="width:0%"></div></div>
     </div>
-    <div class="dl-stock">
-      <input type="number" id="cash_goal_${idx}" min="0" step="10" placeholder="doel">
-      <span class="dl-unit">€</span>
+    <div class="inv-input-wrap">
+      <span class="inv-input-lbl">Doel (€)</span>
+      <input type="number" id="cash_goal_${idx}" min="0" step="10">
     </div>
-    <div class="dl-stock" style="margin-left:4px">
-      <input type="number" id="cash_stock_${idx}" min="0" step="10" readonly>
-      <span class="dl-unit">stock</span>
-    </div>
-    <div class="dl-badge-wrap">
-      <div class="dl-badge ok" id="cashbadge_${idx}">✓ OK</div>
-    </div>
+    <div class="inv-badge ok" id="cashbadge_${idx}">✓ OK</div>
+    <input type="number" id="cash_stock_${idx}" style="display:none" readonly>
     <input type="text" id="cash_order_eur_${idx}" style="display:none" readonly>
     <input type="number" id="cash_order_units_${idx}" style="display:none" readonly>`;
     document.getElementById('cashGrid').appendChild(row);
@@ -145,14 +141,22 @@
       oUnits.value = notes;
       var row = document.getElementById('cash_row_' + idx);
       var badge = document.getElementById('cashbadge_' + idx);
-      row.classList.remove('needs-order', 'ok');
+      var barEl = document.getElementById('cs-bar-' + idx);
+      var metaEl = document.getElementById('cs-meta-' + idx);
+      if (metaEl) metaEl.textContent = 'Stock: €' + formatMoney(stock) + ' / Doel: €' + formatMoney(goal);
+      if (barEl && goal > 0) {
+        var pct = Math.min(100, Math.round(stock / goal * 100));
+        barEl.style.width = pct + '%';
+        barEl.className = 'inv-bar-fill' + (pct >= 100 ? ' over' : pct < 33 ? ' crit' : pct < 66 ? ' low' : '');
+      }
+      row.className = 'inv-row cash-row';
       if (notes > 0) {
-        row.classList.add('needs-order');
-        badge.className = 'dl-badge order';
-        badge.textContent = notes + ' st = ' + formatMoney(orderAmount) + ' euro';
+        row.classList.add('status-order');
+        badge.className = 'inv-badge order';
+        badge.textContent = notes + ' st = €' + formatMoney(orderAmount);
       } else {
-        row.classList.add('ok');
-        badge.className = 'dl-badge ok';
+        row.classList.add('status-ok');
+        badge.className = 'inv-badge ok';
         badge.textContent = '✓ Voldoende';
       }
       totalOrderUnits += notes; totalOrderAmount += orderAmount;

@@ -1159,3 +1159,89 @@ td.warn-val {
 .dl-badge.order { background: #fee2e2; color: #dc2626; }
 .dl-badge.ok { background: #dcfce7; color: #15803d; }
 .dl-badge.warn { background: #fef9c3; color: #a16207; }
+
+/* ══════════════════════════════════
+   PREMIUM INVENTORY ROW DESIGN
+══════════════════════════════════ */
+#drankGrid, #cashGrid {
+  display: flex !important;
+  flex-direction: column;
+  gap: 0;
+  padding: 0 !important;
+}
+
+/* ── Inventory row ── */
+.inv-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 0 20px;
+  padding: 14px 22px;
+  border-left: 4px solid transparent;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background .15s, border-color .15s;
+  background: white;
+}
+.inv-row:last-child { border-bottom: none; }
+.inv-row:hover { background: #fafbfd; }
+
+/* Status colors */
+.inv-row.status-ok    { border-left-color: #4ade80; }
+.inv-row.status-order { border-left-color: #f87171; background: #fffafa; }
+.inv-row.status-warn  { border-left-color: #fbbf24; background: #fffdf0; }
+.inv-row.status-empty { border-left-color: #fb923c; background: #fff8f3; }
+
+/* Name column */
+.inv-name { min-width: 0; }
+.inv-title {
+  font-size: 14px; font-weight: 700; color: #1a1a2e;
+  display: block; margin-bottom: 4px;
+}
+.inv-bar-wrap {
+  height: 5px; border-radius: 3px; background: #f1f5f9;
+  overflow: hidden; width: 100%; max-width: 180px;
+}
+.inv-bar-fill {
+  height: 100%; border-radius: 3px;
+  background: #4ade80; transition: width .4s ease, background .3s;
+}
+.inv-bar-fill.low  { background: #fbbf24; }
+.inv-bar-fill.crit { background: #f87171; }
+.inv-bar-fill.over { background: #818cf8; }
+
+/* Stock input */
+.inv-input-wrap {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+}
+.inv-input-lbl { font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: .5px; }
+.inv-input-wrap input[type="number"] {
+  width: 80px; border: 2px solid #e2e8f0; border-radius: 10px;
+  padding: 8px 10px; font-size: 16px; font-weight: 800;
+  text-align: center; outline: none;
+  font-family: 'Inter', sans-serif; color: #1a1a2e;
+  transition: border-color .15s, box-shadow .15s;
+}
+.inv-input-wrap input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99,102,241,.12);
+}
+
+/* Badge */
+.inv-badge {
+  min-width: 100px; text-align: center;
+  padding: 7px 14px; border-radius: 22px;
+  font-size: 13px; font-weight: 800;
+  white-space: nowrap; transition: all .2s;
+}
+.inv-badge.ok    { background: #dcfce7; color: #15803d; }
+.inv-badge.order { background: #fee2e2; color: #dc2626; }
+.inv-badge.warn  { background: #fef9c3; color: #a16207; }
+.inv-badge.empty { background: #ffedd5; color: #c2410c; }
+
+/* Cash row: 4 columns */
+.inv-row.cash-row {
+  grid-template-columns: 80px 1fr auto auto;
+}
+.inv-denom {
+  font-size: 22px; font-weight: 900; color: #6366f1;
+}

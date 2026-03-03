@@ -37,19 +37,17 @@
   DRINKS.forEach(function (d, idx) {
     var row = document.createElement('div');
     row.id = 'row_' + idx;
-    row.className = 'dl-row';
+    row.className = 'inv-row status-ok';
     row.innerHTML = `
-    <div class="dl-name">
-      <span class="dl-title">${d.short}</span>
-      <span class="dl-meta" id="dl-meta-${idx}"></span>
+    <div class="inv-name">
+      <span class="inv-title">${d.short}</span>
+      <div class="inv-bar-wrap"><div class="inv-bar-fill" id="inv-bar-${idx}" style="width:0%"></div></div>
     </div>
-    <div class="dl-stock">
+    <div class="inv-input-wrap">
+      <span class="inv-input-lbl">Stock (fl)</span>
       <input type="number" id="stock_${idx}" min="0" value="0" placeholder="0">
-      <span class="dl-unit">fl</span>
     </div>
-    <div class="dl-badge-wrap">
-      <div class="dl-badge ok" id="bestelbadge_${idx}">✓ OK</div>
-    </div>
+    <div class="inv-badge ok" id="bestelbadge_${idx}">✓ OK</div>
     <input type="number" id="gew_${idx}" style="display:none" readonly>
     <input type="number" id="bar_${idx}" style="display:none" readonly>
     <input type="number" id="achterfl_${idx}" style="display:none" readonly>
@@ -158,20 +156,25 @@
       document.getElementById('bestel_' + idx).value = bestelBakken;
       var row = document.getElementById('row_' + idx);
       var badge = document.getElementById('bestelbadge_' + idx);
-      var meta = document.getElementById('dl-meta-' + idx);
-      if (meta) meta.textContent = 'Doel: ' + gewenst + ' | Bar: ' + bar;
-      row.classList.remove('needs-order', 'ok', 'amber', 'zero-stock');
-      if (bestelBakken > 0) {
-        row.classList.add('needs-order');
-        badge.className = 'dl-badge order'; badge.textContent = '+' + bestelBakken + ' bak';
-      } else if (achterBakken === 0 && restFlessen === 0) {
-        row.classList.add('zero-stock');
-        badge.className = 'dl-badge warn'; badge.textContent = '⚠ Leeg achter';
-      } else {
-        row.classList.add('ok');
-        badge.className = 'dl-badge ok'; badge.textContent = '✓ OK';
+      var bar = document.getElementById('inv-bar-' + idx);
+      // Progress bar: stock vs target
+      if (bar && gewenst > 0) {
+        var pct = Math.min(100, Math.round(stock / gewenst * 100));
+        bar.style.width = pct + '%';
+        bar.className = 'inv-bar-fill' + (pct >= 100 ? ' over' : pct < 33 ? ' crit' : pct < 66 ? ' low' : '');
       }
-      if (lastFound[idx] === false) { row.classList.remove('ok'); row.classList.add('amber'); badge.className = 'dl-badge warn'; badge.textContent = '? Niet gevonden'; }
+      row.className = 'inv-row';
+      if (bestelBakken > 0) {
+        row.classList.add('status-order');
+        badge.className = 'inv-badge order'; badge.textContent = '+' + bestelBakken + ' bak';
+      } else if (achterBakken === 0 && restFlessen === 0) {
+        row.classList.add('status-empty');
+        badge.className = 'inv-badge empty'; badge.textContent = '⚠ Leeg achter';
+      } else {
+        row.classList.add('status-ok');
+        badge.className = 'inv-badge ok'; badge.textContent = '✓ OK';
+      }
+      if (lastFound[idx] === false) { row.className = 'inv-row status-warn'; badge.className = 'inv-badge warn'; badge.textContent = '? Niet gevonden'; }
       total += bestelBakken;
     });
     totalsEl.textContent = 'Totaal bestellen: ' + total + ' bak(ken)';
