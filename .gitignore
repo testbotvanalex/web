@@ -36,4 +36,7 @@ npm-debug.log*
 
 # Testing
 coverage/
-.nyc_output/
+.nyc_output/node_modules/
+.DS_Store
+**/.DS_Store
+.env
