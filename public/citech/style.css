@@ -1245,3 +1245,64 @@ td.warn-val {
 .inv-denom {
   font-size: 22px; font-weight: 900; color: #6366f1;
 }
+
+/* ══════════════════════════════════
+   MODERN TABLE DESIGN (Option A)
+══════════════════════════════════ */
+.tbl-wrap { overflow-x: auto; }
+.inv-table {
+  width: 100%; border-collapse: collapse;
+  font-family: 'Inter', sans-serif; font-size: 13px;
+}
+.inv-table thead tr { background: #1a1a2e; }
+.inv-table thead th {
+  padding: 13px 18px; color: white;
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .6px;
+  text-align: left; white-space: nowrap;
+}
+.inv-table thead th.tbl-num { text-align: center; }
+.inv-table thead th.tbl-status { text-align: center; }
+.inv-table thead th:first-child { border-radius: 0; }
+.inv-table tbody tr { border-bottom: 1px solid #f1f5f9; transition: background .1s; }
+.inv-table tbody tr:last-child { border-bottom: none; }
+.inv-table tbody tr:hover { background: #f8fafc !important; }
+.inv-table tbody td { padding: 12px 18px; vertical-align: middle; }
+.tbl-name { font-weight: 700; color: #1a1a2e; font-size: 14px; }
+.tbl-num { text-align: center !important; color: #475569; font-size: 13px; font-weight: 600; }
+.tbl-status { text-align: center !important; }
+
+/* Row status colors */
+.inv-table tbody tr.tr-ok   { background: white; }
+.inv-table tbody tr.tr-order { background: #fff5f5; }
+.inv-table tbody tr.tr-empty { background: #fff8f3; }
+.inv-table tbody tr.tr-warn  { background: #fffbeb; }
+
+/* Input */
+.tbl-input {
+  width: 80px; border: 2px solid #e2e8f0; border-radius: 8px;
+  padding: 7px 10px; font-size: 15px; font-weight: 800;
+  text-align: center; outline: none;
+  font-family: 'Inter', sans-serif; color: #1a1a2e;
+  transition: border-color .15s, box-shadow .15s;
+  display: block; margin: 0 auto;
+}
+.tbl-input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99,102,241,.12);
+}
+
+/* Badge */
+.tbl-badge {
+  display: inline-block; padding: 5px 14px; border-radius: 20px;
+  font-size: 12px; font-weight: 800; white-space: nowrap;
+}
+.tbl-badge.ok    { background: #dcfce7; color: #15803d; }
+.tbl-badge.order { background: #fee2e2; color: #dc2626; }
+.tbl-badge.warn  { background: #fef9c3; color: #a16207; }
+
+@media(max-width:600px){
+  .inv-table thead th { font-size: 10px; padding: 10px 10px; }
+  .inv-table tbody td { padding: 10px 10px; }
+  .tbl-input { width: 64px; font-size: 14px; }
+}

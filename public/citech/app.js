@@ -35,25 +35,20 @@
   let isRestoring = false, stockDebounce = null, lastFound = [];
 
   DRINKS.forEach(function (d, idx) {
-    var row = document.createElement('div');
+    var row = document.createElement('tr');
     row.id = 'row_' + idx;
-    row.className = 'inv-row status-ok';
     row.innerHTML = `
-    <div class="inv-name">
-      <span class="inv-title">${d.short}</span>
-      <div class="inv-bar-wrap"><div class="inv-bar-fill" id="inv-bar-${idx}" style="width:0%"></div></div>
-    </div>
-    <div class="inv-input-wrap">
-      <span class="inv-input-lbl">Stock (fl)</span>
-      <input type="number" id="stock_${idx}" min="0" value="0" placeholder="0">
-    </div>
-    <div class="inv-badge ok" id="bestelbadge_${idx}">✓ OK</div>
-    <input type="number" id="gew_${idx}" style="display:none" readonly>
-    <input type="number" id="bar_${idx}" style="display:none" readonly>
-    <input type="number" id="achterfl_${idx}" style="display:none" readonly>
-    <input type="number" id="achterbak_${idx}" style="display:none" readonly>
-    <input type="number" id="rest_${idx}" style="display:none" readonly>
-    <input type="number" id="bestel_${idx}" style="display:none" readonly>`;
+      <td class="tbl-name">${d.short}</td>
+      <td class="tbl-num"><span id="gew_txt_${idx}">—</span><input type="number" id="gew_${idx}" style="display:none" readonly></td>
+      <td class="tbl-num"><span id="bar_txt_${idx}">—</span><input type="number" id="bar_${idx}" style="display:none" readonly></td>
+      <td class="tbl-num">
+        <input type="number" id="stock_${idx}" min="0" value="0" class="tbl-input">
+      </td>
+      <td class="tbl-status"><span class="tbl-badge ok" id="bestelbadge_${idx}">✓ OK</span></td>
+      <input type="number" id="achterfl_${idx}" style="display:none" readonly>
+      <input type="number" id="achterbak_${idx}" style="display:none" readonly>
+      <input type="number" id="rest_${idx}" style="display:none" readonly>
+      <input type="number" id="bestel_${idx}" style="display:none" readonly>`;
     document.getElementById('drankGrid').appendChild(row);
   });
 
@@ -154,27 +149,24 @@
       document.getElementById('achterbak_' + idx).value = achterBakken;
       document.getElementById('rest_' + idx).value = restFlessen;
       document.getElementById('bestel_' + idx).value = bestelBakken;
+      var gewTxt = document.getElementById('gew_txt_' + idx);
+      var barTxt = document.getElementById('bar_txt_' + idx);
+      if (gewTxt) gewTxt.textContent = gewenst;
+      if (barTxt) barTxt.textContent = bar;
       var row = document.getElementById('row_' + idx);
       var badge = document.getElementById('bestelbadge_' + idx);
-      var bar = document.getElementById('inv-bar-' + idx);
-      // Progress bar: stock vs target
-      if (bar && gewenst > 0) {
-        var pct = Math.min(100, Math.round(stock / gewenst * 100));
-        bar.style.width = pct + '%';
-        bar.className = 'inv-bar-fill' + (pct >= 100 ? ' over' : pct < 33 ? ' crit' : pct < 66 ? ' low' : '');
-      }
-      row.className = 'inv-row';
+      row.className = '';
       if (bestelBakken > 0) {
-        row.classList.add('status-order');
-        badge.className = 'inv-badge order'; badge.textContent = '+' + bestelBakken + ' bak';
+        row.className = 'tr-order';
+        badge.className = 'tbl-badge order'; badge.textContent = '+' + bestelBakken + ' bak';
       } else if (achterBakken === 0 && restFlessen === 0) {
-        row.classList.add('status-empty');
-        badge.className = 'inv-badge empty'; badge.textContent = '⚠ Leeg achter';
+        row.className = 'tr-empty';
+        badge.className = 'tbl-badge warn'; badge.textContent = '⚠ Leeg achter';
       } else {
-        row.classList.add('status-ok');
-        badge.className = 'inv-badge ok'; badge.textContent = '✓ OK';
+        row.className = 'tr-ok';
+        badge.className = 'tbl-badge ok'; badge.textContent = '✓ OK';
       }
-      if (lastFound[idx] === false) { row.className = 'inv-row status-warn'; badge.className = 'inv-badge warn'; badge.textContent = '? Niet gevonden'; }
+      if (lastFound[idx] === false) { row.className = 'tr-warn'; badge.className = 'tbl-badge warn'; badge.textContent = '? Niet gevonden'; }
       total += bestelBakken;
     });
     totalsEl.textContent = 'Totaal bestellen: ' + total + ' bak(ken)';

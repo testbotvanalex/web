@@ -31,23 +31,17 @@
   }
 
   CASH_ITEMS.forEach(function (item, idx) {
-    var row = document.createElement('div');
+    var row = document.createElement('tr');
     row.id = 'cash_row_' + idx;
-    row.className = 'inv-row cash-row status-ok';
     row.innerHTML = `
-    <div class="inv-denom">${item.label}</div>
-    <div class="inv-name">
-      <span class="inv-title" id="cs-meta-${idx}" style="font-size:12px;font-weight:600;color:#94a3b8">—</span>
-      <div class="inv-bar-wrap"><div class="inv-bar-fill" id="cs-bar-${idx}" style="width:0%"></div></div>
-    </div>
-    <div class="inv-input-wrap">
-      <span class="inv-input-lbl">Doel (€)</span>
-      <input type="number" id="cash_goal_${idx}" min="0" step="10">
-    </div>
-    <div class="inv-badge ok" id="cashbadge_${idx}">✓ OK</div>
-    <input type="number" id="cash_stock_${idx}" style="display:none" readonly>
-    <input type="text" id="cash_order_eur_${idx}" style="display:none" readonly>
-    <input type="number" id="cash_order_units_${idx}" style="display:none" readonly>`;
+      <td class="tbl-name" style="font-weight:800;font-size:18px;color:#6366f1">${item.label}</td>
+      <td class="tbl-num">
+        <input type="number" id="cash_goal_${idx}" min="0" step="10" class="tbl-input">
+      </td>
+      <td class="tbl-num"><span id="cs-stock-txt-${idx}">—</span><input type="number" id="cash_stock_${idx}" style="display:none" readonly></td>
+      <td class="tbl-status"><span class="tbl-badge ok" id="cashbadge_${idx}">✓ OK</span></td>
+      <input type="text" id="cash_order_eur_${idx}" style="display:none" readonly>
+      <input type="number" id="cash_order_units_${idx}" style="display:none" readonly>`;
     document.getElementById('cashGrid').appendChild(row);
   });
 
@@ -141,22 +135,16 @@
       oUnits.value = notes;
       var row = document.getElementById('cash_row_' + idx);
       var badge = document.getElementById('cashbadge_' + idx);
-      var barEl = document.getElementById('cs-bar-' + idx);
-      var metaEl = document.getElementById('cs-meta-' + idx);
-      if (metaEl) metaEl.textContent = 'Stock: €' + formatMoney(stock) + ' / Doel: €' + formatMoney(goal);
-      if (barEl && goal > 0) {
-        var pct = Math.min(100, Math.round(stock / goal * 100));
-        barEl.style.width = pct + '%';
-        barEl.className = 'inv-bar-fill' + (pct >= 100 ? ' over' : pct < 33 ? ' crit' : pct < 66 ? ' low' : '');
-      }
-      row.className = 'inv-row cash-row';
+      var stockTxt = document.getElementById('cs-stock-txt-' + idx);
+      if (stockTxt) stockTxt.textContent = '€ ' + formatMoney(stock);
+      row.className = '';
       if (notes > 0) {
-        row.classList.add('status-order');
-        badge.className = 'inv-badge order';
+        row.className = 'tr-order';
+        badge.className = 'tbl-badge order';
         badge.textContent = notes + ' st = €' + formatMoney(orderAmount);
       } else {
-        row.classList.add('status-ok');
-        badge.className = 'inv-badge ok';
+        row.className = 'tr-ok';
+        badge.className = 'tbl-badge ok';
         badge.textContent = '✓ Voldoende';
       }
       totalOrderUnits += notes; totalOrderAmount += orderAmount;
