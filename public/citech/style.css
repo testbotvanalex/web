@@ -1089,3 +1089,12 @@ td.warn-val {
     font-size: 12px;
   }
 }
+/* ── Row status colors ── */
+tbody tr.row-red   { background: #fff1f2; }
+tbody tr.row-red td:first-child   { border-left: 3px solid #f87171; }
+tbody tr.row-green { background: #f0fdf4; }
+tbody tr.row-green td:first-child { border-left: 3px solid #4ade80; }
+tbody tr.row-amber { background: #fffbeb; }
+tbody tr.row-amber td:first-child { border-left: 3px solid #fbbf24; }
+tbody tr.row-orange { background: #fff7ed; }
+tbody tr.row-orange td:first-child { border-left: 3px solid #fb923c; }
