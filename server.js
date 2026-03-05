@@ -11,6 +11,19 @@ const app = express();
 // 📁 Раздаём всё из папки public
 app.use(express.static(path.join(__dirname, "public")));
 
+// 📄 Публичные legal-страницы с чистыми URL
+app.get(["/privacy-policy", "/privacy-policy/"], (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "privacy-policy.html"));
+});
+
+app.get(["/terms", "/terms/"], (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "terms.html"));
+});
+
+app.get(["/data-deletion", "/data-deletion/"], (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "data-deletion.html"));
+});
+
 // 📄 Все неизвестные пути отправляем на index.html (для SPA или обычного сайта)
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));

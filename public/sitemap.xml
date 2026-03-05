@@ -50,4 +50,19 @@
     <lastmod>2026-02-25</lastmod>
     <priority>0.4</priority>
   </url>
+  <url>
+    <loc>https://www.botmatic.be/privacy-policy</loc>
+    <lastmod>2026-03-05</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.botmatic.be/terms</loc>
+    <lastmod>2026-03-05</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.botmatic.be/data-deletion</loc>
+    <lastmod>2026-03-05</lastmod>
+    <priority>0.6</priority>
+  </url>
 </urlset>
