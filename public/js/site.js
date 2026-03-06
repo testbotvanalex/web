@@ -1,4 +1,4 @@
-const WA_NUMBER = '+32XXXXXXXXX';
+const WA_NUMBER = '+32456912464';
 const WA_TEXT = 'Hallo BotMatic, ik wil graag een demo zien.';
 
 function setWhatsAppLinks() {
