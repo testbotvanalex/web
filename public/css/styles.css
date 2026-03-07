@@ -860,3 +860,122 @@ textarea {
 @media (max-width: 980px) {
   .lang-switch { display: none; }
 }
+
+/* ── Pain section ───────────────────────────────────────────── */
+.pain-section {
+  background: #f9fafb;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.pain-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.pain-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  max-width: 720px;
+  margin: 0 auto 2.5rem;
+}
+
+.pain-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 1rem;
+  color: #374151;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+}
+
+.pain-item .pain-emoji {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  line-height: 1.3;
+}
+
+.pain-cta {
+  text-align: center;
+}
+
+.pain-cta p {
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 600px) {
+  .pain-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Compare table (BotMatic vs Handmatig) ──────────────────── */
+.compare-table-section h2 {
+  margin-bottom: 1.25rem;
+}
+
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+
+.compare-table th,
+.compare-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.92rem;
+}
+
+.compare-table tr:last-child td {
+  border-bottom: none;
+}
+
+.compare-table thead th {
+  font-weight: 700;
+  background: #f4f4f5;
+  font-size: 0.88rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.compare-table .col-botmatic {
+  background: rgba(16, 185, 129, 0.06);
+  font-weight: 600;
+  color: #065f46;
+}
+
+.compare-table thead .col-botmatic {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--green-dark);
+}
+
+@media (max-width: 600px) {
+  .compare-table { font-size: 0.82rem; }
+  .compare-table th,
+  .compare-table td { padding: 0.5rem 0.6rem; }
+}
+
+/* ── AI-bot comparison section (vergelijking.html) ──────────── */
+.ai-compare-section .section-tag {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+.ai-compare-section h2 {
+  margin-bottom: 0.5rem;
+}
+
+.ai-compare-section .sub {
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+  max-width: 560px;
+}
