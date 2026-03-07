@@ -46,17 +46,17 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.botmatic.be/privacy.html</loc>
+    <loc>https://www.botmatic.be/instagram-demo.html</loc>
     <lastmod>2026-03-07</lastmod>
-    <priority>0.4</priority>
-  </url>
-  <url>
-    <loc>https://www.botmatic.be/cookies.html</loc>
-    <lastmod>2026-03-07</lastmod>
-    <priority>0.4</priority>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.botmatic.be/privacy-policy</loc>
+    <lastmod>2026-03-07</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.botmatic.be/data-deletion</loc>
     <lastmod>2026-03-07</lastmod>
     <priority>0.6</priority>
   </url>
@@ -66,13 +66,13 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://www.botmatic.be/data-deletion</loc>
+    <loc>https://www.botmatic.be/cookies.html</loc>
     <lastmod>2026-03-07</lastmod>
-    <priority>0.6</priority>
+    <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://www.botmatic.be/instagram-demo.html</loc>
+    <loc>https://www.botmatic.be/privacy.html</loc>
     <lastmod>2026-03-07</lastmod>
-    <priority>0.6</priority>
+    <priority>0.4</priority>
   </url>
 </urlset>
