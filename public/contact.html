@@ -65,10 +65,7 @@
 
         <article class="card">
           <h3>Of stuur een bericht</h3>
-          <!-- Formspree: vervang YOUR_FORM_ID na registratie op formspree.io -->
-          <form class="form-grid" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-            <input type="hidden" name="_subject" value="Nieuwe vraag via botmatic.be" />
-            <input type="hidden" name="_next" value="https://botmatic.be/contact.html?verzonden=1" />
+          <form class="form-grid" id="contact-form" onsubmit="submitToWhatsApp(event)">
             <div>
               <label for="naam">Naam</label>
               <input id="naam" name="naam" required />
@@ -85,8 +82,23 @@
               <label for="bericht">Bericht</label>
               <textarea id="bericht" name="bericht" required></textarea>
             </div>
-            <button class="btn btn-ghost" type="submit">Verstuur bericht</button>
+            <button class="btn btn-ghost" type="submit">Verstuur via WhatsApp →</button>
           </form>
+          <script>
+            function submitToWhatsApp(e) {
+              e.preventDefault();
+              var naam    = document.getElementById('naam').value.trim();
+              var email   = document.getElementById('email').value.trim();
+              var bedrijf = document.getElementById('bedrijf').value.trim();
+              var bericht = document.getElementById('bericht').value.trim();
+              var msg = 'Hallo BotMatic! Ik stuur een bericht via de website.' +
+                '\n\nNaam: ' + naam +
+                '\nE-mail: ' + email +
+                (bedrijf ? '\nBedrijf: ' + bedrijf : '') +
+                '\n\nBericht:\n' + bericht;
+              window.open('https://wa.me/32456912464?text=' + encodeURIComponent(msg), '_blank');
+            }
+          </script>
         </article>
       </div>
     </section>
