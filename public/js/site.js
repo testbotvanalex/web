@@ -64,14 +64,14 @@ function initLangSwitch() {
       "nav-how":    "Hoe werkt het",
       "nav-who":    "Voor wie",
       "nav-price":  "Prijzen",
-      "hero-title": "Meer rust in je inbox.<br />Meer tijd voor je klanten.",
+      "hero-title": "De chatbot die klantvragen beantwoordt.<br />Automatisch, 24/7.",
     },
     fr: {
       "nav-cta":    "Voir la démo via WhatsApp",
       "nav-how":    "Comment ça marche",
       "nav-who":    "Pour qui",
       "nav-price":  "Tarifs",
-      "hero-title": "Plus de sérénité dans votre boîte mail.<br />Plus de temps pour vos clients.",
+      "hero-title": "Le chatbot qui répond aux questions clients.<br />Automatiquement, 24/7.",
     },
   };
 
