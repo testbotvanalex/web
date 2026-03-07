@@ -413,6 +413,12 @@ h3 {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.phone-quick.visible {
+  opacity: 1;
 }
 
 .quick {

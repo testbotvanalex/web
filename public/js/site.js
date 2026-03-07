@@ -184,6 +184,7 @@ function initSectorDemo() {
 function initHeroChat() {
   const chatEl = document.getElementById("hero-chat");
   if (!chatEl) return;
+  const quickEl = chatEl.closest(".phone") && chatEl.closest(".phone").querySelector(".phone-quick");
 
   const messages = [
     { from: "in",  text: "Hallo! Hebben jullie morgen nog plaats?" },
@@ -229,11 +230,13 @@ function initHeroChat() {
 
   function play() {
     chatEl.innerHTML = "";
+    if (quickEl) quickEl.classList.remove("visible");
     timers.forEach(clearTimeout);
     timers = [];
 
     let delay = 800;
-    messages.forEach((msg) => {
+    messages.forEach((msg, i) => {
+      const isLast = i === messages.length - 1;
       if (msg.from === "out") {
         const tStart = delay;
         delay += 500;
@@ -245,11 +248,16 @@ function initHeroChat() {
       } else {
         const d = delay;
         delay += 1800;
-        timers.push(setTimeout(() => addBubble("in", msg.text), d));
+        timers.push(setTimeout(() => {
+          addBubble("in", msg.text);
+          if (isLast && quickEl) {
+            setTimeout(() => quickEl.classList.add("visible"), 400);
+          }
+        }, d));
       }
     });
 
-    timers.push(setTimeout(play, delay + 2800));
+    timers.push(setTimeout(play, delay + 3200));
   }
 
   play();
