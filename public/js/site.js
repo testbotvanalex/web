@@ -181,6 +181,80 @@ function initSectorDemo() {
   });
 }
 
+function initHeroChat() {
+  const chatEl = document.getElementById("hero-chat");
+  if (!chatEl) return;
+
+  const messages = [
+    { from: "in",  text: "Hallo! Hebben jullie morgen nog plaats?" },
+    { from: "out", text: "Ja, zeker. Voormiddag of namiddag?" },
+    { from: "in",  text: "Namiddag rond 14u." },
+    { from: "out", text: "Perfect. Stuur je naam en telefoonnummer en we bevestigen meteen." },
+    { from: "in",  text: "Dank je! 😊" },
+  ];
+
+  let timers = [];
+
+  function addBubble(from, text) {
+    const el = document.createElement("div");
+    el.className = "bubble " + from;
+    el.textContent = text;
+    el.style.opacity = "0";
+    el.style.transform = "translateY(5px)";
+    chatEl.appendChild(el);
+    requestAnimationFrame(() => {
+      el.style.transition = "opacity 0.25s, transform 0.25s";
+      el.style.opacity = "1";
+      el.style.transform = "translateY(0)";
+    });
+    chatEl.scrollTop = chatEl.scrollHeight;
+    return el;
+  }
+
+  function addTyping() {
+    const el = document.createElement("div");
+    el.className = "bubble out typing-bubble";
+    el.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
+    el.style.opacity = "0";
+    el.style.transform = "translateY(5px)";
+    chatEl.appendChild(el);
+    requestAnimationFrame(() => {
+      el.style.transition = "opacity 0.25s, transform 0.25s";
+      el.style.opacity = "1";
+      el.style.transform = "translateY(0)";
+    });
+    chatEl.scrollTop = chatEl.scrollHeight;
+    return el;
+  }
+
+  function play() {
+    chatEl.innerHTML = "";
+    timers.forEach(clearTimeout);
+    timers = [];
+
+    let delay = 800;
+    messages.forEach((msg) => {
+      if (msg.from === "out") {
+        const tStart = delay;
+        delay += 500;
+        const tShow = delay;
+        delay += 1600;
+        let typingEl;
+        timers.push(setTimeout(() => { typingEl = addTyping(); }, tStart));
+        timers.push(setTimeout(() => { if (typingEl) typingEl.remove(); addBubble("out", msg.text); }, tShow));
+      } else {
+        const d = delay;
+        delay += 1800;
+        timers.push(setTimeout(() => addBubble("in", msg.text), d));
+      }
+    });
+
+    timers.push(setTimeout(play, delay + 2800));
+  }
+
+  play();
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   setWhatsAppLinks();
   initMenu();
@@ -188,4 +262,5 @@ window.addEventListener("DOMContentLoaded", () => {
   initSmoothScroll();
   initLangSwitch();
   initSectorDemo();
+  initHeroChat();
 });
