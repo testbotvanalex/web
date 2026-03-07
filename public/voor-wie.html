@@ -53,23 +53,40 @@
     </section>
 
     <section class="section section-muted">
-      <div class="container grid-2">
-        <article class="card">
-          <h3>Salons & beauty</h3>
-          <p>Behandelingen, beschikbaarheid en last-minute vragen zonder onderbreking van je planning.</p>
-        </article>
-        <article class="card">
-          <h3>Garages & dealers</h3>
-          <p>Onderhoudsvragen, offertes en afspraken worden eerst opgevangen voordat je team moet schakelen.</p>
-        </article>
-        <article class="card">
-          <h3>Praktijken</h3>
-          <p>Minder ochtendachterstand in berichten en meer focus op cliënten tijdens werkuren.</p>
-        </article>
-        <article class="card">
-          <h3>Lokale diensten</h3>
-          <p>Snelle opvolging van aanvragen terwijl je ploeg op de baan of op locatie werkt.</p>
-        </article>
+      <div class="container">
+        <div class="grid-2">
+          <article class="card sector-card" data-sector="beauty">
+            <h3>Salons & beauty</h3>
+            <p>Behandelingen, beschikbaarheid en last-minute vragen zonder onderbreking van je planning.</p>
+            <span class="sector-card-hint">Bekijk voorbeeldgesprek →</span>
+          </article>
+          <article class="card sector-card" data-sector="garage">
+            <h3>Garages & dealers</h3>
+            <p>Onderhoudsvragen, offertes en afspraken worden eerst opgevangen voordat je team moet schakelen.</p>
+            <span class="sector-card-hint">Bekijk voorbeeldgesprek →</span>
+          </article>
+          <article class="card sector-card" data-sector="praktijk">
+            <h3>Praktijken</h3>
+            <p>Minder ochtendachterstand in berichten en meer focus op cliënten tijdens werkuren.</p>
+            <span class="sector-card-hint">Bekijk voorbeeldgesprek →</span>
+          </article>
+          <article class="card sector-card" data-sector="diensten">
+            <h3>Lokale diensten</h3>
+            <p>Snelle opvolging van aanvragen terwijl je ploeg op de baan of op locatie werkt.</p>
+            <span class="sector-card-hint">Bekijk voorbeeldgesprek →</span>
+          </article>
+        </div>
+
+        <div class="sector-demo" id="sector-demo" hidden>
+          <div class="sector-demo-header">
+            <div class="sector-demo-avatar">BM</div>
+            <div>
+              <strong class="sector-demo-name">BotMatic Assistent</strong>
+              <span class="sector-demo-status">Online</span>
+            </div>
+          </div>
+          <div class="sector-demo-chat" id="sector-demo-chat"></div>
+        </div>
       </div>
     </section>
 
