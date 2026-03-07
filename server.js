@@ -24,9 +24,9 @@ app.get(["/data-deletion", "/data-deletion/"], (req, res) => {
   res.sendFile(path.join(__dirname, "public", "data-deletion.html"));
 });
 
-// 📄 Все неизвестные пути отправляем на index.html (для SPA или обычного сайта)
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+// 📄 404 для всех неизвестных путей
+app.use((req, res) => {
+  res.status(404).sendFile(path.join(__dirname, "public", "404.html"));
 });
 
 const PORT = process.env.PORT || 3000;
