@@ -1129,40 +1129,40 @@ textarea {
    =================================================== */
 #bm-chat-widget {
   position: fixed;
-  bottom: 24px;
-  left: 24px;
+  bottom: 96px;
+  right: 28px;
   z-index: 9990;
   font-family: 'DM Sans', sans-serif;
 }
 
-/* Trigger button */
+/* Trigger button — круглая иконка как WA bubble */
 .bm-trigger {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
   background: linear-gradient(135deg, #0d1b2a 0%, #1b3250 100%);
   color: #fff;
   border: none;
-  border-radius: 50px;
-  padding: 12px 20px 12px 14px;
+  border-radius: 50%;
+  padding: 0;
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(13,27,42,0.35);
+  box-shadow: 0 4px 20px rgba(13,27,42,0.4);
   transition: transform 0.2s, box-shadow 0.2s;
   position: relative;
+  animation: bm-bot-pulse 2.5s infinite;
+}
+@keyframes bm-bot-pulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(13,27,42,0.4); }
+  50%       { box-shadow: 0 4px 32px rgba(13,27,42,0.65); }
 }
 .bm-trigger:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 28px rgba(13,27,42,0.45);
+  box-shadow: 0 6px 28px rgba(13,27,42,0.55);
 }
-.bm-trigger-open {
-  border-radius: 50px;
-}
-.bm-trigger-label {
-  font-size: 0.88rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  white-space: nowrap;
-}
+.bm-trigger-open { animation: none; }
+.bm-trigger-label { display: none; }
 
 /* Badge */
 .bm-badge {
@@ -1190,7 +1190,8 @@ textarea {
 .bm-window {
   position: absolute;
   bottom: 66px;
-  left: 0;
+  right: 0;
+  left: auto;
   width: 320px;
   background: #fff;
   border-radius: 18px;
@@ -1201,7 +1202,7 @@ textarea {
   opacity: 0;
   pointer-events: none;
   transform: scale(0.96) translateY(8px);
-  transform-origin: bottom left;
+  transform-origin: bottom right;
   transition: opacity 0.22s ease, transform 0.22s ease;
 }
 .bm-window.bm-open {
@@ -1351,10 +1352,8 @@ textarea {
 
 /* Mobile adjustments */
 @media (max-width: 480px) {
-  #bm-chat-widget { bottom: 16px; left: 16px; }
-  .bm-trigger-label { display: none; }
-  .bm-trigger { padding: 14px; border-radius: 50%; }
-  .bm-window { width: calc(100vw - 32px); }
+  #bm-chat-widget { bottom: 84px; right: 20px; }
+  .bm-window { width: calc(100vw - 32px); right: 0; }
 }
 
 /* Chat input row */
