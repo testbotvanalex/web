@@ -16,6 +16,56 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/styles.css" />
+  <!-- Schema.org structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://www.botmatic.be/#organization",
+        "name": "BotMatic",
+        "url": "https://www.botmatic.be",
+        "logo": "https://www.botmatic.be/assets/og.png",
+        "description": "BotMatic neemt terugkerende vragen en afspraken over via WhatsApp, Instagram, Messenger en meer. Speciaal voor Belgische KMO's.",
+        "telephone": "+32456912464",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "BE"
+        },
+        "areaServed": "BE",
+        "knowsLanguage": ["nl", "fr"],
+        "sameAs": []
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://www.botmatic.be/#website",
+        "url": "https://www.botmatic.be",
+        "name": "BotMatic",
+        "publisher": {
+          "@id": "https://www.botmatic.be/#organization"
+        }
+      },
+      {
+        "@type": "Service",
+        "@id": "https://www.botmatic.be/#service",
+        "name": "BotMatic chatbot voor KMO's",
+        "provider": {
+          "@id": "https://www.botmatic.be/#organization"
+        },
+        "description": "Virtuele assistent voor Belgische KMO's via WhatsApp, Instagram en Messenger — geautomatiseerde FAQ, afspraken en opvolging.",
+        "areaServed": "BE",
+        "serviceType": "Chatbot automatisering",
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "EUR",
+          "availability": "https://schema.org/InStock"
+        }
+      }
+    ]
+  }
+  </script>
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-W5B2VS39V0"></script>
   <script>
