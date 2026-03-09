@@ -1,47 +1,6 @@
 (function () {
   var WA = 'https://wa.me/32456912464?text=Hallo%20BotMatic%2C%20ik%20wil%20graag%20een%20demo%20zien.';
-
-  var flows = {
-    start: {
-      message: 'Hallo! 👋 Ik ben de BotMatic-assistent. Waarmee kan ik je helpen?',
-      options: [
-        { label: '🤖 Wat doet BotMatic?', next: 'what' },
-        { label: '💶 Wat kost het?', next: 'price' },
-        { label: '📱 Welke kanalen?', next: 'channels' },
-        { label: '🚀 Gratis demo', next: 'demo' }
-      ]
-    },
-    what: {
-      message: 'BotMatic beantwoordt automatisch herhalende vragen via WhatsApp, Instagram en Messenger — 24/7, zonder dat jij iets hoeft te doen. Jouw team krijgt eindelijk rust. 🤖',
-      options: [
-        { label: '💶 Wat kost het?', next: 'price' },
-        { label: '📱 Welke kanalen?', next: 'channels' },
-        { label: '🚀 Gratis demo', next: 'demo' }
-      ]
-    },
-    price: {
-      message: 'Ons Basis-plan start vanaf €149/maand — alles inbegrepen, geen setupkosten, maandelijks opzegbaar. 💶',
-      options: [
-        { label: '📋 Alle prijzen bekijken', action: 'link', href: '/prijzen.html' },
-        { label: '🚀 Gratis demo', next: 'demo' },
-        { label: '← Terug', next: 'start' }
-      ]
-    },
-    channels: {
-      message: 'BotMatic werkt op WhatsApp ✅, Instagram ✅ en Facebook Messenger ✅ — allemaal vanuit één dashboard. Meer kanalen volgen. 📱',
-      options: [
-        { label: '💶 Wat kost het?', next: 'price' },
-        { label: '🚀 Gratis demo', next: 'demo' },
-        { label: '← Terug', next: 'start' }
-      ]
-    },
-    demo: {
-      message: 'Top keuze! 🎉 Stuur ons een berichtje via WhatsApp en we tonen je live hoe het werkt voor jouw sector.',
-      options: [
-        { label: '💬 Start demo via WhatsApp', action: 'wa' }
-      ]
-    }
-  };
+  var history = [];
 
   function createWidget() {
     var el = document.createElement('div');
@@ -74,7 +33,14 @@
           '<button class="bm-close" id="bm-close" aria-label="Sluiten">✕</button>' +
         '</div>' +
         '<div class="bm-messages" id="bm-messages"></div>' +
-        '<div class="bm-options" id="bm-options"></div>' +
+        '<div class="bm-input-row" id="bm-input-row">' +
+          '<input class="bm-input" id="bm-input" type="text" placeholder="Stel een vraag..." autocomplete="off" />' +
+          '<button class="bm-send" id="bm-send" aria-label="Verstuur">' +
+            '<svg viewBox="0 0 24 24" fill="none" width="18" height="18">' +
+              '<path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+            '</svg>' +
+          '</button>' +
+        '</div>' +
       '</div>';
     document.body.appendChild(el);
   }
@@ -103,7 +69,13 @@
     var m = document.getElementById('bm-messages');
     var d = document.createElement('div');
     d.className = 'bm-msg bm-bot';
-    d.textContent = text;
+    // detect WA CTA and add button
+    if (text.toLowerCase().indexOf('whatsapp') !== -1) {
+      d.innerHTML = text.replace(/\n/g, '<br>') +
+        '<br><br><a href="' + WA + '" target="_blank" rel="noopener" class="bm-wa-btn">💬 Start demo via WhatsApp</a>';
+    } else {
+      d.textContent = text;
+    }
     m.appendChild(d);
     scrollBottom();
   }
@@ -117,47 +89,41 @@
     scrollBottom();
   }
 
-  function renderOptions(options) {
-    var o = document.getElementById('bm-options');
-    o.innerHTML = '';
-    options.forEach(function (opt) {
-      var btn = document.createElement('button');
-      btn.className = 'bm-opt';
-      btn.textContent = opt.label;
-      btn.addEventListener('click', function () { pick(opt); });
-      o.appendChild(btn);
-    });
+  function setInputEnabled(enabled) {
+    var inp = document.getElementById('bm-input');
+    var btn = document.getElementById('bm-send');
+    inp.disabled = !enabled;
+    btn.disabled = !enabled;
   }
 
-  function pick(opt) {
-    addUser(opt.label);
-    document.getElementById('bm-options').innerHTML = '';
+  function sendMessage(text) {
+    if (!text.trim()) return;
+    addUser(text);
+    document.getElementById('bm-input').value = '';
+    setInputEnabled(false);
+    showTyping();
 
-    if (opt.action === 'wa') {
-      showTyping();
-      setTimeout(function () {
+    history.push({ role: 'user', content: text });
+
+    fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: text, history: history.slice(-6) })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
         hideTyping();
-        addBot('We spreken je zo via WhatsApp! Tot zo 👋');
-        setTimeout(function () {
-          window.open(WA, '_blank');
-        }, 800);
-      }, 700);
-      return;
-    }
-
-    if (opt.action === 'link') {
-      window.location.href = opt.href;
-      return;
-    }
-
-    if (opt.next && flows[opt.next]) {
-      showTyping();
-      setTimeout(function () {
+        var reply = data.reply || 'Sorry, even een probleem. Probeer opnieuw!';
+        history.push({ role: 'assistant', content: reply });
+        addBot(reply);
+        setInputEnabled(true);
+        document.getElementById('bm-input').focus();
+      })
+      .catch(function () {
         hideTyping();
-        addBot(flows[opt.next].message);
-        renderOptions(flows[opt.next].options);
-      }, 750);
-    }
+        addBot('Sorry, even een technisch probleem. Stuur ons gerust een WhatsApp! 💬');
+        setInputEnabled(true);
+      });
   }
 
   var isOpen = false;
@@ -171,20 +137,18 @@
     trigger.querySelector('.bm-icon-bot').style.display = 'none';
     trigger.querySelector('.bm-icon-x').style.display = '';
     trigger.classList.add('bm-trigger-open');
-    // remove badge
     var badge = trigger.querySelector('.bm-badge');
     if (badge) badge.remove();
-    // start flow if fresh
     if (document.getElementById('bm-messages').children.length === 0) {
+      showTyping();
       setTimeout(function () {
-        showTyping();
-        setTimeout(function () {
-          hideTyping();
-          addBot(flows.start.message);
-          renderOptions(flows.start.options);
-        }, 900);
-      }, 200);
+        hideTyping();
+        addBot('Hallo! 👋 Ik ben de BotMatic-assistent. Stel me gerust je vraag over onze chatbots voor Belgische KMO\'s!');
+      }, 800);
     }
+    setTimeout(function () {
+      document.getElementById('bm-input').focus();
+    }, 300);
   }
 
   function closeChat() {
@@ -198,22 +162,30 @@
     trigger.classList.remove('bm-trigger-open');
   }
 
-  function addBadge() {
-    var trigger = document.getElementById('bm-trigger');
-    if (isOpen || trigger.querySelector('.bm-badge')) return;
-    var badge = document.createElement('span');
-    badge.className = 'bm-badge';
-    badge.textContent = '1';
-    trigger.appendChild(badge);
-  }
-
   document.addEventListener('DOMContentLoaded', function () {
     createWidget();
+
     document.getElementById('bm-trigger').addEventListener('click', function () {
       isOpen ? closeChat() : openChat();
     });
     document.getElementById('bm-close').addEventListener('click', closeChat);
-    // show badge after 6s to invite interaction
-    setTimeout(addBadge, 6000);
+
+    document.getElementById('bm-send').addEventListener('click', function () {
+      sendMessage(document.getElementById('bm-input').value);
+    });
+
+    document.getElementById('bm-input').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') sendMessage(this.value);
+    });
+
+    // badge after 6s
+    setTimeout(function () {
+      if (!isOpen) {
+        var badge = document.createElement('span');
+        badge.className = 'bm-badge';
+        badge.textContent = '1';
+        document.getElementById('bm-trigger').appendChild(badge);
+      }
+    }, 6000);
   });
 })();
