@@ -75,6 +75,11 @@ app.get(["/data-deletion", "/data-deletion/"], (req, res) => {
   res.sendFile(path.join(__dirname, "public", "data-deletion.html"));
 });
 
+// 📄 Citech helper page
+app.get(["/citech", "/citech/"], (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "citech", "index.html"));
+});
+
 // 📄 404 для всех неизвестных путей
 app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, "public", "404.html"));
