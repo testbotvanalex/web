@@ -23,6 +23,10 @@
     {
       "source": "/dashboard",
       "destination": "https://ocenka02.ru/dashboard"
+    },
+    {
+      "source": "/bots",
+      "destination": "https://ocenka02.ru/bots"
     }
   ]
 }

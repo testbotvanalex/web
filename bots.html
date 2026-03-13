@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BotMatic · Bots</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f4f5f9;
+      --surface: #ffffff;
+      --surface2: #f0f1f6;
+      --border: #e2e4ed;
+      --text: #1a1a2e;
+      --muted: #6b7280;
+      --accent: #7c3aed;
+      --accent2: #db2777;
+      --green: #059669;
+      --yellow: #d97706;
+      --blue: #2563eb;
+      --red: #dc2626;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 220px; flex-shrink: 0; background: var(--surface);
+      border-right: 1px solid var(--border); padding: 24px 0;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .sidebar-logo {
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px;
+      background: linear-gradient(135deg, #7c3aed, #db2777);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      padding: 0 20px 20px;
+    }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px; padding: 10px 20px;
+      color: var(--muted); text-decoration: none; font-size: 14px; transition: all .15s;
+    }
+    .nav-item:hover { color: var(--text); background: var(--surface2); }
+    .nav-item.active { color: var(--accent); background: rgba(124,108,252,0.1); border-left: 2px solid var(--accent); }
+    .main { flex: 1; overflow-y: auto; }
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 20px 32px; border-bottom: 1px solid var(--border);
+      background: var(--surface); position: sticky; top: 0; z-index: 10;
+    }
+    .topbar h1 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; }
+    .topbar-actions { display: flex; align-items: center; gap: 10px; }
+    .top-chip {
+      font-size: 13px; color: var(--muted); background: var(--surface2);
+      border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px;
+    }
+    .btn {
+      border: none; border-radius: 10px; padding: 10px 18px; font-size: 14px;
+      font-family: inherit; font-weight: 600; cursor: pointer; transition: all .15s;
+      text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+    }
+    .btn-primary { background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff; box-shadow: 0 4px 14px rgba(124,58,237,.24); }
+    .btn-primary:hover { transform: translateY(-1px); }
+    .btn-ghost { background: var(--surface); border: 1px solid var(--border); color: var(--text); }
+    .btn-ghost:hover { border-color: var(--accent); }
+    .content { padding: 28px 32px; display: grid; gap: 24px; }
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 20px 22px; box-shadow: 0 1px 4px rgba(0,0,0,.05);
+    }
+    .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+    .stat-value { font-family: 'Syne', sans-serif; font-size: 30px; font-weight: 800; }
+    .stat-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .cards-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .cards-head h2 { font-family: 'Syne', sans-serif; font-size: 18px; }
+    .cards-head p { color: var(--muted); font-size: 14px; }
+    .bot-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .bot-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+      padding: 22px; box-shadow: 0 1px 4px rgba(0,0,0,.05); display: grid; gap: 16px;
+    }
+    .bot-card.active { border-color: rgba(124,58,237,.3); box-shadow: 0 10px 30px rgba(124,58,237,.08); }
+    .bot-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .bot-name { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; }
+    .bot-meta { color: var(--muted); font-size: 12px; margin-top: 4px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px;
+      border-radius: 999px; font-size: 11px; font-weight: 700; white-space: nowrap;
+    }
+    .badge.active { background: rgba(124,58,237,.12); color: var(--accent); }
+    .badge.live { background: rgba(16,185,129,.12); color: var(--green); }
+    .badge.setup { background: rgba(245,158,11,.12); color: var(--yellow); }
+    .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .summary-box { background: var(--surface2); border-radius: 12px; padding: 12px 14px; }
+    .summary-box span { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 5px; }
+    .summary-box strong { font-size: 18px; }
+    .channels-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .channel-pill {
+      display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px;
+      border-radius: 999px; font-size: 12px; font-weight: 600; background: var(--surface2); color: var(--text);
+    }
+    .channel-pill.connected { background: rgba(16,185,129,.12); color: var(--green); }
+    .channel-pill.disconnected { background: rgba(107,114,128,.12); color: var(--muted); }
+    .channel-pill.disabled { background: rgba(220,38,38,.08); color: var(--red); }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .empty-state {
+      background: var(--surface); border: 1px dashed var(--border); border-radius: 16px;
+      padding: 48px 24px; text-align: center; color: var(--muted);
+    }
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.45); display: none;
+      align-items: center; justify-content: center; z-index: 100;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      width: min(440px, calc(100% - 40px)); background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,.18);
+    }
+    .modal h3 { font-family: 'Syne', sans-serif; font-size: 22px; margin-bottom: 10px; }
+    .modal p { color: var(--muted); font-size: 14px; line-height: 1.6; margin-bottom: 18px; }
+    .field { display: grid; gap: 8px; }
+    .field label { font-size: 12px; color: var(--muted); font-weight: 600; }
+    .field input {
+      height: 46px; border-radius: 10px; border: 1px solid var(--border);
+      background: var(--surface2); padding: 0 14px; font: inherit; outline: none;
+    }
+    .field input:focus { border-color: var(--accent); }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
+    .error { margin-top: 10px; font-size: 13px; color: var(--red); display: none; }
+    @media (max-width: 1100px) {
+      .stats-row, .bot-grid, .summary-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <nav class="sidebar">
+      <div class="sidebar-logo">BotMatic</div>
+      <a href="/admin/clients" class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Clients
+      </a>
+      <a href="/dashboard" class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+      <a href="/bots" class="nav-item active">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
+        Bots
+      </a>
+      <a href="/inbox" class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Inbox
+      </a>
+      <a href="/auth/connect" class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v2"/><path d="M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M20 16v2a2 2 0 0 1-2 2h-2"/><path d="M4 8V6a2 2 0 0 1 2-2h2"/><circle cx="12" cy="12" r="3"/></svg>
+        Channels
+      </a>
+      <a href="/analytics" class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Analytics
+      </a>
+      <a href="/auth/permissions" class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Permissions
+      </a>
+    </nav>
+
+    <div class="main">
+      <div class="topbar">
+        <h1>Bots</h1>
+        <div class="topbar-actions">
+          <div class="top-chip" id="topSummary">Loading…</div>
+          <button class="btn btn-primary" id="openCreateBot">+ New Bot</button>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-label">Total Bots</div><div class="stat-value" id="stTotal">—</div><div class="stat-sub">in BotMatic</div></div>
+          <div class="stat-card"><div class="stat-label">Connected Bots</div><div class="stat-value" id="stConnected">—</div><div class="stat-sub">with at least one live channel</div></div>
+          <div class="stat-card"><div class="stat-label">Channels</div><div class="stat-value" id="stChannels">—</div><div class="stat-sub">connected across all bots</div></div>
+          <div class="stat-card"><div class="stat-label">Needs Setup</div><div class="stat-value" id="stSetup">—</div><div class="stat-sub">no channels yet</div></div>
+        </div>
+
+        <div class="cards-head">
+          <div>
+            <h2>Bot Control Center</h2>
+            <p>Switch between bots, inspect channel status, and jump straight into the relevant workspace.</p>
+          </div>
+        </div>
+
+        <div id="botGrid" class="bot-grid">
+          <div class="empty-state">Loading bots…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="createBotModal">
+    <div class="modal">
+      <h3>Create Bot</h3>
+      <p>Add a new bot workspace. You can connect channels and configure flows right after creation.</p>
+      <div class="field">
+        <label for="botName">Bot name</label>
+        <input id="botName" type="text" placeholder="Sales Bot" />
+      </div>
+      <div id="createError" class="error"></div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="closeCreateBot">Cancel</button>
+        <button class="btn btn-primary" id="submitCreateBot">Create</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const esc = (value) => String(value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const fmtDate = (value) => value ? new Date(value).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
+    const fmtAgo = (value) => {
+      if (!value) return '—';
+      const m = Math.floor((Date.now() - new Date(value).getTime()) / 60000);
+      if (m < 1) return 'just now';
+      if (m < 60) return `${m} min ago`;
+      const h = Math.floor(m / 60);
+      if (h < 24) return `${h} h ago`;
+      return `${Math.floor(h / 24)} d ago`;
+    };
+
+    const modal = document.getElementById('createBotModal');
+    const botGrid = document.getElementById('botGrid');
+    const botNameInput = document.getElementById('botName');
+    const createError = document.getElementById('createError');
+    let activeBotId = '';
+
+    function openModal() {
+      createError.style.display = 'none';
+      createError.textContent = '';
+      botNameInput.value = '';
+      modal.classList.add('open');
+      setTimeout(() => botNameInput.focus(), 0);
+    }
+
+    function closeModal() {
+      modal.classList.remove('open');
+    }
+
+    function channelState(channel) {
+      if (!channel || channel.available === false) return 'disabled';
+      return channel.connected ? 'connected' : 'disconnected';
+    }
+
+    function countConnectedChannels(channels) {
+      return ['instagram', 'messenger', 'telegram'].filter((key) => channels[key] && channels[key].connected).length;
+    }
+
+    function renderBots(botsWithChannels) {
+      const connectedBots = botsWithChannels.filter((item) => item.connectedCount > 0).length;
+      const totalChannels = botsWithChannels.reduce((sum, item) => sum + item.connectedCount, 0);
+      const setupBots = botsWithChannels.filter((item) => item.connectedCount === 0).length;
+      document.getElementById('stTotal').textContent = botsWithChannels.length;
+      document.getElementById('stConnected').textContent = connectedBots;
+      document.getElementById('stChannels').textContent = totalChannels;
+      document.getElementById('stSetup').textContent = setupBots;
+      document.getElementById('topSummary').textContent = `${connectedBots}/${botsWithChannels.length} bots live`;
+
+      if (!botsWithChannels.length) {
+        botGrid.innerHTML = '<div class="empty-state">No bots yet. Create the first bot to get started.</div>';
+        return;
+      }
+
+      botGrid.innerHTML = botsWithChannels.map((item) => {
+        const { bot, channels, connectedCount } = item;
+        const stateClass = bot.id === activeBotId ? 'active' : '';
+        const setupBadge = connectedCount > 0
+          ? '<div class="badge live">Live</div>'
+          : '<div class="badge setup">Needs setup</div>';
+        const channelPills = [
+          ['Instagram', channels.instagram],
+          ['Messenger', channels.messenger],
+          ['Telegram', channels.telegram],
+        ].map(([label, channel]) => {
+          const state = channelState(channel);
+          const text = state === 'connected' ? (channel.statusLabel || 'Connected') : state === 'disabled' ? 'Disabled' : 'Not connected';
+          return `<div class="channel-pill ${state}">${label} · ${esc(text)}</div>`;
+        }).join('');
+
+        return `
+          <section class="bot-card ${stateClass}">
+            <div class="bot-top">
+              <div>
+                <div class="bot-name">${esc(bot.name)}</div>
+                <div class="bot-meta">ID: ${esc(bot.id)} · Updated ${fmtAgo(bot.updatedAt)}</div>
+              </div>
+              ${bot.id === activeBotId ? '<div class="badge active">Active</div>' : setupBadge}
+            </div>
+
+            <div class="summary-grid">
+              <div class="summary-box"><span>Connected</span><strong>${connectedCount}/3</strong></div>
+              <div class="summary-box"><span>Created</span><strong>${fmtDate(bot.createdAt)}</strong></div>
+              <div class="summary-box"><span>Updated</span><strong>${fmtDate(bot.updatedAt)}</strong></div>
+            </div>
+
+            <div class="channels-row">${channelPills}</div>
+
+            <div class="actions">
+              <a class="btn btn-primary" href="/auth/connect?botId=${encodeURIComponent(bot.id)}">Channels</a>
+              <a class="btn btn-ghost" href="/inbox?botId=${encodeURIComponent(bot.id)}">Inbox</a>
+              <a class="btn btn-ghost" href="/constructor?botId=${encodeURIComponent(bot.id)}">Constructor</a>
+              <a class="btn btn-ghost" href="/train?botId=${encodeURIComponent(bot.id)}">Training</a>
+            </div>
+          </section>`;
+      }).join('');
+    }
+
+    async function load() {
+      const botsData = await fetch('/auth/api/bots').then((r) => r.json());
+      activeBotId = botsData.activeBotId || '';
+      const bots = botsData.bots || [];
+      const botsWithChannels = await Promise.all(bots.map(async (bot) => {
+        try {
+          const channels = await fetch(`/auth/api/channels?botId=${encodeURIComponent(bot.id)}`).then((r) => r.json());
+          return { bot, channels, connectedCount: countConnectedChannels(channels) };
+        } catch (e) {
+          return {
+            bot,
+            channels: {
+              instagram: { connected: false },
+              messenger: { connected: false },
+              telegram: { connected: false },
+            },
+            connectedCount: 0,
+          };
+        }
+      }));
+      renderBots(botsWithChannels);
+    }
+
+    async function createBot() {
+      const name = botNameInput.value.trim();
+      const submit = document.getElementById('submitCreateBot');
+      submit.disabled = true;
+      submit.textContent = 'Creating...';
+      createError.style.display = 'none';
+      try {
+        const rsp = await fetch('/auth/api/bots', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', accept: 'application/json' },
+          body: JSON.stringify({ name }),
+        });
+        const data = await rsp.json();
+        if (!rsp.ok) throw new Error(data.error || 'Failed to create bot');
+        closeModal();
+        await load();
+      } catch (e) {
+        createError.textContent = e.message || 'Failed to create bot';
+        createError.style.display = 'block';
+      } finally {
+        submit.disabled = false;
+        submit.textContent = 'Create';
+      }
+    }
+
+    document.getElementById('openCreateBot').addEventListener('click', openModal);
+    document.getElementById('closeCreateBot').addEventListener('click', closeModal);
+    document.getElementById('submitCreateBot').addEventListener('click', createBot);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    botNameInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') createBot(); });
+
+    load().catch((error) => {
+      console.error(error);
+      botGrid.innerHTML = '<div class="empty-state">Failed to load bots.</div>';
+      document.getElementById('topSummary').textContent = 'Load error';
+    });
+  </script>
+</body>
+</html>

@@ -4,198 +4,477 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BotMatic Inbox</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #f6f3e8;
+      --bg: #f0f2f7;
       --panel: #ffffff;
-      --border: #e6e1d2;
-      --text: #1f1f1f;
-      --muted: #6a675f;
-      --green: #228b5a;
-      --accent: #0c224a;
-      --accent-2: #f4a261;
+      --panel2: #f5f6fa;
+      --border: #e2e5ef;
+      --text: #1a1d2e;
+      --muted: #8a90b0;
+      --accent: #5b4ef8;
+      --accent2: #7c6cfc;
+      --ig: #e1306c;
+      --tg: #0088cc;
+      --wa: #25d366;
+      --green: #16a34a;
+      --red: #dc2626;
+      --send: #5b4ef8;
     }
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      font-family: 'DM Sans', -apple-system, sans-serif;
       background: var(--bg);
       color: var(--text);
+      min-height: 100vh;
+      overflow: hidden;
     }
-    .top {
-      padding: 24px;
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 220px; flex-shrink: 0; background: var(--panel);
+      border-right: 1px solid var(--border); padding: 24px 0;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .sidebar-logo {
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px;
+      background: linear-gradient(135deg, #7c3aed, #db2777);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      padding: 0 20px 20px;
+    }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px; padding: 10px 20px;
+      color: var(--muted); text-decoration: none; font-size: 14px; transition: all .15s;
+    }
+    .nav-item:hover { color: var(--text); background: var(--panel2); }
+    .nav-item.active { color: var(--accent); background: rgba(124,108,252,0.1); border-left: 2px solid var(--accent); }
+    .main { flex: 1; min-width: 0; display: flex; flex-direction: column; min-height: 100vh; }
+
+    /* ── Top bar ── */
+    .topbar {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      padding: 14px 24px;
+      border-bottom: 1px solid var(--border);
+      background: var(--panel);
+      flex-shrink: 0;
     }
-    .title { font-size: 46px; font-weight: 800; margin: 0; }
-    .sub { color: var(--muted); margin-top: 8px; font-size: 32px; }
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo span { color: var(--accent2); }
+    .logo-dot {
+      width: 8px; height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .bot-name {
+      font-size: 13px;
+      color: var(--muted);
+      background: var(--panel2);
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+    }
+    .logout-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-family: inherit;
+      transition: all .2s;
+    }
+    .logout-btn:hover { border-color: var(--accent); color: var(--text); }
+
+    /* ── Shell ── */
     .shell {
       display: grid;
-      grid-template-columns: 360px 1fr;
-      gap: 16px;
-      padding: 0 24px 24px;
-      height: calc(100vh - 120px);
-    }
-    .left, .right {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
+      grid-template-columns: 320px 1fr;
+      flex: 1;
       min-height: 0;
     }
+
+    /* ── Left panel ── */
+    .left {
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      background: var(--panel);
+    }
     .left-head {
-      padding: 16px;
+      padding: 14px 16px 12px;
       border-bottom: 1px solid var(--border);
-      display: grid;
-      gap: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .left-head h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
     }
     input[type="search"] {
       width: 100%;
+      background: var(--panel2);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 10px 12px;
-      font-size: 16px;
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-size: 13px;
+      color: var(--text);
       outline: none;
+      font-family: inherit;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,.06);
     }
-    .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+    input[type="search"]::placeholder { color: var(--muted); }
+    input[type="search"]:focus { border-color: var(--accent); background: #fff; }
+
+    .tabs { display: flex; gap: 6px; }
     .tab {
       border: 1px solid var(--border);
-      background: #fff;
-      border-radius: 12px;
-      padding: 8px 14px;
+      background: transparent;
+      color: var(--muted);
+      border-radius: 8px;
+      padding: 6px 12px;
       cursor: pointer;
       font-weight: 600;
+      font-size: 12px;
+      font-family: inherit;
+      transition: all .15s;
     }
+    .tab:hover { border-color: var(--accent); color: var(--text); }
     .tab.active {
-      background: var(--green);
+      background: var(--accent);
       color: #fff;
-      border-color: var(--green);
+      border-color: var(--accent);
     }
-    .chat-list {
-      overflow: auto;
-      flex: 1;
-    }
-    .chat-item {
-      border-bottom: 1px solid #f1eee4;
-      padding: 12px 14px;
-      cursor: pointer;
-      display: grid;
-      gap: 6px;
-    }
-    .chat-item:hover { background: #faf8f0; }
-    .chat-item.active { background: #f3efe2; }
-    .row {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      align-items: center;
-    }
-    .name { font-weight: 700; font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .meta { color: var(--muted); font-size: 12px; }
-    .chip {
-      font-size: 11px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: #fff;
-      white-space: nowrap;
-    }
-    .chip.mode-human { background: #fee2e2; border-color: #fecaca; color: #991b1b; }
-    .chip.mode-bot { background: #dcfce7; border-color: #bbf7d0; color: #166534; }
-    .chip.unread { background: #111827; color: #fff; border-color: #111827; }
 
-    .right-head {
-      padding: 16px;
+    .chat-list { overflow-y: auto; flex: 1; }
+    .chat-list::-webkit-scrollbar { width: 4px; }
+    .chat-list::-webkit-scrollbar-track { background: transparent; }
+    .chat-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .chat-item {
+      padding: 12px 16px;
+      cursor: pointer;
       border-bottom: 1px solid var(--border);
+      transition: background .15s;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       gap: 12px;
     }
-    .actions { display: flex; gap: 8px; }
-    button.btn {
-      border: 0;
-      border-radius: 12px;
-      padding: 10px 14px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .btn.take { background: #f59e0b; color: #111827; }
-    .btn.release { background: #10b981; color: #062b1e; }
-    .btn.send { background: var(--accent-2); color: #111827; }
+    .chat-item:hover { background: #f0f1fb; }
+    .chat-item.active { background: #ece9ff; border-left: 3px solid var(--accent); }
 
+    .avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      font-weight: 700;
+      font-family: 'Syne', sans-serif;
+      position: relative;
+    }
+    .avatar-ig { background: linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); color: #fff; }
+    .avatar-tg { background: #0088cc; color: #fff; }
+    .avatar-wa { background: #25d366; color: #fff; }
+    .avatar-default { background: #ece9ff; color: var(--accent); border: 1px solid #d4cfff; }
+
+    .ch-dot {
+      position: absolute;
+      bottom: -1px; right: -1px;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      border: 2px solid var(--panel);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 8px;
+    }
+    .ch-dot-ig { background: var(--ig); }
+    .ch-dot-tg { background: var(--tg); }
+    .ch-dot-wa { background: var(--wa); }
+    .ch-dot-ms { background: #0084ff; }
+
+    .chat-info { flex: 1; min-width: 0; }
+    .chat-name-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 3px;
+    }
+    .chat-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .chat-time { font-size: 11px; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
+    .chat-preview {
+      font-size: 12px;
+      color: var(--muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-bottom: 4px;
+    }
+    .chat-meta-row { display: flex; align-items: center; gap: 6px; }
+    .chip {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 999px;
+      letter-spacing: .3px;
+    }
+    .chip-bot { background: #dcfce7; color: #15803d; }
+    .chip-human { background: #fee2e2; color: #b91c1c; }
+    .chip-ig { background: #fce7f3; color: #be185d; }
+    .chip-tg { background: #e0f2fe; color: #0369a1; }
+    .chip-unread {
+      background: var(--accent);
+      color: #fff;
+      margin-left: auto;
+      min-width: 18px;
+      text-align: center;
+    }
+
+    /* ── Right panel ── */
+    .right {
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      min-height: 0;
+    }
+    .right-head {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: var(--panel);
+      flex-shrink: 0;
+    }
+    .right-head-info {}
+    .right-head-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .right-head-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .mode-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 99px;
+    }
+    .mode-badge.bot { background: #dcfce7; color: #15803d; }
+    .mode-badge.human { background: #fee2e2; color: #b91c1c; }
+
+    .head-actions { display: flex; gap: 8px; }
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 8px 16px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity .15s;
+    }
+    .btn:disabled { opacity: .5; cursor: default; }
+    .btn-take { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+    .btn-release { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+    .btn-send {
+      background: var(--accent);
+      color: #fff;
+      padding: 10px 24px;
+      font-size: 14px;
+    }
+    .btn-send:hover:not(:disabled) { opacity: .85; }
+
+    /* ── Messages ── */
     .messages {
       flex: 1;
       min-height: 0;
-      overflow: auto;
-      padding: 16px;
+      overflow-y: auto;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      background: #fffdf7;
+      gap: 8px;
     }
+    .messages::-webkit-scrollbar { width: 4px; }
+    .messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .msg-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+    .msg-wrap.out { align-items: flex-end; }
+    .msg-wrap.in { align-items: flex-start; }
+
     .msg {
-      max-width: 72%;
-      padding: 10px 12px;
-      border-radius: 14px;
+      max-width: 68%;
+      padding: 10px 14px;
+      border-radius: 16px;
       font-size: 14px;
-      line-height: 1.45;
-      border: 1px solid var(--border);
+      line-height: 1.5;
       white-space: pre-wrap;
       word-break: break-word;
     }
-    .msg.in { background: #fff; align-self: flex-start; border-bottom-left-radius: 4px; }
-    .msg.out { background: #0f172a; color: #fff; align-self: flex-end; border-color: #0f172a; border-bottom-right-radius: 4px; }
-    .msg .small { font-size: 11px; opacity: 0.75; margin-top: 5px; }
+    .msg.in {
+      background: #fff;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06);
+    }
+    .msg.out {
+      background: var(--accent);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+      box-shadow: 0 2px 6px rgba(91,78,248,.3);
+    }
+    .msg-time {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 3px;
+      padding: 0 4px;
+    }
+
+    /* ── Composer ── */
     .composer {
       border-top: 1px solid var(--border);
-      padding: 12px;
-      display: grid;
-      gap: 8px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+      background: var(--panel);
+      flex-shrink: 0;
     }
     textarea {
-      width: 100%;
-      min-height: 72px;
-      max-height: 180px;
-      resize: vertical;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 10px 12px;
-      font-size: 14px;
-      outline: none;
-      font-family: inherit;
+      flex: 1;
+      min-height: 44px;
+      max-height: 140px;
+      resize: none;
       background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 14px;
+      color: var(--text);
+      font-family: inherit;
+      outline: none;
+      line-height: 1.45;
+      transition: border-color .15s;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06);
     }
-    .empty {
+    textarea::placeholder { color: var(--muted); }
+    textarea:focus { border-color: var(--accent); }
+
+    /* ── Empty states ── */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      gap: 12px;
       color: var(--muted);
-      font-size: 15px;
-      padding: 18px;
+      font-size: 14px;
+      text-align: center;
     }
-    @media (max-width: 960px) {
-      .shell { grid-template-columns: 1fr; height: auto; }
-      .left { max-height: 42vh; }
-      .right { min-height: 52vh; }
-      .title { font-size: 36px; }
-      .sub { font-size: 22px; }
+    .empty-icon { font-size: 40px; opacity: .4; }
+
+    /* ── Messages bg ── */
+    .messages { background: #f8f9fd; }
+
+    /* ── Day divider ── */
+    .day-divider {
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      margin: 8px 0 4px;
+      position: relative;
     }
+    .day-divider::before, .day-divider::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 30%;
+      height: 1px;
+      background: var(--border);
+    }
+    .day-divider::before { left: 0; }
+    .day-divider::after { right: 0; }
   </style>
 </head>
 <body>
-  <div class="top">
-    <div>
-      <h1 class="title">Inbox</h1>
-      <div class="sub" id="botSubtitle">BotMatic · Message Inbox</div>
-    </div>
-    <form action="/api/auth/logout" method="post"><button class="btn">Logout</button></form>
-  </div>
+  <div class="layout">
+    <nav class="sidebar">
+      <div class="sidebar-logo">BotMatic</div>
+      <a href="/admin/clients" class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Clients
+      </a>
+      <a href="/dashboard" class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+      <a href="/bots" class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
+        Bots
+      </a>
+      <a href="/inbox" class="nav-item active">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Inbox
+      </a>
+      <a href="/auth/connect" class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v2"/><path d="M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M20 16v2a2 2 0 0 1-2 2h-2"/><path d="M4 8V6a2 2 0 0 1 2-2h2"/><circle cx="12" cy="12" r="3"/></svg>
+        Channels
+      </a>
+      <a href="/analytics" class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Analytics
+      </a>
+    </nav>
 
-  <div class="shell">
-    <aside class="left">
+    <div class="main">
+      <div class="topbar">
+        <div class="logo">
+          <div class="logo-dot"></div>
+          Bot<span>Matic</span> · Inbox
+        </div>
+        <div class="topbar-right">
+          <div class="bot-name" id="botSubtitle">Loading…</div>
+          <form action="/api/auth/logout" method="post">
+            <button class="logout-btn">Logout</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="shell">
+        <aside class="left">
       <div class="left-head">
-        <input id="search" type="search" placeholder="Search by name or phone" />
+        <h2>Conversations</h2>
+        <input id="search" type="search" placeholder="Search by name or ID…" />
         <div class="tabs">
           <button class="tab active" data-filter="all">All</button>
           <button class="tab" data-filter="open">Open</button>
@@ -203,32 +482,36 @@
           <button class="tab" data-filter="human">Human</button>
         </div>
       </div>
-      <div id="chatList" class="chat-list"><div class="empty">Loading chats…</div></div>
-    </aside>
-
-    <section class="right">
-      <div id="chatHeader" class="right-head">
-        <div class="empty">Select a chat to open the conversation.</div>
+      <div id="chatList" class="chat-list">
+        <div class="empty-state"><div class="empty-icon">💬</div>Loading…</div>
       </div>
-      <div id="messages" class="messages"><div class="empty">No chat selected.</div></div>
-      <div class="composer">
-        <textarea id="messageInput" placeholder="Type a reply…"></textarea>
-        <div style="display:flex;justify-content:flex-end;gap:8px;">
-          <button id="sendBtn" class="btn send">Send</button>
+        </aside>
+
+        <section class="right">
+      <div id="chatHeader" class="right-head">
+        <div class="empty-state" style="flex-direction:row;gap:8px;padding:0;">
+          <span style="font-size:20px;">←</span>
+          Select a conversation
         </div>
       </div>
-    </section>
+      <div id="messages" class="messages">
+        <div class="empty-state">
+          <div class="empty-icon">✉️</div>
+          <div>No conversation selected.<br/>Pick one from the left.</div>
+        </div>
+      </div>
+      <div class="composer">
+        <textarea id="messageInput" placeholder="Type your reply… (Enter to send)" rows="1"></textarea>
+        <button id="sendBtn" class="btn btn-send">Send →</button>
+      </div>
+        </section>
+      </div>
+    </div>
   </div>
 
   <script>
     const API = '/api/admin';
-    const state = {
-      chats: [],
-      filtered: [],
-      activeChat: null,
-      filter: 'all',
-      search: ''
-    };
+    const state = { chats: [], filtered: [], activeChat: null, filter: 'all', search: '' };
 
     const chatListEl = document.getElementById('chatList');
     const chatHeaderEl = document.getElementById('chatHeader');
@@ -238,129 +521,165 @@
     const searchEl = document.getElementById('search');
 
     function esc(v) {
-      return String(v || '')
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;');
+      return String(v || '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
     }
 
     function fmtTime(ts) {
       if (!ts) return '';
       const d = new Date(ts);
-      if (Number.isNaN(d.getTime())) return '';
-      return d.toLocaleString();
+      if (isNaN(d)) return '';
+      const now = new Date();
+      const diff = now - d;
+      if (diff < 60000) return 'just now';
+      if (diff < 3600000) return Math.floor(diff/60000) + 'm ago';
+      if (diff < 86400000) return d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+      return d.toLocaleDateString([], {day:'numeric',month:'short'}) + ' ' + d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+    }
+
+    function channelIcon(ch) {
+      if (ch === 'instagram') return '📷';
+      if (ch === 'telegram') return '✈️';
+      if (ch === 'whatsapp') return '💬';
+      if (ch === 'messenger') return '💙';
+      return '💬';
+    }
+
+    function avatarClass(ch) {
+      if (ch === 'instagram') return 'avatar-ig';
+      if (ch === 'telegram') return 'avatar-tg';
+      if (ch === 'whatsapp') return 'avatar-wa';
+      return 'avatar-default';
+    }
+
+    function dotClass(ch) {
+      if (ch === 'instagram') return 'ch-dot ch-dot-ig';
+      if (ch === 'telegram') return 'ch-dot ch-dot-tg';
+      if (ch === 'whatsapp') return 'ch-dot ch-dot-wa';
+      return '';
+    }
+
+    function chipClass(ch) {
+      if (ch === 'instagram') return 'chip chip-ig';
+      if (ch === 'telegram') return 'chip chip-tg';
+      return 'chip';
+    }
+
+    function initials(name) {
+      const n = String(name || '?');
+      if (n.match(/^\d+$/)) return '#';
+      return n.charAt(0).toUpperCase();
     }
 
     function applyFilters() {
       const q = state.search.toLowerCase().trim();
-      state.filtered = state.chats.filter((chat) => {
-        if (state.filter === 'open' && chat.status !== 'open') return false;
-        if (state.filter === 'bot' && chat.mode !== 'bot') return false;
-        if (state.filter === 'human' && chat.mode !== 'human') return false;
+      state.filtered = state.chats.filter(c => {
+        if (state.filter === 'open' && c.status !== 'open') return false;
+        if (state.filter === 'bot' && c.mode !== 'bot') return false;
+        if (state.filter === 'human' && c.mode !== 'human') return false;
         if (!q) return true;
-        const haystack = `${chat.sender_name || ''} ${chat.sender_id || ''} ${chat.company || ''}`.toLowerCase();
-        return haystack.includes(q);
+        return `${c.sender_name||''} ${c.sender_id||''} ${c.company||''}`.toLowerCase().includes(q);
       });
     }
 
     function renderList() {
       applyFilters();
       if (!state.filtered.length) {
-        chatListEl.innerHTML = '<div class="empty">No chats found.</div>';
+        chatListEl.innerHTML = '<div class="empty-state" style="padding:32px 0;"><div class="empty-icon">🔍</div>No chats found</div>';
         return;
       }
-      chatListEl.innerHTML = state.filtered.map((chat) => {
-        const active = state.activeChat && state.activeChat.id === chat.id ? ' active' : '';
-        const modeClass = chat.mode === 'human' ? 'mode-human' : 'mode-bot';
-        const unreadChip = chat.unread_count > 0 ? `<span class="chip unread">${chat.unread_count}</span>` : '';
+      chatListEl.innerHTML = state.filtered.map(c => {
+        const active = state.activeChat?.id === c.id ? ' active' : '';
+        const dot = dotClass(c.channel);
         return `
-          <div class="chat-item${active}" data-id="${chat.id}">
-            <div class="row">
-              <div class="name">${esc(chat.sender_name || chat.sender_id || 'Unknown')}</div>
-              <div class="meta">${fmtTime(chat.last_message_at)}</div>
+          <div class="chat-item${active}" data-id="${c.id}">
+            <div class="avatar ${avatarClass(c.channel)}">
+              ${initials(c.sender_name || c.sender_id)}
+              ${dot ? `<div class="${dot}">${channelIcon(c.channel)}</div>` : ''}
             </div>
-            <div class="row">
-              <div class="meta">${esc(chat.last_message_text || '—')}</div>
-            </div>
-            <div class="row">
-              <div class="meta">${esc(chat.channel)} · ${esc(chat.company || '')}</div>
-              <div style="display:flex;gap:6px;">
-                <span class="chip ${modeClass}">${chat.mode}</span>
-                ${unreadChip}
+            <div class="chat-info">
+              <div class="chat-name-row">
+                <div class="chat-name">${esc(c.sender_name || c.sender_id || 'Unknown')}</div>
+                <div class="chat-time">${fmtTime(c.last_message_at)}</div>
+              </div>
+              <div class="chat-preview">${esc(c.last_message_text || '—')}</div>
+              <div class="chat-meta-row">
+                <span class="${chipClass(c.channel)}">${channelIcon(c.channel)} ${c.channel}</span>
+                <span class="chip ${c.mode === 'human' ? 'chip-human' : 'chip-bot'}">${c.mode}</span>
+                ${c.unread_count > 0 ? `<span class="chip chip-unread">${c.unread_count}</span>` : ''}
               </div>
             </div>
-          </div>
-        `;
+          </div>`;
       }).join('');
-
-      chatListEl.querySelectorAll('.chat-item').forEach((el) => {
-        el.addEventListener('click', () => openChat(el.dataset.id));
-      });
+      chatListEl.querySelectorAll('.chat-item').forEach(el =>
+        el.addEventListener('click', () => openChat(el.dataset.id))
+      );
     }
 
     async function loadChats() {
-      const rsp = await fetch(`${API}/chats`);
-      const data = await rsp.json();
-      state.chats = Array.isArray(data.chats) ? data.chats : [];
-      renderList();
-      if (state.activeChat) {
-        const reselected = state.chats.find((x) => x.id === state.activeChat.id);
-        if (reselected) state.activeChat = reselected;
-      }
+      try {
+        const d = await fetch(`${API}/chats`).then(r => r.json());
+        state.chats = Array.isArray(d.chats) ? d.chats : [];
+        renderList();
+        if (state.activeChat) {
+          const r = state.chats.find(x => x.id === state.activeChat.id);
+          if (r) state.activeChat = r;
+        }
+      } catch(e) {}
     }
 
     async function openChat(chatId) {
-      const chat = state.chats.find((x) => x.id === chatId);
+      const chat = state.chats.find(x => x.id === chatId);
       if (!chat) return;
       state.activeChat = chat;
       renderList();
 
-      const rsp = await fetch(`${API}/chats/${chat.id}/messages?limit=300`);
-      const data = await rsp.json();
-      const messages = Array.isArray(data.messages) ? data.messages : [];
-      const mode = data.chat?.mode || chat.mode || 'bot';
+      try {
+        const d = await fetch(`${API}/chats/${chat.id}/messages?limit=300`).then(r => r.json());
+        const msgs = Array.isArray(d.messages) ? d.messages : [];
+        const mode = d.chat?.mode || chat.mode || 'bot';
 
-      chatHeaderEl.innerHTML = `
-        <div>
-          <div style="font-size:18px;font-weight:800;">${esc(chat.sender_name || chat.sender_id)}</div>
-          <div class="meta">${esc(chat.channel)} · ${esc(chat.company || '')} · mode: <b>${mode}</b></div>
-        </div>
-        <div class="actions">
-          <button class="btn take" id="takeBtn">Take over</button>
-          <button class="btn release" id="releaseBtn">Release back to bot</button>
-        </div>
-      `;
-
-      messagesEl.innerHTML = messages.length
-        ? messages.map((m) => `
-          <div class="msg ${m.direction === 'out' ? 'out' : 'in'}">
-            <div>${esc(m.text || '')}</div>
-            <div class="small">${esc(m.direction)} · ${fmtTime(m.created_at)}</div>
+        chatHeaderEl.innerHTML = `
+          <div class="right-head-info">
+            <div class="right-head-name">${esc(chat.sender_name || chat.sender_id)}</div>
+            <div class="right-head-meta">
+              ${channelIcon(chat.channel)} ${esc(chat.channel)}
+              ${chat.company ? '· ' + esc(chat.company) : ''}
+              · <span class="mode-badge ${mode}">${mode}</span>
+            </div>
           </div>
-        `).join('')
-        : '<div class="empty">No messages in this chat.</div>';
+          <div class="head-actions">
+            <button class="btn btn-take" id="takeBtn">Take over</button>
+            <button class="btn btn-release" id="releaseBtn">Release to bot</button>
+          </div>`;
 
-      messagesEl.scrollTop = messagesEl.scrollHeight;
-      bindModeButtons(chat.id);
-    }
+        if (!msgs.length) {
+          messagesEl.innerHTML = '<div class="empty-state"><div class="empty-icon">💬</div>No messages yet.</div>';
+        } else {
+          messagesEl.innerHTML = msgs.map((m, i) => {
+            const prev = msgs[i-1];
+            let divider = '';
+            if (!prev || new Date(m.created_at).toDateString() !== new Date(prev.created_at).toDateString()) {
+              const label = new Date(m.created_at).toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'});
+              divider = `<div class="day-divider">${label}</div>`;
+            }
+            return divider + `
+              <div class="msg-wrap ${m.direction === 'out' ? 'out' : 'in'}">
+                <div class="msg ${m.direction === 'out' ? 'out' : 'in'}">${esc(m.text || '')}</div>
+                <div class="msg-time">${fmtTime(m.created_at)}</div>
+              </div>`;
+          }).join('');
+        }
 
-    function bindModeButtons(chatId) {
-      const takeBtn = document.getElementById('takeBtn');
-      const releaseBtn = document.getElementById('releaseBtn');
-      if (takeBtn) {
-        takeBtn.addEventListener('click', async () => {
-          await fetch(`${API}/chats/${chatId}/takeover`, { method: 'POST' });
-          await loadChats();
-          await openChat(chatId);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+        document.getElementById('takeBtn')?.addEventListener('click', async () => {
+          await fetch(`${API}/chats/${chat.id}/takeover`, { method: 'POST' });
+          loadChats(); openChat(chat.id);
         });
-      }
-      if (releaseBtn) {
-        releaseBtn.addEventListener('click', async () => {
-          await fetch(`${API}/chats/${chatId}/release`, { method: 'POST' });
-          await loadChats();
-          await openChat(chatId);
+        document.getElementById('releaseBtn')?.addEventListener('click', async () => {
+          await fetch(`${API}/chats/${chat.id}/release`, { method: 'POST' });
+          loadChats(); openChat(chat.id);
         });
-      }
+      } catch(e) {}
     }
 
     async function sendMessage() {
@@ -368,6 +687,7 @@
       const text = messageInputEl.value.trim();
       if (!text) return;
       sendBtnEl.disabled = true;
+      sendBtnEl.textContent = 'Sending…';
       try {
         const rsp = await fetch(`${API}/send-message`, {
           method: 'POST',
@@ -375,52 +695,75 @@
           body: JSON.stringify({ chat_id: state.activeChat.id, text })
         });
         const data = await rsp.json();
-        if (!rsp.ok || !data.ok) {
-          throw new Error(data.error || 'Send failed');
-        }
+        if (!rsp.ok || !data.ok) throw new Error(data.error || 'Send failed');
         messageInputEl.value = '';
         await loadChats();
         await openChat(state.activeChat.id);
-      } catch (err) {
-        alert(err.message || 'Send failed');
+      } catch (e) {
+        alert(e.message || 'Send failed');
       } finally {
         sendBtnEl.disabled = false;
+        sendBtnEl.textContent = 'Send →';
       }
     }
 
     sendBtnEl.addEventListener('click', sendMessage);
-    messageInputEl.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-      }
+    messageInputEl.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    });
+    // auto-resize textarea
+    messageInputEl.addEventListener('input', () => {
+      messageInputEl.style.height = 'auto';
+      messageInputEl.style.height = Math.min(messageInputEl.scrollHeight, 140) + 'px';
     });
 
-    document.querySelectorAll('.tab').forEach((btn) => {
+    document.querySelectorAll('.tab').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach((x) => x.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
         btn.classList.add('active');
         state.filter = btn.dataset.filter;
         renderList();
       });
     });
-
-    searchEl.addEventListener('input', () => {
-      state.search = searchEl.value;
-      renderList();
-    });
+    searchEl.addEventListener('input', () => { state.search = searchEl.value; renderList(); });
 
     async function init() {
-      fetch('/auth/api/bots').then(r => r.json()).then(data => {
-        const active = (data.bots || []).find(b => b.id === data.activeBotId);
-        if (active) document.getElementById('botSubtitle').textContent = 'BotMatic · ' + active.name;
-      }).catch(() => {});
+      try {
+        const d = await fetch('/auth/api/bots').then(r => r.json());
+        const active = (d.bots || []).find(b => b.id === d.activeBotId);
+        document.getElementById('botSubtitle').textContent = active ? active.name : 'BotMatic';
+      } catch(e) {
+        document.getElementById('botSubtitle').textContent = 'BotMatic';
+      }
       await loadChats();
       setInterval(async () => {
-        const activeId = state.activeChat?.id || null;
+        const id = state.activeChat?.id || null;
         await loadChats();
-        if (activeId) await openChat(activeId);
-      }, 5000);
+        // only silently refresh messages if chat is open (don't scroll unless new msg)
+        if (id && state.activeChat?.id === id) {
+          const d = await fetch(`${API}/chats/${id}/messages?limit=300`).then(r=>r.json()).catch(()=>null);
+          if (!d) return;
+          const msgs = Array.isArray(d.messages) ? d.messages : [];
+          const wasAtBottom = messagesEl.scrollHeight - messagesEl.scrollTop - messagesEl.clientHeight < 60;
+          if (msgs.length) {
+            const mode = d.chat?.mode || state.activeChat?.mode || 'bot';
+            messagesEl.innerHTML = msgs.map((m, i) => {
+              const prev = msgs[i-1];
+              let divider = '';
+              if (!prev || new Date(m.created_at).toDateString() !== new Date(prev.created_at).toDateString()) {
+                const label = new Date(m.created_at).toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'});
+                divider = `<div class="day-divider">${label}</div>`;
+              }
+              return divider + `
+                <div class="msg-wrap ${m.direction === 'out' ? 'out' : 'in'}">
+                  <div class="msg ${m.direction === 'out' ? 'out' : 'in'}">${esc(m.text||'')}</div>
+                  <div class="msg-time">${fmtTime(m.created_at)}</div>
+                </div>`;
+            }).join('');
+            if (wasAtBottom) messagesEl.scrollTop = messagesEl.scrollHeight;
+          }
+        }
+      }, 4000);
     }
     init();
   </script>

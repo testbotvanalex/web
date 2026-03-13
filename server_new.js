@@ -62,6 +62,55 @@ function findClientAndBotIdByBot(botId) {
   }
 }
 
+function getStoreBackedBotIdsForClient(clientId) {
+  if (!clientId) return [];
+
+  const ids = new Set();
+  const normalized = String(clientId);
+
+  ids.add(normalized);
+
+  try {
+    const bots = D.bots.byClient.all(normalized);
+    for (const bot of bots) {
+      if (bot?.id) ids.add(String(bot.id));
+    }
+  } catch {}
+
+  return [...ids];
+}
+
+function resolveStoreChannelForClient(channelType, clientId) {
+  const botIds = getStoreBackedBotIdsForClient(clientId);
+  const extractors = {
+    telegram: (ch) => ch.telegram?.token
+      ? { botId: ch.botId, token: ch.telegram.token }
+      : null,
+    instagram: (ch) => {
+      const token = ch.instagram?.pageToken || ch.instagram?.token || ch.messenger?.pageToken || null;
+      return token ? { botId: ch.botId, token } : null;
+    },
+  };
+
+  const pick = extractors[channelType];
+  if (!pick) return null;
+
+  for (const botId of botIds) {
+    const channels = getChannelsByBotId(botId);
+    const match = pick({ ...channels, botId });
+    if (match) return match;
+  }
+
+  const connected = store.bots
+    .map((bot) => {
+      const channels = getChannelsByBotId(bot.id);
+      return pick({ ...channels, botId: bot.id });
+    })
+    .filter(Boolean);
+
+  return connected.length === 1 ? connected[0] : null;
+}
+
 function findClientForWhatsapp(phoneNumberId) {
   if (phoneNumberId) {
     try {
@@ -268,29 +317,32 @@ app.post('/api/admin/send-message', async (req, res, next) => {
       senderId = chat.sender_id;
     }
 
+    // ── Telegram fallback (store-backed) ──
+    if (channel === 'telegram') {
+      const resolved = resolveStoreChannelForClient('telegram', clientId);
+      const tgToken = resolved?.token || null;
+      if (!tgToken) return next();
+
+      await axios.post(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
+        chat_id: senderId, text: text.trim(),
+      });
+      const now = new Date().toISOString();
+      const chat = D.chats.byId.get(chat_id) || D.chats.byThread.get(clientId, 'telegram', senderId);
+      if (chat) {
+        D.messages.insert.run({
+          id: D.genId('msg_'), client_id: clientId, channel: 'telegram',
+          sender_id: senderId, sender_name: senderId,
+          text: text.trim(), direction: 'out', raw: null,
+        });
+        D.chats.touchOutgoing.run({ id: chat.id, sender_name: senderId, last_message_at: now });
+      }
+      return res.json({ ok: true, sent: true });
+    }
+
     if (channel !== 'instagram') return next();
 
-    // Find Instagram token from store by botId (clientId may be a bot id)
-    let igToken = null;
-    for (const bot of store.bots) {
-      if (bot.id === clientId) {
-        const ch = getChannelsByBotId(bot.id);
-        igToken = ch.instagram?.pageToken || ch.instagram?.token || ch.messenger?.pageToken || null;
-        break;
-      }
-    }
-
-    // Also try finding by any connected Instagram channel if only one exists
-    if (!igToken) {
-      const connected = store.bots
-        .map((b) => ({ bot: b, ch: getChannelsByBotId(b.id) }))
-        .filter(({ ch }) => ch.instagram?.pageToken || ch.instagram?.token || ch.messenger?.pageToken);
-      if (connected.length === 1) {
-        const { ch } = connected[0];
-        igToken = ch.instagram?.pageToken || ch.instagram?.token || ch.messenger?.pageToken || null;
-      }
-    }
-
+    const resolved = resolveStoreChannelForClient('instagram', clientId);
+    const igToken = resolved?.token || null;
     if (!igToken) return next(); // fall through to admin router which will return 404
 
     await sendInstagramMessage(igToken, senderId, text.trim());
@@ -324,6 +376,7 @@ app.get('/admin/client', (req, res) => res.sendFile(path.join(__dirname, 'admin-
 
 // ── .html → route redirects (for old links/bookmarks) ─────────────────────────
 app.get('/dashboard.html',         (req, res) => res.redirect('/dashboard'));
+app.get('/bots.html',              (req, res) => res.redirect('/bots'));
 app.get('/channels.html',          (req, res) => res.redirect('/auth/channels'));
 app.get('/analytics.html',         (req, res) => res.redirect('/analytics'));
 app.get('/constructor.html',       (req, res) => res.redirect('/constructor'));
@@ -336,6 +389,10 @@ app.get('/auth/channels', (req, res) => {
 
 app.get('/dashboard', (req, res) => {
   res.sendFile(path.join(__dirname, 'dashboard.html'));
+});
+
+app.get('/bots', (req, res) => {
+  res.sendFile(path.join(__dirname, 'bots.html'));
 });
 
 app.get('/constructor', (req, res) => {
@@ -360,6 +417,27 @@ app.get('/auth/instagram/connect', (req, res) => {
 
 app.get('/auth/connect', (req, res) => {
   res.sendFile(path.join(__dirname, 'channels.html'));
+});
+
+app.get('/auth/permissions', (req, res) => {
+  res.sendFile(path.join(__dirname, 'permissions.html'));
+});
+
+app.get('/auth/api/permissions', async (req, res) => {
+  try {
+    const botId = req.query.botId || store.bots[0]?.id;
+    const ch = getChannelsByBotId(botId);
+    const connected = Boolean(ch.instagram?.pageToken || ch.instagram?.token);
+    const username = ch.instagram?.username || '';
+
+    // Build permission list from granted OAuth scopes
+    const grantedScopes = (CONFIG.IG_SCOPES || '').split(',').map(s => s.trim()).filter(Boolean);
+    const permissions = grantedScopes.map(scope => ({ permission: scope, status: 'granted' }));
+
+    res.json({ ok: true, permissions, connected, username, botId });
+  } catch (e) {
+    res.json({ ok: false, error: e.message, permissions: [] });
+  }
 });
 
 app.get('/auth/api/debug/channels', (req, res) => {
@@ -403,9 +481,13 @@ app.get('/auth/api/channels', async (req, res) => {
   if (!channels.whatsapp.connected) {
     try {
       const waRes = await axios.get(`http://localhost:3300/api/whatsapp/connect?botId=${bot.id}`);
+      channels.whatsapp.lastStatus = waRes.data.status || '';
       if (waRes.data.status === 'connected') {
         channels.whatsapp.connected = true;
-        channels.whatsapp.connectedAt = new Date().toISOString();
+        channels.whatsapp.connectedAt = channels.whatsapp.connectedAt || new Date().toISOString();
+        channels.whatsapp.source = channels.whatsapp.source || 'session-sync';
+        setChannelsByBotId(bot.id, channels);
+      } else if (waRes.data.status === 'pending' || waRes.data.status === 'initializing') {
         setChannelsByBotId(bot.id, channels);
       }
     } catch (err) {
@@ -456,11 +538,16 @@ app.get('/auth/api/channels', async (req, res) => {
       statusLabel: telegramConnected ? 'Connected' : 'Not Connected',
     },
     whatsapp: {
-      connected: channels.whatsapp.connected || false,
+      connected: false,
       connectedAt: channels.whatsapp.connectedAt || '',
+      pageId: channels.whatsapp.pageId || '',
+      pageName: channels.whatsapp.pageName || '',
+      source: channels.whatsapp.source || '',
+      lastStatus: channels.whatsapp.lastStatus || '',
+      available: false,
       connectUrl: '#',
       disconnectUrl: `/auth/api/channels/whatsapp?${botParam}`,
-      statusLabel: channels.whatsapp.connected ? 'Connected' : 'Not Connected',
+      statusLabel: 'Disabled',
     },
   });
 });
@@ -542,7 +629,55 @@ function createEmptyWhatsappChannel() {
   return {
     connected: false,
     connectedAt: '',
+    pageId: '',
+    pageName: '',
+    source: '',
   };
+}
+
+function getWhatsappDemoImports() {
+  return {
+    dockz: { pageId: '869621806240205', pageName: 'doc.kz bot' },
+    'demo-beauty': { pageId: '869710229554066', pageName: 'Demo beauty' },
+    'demo-garage': { pageId: '869710229554067', pageName: 'Demo garage' },
+    'demo-advocaat': { pageId: '869710229554068', pageName: 'Demo advocaat' },
+    autoscout: { pageId: '869710229554065', pageName: 'Autoscout' },
+  };
+}
+
+function syncKnownWhatsappMappings(targetStore = store) {
+  let changed = false;
+
+  for (const [botId, meta] of Object.entries(getWhatsappDemoImports())) {
+    const bot = targetStore.bots.find((item) => item.id === botId);
+    if (!bot) continue;
+
+    const channels = targetStore.channelsByBotId[botId] || createBotChannels();
+    const whatsapp = {
+      ...createEmptyWhatsappChannel(),
+      ...(channels.whatsapp || {}),
+    };
+
+    if (!whatsapp.pageId) {
+      whatsapp.pageId = meta.pageId;
+      changed = true;
+    }
+    if (!whatsapp.pageName) {
+      whatsapp.pageName = meta.pageName;
+      changed = true;
+    }
+    if (!whatsapp.source) {
+      whatsapp.source = 'import-sync';
+      changed = true;
+    }
+
+    targetStore.channelsByBotId[botId] = {
+      ...channels,
+      whatsapp,
+    };
+  }
+
+  if (changed) saveStore(targetStore);
 }
 
 function createBotChannels() {
@@ -644,6 +779,7 @@ function loadStore() {
     };
   }
 
+  syncKnownWhatsappMappings(data);
   saveStore(data);
   return data;
 }
@@ -1493,9 +1629,13 @@ app.post('/webhook/instagram', async (req, res) => {
         event.message?.from?.id ||
         '';
 
+      const quickReplyPayload = event.message?.quick_reply?.payload || null;
+
       let text = '';
       if (event.message?.text) {
         text = event.message.text;
+      } else if (quickReplyPayload) {
+        text = quickReplyPayload;
       } else if (event.postback?.payload) {
         text = event.postback.payload; // Treatment for buttons
       } else if (event.message?.attachments) {
@@ -1513,6 +1653,7 @@ app.post('/webhook/instagram', async (req, res) => {
         || findClientAndBotIdByBot(channel.bot?.id)?.clientId
         || channel.bot?.id
         || null;
+      console.log(`[IG DEBUG] entry.id=${entry.id} botId=${channel.bot?.id} igClientId=${igClientId} senderId=${senderId}`);
       saveMessageToDb(igClientId, 'instagram', senderId, text, 'in', event);
 
       const igChat = igClientId ? D.chats.byThread.get(igClientId, 'instagram', senderId) : null;
@@ -1535,6 +1676,16 @@ app.post('/webhook/instagram', async (req, res) => {
 
       // Get bot + history → OpenAI
       try {
+        // Handle quick-reply button payloads
+        const payload = quickReplyPayload || event.postback?.payload || null;
+        if (payload && IG_BUTTON_REPLIES[payload]) {
+          const btnReply = IG_BUTTON_REPLIES[payload];
+          await sendInstagramMessage(pageToken, senderId, btnReply, IG_QUICK_REPLIES);
+          saveMessageToDb(igClientId, 'instagram', senderId, btnReply, 'out', null);
+          console.log(`[IG] Button reply sent: ${payload}`);
+          continue;
+        }
+
         let igBot = null;
         if (igClientId) {
           const igBots = D.bots.byClient.all(igClientId);
@@ -1543,13 +1694,16 @@ app.post('/webhook/instagram', async (req, res) => {
         const igHistory = igClientId
           ? D.messages.historyByThread.all(igClientId, 'instagram', senderId, 20)
           : [];
+
         let igReply = igBot
           ? (await askOpenAI(igBot, text, igHistory).catch(e => { console.error('[IG] OpenAI error:', e.message); return null; }))
           : null;
-        if (!igReply) igReply = 'Привет! Ваше сообщение получено.';
+        if (!igReply) igReply = "Hi! 👋 I'm the BotMatic assistant. How can I help you today?";
 
-        await sendInstagramMessage(pageToken, senderId, igReply);
-        console.log(`[IG] AI reply sent to ${senderId}`);
+        // Always show quick-reply buttons so Meta reviewer can see them
+        const qr = IG_QUICK_REPLIES;
+        await sendInstagramMessage(pageToken, senderId, igReply, qr);
+        console.log(`[IG] AI reply sent to ${senderId}${qr ? ' + quick replies' : ''}`);
         saveMessageToDb(igClientId, 'instagram', senderId, igReply, 'out', null);
       } catch (err) {
         console.error('Instagram send error:', err.response?.data || err.message);
@@ -1693,21 +1847,29 @@ async function subscribeToInstagramWebhooks(pageId, pageToken) {
   console.log(`Instagram webhook subscriptions enabled for page ${pageId}: ${CONFIG.IG_SUBSCRIBED_FIELDS}`);
 }
 
-async function sendInstagramMessage(pageToken, recipientId, text) {
-  // Send via Graph API /me/messages with Page access token
+async function sendInstagramMessage(pageToken, recipientId, text, quickReplies) {
+  const message = quickReplies?.length
+    ? { text, quick_replies: quickReplies }
+    : { text };
   await axios.post(
     `https://graph.facebook.com/${CONFIG.API_VERSION}/me/messages`,
-    {
-      recipient: { id: recipientId },
-      message: { text },
-    },
-    {
-      params: {
-        access_token: pageToken,
-      },
-    }
+    { recipient: { id: recipientId }, message },
+    { params: { access_token: pageToken } }
   );
 }
+
+// Quick-reply button sets for the demo
+const IG_QUICK_REPLIES = [
+  { content_type: 'text', title: 'Book Demo',  payload: 'BOOK_DEMO' },
+  { content_type: 'text', title: 'Pricing',    payload: 'PRICING'   },
+  { content_type: 'text', title: 'How It Works', payload: 'FAQ'     },
+];
+
+const IG_BUTTON_REPLIES = {
+  BOOK_DEMO: "You can book a live BotMatic demo and see Instagram inbox, automations, and handoff in one session.",
+  PRICING:   "BotMatic plans start from 49 EUR per month per channel. Instagram, Telegram, Messenger, and WhatsApp are supported.",
+  FAQ:       "BotMatic can auto-reply, route chats to the shared inbox, and let a human take over any conversation in real time.",
+};
 
 async function fetchMessengerPages(accessToken) {
   const response = await axios.get('https://graph.facebook.com/v21.0/me/accounts', {

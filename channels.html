@@ -40,6 +40,99 @@
         linear-gradient(180deg, #f7f2e8 0%, #efe4d3 100%);
     }
 
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.74);
+      backdrop-filter: blur(18px);
+      border-right: 1px solid var(--border);
+      padding: 24px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .sidebar-logo {
+      font-family: "Syne", sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      background: linear-gradient(135deg, #7c3aed, #db2777);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      padding: 0 20px 20px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      color: #5f6779;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.15s;
+    }
+
+    .nav-item:hover {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.55);
+    }
+
+    .nav-item.active {
+      color: #6d28d9;
+      background: rgba(124, 108, 252, 0.12);
+      border-left: 2px solid #6d28d9;
+    }
+
+    .main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .app-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 24px;
+      background: rgba(255, 255, 255, 0.74);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      z-index: 1;
+    }
+
+    .app-title {
+      font-family: "Syne", sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--ink);
+    }
+
+    .app-title span {
+      color: #6d28d9;
+    }
+
+    .app-meta {
+      font-size: 13px;
+      color: #5f6779;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(18, 21, 31, 0.1);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
     body::before {
       content: "";
       position: fixed;
@@ -473,6 +566,21 @@
 
     @media (max-width: 980px) {
 
+      .layout {
+        display: block;
+      }
+
+      .sidebar {
+        width: 100%;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 16px;
+      }
+
+      .main {
+        min-height: auto;
+      }
+
       .hero,
       .card-grid,
       .footer-bar {
@@ -697,7 +805,46 @@
 </head>
 
 <body>
-  <main class="shell">
+  <div class="layout">
+    <nav class="sidebar">
+      <div class="sidebar-logo">BotMatic</div>
+      <a href="/admin/clients" class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Clients
+      </a>
+      <a href="/dashboard" class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+      <a href="/bots" class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
+        Bots
+      </a>
+      <a href="/inbox" class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Inbox
+      </a>
+      <a href="/auth/connect" class="nav-item active">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v2"/><path d="M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M20 16v2a2 2 0 0 1-2 2h-2"/><path d="M4 8V6a2 2 0 0 1 2-2h2"/><circle cx="12" cy="12" r="3"/></svg>
+        Channels
+      </a>
+      <a href="/analytics" class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Analytics
+      </a>
+      <a href="/auth/permissions" class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Permissions
+      </a>
+    </nav>
+
+    <div class="main">
+      <div class="app-topbar">
+        <div class="app-title">Bot<span>Matic</span> · Channels</div>
+        <div class="app-meta">Connection center</div>
+      </div>
+
+      <main class="shell">
     <section class="hero">
       <div class="hero-panel">
         <div class="eyebrow">BotMatic Channel Center</div>
@@ -829,36 +976,6 @@
           <div class="actions" id="telegramActions"></div>
         </article>
 
-        <article class="card" id="whatsappCard">
-          <div class="card-head">
-            <div>
-              <div class="channel-tag">WhatsApp</div>
-              <h3>Business Account</h3>
-            </div>
-            <div class="channel-icon whatsapp" aria-hidden="true">
-              <svg width="30" height="30" viewBox="0 0 24 24" fill="white">
-                <path
-                  d="M12.031 21A9.957 9.957 0 0 1 7.15 19.68L2 22l2.39-5.04A9.957 9.957 0 0 1 2 12C2 6.48 6.48 2 12 2s10 4.48 10 10-4.48 10-10.031 9zM12 4C7.58 4 4 7.58 4 12c0 1.76.57 3.39 1.54 4.71l-.88 1.85 1.94-.55A7.957 7.957 0 0 0 12 20c4.42 0 8-3.58 8-8s-3.58-8-8-8zm4.18 11.26c-.23-.11-1.33-.66-1.53-.73-.2-.08-.35-.11-.5.11-.15.22-.58.73-.71.88-.13.15-.27.17-.5.06-1.55-.77-2.61-1.53-3.6-3.23-.11-.19 0-.29.11-.4l.33-.39c.11-.13.15-.22.22-.37.08-.15.04-.28-.02-.39-.06-.11-.5-1.21-.69-1.65-.18-.43-.37-.37-.5-.38-.13-.01-.28-.01-.43-.01s-.39.06-.59.28c-.2.22-.76.74-.76 1.8 0 1.06.78 2.08.89 2.23.11.15 1.52 2.32 3.68 3.25.51.22.91.35 1.22.45.51.16.98.14 1.35.08.41-.06 1.33-.54 1.52-1.07.19-.53.19-.98.13-1.07-.06-.08-.22-.13-.45-.24z" />
-              </svg>
-            </div>
-          </div>
-          <div class="status-pill" id="whatsappStatus">Loading</div>
-          <p>
-            Scan the QR code in your WhatsApp app so BotMatic can receive
-            and send messages on behalf of this number.
-          </p>
-          <div class="details" id="whatsappDetails">
-            <div class="skeleton"></div>
-            <div class="skeleton"></div>
-            <div class="skeleton"></div>
-          </div>
-          <ul class="perms">
-            <li>Baileys Web Client session</li>
-            <li>Send and read messages without Meta API</li>
-            <li>Unofficial webhook</li>
-          </ul>
-          <div class="actions" id="whatsappActions"></div>
-        </article>
       </div>
 
       <section class="footer-bar">
@@ -876,7 +993,9 @@
         </div>
       </section>
     </section>
-  </main>
+      </main>
+    </div>
+  </div>
 
   <div class="modal-overlay" id="telegramModal">
     <div class="modal">
@@ -902,23 +1021,6 @@
 
       <a href="https://core.telegram.org/bots/features#botfather" target="_blank" class="modal-link">How to get a bot
         token?</a>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="whatsappModal">
-    <div class="modal" style="text-align: center;">
-      <button class="modal-close" id="closeWhatsappModalBtn" aria-label="Close">&times;</button>
-      <h2>WhatsApp Connection</h2>
-      <p class="desc" id="whatsappModalDesc">
-        Open WhatsApp on your phone &rarr; Settings &rarr; Linked Devices &rarr; Link a Device. Then scan this QR code.
-      </p>
-
-      <div id="qrContainer"
-        style="display: flex; justify-content: center; align-items: center; min-height: 256px; margin-bottom: 20px; border-radius: 12px; background: #fafafa; border: 1px dashed #cbd5e1;">
-        <div class="skeleton" style="width: 200px; height: 200px;"></div>
-      </div>
-
-      <div id="waError" class="modal-error"></div>
     </div>
   </div>
 
@@ -968,6 +1070,12 @@
       const target = document.getElementById(targetId);
       const connectButtonClass = config.primaryClass || 'secondary';
       const buttons = [];
+
+      if (config.available === false) {
+        buttons.push(`<button class="button secondary" type="button" disabled>Disabled</button>`);
+        target.innerHTML = buttons.join('');
+        return;
+      }
 
       if (!config.connected) {
         if (config.onClick) {
@@ -1081,17 +1189,6 @@
         primaryClass: 'primary-telegram',
       });
 
-      setStatus('whatsappStatus', data.whatsapp.connected, data.whatsapp.statusLabel);
-      setDetails('whatsappDetails', [
-        { label: 'Session Status', value: data.whatsapp.connected ? 'Active' : 'Not connected' },
-        { label: 'Connected', value: formatDate(data.whatsapp.connectedAt) },
-      ]);
-      setActions('whatsappActions', {
-        channel: 'whatsapp',
-        connected: data.whatsapp.connected,
-        onClick: 'connectWhatsapp()',
-        primaryClass: 'primary-whatsapp',
-      });
     }
 
     async function disconnectChannel(channel) {
@@ -1189,79 +1286,6 @@
         tgSubmitBtn.textContent = 'Connect';
       }
     });
-
-    // --- WhatsApp Baileys Logic ---
-    const waModal = document.getElementById('whatsappModal');
-    const qrContainer = document.getElementById('qrContainer');
-    const waError = document.getElementById('waError');
-    const waCloseBtn = document.getElementById('closeWhatsappModalBtn');
-    let waPollInterval = null;
-
-    function closeWhatsappModal() {
-      waModal.classList.remove('open');
-      if (waPollInterval) {
-        clearInterval(waPollInterval);
-        waPollInterval = null;
-      }
-    }
-
-    waCloseBtn.addEventListener('click', closeWhatsappModal);
-    waModal.addEventListener('click', (e) => {
-      if (e.target === waModal) closeWhatsappModal();
-    });
-
-    async function connectWhatsapp() {
-      if (!currentBotId) {
-        alert("Please select or create a bot first.");
-        return;
-      }
-
-      waError.style.display = 'none';
-      qrContainer.innerHTML = '<div class="skeleton" style="width: 200px; height: 200px;"></div>';
-      waModal.classList.add('open');
-
-      if (waPollInterval) clearInterval(waPollInterval);
-
-      // Trigger initialization by backend
-      try {
-        await fetch(`/auth/api/whatsapp/connect?botId=${encodeURIComponent(currentBotId)}`);
-      } catch (err) { }
-
-      waPollInterval = setInterval(async () => {
-        try {
-          const res = await fetch(`/auth/api/whatsapp/connect?botId=${encodeURIComponent(currentBotId)}`);
-          if (!res.ok) throw new Error("Backend offline");
-
-          const data = await res.json();
-
-          if (data.status === 'pending' && data.qr) {
-            qrContainer.innerHTML = `<img src="${data.qr}" alt="WhatsApp QR Code" style="width: 240px; height: 240px; image-rendering: pixelated; border-radius: 8px;" />`;
-          } else if (data.status === 'connected') {
-            clearInterval(waPollInterval);
-            qrContainer.innerHTML = `<div style="color: var(--ok); font-weight: 800; font-size: 20px;">✅ Successfully connected!</div>`;
-
-            // Register success with our own server db
-            await fetch('/auth/api/whatsapp/success', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ botId: currentBotId })
-            });
-
-            setTimeout(() => {
-              closeWhatsappModal();
-              loadChannels();
-            }, 1500);
-          } else if (data.status === 'initializing') {
-            qrContainer.innerHTML = '<div class="skeleton" style="width: 200px; height: 200px;"></div>';
-          }
-        } catch (err) {
-          console.error(err);
-          waError.textContent = "Failed to generate QR code. Check server logs.";
-          waError.style.display = 'block';
-          clearInterval(waPollInterval);
-        }
-      }, 2000);
-    }
 
     document.getElementById('createBotBtn').addEventListener('click', () => {
       createBot().catch((error) => {
