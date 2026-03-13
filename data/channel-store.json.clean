@@ -1,0 +1,42 @@
+{
+  "bots": [
+    {
+      "id": "main",
+      "name": "Основной бот",
+      "createdAt": "2026-03-10T08:00:00.000Z",
+      "updatedAt": "2026-03-10T08:00:00.000Z"
+    }
+  ],
+  "channelsByBotId": {
+    "main": {
+      "instagram": {
+        "id": "",
+        "entryId": "",
+        "pageId": "",
+        "pageToken": "",
+        "token": "",
+        "username": "",
+        "name": "",
+        "connectedAt": ""
+      },
+      "messenger": {
+        "pageId": "",
+        "pageName": "",
+        "pageToken": "",
+        "pagePicture": "",
+        "connectedAt": ""
+      },
+      "telegram": {
+        "id": "",
+        "token": "",
+        "username": "",
+        "name": "",
+        "connectedAt": ""
+      },
+      "whatsapp": {
+        "connected": false,
+        "connectedAt": ""
+      }
+    }
+  }
+}

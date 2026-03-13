@@ -1,16 +1,23 @@
 {
-  "name": "botmatic-webbot",
+  "name": "botmatic-instagram-oauth",
   "version": "1.0.0",
-  "type": "module",
+  "description": "BotMatic Instagram OAuth integration",
+  "main": "server_new.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node server_new.js",
+    "dev": "nodemon server_new.js",
+    "sync:legacy": "node scripts/sync-legacy-bots.js"
   },
   "dependencies": {
-    "express": "^4.19.2",
+    "axios": "^1.6.0",
+    "better-sqlite3": "^12.6.2",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^4.18.2",
+    "jsdom": "^28.1.0",
     "openai": "^6.27.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.0.0"
   }
 }

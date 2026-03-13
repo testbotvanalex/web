@@ -1,0 +1,51 @@
+{
+  "nodes": [
+    {
+      "id": "node_1773052697994",
+      "type": "text",
+      "data": {
+        "text": "Hello! This is a text message.",
+        "buttons": [],
+        "mediaUrl": ""
+      },
+      "x": 300,
+      "y": 150
+    },
+    {
+      "id": "node_1773052701953",
+      "type": "buttons",
+      "data": {
+        "text": "ytftyfgfy",
+        "buttons": [
+          {
+            "id": "opt1",
+            "text": "Option 1"
+          },
+          {
+            "id": "opt1773052711464",
+            "text": "New Button"
+          },
+          {
+            "id": "opt1773052717214",
+            "text": "New Button"
+          }
+        ],
+        "mediaUrl": ""
+      },
+      "x": 20,
+      "y": 137
+    },
+    {
+      "id": "node_1773052703592",
+      "type": "media",
+      "data": {
+        "text": "Hello! This is a media message.",
+        "buttons": [],
+        "mediaUrl": "https://via.placeholder.com/150"
+      },
+      "x": 157,
+      "y": 349
+    }
+  ],
+  "connections": []
+}

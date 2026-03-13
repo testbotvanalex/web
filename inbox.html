@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BotMatic Inbox</title>
+  <style>
+    :root {
+      --bg: #f6f3e8;
+      --panel: #ffffff;
+      --border: #e6e1d2;
+      --text: #1f1f1f;
+      --muted: #6a675f;
+      --green: #228b5a;
+      --accent: #0c224a;
+      --accent-2: #f4a261;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .top {
+      padding: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .title { font-size: 46px; font-weight: 800; margin: 0; }
+    .sub { color: var(--muted); margin-top: 8px; font-size: 32px; }
+    .shell {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 16px;
+      padding: 0 24px 24px;
+      height: calc(100vh - 120px);
+    }
+    .left, .right {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .left-head {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      gap: 12px;
+    }
+    input[type="search"] {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 16px;
+      outline: none;
+    }
+    .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tab {
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 12px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .tab.active {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+    }
+    .chat-list {
+      overflow: auto;
+      flex: 1;
+    }
+    .chat-item {
+      border-bottom: 1px solid #f1eee4;
+      padding: 12px 14px;
+      cursor: pointer;
+      display: grid;
+      gap: 6px;
+    }
+    .chat-item:hover { background: #faf8f0; }
+    .chat-item.active { background: #f3efe2; }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }
+    .name { font-weight: 700; font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .meta { color: var(--muted); font-size: 12px; }
+    .chip {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #fff;
+      white-space: nowrap;
+    }
+    .chip.mode-human { background: #fee2e2; border-color: #fecaca; color: #991b1b; }
+    .chip.mode-bot { background: #dcfce7; border-color: #bbf7d0; color: #166534; }
+    .chip.unread { background: #111827; color: #fff; border-color: #111827; }
+
+    .right-head {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .actions { display: flex; gap: 8px; }
+    button.btn {
+      border: 0;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn.take { background: #f59e0b; color: #111827; }
+    .btn.release { background: #10b981; color: #062b1e; }
+    .btn.send { background: var(--accent-2); color: #111827; }
+
+    .messages {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: #fffdf7;
+    }
+    .msg {
+      max-width: 72%;
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-size: 14px;
+      line-height: 1.45;
+      border: 1px solid var(--border);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .msg.in { background: #fff; align-self: flex-start; border-bottom-left-radius: 4px; }
+    .msg.out { background: #0f172a; color: #fff; align-self: flex-end; border-color: #0f172a; border-bottom-right-radius: 4px; }
+    .msg .small { font-size: 11px; opacity: 0.75; margin-top: 5px; }
+    .composer {
+      border-top: 1px solid var(--border);
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+    }
+    textarea {
+      width: 100%;
+      min-height: 72px;
+      max-height: 180px;
+      resize: vertical;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 14px;
+      outline: none;
+      font-family: inherit;
+      background: #fff;
+    }
+    .empty {
+      color: var(--muted);
+      font-size: 15px;
+      padding: 18px;
+    }
+    @media (max-width: 960px) {
+      .shell { grid-template-columns: 1fr; height: auto; }
+      .left { max-height: 42vh; }
+      .right { min-height: 52vh; }
+      .title { font-size: 36px; }
+      .sub { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top">
+    <div>
+      <h1 class="title">Inbox</h1>
+      <div class="sub">Demo Company · Demo Owner</div>
+    </div>
+    <form action="/api/auth/logout" method="post"><button class="btn">Logout</button></form>
+  </div>
+
+  <div class="shell">
+    <aside class="left">
+      <div class="left-head">
+        <input id="search" type="search" placeholder="Search by name or phone" />
+        <div class="tabs">
+          <button class="tab active" data-filter="all">All</button>
+          <button class="tab" data-filter="open">Open</button>
+          <button class="tab" data-filter="bot">Bot</button>
+          <button class="tab" data-filter="human">Human</button>
+        </div>
+      </div>
+      <div id="chatList" class="chat-list"><div class="empty">Loading chats…</div></div>
+    </aside>
+
+    <section class="right">
+      <div id="chatHeader" class="right-head">
+        <div class="empty">Select a chat to open the conversation.</div>
+      </div>
+      <div id="messages" class="messages"><div class="empty">No chat selected.</div></div>
+      <div class="composer">
+        <textarea id="messageInput" placeholder="Type a reply…"></textarea>
+        <div style="display:flex;justify-content:flex-end;gap:8px;">
+          <button id="sendBtn" class="btn send">Send</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const API = '/api/admin';
+    const state = {
+      chats: [],
+      filtered: [],
+      activeChat: null,
+      filter: 'all',
+      search: ''
+    };
+
+    const chatListEl = document.getElementById('chatList');
+    const chatHeaderEl = document.getElementById('chatHeader');
+    const messagesEl = document.getElementById('messages');
+    const messageInputEl = document.getElementById('messageInput');
+    const sendBtnEl = document.getElementById('sendBtn');
+    const searchEl = document.getElementById('search');
+
+    function esc(v) {
+      return String(v || '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;');
+    }
+
+    function fmtTime(ts) {
+      if (!ts) return '';
+      const d = new Date(ts);
+      if (Number.isNaN(d.getTime())) return '';
+      return d.toLocaleString();
+    }
+
+    function applyFilters() {
+      const q = state.search.toLowerCase().trim();
+      state.filtered = state.chats.filter((chat) => {
+        if (state.filter === 'open' && chat.status !== 'open') return false;
+        if (state.filter === 'bot' && chat.mode !== 'bot') return false;
+        if (state.filter === 'human' && chat.mode !== 'human') return false;
+        if (!q) return true;
+        const haystack = `${chat.sender_name || ''} ${chat.sender_id || ''} ${chat.company || ''}`.toLowerCase();
+        return haystack.includes(q);
+      });
+    }
+
+    function renderList() {
+      applyFilters();
+      if (!state.filtered.length) {
+        chatListEl.innerHTML = '<div class="empty">No chats found.</div>';
+        return;
+      }
+      chatListEl.innerHTML = state.filtered.map((chat) => {
+        const active = state.activeChat && state.activeChat.id === chat.id ? ' active' : '';
+        const modeClass = chat.mode === 'human' ? 'mode-human' : 'mode-bot';
+        const unreadChip = chat.unread_count > 0 ? `<span class="chip unread">${chat.unread_count}</span>` : '';
+        return `
+          <div class="chat-item${active}" data-id="${chat.id}">
+            <div class="row">
+              <div class="name">${esc(chat.sender_name || chat.sender_id || 'Unknown')}</div>
+              <div class="meta">${fmtTime(chat.last_message_at)}</div>
+            </div>
+            <div class="row">
+              <div class="meta">${esc(chat.last_message_text || '—')}</div>
+            </div>
+            <div class="row">
+              <div class="meta">${esc(chat.channel)} · ${esc(chat.company || '')}</div>
+              <div style="display:flex;gap:6px;">
+                <span class="chip ${modeClass}">${chat.mode}</span>
+                ${unreadChip}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      chatListEl.querySelectorAll('.chat-item').forEach((el) => {
+        el.addEventListener('click', () => openChat(el.dataset.id));
+      });
+    }
+
+    async function loadChats() {
+      const rsp = await fetch(`${API}/chats`);
+      const data = await rsp.json();
+      state.chats = Array.isArray(data.chats) ? data.chats : [];
+      renderList();
+      if (state.activeChat) {
+        const reselected = state.chats.find((x) => x.id === state.activeChat.id);
+        if (reselected) state.activeChat = reselected;
+      }
+    }
+
+    async function openChat(chatId) {
+      const chat = state.chats.find((x) => x.id === chatId);
+      if (!chat) return;
+      state.activeChat = chat;
+      renderList();
+
+      const rsp = await fetch(`${API}/chats/${chat.id}/messages?limit=300`);
+      const data = await rsp.json();
+      const messages = Array.isArray(data.messages) ? data.messages : [];
+      const mode = data.chat?.mode || chat.mode || 'bot';
+
+      chatHeaderEl.innerHTML = `
+        <div>
+          <div style="font-size:18px;font-weight:800;">${esc(chat.sender_name || chat.sender_id)}</div>
+          <div class="meta">${esc(chat.channel)} · ${esc(chat.company || '')} · mode: <b>${mode}</b></div>
+        </div>
+        <div class="actions">
+          <button class="btn take" id="takeBtn">Take over</button>
+          <button class="btn release" id="releaseBtn">Release back to bot</button>
+        </div>
+      `;
+
+      messagesEl.innerHTML = messages.length
+        ? messages.map((m) => `
+          <div class="msg ${m.direction === 'out' ? 'out' : 'in'}">
+            <div>${esc(m.text || '')}</div>
+            <div class="small">${esc(m.direction)} · ${fmtTime(m.created_at)}</div>
+          </div>
+        `).join('')
+        : '<div class="empty">No messages in this chat.</div>';
+
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+      bindModeButtons(chat.id);
+    }
+
+    function bindModeButtons(chatId) {
+      const takeBtn = document.getElementById('takeBtn');
+      const releaseBtn = document.getElementById('releaseBtn');
+      if (takeBtn) {
+        takeBtn.addEventListener('click', async () => {
+          await fetch(`${API}/chats/${chatId}/takeover`, { method: 'POST' });
+          await loadChats();
+          await openChat(chatId);
+        });
+      }
+      if (releaseBtn) {
+        releaseBtn.addEventListener('click', async () => {
+          await fetch(`${API}/chats/${chatId}/release`, { method: 'POST' });
+          await loadChats();
+          await openChat(chatId);
+        });
+      }
+    }
+
+    async function sendMessage() {
+      if (!state.activeChat) return;
+      const text = messageInputEl.value.trim();
+      if (!text) return;
+      sendBtnEl.disabled = true;
+      try {
+        const rsp = await fetch(`${API}/send-message`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: state.activeChat.id, text })
+        });
+        const data = await rsp.json();
+        if (!rsp.ok || !data.ok) {
+          throw new Error(data.error || 'Send failed');
+        }
+        messageInputEl.value = '';
+        await loadChats();
+        await openChat(state.activeChat.id);
+      } catch (err) {
+        alert(err.message || 'Send failed');
+      } finally {
+        sendBtnEl.disabled = false;
+      }
+    }
+
+    sendBtnEl.addEventListener('click', sendMessage);
+    messageInputEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    document.querySelectorAll('.tab').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach((x) => x.classList.remove('active'));
+        btn.classList.add('active');
+        state.filter = btn.dataset.filter;
+        renderList();
+      });
+    });
+
+    searchEl.addEventListener('input', () => {
+      state.search = searchEl.value;
+      renderList();
+    });
+
+    async function init() {
+      await loadChats();
+      setInterval(async () => {
+        const activeId = state.activeChat?.id || null;
+        await loadChats();
+        if (activeId) await openChat(activeId);
+      }, 5000);
+    }
+    init();
+  </script>
+</body>
+</html>

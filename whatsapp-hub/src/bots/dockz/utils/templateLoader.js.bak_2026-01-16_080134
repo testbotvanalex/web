@@ -1,0 +1,34 @@
+cd /var/www/docKZ/backend/src/utils
+cat > templateLoader.js << 'EOF'
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export function loadTemplate(templateName) {
+  // Ищем шаблон в templates/ или storage/
+  const paths = [
+    path.join(process.cwd(), "templates", `${templateName}.html`),
+    path.join(process.cwd(), "storage", `${templateName}.html`),
+    path.join(__dirname, "..", "..", "templates", `${templateName}.html`),
+  ];
+
+  for (const p of paths) {
+    if (fs.existsSync(p)) {
+      console.log("✅ Template found:", p);
+      return fs.readFileSync(p, "utf8");
+    }
+  }
+  throw new Error(`Template ${templateName} not found`);
+}
+
+export function renderTemplate(content, data) {
+  let html = content;
+  for (const [key, val] of Object.entries(data)) {
+    html = html.replace(new RegExp(`{{${key}}}`, "g"), val || "");
+  }
+  return html;
+}
+EOF

@@ -1,0 +1,5 @@
+{
+  "watch": ["server_new.js", "routes/", "db.js"],
+  "ext": "js",
+  "ignore": ["*.html", "data/", "bots/", "whatsapp-hub/"]
+}

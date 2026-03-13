@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BotMatic Channels</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Manrope:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --paper: #f5efe3;
+      --ink: #12151f;
+      --panel: rgba(255, 255, 255, 0.68);
+      --panel-strong: rgba(255, 255, 255, 0.82);
+      --border: rgba(18, 21, 31, 0.12);
+      --muted: #5f6779;
+      --instagram: linear-gradient(135deg, #f4c76d 0%, #ff8f5b 24%, #e33568 58%, #8e43ff 100%);
+      --messenger: linear-gradient(135deg, #7ec8ff 0%, #458dff 60%, #2957e0 100%);
+      --telegram: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+      --whatsapp: linear-gradient(135deg, #4aec7b 0%, #1eb954 100%);
+      --ok: #0c7f58;
+      --danger: #a23a2b;
+      --shadow: 0 24px 80px rgba(36, 31, 24, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Manrope", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(255, 159, 90, 0.28), transparent 28%),
+        radial-gradient(circle at top right, rgba(68, 131, 255, 0.22), transparent 24%),
+        linear-gradient(180deg, #f7f2e8 0%, #efe4d3 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(18, 21, 31, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(18, 21, 31, 0.025) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(circle at center, black, transparent 80%);
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 40px));
+      margin: 28px auto 40px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.25fr 0.9fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .hero-panel,
+    .note-panel,
+    .card,
+    .footer-bar {
+      background: var(--panel);
+      backdrop-filter: blur(18px);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      border-radius: 28px;
+    }
+
+    .hero-panel {
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-panel::after {
+      content: "";
+      position: absolute;
+      right: -90px;
+      top: -90px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 167, 120, 0.38) 0%, transparent 72%);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(18, 21, 31, 0.06);
+      color: #384056;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff8d5e, #3b7bff);
+    }
+
+    h1 {
+      margin: 18px 0 14px;
+      font-family: "Syne", sans-serif;
+      font-size: clamp(38px, 6vw, 72px);
+      line-height: 0.94;
+      letter-spacing: -0.04em;
+      max-width: 11ch;
+    }
+
+    .hero-copy {
+      max-width: 58ch;
+      color: #4d5569;
+      font-size: 16px;
+      line-height: 1.7;
+      margin-bottom: 0;
+    }
+
+    .hero-copy strong {
+      color: #222838;
+    }
+
+    .note-panel {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.58)),
+        linear-gradient(135deg, rgba(255, 142, 90, 0.16), rgba(59, 123, 255, 0.08));
+    }
+
+    .note-panel h2 {
+      margin: 0;
+      font-family: "Syne", sans-serif;
+      font-size: 28px;
+      line-height: 1.05;
+    }
+
+    .note-panel p {
+      margin: 0;
+      color: #4f576a;
+      line-height: 1.7;
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .bot-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 18px 20px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .bot-summary {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .bot-summary span {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #6b7488;
+    }
+
+    .bot-summary strong {
+      font-size: 18px;
+      color: #1d2434;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 40vw;
+    }
+
+    .bot-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .bot-select {
+      min-width: 220px;
+      min-height: 44px;
+      border-radius: 12px;
+      border: 1px solid rgba(18, 21, 31, 0.16);
+      background: rgba(255, 255, 255, 0.85);
+      color: #1f2635;
+      padding: 0 12px;
+      font-size: 14px;
+      font-weight: 600;
+      outline: none;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      min-height: 460px;
+    }
+
+    .card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .channel-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #3d455a;
+    }
+
+    .channel-icon {
+      width: 62px;
+      height: 62px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      color: white;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.18);
+    }
+
+    .channel-icon.instagram {
+      background: var(--instagram);
+    }
+
+    .channel-icon.messenger {
+      background: var(--messenger);
+    }
+
+    .channel-icon.telegram {
+      background: var(--telegram);
+    }
+
+    .channel-icon.whatsapp {
+      background: var(--whatsapp);
+    }
+
+    .status-pill {
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(18, 21, 31, 0.06);
+      color: #3e465a;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .status-pill.connected {
+      background: rgba(12, 127, 88, 0.1);
+      color: var(--ok);
+    }
+
+    .card h3 {
+      margin: 0;
+      font-family: "Syne", sans-serif;
+      font-size: 34px;
+      line-height: 1;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .details {
+      background: var(--panel-strong);
+      border: 1px solid rgba(18, 21, 31, 0.08);
+      border-radius: 20px;
+      padding: 18px;
+      display: grid;
+      gap: 10px;
+      min-height: 128px;
+    }
+
+    .details-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .details-row span:first-child {
+      color: #667086;
+    }
+
+    .details-row span:last-child,
+    .details-row strong {
+      color: #222838;
+      text-align: right;
+      word-break: break-word;
+    }
+
+    .perms {
+      display: grid;
+      gap: 10px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .perms li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      color: #4c5568;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .perms li::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      margin-top: 6px;
+      border-radius: 50%;
+      flex: 0 0 auto;
+      background: linear-gradient(135deg, #ff8a5b, #467eff);
+    }
+
+    .actions {
+      margin-top: auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 16px;
+      text-decoration: none;
+      border: 1px solid transparent;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    .button.primary-instagram {
+      background: var(--instagram);
+      color: white;
+      box-shadow: 0 16px 30px rgba(219, 72, 108, 0.22);
+    }
+
+    .button.primary-messenger {
+      background: var(--messenger);
+      color: white;
+      box-shadow: 0 16px 30px rgba(53, 101, 232, 0.22);
+    }
+
+    .button.primary-telegram {
+      background: var(--telegram);
+      color: white;
+      box-shadow: 0 16px 30px rgba(2, 132, 199, 0.22);
+    }
+
+    .button.primary-whatsapp {
+      background: var(--whatsapp);
+      color: white;
+      box-shadow: 0 16px 30px rgba(37, 211, 102, 0.22);
+    }
+
+    .button.secondary {
+      background: rgba(18, 21, 31, 0.04);
+      color: #273042;
+      border-color: rgba(18, 21, 31, 0.12);
+    }
+
+    .button.danger {
+      background: rgba(162, 58, 43, 0.08);
+      color: var(--danger);
+      border-color: rgba(162, 58, 43, 0.14);
+    }
+
+    .footer-bar {
+      padding: 20px 22px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      background: rgba(255, 255, 255, 0.58);
+    }
+
+    .footer-item {
+      display: grid;
+      gap: 6px;
+    }
+
+    .footer-item span {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #727b8f;
+    }
+
+    .footer-item strong {
+      font-size: 14px;
+      color: #1d2434;
+      word-break: break-word;
+    }
+
+    .skeleton {
+      background: linear-gradient(90deg, rgba(18, 21, 31, 0.06), rgba(18, 21, 31, 0.12), rgba(18, 21, 31, 0.06));
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite linear;
+      border-radius: 12px;
+      min-height: 18px;
+    }
+
+    @keyframes shimmer {
+      from {
+        background-position: 200% 0;
+      }
+
+      to {
+        background-position: -200% 0;
+      }
+    }
+
+    @media (max-width: 980px) {
+
+      .hero,
+      .card-grid,
+      .footer-bar {
+        grid-template-columns: 1fr;
+      }
+
+      .bot-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .bot-controls {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .bot-select {
+        width: 100%;
+      }
+
+      .card {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        width: min(100% - 24px, 100%);
+        margin-top: 12px;
+      }
+
+      .hero-panel,
+      .note-panel,
+      .card,
+      .footer-bar {
+        border-radius: 22px;
+      }
+
+      .hero-panel,
+      .note-panel,
+      .card {
+        padding: 22px;
+      }
+
+      h1 {
+        font-size: 42px;
+      }
+
+      .card h3 {
+        font-size: 30px;
+      }
+
+      .details-row {
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .details-row span:last-child,
+      .details-row strong {
+        text-align: left;
+      }
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(18, 21, 31, 0.4);
+      backdrop-filter: blur(4px);
+      display: none;
+      place-items: center;
+      z-index: 100;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-overlay.open {
+      display: grid;
+      opacity: 1;
+    }
+
+    .modal {
+      background: #ffffff;
+      border-radius: 20px;
+      width: min(480px, calc(100% - 40px));
+      padding: 32px 32px 40px;
+      position: relative;
+      box-shadow: 0 32px 64px rgba(36, 31, 24, 0.2);
+      transform: translateY(20px);
+      transition: transform 0.2s ease;
+    }
+
+    .modal-overlay.open .modal {
+      transform: translateY(0);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: #99a1b3;
+      cursor: pointer;
+      line-height: 1;
+      padding: 4px;
+      transition: color 0.15s;
+    }
+
+    .modal-close:hover {
+      color: #12151f;
+    }
+
+    .modal h2 {
+      margin: 0 0 12px;
+      font-family: "Syne", sans-serif;
+      font-weight: 700;
+      font-size: 28px;
+      color: #1a1f2c;
+    }
+
+    .modal p.desc {
+      margin: 0 0 24px;
+      color: #64748b;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .modal p.req {
+      margin: 0 0 16px;
+      color: #334155;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #1e293b;
+    }
+
+    .form-control {
+      width: 100%;
+      height: 46px;
+      padding: 0 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 15px;
+      color: #0f172a;
+      background: #ffffff;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      font-family: inherit;
+    }
+
+    select.form-control {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: #8b52a9;
+      box-shadow: 0 0 0 3px rgba(139, 90, 171, 0.15);
+    }
+
+    .btn-purple {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 44px;
+      padding: 0 24px;
+      background: #8b52a9;
+      color: white;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 15px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-top: 10px;
+    }
+
+    .btn-purple:hover {
+      background: #733c8f;
+    }
+
+    .btn-purple:disabled {
+      background: #cbd5e1;
+      cursor: not-allowed;
+    }
+
+    .modal-link {
+      display: block;
+      margin-top: 20px;
+      color: #8b52a9;
+      font-size: 14px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .modal-link:hover {
+      text-decoration: underline;
+    }
+
+    .modal-error {
+      color: var(--danger);
+      font-size: 13px;
+      margin-top: 8px;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="hero-panel">
+        <div class="eyebrow">BotMatic Channel Center</div>
+        <h1>Connect channels just as easily.</h1>
+        <p class="hero-copy">
+          This follows the same clean pattern you saw in RAI: one centralized place
+          to connect business channels, store tokens, subscribe webhooks,
+          and link bots to the correct accounts.
+          <strong>Instagram and Messenger are now side-by-side in one screen.</strong>
+        </p>
+      </div>
+      <aside class="note-panel">
+        <h2>Under the Hood</h2>
+        <p>
+          We initiate the official Meta OAuth flow, exchange the code for a long-lived token,
+          subscribe the account or Page to webhooks, and return the connection status
+          back to this dashboard.
+        </p>
+        <p>
+          Instagram connects a Professional account. Messenger connects a Facebook
+          Page and prepares it for bot responses.
+        </p>
+      </aside>
+    </section>
+
+    <section class="stack">
+      <section class="bot-bar" aria-label="Bot Selection">
+        <div class="bot-summary">
+          <span>Current Bot</span>
+          <strong id="activeBotName">Loading...</strong>
+        </div>
+        <div class="bot-controls">
+          <select id="botSelect" class="bot-select" aria-label="Select Bot"></select>
+          <button class="button secondary" type="button" id="createBotBtn">Create Bot</button>
+        </div>
+      </section>
+
+      <div class="card-grid">
+        <article class="card" id="instagramCard">
+          <div class="card-head">
+            <div>
+              <div class="channel-tag">Instagram</div>
+              <h3>Direct Automation</h3>
+            </div>
+            <div class="channel-icon instagram" aria-hidden="true">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="white">
+                <path
+                  d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.26.07 1.64.07 4.85 0 3.2-.01 3.58-.07 4.85-.15 3.22-1.66 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07-3.2 0-3.58-.01-4.85-.07-3.26-.15-4.77-1.7-4.92-4.92C2.17 15.58 2.16 15.2 2.16 12c0-3.21.01-3.59.07-4.85.15-3.23 1.66-4.77 4.92-4.92 1.27-.06 1.65-.07 4.85-.07Zm0 1.95c-3.15 0-3.52.01-4.76.07-2.76.13-4.02 1.37-4.15 4.15-.06 1.23-.07 1.6-.07 4.76s.01 3.52.07 4.76c.13 2.76 1.39 4.02 4.15 4.15 1.24.06 1.61.07 4.76.07 3.16 0 3.53-.01 4.76-.07 2.76-.13 4.02-1.39 4.15-4.15.06-1.24.07-1.61.07-4.76 0-3.16-.01-3.53-.07-4.76-.13-2.78-1.39-4.02-4.15-4.15-1.23-.06-1.6-.07-4.76-.07Zm0 3.31A4.58 4.58 0 1 1 7.42 12 4.58 4.58 0 0 1 12 7.42Zm0 7.55A2.97 2.97 0 1 0 9.03 12 2.97 2.97 0 0 0 12 14.97Zm5.83-8.46a1.07 1.07 0 1 1-1.07-1.07 1.07 1.07 0 0 1 1.07 1.07Z" />
+              </svg>
+            </div>
+          </div>
+          <div class="status-pill" id="instagramStatus">Loading</div>
+          <p>
+            Connect your Instagram Professional account to receive Direct messages,
+            subscribe webhooks, and send automated responses with a single click.
+          </p>
+          <div class="details" id="instagramDetails">
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+          </div>
+          <ul class="perms">
+            <li>OAuth via Instagram Login for Business</li>
+            <li>Exchange for long-lived user token</li>
+            <li>Subscribe to webhooks for Direct events</li>
+          </ul>
+          <div class="actions" id="instagramActions"></div>
+        </article>
+
+        <article class="card" id="messengerCard">
+          <div class="card-head">
+            <div>
+              <div class="channel-tag">Messenger</div>
+              <h3>Facebook Page Messages</h3>
+            </div>
+            <div class="channel-icon messenger" aria-hidden="true">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="white">
+                <path
+                  d="M12 2C6.48 2 2 6.15 2 11.27c0 2.91 1.45 5.51 3.72 7.2V22l3.28-1.81c.96.27 1.97.41 3 .41 5.52 0 10-4.15 10-9.27S17.52 2 12 2Zm1 12.47-2.55-2.72-5.05 2.72L11 8.53l2.58 2.72 5.02-2.72L13 14.47Z" />
+              </svg>
+            </div>
+          </div>
+          <div class="status-pill" id="messengerStatus">Loading</div>
+          <p>
+            Connect your Facebook Page, select the desired page if you have several,
+            subscribe it to Messenger webhooks and keep the bot ready for replies.
+          </p>
+          <div class="details" id="messengerDetails">
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+          </div>
+          <ul class="perms">
+            <li>Facebook OAuth with Page scopes</li>
+            <li>Store Page token for send / reply flow</li>
+            <li>Dedicated Messenger webhook endpoint</li>
+          </ul>
+          <div class="actions" id="messengerActions"></div>
+        </article>
+
+        <article class="card" id="telegramCard">
+          <div class="card-head">
+            <div>
+              <div class="channel-tag">Telegram</div>
+              <h3>Telegram Bot</h3>
+            </div>
+            <div class="channel-icon telegram" aria-hidden="true">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="white">
+                <path
+                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.18-.08-.05-.19-.02-.27 0-.11.03-1.84 1.18-5.2 3.45-.49.34-.93.51-1.33.5-.42-.01-1.22-.24-1.82-.44-.73-.24-1.31-.37-1.25-.78.03-.22.33-.44.89-.68 3.48-1.52 5.81-2.52 6.99-3.01 3.33-1.38 4.02-1.62 4.47-1.63.1 0 .32.02.46.14.12.1.15.24.16.34-.01.03.01.07.03.11z" />
+              </svg>
+            </div>
+          </div>
+          <div class="status-pill" id="telegramStatus">Loading</div>
+          <p>
+            Connect a Telegram bot using a Bot Token so BotMatic can receive
+            messages from Telegram and automatically reply to users.
+          </p>
+          <div class="details" id="telegramDetails">
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+          </div>
+          <ul class="perms">
+            <li>Token from @BotFather (no OAuth)</li>
+            <li>Automatic webhook configuration</li>
+            <li>Dedicated Telegram webhook endpoint</li>
+          </ul>
+          <div class="actions" id="telegramActions"></div>
+        </article>
+
+        <article class="card" id="whatsappCard">
+          <div class="card-head">
+            <div>
+              <div class="channel-tag">WhatsApp</div>
+              <h3>Business Account</h3>
+            </div>
+            <div class="channel-icon whatsapp" aria-hidden="true">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="white">
+                <path
+                  d="M12.031 21A9.957 9.957 0 0 1 7.15 19.68L2 22l2.39-5.04A9.957 9.957 0 0 1 2 12C2 6.48 6.48 2 12 2s10 4.48 10 10-4.48 10-10.031 9zM12 4C7.58 4 4 7.58 4 12c0 1.76.57 3.39 1.54 4.71l-.88 1.85 1.94-.55A7.957 7.957 0 0 0 12 20c4.42 0 8-3.58 8-8s-3.58-8-8-8zm4.18 11.26c-.23-.11-1.33-.66-1.53-.73-.2-.08-.35-.11-.5.11-.15.22-.58.73-.71.88-.13.15-.27.17-.5.06-1.55-.77-2.61-1.53-3.6-3.23-.11-.19 0-.29.11-.4l.33-.39c.11-.13.15-.22.22-.37.08-.15.04-.28-.02-.39-.06-.11-.5-1.21-.69-1.65-.18-.43-.37-.37-.5-.38-.13-.01-.28-.01-.43-.01s-.39.06-.59.28c-.2.22-.76.74-.76 1.8 0 1.06.78 2.08.89 2.23.11.15 1.52 2.32 3.68 3.25.51.22.91.35 1.22.45.51.16.98.14 1.35.08.41-.06 1.33-.54 1.52-1.07.19-.53.19-.98.13-1.07-.06-.08-.22-.13-.45-.24z" />
+              </svg>
+            </div>
+          </div>
+          <div class="status-pill" id="whatsappStatus">Loading</div>
+          <p>
+            Scan the QR code in your WhatsApp app so BotMatic can receive
+            and send messages on behalf of this number.
+          </p>
+          <div class="details" id="whatsappDetails">
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+          </div>
+          <ul class="perms">
+            <li>Baileys Web Client session</li>
+            <li>Send and read messages without Meta API</li>
+            <li>Unofficial webhook</li>
+          </ul>
+          <div class="actions" id="whatsappActions"></div>
+        </article>
+      </div>
+
+      <section class="footer-bar">
+        <div class="footer-item">
+          <span>Instagram Webhook</span>
+          <strong>/webhook/instagram</strong>
+        </div>
+        <div class="footer-item">
+          <span>Messenger Webhook</span>
+          <strong>/auth/messenger/webhook</strong>
+        </div>
+        <div class="footer-item">
+          <span>Privacy Policy</span>
+          <strong>/webhook/instagram/privacy-policy</strong>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <div class="modal-overlay" id="telegramModal">
+    <div class="modal">
+      <button class="modal-close" id="closeTelegramModalBtn" aria-label="Close">&times;</button>
+      <h2>Telegram Connection</h2>
+      <p class="desc">
+        Create Telegram bots for information, consulting, and even selling goods and services.
+      </p>
+      <p class="req">
+        To connect a Telegram bot, you need a bot token
+      </p>
+
+      <form id="telegramConnectForm">
+        <div class="form-group">
+          <label for="tgToken">Enter access key (bot token)</label>
+          <input type="text" id="tgToken" class="form-control" placeholder="123456789:ABCDefGHIJKlmNoPQRSTUVWXYZ"
+            required autocomplete="off">
+          <div id="tgError" class="modal-error"></div>
+        </div>
+
+        <button type="submit" class="btn-purple" id="tgSubmitBtn">Connect</button>
+      </form>
+
+      <a href="https://core.telegram.org/bots/features#botfather" target="_blank" class="modal-link">How to get a bot
+        token?</a>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="whatsappModal">
+    <div class="modal" style="text-align: center;">
+      <button class="modal-close" id="closeWhatsappModalBtn" aria-label="Close">&times;</button>
+      <h2>WhatsApp Connection</h2>
+      <p class="desc" id="whatsappModalDesc">
+        Open WhatsApp on your phone &rarr; Settings &rarr; Linked Devices &rarr; Link a Device. Then scan this QR code.
+      </p>
+
+      <div id="qrContainer"
+        style="display: flex; justify-content: center; align-items: center; min-height: 256px; margin-bottom: 20px; border-radius: 12px; background: #fafafa; border: 1px dashed #cbd5e1;">
+        <div class="skeleton" style="width: 200px; height: 200px;"></div>
+      </div>
+
+      <div id="waError" class="modal-error"></div>
+    </div>
+  </div>
+
+  <script>
+    let currentBotId = '';
+
+    function formatDate(value) {
+      if (!value) return 'Not connected yet';
+      return new Date(value).toLocaleString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    }
+
+    function buildApiUrl(pathname) {
+      const url = new URL(pathname, window.location.origin);
+      if (currentBotId) {
+        url.searchParams.set('botId', currentBotId);
+      }
+      return url.pathname + url.search;
+    }
+
+    function syncBotIdInUrl(botId) {
+      const url = new URL(window.location.href);
+      if (botId) {
+        url.searchParams.set('botId', botId);
+      } else {
+        url.searchParams.delete('botId');
+      }
+      window.history.replaceState({}, '', url.pathname + url.search);
+    }
+
+    function setDetails(targetId, rows) {
+      const target = document.getElementById(targetId);
+      target.innerHTML = rows.map((row) => `
+        <div class="details-row">
+          <span>${row.label}</span>
+          <strong>${row.value}</strong>
+        </div>
+      `).join('');
+    }
+
+    function setActions(targetId, config) {
+      const target = document.getElementById(targetId);
+      const connectButtonClass = config.primaryClass || 'secondary';
+      const buttons = [];
+
+      if (!config.connected) {
+        if (config.onClick) {
+          buttons.push(`<button class="button ${connectButtonClass}" type="button" onclick="${config.onClick}">Connect</button>`);
+        } else {
+          buttons.push(`<a class="button ${connectButtonClass}" href="${config.connectUrl}">Connect</a>`);
+        }
+      } else {
+        if (config.onClick) {
+          buttons.push(`<button class="button secondary" type="button" onclick="${config.onClick}">Reconnect</button>`);
+        } else {
+          buttons.push(`<a class="button secondary" href="${config.connectUrl}">Reconnect</a>`);
+        }
+        buttons.push(`<button class="button danger" type="button" data-channel="${config.channel}" onclick="disconnectChannel(this.dataset.channel)">Disconnect</button>`);
+      }
+
+      target.innerHTML = buttons.join('');
+    }
+
+    function setStatus(targetId, connected, label) {
+      const target = document.getElementById(targetId);
+      target.textContent = label;
+      target.classList.toggle('connected', connected);
+    }
+
+    async function loadBots() {
+      const requestedBotId = new URLSearchParams(window.location.search).get('botId') || '';
+      const botsUrl = requestedBotId
+        ? `/auth/api/bots?botId=${encodeURIComponent(requestedBotId)}`
+        : '/auth/api/bots';
+
+      const response = await fetch(botsUrl, { headers: { accept: 'application/json' } });
+      if (!response.ok) {
+        throw new Error('Failed to load bot list');
+      }
+
+      const data = await response.json();
+      currentBotId = data.activeBotId || '';
+      syncBotIdInUrl(currentBotId);
+      renderBotSelector(data.bots || [], currentBotId);
+      return data;
+    }
+
+    function renderBotSelector(bots, activeBotId) {
+      const select = document.getElementById('botSelect');
+      const activeName = document.getElementById('activeBotName');
+      select.innerHTML = '';
+
+      for (const bot of bots) {
+        const option = document.createElement('option');
+        option.value = bot.id;
+        option.textContent = bot.name;
+        option.selected = bot.id === activeBotId;
+        select.appendChild(option);
+      }
+
+      const activeBot = bots.find((bot) => bot.id === activeBotId);
+      activeName.textContent = activeBot ? activeBot.name : 'Bot not selected';
+    }
+
+    async function loadChannels() {
+      const response = await fetch(buildApiUrl('/auth/api/channels'), {
+        headers: { accept: 'application/json' },
+      });
+      if (!response.ok) {
+        throw new Error('Failed to load channel status');
+      }
+
+      const data = await response.json();
+      const activeBotName = document.getElementById('activeBotName');
+      if (data.bot?.name) {
+        activeBotName.textContent = data.bot.name;
+      }
+
+      setStatus('instagramStatus', data.instagram.connected, data.instagram.statusLabel);
+      setDetails('instagramDetails', [
+        { label: 'Account', value: data.instagram.username ? '@' + data.instagram.username : 'Account not connected' },
+        { label: 'Name', value: data.instagram.name || 'Unavailable' },
+        { label: 'Connected', value: formatDate(data.instagram.connectedAt) },
+      ]);
+      setActions('instagramActions', {
+        channel: 'instagram',
+        connected: data.instagram.connected,
+        connectUrl: data.instagram.connectUrl + '&t=' + Date.now(),
+        primaryClass: 'primary-instagram',
+      });
+
+      setStatus('messengerStatus', data.messenger.connected, data.messenger.statusLabel);
+      setDetails('messengerDetails', [
+        { label: 'Page', value: data.messenger.pageName || 'Page not connected' },
+        { label: 'Page ID', value: data.messenger.pageId || 'Unavailable' },
+        { label: 'Connected', value: formatDate(data.messenger.connectedAt) },
+      ]);
+      setActions('messengerActions', {
+        channel: 'messenger',
+        connected: data.messenger.connected,
+        connectUrl: data.messenger.connectUrl + '&t=' + Date.now(),
+        primaryClass: 'primary-messenger',
+      });
+
+      setStatus('telegramStatus', data.telegram.connected, data.telegram.statusLabel);
+      setDetails('telegramDetails', [
+        { label: 'Bot', value: data.telegram.username ? '@' + data.telegram.username : 'Not connected' },
+        { label: 'Name', value: data.telegram.name || 'Unavailable' },
+        { label: 'Connected', value: formatDate(data.telegram.connectedAt) },
+      ]);
+      setActions('telegramActions', {
+        channel: 'telegram',
+        connected: data.telegram.connected,
+        onClick: 'connectTelegram()',
+        primaryClass: 'primary-telegram',
+      });
+
+      setStatus('whatsappStatus', data.whatsapp.connected, data.whatsapp.statusLabel);
+      setDetails('whatsappDetails', [
+        { label: 'Session Status', value: data.whatsapp.connected ? 'Active' : 'Not connected' },
+        { label: 'Connected', value: formatDate(data.whatsapp.connectedAt) },
+      ]);
+      setActions('whatsappActions', {
+        channel: 'whatsapp',
+        connected: data.whatsapp.connected,
+        onClick: 'connectWhatsapp()',
+        primaryClass: 'primary-whatsapp',
+      });
+    }
+
+    async function disconnectChannel(channel) {
+      const ok = window.confirm(`Disconnect ${channel} from BotMatic?`);
+      if (!ok) return;
+
+      await fetch(buildApiUrl('/auth/api/channels/' + channel), { method: 'DELETE' });
+      await loadChannels();
+    }
+
+    async function createBot() {
+      const name = window.prompt('New bot name:');
+      if (!name || !name.trim()) return;
+
+      const response = await fetch('/auth/api/bots', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', accept: 'application/json' },
+        body: JSON.stringify({ name: name.trim() }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create bot');
+      }
+
+      const created = await response.json();
+      currentBotId = created.id;
+      syncBotIdInUrl(currentBotId);
+      await loadBots();
+      await loadChannels();
+    }
+
+    document.getElementById('botSelect').addEventListener('change', async (event) => {
+      currentBotId = event.target.value || '';
+      syncBotIdInUrl(currentBotId);
+      await loadChannels();
+    });
+
+    const tgModal = document.getElementById('telegramModal');
+    const tgForm = document.getElementById('telegramConnectForm');
+    const tgTokenInput = document.getElementById('tgToken');
+    const tgError = document.getElementById('tgError');
+    const tgSubmitBtn = document.getElementById('tgSubmitBtn');
+    const tgCloseBtn = document.getElementById('closeTelegramModalBtn');
+
+    function connectTelegram() {
+      tgError.style.display = 'none';
+      tgTokenInput.value = '';
+      tgModal.classList.add('open');
+      tgTokenInput.focus();
+    }
+
+    function closeTelegramModal() {
+      tgModal.classList.remove('open');
+    }
+
+    tgCloseBtn.addEventListener('click', closeTelegramModal);
+
+    tgModal.addEventListener('click', (e) => {
+      if (e.target === tgModal) {
+        closeTelegramModal();
+      }
+    });
+
+    tgForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const token = tgTokenInput.value.trim();
+      if (!token) return;
+
+      tgSubmitBtn.disabled = true;
+      tgSubmitBtn.textContent = 'Connecting...';
+      tgError.style.display = 'none';
+
+      try {
+        const response = await fetch('/auth/api/telegram/connect', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', accept: 'application/json' },
+          body: JSON.stringify({
+            botId: currentBotId,
+            token: token,
+          }),
+        });
+
+        const result = await response.json();
+        if (!response.ok) {
+          throw new Error(result.error || 'Failed to connect Telegram');
+        }
+
+        closeTelegramModal();
+        await loadChannels();
+      } catch (err) {
+        tgError.textContent = 'Error: ' + err.message;
+        tgError.style.display = 'block';
+      } finally {
+        tgSubmitBtn.disabled = false;
+        tgSubmitBtn.textContent = 'Connect';
+      }
+    });
+
+    // --- WhatsApp Baileys Logic ---
+    const waModal = document.getElementById('whatsappModal');
+    const qrContainer = document.getElementById('qrContainer');
+    const waError = document.getElementById('waError');
+    const waCloseBtn = document.getElementById('closeWhatsappModalBtn');
+    let waPollInterval = null;
+
+    function closeWhatsappModal() {
+      waModal.classList.remove('open');
+      if (waPollInterval) {
+        clearInterval(waPollInterval);
+        waPollInterval = null;
+      }
+    }
+
+    waCloseBtn.addEventListener('click', closeWhatsappModal);
+    waModal.addEventListener('click', (e) => {
+      if (e.target === waModal) closeWhatsappModal();
+    });
+
+    async function connectWhatsapp() {
+      if (!currentBotId) {
+        alert("Please select or create a bot first.");
+        return;
+      }
+
+      waError.style.display = 'none';
+      qrContainer.innerHTML = '<div class="skeleton" style="width: 200px; height: 200px;"></div>';
+      waModal.classList.add('open');
+
+      if (waPollInterval) clearInterval(waPollInterval);
+
+      // Trigger initialization by backend
+      try {
+        await fetch(`/auth/api/whatsapp/connect?botId=${encodeURIComponent(currentBotId)}`);
+      } catch (err) { }
+
+      waPollInterval = setInterval(async () => {
+        try {
+          const res = await fetch(`/auth/api/whatsapp/connect?botId=${encodeURIComponent(currentBotId)}`);
+          if (!res.ok) throw new Error("Backend offline");
+
+          const data = await res.json();
+
+          if (data.status === 'pending' && data.qr) {
+            qrContainer.innerHTML = `<img src="${data.qr}" alt="WhatsApp QR Code" style="width: 240px; height: 240px; image-rendering: pixelated; border-radius: 8px;" />`;
+          } else if (data.status === 'connected') {
+            clearInterval(waPollInterval);
+            qrContainer.innerHTML = `<div style="color: var(--ok); font-weight: 800; font-size: 20px;">✅ Successfully connected!</div>`;
+
+            // Register success with our own server db
+            await fetch('/auth/api/whatsapp/success', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ botId: currentBotId })
+            });
+
+            setTimeout(() => {
+              closeWhatsappModal();
+              loadChannels();
+            }, 1500);
+          } else if (data.status === 'initializing') {
+            qrContainer.innerHTML = '<div class="skeleton" style="width: 200px; height: 200px;"></div>';
+          }
+        } catch (err) {
+          console.error(err);
+          waError.textContent = "Failed to generate QR code. Check server logs.";
+          waError.style.display = 'block';
+          clearInterval(waPollInterval);
+        }
+      }, 2000);
+    }
+
+    document.getElementById('createBotBtn').addEventListener('click', () => {
+      createBot().catch((error) => {
+        console.error(error);
+        window.alert('Failed to create bot. Check server logs.');
+      });
+    });
+
+    async function bootstrap() {
+      await loadBots();
+      await loadChannels();
+    }
+
+    bootstrap().catch((error) => {
+      console.error(error);
+      setStatus('instagramStatus', false, 'Error');
+      setStatus('messengerStatus', false, 'Error');
+      setDetails('instagramDetails', [
+        { label: 'Status', value: 'Failed to load channel state' },
+        { label: 'Hint', value: 'Check /auth/api/channels' },
+        { label: 'Error', value: 'Details in browser console' },
+      ]);
+      setDetails('messengerDetails', [
+        { label: 'Status', value: 'Failed to load channel state' },
+        { label: 'Hint', value: 'Check /auth/api/channels' },
+        { label: 'Error', value: 'Details in browser console' },
+      ]);
+    });
+  </script>
+</body>
+
+</html>

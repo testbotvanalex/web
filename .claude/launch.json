@@ -2,10 +2,16 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "botmatic",
-      "runtimeExecutable": "/usr/local/bin/node",
-      "runtimeArgs": ["server.js"],
-      "port": 3000
+      "name": "BotMatic Dev (nodemon)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3200
+    },
+    {
+      "name": "BotMatic Prod (node)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["start"],
+      "port": 3200
     }
   ]
 }

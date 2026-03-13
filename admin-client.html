@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BotMatic — Client Card</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f4f5f9; --surface: #ffffff; --surface2: #f0f1f6; --surface3: #e8eaf2;
+      --border: #e2e4ed; --accent: #7c3aed; --accent2: #db2777;
+      --accent-glow: rgba(124,58,237,0.2); --text: #1a1a2e; --muted: #6b7280;
+      --green: #059669; --yellow: #d97706; --red: #dc2626; --blue: #2563eb;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 220px; flex-shrink: 0; background: var(--surface);
+      border-right: 1px solid var(--border); padding: 24px 0;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .sidebar-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; background: linear-gradient(135deg, #7c3aed, #db2777); -webkit-background-clip: text; -webkit-text-fill-color: transparent; padding: 0 20px 20px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px; padding: 10px 20px;
+      color: var(--muted); text-decoration: none; font-size: 14px; transition: all .15s;
+      cursor: pointer; border: none; background: none; width: 100%; text-align: left;
+    }
+    .nav-item:hover { color: var(--text); background: var(--surface2); }
+    .nav-item.active { color: var(--accent); background: rgba(124,108,252,0.1); border-left: 2px solid var(--accent); }
+
+    .main { flex: 1; overflow-y: auto; }
+
+    .topbar {
+      display: flex; align-items: center; gap: 16px; padding: 16px 32px;
+      border-bottom: 1px solid var(--border); background: var(--surface);
+      position: sticky; top: 0; z-index: 10;
+    }
+    .back-btn {
+      display: flex; align-items: center; gap: 6px; color: var(--muted);
+      text-decoration: none; font-size: 14px; transition: color .15s;
+    }
+    .back-btn:hover { color: var(--text); }
+    .topbar-company { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; }
+    .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+
+    /* Status stepper */
+    .status-stepper {
+      display: flex; align-items: center; gap: 0; background: var(--surface2);
+      border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+    }
+    .step-btn {
+      padding: 6px 12px; font-size: 12px; cursor: pointer; border: none;
+      background: none; color: var(--muted); font-family: inherit; transition: all .15s;
+      border-right: 1px solid var(--border);
+    }
+    .step-btn:last-child { border-right: none; }
+    .step-btn:hover { background: var(--surface3); color: var(--text); }
+    .step-btn.active { background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff; box-shadow: 0 2px 8px rgba(124,58,237,0.3); }
+
+    .content { padding: 24px 32px; display: grid; grid-template-columns: 340px 1fr; gap: 20px; align-items: start; }
+
+    /* Card section */
+    .card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px; border-bottom: 1px solid var(--border);
+      background: var(--surface2);
+    }
+    .card-header h3 { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; }
+    .card-body { padding: 18px; }
+
+    /* Info rows */
+    .info-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid var(--border); gap: 12px; }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { font-size: 12px; color: var(--muted); min-width: 100px; flex-shrink: 0; }
+    .info-value { font-size: 13px; text-align: right; word-break: break-word; }
+    .info-value a { color: var(--accent); text-decoration: none; }
+
+    /* Editable field */
+    .editable { cursor: pointer; border-bottom: 1px dashed transparent; transition: border-color .15s; }
+    .editable:hover { border-bottom-color: var(--muted); }
+    .edit-input {
+      background: var(--surface2); border: 1px solid var(--accent); border-radius: 6px;
+      padding: 4px 8px; color: var(--text); font-size: 13px; font-family: inherit;
+      outline: none; width: 100%; text-align: right;
+    }
+    select.edit-input { text-align: left; }
+
+    /* Bot section */
+    .bot-section { display: flex; flex-direction: column; gap: 16px; }
+    .textarea-field {
+      width: 100%; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 12px; color: var(--text); font-size: 13px;
+      font-family: 'DM Sans', sans-serif; resize: vertical; outline: none;
+      line-height: 1.6;
+    }
+    .textarea-field:focus { border-color: var(--accent); }
+    .field-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
+
+    /* Channel cards */
+    .channels-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .channel-card {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 16px;
+    }
+    .channel-card.connected { border-color: rgba(74,222,128,0.3); }
+    .channel-top { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .channel-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; flex-shrink: 0;
+    }
+    .ch-ig { background: rgba(252,108,143,.15); color: var(--accent2); }
+    .ch-ms { background: rgba(96,165,250,.15); color: var(--blue); }
+    .ch-tg { background: rgba(56,189,248,.12); color: #38bdf8; }
+    .ch-wa { background: rgba(74,222,128,.12); color: var(--green); }
+    .channel-name { font-weight: 600; font-size: 14px; }
+    .channel-sub  { font-size: 11px; color: var(--muted); }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; margin-left: auto; flex-shrink: 0; }
+    .dot-green  { background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .dot-gray   { background: var(--muted); }
+    .dot-red    { background: var(--red); }
+    .channel-info { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+    .channel-actions { display: flex; gap: 6px; }
+
+    .btn { padding: 7px 14px; border-radius: 7px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; font-family: inherit; transition: all .15s; }
+    .btn-primary { background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff; box-shadow: 0 2px 8px rgba(124,58,237,0.3); }
+    .btn-primary:hover { background: linear-gradient(135deg, #6d28d9, #5b21b6); box-shadow: 0 4px 16px rgba(124,58,237,0.4); }
+    .btn-ghost { background: var(--surface); border: 1px solid var(--border); color: var(--text); }
+    .btn-ghost:hover { border-color: var(--accent); }
+    .btn-danger { background: rgba(248,113,113,.1); border: 1px solid rgba(248,113,113,.3); color: var(--red); }
+    .btn-danger:hover { background: rgba(248,113,113,.2); }
+    .btn-green  { background: rgba(74,222,128,.12); border: 1px solid rgba(74,222,128,.3); color: var(--green); }
+    .btn-green:hover  { background: rgba(74,222,128,.2); }
+
+    /* Tasks */
+    .tasks-list { display: flex; flex-direction: column; gap: 8px; }
+    .task-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; background: var(--surface2); border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .task-checkbox { width: 16px; height: 16px; border-radius: 4px; cursor: pointer; accent-color: var(--accent); flex-shrink: 0; }
+    .task-title { flex: 1; font-size: 13px; }
+    .task-title.done { text-decoration: line-through; color: var(--muted); }
+    .task-due { font-size: 11px; color: var(--muted); white-space: nowrap; }
+    .task-del { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 16px; line-height: 1; padding: 0 2px; }
+    .task-del:hover { color: var(--red); }
+    .add-task-row { display: flex; gap: 8px; margin-top: 8px; }
+    .task-input {
+      flex: 1; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 8px 12px; color: var(--text); font-size: 13px;
+      font-family: inherit; outline: none;
+    }
+    .task-input:focus { border-color: var(--accent); }
+
+    /* Activity log */
+    .log-list { display: flex; flex-direction: column; gap: 0; }
+    .log-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .log-item:last-child { border-bottom: none; }
+    .log-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-top: 5px; flex-shrink: 0; }
+    .log-content { flex: 1; }
+    .log-action { font-size: 13px; }
+    .log-details { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .log-time { font-size: 11px; color: var(--muted); white-space: nowrap; }
+
+    /* Conversations */
+    .conv-list { display: flex; flex-direction: column; gap: 8px; max-height: 500px; overflow-y: auto; padding-right: 4px; }
+    .msg-item { display: flex; gap: 10px; padding: 12px 14px; border-radius: 12px; max-width: 85%; }
+    .msg-item.in  { background: var(--surface2); align-self: flex-start; border-bottom-left-radius: 4px; }
+    .msg-item.out { background: rgba(56,189,248,0.08); align-self: flex-end; border: 1px solid rgba(56,189,248,0.15); border-bottom-right-radius: 4px; }
+    .msg-arrow { font-size: 11px; color: var(--muted); flex-shrink: 0; margin-top: 2px; }
+    .msg-body { flex: 1; display: flex; flex-direction: column; }
+    .msg-sender { font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .msg-text { font-size: 13.5px; line-height: 1.5; word-wrap: break-word; }
+    .msg-time { font-size: 10px; color: var(--muted); align-self: flex-end; margin-top: 6px; }
+
+    .reply-btn {
+      background: none; border: none; color: var(--accent); font-size: 12px; cursor: pointer;
+      padding: 0; margin-top: 8px; font-weight: 500; display: none; text-align: left;
+    }
+    .msg-item.in:hover .reply-btn { display: block; }
+    .reply-btn:hover { text-decoration: underline; }
+
+    .reply-box {
+      margin-top: 10px; display: none; flex-direction: column; gap: 8px;
+      padding-top: 10px; border-top: 1px solid var(--border);
+    }
+    .reply-box.open { display: flex; }
+    .reply-input {
+      background: var(--surface3); border: 1px solid var(--border); border-radius: 8px;
+      padding: 10px; color: var(--text); font-size: 13px; font-family: inherit; outline: none;
+      resize: vertical; min-height: 80px;
+    }
+    .reply-input:focus { border-color: var(--accent); }
+    .reply-actions { display: flex; justify-content: flex-end; gap: 10px; }
+
+    /* Tabs */
+    .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+    .tab {
+      padding: 10px 18px; font-size: 13px; cursor: pointer; color: var(--muted);
+      border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all .15s;
+    }
+    .tab:hover { color: var(--text); }
+    .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    .badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+    .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .badge-new      { color: #a0a0c0; background: rgba(160,160,192,.12); }
+    .badge-brief    { color: var(--blue); background: rgba(96,165,250,.12); }
+    .badge-connecting { color: var(--yellow); background: rgba(251,191,36,.12); }
+    .badge-setup    { color: #c084fc; background: rgba(192,132,252,.12); }
+    .badge-test     { color: var(--yellow); background: rgba(251,191,36,.12); }
+    .badge-live     { color: var(--green); background: rgba(74,222,128,.12); }
+    .badge-support  { color: var(--blue); background: rgba(96,165,250,.12); }
+
+    .save-btn-row { display: flex; justify-content: flex-end; margin-top: 12px; }
+    .char-count { font-size: 11px; color: var(--muted); text-align: right; margin-top: 4px; }
+
+    .empty-state { text-align: center; padding: 40px; color: var(--muted); font-size: 13px; }
+
+    /* ── Onboarding Checklist ── */
+    .checklist-card { background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,.05); }
+    .checklist-header { display:flex;align-items:center;justify-content:space-between;margin-bottom:12px; }
+    .checklist-title { font-family:'Syne',sans-serif;font-size:13px;font-weight:700; }
+    .checklist-pct { font-family:'Outfit',sans-serif;font-size:13px;font-weight:800;color:var(--accent); }
+    .checklist-bar { height:4px;background:var(--surface3);border-radius:2px;margin-bottom:12px;overflow:hidden; }
+    .checklist-fill { height:100%;background:linear-gradient(90deg,#7c3aed,#db2777);border-radius:2px;transition:width .4s; }
+    .checklist-items { display:flex;flex-direction:column;gap:6px; }
+    .cl-item { display:flex;align-items:center;gap:8px;font-size:12px; }
+    .cl-check { width:16px;height:16px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:9px;transition:all .2s; }
+    .cl-check.done { background:var(--green);border-color:var(--green);color:#fff; }
+    .cl-check.active { border-color:var(--accent); }
+    .cl-label { color:var(--muted); }
+    .cl-label.done { color:var(--text); }
+
+    .toast { position: fixed; bottom: 24px; right: 24px; z-index: 999; background: var(--surface3); border: 1px solid var(--border); border-radius: 10px; padding: 12px 18px; font-size: 14px; transform: translateY(80px); opacity: 0; transition: all .25s; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { border-color: var(--green); color: var(--green); }
+    .toast.error { border-color: var(--red); color: var(--red); }
+  /* ── Modal overlay ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,.45); z-index: 1000;
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface); border-radius: 16px;
+    width: 100%; padding: 0; box-shadow: 0 24px 64px rgba(0,0,0,.18);
+    animation: modalIn .18s ease;
+  }
+  @keyframes modalIn { from { opacity:0; transform:scale(.96) translateY(8px); } to { opacity:1; transform:none; } }
+  .modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 24px 0;
+  }
+  .modal-body { padding: 16px 24px; }
+  .modal-footer {
+    display: flex; justify-content: flex-end; gap: 10px;
+    padding: 16px 24px; border-top: 1px solid var(--border);
+  }
+  .close-btn {
+    background: none; border: none; font-size: 22px; cursor: pointer;
+    color: var(--muted); line-height: 1; padding: 0 4px;
+  }
+  .close-btn:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-logo">BotMatic</div>
+    <a href="/admin/clients" class="nav-item active">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Clients
+    </a>
+    <a href="/dashboard" class="nav-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </a>
+    <a href="/inbox" class="nav-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Inbox
+    </a>
+    <a href="/analytics" class="nav-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Analytics
+    </a>
+  </nav>
+
+  <div class="main">
+    <!-- Topbar -->
+    <div class="topbar">
+      <a href="/admin/clients" class="back-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        Clients
+      </a>
+      <div class="topbar-company" id="topCompany">Loading...</div>
+      <span id="topBadge" class="badge badge-new">New</span>
+      <div class="topbar-right">
+        <!-- Status stepper -->
+        <div class="status-stepper" id="stepper"></div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- LEFT: Info card + channels + tasks -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+
+        <!-- Onboarding Checklist -->
+        <div class="checklist-card" id="checklistCard">
+          <div class="checklist-header">
+            <div class="checklist-title">Launch Progress</div>
+            <div class="checklist-pct" id="checkPct">0%</div>
+          </div>
+          <div class="checklist-bar"><div class="checklist-fill" id="checkFill" style="width:0%"></div></div>
+          <div class="checklist-items" id="checkItems"></div>
+        </div>
+
+        <!-- Client info card -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Client Information</h3>
+            <button class="btn btn-ghost" id="editInfoBtn" onclick="toggleEditInfo()" style="padding:4px 10px;font-size:12px">Edit</button>
+          </div>
+          <div class="card-body" id="infoCard">
+            <div class="empty-state">Загрузка...</div>
+          </div>
+        </div>
+
+        <!-- Channels -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Channels</h3>
+          </div>
+          <div class="card-body">
+            <div class="channels-grid" id="channelsGrid">
+              <div class="empty-state">Загрузка...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tasks -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Tasks</h3>
+          </div>
+          <div class="card-body">
+            <div class="tasks-list" id="tasksList"></div>
+            <div class="add-task-row">
+              <input class="task-input" id="taskInput" placeholder="Add task..." onkeydown="if(event.key==='Enter')addTask()" />
+              <button class="btn btn-ghost" onclick="addTask()">+</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: Tabs (Bot / Conversations / Log) -->
+      <div style="display:flex;flex-direction:column;">
+        <div class="tabs">
+          <div class="tab active" onclick="switchTab('bot', this)">Bot Settings</div>
+          <div class="tab" onclick="switchTab('conv', this)">Conversations</div>
+          <div class="tab" onclick="switchTab('log', this)">Log</div>
+        </div>
+
+        <!-- Bot Builder Tab -->
+        <div class="tab-content active" id="tab-bot">
+          <div class="card">
+            <div class="card-header">
+              <h3>Bot <span id="botVersion" style="font-size:11px;color:var(--muted);font-weight:400;margin-left:6px"></span></h3>
+              <div style="display:flex;gap:8px;">
+                <button class="btn btn-primary" onclick="saveBot()">Save</button>
+              </div>
+            </div>
+            <div class="card-body bot-section">
+              <div>
+                <div class="field-label">System Prompt (bot instructions)</div>
+                <textarea class="textarea-field" id="botPrompt" rows="10"
+                  placeholder="You are a smart assistant of {company}. Your goal is {goal}. Respond {tone}..."></textarea>
+                <div class="char-count" id="promptCount">0 characters</div>
+              </div>
+              <div>
+                <div class="field-label">Knowledge Base (FAQ, company info, price)</div>
+                <textarea class="textarea-field" id="botKnowledge" rows="8"
+                  placeholder="Working hours: Mon-Fri 9:00-18:00&#10;Address: Example St 1&#10;Prices: ..."></textarea>
+                <div class="char-count" id="knowledgeCount">0 characters</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Conversations Tab -->
+        <div class="tab-content" id="tab-conv">
+          <div class="card">
+            <div class="card-header">
+              <h3>Incoming Conversations</h3>
+              <button class="btn btn-ghost" onclick="loadMessages()" style="padding:4px 10px;font-size:12px">Refresh</button>
+            </div>
+            <div class="card-body">
+              <div class="conv-list" id="convList">
+                <div class="empty-state">No messages</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Activity Log Tab -->
+        <div class="tab-content" id="tab-log">
+          <div class="card">
+            <div class="card-header"><h3>Change Log</h3></div>
+            <div class="card-body">
+              <div class="log-list" id="logList">
+                <div class="empty-state">No log entries</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Telegram Connect Modal -->
+<div class="modal-overlay" id="tgModal">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header">
+      <h2 style="display:flex;align-items:center;gap:8px"><span style="background:rgba(56,189,248,.15);color:#38bdf8;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px">TG</span> Connect Telegram</h2>
+      <button class="close-btn" onclick="closeTgModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--muted);line-height:1.6">
+        1. Create a bot via <b>@BotFather</b> in Telegram<br>
+        2. Enter <code style="background:var(--surface2);padding:1px 6px;border-radius:4px">/newbot</code> and follow instructions<br>
+        3. Copy the received token and paste below
+      </p>
+      <div class="form-group">
+        <label>Bot Token</label>
+        <input type="text" id="tgToken" placeholder="1234567890:AAxxxxxxxxxxxxxxxx" />
+      </div>
+      <div class="form-group">
+        <label>Bot Username (no @)</label>
+        <input type="text" id="tgUsername" placeholder="my_company_bot" />
+      </div>
+      <div id="tgError" style="display:none;color:var(--red);font-size:12px;padding:8px 12px;background:rgba(220,38,38,.08);border-radius:6px"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeTgModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveTelegram()" id="tgSaveBtn">Connect</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = '/api/admin';
+const params = new URLSearchParams(location.search);
+const CLIENT_ID = params.get('id');
+
+if (!CLIENT_ID) window.location.href = 'admin-clients.html';
+
+let state = { client: null, bots: [], channels: [], tasks: [], activity: [] };
+let editMode = false;
+let currentBot = null;
+
+const STATUS_STEPS = ['new','brief','connecting','setup','test','live','support'];
+const STATUS_LABELS = { new:'New', brief:'Brief', connecting:'Connecting', setup:'Setup', test:'Test', live:'Live', support:'Support' };
+const GOAL_LABELS = { leads:'Leads/Booking', support:'Support', faq:'FAQ', sales:'Sales' };
+const TONE_LABELS = { friendly:'Friendly', formal:'Formal', casual:'Casual' };
+
+async function load() {
+  try {
+    const res = await fetch(`${API}/clients/${CLIENT_ID}`).then(r => r.json());
+    if (!res.ok) { showToast(res.error, 'error'); return; }
+    state = res;
+    render();
+  } catch (e) { showToast('Error: ' + e.message, 'error'); }
+}
+
+function render() {
+  const { client, bots, channels, tasks, activity } = state;
+  if (!client) return;
+
+  // Topbar
+  document.title = `BotMatic — ${client.company}`;
+  document.getElementById('topCompany').textContent = client.company;
+  document.getElementById('topBadge').className = `badge badge-${client.status}`;
+  document.getElementById('topBadge').textContent = STATUS_LABELS[client.status] || client.status;
+
+  // Stepper
+  renderStepper(client.status);
+
+  // Info card
+  renderInfo(client);
+
+  // Channels
+  renderChannels(channels, bots);
+
+  // Tasks
+  renderTasks(tasks);
+
+  // Bot
+  currentBot = bots[0] || null;
+  renderBot(currentBot);
+
+  // Log
+  renderLog(activity);
+
+  // Checklist
+  renderChecklist(client, bots, channels);
+}
+
+// ── Onboarding Checklist ───────────────────────────────────────────────────────
+function renderChecklist(client, bots, channels) {
+  const bot = bots?.[0];
+  const hasChannels = channels?.some(c => c.status === 'connected');
+  const doneStatuses = ['test','live','support'];
+  const liveStatuses = ['live','support'];
+
+  const steps = [
+    { label: 'Client created',       done: true },
+    { label: 'Brief completed',    done: client.status !== 'new' },
+    { label: 'Bot configured',      done: !!(bot?.prompt) },
+    { label: 'Channel connected',    done: hasChannels },
+    { label: 'Test performed',       done: doneStatuses.includes(client.status) },
+    { label: 'Live in production',   done: liveStatuses.includes(client.status) },
+  ];
+
+  const doneCount = steps.filter(s => s.done).length;
+  const pct = Math.round(doneCount / steps.length * 100);
+  const nextStep = steps.find(s => !s.done);
+
+  document.getElementById('checkPct').textContent = pct + '%';
+  document.getElementById('checkFill').style.width = pct + '%';
+  document.getElementById('checkItems').innerHTML = steps.map(s => `
+    <div class="cl-item">
+      <div class="cl-check ${s.done ? 'done' : (s === nextStep ? 'active' : '')}">${s.done ? '✓' : ''}</div>
+      <span class="cl-label ${s.done ? 'done' : ''}">${s.label}</span>
+    </div>`).join('');
+}
+
+// ── Stepper ────────────────────────────────────────────────────────────────────
+function renderStepper(currentStatus) {
+  document.getElementById('stepper').innerHTML = STATUS_STEPS.map(s =>
+    `<button class="step-btn ${s === currentStatus ? 'active' : ''}" onclick="setStatus('${s}')">${STATUS_LABELS[s]}</button>`
+  ).join('');
+}
+
+async function setStatus(status) {
+  try {
+    const res = await fetch(`${API}/clients/${CLIENT_ID}/status`, {
+      method: 'PATCH', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ status })
+    }).then(r => r.json());
+    if (!res.ok) throw new Error(res.error);
+    state.client.status = status;
+    renderStepper(status);
+    document.getElementById('topBadge').className = `badge badge-${status}`;
+    document.getElementById('topBadge').textContent = STATUS_LABELS[status];
+    showToast(`Status → ${STATUS_LABELS[status]}`, 'success');
+    // Refresh activity
+    await load();
+  } catch (e) { showToast(e.message, 'error'); }
+}
+
+// ── Info Card ─────────────────────────────────────────────────────────────────
+function renderInfo(c) {
+  const rows = [
+    ['Niche',         c.niche || '—', 'niche'],
+    ['Contact',      c.contact_name || '—', 'contact_name'],
+    ['Phone',      c.contact_phone || '—', 'contact_phone'],
+    ['Email',        c.contact_email ? `<a href="mailto:${esc(c.contact_email)}">${esc(c.contact_email)}</a>` : '—', 'contact_email'],
+    ['Contract',      c.contract_url ? `<a href="${esc(c.contract_url)}" target="_blank">Open</a>` : '—', 'contract_url'],
+    ['Bot Goal',    GOAL_LABELS[c.goal] || c.goal || '—', 'goal'],
+    ['Tone',          TONE_LABELS[c.tone] || c.tone || '—', 'tone'],
+    ['Language',         c.language || 'en', 'language'],
+    ['SLA Owner',    c.sla_owner || '—', 'sla_owner'],
+    ['SLA Deadline',      c.sla_deadline || '—', 'sla_deadline'],
+    ['Priority',    c.priority || 'normal', 'priority'],
+    ['Notes',      c.notes ? `<span style="color:var(--muted);font-size:12px">${esc(c.notes).replace(/\n/g,'<br>')}</span>` : '—', 'notes'],
+    ['Created',       fmtDate(c.created_at), null],
+  ];
+
+  document.getElementById('infoCard').innerHTML = rows.map(([label, value, field]) => `
+    <div class="info-row">
+      <div class="info-label">${label}</div>
+      <div class="info-value ${field && editMode ? 'editable' : ''}" ${field && editMode ? `onclick="editField('${field}', this)"` : ''}>${value}</div>
+    </div>
+  `).join('');
+}
+
+function toggleEditInfo() {
+  editMode = !editMode;
+  document.getElementById('editInfoBtn').textContent = editMode ? 'Done' : 'Edit';
+  renderInfo(state.client);
+  if (!editMode) saveClientInfo();
+}
+
+async function saveClientInfo() {
+  try {
+    const res = await fetch(`${API}/clients/${CLIENT_ID}`, {
+      method: 'PUT', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(state.client)
+    }).then(r => r.json());
+    if (!res.ok) throw new Error(res.error);
+    state.client = res.client;
+    showToast('Saved', 'success');
+    renderInfo(state.client);
+  } catch (e) { showToast(e.message, 'error'); }
+}
+
+function editField(field, el) {
+  if (el.querySelector('input,select,textarea')) return;
+  const val = state.client[field] || '';
+  const selectFields = {
+    goal: ['leads','support','faq','sales'],
+    tone: ['friendly','formal','casual'],
+    language: ['ru','en','kz'],
+    priority: ['normal','high','low'],
+  };
+  let input;
+  if (selectFields[field]) {
+    input = document.createElement('select');
+    input.className = 'edit-input';
+    selectFields[field].forEach(opt => {
+      const o = document.createElement('option');
+      o.value = opt; o.textContent = opt;
+      if (opt === val) o.selected = true;
+      input.appendChild(o);
+    });
+  } else if (field === 'notes') {
+    input = document.createElement('textarea');
+    input.className = 'edit-input'; input.rows = 3; input.value = val;
+  } else {
+    input = document.createElement('input');
+    input.className = 'edit-input'; input.type = 'text'; input.value = val;
+  }
+  input.onblur = () => { state.client[field] = input.value; renderInfo(state.client); };
+  input.onkeydown = (e) => { if (e.key === 'Enter') input.blur(); };
+  el.innerHTML = ''; el.appendChild(input); input.focus();
+}
+
+// ── Channels ──────────────────────────────────────────────────────────────────
+function renderChannels(channels, bots) {
+  const botId = bots[0]?.id || null;
+  const ch = { instagram: null, messenger: null, telegram: null, whatsapp: null };
+  channels.forEach(c => ch[c.type] = c);
+
+  const items = [
+    { type: 'instagram', label: 'Instagram', cls: 'ch-ig', icon: 'IG',
+      connectPath: `/auth/instagram?client_id=${CLIENT_ID}&bot_id=${botId}` },
+    { type: 'messenger', label: 'Messenger',  cls: 'ch-ms', icon: 'MS',
+      connectPath: `/auth/messenger?client_id=${CLIENT_ID}&bot_id=${botId}` },
+    { type: 'telegram',  label: 'Telegram',   cls: 'ch-tg', icon: 'TG', connectPath: 'tg_modal' },
+    { type: 'whatsapp',  label: 'WhatsApp',   cls: 'ch-wa', icon: 'WA', connectPath: null },
+  ];
+
+  document.getElementById('channelsGrid').innerHTML = items.map(({ type, label, cls, icon, connectPath }) => {
+    const data = ch[type];
+    const connected = data?.status === 'connected';
+    const dotClass = connected ? 'dot-green' : (data?.status === 'error' ? 'dot-red' : 'dot-gray');
+    const subText = connected ? (data.page_name || data.username || 'Connected') : 'Not connected';
+    const since = connected && data.connected_at ? `Connected ${fmtDate(data.connected_at)}` : '';
+
+    return `
+      <div class="channel-card ${connected ? 'connected' : ''}">
+        <div class="channel-top">
+          <div class="channel-icon ${cls}">${icon}</div>
+          <div>
+            <div class="channel-name">${label}</div>
+            <div class="channel-sub">${esc(subText)}</div>
+          </div>
+          <div class="status-dot ${dotClass}"></div>
+        </div>
+        ${since ? `<div class="channel-info">${since}</div>` : '<div class="channel-info" style="height:16px"></div>'}
+        <div class="channel-actions">
+          ${connected
+            ? `<button class="btn btn-danger" onclick="disconnectChannel('${data.id}')">Disconnect</button>`
+            : connectPath === 'tg_modal'
+              ? `<button class="btn btn-green" onclick="openTgModal()">Connect</button>`
+              : connectPath
+                ? `<button class="btn btn-green" onclick="connectChannel('${connectPath}')">Connect</button>`
+                : `<button class="btn btn-ghost" title="In development" disabled>Soon</button>`
+          }
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function connectChannel(path) {
+  // Store client_id in session before OAuth
+  window.open(path, '_self');
+}
+
+async function disconnectChannel(channelId) {
+  if (!confirm('Disconnect channel?')) return;
+  try {
+    const res = await fetch(`${API}/channels/${channelId}/disconnect`, { method: 'PATCH' }).then(r => r.json());
+    if (!res.ok) throw new Error(res.error);
+    showToast('Channel disconnected', 'success');
+    await load();
+  } catch (e) { showToast(e.message, 'error'); }
+}
+
+// ── Tasks ──────────────────────────────────────────────────────────────────────
+function renderTasks(tasks) {
+  const list = document.getElementById('tasksList');
+  if (!tasks.length) { list.innerHTML = '<div class="empty-state">No tasks</div>'; return; }
+  list.innerHTML = tasks.map(t => `
+    <div class="task-item" id="task-${t.id}">
+      <input type="checkbox" class="task-checkbox" ${t.status==='done'?'checked':''} onchange="toggleTask('${t.id}', this.checked)" />
+      <span class="task-title ${t.status==='done'?'done':''}">${esc(t.title)}</span>
+      ${t.due_date ? `<span class="task-due">${t.due_date}</span>` : ''}
+      <button class="task-del" onclick="deleteTask('${t.id}')">×</button>
+    </div>
+  `).join('');
+}
+
+async function addTask() {
+  const input = document.getElementById('taskInput');
+  const title = input.value.trim();
+  if (!title) return;
+  try {
+    const res = await fetch(`${API}/clients/${CLIENT_ID}/tasks`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ title })
+    }).then(r => r.json());
+    if (!res.ok) throw new Error(res.error);
+    input.value = '';
+    state.tasks.push(res.task);
+    renderTasks(state.tasks);
+  } catch (e) { showToast(e.message, 'error'); }
+}
+
+async function toggleTask(id, done) {
+  try {
+    const task = state.tasks.find(t => t.id === id);
+    if (!task) return;
+    task.status = done ? 'done' : 'todo';
+    await fetch(`${API}/tasks/${id}`, {
+      method: 'PUT', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ ...task, status: task.status })
+    });
+    renderTasks(state.tasks);
+  } catch (e) { showToast(e.message, 'error'); }
+}
+
+async function deleteTask(id) {
+  try {
+    await fetch(`${API}/tasks/${id}`, { method: 'DELETE' });
+    state.tasks = state.tasks.filter(t => t.id !== id);
+    renderTasks(state.tasks);
+  } catch (e) { showToast(e.message, 'error'); }
+}
+
+// ── Bot ────────────────────────────────────────────────────────────────────────
+function renderBot(bot) {
+  if (!bot) {
+    document.getElementById('botPrompt').value = '';
+    document.getElementById('botKnowledge').value = '';
+    return;
+  }
+  document.getElementById('botVersion').textContent = `v${bot.version}`;
+  document.getElementById('botPrompt').value = bot.prompt || '';
+  document.getElementById('botKnowledge').value = bot.knowledge_base || '';
+  updateCounts();
+}
+
+function updateCounts() {
+  const p = document.getElementById('botPrompt').value;
+  const k = document.getElementById('botKnowledge').value;
+  document.getElementById('promptCount').textContent = `${p.length} characters`;
+  document.getElementById('knowledgeCount').textContent = `${k.length} characters`;
+}
+document.getElementById('botPrompt').addEventListener('input', updateCounts);
+document.getElementById('botKnowledge').addEventListener('input', updateCounts);
+
+async function saveBot() {
+  if (!currentBot) {
+    // Create bot first
+    const res = await fetch(`${API}/clients/${CLIENT_ID}/bots`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ name: state.client?.company + ' Bot' })
+    }).then(r => r.json());
+    if (!res.ok) { showToast(res.error, 'error'); return; }
+    currentBot = res.bot;
+    state.bots = [currentBot];
+  }
+
+  try {
+    const res = await fetch(`${API}/bots/${currentBot.id}`, {
+      method: 'PUT', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        name: currentBot.name,
+        prompt: document.getElementById('botPrompt').value,
+        knowledge_base: document.getElementById('botKnowledge').value,
+      })
+    }).then(r => r.json());
+    if (!res.ok) throw new Error(res.error);
+    currentBot = res.bot;
+    state.bots[0] = currentBot;
+    document.getElementById('botVersion').textContent = `v${res.bot.version}`;
+    showToast('Bot saved and deployed ✓', 'success');
+    // Refresh log
+    const logRes = await fetch(`${API}/clients/${CLIENT_ID}`).then(r => r.json());
+    if (logRes.ok) { state.activity = logRes.activity; renderLog(state.activity); }
+  } catch (e) { showToast(e.message, 'error'); }
+}
+
+// ── Conversations ─────────────────────────────────────────────────────────────
+async function loadMessages() {
+  try {
+    const res = await fetch(`${API}/clients/${CLIENT_ID}/messages?limit=50`).then(r => r.json());
+    if (!res.ok) throw new Error(res.error);
+    const list = document.getElementById('convList');
+    if (!res.messages.length) { list.innerHTML = '<div class="empty-state">No messages</div>'; return; }
+    list.innerHTML = res.messages.map(m => `
+      <div class="msg-item ${m.direction}">
+        <div class="msg-arrow">${m.direction === 'in' ? '←' : '→'}</div>
+        <div class="msg-body">
+          <div class="msg-sender">${esc(m.sender_name || m.sender_id || (m.direction==='out'?'Bot':'User'))} · ${esc(m.channel)}</div>
+          <div class="msg-text">${esc(m.text || '')}</div>
+          ${m.direction === 'in' ? `
+            <button class="reply-btn" onclick="toggleReply(this)">Reply manually</button>
+            <div class="reply-box">
+              <textarea class="reply-input" placeholder="Type your reply..."></textarea>
+              <div class="reply-actions">
+                <button class="btn btn-ghost" style="padding:4px 8px;font-size:11px" onclick="toggleReply(this)">Cancel</button>
+                <button class="btn btn-primary" style="padding:4px 12px;font-size:11px" onclick="sendReply(this, '${esc(m.channel)}', '${esc(m.sender_id)}')">Send</button>
+              </div>
+            </div>
+          ` : ''}
+        </div>
+        <div class="msg-time">${fmtDate(m.created_at)}</div>
+      </div>
+    `).join('');
+  } catch (e) { showToast(e.message, 'error'); }
+}
+
+function toggleReply(btn) {
+  const body = btn.closest('.msg-body');
+  const box = body.querySelector('.reply-box');
+  const rBtn = body.querySelector('.reply-btn');
+  const isOpen = box.classList.toggle('open');
+  rBtn.style.display = isOpen ? 'none' : '';
+  if (isOpen) box.querySelector('textarea').focus();
+}
+
+async function sendReply(btn, channel, senderId) {
+  const box = btn.closest('.reply-box');
+  const input = box.querySelector('textarea');
+  const text = input.value.trim();
+  if (!text) return;
+
+  btn.disabled = true;
+  const oldText = btn.textContent;
+  btn.textContent = 'Sending...';
+
+  try {
+    const res = await fetch(`${API}/send-message`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        client_id: CLIENT_ID,
+        channel,
+        sender_id: senderId,
+        text
+      })
+    }).then(r => r.json());
+
+    if (!res.ok) throw new Error(res.error);
+    showToast('Message sent!', 'success');
+    input.value = '';
+    toggleReply(btn.closest('.msg-body').querySelector('.reply-btn') || btn);
+    loadMessages();
+  } catch (e) {
+    showToast(e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = oldText;
+  }
+}
+
+// ── Log ────────────────────────────────────────────────────────────────────────
+function renderLog(activity) {
+  const list = document.getElementById('logList');
+  if (!activity.length) { list.innerHTML = '<div class="empty-state">No entries</div>'; return; }
+  list.innerHTML = activity.map(a => `
+    <div class="log-item">
+      <div class="log-dot"></div>
+      <div class="log-content">
+        <div class="log-action">${esc(a.action.replace(/_/g,' '))}</div>
+        ${a.details ? `<div class="log-details">${esc(a.details)}</div>` : ''}
+      </div>
+      <div class="log-time">${fmtDate(a.created_at)}</div>
+    </div>
+  `).join('');
+}
+
+// ── Tabs ───────────────────────────────────────────────────────────────────────
+function switchTab(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-' + id).classList.add('active');
+  if (id === 'conv') loadMessages();
+}
+
+// ── Utils ──────────────────────────────────────────────────────────────────────
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmtDate(s) {
+  if (!s) return '—';
+  try { return new Date(s).toLocaleString('en-US', { day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit' }); }
+  catch { return s; }
+}
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = `toast ${type} show`;
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ── Telegram Modal ─────────────────────────────────────────────────────────────
+function openTgModal() {
+  document.getElementById('tgToken').value = '';
+  document.getElementById('tgUsername').value = '';
+  document.getElementById('tgError').style.display = 'none';
+  document.getElementById('tgModal').classList.add('open');
+}
+
+function closeTgModal() {
+  document.getElementById('tgModal').classList.remove('open');
+}
+
+async function saveTelegram() {
+  const token    = document.getElementById('tgToken').value.trim();
+  const username = document.getElementById('tgUsername').value.trim().replace('@','');
+  const errEl    = document.getElementById('tgError');
+  errEl.style.display = 'none';
+
+  if (!token) { errEl.textContent = 'Enter bot token'; errEl.style.display = 'block'; return; }
+  if (!/^\d+:[A-Za-z0-9_-]{35,}$/.test(token)) {
+    errEl.textContent = 'Invalid token format. Example: 1234567890:AAxxxxxxxx...';
+    errEl.style.display = 'block'; return;
+  }
+
+  const btn = document.getElementById('tgSaveBtn');
+  btn.textContent = 'Checking...'; btn.disabled = true;
+
+  try {
+    // Verify token via Telegram API
+    const tgRes = await fetch(`https://api.telegram.org/bot${token}/getMe`).then(r=>r.json()).catch(()=>null);
+    if (!tgRes || !tgRes.ok) {
+      errEl.textContent = 'Verification failed. Please check the token.';
+      errEl.style.display = 'block'; return;
+    }
+
+    const botInfo = tgRes.result;
+    const botId = state.bots[0]?.id || null;
+
+    // Save to DB
+    const res = await fetch(`${API}/clients/${CLIENT_ID}/channels`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        bot_id: botId, type: 'telegram', status: 'connected',
+        page_name: botInfo.first_name || username,
+        username: '@' + (botInfo.username || username),
+        token, webhook_active: 0
+      })
+    }).then(r=>r.json());
+
+    if (!res.ok) throw new Error(res.error);
+
+    showToast(`✓ Telegram @${botInfo.username} connected`, 'success');
+    closeTgModal();
+    await load();
+  } catch(e) {
+    errEl.textContent = e.message || 'Save error';
+    errEl.style.display = 'block';
+  } finally {
+    btn.textContent = 'Connect'; btn.disabled = false;
+  }
+}
+
+// Close modal on overlay click
+document.getElementById('tgModal').addEventListener('click', function(e) {
+  if (e.target === this) closeTgModal();
+});
+
+load();
+</script>
+</body>
+</html>

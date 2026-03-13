@@ -1,0 +1,1538 @@
+// backend/src/webhook/handler.js
+import {
+    getUser,
+    setStep,
+    setData,
+    saveAndNext,
+    getT,
+    sendLanguageMenu,
+    sendConsent,
+    sendMainMenu,
+    sendScenario1VideoChoice,
+    sendScenario2VideoChoice,
+    jumpToStep,
+    sendSummary,
+    handleConfirmation,
+    sendNavPrompt,
+    sendOperatorPrompt,
+    goToMenuPreserveLang,
+    sendInteractiveButtons,
+    sendAfterDocMenu,
+    forwardToSupport,
+    sendNotaryList,
+    sendWhatsAppMessage,
+    sendInteractiveList,
+    sendWhatsAppDocument,
+    sendTelegramMessage
+} from "./helpers.js";
+
+import {
+    NAV_MENU_ID,
+    NAV_BACK_ID,
+    NAV_EDIT_ID,
+    AFTER_DOC_STEP,
+    AFTER_Q_ID,
+    AFTER_FB_ID,
+    AFTER_RAHMET_ID,
+    AFTER_MENU_ID,
+    S1_VIDEO_WATCH_ID,
+    S1_VIDEO_CONTINUE_ID,
+    S2_VIDEO_WATCH_ID,
+    S2_VIDEO_CONTINUE_ID,
+    MENU_MORE_ID
+} from "./constants.js";
+
+import { isValidDate, isValidIIN, isValidEmail, normalizeOptional } from "./validators.js";
+import axios from "axios";
+import fs from "fs";
+import path from "path";
+import { notaryDb } from "./notaryDbInstance.js";
+import { DOCUMENTS, FIELD_QUESTIONS, FIELD_VALIDATORS } from "./documents.js";
+import { formatNotary, slicePage, getPageSize } from "./flows/notaryLookupFlow.js";
+import { sendScenario1Video, sendScenario2Video, sendMoreDocsMenu } from "./helpers.js";
+
+import { resetUser, initUser, setTemplate } from "./memory/userState.js";
+
+const NOTARY_PAGE_SIZE = getPageSize();
+
+async function setLookupData(from, updates) {
+    for (const [k, v] of Object.entries(updates)) {
+        await setData(from, k, v);
+    }
+}
+
+async function clearNotaryLookup(from) {
+    await setLookupData(from, {
+        notary_lookup_mode: null,
+        notary_lookup_query: null,
+        notary_lookup_results: null,
+        notary_lookup_page: null,
+        selected_notary_id: null,
+    });
+}
+
+const EVENTS_PATH = "/var/www/dockz/whatsapp/stats/events.json";
+
+function logEvent(event) {
+    try {
+        const dir = path.dirname(EVENTS_PATH);
+        fs.mkdirSync(dir, { recursive: true });
+        let arr = [];
+        if (fs.existsSync(EVENTS_PATH)) {
+            try {
+                const raw = fs.readFileSync(EVENTS_PATH, "utf-8");
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) arr = parsed;
+            } catch (e) {
+                arr = [];
+            }
+        }
+        arr.push(event);
+        fs.writeFileSync(EVENTS_PATH, JSON.stringify(arr, null, 2));
+    } catch (e) {
+        console.error("Failed to log event:", e.message);
+    }
+}
+
+
+const DOC_GEN_URL = process.env.DOC_GEN_URL || "http://127.0.0.1:3011/generate/document";
+const ONLY_DOC_KEY = "vozrazhenie";
+const ONLY_DOC_CHOICE_ID = "doc_choice_voz";
+
+function getDoc(key) {
+    return DOCUMENTS[key] || null;
+}
+
+function isNoneValue(v) {
+    const s = String(v || "").trim().toLowerCase();
+    return s === "нет" || s === "нету" || s === "no" || s === "-";
+}
+
+function validateFieldValue(field, value) {
+    const rule = FIELD_VALIDATORS[field];
+    if (!rule) return { ok: true, value };
+    if (rule === "iin") return { ok: isValidIIN(value), value };
+    if (rule === "email_optional") {
+        if (isNoneValue(value)) return { ok: true, value: "" };
+        return { ok: isValidEmail(value), value };
+    }
+    if (rule === "phone_optional") {
+        if (isNoneValue(value)) return { ok: true, value: "" };
+        return { ok: true, value };
+    }
+    return { ok: true, value };
+}
+
+async function sendDocMenu(from) {
+    const doc = getDoc(ONLY_DOC_KEY);
+    const rows = [{
+        id: `doc:${ONLY_DOC_KEY}`,
+        title: doc?.title || "✍️ Возражение",
+        description: doc?.intro || "Исполнительная надпись",
+    }];
+    await sendInteractiveList(from, "📂 Меню документов", "Открыть", [
+        { title: "Документы", rows }
+    ]);
+}
+
+async function sendDocIntro(from, doc) {
+    await sendWhatsAppMessage(from, doc.intro);
+    await sendInteractiveButtons(from, "Что дальше?", [
+        { id: `startdoc:${doc.key}`, title: "📝 Начать оформление" },
+        { id: NAV_MENU_ID, title: "📂 Меню" },
+    ]);
+}
+
+async function askDocQuestion(from) {
+    const state = await getUser(from);
+    const d = state?.data || {};
+    const doc = getDoc(d.doc_key);
+    if (!doc) return goToMenuPreserveLang(from);
+
+    const idx = Number(d.doc_index || 0);
+    const field = doc.fields[idx];
+    if (!field) return sendDocConfirm(from);
+
+    if (field === "notary") {
+        await setData(from, "doc_waiting_notary", true);
+        await setStep(from, "s2_notary_choice");
+        const t = await getT(from);
+        await sendInteractiveButtons(from, t.notary_choice_ask, [
+            { id: "s2_choice_search", title: t.btn_search_base },
+            { id: "s2_choice_manual", title: t.btn_manual_entry },
+            { id: NAV_MENU_ID, title: t.btn_menu },
+        ]);
+        return;
+    }
+
+    const question = FIELD_QUESTIONS[field] || "Введите значение:";
+    await setStep(from, "doc_fill");
+    await sendNavPrompt(from, question);
+}
+
+async function startDocFlow(from, key) {
+    const doc = getDoc(key);
+    if (!doc) return goToMenuPreserveLang(from);
+    await setData(from, "doc_key", key);
+    await setData(from, "doc_index", 0);
+    await setData(from, "doc_waiting_notary", false);
+    await setStep(from, "doc_fill");
+    await askDocQuestion(from);
+}
+
+async function sendDocConfirm(from) {
+    await setStep(from, "doc_confirm");
+    const state = await getUser(from);
+    const d = state?.data || {};
+    const doc = getDoc(d.doc_key);
+    if (!doc) return goToMenuPreserveLang(from);
+
+    const lines = ["Проверьте данные:"];
+    for (const f of doc.fields) {
+        if (f === "notary") {
+            lines.push(`Нотариус: ${d.notary_full_name || "—"}`);
+            continue;
+        }
+        const label = FIELD_QUESTIONS[f] || f;
+        const val = d[f] || "—";
+        lines.push(`${label} ${val}`);
+    }
+    await sendWhatsAppMessage(from, lines.join("\n"));
+    await sendInteractiveButtons(from, "Продолжаем?", [
+        { id: "confirm_yes", title: "✅ Сгенерировать" },
+        { id: "nav_edit", title: "✏️ Исправить" },
+        { id: "entry_services", title: "📂 Меню документов" },
+    ]);
+}
+
+async function sendEditMenu(from) {
+    const state = await getUser(from);
+    const d = state?.data || {};
+    const doc = getDoc(d.doc_key);
+    if (!doc) return goToMenuPreserveLang(from);
+
+    const rows = doc.fields.map(f => ({
+        id: `editfield:${f}`,
+        title: (FIELD_QUESTIONS[f] || f).slice(0, 24),
+    }));
+    await sendInteractiveList(from, "Что хотите изменить?", "Выбрать", [
+        { title: "Поля", rows }
+    ]);
+}
+
+async function generateDoc(from) {
+    const state = await getUser(from);
+    const d = state?.data || {};
+    const doc = getDoc(d.doc_key);
+    if (!doc) return goToMenuPreserveLang(from);
+
+    const today = new Date().toLocaleDateString("ru-RU");
+    const data = {
+        ...d,
+        current_date: today,
+        currentDate: today,
+        appealDate: today,
+        phone: from,
+    };
+
+    if (doc.key === "zayavlenie") {
+        data.bailiff_address = d.bailiff_address || d.bailiff_region || "";
+        data.bailiff_phone = d.bailiff_phone || "";
+        data.bailiff_email = d.bailiff_email || "";
+        data.case_date = d.case_date || "";
+    }
+
+    if (doc.key === "notary_docs") {
+        data.notary_name = d.notary_full_name || d.notary_name || "";
+        data.notary_address = d.notary_address || d.notary_region || "";
+        data.notary_phone = d.notary_phone || "";
+        data.notary_email = d.notary_email || "";
+        data.case_date = d.case_date || "";
+    }
+
+    if (doc.key === "vozrazhenie") {
+        data.notary_name = d.notary_full_name || d.notary_name || "";
+        data.debt_amount = d.debt_amount || "";
+    }
+
+    if (doc.key === "complaint_chamber" || doc.key === "complaint_court" || doc.key === "complaint_justice") {
+        data.notaryName = d.comp_bailiff_name || d.notary_full_name || "";
+        data.notaryAddress = d.comp_region || d.bailiff_region || d.bailiff_address || "";
+        data.bankName = d.comp_bank || d.bank_name || "";
+        data.arrestDate = d.comp_arrest_date || d.case_date || "";
+        data.debtorName = d.client_full_name || "";
+        data.debtorIIN = d.iin || "";
+        data.debtorAddress = d.client_address || "";
+        data.debtorPhone = d.client_phone || "";
+        if (doc.key === "complaint_court") {
+            data.caseNumber = d.case_number || "";
+        }
+    }
+
+    const payload = {
+        template: doc.template,
+        data,
+        lang: d.lang || "ru",
+    };
+
+    try {
+        await sendWhatsAppMessage(from, (await getT(from)).processing);
+        const gen = await axios.post(DOC_GEN_URL, payload, { timeout: 60000 });
+        if (!gen.data?.url) throw new Error("No URL in response");
+        await setData(from, "__last_doc_url", gen.data.url);
+
+        await sendWhatsAppDocument(from, gen.data.url, `${doc.key}.pdf`);
+
+        await sendAfterDelivery(from);
+        await setStep(from, "after_delivery");
+        await setData(from, "doc_key", null);
+        await setData(from, "doc_index", null);
+        await setData(from, "doc_waiting_notary", false);
+
+        try {
+            await sendTelegramMessage(`✅ <b>DOC GENERATED</b>
+To: ${from}
+Template: ${doc.template}
+Link: ${gen.data.url}`);
+        } catch (err) { }
+    } catch (e) {
+        console.error("❌ Generation failed:", e.message);
+        try {
+            await sendTelegramMessage(`🚨 <b>GEN ERROR</b>
+To: ${from}
+Error: ${e.message}`);
+        } catch (err) { }
+        const t = await getT(from);
+        await sendWhatsAppMessage(from, "❌ " + (t.error_gen || "Ошибка создания документа."));
+    }
+}
+
+
+function buildNotaryResultsBody(page, total) {
+    const start = page * NOTARY_PAGE_SIZE + 1;
+    const end = Math.min(total, page * NOTARY_PAGE_SIZE + NOTARY_PAGE_SIZE);
+    return `Нашёл варианты (${start}–${end} из ${total}). Выберите нотариуса:`;
+}
+
+async function resolveNotaryById(id) {
+    const fromCsv = notaryDb.getById(id);
+    if (fromCsv) return fromCsv;
+    try {
+        const { getNotaryById } = await import("./db.js");
+        const n = getNotaryById(id);
+        if (!n) return null;
+        return {
+            id: String(n.id),
+            full_name: n.fio || "",
+            region: n.region || "",
+            address: n.address || "",
+            phone: n.phone || "",
+            email: n.email || "",
+        };
+    } catch (e) {
+        return null;
+    }
+}
+
+async function searchNotariesSafe(query) {
+    const q = String(query || "").trim();
+    if (!q) return [];
+    const fromCsv = notaryDb.search(q, 50);
+    if (fromCsv && fromCsv.length) return fromCsv;
+    try {
+        const { searchNotaries } = await import("./db.js");
+        const rows = searchNotaries(q) || [];
+        return rows.map(n => ({
+            id: String(n.id),
+            full_name: n.fio || "",
+            region: n.region || "",
+            address: n.address || "",
+            phone: n.phone || "",
+            email: n.email || "",
+        }));
+    } catch (e) {
+        return [];
+    }
+}
+
+async function sendNotaryResults(from, results, page, t) {
+    const total = results.length;
+    const pageItems = slicePage(results, page);
+
+    const start = page * NOTARY_PAGE_SIZE + 1;
+    const end = Math.min(total, page * NOTARY_PAGE_SIZE + NOTARY_PAGE_SIZE);
+
+    const rows = pageItems.map(n => ({
+        id: `notary_pick:${n.id}`,
+        title: (n.full_name || "—").slice(0, 24),
+        description: (n.region || n.address || "").slice(0, 72),
+    }));
+
+    await sendInteractiveList(from, `Нашёл варианты (${start}–${end} из ${total}). Выберите нотариуса:`, `Выбрать ${start}–${end}`, [
+        { title: "Нотариусы", rows }
+    ]);
+
+    // If there is another page, send its list immediately below
+    const nextPage = page + 1;
+    if (nextPage * NOTARY_PAGE_SIZE < total) {
+        const nextStart = nextPage * NOTARY_PAGE_SIZE + 1;
+        const nextEnd = Math.min(total, nextPage * NOTARY_PAGE_SIZE + NOTARY_PAGE_SIZE);
+        const nextItems = slicePage(results, nextPage);
+        const nextRows = nextItems.map(n => ({
+            id: `notary_pick:${n.id}`,
+            title: (n.full_name || "—").slice(0, 24),
+            description: (n.region || n.address || "").slice(0, 72),
+        }));
+        await sendInteractiveList(from, `Нашёл варианты (${nextStart}–${nextEnd} из ${total}). Выберите нотариуса:`, `Выбрать ${nextStart}–${nextEnd}`, [
+            { title: "Нотариусы", rows: nextRows }
+        ]);
+    }
+
+    // Actions (3 fixed buttons)
+    await sendInteractiveButtons(from, "Действия:", [
+        { id: "notary_find", title: "🔎 Новый поиск" },
+        { id: "notary_back_pick", title: "◀️ Назад" },
+        { id: "nav_menu", title: "🏠 Меню" },
+    ]);
+}
+// ===== Entry/Docs FSM v2 =====
+const DOC_MENU_ITEMS = [
+    { id: "doc_choice_voz", key: "vozrazhenie", title: "✍️ Возражение", desc: "Исполнительная надпись" },
+];
+
+function getDocKeyFromChoice(id) {
+    const item = DOC_MENU_ITEMS.find(x => x.id === id);
+    return item ? item.key : null;
+}
+
+async function sendGreetingStart(from) {
+    const text = "Здравствуйте! 👋 Поможем подготовить возражение на исполнительную надпись.";
+    await sendInteractiveButtons(from, text, [
+        { id: "ux_start", title: "🚀 Начать" },
+        { id: "ux_how", title: "ℹ️ Как работает?" },
+        { id: ONLY_DOC_CHOICE_ID, title: "📝 Оформить" }
+    ]);
+}
+
+async function sendDiagnosticPath(from) {
+    const text = `Вы знаете, КТО именно наложил арест на ваш счет или возбудил дело?`;
+    await sendInteractiveButtons(from, text, [
+        { id: "ux_chsi", title: "🕵️ ЧСИ / Нотариус" },
+        { id: "ux_court", title: "⚖️ Суд" },
+        { id: "ux_unknown", title: "🤷‍♂️ Не знаю" }
+    ]);
+}
+
+async function sendUnknownCheck(from) {
+    const text = `📌 Давайте проверим вместе!
+Перейдите по официальной ссылке: https://aisoip.adilet.gov.kz/
+Введите свой ИИН (это безопасно).
+Там будет указан инициатор в столбце «Орган, выдавший документ».
+
+Выберите, что там написано:`;
+    await sendInteractiveButtons(from, text, [
+        { id: "ux_chsi", title: "Нотариус / ЧСИ" },
+        { id: "ux_court", title: "Решение суда" },
+        { id: "nav_operator", title: "Не получается 🤷" }
+    ]);
+}
+
+async function sendChsiPath(from) {
+    const text = `Отлично! Чтобы снять арест от ЧСИ или нотариуса, нам нужно написать "Возражение" нотариусу или "Заявление" самому ЧСИ об отзыве.
+Что будем делать сейчас?`;
+    await sendInteractiveButtons(from, text, [
+        { id: "doc_choice_voz", title: "📝 Возражение" },
+        { id: "doc_choice_zayavlenie", title: "📄 Заявление ЧСИ" },
+        { id: "ux_diff", title: "В чем разница? ❓" }
+    ]);
+}
+
+async function sendChsiDiff(from) {
+    const text = `📖 **В чем разница?**
+• Возражение нотариусу — пишется, если вы не согласны с долгом и хотите отменить исполнительную надпись.
+• Заявление ЧСИ — пишется, чтобы ознакомиться с делом или запросить снятие ареста (если долг уже оплачен).`;
+    await sendInteractiveButtons(from, text, [
+        { id: "doc_choice_voz", title: "📝 Возражение" },
+        { id: "doc_choice_zayavlenie", title: "📄 Заявление ЧСИ" },
+        { id: "nav_operator", title: "Нужен совет 👤" }
+    ]);
+}
+async function sendDocMenuV2(from) {
+    const rows = DOC_MENU_ITEMS.map(d => ({
+        id: d.id,
+        title: d.title,
+        description: d.desc,
+    }));
+    await sendInteractiveList(from, "📂 Меню документов", "Открыть", [
+        { title: "Документы", rows },
+    ]);
+}
+
+async function sendDocInfo(from, key) {
+    const doc = getDoc(key);
+    if (!doc) return sendDocMenuV2(from);
+    const body = doc.intro || "Кратко о документе.";
+    await sendWhatsAppMessage(from, body);
+    await sendInteractiveButtons(from, "Что дальше?", [
+        { id: "fill_" + doc.key, title: "📝 Начать оформление" },
+        { id: "help_" + doc.key, title: "❓ Зачем нужен документ" },
+        { id: "entry_services", title: "📂 Меню документов" },
+    ]);
+}
+
+async function sendDocHelp(from, key) {
+    const doc = getDoc(key);
+    if (!doc) return sendDocMenuV2(from);
+    await sendWhatsAppMessage(from, "Зачем нужен документ:\n" + (doc.intro || ""));
+    await sendInteractiveButtons(from, "Дальше:", [
+        { id: "fill_" + doc.key, title: "📝 Начать оформление" },
+        { id: "entry_services", title: "📂 Меню документов" },
+    ]);
+}
+
+async function sendConsentEntry(from) {
+    const t = await getT(from);
+    await sendWhatsAppMessage(from, t.consent_text);
+    await sendInteractiveButtons(from, t.consent_title || "Согласие", [
+        { id: "consent_yes", title: "✅ Согласен" },
+        { id: "entry_services", title: "📂 Меню документов" },
+    ]);
+}
+
+async function startFormFlow(from, key) {
+    const doc = getDoc(key);
+    if (!doc) return sendDocMenuV2(from);
+    await setData(from, "doc_key", key);
+    await setData(from, "doc_index", 0);
+    await setData(from, "doc_waiting_notary", false);
+    await setStep(from, "doc_fill");
+    await askDocQuestion(from);
+}
+
+async function sendAfterDelivery(from) {
+    const t = await getT(from);
+    const donateText = t.donate_text || "✅ Документ готов и отправлен.\n\nЕсли было полезно — можете поддержать сервис на любую сумму 🙏";
+    await sendInteractiveButtons(from, donateText, [
+        { id: "donate_url", title: "💳 Поддержать" },
+        { id: "rate", title: "⭐ Отзыв" },
+        { id: "entry_services", title: "📂 Меню документов" },
+    ]);
+    await sendInteractiveButtons(from, "Хотите сказать спасибо?", [
+        { id: "thanks", title: "🙏 Рахмет" },
+        { id: "entry_services", title: "📂 Меню документов" },
+    ]);
+}
+
+async function sendThanksScreen(from) {
+    await sendWhatsAppMessage(from, "Рахмет! 😊");
+    await sendInteractiveButtons(from, "Дальше:", [
+        { id: "entry_services", title: "📂 Меню документов" },
+        { id: "donate_url", title: "💳 Поддержать" },
+    ]);
+}
+
+async function sendRateMenu(from) {
+    await sendInteractiveButtons(from, "Оцените, пожалуйста:", [
+        { id: "rate_5", title: "⭐⭐⭐⭐⭐" },
+        { id: "rate_4", title: "⭐⭐⭐⭐" },
+        { id: "rate_3", title: "⭐⭐⭐" },
+    ]);
+}
+
+async function sendRateThanks(from) {
+    await sendWhatsAppMessage(from, "Спасибо за отзыв!");
+    await sendInteractiveButtons(from, "Дальше:", [
+        { id: "entry_services", title: "📂 Меню документов" },
+        { id: "donate_url", title: "💳 Поддержать" },
+    ]);
+}
+
+async function sendContactSpecialist(from) {
+    const t = await getT(from);
+    await sendWhatsAppMessage(from, t.operator_ask || "Опишите ситуацию — я передам специалисту.");
+    await sendInteractiveButtons(from, "Дальше:", [
+        { id: "entry_services", title: "📂 Меню документов" },
+        { id: "entry", title: "◀️ Назад" },
+    ]);
+}
+
+
+export async function handleIncoming(from, textArg) {
+    try {
+        const text = (textArg || "").trim();
+        const cleanBox = text.toLowerCase();
+
+        const user = await getUser(from);
+        let step = user ? user.step : null;
+
+        // Force-generate on confirm button title (WhatsApp sometimes sends title, not id)
+        const rawLower = String(text || "").toLowerCase();
+        if (step === "doc_confirm" && (cleanBox === "confirm_yes" || cleanBox === "gendoc" || rawLower.includes("сгенер"))) {
+            await generateDoc(from);
+            return;
+        }
+
+        console.log(`📠 Incoming from ${from}: "${text}" (Step: ${step})`);
+
+        // Global reset
+        if (cleanBox === "/reset" || cleanBox === "reset" || cleanBox === "start" || cleanBox === "старт") {
+            console.log(`🔄 RESET triggered for ${from}`);
+            try {
+                const user = await getUser(from);
+                const name = user?.data ? JSON.parse(user.data).profile_name || "" : "";
+                await sendTelegramMessage(`✨ <b>НОВЫЙ ВХОД</b>\n👤 +${from} ${name ? `(${name})` : ""}`);
+            } catch (e) { }
+
+            await resetUser(from);
+            await initUser(from); // Re-init to ensure session exists
+            await sendGreetingStart(from);
+            await setStep(from, "ux_greeting");
+            return;
+        }
+
+        // TEST CRASH (Temporary)
+        if (cleanBox === "/test_crash" || cleanBox === "test_crash") {
+            throw new Error("Тестовая ошибка для проверки Telegram логов! 🧪");
+        }
+        // New user -> ENTRY
+        if (!step) {
+            await initUser(from);
+            await sendGreetingStart(from);
+            await setStep(from, "ux_greeting");
+            return;
+        }
+
+        // UX Flow Step 1: Greeting
+        if (cleanBox === "ux_start") {
+            await setData(from, "doc_key", ONLY_DOC_KEY);
+            await setStep(from, "doc_info");
+            await sendDocInfo(from, ONLY_DOC_KEY);
+            return;
+        }
+        if (cleanBox === "ux_how") {
+            await sendWhatsAppMessage(from, "Вы заполняете данные в WhatsApp, после проверки формируется документ. Стоимость: 1990 ₸. Оплата после заполнения.");
+            await setData(from, "doc_key", ONLY_DOC_KEY);
+            await setStep(from, "doc_info");
+            await sendDocInfo(from, ONLY_DOC_KEY);
+            return;
+        }
+
+        // UX Flow Step 2: Diagnostic Path
+        if (cleanBox === "ux_chsi") {
+            await setData(from, "doc_key", ONLY_DOC_KEY);
+            await setStep(from, "doc_info");
+            await sendDocInfo(from, ONLY_DOC_KEY);
+            return;
+        }
+        if (cleanBox === "ux_court") {
+            await setData(from, "doc_key", ONLY_DOC_KEY);
+            await setStep(from, "doc_info");
+            await sendDocInfo(from, ONLY_DOC_KEY);
+            return;
+        }
+        if (cleanBox === "ux_unknown") {
+            await setData(from, "doc_key", ONLY_DOC_KEY);
+            await setStep(from, "doc_info");
+            await sendDocInfo(from, ONLY_DOC_KEY);
+            return;
+        }
+
+        // UX Flow Step 3: CHSI Path Differentiation
+        if (cleanBox === "ux_diff") {
+            await setData(from, "doc_key", ONLY_DOC_KEY);
+            await setStep(from, "doc_info");
+            await sendDocInfo(from, ONLY_DOC_KEY);
+            return;
+        }
+
+        // ENTRY/Docs FSM v2 routing
+        if (["меню", "menu", "главное меню"].includes(cleanBox)) {
+            await setStep(from, "doc_menu");
+            await sendDocMenuV2(from);
+            return;
+        }
+
+        if (cleanBox === "entry" || cleanBox === "entry_check") {
+            await setStep(from, "ux_greeting");
+            await sendGreetingStart(from);
+            return;
+        }
+        if (cleanBox === "entry_services" || cleanBox === "nav_documents") {
+            await setStep(from, "doc_menu");
+            await sendDocMenuV2(from);
+            return;
+        }
+        if (cleanBox === "nav_operator" || cleanBox === "operator") {
+            await setStep(from, "contact_specialist");
+            await sendContactSpecialist(from);
+            return;
+        }
+        if (cleanBox === "donate_url") {
+            const link = process.env.STRIPE_PAYMENT_LINK;
+            if (link) await sendWhatsAppMessage(from, link);
+            else await sendWhatsAppMessage(from, "Ссылка для поддержки временно недоступна.");
+            return;
+        }
+        if (cleanBox === "rate") {
+            await setStep(from, "rate_menu");
+            await sendRateMenu(from);
+            return;
+        }
+        if (cleanBox.startsWith("doc_choice_")) {
+            const key = ONLY_DOC_KEY;
+            await setData(from, "doc_key", key);
+            await setStep(from, "doc_info");
+            await sendDocInfo(from, key);
+            return;
+        }
+        if (cleanBox.startsWith("fill_")) {
+            const key = ONLY_DOC_KEY;
+            const user = await getUser(from);
+            if (user?.data?.gdpr_accepted) {
+                await startFormFlow(from, key);
+            } else {
+                await setData(from, "pending_doc_key", key);
+                await setStep(from, "consent_entry");
+                await sendConsentEntry(from);
+            }
+            return;
+        }
+        if (cleanBox.startsWith("editfield:")) {
+            const field = cleanBox.split(":")[1];
+            if (field) {
+                await setData(from, "doc_edit_field", field);
+                await setStep(from, "doc_edit");
+                const q = FIELD_QUESTIONS[field] || "Введите значение:";
+                await sendNavPrompt(from, q);
+                return;
+            }
+        }
+
+        // Rating (FSM v2)
+        // Rating (FSM v2)
+        if (cleanBox === "rate_5" || cleanBox === "rate_4" || cleanBox === "rate_3") {
+            const rating = parseInt(cleanBox.split("_")[1], 10) || null;
+            const state = await getUser(from);
+            logEvent({
+                ts: new Date().toISOString(),
+                type: "rating",
+                rating,
+                from,
+                step: state?.step || null,
+                template: state?.template || null,
+            });
+            await setStep(from, "rate_thanks");
+            await sendRateThanks(from);
+            return;
+        }
+
+        // After delivery (FSM v2)
+        if (cleanBox === "thanks") {
+            await setStep(from, "thanks_screen");
+            await sendThanksScreen(from);
+            return;
+        }
+        // Donate / Review actions (global)
+        if (cleanBox === "donate" || cleanBox === "donate_open") {
+            const t = await getT(from);
+            const link = process.env.STRIPE_PAYMENT_LINK;
+            await sendWhatsAppMessage(from, link ? `Ссылка для поддержки: ${link}` : t.donate_link_text);
+            return;
+        }
+        if (cleanBox === "review" || cleanBox === "review_open") {
+            const t = await getT(from);
+            await sendInteractiveButtons(from, t.review_prompt, [
+                { id: "rate_5", title: "⭐⭐⭐⭐⭐" },
+                { id: "rate_4", title: "⭐⭐⭐⭐" },
+                { id: "rate_3", title: "⭐⭐⭐" },
+                { id: NAV_MENU_ID, title: t.btn_menu },
+            ]);
+            return;
+        }
+        if (cleanBox === "thanks") {
+            const t = await getT(from);
+            await sendWhatsAppMessage(from, t.thanks_text || "Спасибо!");
+            await goToMenuPreserveLang(from);
+            return;
+        }
+        if (cleanBox === "rate_5" || cleanBox === "rate_4" || cleanBox === "rate_3") {
+            const rating = parseInt(cleanBox.split("_")[1], 10) || null;
+            const state = await getUser(from);
+            logEvent({
+                ts: new Date().toISOString(),
+                type: "rating",
+                rating,
+                from,
+                step: state?.step || null,
+                template: state?.template || null,
+            });
+            await sendWhatsAppMessage(from, "Спасибо!");
+            await goToMenuPreserveLang(from);
+            return;
+        }
+
+        // Documents menu
+        if (cleanBox === "doc_menu") {
+            await sendDocMenuV2(from);
+            return;
+        }
+        if (cleanBox.startsWith("doc:")) {
+            const doc = getDoc(ONLY_DOC_KEY);
+            if (doc) {
+                await sendDocIntro(from, doc);
+                return;
+            }
+        }
+
+        // Language selection (Deprecated in Hybrid, but kept for safety if needed)
+        if (step === "lang_selection") {
+            // For now, if we somehow land here, redirect to menu
+            await setStep(from, "main_menu");
+            await sendMainMenu(from);
+            return;
+        }
+
+        // Consent Entry (FSM v2)
+        if (step === "consent_entry") {
+            if (cleanBox === "consent_yes") {
+                await setData(from, "gdpr_accepted", true);
+                const user = await getUser(from);
+                const pendingDoc = user?.data?.pending_doc_key;
+                if (pendingDoc) {
+                    await setData(from, "pending_doc_key", null);
+                    await startFormFlow(from, pendingDoc);
+                    return;
+                }
+                await sendDocMenuV2(from);
+                await setStep(from, "doc_menu");
+                return;
+            }
+            if (cleanBox === "entry_services") {
+                await setStep(from, "doc_menu");
+                await sendDocMenuV2(from);
+                return;
+            }
+            await sendConsentEntry(from);
+            return;
+        }
+
+        // Consent Check (Post-Menu)
+        if (step === "consent_check") {
+            const t = await getT(from);
+
+            // If already accepted earlier, skip consent forever
+            {
+                const user = await getUser(from);
+                const accepted = !!(user?.data?.gdpr_accepted);
+                const dest = user?.data?.temp_destination;
+                const pendingDoc = user?.data?.pending_doc_key;
+                if (accepted) {
+                    if (pendingDoc) {
+                        await setData(from, "pending_doc_key", null);
+                        await startDocFlow(from, pendingDoc);
+                    } else if (dest === "s1_video_choice") {
+                        await setStep(from, "s1_video_choice");
+                        await sendScenario1VideoChoice(from);
+                    } else if (dest === "s2_video_choice") {
+                        await setStep(from, "s2_video_choice");
+                        await sendScenario2VideoChoice(from);
+                    } else {
+                        await sendMainMenu(from);
+                    }
+                    return;
+                }
+            }
+
+            if (cleanBox === "consent_yes") {
+                await setData(from, "gdpr_accepted", true);
+
+                // Redirect to destination
+                const user = await getUser(from);
+                const dest = user?.data?.temp_destination;
+                const pendingDoc = user?.data?.pending_doc_key;
+
+                if (pendingDoc) {
+                    await setData(from, "pending_doc_key", null);
+                    await startDocFlow(from, pendingDoc);
+                } else if (dest === "s1_video_choice") {
+                    await setStep(from, "s1_video_choice");
+                    await sendScenario1VideoChoice(from);
+                } else if (dest === "s2_video_choice") {
+                    await setStep(from, "s2_video_choice");
+                    await sendScenario2VideoChoice(from);
+                } else {
+                    // Fallback
+                    await sendMainMenu(from);
+                }
+                return;
+            }
+            if (cleanBox === "consent_no") {
+                await sendWhatsAppMessage(from, t.consent_declined);
+                await goToMenuPreserveLang(from);
+                return;
+            }
+            // Retry
+            await sendConsent(from);
+            return;
+        }
+
+        // Main Menu
+        if (step === "main_menu" || step === "more_docs_menu") {
+            if (cleanBox === "scenario_1") {
+                await setTemplate(from, "zayavlenie");
+                await setData(from, "temp_destination", "s1_video_choice");
+
+                const user = await getUser(from);
+                if (user?.data?.gdpr_accepted) {
+                    await setStep(from, "s1_video_choice");
+                    await sendScenario1VideoChoice(from);
+                } else {
+                    await setStep(from, "consent_check");
+                    await sendConsent(from);
+                }
+                return;
+            }
+            if (cleanBox === "scenario_2") {
+                await setTemplate(from, "vozrazhenie");
+                await setData(from, "temp_destination", "s2_video_choice");
+
+                const user = await getUser(from);
+                if (user?.data?.gdpr_accepted) {
+                    await setStep(from, "s2_video_choice");
+                    await sendScenario2VideoChoice(from);
+                } else {
+                    await setStep(from, "consent_check");
+                    await sendConsent(from);
+                }
+                return;
+            }
+            // [NEW] Hybrid Flows
+            if (cleanBox === "complaint_csi") {
+                const t = await getT(from);
+                await sendWhatsAppMessage(from, t.complaint_text);
+                await sendMainMenu(from); // Loop back
+                return;
+            }
+            if (cleanBox === "restruct") {
+                const t = await getT(from);
+                await sendWhatsAppMessage(from, t.restruct_text);
+                await sendMainMenu(from); // Loop back
+                return;
+            }
+
+            if (cleanBox === "scenario_3") {
+                await setTemplate(from, "notary_docs");
+                await setStep(from, "s2_notary_choice");
+                const t = await getT(from);
+                await sendInteractiveButtons(from, t.notary_choice_ask, [
+                    { id: "s2_choice_search", title: t.btn_search_base },
+                    { id: "s2_choice_manual", title: t.btn_manual_entry },
+                    { id: NAV_MENU_ID, title: t.btn_menu },
+                ]);
+                return;
+            }
+            if (cleanBox === "check_arrests") {
+                await setStep(from, "ux_greeting");
+                await sendGreetingStart(from);
+                return;
+            }
+            if (cleanBox === "info_how") {
+                const t = await getT(from);
+                await sendWhatsAppMessage(from, t.info_how_text);
+                await sendMainMenu(from);
+                return;
+            }
+            if (cleanBox === "info_price") {
+                const t = await getT(from);
+                await sendWhatsAppMessage(from, t.info_price_text);
+                await sendMainMenu(from);
+                return;
+            }
+            if (cleanBox === "info_contacts") {
+                const t = await getT(from);
+                await sendWhatsAppMessage(from, t.info_contacts_text);
+                await sendMainMenu(from);
+                return;
+            }
+            if (cleanBox === MENU_MORE_ID || cleanBox === "menu_more_docs") {
+                await setStep(from, "more_docs_menu");
+                await sendMoreDocsMenu(from);
+                return;
+            }
+            if (cleanBox === "operator") {
+                const t = await getT(from);
+                await setStep(from, "operator_text");
+                await sendOperatorPrompt(from, t.operator_ask);
+                return;
+            }
+        }
+
+        // Video Choices
+        if (step === "s1_video_choice") {
+            if (cleanBox === S1_VIDEO_WATCH_ID) {
+                await sendScenario1Video(from);
+                return;
+            }
+            if (cleanBox === S1_VIDEO_CONTINUE_ID) {
+                const t = await getT(from);
+                await setStep(from, "s1_bailiff_name");
+                await sendNavPrompt(from, t.steps_s1[0]);
+                return;
+            }
+            if (cleanBox === NAV_MENU_ID) {
+                await setStep(from, doc_menu);
+                await sendDocMenuV2(from);
+                return;
+            }
+        }
+
+        if (step === "s2_video_choice") {
+            if (cleanBox === S2_VIDEO_WATCH_ID) {
+                await sendScenario2Video(from);
+                return;
+            }
+            if (cleanBox === S2_VIDEO_CONTINUE_ID) {
+                const t = await getT(from);
+                await setStep(from, "s2_notary_choice");
+                await sendInteractiveButtons(from, t.notary_choice_ask, [
+                    { id: "s2_choice_search", title: t.btn_search_base },
+                    { id: "s2_choice_manual", title: t.btn_manual_entry },
+                    { id: NAV_MENU_ID, title: t.btn_menu },
+                ]);
+                return;
+            }
+            if (cleanBox === NAV_MENU_ID) return goToMenuPreserveLang(from);
+        }
+
+        // Operator
+        if (step === "operator_text") {
+            const t = await getT(from);
+            if (cleanBox === NAV_MENU_ID || cleanBox === "nav_back") return goToMenuPreserveLang(from);
+
+            await forwardToSupport("operator", from, text);
+            await sendWhatsAppMessage(from, t.operator_sent);
+            await goToMenuPreserveLang(from);
+            return;
+        }
+
+        // Handle Edit/Jump
+        if (text.startsWith("EDT:")) {
+            const stepKey = text.replace("EDT:", "");
+            await jumpToStep(from, stepKey);
+            return;
+        }
+
+        const t = await getT(from);
+
+        // Common Navigation
+        if (cleanBox === NAV_MENU_ID) return goToMenuPreserveLang(from);
+        if (cleanBox === NAV_BACK_ID) {
+            const { goBack } = await import("./helpers.js");
+            await goBack(from);
+            return;
+        }
+
+        switch (step) {
+            case "rate_menu": {
+                if (cleanBox === "entry_services") {
+                    await setStep(from, "doc_menu");
+                    await sendDocMenuV2(from);
+                    return;
+                }
+                return;
+            }
+            case "rate_thanks": {
+                if (cleanBox === "entry_services") {
+                    await setStep(from, "doc_menu");
+                    await sendDocMenuV2(from);
+                    return;
+                }
+                return;
+            }
+            case "doc_fill": {
+                const state = await getUser(from);
+                const d = state?.data || {};
+                const doc = getDoc(d.doc_key);
+                if (!doc) return goToMenuPreserveLang(from);
+
+                const idx = Number(d.doc_index || 0);
+                const field = doc.fields[idx];
+                if (!field) {
+                    await sendDocConfirm(from);
+                    return;
+                }
+
+                const { ok, value } = validateFieldValue(field, text);
+                if (!ok) {
+                    const q = FIELD_QUESTIONS[field] || "Введите значение:";
+                    await sendWhatsAppMessage(from, "Некорректное значение. Повторите.");
+                    await sendNavPrompt(from, q);
+                    return;
+                }
+
+                await setData(from, field, value);
+                await setData(from, "doc_index", idx + 1);
+                await askDocQuestion(from);
+                return;
+            }
+
+            case "doc_confirm": {
+                if (cleanBox === NAV_MENU_ID) return goToMenuPreserveLang(from);
+                const lowered = String(text || "").toLowerCase();
+                const norm = String(text || "").replace(/[^a-zA-Zа-яА-ЯёЁ]/g, "").toLowerCase();
+                if (cleanBox === "nav_edit" || cleanBox === "editdoc" || lowered.includes("исправ") || norm.includes("исправ")) {
+                    await sendEditMenu(from);
+                    return;
+                }
+                if (cleanBox === "confirm_yes" || cleanBox === "gendoc" || lowered.includes("сгенер") || norm.includes("сгенер")) {
+                    await generateDoc(from);
+                    return;
+                }
+                return;
+            }
+
+            case "doc_edit": {
+                if (cleanBox === NAV_MENU_ID) return goToMenuPreserveLang(from);
+                const state = await getUser(from);
+                const d = state?.data || {};
+                const field = d.doc_edit_field;
+                if (!field) {
+                    await sendDocConfirm(from);
+                    return;
+                }
+                const { ok, value } = validateFieldValue(field, text);
+                if (!ok) {
+                    const q = FIELD_QUESTIONS[field] || "Введите значение:";
+                    await sendWhatsAppMessage(from, "Некорректное значение. Повторите.");
+                    await sendNavPrompt(from, q);
+                    return;
+                }
+                await setData(from, field, value);
+                await setData(from, "doc_edit_field", null);
+                await sendDocConfirm(from);
+                return;
+            }
+
+            case "doc_done": {
+                if (cleanBox === NAV_MENU_ID) return goToMenuPreserveLang(from);
+                return;
+            }
+
+            // === POST-DOC MENU (RAHMET) ===
+            case AFTER_DOC_STEP: {
+                if (cleanBox === AFTER_MENU_ID) return goToMenuPreserveLang(from);
+
+                if (cleanBox === AFTER_RAHMET_ID) {
+                    await sendWhatsAppMessage(from, t.rahmet_reply);
+
+                    await sendInteractiveButtons(from, "👇", [
+                        { id: AFTER_FB_ID, title: t.rahmet_btn_rate || "⭐" },
+                        { id: AFTER_MENU_ID, title: t.btn_menu }
+                    ]);
+                    return;
+                }
+
+                if (cleanBox === AFTER_Q_ID) {
+                    await setStep(from, "after_question_text");
+                    await sendNavPrompt(from, t.after_doc_q_ask);
+                    return;
+                }
+                if (cleanBox === AFTER_FB_ID) {
+                    await setStep(from, "after_feedback_text");
+                    await sendNavPrompt(from, t.after_doc_fb_ask);
+                    return;
+                }
+
+                await sendAfterDocMenu(from);
+                return;
+            }
+
+            case "after_question_text": {
+                await forwardToSupport("question", from, text);
+                await sendWhatsAppMessage(from, t.after_doc_thanks);
+                await goToMenuPreserveLang(from);
+                return;
+            }
+
+            case "after_feedback_text": {
+                await forwardToSupport("feedback", from, text);
+                await sendWhatsAppMessage(from, t.after_doc_thanks);
+                await goToMenuPreserveLang(from);
+                return;
+            }
+
+            // === СЦЕНАРИЙ 1 ===
+            case "s1_bailiff_name":
+                await saveAndNext(from, "bailiff_name", text, "s1_bailiff_address", t.steps_s1[1]);
+                return;
+            case "s1_bailiff_address":
+                await saveAndNext(from, "bailiff_address", text, "s1_bailiff_phone", t.steps_s1[2]);
+                return;
+            case "s1_bailiff_phone":
+                await saveAndNext(from, "bailiff_phone", text, "s1_bailiff_email", t.steps_s1[3]);
+                return;
+            case "s1_bailiff_email":
+                await saveAndNext(from, "bailiff_email", text, "s1_case_number", t.steps_s1[4]);
+                return;
+            case "s1_case_number":
+                await saveAndNext(from, "case_number", text, "s1_case_date", t.steps_s1[5]);
+                return;
+            case "s1_case_date": {
+                if (!isValidDate(text)) {
+                    await sendWhatsAppMessage(from, t.errors.date);
+                    await sendNavPrompt(from, t.steps_s1[5]);
+                    return;
+                }
+                await saveAndNext(from, "case_date", text, "s1_client_full_name", t.steps_s1[6]);
+                return;
+            }
+            case "s1_client_full_name":
+                await saveAndNext(from, "client_full_name", text, "s1_client_address", t.steps_s1[7]);
+                return;
+            case "s1_client_address":
+                await saveAndNext(from, "client_address", text, "s1_iin", t.steps_s1[8]);
+                return;
+            case "s1_iin": {
+                if (!isValidIIN(text)) {
+                    await sendWhatsAppMessage(from, t.errors.iin);
+                    await sendNavPrompt(from, t.steps_s1[8]);
+                    return;
+                }
+                await saveAndNext(from, "iin", text, "s1_client_phone", t.steps_s1[9]);
+                return;
+            }
+            case "s1_client_phone": {
+                // Per user request, validation removed.
+                // if (!isValidPhone(text)) ...
+                await saveAndNext(from, "client_phone", text, "s1_client_email", t.steps_s1[10]);
+                return;
+            }
+            case "s1_client_email": {
+                if (!isValidEmail(text)) {
+                    await sendWhatsAppMessage(from, t.errors.email);
+                    await sendNavPrompt(from, t.steps_s1[10]);
+                    return;
+                }
+                await setData(from, "client_email", normalizeOptional(text));
+                await sendSummary(from);
+                await setStep(from, "s1_confirm");
+                return;
+            }
+            case "s1_confirm":
+                await handleConfirmation(from, cleanBox, "zayavlenie.pdf", t.doc_ready_s1);
+                return;
+            case "s1_confirm_declined": {
+                await sendWhatsAppMessage(from, "Исправьте данные и попробуйте снова.");
+                return;
+            }
+
+            // === СЦЕНАРИЙ 2 / 3 ===
+            case "s2_notary_choice": {
+                const state = await getUser(from);
+                const d = state?.data || {};
+                const mode = d.notary_lookup_mode || "pick";
+
+                if (cleanBox === NAV_MENU_ID) {
+                    await clearNotaryLookup(from);
+                    return goToMenuPreserveLang(from);
+                }
+
+                if (text === "notary_find" || text === "s2_choice_search") {
+                    await setLookupData(from, {
+                        notary_lookup_mode: "query",
+                        notary_lookup_query: null,
+                        notary_lookup_results: null,
+                        notary_lookup_page: 0,
+                        selected_notary_id: null,
+                    });
+                    await sendInteractiveButtons(from, "Введите ФИО нотариуса (или часть) для поиска:", [
+                        { id: "notary_back_pick", title: "◀️ Назад" },
+                        { id: NAV_MENU_ID, title: t.btn_menu },
+                    ]);
+                    return;
+                }
+
+                if (text === "notary_manual" || text === "s2_choice_manual") {
+                    await setLookupData(from, {
+                        notary_lookup_mode: "manual",
+                        selected_notary_id: null,
+                    });
+                    await sendInteractiveButtons(from, "Введите ФИО нотариуса вручную:", [
+                        { id: "notary_back_pick", title: "◀️ Назад" },
+                        { id: NAV_MENU_ID, title: t.btn_menu },
+                    ]);
+                    return;
+                }
+
+                if (text === "notary_back_pick") {
+                    await setLookupData(from, { notary_lookup_mode: "pick" });
+                    await sendInteractiveButtons(from, "Шаг 1/11. Как вы хотите указать нотариуса?", [
+                        { id: "notary_find", title: "🔎 Найти в базе" },
+                        { id: "notary_manual", title: "✍️ Ввести вручную" },
+                        { id: NAV_MENU_ID, title: t.btn_menu },
+                    ]);
+                    return;
+                }
+
+                if (text.startsWith("notary_page:")) {
+                    const page = parseInt(text.split(":")[1] || "0", 10) || 0;
+                    const ids = Array.isArray(d.notary_lookup_results) ? d.notary_lookup_results : [];
+                    const results = [];
+                    for (const id of ids) {
+                        const n = await resolveNotaryById(id);
+                        if (n) results.push(n);
+                    }
+                    await setLookupData(from, { notary_lookup_page: page, notary_lookup_mode: "results" });
+                    if (results.length) {
+                        await sendNotaryResults(from, results, page, t);
+                    } else {
+                        await sendInteractiveButtons(from, "Ничего не найдено.", [
+                            { id: "notary_find", title: "🔎 Новый поиск" },
+                            { id: "notary_back_pick", title: "◀️ Назад" },
+                            { id: NAV_MENU_ID, title: t.btn_menu },
+                        ]);
+                    }
+                    return;
+                }
+
+                if (text.startsWith("notary_pick:")) {
+                    const id = text.split(":")[1];
+                    const notary = await resolveNotaryById(id);
+                    if (notary) {
+                        await setLookupData(from, {
+                            selected_notary_id: id,
+                            notary_lookup_mode: "confirm",
+                        });
+                        await sendInteractiveButtons(from, formatNotary(notary), [
+                            { id: "notary_confirm_yes", title: "➡️ Продолжить" },
+                            { id: "notary_confirm_no", title: "🔁 Выбрать другого" },
+                            { id: NAV_MENU_ID, title: t.btn_menu },
+                        ]);
+                        return;
+                    }
+                }
+
+                if (text === "notary_confirm_yes") {
+                    const docWaiting = d.doc_waiting_notary;
+                    const id = d.selected_notary_id;
+                    const notary = await resolveNotaryById(id);
+                    if (notary) {
+                        await setData(from, "notary_id", String(notary.id));
+                        await setData(from, "notary_full_name", notary.full_name);
+                        await setData(from, "notary_name", notary.full_name);
+                        await setData(from, "notary_region", notary.region || "");
+                        await setData(from, "notary_address", notary.address || "");
+                        await setData(from, "notary_phone", notary.phone || "");
+                        await setData(from, "notary_email", notary.email || "");
+                        await clearNotaryLookup(from);
+
+                        if (docWaiting) {
+                            await setData(from, "doc_waiting_notary", false);
+                            const idx = Number(d.doc_index || 0);
+                            await setData(from, "doc_index", idx + 1);
+                            await setStep(from, "doc_fill");
+                            await askDocQuestion(from);
+                            return;
+                        }
+
+                        await setStep(from, "s2_creditor_name");
+                        await sendNavPrompt(from, t.steps_s2[4]);
+                        return;
+                    }
+                }
+
+                if (text === "notary_confirm_no") {
+                    const ids = Array.isArray(d.notary_lookup_results) ? d.notary_lookup_results : [];
+                    const results = [];
+                    for (const id of ids) {
+                        const n = await resolveNotaryById(id);
+                        if (n) results.push(n);
+                    }
+                    const page = Number(d.notary_lookup_page || 0) || 0;
+                    await setLookupData(from, { notary_lookup_mode: "results" });
+                    if (results.length) {
+                        await sendNotaryResults(from, results, page, t);
+                    } else {
+                        await sendInteractiveButtons(from, "Ничего не найдено.", [
+                            { id: "notary_find", title: "🔎 Новый поиск" },
+                            { id: "notary_back_pick", title: "◀️ Назад" },
+                            { id: NAV_MENU_ID, title: t.btn_menu },
+                        ]);
+                    }
+                    return;
+                }
+
+                if (mode === "query") {
+                    const query = String(text || "").trim();
+                    if (!query) {
+                        await sendInteractiveButtons(from, "Введите ФИО нотариуса (или часть) для поиска:", [
+                            { id: "notary_back_pick", title: "◀️ Назад" },
+                            { id: NAV_MENU_ID, title: t.btn_menu },
+                        ]);
+                        return;
+                    }
+                    const results = await searchNotariesSafe(query);
+                    if (results.length) {
+                        const ids = results.map(n => String(n.id));
+                        await setLookupData(from, {
+                            notary_lookup_mode: "results",
+                            notary_lookup_query: query,
+                            notary_lookup_results: ids,
+                            notary_lookup_page: 0,
+                        });
+                        await sendNotaryResults(from, results, 0, t);
+                        return;
+                    }
+                    await sendInteractiveButtons(from, "Ничего не найдено. Попробуйте снова.", [
+                        { id: "notary_find", title: "🔎 Новый поиск" },
+                        { id: "notary_back_pick", title: "◀️ Назад" },
+                        { id: NAV_MENU_ID, title: t.btn_menu },
+                    ]);
+                    return;
+                }
+
+                if (mode === "manual") {
+                    const name = String(text || "").trim();
+                    if (!name) {
+                        await sendInteractiveButtons(from, "Введите ФИО нотариуса вручную:", [
+                            { id: "notary_back_pick", title: "◀️ Назад" },
+                            { id: NAV_MENU_ID, title: t.btn_menu },
+                        ]);
+                        return;
+                    }
+                    await setData(from, "notary_full_name", name);
+                    await setData(from, "notary_name", name);
+                    await clearNotaryLookup(from);
+                    if (d.doc_waiting_notary) {
+                        await setData(from, "doc_waiting_notary", false);
+                        const idx = Number(d.doc_index || 0);
+                        await setData(from, "doc_index", idx + 1);
+                        await setStep(from, "doc_fill");
+                        await askDocQuestion(from);
+                        return;
+                    }
+                    await setStep(from, "s2_notary_address");
+                    await sendNavPrompt(from, t.steps_s2[1]);
+                    return;
+                }
+
+                await sendInteractiveButtons(from, "Шаг 1/11. Как вы хотите указать нотариуса?", [
+                    { id: "notary_find", title: "🔎 Найти в базе" },
+                    { id: "notary_manual", title: "✍️ Ввести вручную" },
+                    { id: NAV_MENU_ID, title: t.btn_menu },
+                ]);
+                return;
+            }
+
+            case "s2_notary_search": {
+                await setStep(from, "s2_notary_choice");
+                await setLookupData(from, { notary_lookup_mode: "query" });
+                await sendInteractiveButtons(from, "Введите ФИО нотариуса (или часть) для поиска:", [
+                    { id: "notary_back_pick", title: "◀️ Назад" },
+                    { id: NAV_MENU_ID, title: t.btn_menu },
+                ]);
+                return;
+            }
+
+            case "s2_notary_manual_name": {
+                await setStep(from, "s2_notary_choice");
+                await setLookupData(from, { notary_lookup_mode: "manual" });
+                if (text) {
+                    await setData(from, "notary_full_name", text);
+                    await setData(from, "notary_name", text);
+                    await clearNotaryLookup(from);
+                    await setStep(from, "s2_notary_address");
+                    await sendNavPrompt(from, t.steps_s2[1]);
+                } else {
+                    await sendInteractiveButtons(from, "Введите ФИО нотариуса вручную:", [
+                        { id: "notary_back_pick", title: "◀️ Назад" },
+                        { id: NAV_MENU_ID, title: t.btn_menu },
+                    ]);
+                }
+                return;
+            }
+
+            case "s2_notary_address":
+                await saveAndNext(from, "notary_address", text, "s2_notary_phone", t.steps_s2[2]);
+                return;
+            case "s2_notary_phone":
+                await saveAndNext(from, "notary_phone", text, "s2_notary_email", t.steps_s2[3]);
+                return;
+            case "s2_notary_email":
+                await saveAndNext(from, "notary_email", text, "s2_creditor_name", t.steps_s2[4]);
+                return;
+            case "s2_creditor_name":
+                await saveAndNext(from, "creditor_name", text, "s2_client_full_name", t.steps_s2[5]);
+                return;
+            case "s2_client_full_name":
+                await saveAndNext(from, "client_full_name", text, "s2_client_address", t.steps_s2[6]);
+                return;
+            case "s2_client_address":
+                await saveAndNext(from, "client_address", text, "s2_iin", t.steps_s2[7]);
+                return;
+            case "s2_iin": {
+                if (!isValidIIN(text)) {
+                    await sendWhatsAppMessage(from, t.errors.iin);
+                    await sendNavPrompt(from, t.steps_s2[7]);
+                    return;
+                }
+                await saveAndNext(from, "iin", text, "s2_client_phone", t.steps_s2[8]);
+                return;
+            }
+            case "s2_client_phone": {
+                // Per user request, validation removed.
+                // if (!isValidPhone(text)) ...
+                await saveAndNext(from, "client_phone", text, "s2_debt_amount", t.steps_s2[9]);
+                return;
+            }
+            case "s2_debt_amount":
+                await saveAndNext(from, "debt_amount", text, "s2_client_email", t.steps_s2[10]);
+                return;
+
+            case "s2_client_email": {
+                if (!isValidEmail(text)) {
+                    await sendWhatsAppMessage(from, t.errors.email);
+                    await sendNavPrompt(from, t.steps_s2[10]);
+                    return;
+                }
+
+                await setData(from, "client_email", normalizeOptional(text));
+
+                const current = await getUser(from);
+                const tpl = current?.template;
+
+                await sendSummary(from);
+
+                if (tpl === "notary_docs") {
+                    await setStep(from, "s3_confirm");
+                    return;
+                }
+
+                await setStep(from, "s2_confirm");
+                return;
+            }
+
+            case "s2_confirm":
+                await handleConfirmation(from, cleanBox, "vozrazhenie.pdf", t.doc_ready_s2);
+                return;
+
+            case "s3_confirm":
+                await handleConfirmation(from, cleanBox, "notary_docs.pdf", t.doc_ready_s2);
+                return;
+
+            default:
+                console.log(`⚠️ Unknown step '${step}' for ${from}. Resetting.`);
+                await setStep(from, "main_menu");
+                await sendMainMenu(from);
+                return;
+        }
+
+    } catch (e) {
+        console.error(`❌ HANDLER ERROR for ${from}:`, e);
+        try {
+            await sendTelegramMessage(`🚨 <b>BOT CRASH</b>\n👤 +${from}\n❌ Error: ${e.message}\nStack: ${e.stack ? e.stack.substring(0, 200) : "N/A"}`);
+        } catch (tgErr) {
+            console.error("TG Send Failed:", tgErr.message);
+        }
+    }
+}

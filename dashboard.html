@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BotMatic — Дашборд</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f4f5f9; --surface: #ffffff; --surface2: #f0f1f6; --surface3: #e8eaf2;
+      --border: #e2e4ed; --accent: #7c3aed; --accent2: #db2777;
+      --accent-glow: rgba(124,58,237,0.2); --text: #1a1a2e; --muted: #6b7280;
+      --green: #059669; --yellow: #d97706; --red: #dc2626; --blue: #2563eb;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar { width: 220px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); padding: 24px 0; display: flex; flex-direction: column; gap: 4px; }
+    .sidebar-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; background: linear-gradient(135deg, #7c3aed, #db2777); -webkit-background-clip: text; -webkit-text-fill-color: transparent; padding: 0 20px 20px; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: var(--muted); text-decoration: none; font-size: 14px; transition: all .15s; }
+    .nav-item:hover { color: var(--text); background: var(--surface2); }
+    .nav-item.active { color: var(--accent); background: rgba(124,108,252,0.1); border-left: 2px solid var(--accent); }
+    .main { flex: 1; overflow-y: auto; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 16px 28px; border-bottom: 1px solid var(--border); background: var(--surface); position: sticky; top: 0; z-index: 10; gap: 12px; }
+    .topbar h1 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; white-space: nowrap; }
+    .main { overflow-x: hidden; }
+    .content { padding: 24px 28px; }
+
+    /* Stats */
+    .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 20px; }
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+      padding: 18px 20px; box-shadow: 0 1px 4px rgba(0,0,0,.05);
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; font-weight: 500; }
+    .stat-value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 34px; font-weight: 800; line-height: 1.1;
+      font-variant-numeric: tabular-nums; letter-spacing: -1px;
+    }
+    .stat-value.accent { color: var(--accent); }
+    .stat-value.green  { color: var(--green); }
+    .stat-value.blue   { color: var(--blue); }
+    .stat-value.yellow { color: var(--yellow); }
+    .stat-sub { font-size: 12px; color: var(--muted); }
+
+    /* Quick actions */
+    .quick-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 20px; }
+    .quick-btn {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 14px 18px; display: flex; align-items: center; gap: 12px;
+      text-decoration: none; color: var(--text); transition: all .15s;
+      box-shadow: 0 1px 4px rgba(0,0,0,.05);
+    }
+    .quick-btn:hover { border-color: var(--accent); box-shadow: 0 4px 16px var(--accent-glow); transform: translateY(-1px); }
+    .quick-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+    .qi-p { background: rgba(124,58,237,.1); } .qi-b { background: rgba(37,99,235,.1); } .qi-g { background: rgba(5,150,105,.1); }
+    .quick-text strong { font-size: 14px; font-weight: 500; display: block; }
+    .quick-text span   { font-size: 12px; color: var(--muted); }
+
+    /* Cards */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+    .card-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 1px solid var(--border); }
+    .card-header h3 { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; }
+    .card-link { font-size: 12px; color: var(--accent); text-decoration: none; }
+    .card-link:hover { text-decoration: underline; }
+
+    /* Pipeline */
+    .pipe-row { display: flex; align-items: center; gap: 10px; padding: 9px 20px; cursor: pointer; }
+    .pipe-row:hover { background: var(--surface2); }
+    .pipe-label { width: 95px; font-size: 13px; color: var(--text); flex-shrink: 0; }
+    .pipe-bar-wrap { flex: 1; min-width: 0; height: 6px; background: var(--surface3); border-radius: 3px; overflow: hidden; }
+    .pipe-bar { height: 100%; border-radius: 3px; min-width: 4px; transition: width .5s; }
+    .pipe-count { width: 28px; text-align: right; font-size: 13px; font-weight: 600; color: var(--text); flex-shrink: 0; }
+
+    /* Activity */
+    .activity-list { max-height: 320px; overflow-y: auto; }
+    .act-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 20px; border-bottom: 1px solid var(--border); }
+    .act-item:last-child { border-bottom: none; }
+    .act-item:hover { background: var(--surface2); }
+    .act-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+    .dot-g { background: var(--green); } .dot-b { background: var(--blue); }
+    .dot-y { background: var(--yellow); } .dot-p { background: var(--accent); } .dot-gr { background: var(--muted); }
+    .act-text { min-width: 0; }
+    .act-action { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .act-meta   { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+    /* Recent clients */
+    .client-row { display: flex; align-items: center; gap: 12px; padding: 11px 20px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background .1s; }
+    .client-row:last-child { border-bottom: none; }
+    .client-row:hover { background: var(--surface2); }
+    .client-avatar { width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; color: #fff; }
+    .client-info { flex: 1; min-width: 0; }
+    .client-name  { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .client-niche { font-size: 12px; color: var(--muted); }
+    .badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; flex-shrink: 0; white-space: nowrap; }
+    .badge::before { content:''; width:5px; height:5px; border-radius:50%; background:currentColor; }
+    .badge-new        { color: #a0a0c0; background: rgba(160,160,192,.12); }
+    .badge-brief      { color: var(--blue); background: rgba(96,165,250,.12); }
+    .badge-connecting { color: var(--yellow); background: rgba(251,191,36,.12); }
+    .badge-setup      { color: #c084fc; background: rgba(192,132,252,.12); }
+    .badge-test       { color: var(--yellow); background: rgba(251,191,36,.12); }
+    .badge-live       { color: var(--green); background: rgba(74,222,128,.12); }
+    .badge-support    { color: var(--blue); background: rgba(96,165,250,.12); }
+    .empty-feed { padding: 28px 20px; text-align: center; color: var(--muted); font-size: 13px; }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-logo">BotMatic</div>
+    <a href="/admin/clients" class="nav-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Клиенты
+    </a>
+    <a href="/dashboard" class="nav-item active">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Дашборд
+    </a>
+        <a href="/inbox" class="nav-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Inbox
+    </a>
+    <a href="/analytics" class="nav-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Аналитика
+    </a>
+  </nav>
+
+  <div class="main">
+    <div class="topbar">
+      <h1>Дашборд</h1>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="font-size:13px;color:var(--muted)" id="topDate"></span>
+        <a href="/admin/clients" style="background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;padding:9px 18px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;">+ Новый клиент</a>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Всего клиентов</div><div class="stat-value accent" id="st-total">—</div><div class="stat-sub" id="st-live-sub">— live</div></div>
+        <div class="stat-card"><div class="stat-label">Сообщений сегодня</div><div class="stat-value green" id="st-today">—</div><div class="stat-sub" id="st-week-sub">— за неделю</div></div>
+        <div class="stat-card"><div class="stat-label">Каналов активно</div><div class="stat-value blue" id="st-ch">—</div><div class="stat-sub">подключено</div></div>
+        <div class="stat-card"><div class="stat-label">Всего сообщений</div><div class="stat-value yellow" id="st-total-msg">—</div><div class="stat-sub" id="st-tasks-sub">— открытых задач</div></div>
+      </div>
+
+      <div class="quick-grid">
+        <a href="/admin/clients" class="quick-btn">
+          <div class="quick-icon qi-p">👥</div>
+          <div class="quick-text"><strong>Клиенты</strong><span>Pipeline и карточки</span></div>
+        </a>
+        <a href="/inbox" class="quick-btn">
+          <div class="quick-icon qi-b">💬</div>
+          <div class="quick-text"><strong>Inbox</strong><span>Входящие сообщения</span></div>
+        </a>
+        <a href="/analytics" class="quick-btn">
+          <div class="quick-icon qi-g">📊</div>
+          <div class="quick-text"><strong>Аналитика</strong><span>Статистика по клиентам</span></div>
+        </a>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><h3>Pipeline</h3><a href="/admin/clients" class="card-link">Все →</a></div>
+          <div id="pipeList"><div class="empty-feed">Загрузка…</div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Последние действия</h3></div>
+          <div class="activity-list" id="actList"><div class="empty-feed">Загрузка…</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3>Последние клиенты</h3><a href="/admin/clients" class="card-link">Все →</a></div>
+        <div id="clientList"><div class="empty-feed">Загрузка…</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SL = { new:'Новый', brief:'Бриф', connecting:'Подключение', setup:'Настройка', test:'Тест', live:'Live', support:'Поддержка' };
+const SO = ['new','brief','connecting','setup','test','live','support'];
+const PC = { new:'#a0a0c0', brief:'#60a5fa', connecting:'#fbbf24', setup:'#c084fc', test:'#fbbf24', live:'#4ade80', support:'#60a5fa' };
+const AV = ['#7c3aed','#db2777','#2563eb','#059669','#d97706','#0891b2','#dc2626'];
+
+document.getElementById('topDate').textContent =
+  new Date().toLocaleDateString('ru-RU', { weekday:'long', day:'numeric', month:'long' });
+
+const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+function ago(ds) {
+  const m = Math.floor((Date.now() - new Date(ds.includes('T')?ds:ds+' UTC')) / 60000);
+  if (m<1) return 'только что';
+  if (m<60) return `${m} мин. назад`;
+  const h=Math.floor(m/60);
+  return h<24 ? `${h} ч. назад` : `${Math.floor(h/24)} дн. назад`;
+}
+
+const AL = { client_created:'🆕 Новый клиент', client_updated:'✏️ Обновлён', client_deleted:'🗑️ Удалён',
+  status_changed:'🔄 Статус изменён', bot_created:'🤖 Бот создан', bot_updated:'🤖 Бот сохранён',
+  flow_updated:'🔧 Flow обновлён', channel_connected:'🔗 Канал подключён', channel_disconnected:'❌ Канал отключён' };
+
+function dotCls(a) {
+  if (a.includes('creat')||a.includes('connect')) return 'dot-p';
+  if (a.includes('delet')||a.includes('disconnect')) return 'dot-y';
+  if (a.includes('status')) return 'dot-g';
+  if (a.includes('flow')||a.includes('bot')) return 'dot-b';
+  return 'dot-gr';
+}
+
+async function load() {
+  try {
+    const [s,c] = await Promise.all([
+      fetch('/api/admin/stats').then(r=>r.json()),
+      fetch('/api/admin/clients').then(r=>r.json()),
+    ]);
+    const ov = s.overview;
+    document.getElementById('st-total').textContent     = ov.total_clients;
+    document.getElementById('st-live-sub').textContent  = `${ov.live_clients} live`;
+    document.getElementById('st-today').textContent     = ov.messages_today;
+    document.getElementById('st-week-sub').textContent  = `${ov.messages_week} за неделю`;
+    document.getElementById('st-ch').textContent        = ov.connected_channels;
+    document.getElementById('st-total-msg').textContent = ov.messages_total;
+    document.getElementById('st-tasks-sub').textContent = `${ov.open_tasks} открытых задач`;
+
+    const bm={}; (s.byStatus||[]).forEach(r=>bm[r.status]=r.count);
+    const mx=Math.max(1,...Object.values(bm));
+    document.getElementById('pipeList').innerHTML = SO.map(st=>`
+      <div class="pipe-row" onclick="location='/admin/clients'">
+        <span class="pipe-label">${SL[st]}</span>
+        <div class="pipe-bar-wrap"><div class="pipe-bar" style="width:${Math.round((bm[st]||0)/mx*100)}%;background:${PC[st]}"></div></div>
+        <span class="pipe-count">${bm[st]||0}</span>
+      </div>`).join('');
+
+    const acts=(s.activity||[]).slice(0,12);
+    document.getElementById('actList').innerHTML = acts.length
+      ? acts.map(a=>`<div class="act-item">
+          <div class="act-dot ${dotCls(a.action)}"></div>
+          <div class="act-text"><div class="act-action">${AL[a.action]||a.action}${a.company?' · <b>'+esc(a.company)+'</b>':''}</div>
+          <div class="act-meta">${esc(a.details||'')} · ${ago(a.created_at)}</div></div>
+        </div>`).join('')
+      : '<div class="empty-feed">Нет активности</div>';
+
+    const cls=(c.clients||[]).slice(0,6);
+    document.getElementById('clientList').innerHTML = cls.length
+      ? cls.map((cl,i)=>`<div class="client-row" onclick="location='/admin/client?id=${cl.id}'">
+          <div class="client-avatar" style="background:${AV[i%AV.length]}">${esc((cl.company||'?')[0])}</div>
+          <div style="flex:1;min-width:0"><div class="client-name">${esc(cl.company)}</div><div class="client-niche">${esc(cl.niche||'—')}</div></div>
+          <span class="badge badge-${cl.status}">${SL[cl.status]||cl.status}</span>
+        </div>`).join('')
+      : '<div class="empty-feed">Клиентов нет — <a href="/admin/clients" style="color:var(--accent)">добавить</a></div>';
+  } catch(e){console.error(e);}
+}
+
+load();
+setInterval(load, 30000);
+</script>
+</body>
+</html>

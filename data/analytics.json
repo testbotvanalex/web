@@ -1,0 +1,30 @@
+[
+  {
+    "timestamp": "2026-03-09T09:19:38.553Z",
+    "botId": "main",
+    "type": "message",
+    "direction": "in",
+    "text": "Hello from test script!"
+  },
+  {
+    "timestamp": "2026-03-09T10:05:05.132Z",
+    "botId": "main",
+    "type": "message",
+    "direction": "in",
+    "text": "Hello rescued bot"
+  },
+  {
+    "timestamp": "2026-03-09T10:07:01.372Z",
+    "botId": "main",
+    "type": "message",
+    "direction": "in",
+    "text": "Hello rescued bot"
+  },
+  {
+    "timestamp": "2026-03-09T10:15:02.922Z",
+    "botId": "main",
+    "type": "message",
+    "direction": "in",
+    "text": "Hello rescued bot again"
+  }
+]
