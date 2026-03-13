@@ -948,6 +948,35 @@ app.get('/auth/instagram/callback', async (req, res) => {
 
     let pages = pagesRes.data.data || [];
 
+    // ── 3.5 Business API Fallback: pages owned by user's businesses ──
+    if (pages.length === 0) {
+      console.log('[Instagram Connect] /me/accounts empty — trying Business API fallback');
+      try {
+        const bizRes = await axios.get(`https://graph.facebook.com/${CONFIG.API_VERSION}/me/businesses`, {
+          params: { access_token: longToken, fields: 'id,name' },
+        });
+        const businesses = bizRes.data?.data || [];
+        console.log('[Instagram Connect] Businesses found:', businesses.map(b => b.name));
+        for (const biz of businesses) {
+          try {
+            const ownedRes = await axios.get(`https://graph.facebook.com/${CONFIG.API_VERSION}/${biz.id}/owned_pages`, {
+              params: {
+                access_token: longToken,
+                fields: 'id,name,access_token,instagram_business_account,connected_instagram_account',
+              },
+            });
+            const bizPages = ownedRes.data?.data || [];
+            console.log('[Instagram Connect] Pages from business', biz.name, ':', bizPages.map(p => p.name));
+            pages.push(...bizPages);
+          } catch (e) {
+            console.warn('[Instagram Connect] owned_pages failed for', biz.name, ':', e.response?.data || e.message);
+          }
+        }
+      } catch (e) {
+        console.warn('[Instagram Connect] Business API fallback failed:', e.response?.data || e.message);
+      }
+    }
+
     // ── 3.8 Smart Fallback: Check existing store pages (Messenger) ──
     if (pages.length === 0) {
       for (const botId in store.channelsByBotId) {
