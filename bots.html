@@ -3,22 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BotMatic · Bots</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <title>BotMatic — Bots</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #f4f5f9;
-      --surface: #ffffff;
-      --surface2: #f0f1f6;
-      --border: #e2e4ed;
-      --text: #1a1a2e;
-      --muted: #6b7280;
-      --accent: #7c3aed;
-      --accent2: #db2777;
-      --green: #059669;
-      --yellow: #d97706;
-      --blue: #2563eb;
-      --red: #dc2626;
+      --bg: #f4f5f9; --surface: #ffffff; --surface2: #f0f1f6; --surface3: #e8eaf2;
+      --border: #e2e4ed; --accent: #7c3aed; --accent2: #db2777;
+      --accent-glow: rgba(124,58,237,0.2); --text: #1a1a2e; --muted: #6b7280;
+      --green: #059669; --yellow: #d97706; --red: #dc2626; --blue: #2563eb;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
@@ -32,344 +24,468 @@
       font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px;
       background: linear-gradient(135deg, #7c3aed, #db2777);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      padding: 0 20px 20px;
+      padding: 0 20px 20px; letter-spacing: -0.5px;
     }
     .nav-item {
-      display: flex; align-items: center; gap: 10px; padding: 10px 20px;
-      color: var(--muted); text-decoration: none; font-size: 14px; transition: all .15s;
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 20px; color: var(--muted); text-decoration: none;
+      font-size: 14px; transition: all .15s;
     }
     .nav-item:hover { color: var(--text); background: var(--surface2); }
     .nav-item.active { color: var(--accent); background: rgba(124,108,252,0.1); border-left: 2px solid var(--accent); }
     .main { flex: 1; overflow-y: auto; }
     .topbar {
-      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      display: flex; align-items: center; justify-content: space-between;
       padding: 20px 32px; border-bottom: 1px solid var(--border);
       background: var(--surface); position: sticky; top: 0; z-index: 10;
     }
     .topbar h1 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; }
-    .topbar-actions { display: flex; align-items: center; gap: 10px; }
+    .topbar-actions { display:flex; align-items:center; gap:10px; }
     .top-chip {
       font-size: 13px; color: var(--muted); background: var(--surface2);
       border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px;
     }
+    .content { padding: 28px 32px; }
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .stat-card .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; font-weight: 500; }
+    .stat-card .value { font-family: 'Outfit', sans-serif; font-size: 34px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.1; letter-spacing: -1px; }
+    .stat-card .value.green { color: var(--green); }
+    .stat-card .value.accent { color: var(--accent); }
+    .stat-card .value.blue { color: var(--blue); }
+    .stat-card .value.yellow { color: var(--yellow); }
+    .stat-card .sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .pipeline { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+    .pipe-pill {
+      padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500;
+      background: var(--surface2); border: 1px solid var(--border);
+      cursor: pointer; transition: all .15s; color: var(--muted);
+    }
+    .pipe-pill:hover { border-color: var(--accent); color: var(--text); }
+    .pipe-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .pipe-pill .cnt { opacity: .7; margin-left: 4px; }
+    .toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .search-box {
+      flex: 1; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 9px 14px; color: var(--text); font-size: 14px;
+      font-family: inherit; outline: none;
+    }
+    .search-box:focus { border-color: var(--accent); }
+    .search-box::placeholder { color: var(--muted); }
     .btn {
-      border: none; border-radius: 10px; padding: 10px 18px; font-size: 14px;
-      font-family: inherit; font-weight: 600; cursor: pointer; transition: all .15s;
+      padding: 9px 18px; border-radius: 8px; font-size: 14px; font-weight: 500;
+      cursor: pointer; border: none; font-family: inherit; transition: all .15s;
       text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
     }
-    .btn-primary { background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff; box-shadow: 0 4px 14px rgba(124,58,237,.24); }
-    .btn-primary:hover { transform: translateY(-1px); }
+    .btn-primary { background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff; box-shadow: 0 2px 8px rgba(124,58,237,0.3); }
+    .btn-primary:hover { background: linear-gradient(135deg, #6d28d9, #5b21b6); box-shadow: 0 4px 16px rgba(124,58,237,0.4); }
     .btn-ghost { background: var(--surface); border: 1px solid var(--border); color: var(--text); }
     .btn-ghost:hover { border-color: var(--accent); }
-    .content { padding: 28px 32px; display: grid; gap: 24px; }
-    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-    .stat-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-      padding: 20px 22px; box-shadow: 0 1px 4px rgba(0,0,0,.05);
+    .btn-link { background: var(--surface3); border: 1px solid var(--border); color: var(--text); font-size: 12px; padding: 7px 12px; }
+    .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    thead th {
+      text-align: left; padding: 12px 16px; font-size: 11px; font-weight: 500;
+      color: var(--muted); text-transform: uppercase; letter-spacing: .5px;
+      border-bottom: 1px solid var(--border); background: var(--surface2);
     }
-    .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
-    .stat-value { font-family: 'Syne', sans-serif; font-size: 30px; font-weight: 800; }
-    .stat-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
-    .cards-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-    .cards-head h2 { font-family: 'Syne', sans-serif; font-size: 18px; }
-    .cards-head p { color: var(--muted); font-size: 14px; }
-    .bot-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
-    .bot-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-      padding: 22px; box-shadow: 0 1px 4px rgba(0,0,0,.05); display: grid; gap: 16px;
-    }
-    .bot-card.active { border-color: rgba(124,58,237,.3); box-shadow: 0 10px 30px rgba(124,58,237,.08); }
-    .bot-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-    .bot-name { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; }
-    .bot-meta { color: var(--muted); font-size: 12px; margin-top: 4px; }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--surface2); }
+    td { padding: 14px 16px; vertical-align: middle; }
+    .bot-name { font-weight: 600; }
+    .bot-meta { font-size: 12px; color: var(--muted); margin-top: 3px; }
     .badge {
-      display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px;
-      border-radius: 999px; font-size: 11px; font-weight: 700; white-space: nowrap;
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500;
     }
-    .badge.active { background: rgba(124,58,237,.12); color: var(--accent); }
-    .badge.live { background: rgba(16,185,129,.12); color: var(--green); }
-    .badge.setup { background: rgba(245,158,11,.12); color: var(--yellow); }
-    .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-    .summary-box { background: var(--surface2); border-radius: 12px; padding: 12px 14px; }
-    .summary-box span { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 5px; }
-    .summary-box strong { font-size: 18px; }
-    .channels-row { display: flex; flex-wrap: wrap; gap: 8px; }
-    .channel-pill {
-      display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px;
-      border-radius: 999px; font-size: 12px; font-weight: 600; background: var(--surface2); color: var(--text);
+    .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .badge-live { color: var(--green); background: rgba(74,222,128,.12); }
+    .badge-setup { color: var(--yellow); background: rgba(251,191,36,.12); }
+    .badge-active { color: var(--accent); background: rgba(124,58,237,.12); }
+    .channel-icons { display: flex; gap: 4px; flex-wrap: wrap; }
+    .ch-icon {
+      min-width: 22px; height: 22px; padding: 0 7px; border-radius: 5px; display: inline-flex;
+      align-items: center; justify-content: center; font-size: 11px; font-weight: 700;
     }
-    .channel-pill.connected { background: rgba(16,185,129,.12); color: var(--green); }
-    .channel-pill.disconnected { background: rgba(107,114,128,.12); color: var(--muted); }
-    .channel-pill.disabled { background: rgba(220,38,38,.08); color: var(--red); }
-    .actions { display: flex; flex-wrap: wrap; gap: 10px; }
-    .empty-state {
-      background: var(--surface); border: 1px dashed var(--border); border-radius: 16px;
-      padding: 48px 24px; text-align: center; color: var(--muted);
+    .ch-ig { background: rgba(252,108,143,.15); color: var(--accent2); }
+    .ch-ms { background: rgba(96,165,250,.15); color: var(--blue); }
+    .ch-tg { background: rgba(56,189,248,.12); color: #38bdf8; }
+    .ch-off { background: rgba(107,114,128,.12); color: var(--muted); }
+    .actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    .grid-2 { display: grid; grid-template-columns: 1.2fr .8fr; gap: 16px; margin-top: 20px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+    .card-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 1px solid var(--border); }
+    .card-header h3 { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; }
+    .launch-list { display: grid; gap: 12px; padding: 18px 20px 20px; }
+    .launch-row {
+      background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px;
+      display: flex; align-items: center; justify-content: space-between; gap: 14px;
     }
-    .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,.45); display: none;
-      align-items: center; justify-content: center; z-index: 100;
-    }
+    .launch-copy strong { display: block; font-size: 14px; }
+    .launch-copy span { font-size: 12px; color: var(--muted); }
+    .activity-list { max-height: 360px; overflow-y: auto; }
+    .act-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 20px; border-bottom: 1px solid var(--border); }
+    .act-item:last-child { border-bottom: none; }
+    .act-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+    .dot-p { background: var(--accent); } .dot-g { background: var(--green); } .dot-y { background: var(--yellow); } .dot-b { background: var(--blue); }
+    .act-action { font-size: 13px; }
+    .act-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .empty { text-align: center; padding: 60px; color: var(--muted); }
+    .empty h3 { font-size: 16px; margin-bottom: 8px; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 100; display: none; align-items: center; justify-content: center; }
     .modal-overlay.open { display: flex; }
-    .modal {
-      width: min(440px, calc(100% - 40px)); background: var(--surface); border: 1px solid var(--border);
-      border-radius: 16px; padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,.18);
+    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; width: 520px; max-width: calc(100vw - 40px); }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--border); }
+    .modal-header h2 { font-family: 'Syne', sans-serif; font-size: 18px; }
+    .close-btn { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; }
+    .modal-body { padding: 24px; display: grid; gap: 12px; }
+    .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 12px; color: var(--muted); font-weight: 500; }
+    .form-group input {
+      background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
+      padding: 10px 12px; color: var(--text); font-size: 14px; font-family: inherit; outline: none;
     }
-    .modal h3 { font-family: 'Syne', sans-serif; font-size: 22px; margin-bottom: 10px; }
-    .modal p { color: var(--muted); font-size: 14px; line-height: 1.6; margin-bottom: 18px; }
-    .field { display: grid; gap: 8px; }
-    .field label { font-size: 12px; color: var(--muted); font-weight: 600; }
-    .field input {
-      height: 46px; border-radius: 10px; border: 1px solid var(--border);
-      background: var(--surface2); padding: 0 14px; font: inherit; outline: none;
+    .form-group input:focus { border-color: var(--accent); }
+    .toast {
+      position: fixed; bottom: 24px; right: 24px; z-index: 999;
+      background: var(--surface3); border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px 18px; font-size: 14px;
+      transform: translateY(80px); opacity: 0; transition: all .25s;
     }
-    .field input:focus { border-color: var(--accent); }
-    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
-    .error { margin-top: 10px; font-size: 13px; color: var(--red); display: none; }
-    @media (max-width: 1100px) {
-      .stats-row, .bot-grid, .summary-grid { grid-template-columns: 1fr; }
-    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { border-color: var(--green); color: var(--green); }
+    .toast.error { border-color: var(--red); color: var(--red); }
+    @media (max-width: 1100px) { .stats-row, .grid-2 { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
-  <div class="layout">
-    <nav class="sidebar">
-      <div class="sidebar-logo">BotMatic</div>
-      <a href="/admin/clients" class="nav-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        Clients
-      </a>
-      <a href="/dashboard" class="nav-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        Dashboard
-      </a>
-      <a href="/bots" class="nav-item active">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
-        Bots
-      </a>
-      <a href="/inbox" class="nav-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        Inbox
-      </a>
-      <a href="/auth/connect" class="nav-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v2"/><path d="M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M20 16v2a2 2 0 0 1-2 2h-2"/><path d="M4 8V6a2 2 0 0 1 2-2h2"/><circle cx="12" cy="12" r="3"/></svg>
-        Channels
-      </a>
-      <a href="/analytics" class="nav-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        Analytics
-      </a>
-      <a href="/auth/permissions" class="nav-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Permissions
-      </a>
-    </nav>
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-logo">BotMatic</div>
+    <a href="/admin/clients" class="nav-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Clients
+    </a>
+    <a href="/dashboard" class="nav-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </a>
+    <a href="/bots" class="nav-item active">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
+      Bots
+    </a>
+    <a href="/inbox" class="nav-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Inbox
+    </a>
+    <a href="/auth/connect" class="nav-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v2"/><path d="M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M20 16v2a2 2 0 0 1-2 2h-2"/><path d="M4 8V6a2 2 0 0 1 2-2h2"/><circle cx="12" cy="12" r="3"/></svg>
+      Channels
+    </a>
+    <a href="/analytics" class="nav-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Analytics
+    </a>
+    <a href="/auth/permissions" class="nav-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Permissions
+    </a>
+  </nav>
 
-    <div class="main">
-      <div class="topbar">
-        <h1>Bots</h1>
-        <div class="topbar-actions">
-          <div class="top-chip" id="topSummary">Loading…</div>
-          <button class="btn btn-primary" id="openCreateBot">+ New Bot</button>
-        </div>
+  <div class="main">
+    <div class="topbar">
+      <h1>Bots</h1>
+      <div class="topbar-actions">
+        <div class="top-chip" id="topSummary">Loading…</div>
+        <button class="btn btn-primary" onclick="openModal()">+ New Bot</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="stats-row">
+        <div class="stat-card"><div class="label">Total Bots</div><div class="value accent" id="st-total">—</div><div class="sub">in BotMatic</div></div>
+        <div class="stat-card"><div class="label">Live</div><div class="value green" id="st-live">—</div><div class="sub">with active channels</div></div>
+        <div class="stat-card"><div class="label">Connected Channels</div><div class="value blue" id="st-channels">—</div><div class="sub">across all bots</div></div>
+        <div class="stat-card"><div class="label">Needs Setup</div><div class="value yellow" id="st-setup">—</div><div class="sub">no channels yet</div></div>
       </div>
 
-      <div class="content">
-        <div class="stats-row">
-          <div class="stat-card"><div class="stat-label">Total Bots</div><div class="stat-value" id="stTotal">—</div><div class="stat-sub">in BotMatic</div></div>
-          <div class="stat-card"><div class="stat-label">Connected Bots</div><div class="stat-value" id="stConnected">—</div><div class="stat-sub">with at least one live channel</div></div>
-          <div class="stat-card"><div class="stat-label">Channels</div><div class="stat-value" id="stChannels">—</div><div class="stat-sub">connected across all bots</div></div>
-          <div class="stat-card"><div class="stat-label">Needs Setup</div><div class="stat-value" id="stSetup">—</div><div class="stat-sub">no channels yet</div></div>
-        </div>
+      <div class="pipeline" id="pipeline">
+        <div class="pipe-pill active" data-filter="all" onclick="setFilter(this, 'all')">All <span class="cnt" id="cnt-all"></span></div>
+        <div class="pipe-pill" data-filter="live" onclick="setFilter(this, 'live')">Live <span class="cnt" id="cnt-live"></span></div>
+        <div class="pipe-pill" data-filter="setup" onclick="setFilter(this, 'setup')">Needs Setup <span class="cnt" id="cnt-setup-pill"></span></div>
+        <div class="pipe-pill" data-filter="instagram" onclick="setFilter(this, 'instagram')">Instagram <span class="cnt" id="cnt-instagram"></span></div>
+        <div class="pipe-pill" data-filter="messenger" onclick="setFilter(this, 'messenger')">Messenger <span class="cnt" id="cnt-messenger"></span></div>
+        <div class="pipe-pill" data-filter="telegram" onclick="setFilter(this, 'telegram')">Telegram <span class="cnt" id="cnt-telegram"></span></div>
+      </div>
 
-        <div class="cards-head">
-          <div>
-            <h2>Bot Control Center</h2>
-            <p>Switch between bots, inspect channel status, and jump straight into the relevant workspace.</p>
+      <div class="toolbar">
+        <input class="search-box" type="text" placeholder="Search by bot name or ID..." oninput="onSearch(this.value)" />
+        <a class="btn btn-ghost" href="/auth/connect">Open Channels</a>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Bot</th>
+              <th>Status</th>
+              <th>Channels</th>
+              <th>Updated</th>
+              <th>Created</th>
+              <th>Workspace</th>
+            </tr>
+          </thead>
+          <tbody id="botsBody">
+            <tr><td colspan="6" class="empty"><div><h3>Loading...</h3></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><h3>Quick Launch</h3></div>
+          <div class="launch-list" id="launchList">
+            <div class="launch-row">
+              <div class="launch-copy"><strong>Open Inbox</strong><span>Jump straight into human and bot conversations</span></div>
+              <a class="btn btn-link" href="/inbox">Go</a>
+            </div>
+            <div class="launch-row">
+              <div class="launch-copy"><strong>Channel Center</strong><span>Connect Instagram, Messenger and Telegram per bot</span></div>
+              <a class="btn btn-link" href="/auth/connect">Open</a>
+            </div>
+            <div class="launch-row">
+              <div class="launch-copy"><strong>Flow Constructor</strong><span>Edit flow logic and prompt structure</span></div>
+              <a class="btn btn-link" href="/constructor">Edit</a>
+            </div>
           </div>
         </div>
-
-        <div id="botGrid" class="bot-grid">
-          <div class="empty-state">Loading bots…</div>
+        <div class="card">
+          <div class="card-header"><h3>Bot Highlights</h3></div>
+          <div class="activity-list" id="highlightList"><div class="empty"><h3>Loading...</h3></div></div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <div class="modal-overlay" id="createBotModal">
-    <div class="modal">
-      <h3>Create Bot</h3>
-      <p>Add a new bot workspace. You can connect channels and configure flows right after creation.</p>
-      <div class="field">
-        <label for="botName">Bot name</label>
-        <input id="botName" type="text" placeholder="Sales Bot" />
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>New Bot</h2>
+      <button class="close-btn" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Bot name *</label>
+        <input id="bot-name" type="text" placeholder="Sales Bot" autofocus />
       </div>
-      <div id="createError" class="error"></div>
-      <div class="modal-actions">
-        <button class="btn btn-ghost" id="closeCreateBot">Cancel</button>
-        <button class="btn btn-primary" id="submitCreateBot">Create</button>
-      </div>
+      <p style="font-size:12px;color:var(--muted)">A new bot workspace will be created instantly and can be connected in Channels.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="createBot()">Create Bot</button>
     </div>
   </div>
+</div>
 
-  <script>
-    const esc = (value) => String(value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    const fmtDate = (value) => value ? new Date(value).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
-    const fmtAgo = (value) => {
-      if (!value) return '—';
-      const m = Math.floor((Date.now() - new Date(value).getTime()) / 60000);
-      if (m < 1) return 'just now';
-      if (m < 60) return `${m} min ago`;
-      const h = Math.floor(m / 60);
-      if (h < 24) return `${h} h ago`;
-      return `${Math.floor(h / 24)} d ago`;
-    };
+<div class="toast" id="toast"></div>
 
-    const modal = document.getElementById('createBotModal');
-    const botGrid = document.getElementById('botGrid');
-    const botNameInput = document.getElementById('botName');
-    const createError = document.getElementById('createError');
-    let activeBotId = '';
+<script>
+const rows = [];
+let activeBotId = '';
+let currentFilter = 'all';
+let searchQuery = '';
 
-    function openModal() {
-      createError.style.display = 'none';
-      createError.textContent = '';
-      botNameInput.value = '';
-      modal.classList.add('open');
-      setTimeout(() => botNameInput.focus(), 0);
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function fmtDate(value) {
+  if (!value) return '—';
+  return new Date(value).toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
+}
+function ago(value) {
+  if (!value) return '—';
+  const m = Math.floor((Date.now() - new Date(value).getTime()) / 60000);
+  if (m < 1) return 'just now';
+  if (m < 60) return `${m} min ago`;
+  const h = Math.floor(m / 60);
+  return h < 24 ? `${h} h ago` : `${Math.floor(h / 24)} d ago`;
+}
+function channelCount(item) {
+  return ['instagram','messenger','telegram'].filter(k => item.channels[k]?.connected).length;
+}
+function hasChannel(item, key) {
+  return !!item.channels[key]?.connected;
+}
+function botState(item) {
+  return channelCount(item) > 0 ? 'live' : 'setup';
+}
+function botBadge(item) {
+  if (item.bot.id === activeBotId) return '<span class="badge badge-active">Active</span>';
+  return botState(item) === 'live'
+    ? '<span class="badge badge-live">Live</span>'
+    : '<span class="badge badge-setup">Needs Setup</span>';
+}
+function renderChannels(item) {
+  const map = {
+    instagram: { label: 'IG', cls: 'ch-ig' },
+    messenger: { label: 'MS', cls: 'ch-ms' },
+    telegram: { label: 'TG', cls: 'ch-tg' },
+  };
+  return ['instagram','messenger','telegram'].map((key) => {
+    const cfg = item.channels[key] || {};
+    const base = map[key];
+    if (cfg.connected) return `<span class="ch-icon ${base.cls}" title="${key}: ${esc(cfg.statusLabel || 'Connected')}">${base.label}</span>`;
+    return `<span class="ch-icon ch-off" title="${key}: not connected">${base.label}</span>`;
+  }).join('');
+}
+function renderActions(item) {
+  const id = encodeURIComponent(item.bot.id);
+  return `
+    <div class="actions">
+      <a class="btn btn-link" href="/auth/connect?botId=${id}">Channels</a>
+      <a class="btn btn-link" href="/inbox?botId=${id}">Inbox</a>
+      <a class="btn btn-link" href="/constructor?botId=${id}">Constructor</a>
+      <a class="btn btn-link" href="/train?botId=${id}">Training</a>
+    </div>`;
+}
+function setCounts(list) {
+  const counts = {
+    all: list.length,
+    live: list.filter(i => botState(i) === 'live').length,
+    setup: list.filter(i => botState(i) === 'setup').length,
+    instagram: list.filter(i => hasChannel(i,'instagram')).length,
+    messenger: list.filter(i => hasChannel(i,'messenger')).length,
+    telegram: list.filter(i => hasChannel(i,'telegram')).length,
+  };
+  document.getElementById('cnt-all').textContent = counts.all ? `(${counts.all})` : '';
+  document.getElementById('cnt-live').textContent = counts.live ? `(${counts.live})` : '';
+  document.getElementById('cnt-setup-pill').textContent = counts.setup ? `(${counts.setup})` : '';
+  document.getElementById('cnt-instagram').textContent = counts.instagram ? `(${counts.instagram})` : '';
+  document.getElementById('cnt-messenger').textContent = counts.messenger ? `(${counts.messenger})` : '';
+  document.getElementById('cnt-telegram').textContent = counts.telegram ? `(${counts.telegram})` : '';
+}
+function renderStats(list) {
+  const live = list.filter(i => botState(i) === 'live').length;
+  const connectedChannels = list.reduce((sum, item) => sum + channelCount(item), 0);
+  const setup = list.filter(i => botState(i) === 'setup').length;
+  document.getElementById('st-total').textContent = list.length;
+  document.getElementById('st-live').textContent = live;
+  document.getElementById('st-channels').textContent = connectedChannels;
+  document.getElementById('st-setup').textContent = setup;
+  document.getElementById('topSummary').textContent = `${live}/${list.length} bots live`;
+}
+function renderHighlights(list) {
+  const target = document.getElementById('highlightList');
+  if (!list.length) {
+    target.innerHTML = '<div class="empty"><h3>No bots</h3></div>';
+    return;
+  }
+  const top = [...list].sort((a, b) => channelCount(b) - channelCount(a) || new Date(b.bot.updatedAt) - new Date(a.bot.updatedAt)).slice(0, 6);
+  target.innerHTML = top.map((item) => {
+    const count = channelCount(item);
+    const dot = count > 1 ? 'dot-g' : count === 1 ? 'dot-b' : 'dot-y';
+    return `<div class="act-item">
+      <div class="act-dot ${dot}"></div>
+      <div>
+        <div class="act-action"><b>${esc(item.bot.name)}</b> · ${count}/3 connected</div>
+        <div class="act-meta">Updated ${ago(item.bot.updatedAt)} · ${esc(item.bot.id)}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function render() {
+  setCounts(rows);
+  renderStats(rows);
+  renderHighlights(rows);
+
+  let list = rows.slice();
+  if (currentFilter === 'live') list = list.filter(i => botState(i) === 'live');
+  if (currentFilter === 'setup') list = list.filter(i => botState(i) === 'setup');
+  if (['instagram','messenger','telegram'].includes(currentFilter)) list = list.filter(i => hasChannel(i, currentFilter));
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    list = list.filter(i => i.bot.name.toLowerCase().includes(q) || i.bot.id.toLowerCase().includes(q));
+  }
+
+  const tbody = document.getElementById('botsBody');
+  if (!list.length) {
+    tbody.innerHTML = '<tr><td colspan="6"><div class="empty"><h3>No bots</h3><p>Try another filter or create a new bot.</p></div></td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = list.map((item) => `
+    <tr>
+      <td>
+        <div class="bot-name">${esc(item.bot.name)}</div>
+        <div class="bot-meta">${esc(item.bot.id)}</div>
+      </td>
+      <td>${botBadge(item)}</td>
+      <td><div class="channel-icons">${renderChannels(item)}</div></td>
+      <td>${ago(item.bot.updatedAt)}</td>
+      <td>${fmtDate(item.bot.createdAt)}</td>
+      <td>${renderActions(item)}</td>
+    </tr>
+  `).join('');
+}
+function setFilter(el, filter) {
+  document.querySelectorAll('.pipe-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  currentFilter = filter;
+  render();
+}
+function onSearch(value) {
+  searchQuery = value.trim().toLowerCase();
+  render();
+}
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+function openModal() { document.getElementById('modal').classList.add('open'); }
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+async function createBot() {
+  const name = document.getElementById('bot-name').value.trim();
+  try {
+    const res = await fetch('/auth/api/bots', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', accept: 'application/json' },
+      body: JSON.stringify({ name })
+    }).then(r => r.json());
+    if (!res.id) throw new Error(res.error || 'Failed to create bot');
+    closeModal();
+    document.getElementById('bot-name').value = '';
+    showToast(`Bot "${name || res.name}" created`, 'success');
+    await load();
+  } catch (e) {
+    showToast(e.message, 'error');
+  }
+}
+async function load() {
+  const data = await fetch('/auth/api/bots').then(r => r.json());
+  activeBotId = data.activeBotId || '';
+  const bots = data.bots || [];
+  rows.length = 0;
+  const results = await Promise.all(bots.map(async (bot) => {
+    try {
+      const channels = await fetch(`/auth/api/channels?botId=${encodeURIComponent(bot.id)}`).then(r => r.json());
+      return { bot, channels };
+    } catch {
+      return { bot, channels: { instagram:{connected:false}, messenger:{connected:false}, telegram:{connected:false} } };
     }
-
-    function closeModal() {
-      modal.classList.remove('open');
-    }
-
-    function channelState(channel) {
-      if (!channel || channel.available === false) return 'disabled';
-      return channel.connected ? 'connected' : 'disconnected';
-    }
-
-    function countConnectedChannels(channels) {
-      return ['instagram', 'messenger', 'telegram'].filter((key) => channels[key] && channels[key].connected).length;
-    }
-
-    function renderBots(botsWithChannels) {
-      const connectedBots = botsWithChannels.filter((item) => item.connectedCount > 0).length;
-      const totalChannels = botsWithChannels.reduce((sum, item) => sum + item.connectedCount, 0);
-      const setupBots = botsWithChannels.filter((item) => item.connectedCount === 0).length;
-      document.getElementById('stTotal').textContent = botsWithChannels.length;
-      document.getElementById('stConnected').textContent = connectedBots;
-      document.getElementById('stChannels').textContent = totalChannels;
-      document.getElementById('stSetup').textContent = setupBots;
-      document.getElementById('topSummary').textContent = `${connectedBots}/${botsWithChannels.length} bots live`;
-
-      if (!botsWithChannels.length) {
-        botGrid.innerHTML = '<div class="empty-state">No bots yet. Create the first bot to get started.</div>';
-        return;
-      }
-
-      botGrid.innerHTML = botsWithChannels.map((item) => {
-        const { bot, channels, connectedCount } = item;
-        const stateClass = bot.id === activeBotId ? 'active' : '';
-        const setupBadge = connectedCount > 0
-          ? '<div class="badge live">Live</div>'
-          : '<div class="badge setup">Needs setup</div>';
-        const channelPills = [
-          ['Instagram', channels.instagram],
-          ['Messenger', channels.messenger],
-          ['Telegram', channels.telegram],
-        ].map(([label, channel]) => {
-          const state = channelState(channel);
-          const text = state === 'connected' ? (channel.statusLabel || 'Connected') : state === 'disabled' ? 'Disabled' : 'Not connected';
-          return `<div class="channel-pill ${state}">${label} · ${esc(text)}</div>`;
-        }).join('');
-
-        return `
-          <section class="bot-card ${stateClass}">
-            <div class="bot-top">
-              <div>
-                <div class="bot-name">${esc(bot.name)}</div>
-                <div class="bot-meta">ID: ${esc(bot.id)} · Updated ${fmtAgo(bot.updatedAt)}</div>
-              </div>
-              ${bot.id === activeBotId ? '<div class="badge active">Active</div>' : setupBadge}
-            </div>
-
-            <div class="summary-grid">
-              <div class="summary-box"><span>Connected</span><strong>${connectedCount}/3</strong></div>
-              <div class="summary-box"><span>Created</span><strong>${fmtDate(bot.createdAt)}</strong></div>
-              <div class="summary-box"><span>Updated</span><strong>${fmtDate(bot.updatedAt)}</strong></div>
-            </div>
-
-            <div class="channels-row">${channelPills}</div>
-
-            <div class="actions">
-              <a class="btn btn-primary" href="/auth/connect?botId=${encodeURIComponent(bot.id)}">Channels</a>
-              <a class="btn btn-ghost" href="/inbox?botId=${encodeURIComponent(bot.id)}">Inbox</a>
-              <a class="btn btn-ghost" href="/constructor?botId=${encodeURIComponent(bot.id)}">Constructor</a>
-              <a class="btn btn-ghost" href="/train?botId=${encodeURIComponent(bot.id)}">Training</a>
-            </div>
-          </section>`;
-      }).join('');
-    }
-
-    async function load() {
-      const botsData = await fetch('/auth/api/bots').then((r) => r.json());
-      activeBotId = botsData.activeBotId || '';
-      const bots = botsData.bots || [];
-      const botsWithChannels = await Promise.all(bots.map(async (bot) => {
-        try {
-          const channels = await fetch(`/auth/api/channels?botId=${encodeURIComponent(bot.id)}`).then((r) => r.json());
-          return { bot, channels, connectedCount: countConnectedChannels(channels) };
-        } catch (e) {
-          return {
-            bot,
-            channels: {
-              instagram: { connected: false },
-              messenger: { connected: false },
-              telegram: { connected: false },
-            },
-            connectedCount: 0,
-          };
-        }
-      }));
-      renderBots(botsWithChannels);
-    }
-
-    async function createBot() {
-      const name = botNameInput.value.trim();
-      const submit = document.getElementById('submitCreateBot');
-      submit.disabled = true;
-      submit.textContent = 'Creating...';
-      createError.style.display = 'none';
-      try {
-        const rsp = await fetch('/auth/api/bots', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', accept: 'application/json' },
-          body: JSON.stringify({ name }),
-        });
-        const data = await rsp.json();
-        if (!rsp.ok) throw new Error(data.error || 'Failed to create bot');
-        closeModal();
-        await load();
-      } catch (e) {
-        createError.textContent = e.message || 'Failed to create bot';
-        createError.style.display = 'block';
-      } finally {
-        submit.disabled = false;
-        submit.textContent = 'Create';
-      }
-    }
-
-    document.getElementById('openCreateBot').addEventListener('click', openModal);
-    document.getElementById('closeCreateBot').addEventListener('click', closeModal);
-    document.getElementById('submitCreateBot').addEventListener('click', createBot);
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-    botNameInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') createBot(); });
-
-    load().catch((error) => {
-      console.error(error);
-      botGrid.innerHTML = '<div class="empty-state">Failed to load bots.</div>';
-      document.getElementById('topSummary').textContent = 'Load error';
-    });
-  </script>
+  }));
+  results.forEach(r => rows.push(r));
+  render();
+}
+document.getElementById('modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+load().catch((e) => showToast(`Load error: ${e.message}`, 'error'));
+</script>
 </body>
 </html>

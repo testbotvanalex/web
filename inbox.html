@@ -3,36 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BotMatic Inbox</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <title>BotMatic — Inbox</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #f0f2f7;
-      --panel: #ffffff;
-      --panel2: #f5f6fa;
-      --border: #e2e5ef;
-      --text: #1a1d2e;
-      --muted: #8a90b0;
-      --accent: #5b4ef8;
-      --accent2: #7c6cfc;
-      --ig: #e1306c;
-      --tg: #0088cc;
-      --wa: #25d366;
-      --green: #16a34a;
-      --red: #dc2626;
-      --send: #5b4ef8;
+      --bg: #f4f5f9; --surface: #ffffff; --surface2: #f0f1f6; --surface3: #e8eaf2;
+      --border: #e2e4ed; --accent: #7c3aed; --accent2: #db2777;
+      --accent-glow: rgba(124,58,237,0.2); --text: #1a1a2e; --muted: #6b7280;
+      --green: #059669; --yellow: #d97706; --red: #dc2626; --blue: #2563eb;
+      --ig: #e1306c; --tg: #0088cc; --wa: #25d366;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'DM Sans', -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      overflow: hidden;
-    }
-    .layout { display: flex; min-height: 100vh; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow: hidden; }
+
+    /* ── Layout ── */
+    .layout { display: flex; height: 100vh; overflow: hidden; }
+
+    /* ── Sidebar ── */
     .sidebar {
-      width: 220px; flex-shrink: 0; background: var(--panel);
+      width: 220px; flex-shrink: 0; background: var(--surface);
       border-right: 1px solid var(--border); padding: 24px 0;
       display: flex; flex-direction: column; gap: 4px;
     }
@@ -40,732 +29,595 @@
       font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px;
       background: linear-gradient(135deg, #7c3aed, #db2777);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      padding: 0 20px 20px;
+      padding: 0 20px 20px; letter-spacing: -0.5px;
     }
     .nav-item {
-      display: flex; align-items: center; gap: 10px; padding: 10px 20px;
-      color: var(--muted); text-decoration: none; font-size: 14px; transition: all .15s;
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 20px; color: var(--muted); text-decoration: none;
+      font-size: 14px; transition: all .15s;
+      cursor: pointer; border: none; background: none; width: 100%; text-align: left;
     }
-    .nav-item:hover { color: var(--text); background: var(--panel2); }
+    .nav-item:hover { color: var(--text); background: var(--surface2); }
     .nav-item.active { color: var(--accent); background: rgba(124,108,252,0.1); border-left: 2px solid var(--accent); }
-    .main { flex: 1; min-width: 0; display: flex; flex-direction: column; min-height: 100vh; }
+    .nav-sep { height: 1px; background: var(--border); margin: 8px 0; }
+    .nav-badge {
+      margin-left: auto; background: var(--accent); color: #fff;
+      font-size: 10px; font-weight: 700; padding: 2px 6px;
+      border-radius: 999px; min-width: 18px; text-align: center;
+    }
 
-    /* ── Top bar ── */
+    /* ── Main area ── */
+    .main { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+
+    /* ── Topbar ── */
     .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 24px;
-      border-bottom: 1px solid var(--border);
-      background: var(--panel);
-      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 28px; border-bottom: 1px solid var(--border);
+      background: var(--surface); flex-shrink: 0;
     }
-    .logo {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 20px;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    .topbar-left { display: flex; align-items: center; gap: 10px; }
+    .topbar-left h1 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; }
+    .online-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; flex-shrink: 0; }
+    .topbar-right { display: flex; align-items: center; gap: 10px; }
+    .bot-pill {
+      font-size: 12px; color: var(--muted); background: var(--surface2);
+      padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border);
     }
-    .logo span { color: var(--accent2); }
-    .logo-dot {
-      width: 8px; height: 8px;
-      background: var(--accent);
-      border-radius: 50%;
+    .btn-logout {
+      background: transparent; border: 1px solid var(--border); color: var(--muted);
+      padding: 6px 14px; border-radius: 8px; cursor: pointer;
+      font-size: 13px; font-family: inherit; transition: all .15s;
     }
-    .topbar-right { display: flex; align-items: center; gap: 12px; }
-    .bot-name {
-      font-size: 13px;
-      color: var(--muted);
-      background: var(--panel2);
-      padding: 5px 12px;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-    }
-    .logout-btn {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      padding: 6px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 13px;
-      font-family: inherit;
-      transition: all .2s;
-    }
-    .logout-btn:hover { border-color: var(--accent); color: var(--text); }
+    .btn-logout:hover { border-color: var(--accent); color: var(--text); }
 
-    /* ── Shell ── */
-    .shell {
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      flex: 1;
-      min-height: 0;
-    }
+    /* ── Inbox shell ── */
+    .shell { display: flex; flex: 1; min-height: 0; overflow: hidden; }
 
-    /* ── Left panel ── */
-    .left {
+    /* ── Chat List Panel ── */
+    .panel-left {
+      width: 320px; flex-shrink: 0; background: var(--surface);
       border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      background: var(--panel);
+      display: flex; flex-direction: column; overflow: hidden;
     }
-    .left-head {
-      padding: 14px 16px 12px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+    .panel-left-head {
+      padding: 16px; border-bottom: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 10px; flex-shrink: 0;
     }
-    .left-head h2 {
-      font-family: 'Syne', sans-serif;
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text);
+    .panel-left-title {
+      font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700;
+      display: flex; align-items: center; justify-content: space-between;
     }
-    input[type="search"] {
-      width: 100%;
-      background: var(--panel2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 9px 12px;
-      font-size: 13px;
-      color: var(--text);
-      outline: none;
-      font-family: inherit;
-      box-shadow: inset 0 1px 3px rgba(0,0,0,.06);
+    .total-badge {
+      font-size: 11px; font-weight: 500; color: var(--muted);
+      background: var(--surface2); border: 1px solid var(--border);
+      padding: 2px 8px; border-radius: 99px;
     }
-    input[type="search"]::placeholder { color: var(--muted); }
-    input[type="search"]:focus { border-color: var(--accent); background: #fff; }
+    .search-wrap { position: relative; }
+    .search-wrap svg {
+      position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+      color: var(--muted); pointer-events: none;
+    }
+    .search-input {
+      width: 100%; padding: 8px 12px 8px 32px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; font-size: 13px; color: var(--text);
+      font-family: inherit; outline: none; transition: border-color .15s;
+    }
+    .search-input:focus { border-color: var(--accent); background: #fff; }
+    .search-input::placeholder { color: var(--muted); }
 
-    .tabs { display: flex; gap: 6px; }
-    .tab {
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--muted);
-      border-radius: 8px;
-      padding: 6px 12px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 12px;
-      font-family: inherit;
-      transition: all .15s;
+    .filter-tabs { display: flex; gap: 6px; }
+    .ftab {
+      padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 500;
+      background: var(--surface2); border: 1px solid var(--border);
+      cursor: pointer; transition: all .15s; color: var(--muted); font-family: inherit;
     }
-    .tab:hover { border-color: var(--accent); color: var(--text); }
-    .tab.active {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent);
-    }
+    .ftab:hover { border-color: var(--accent); color: var(--text); }
+    .ftab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-    .chat-list { overflow-y: auto; flex: 1; }
+    .chat-list { flex: 1; overflow-y: auto; }
     .chat-list::-webkit-scrollbar { width: 4px; }
-    .chat-list::-webkit-scrollbar-track { background: transparent; }
     .chat-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
     .chat-item {
-      padding: 12px 16px;
-      cursor: pointer;
-      border-bottom: 1px solid var(--border);
-      transition: background .15s;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 16px; cursor: pointer;
+      border-bottom: 1px solid var(--border); transition: background .1s;
     }
-    .chat-item:hover { background: #f0f1fb; }
-    .chat-item.active { background: #ece9ff; border-left: 3px solid var(--accent); }
+    .chat-item:hover { background: var(--surface2); }
+    .chat-item.active { background: rgba(124,58,237,0.08); border-left: 3px solid var(--accent); }
 
     .avatar {
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 17px;
-      font-weight: 700;
-      font-family: 'Syne', sans-serif;
+      width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 700; font-family: 'Syne', sans-serif;
       position: relative;
     }
-    .avatar-ig { background: linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); color: #fff; }
-    .avatar-tg { background: #0088cc; color: #fff; }
-    .avatar-wa { background: #25d366; color: #fff; }
-    .avatar-default { background: #ece9ff; color: var(--accent); border: 1px solid #d4cfff; }
+    .av-ig { background: linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); color:#fff; }
+    .av-tg { background: #0088cc; color:#fff; }
+    .av-wa { background: #25d366; color:#fff; }
+    .av-default { background: rgba(124,58,237,0.12); color: var(--accent); }
 
     .ch-dot {
-      position: absolute;
-      bottom: -1px; right: -1px;
-      width: 16px; height: 16px;
-      border-radius: 50%;
-      border: 2px solid var(--panel);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 8px;
+      position: absolute; bottom: -2px; right: -2px;
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 2px solid var(--surface);
+      display: flex; align-items: center; justify-content: center; font-size: 8px;
     }
-    .ch-dot-ig { background: var(--ig); }
-    .ch-dot-tg { background: var(--tg); }
-    .ch-dot-wa { background: var(--wa); }
-    .ch-dot-ms { background: #0084ff; }
+    .dot-ig { background: var(--ig); }
+    .dot-tg { background: var(--tg); }
+    .dot-wa { background: var(--wa); }
 
     .chat-info { flex: 1; min-width: 0; }
     .chat-name-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 3px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 6px; margin-bottom: 2px;
     }
-    .chat-name {
-      font-weight: 600;
-      font-size: 14px;
-      color: var(--text);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+    .chat-name { font-weight: 500; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .chat-time { font-size: 11px; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
-    .chat-preview {
-      font-size: 12px;
-      color: var(--muted);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      margin-bottom: 4px;
+    .chat-preview { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 5px; }
+    .chat-chips { display: flex; align-items: center; gap: 5px; }
+
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 7px; border-radius: 20px; font-size: 10px; font-weight: 500;
     }
-    .chat-meta-row { display: flex; align-items: center; gap: 6px; }
-    .chip {
-      font-size: 10px;
-      font-weight: 600;
-      padding: 2px 7px;
-      border-radius: 999px;
-      letter-spacing: .3px;
-    }
-    .chip-bot { background: #dcfce7; color: #15803d; }
-    .chip-human { background: #fee2e2; color: #b91c1c; }
-    .chip-ig { background: #fce7f3; color: #be185d; }
-    .chip-tg { background: #e0f2fe; color: #0369a1; }
-    .chip-unread {
-      background: var(--accent);
-      color: #fff;
-      margin-left: auto;
-      min-width: 18px;
-      text-align: center;
+    .badge-ig { background: #fce7f3; color: #be185d; }
+    .badge-tg { background: #e0f2fe; color: #0369a1; }
+    .badge-wa { background: #dcfce7; color: #15803d; }
+    .badge-bot { background: #f3f4f6; color: var(--muted); }
+    .badge-human { background: #fee2e2; color: var(--red); }
+    .badge-unread { background: var(--accent); color: #fff; margin-left: auto; min-width: 18px; text-align: center; }
+
+    /* ── Chat View ── */
+    .panel-right {
+      flex: 1; display: flex; flex-direction: column;
+      background: var(--bg); min-width: 0; overflow: hidden;
     }
 
-    /* ── Right panel ── */
-    .right {
-      display: flex;
-      flex-direction: column;
-      background: var(--bg);
-      min-height: 0;
+    .chat-topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 24px; border-bottom: 1px solid var(--border);
+      background: var(--surface); flex-shrink: 0; gap: 16px;
     }
-    .right-head {
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      background: var(--panel);
-      flex-shrink: 0;
-    }
-    .right-head-info {}
-    .right-head-name {
-      font-family: 'Syne', sans-serif;
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text);
-    }
-    .right-head-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .mode-badge {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 99px;
-    }
-    .mode-badge.bot { background: #dcfce7; color: #15803d; }
-    .mode-badge.human { background: #fee2e2; color: #b91c1c; }
+    .chat-topbar-name { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; }
+    .chat-topbar-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .chat-topbar-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
 
-    .head-actions { display: flex; gap: 8px; }
-    .btn {
-      border: 0;
-      border-radius: 10px;
-      padding: 8px 16px;
-      font-weight: 600;
-      font-size: 13px;
-      cursor: pointer;
-      font-family: inherit;
-      transition: opacity .15s;
+    .btn { padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid transparent; font-family: inherit; transition: all .15s; }
+    .btn-ghost { background: var(--surface); border-color: var(--border); color: var(--text); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-take { background: #fef3c7; border-color: #fde68a; color: #92400e; }
+    .btn-take:hover { background: #fde68a; }
+    .btn-release { background: #dcfce7; border-color: #bbf7d0; color: #065f46; }
+    .btn-release:hover { background: #bbf7d0; }
+    .mode-pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px;
     }
-    .btn:disabled { opacity: .5; cursor: default; }
-    .btn-take { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
-    .btn-release { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
-    .btn-send {
-      background: var(--accent);
-      color: #fff;
-      padding: 10px 24px;
-      font-size: 14px;
-    }
-    .btn-send:hover:not(:disabled) { opacity: .85; }
+    .mode-pill.bot { background: #f3f4f6; color: var(--muted); }
+    .mode-pill.human { background: #fee2e2; color: var(--red); }
 
     /* ── Messages ── */
-    .messages {
-      flex: 1;
-      min-height: 0;
-      overflow-y: auto;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+    .messages-area {
+      flex: 1; overflow-y: auto; padding: 20px 28px;
+      display: flex; flex-direction: column; gap: 6px; background: var(--bg);
     }
-    .messages::-webkit-scrollbar { width: 4px; }
-    .messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    .messages-area::-webkit-scrollbar { width: 4px; }
+    .messages-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-    .msg-wrap {
-      display: flex;
-      flex-direction: column;
+    .day-sep {
+      text-align: center; font-size: 11px; color: var(--muted);
+      margin: 12px 0 8px; position: relative;
     }
-    .msg-wrap.out { align-items: flex-end; }
-    .msg-wrap.in { align-items: flex-start; }
+    .day-sep span { position: relative; z-index: 1; background: var(--bg); padding: 0 12px; }
+    .day-sep::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border); }
+
+    .msg-group { display: flex; flex-direction: column; }
+    .msg-group.out { align-items: flex-end; }
+    .msg-group.in { align-items: flex-start; }
 
     .msg {
-      max-width: 68%;
-      padding: 10px 14px;
-      border-radius: 16px;
-      font-size: 14px;
-      line-height: 1.5;
-      white-space: pre-wrap;
-      word-break: break-word;
+      max-width: 62%; padding: 10px 14px;
+      font-size: 14px; line-height: 1.5; white-space: pre-wrap; word-break: break-word;
     }
     .msg.in {
-      background: #fff;
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-bottom-left-radius: 4px;
+      background: var(--surface); color: var(--text);
+      border: 1px solid var(--border); border-radius: 12px 12px 12px 3px;
       box-shadow: 0 1px 3px rgba(0,0,0,.06);
     }
     .msg.out {
-      background: var(--accent);
-      color: #fff;
-      border-bottom-right-radius: 4px;
-      box-shadow: 0 2px 6px rgba(91,78,248,.3);
+      background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff;
+      border-radius: 12px 12px 3px 12px;
+      box-shadow: 0 2px 8px rgba(124,58,237,0.3);
     }
-    .msg-time {
-      font-size: 10px;
-      color: var(--muted);
-      margin-top: 3px;
-      padding: 0 4px;
-    }
+    .msg-time { font-size: 10px; color: var(--muted); margin-top: 3px; padding: 0 2px; }
 
     /* ── Composer ── */
     .composer {
-      border-top: 1px solid var(--border);
-      padding: 14px 20px;
-      display: flex;
-      align-items: flex-end;
-      gap: 12px;
-      background: var(--panel);
-      flex-shrink: 0;
+      border-top: 1px solid var(--border); padding: 14px 24px;
+      display: flex; align-items: flex-end; gap: 10px;
+      background: var(--surface); flex-shrink: 0;
     }
-    textarea {
-      flex: 1;
-      min-height: 44px;
-      max-height: 140px;
-      resize: none;
-      background: #fff;
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      padding: 10px 14px;
-      font-size: 14px;
-      color: var(--text);
-      font-family: inherit;
-      outline: none;
-      line-height: 1.45;
-      transition: border-color .15s;
-      box-shadow: 0 1px 3px rgba(0,0,0,.06);
+    .compose-input {
+      flex: 1; min-height: 42px; max-height: 140px; resize: none;
+      background: var(--surface2); border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 10px 14px;
+      font-size: 14px; color: var(--text); font-family: inherit;
+      outline: none; line-height: 1.45; transition: border-color .15s;
     }
-    textarea::placeholder { color: var(--muted); }
-    textarea:focus { border-color: var(--accent); }
+    .compose-input::placeholder { color: var(--muted); }
+    .compose-input:focus { border-color: var(--accent); background: #fff; }
+    .btn-send {
+      background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff;
+      border: none; border-radius: 10px; padding: 10px 22px;
+      font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
+      box-shadow: 0 2px 8px rgba(124,58,237,0.3); transition: all .15s;
+      white-space: nowrap; flex-shrink: 0; display: flex; align-items: center; gap: 6px;
+    }
+    .btn-send:hover:not(:disabled) { box-shadow: 0 4px 16px rgba(124,58,237,0.4); }
+    .btn-send:disabled { opacity: .5; cursor: default; }
 
     /* ── Empty states ── */
-    .empty-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      flex: 1;
-      gap: 12px;
-      color: var(--muted);
-      font-size: 14px;
-      text-align: center;
+    .empty {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; flex: 1; gap: 10px;
+      color: var(--muted); font-size: 14px; text-align: center;
     }
-    .empty-icon { font-size: 40px; opacity: .4; }
-
-    /* ── Messages bg ── */
-    .messages { background: #f8f9fd; }
-
-    /* ── Day divider ── */
-    .day-divider {
-      text-align: center;
-      font-size: 11px;
-      color: var(--muted);
-      margin: 8px 0 4px;
-      position: relative;
-    }
-    .day-divider::before, .day-divider::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      width: 30%;
-      height: 1px;
-      background: var(--border);
-    }
-    .day-divider::before { left: 0; }
-    .day-divider::after { right: 0; }
+    .empty-icon { font-size: 44px; opacity: .3; }
+    .empty h3 { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); opacity: .5; }
   </style>
 </head>
 <body>
-  <div class="layout">
-    <nav class="sidebar">
-      <div class="sidebar-logo">BotMatic</div>
-      <a href="/admin/clients" class="nav-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        Clients
-      </a>
-      <a href="/dashboard" class="nav-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        Dashboard
-      </a>
-      <a href="/bots" class="nav-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
-        Bots
-      </a>
-      <a href="/inbox" class="nav-item active">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        Inbox
-      </a>
-      <a href="/auth/connect" class="nav-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v2"/><path d="M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M20 16v2a2 2 0 0 1-2 2h-2"/><path d="M4 8V6a2 2 0 0 1 2-2h2"/><circle cx="12" cy="12" r="3"/></svg>
-        Channels
-      </a>
-      <a href="/analytics" class="nav-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        Analytics
-      </a>
-    </nav>
+<div class="layout">
 
-    <div class="main">
-      <div class="topbar">
-        <div class="logo">
-          <div class="logo-dot"></div>
-          Bot<span>Matic</span> · Inbox
-        </div>
-        <div class="topbar-right">
-          <div class="bot-name" id="botSubtitle">Loading…</div>
-          <form action="/api/auth/logout" method="post">
-            <button class="logout-btn">Logout</button>
-          </form>
-        </div>
-      </div>
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">BotMatic</div>
+    <a href="/admin/clients" class="nav-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Clients
+    </a>
+    <a href="/dashboard" class="nav-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </a>
+    <a href="/inbox" class="nav-item active">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Inbox
+      <span class="nav-badge" id="sideUnread" style="display:none">0</span>
+    </a>
+    <a href="/bots" class="nav-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
+      Bots
+    </a>
+    <div class="nav-sep"></div>
+    <a href="/auth/connect" class="nav-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v2"/><path d="M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M20 16v2a2 2 0 0 1-2 2h-2"/><path d="M4 8V6a2 2 0 0 1 2-2h2"/><circle cx="12" cy="12" r="3"/></svg>
+      Channels
+    </a>
+    <a href="/analytics" class="nav-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Analytics
+    </a>
+  </nav>
 
-      <div class="shell">
-        <aside class="left">
-      <div class="left-head">
-        <h2>Conversations</h2>
-        <input id="search" type="search" placeholder="Search by name or ID…" />
-        <div class="tabs">
-          <button class="tab active" data-filter="all">All</button>
-          <button class="tab" data-filter="open">Open</button>
-          <button class="tab" data-filter="bot">Bot</button>
-          <button class="tab" data-filter="human">Human</button>
-        </div>
+  <!-- Main -->
+  <div class="main">
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="online-dot"></div>
+        <h1>Inbox</h1>
       </div>
-      <div id="chatList" class="chat-list">
-        <div class="empty-state"><div class="empty-icon">💬</div>Loading…</div>
-      </div>
-        </aside>
-
-        <section class="right">
-      <div id="chatHeader" class="right-head">
-        <div class="empty-state" style="flex-direction:row;gap:8px;padding:0;">
-          <span style="font-size:20px;">←</span>
-          Select a conversation
-        </div>
-      </div>
-      <div id="messages" class="messages">
-        <div class="empty-state">
-          <div class="empty-icon">✉️</div>
-          <div>No conversation selected.<br/>Pick one from the left.</div>
-        </div>
-      </div>
-      <div class="composer">
-        <textarea id="messageInput" placeholder="Type your reply… (Enter to send)" rows="1"></textarea>
-        <button id="sendBtn" class="btn btn-send">Send →</button>
-      </div>
-        </section>
+      <div class="topbar-right">
+        <div class="bot-pill" id="botPill">Loading…</div>
+        <form action="/api/auth/logout" method="post">
+          <button class="btn-logout">Logout</button>
+        </form>
       </div>
     </div>
-  </div>
 
-  <script>
-    const API = '/api/admin';
-    const state = { chats: [], filtered: [], activeChat: null, filter: 'all', search: '' };
+    <!-- Shell -->
+    <div class="shell">
 
-    const chatListEl = document.getElementById('chatList');
-    const chatHeaderEl = document.getElementById('chatHeader');
-    const messagesEl = document.getElementById('messages');
-    const messageInputEl = document.getElementById('messageInput');
-    const sendBtnEl = document.getElementById('sendBtn');
-    const searchEl = document.getElementById('search');
-
-    function esc(v) {
-      return String(v || '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
-    }
-
-    function fmtTime(ts) {
-      if (!ts) return '';
-      const d = new Date(ts);
-      if (isNaN(d)) return '';
-      const now = new Date();
-      const diff = now - d;
-      if (diff < 60000) return 'just now';
-      if (diff < 3600000) return Math.floor(diff/60000) + 'm ago';
-      if (diff < 86400000) return d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-      return d.toLocaleDateString([], {day:'numeric',month:'short'}) + ' ' + d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-    }
-
-    function channelIcon(ch) {
-      if (ch === 'instagram') return '📷';
-      if (ch === 'telegram') return '✈️';
-      if (ch === 'whatsapp') return '💬';
-      if (ch === 'messenger') return '💙';
-      return '💬';
-    }
-
-    function avatarClass(ch) {
-      if (ch === 'instagram') return 'avatar-ig';
-      if (ch === 'telegram') return 'avatar-tg';
-      if (ch === 'whatsapp') return 'avatar-wa';
-      return 'avatar-default';
-    }
-
-    function dotClass(ch) {
-      if (ch === 'instagram') return 'ch-dot ch-dot-ig';
-      if (ch === 'telegram') return 'ch-dot ch-dot-tg';
-      if (ch === 'whatsapp') return 'ch-dot ch-dot-wa';
-      return '';
-    }
-
-    function chipClass(ch) {
-      if (ch === 'instagram') return 'chip chip-ig';
-      if (ch === 'telegram') return 'chip chip-tg';
-      return 'chip';
-    }
-
-    function initials(name) {
-      const n = String(name || '?');
-      if (n.match(/^\d+$/)) return '#';
-      return n.charAt(0).toUpperCase();
-    }
-
-    function applyFilters() {
-      const q = state.search.toLowerCase().trim();
-      state.filtered = state.chats.filter(c => {
-        if (state.filter === 'open' && c.status !== 'open') return false;
-        if (state.filter === 'bot' && c.mode !== 'bot') return false;
-        if (state.filter === 'human' && c.mode !== 'human') return false;
-        if (!q) return true;
-        return `${c.sender_name||''} ${c.sender_id||''} ${c.company||''}`.toLowerCase().includes(q);
-      });
-    }
-
-    function renderList() {
-      applyFilters();
-      if (!state.filtered.length) {
-        chatListEl.innerHTML = '<div class="empty-state" style="padding:32px 0;"><div class="empty-icon">🔍</div>No chats found</div>';
-        return;
-      }
-      chatListEl.innerHTML = state.filtered.map(c => {
-        const active = state.activeChat?.id === c.id ? ' active' : '';
-        const dot = dotClass(c.channel);
-        return `
-          <div class="chat-item${active}" data-id="${c.id}">
-            <div class="avatar ${avatarClass(c.channel)}">
-              ${initials(c.sender_name || c.sender_id)}
-              ${dot ? `<div class="${dot}">${channelIcon(c.channel)}</div>` : ''}
-            </div>
-            <div class="chat-info">
-              <div class="chat-name-row">
-                <div class="chat-name">${esc(c.sender_name || c.sender_id || 'Unknown')}</div>
-                <div class="chat-time">${fmtTime(c.last_message_at)}</div>
-              </div>
-              <div class="chat-preview">${esc(c.last_message_text || '—')}</div>
-              <div class="chat-meta-row">
-                <span class="${chipClass(c.channel)}">${channelIcon(c.channel)} ${c.channel}</span>
-                <span class="chip ${c.mode === 'human' ? 'chip-human' : 'chip-bot'}">${c.mode}</span>
-                ${c.unread_count > 0 ? `<span class="chip chip-unread">${c.unread_count}</span>` : ''}
-              </div>
-            </div>
-          </div>`;
-      }).join('');
-      chatListEl.querySelectorAll('.chat-item').forEach(el =>
-        el.addEventListener('click', () => openChat(el.dataset.id))
-      );
-    }
-
-    async function loadChats() {
-      try {
-        const d = await fetch(`${API}/chats`).then(r => r.json());
-        state.chats = Array.isArray(d.chats) ? d.chats : [];
-        renderList();
-        if (state.activeChat) {
-          const r = state.chats.find(x => x.id === state.activeChat.id);
-          if (r) state.activeChat = r;
-        }
-      } catch(e) {}
-    }
-
-    async function openChat(chatId) {
-      const chat = state.chats.find(x => x.id === chatId);
-      if (!chat) return;
-      state.activeChat = chat;
-      renderList();
-
-      try {
-        const d = await fetch(`${API}/chats/${chat.id}/messages?limit=300`).then(r => r.json());
-        const msgs = Array.isArray(d.messages) ? d.messages : [];
-        const mode = d.chat?.mode || chat.mode || 'bot';
-
-        chatHeaderEl.innerHTML = `
-          <div class="right-head-info">
-            <div class="right-head-name">${esc(chat.sender_name || chat.sender_id)}</div>
-            <div class="right-head-meta">
-              ${channelIcon(chat.channel)} ${esc(chat.channel)}
-              ${chat.company ? '· ' + esc(chat.company) : ''}
-              · <span class="mode-badge ${mode}">${mode}</span>
-            </div>
+      <!-- Left: Chat List -->
+      <div class="panel-left">
+        <div class="panel-left-head">
+          <div class="panel-left-title">
+            Conversations
+            <span class="total-badge" id="totalBadge">0</span>
           </div>
-          <div class="head-actions">
-            <button class="btn btn-take" id="takeBtn">Take over</button>
-            <button class="btn btn-release" id="releaseBtn">Release to bot</button>
-          </div>`;
+          <div class="search-wrap">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input id="searchInput" class="search-input" type="search" placeholder="Search by name or ID…" />
+          </div>
+          <div class="filter-tabs">
+            <button class="ftab active" data-f="all">All</button>
+            <button class="ftab" data-f="open">Open</button>
+            <button class="ftab" data-f="bot">Bot</button>
+            <button class="ftab" data-f="human">Human</button>
+          </div>
+        </div>
+        <div id="chatList" class="chat-list">
+          <div class="empty" style="padding:40px 0;">
+            <div class="empty-icon">💬</div>
+            <div>Loading…</div>
+          </div>
+        </div>
+      </div>
 
-        if (!msgs.length) {
-          messagesEl.innerHTML = '<div class="empty-state"><div class="empty-icon">💬</div>No messages yet.</div>';
-        } else {
-          messagesEl.innerHTML = msgs.map((m, i) => {
-            const prev = msgs[i-1];
-            let divider = '';
-            if (!prev || new Date(m.created_at).toDateString() !== new Date(prev.created_at).toDateString()) {
-              const label = new Date(m.created_at).toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'});
-              divider = `<div class="day-divider">${label}</div>`;
-            }
-            return divider + `
-              <div class="msg-wrap ${m.direction === 'out' ? 'out' : 'in'}">
-                <div class="msg ${m.direction === 'out' ? 'out' : 'in'}">${esc(m.text || '')}</div>
-                <div class="msg-time">${fmtTime(m.created_at)}</div>
-              </div>`;
-          }).join('');
-        }
+      <!-- Right: Chat View -->
+      <div class="panel-right">
+        <div id="chatTopbar" class="chat-topbar">
+          <div class="empty" style="flex-direction:row;gap:8px;flex:1;justify-content:flex-start;padding:0;">
+            <span style="font-size:22px;opacity:.3;">←</span>
+            <span style="color:var(--muted);font-size:14px;">Select a conversation</span>
+          </div>
+        </div>
+        <div id="messagesArea" class="messages-area">
+          <div class="empty">
+            <div class="empty-icon">✉️</div>
+            <h3>No conversation selected</h3>
+            <div>Pick one from the left</div>
+          </div>
+        </div>
+        <div class="composer">
+          <textarea id="composeInput" class="compose-input" placeholder="Type your reply… (Enter to send)" rows="1"></textarea>
+          <button id="sendBtn" class="btn-send">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Send
+          </button>
+        </div>
+      </div>
 
-        messagesEl.scrollTop = messagesEl.scrollHeight;
-        document.getElementById('takeBtn')?.addEventListener('click', async () => {
-          await fetch(`${API}/chats/${chat.id}/takeover`, { method: 'POST' });
-          loadChats(); openChat(chat.id);
-        });
-        document.getElementById('releaseBtn')?.addEventListener('click', async () => {
-          await fetch(`${API}/chats/${chat.id}/release`, { method: 'POST' });
-          loadChats(); openChat(chat.id);
-        });
+    </div>
+  </div>
+</div>
+
+<script>
+const API = '/api/admin';
+const S = { chats: [], filtered: [], active: null, filter: 'all', q: '' };
+
+const $ = id => document.getElementById(id);
+const chatListEl   = $('chatList');
+const chatTopbarEl = $('chatTopbar');
+const messagesEl   = $('messagesArea');
+const composeEl    = $('composeInput');
+const sendBtnEl    = $('sendBtn');
+
+function esc(v) {
+  return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function fmtTime(ts) {
+  if (!ts) return '';
+  const d = new Date(ts); if (isNaN(d)) return '';
+  const diff = Date.now() - d;
+  if (diff < 60000)    return 'just now';
+  if (diff < 3600000)  return Math.floor(diff/60000) + 'm ago';
+  if (diff < 86400000) return d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  return d.toLocaleDateString([], {day:'numeric',month:'short'});
+}
+function initials(name) {
+  const n = String(name||'?');
+  return n.match(/^\d+$/) ? '#' : n.charAt(0).toUpperCase();
+}
+function avClass(ch) {
+  return ch==='instagram'?'av-ig':ch==='telegram'?'av-tg':ch==='whatsapp'?'av-wa':'av-default';
+}
+function chIcon(ch) {
+  return ch==='instagram'?'📷':ch==='telegram'?'✈️':ch==='whatsapp'?'💬':'💬';
+}
+function chDot(ch) {
+  const cls = ch==='instagram'?'dot-ig':ch==='telegram'?'dot-tg':ch==='whatsapp'?'dot-wa':'';
+  return cls ? `<div class="ch-dot ${cls}">${chIcon(ch)}</div>` : '';
+}
+function chBadge(ch) {
+  const cls = ch==='instagram'?'badge-ig':ch==='telegram'?'badge-tg':ch==='whatsapp'?'badge-wa':'';
+  return `badge ${cls}`;
+}
+
+function applyFilters() {
+  const q = S.q.toLowerCase().trim();
+  S.filtered = S.chats.filter(c => {
+    if (S.filter==='open'  && c.status!=='open')  return false;
+    if (S.filter==='bot'   && c.mode!=='bot')      return false;
+    if (S.filter==='human' && c.mode!=='human')    return false;
+    if (!q) return true;
+    return `${c.sender_name||''} ${c.sender_id||''} ${c.company||''}`.toLowerCase().includes(q);
+  });
+}
+
+function renderList() {
+  applyFilters();
+  $('totalBadge').textContent = S.chats.length;
+
+  const unread = S.chats.reduce((a,c)=>a+(c.unread_count||0), 0);
+  const su = $('sideUnread');
+  su.style.display = unread > 0 ? '' : 'none';
+  su.textContent = unread;
+
+  if (!S.filtered.length) {
+    chatListEl.innerHTML = `<div class="empty" style="padding:40px 0;"><div class="empty-icon">🔍</div><div>No chats found</div></div>`;
+    return;
+  }
+  chatListEl.innerHTML = S.filtered.map(c => {
+    const active = S.active?.id === c.id ? ' active' : '';
+    return `
+      <div class="chat-item${active}" data-id="${c.id}">
+        <div class="avatar ${avClass(c.channel)}">
+          ${initials(c.sender_name||c.sender_id)}
+          ${chDot(c.channel)}
+        </div>
+        <div class="chat-info">
+          <div class="chat-name-row">
+            <div class="chat-name">${esc(c.sender_name||c.sender_id||'Unknown')}</div>
+            <div class="chat-time">${fmtTime(c.last_message_at)}</div>
+          </div>
+          <div class="chat-preview">${esc(c.last_message_text||'—')}</div>
+          <div class="chat-chips">
+            <span class="${chBadge(c.channel)}">${chIcon(c.channel)} ${c.channel}</span>
+            <span class="badge ${c.mode==='human'?'badge-human':'badge-bot'}">${c.mode||'bot'}</span>
+            ${c.unread_count>0?`<span class="badge badge-unread">${c.unread_count}</span>`:''}
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  chatListEl.querySelectorAll('.chat-item').forEach(el =>
+    el.addEventListener('click', () => openChat(el.dataset.id))
+  );
+}
+
+async function loadChats() {
+  try {
+    const d = await fetch(`${API}/chats`).then(r=>r.json());
+    S.chats = Array.isArray(d.chats) ? d.chats : [];
+    renderList();
+    if (S.active) {
+      const r = S.chats.find(x=>x.id===S.active.id);
+      if (r) S.active = r;
+    }
+  } catch(e) {}
+}
+
+function renderMessages(msgs) {
+  if (!msgs.length) {
+    messagesEl.innerHTML = `<div class="empty"><div class="empty-icon">💬</div><div>No messages yet</div></div>`;
+    return;
+  }
+  let html = '';
+  msgs.forEach((m, i) => {
+    const prev = msgs[i-1];
+    if (!prev || new Date(m.created_at).toDateString() !== new Date(prev.created_at).toDateString()) {
+      const lbl = new Date(m.created_at).toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'});
+      html += `<div class="day-sep"><span>${lbl}</span></div>`;
+    }
+    const dir = m.direction==='out' ? 'out' : 'in';
+    html += `
+      <div class="msg-group ${dir}">
+        <div class="msg ${dir}">${esc(m.text||'')}</div>
+        <div class="msg-time">${fmtTime(m.created_at)}</div>
+      </div>`;
+  });
+  messagesEl.innerHTML = html;
+}
+
+async function openChat(chatId) {
+  const chat = S.chats.find(x=>x.id===chatId);
+  if (!chat) return;
+  S.active = chat;
+  renderList();
+
+  chatTopbarEl.innerHTML = `
+    <div>
+      <div class="chat-topbar-name">${esc(chat.sender_name||chat.sender_id||'Unknown')}</div>
+      <div class="chat-topbar-meta">${chIcon(chat.channel)} ${esc(chat.channel)}${chat.company?' · '+esc(chat.company):''}</div>
+    </div>`;
+  messagesEl.innerHTML = `<div class="empty"><div class="empty-icon" style="font-size:28px;opacity:.2;">⏳</div></div>`;
+
+  try {
+    const d = await fetch(`${API}/chats/${chat.id}/messages?limit=300`).then(r=>r.json());
+    const msgs = Array.isArray(d.messages) ? d.messages : [];
+    const mode = d.chat?.mode || chat.mode || 'bot';
+
+    chatTopbarEl.innerHTML = `
+      <div>
+        <div class="chat-topbar-name">${esc(chat.sender_name||chat.sender_id||'Unknown')}</div>
+        <div class="chat-topbar-meta">
+          ${chIcon(chat.channel)} ${esc(chat.channel)}
+          ${chat.company?' · '+esc(chat.company):''}
+          · <span class="mode-pill ${mode}">${mode==='human'?'👤 Human':'🤖 Bot'}</span>
+        </div>
+      </div>
+      <div class="chat-topbar-actions">
+        <button class="btn btn-take" id="takeBtn">Take over</button>
+        <button class="btn btn-release" id="releaseBtn">Release to bot</button>
+      </div>`;
+
+    renderMessages(msgs);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+
+    $('takeBtn')?.addEventListener('click', async () => {
+      await fetch(`${API}/chats/${chat.id}/takeover`, {method:'POST'});
+      loadChats(); openChat(chat.id);
+    });
+    $('releaseBtn')?.addEventListener('click', async () => {
+      await fetch(`${API}/chats/${chat.id}/release`, {method:'POST'});
+      loadChats(); openChat(chat.id);
+    });
+  } catch(e) {}
+}
+
+async function sendMessage() {
+  if (!S.active) return;
+  const text = composeEl.value.trim();
+  if (!text) return;
+  sendBtnEl.disabled = true;
+  sendBtnEl.innerHTML = 'Sending…';
+  try {
+    const r = await fetch(`${API}/send-message`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ chat_id: S.active.id, text })
+    });
+    const data = await r.json();
+    if (!r.ok || !data.ok) throw new Error(data.error||'Send failed');
+    composeEl.value = '';
+    composeEl.style.height = 'auto';
+    await loadChats();
+    await openChat(S.active.id);
+  } catch(e) {
+    alert(e.message||'Send failed');
+  } finally {
+    sendBtnEl.disabled = false;
+    sendBtnEl.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Send';
+  }
+}
+
+sendBtnEl.addEventListener('click', sendMessage);
+composeEl.addEventListener('keydown', e => {
+  if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+composeEl.addEventListener('input', () => {
+  composeEl.style.height = 'auto';
+  composeEl.style.height = Math.min(composeEl.scrollHeight, 140) + 'px';
+});
+document.querySelectorAll('.ftab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.ftab').forEach(x=>x.classList.remove('active'));
+    btn.classList.add('active');
+    S.filter = btn.dataset.f;
+    renderList();
+  });
+});
+$('searchInput').addEventListener('input', e => { S.q = e.target.value; renderList(); });
+
+async function init() {
+  try {
+    const d = await fetch('/auth/api/bots').then(r=>r.json());
+    const active = (d.bots||[]).find(b=>b.id===d.activeBotId);
+    $('botPill').textContent = active ? active.name : 'BotMatic';
+  } catch(e) { $('botPill').textContent = 'BotMatic'; }
+
+  await loadChats();
+
+  setInterval(async () => {
+    const prevId = S.active?.id || null;
+    await loadChats();
+    if (prevId && S.active?.id === prevId) {
+      try {
+        const d = await fetch(`${API}/chats/${prevId}/messages?limit=300`).then(r=>r.json());
+        const msgs = Array.isArray(d.messages) ? d.messages : [];
+        if (!msgs.length) return;
+        const atBottom = messagesEl.scrollHeight - messagesEl.scrollTop - messagesEl.clientHeight < 60;
+        renderMessages(msgs);
+        if (atBottom) messagesEl.scrollTop = messagesEl.scrollHeight;
       } catch(e) {}
     }
+  }, 4000);
+}
 
-    async function sendMessage() {
-      if (!state.activeChat) return;
-      const text = messageInputEl.value.trim();
-      if (!text) return;
-      sendBtnEl.disabled = true;
-      sendBtnEl.textContent = 'Sending…';
-      try {
-        const rsp = await fetch(`${API}/send-message`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ chat_id: state.activeChat.id, text })
-        });
-        const data = await rsp.json();
-        if (!rsp.ok || !data.ok) throw new Error(data.error || 'Send failed');
-        messageInputEl.value = '';
-        await loadChats();
-        await openChat(state.activeChat.id);
-      } catch (e) {
-        alert(e.message || 'Send failed');
-      } finally {
-        sendBtnEl.disabled = false;
-        sendBtnEl.textContent = 'Send →';
-      }
-    }
-
-    sendBtnEl.addEventListener('click', sendMessage);
-    messageInputEl.addEventListener('keydown', e => {
-      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-    });
-    // auto-resize textarea
-    messageInputEl.addEventListener('input', () => {
-      messageInputEl.style.height = 'auto';
-      messageInputEl.style.height = Math.min(messageInputEl.scrollHeight, 140) + 'px';
-    });
-
-    document.querySelectorAll('.tab').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
-        btn.classList.add('active');
-        state.filter = btn.dataset.filter;
-        renderList();
-      });
-    });
-    searchEl.addEventListener('input', () => { state.search = searchEl.value; renderList(); });
-
-    async function init() {
-      try {
-        const d = await fetch('/auth/api/bots').then(r => r.json());
-        const active = (d.bots || []).find(b => b.id === d.activeBotId);
-        document.getElementById('botSubtitle').textContent = active ? active.name : 'BotMatic';
-      } catch(e) {
-        document.getElementById('botSubtitle').textContent = 'BotMatic';
-      }
-      await loadChats();
-      setInterval(async () => {
-        const id = state.activeChat?.id || null;
-        await loadChats();
-        // only silently refresh messages if chat is open (don't scroll unless new msg)
-        if (id && state.activeChat?.id === id) {
-          const d = await fetch(`${API}/chats/${id}/messages?limit=300`).then(r=>r.json()).catch(()=>null);
-          if (!d) return;
-          const msgs = Array.isArray(d.messages) ? d.messages : [];
-          const wasAtBottom = messagesEl.scrollHeight - messagesEl.scrollTop - messagesEl.clientHeight < 60;
-          if (msgs.length) {
-            const mode = d.chat?.mode || state.activeChat?.mode || 'bot';
-            messagesEl.innerHTML = msgs.map((m, i) => {
-              const prev = msgs[i-1];
-              let divider = '';
-              if (!prev || new Date(m.created_at).toDateString() !== new Date(prev.created_at).toDateString()) {
-                const label = new Date(m.created_at).toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'});
-                divider = `<div class="day-divider">${label}</div>`;
-              }
-              return divider + `
-                <div class="msg-wrap ${m.direction === 'out' ? 'out' : 'in'}">
-                  <div class="msg ${m.direction === 'out' ? 'out' : 'in'}">${esc(m.text||'')}</div>
-                  <div class="msg-time">${fmtTime(m.created_at)}</div>
-                </div>`;
-            }).join('');
-            if (wasAtBottom) messagesEl.scrollTop = messagesEl.scrollHeight;
-          }
-        }
-      }, 4000);
-    }
-    init();
-  </script>
+init();
+</script>
 </body>
 </html>

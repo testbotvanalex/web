@@ -976,6 +976,36 @@
           <div class="actions" id="telegramActions"></div>
         </article>
 
+        <article class="card" id="whatsappCard">
+          <div class="card-head">
+            <div>
+              <div class="channel-tag">WhatsApp</div>
+              <h3>Meta Business Number</h3>
+            </div>
+            <div class="channel-icon whatsapp" aria-hidden="true">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="white">
+                <path d="M20.52 3.48A11.85 11.85 0 0 0 12.07 0C5.5 0 .17 5.33.17 11.9c0 2.1.55 4.15 1.6 5.95L0 24l6.33-1.66a11.82 11.82 0 0 0 5.73 1.46h.01c6.57 0 11.9-5.33 11.9-11.9 0-3.18-1.24-6.16-3.45-8.42ZM12.07 21.8h-.01a9.85 9.85 0 0 1-5.02-1.38l-.36-.21-3.76.99 1-3.67-.23-.38a9.86 9.86 0 0 1-1.51-5.25c0-5.45 4.44-9.9 9.9-9.9 2.64 0 5.12 1.03 6.98 2.91a9.82 9.82 0 0 1 2.9 6.99c0 5.46-4.44 9.9-9.89 9.9Zm5.43-7.43c-.3-.15-1.77-.87-2.05-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.18.2-.35.22-.65.08-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.05-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.38-.03-.53-.08-.15-.67-1.62-.92-2.22-.24-.58-.48-.5-.67-.5h-.57c-.2 0-.52.08-.8.38-.27.3-1.04 1.02-1.04 2.49 0 1.47 1.07 2.89 1.22 3.09.15.2 2.1 3.2 5.1 4.49.71.31 1.27.49 1.7.63.72.23 1.38.2 1.9.12.58-.09 1.77-.72 2.02-1.42.25-.7.25-1.29.17-1.42-.07-.13-.27-.2-.57-.35Z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="status-pill" id="whatsappStatus">Loading</div>
+          <p>
+            Attach the live Meta WhatsApp business number already running on the server
+            to this BotMatic bot and use it in the shared inbox.
+          </p>
+          <div class="details" id="whatsappDetails">
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+          </div>
+          <ul class="perms">
+            <li>Uses the existing live Meta WhatsApp integration</li>
+            <li>No QR code or Baileys session required</li>
+            <li>Ready for inbox send and webhook receive flow</li>
+          </ul>
+          <div class="actions" id="whatsappActions"></div>
+        </article>
+
       </div>
 
       <section class="footer-bar">
@@ -1189,6 +1219,20 @@
         primaryClass: 'primary-telegram',
       });
 
+      setStatus('whatsappStatus', data.whatsapp.connected, data.whatsapp.statusLabel);
+      setDetails('whatsappDetails', [
+        { label: 'Number', value: data.whatsapp.pageName || 'Not available' },
+        { label: 'Phone ID', value: data.whatsapp.pageId || 'Unavailable' },
+        { label: 'Connected', value: formatDate(data.whatsapp.connectedAt) },
+      ]);
+      setActions('whatsappActions', {
+        channel: 'whatsapp',
+        connected: data.whatsapp.connected,
+        available: data.whatsapp.available,
+        onClick: 'connectWhatsApp()',
+        primaryClass: 'primary-whatsapp',
+      });
+
     }
 
     async function disconnectChannel(channel) {
@@ -1217,6 +1261,20 @@
       currentBotId = created.id;
       syncBotIdInUrl(currentBotId);
       await loadBots();
+      await loadChannels();
+    }
+
+    async function connectWhatsApp() {
+      const response = await fetch(buildApiUrl('/auth/api/whatsapp/connect-live'), {
+        method: 'POST',
+        headers: { accept: 'application/json' },
+      });
+
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to attach live WhatsApp channel');
+      }
+
       await loadChannels();
     }
 

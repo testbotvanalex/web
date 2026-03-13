@@ -476,28 +476,16 @@ app.post('/auth/api/bots', (req, res) => {
 app.get('/auth/api/channels', async (req, res) => {
   const bot = getBotOrDefault(req.query.botId);
   const channels = getChannelsByBotId(bot.id);
-
-  // Proactively sync WhatsApp status if marked as disconnected
-  if (!channels.whatsapp.connected) {
-    try {
-      const waRes = await axios.get(`http://localhost:3300/api/whatsapp/connect?botId=${bot.id}`);
-      channels.whatsapp.lastStatus = waRes.data.status || '';
-      if (waRes.data.status === 'connected') {
-        channels.whatsapp.connected = true;
-        channels.whatsapp.connectedAt = channels.whatsapp.connectedAt || new Date().toISOString();
-        channels.whatsapp.source = channels.whatsapp.source || 'session-sync';
-        setChannelsByBotId(bot.id, channels);
-      } else if (waRes.data.status === 'pending' || waRes.data.status === 'initializing') {
-        setChannelsByBotId(bot.id, channels);
-      }
-    } catch (err) {
-      console.error('Proactive WhatsApp sync failed:', err.message);
-    }
-  }
+  const liveWhatsapp = getLiveWhatsappConfig();
 
   const instagramConnected = Boolean(channels.instagram.token && channels.instagram.id);
   const messengerConnected = Boolean(channels.messenger.pageToken && channels.messenger.pageId);
   const telegramConnected = Boolean(channels.telegram.token && channels.telegram.id);
+  const whatsappConnected = Boolean(
+    channels.whatsapp.connected &&
+    (channels.whatsapp.pageId || liveWhatsapp.phoneNumberId) &&
+    (channels.whatsapp.token || liveWhatsapp.token)
+  );
   const botParam = `botId=${encodeURIComponent(bot.id)}`;
 
   res.json({
@@ -538,18 +526,57 @@ app.get('/auth/api/channels', async (req, res) => {
       statusLabel: telegramConnected ? 'Connected' : 'Not Connected',
     },
     whatsapp: {
-      connected: false,
+      connected: whatsappConnected,
       connectedAt: channels.whatsapp.connectedAt || '',
-      pageId: channels.whatsapp.pageId || '',
-      pageName: channels.whatsapp.pageName || '',
-      source: channels.whatsapp.source || '',
-      lastStatus: channels.whatsapp.lastStatus || '',
-      available: false,
+      pageId: channels.whatsapp.pageId || liveWhatsapp.phoneNumberId || '',
+      pageName: channels.whatsapp.pageName || liveWhatsapp.displayNumber || 'WhatsApp Business',
+      source: channels.whatsapp.source || liveWhatsapp.source || '',
+      lastStatus: channels.whatsapp.lastStatus || (liveWhatsapp.available ? 'connected' : ''),
+      available: liveWhatsapp.available,
       connectUrl: '#',
       disconnectUrl: `/auth/api/channels/whatsapp?${botParam}`,
-      statusLabel: 'Disabled',
+      statusLabel: whatsappConnected ? 'Connected' : (liveWhatsapp.available ? 'Ready to connect' : 'Not Available'),
     },
   });
+});
+
+app.post('/auth/api/whatsapp/connect-live', (req, res) => {
+  const bot = getBotOrDefault(req.query.botId || req.body?.botId);
+  const channels = getChannelsByBotId(bot.id);
+  const liveWhatsapp = getLiveWhatsappConfig();
+
+  if (!liveWhatsapp.available) {
+    return res.status(400).json({ error: 'Live WhatsApp Meta channel is not available on this server.' });
+  }
+
+  const resolvedPageId = channels.whatsapp.pageId || liveWhatsapp.phoneNumberId;
+  const resolvedPageName = channels.whatsapp.pageName || liveWhatsapp.displayNumber || 'WhatsApp Business';
+  const now = new Date().toISOString();
+
+  channels.whatsapp = {
+    ...createEmptyWhatsappChannel(),
+    ...channels.whatsapp,
+    connected: true,
+    connectedAt: now,
+    pageId: resolvedPageId,
+    pageName: resolvedPageName,
+    token: liveWhatsapp.token,
+    source: 'meta-live',
+    lastStatus: 'connected',
+  };
+
+  setChannelsByBotId(bot.id, channels);
+
+  const mapping = findClientAndBotIdByBot(bot.id);
+  if (mapping?.clientId) {
+    saveChannelToDb(mapping.clientId, bot.id, 'whatsapp', {
+      pageId: resolvedPageId,
+      pageName: resolvedPageName,
+      token: liveWhatsapp.token,
+    });
+  }
+
+  return res.json({ ok: true, botId: bot.id, pageId: resolvedPageId, pageName: resolvedPageName });
 });
 
 app.delete('/auth/api/channels/:channel', (req, res) => {
@@ -576,15 +603,12 @@ app.delete('/auth/api/channels/:channel', (req, res) => {
   }
 
   if (channel === 'whatsapp') {
-    channels.whatsapp.connected = false;
-    channels.whatsapp.connectedAt = '';
+    channels.whatsapp = {
+      ...createEmptyWhatsappChannel(),
+      pageId: channels.whatsapp.pageId || '',
+      pageName: channels.whatsapp.pageName || '',
+    };
     setChannelsByBotId(bot.id, channels);
-
-    // Ping backend to wipe session folder and clear memory
-    axios.delete(`http://localhost:3300/api/whatsapp/disconnect?botId=${encodeURIComponent(bot.id)}`)
-      .catch((err) => {
-        console.error('Failed to notify WhatsApp hub of disconnect:', err.message);
-      });
 
     return res.json({ ok: true, botId: bot.id });
   }
@@ -632,6 +656,63 @@ function createEmptyWhatsappChannel() {
     pageId: '',
     pageName: '',
     source: '',
+    token: '',
+    lastStatus: '',
+  };
+}
+
+function parseSimpleEnvFile(filePath) {
+  try {
+    if (!fs.existsSync(filePath)) return {};
+    const raw = fs.readFileSync(filePath, 'utf8');
+    const out = {};
+    for (const line of raw.split(/\r?\n/)) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+      const idx = trimmed.indexOf('=');
+      if (idx === -1) continue;
+      out[trimmed.slice(0, idx).trim()] = trimmed.slice(idx + 1).trim();
+    }
+    return out;
+  } catch {
+    return {};
+  }
+}
+
+function getLiveWhatsappConfig() {
+  const hubEnv = parseSimpleEnvFile(path.resolve(__dirname, '..', 'whatsapp-hub', '.env'));
+  const dockEnv = parseSimpleEnvFile(path.resolve(__dirname, '..', 'dockz', 'whatsapp', '.env'));
+  const merged = { ...dockEnv, ...hubEnv, ...process.env };
+
+  const token = String(
+    merged.WHATSAPP_TOKEN ||
+    merged.WA_TOKEN ||
+    merged.WA_ACCESS_TOKEN ||
+    merged.CLOUD_API_ACCESS_TOKEN ||
+    merged.META_ACCESS_TOKEN ||
+    ''
+  ).trim();
+
+  const phoneNumberId = String(
+    merged.WHATSAPP_PHONE_NUMBER_ID ||
+    merged.WA_PHONE_NUMBER_ID ||
+    merged.META_PHONE_NUMBER_ID ||
+    merged.PHONE_NUMBER_ID ||
+    ''
+  ).trim();
+
+  const displayNumber = String(
+    merged.META_DISPLAY_NUMBER ||
+    merged.WHATSAPP_DISPLAY_NUMBER ||
+    ''
+  ).trim();
+
+  return {
+    token,
+    phoneNumberId,
+    displayNumber,
+    available: Boolean(token && phoneNumberId),
+    source: token || phoneNumberId ? 'meta-live' : '',
   };
 }
 
