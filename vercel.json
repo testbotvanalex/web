@@ -2,23 +2,23 @@
   "rewrites": [
     {
       "source": "/auth/:path*",
-      "destination": "http://91.183.13.81:3200/auth/:path*"
+      "destination": "https://ocenka02.ru/auth/:path*"
     },
     {
       "source": "/api/admin/:path*",
-      "destination": "http://91.183.13.81:3200/api/admin/:path*"
+      "destination": "https://ocenka02.ru/api/admin/:path*"
     },
     {
       "source": "/api/send-message",
-      "destination": "http://91.183.13.81:3200/api/send-message"
+      "destination": "https://ocenka02.ru/api/send-message"
     },
     {
       "source": "/analytics",
-      "destination": "http://91.183.13.81:3200/analytics"
+      "destination": "https://ocenka02.ru/analytics"
     },
     {
       "source": "/dashboard",
-      "destination": "http://91.183.13.81:3200/dashboard"
+      "destination": "https://ocenka02.ru/dashboard"
     }
   ]
 }
