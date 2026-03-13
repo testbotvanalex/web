@@ -13,6 +13,10 @@
       "destination": "https://ocenka02.ru/api/send-message"
     },
     {
+      "source": "/inbox",
+      "destination": "https://ocenka02.ru/inbox"
+    },
+    {
       "source": "/analytics",
       "destination": "https://ocenka02.ru/analytics"
     },
