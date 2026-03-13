@@ -1,9 +1,20 @@
 {
-  "version": 2,
-  "builds": [
-    { "src": "server.js", "use": "@vercel/node" }
-  ],
-  "routes": [
-    { "src": "/(.*)", "dest": "server.js" }
+  "rewrites": [
+    {
+      "source": "/auth/:path*",
+      "destination": "http://91.183.13.81:3200/auth/:path*"
+    },
+    {
+      "source": "/api/admin/:path*",
+      "destination": "http://91.183.13.81:3200/api/admin/:path*"
+    },
+    {
+      "source": "/analytics",
+      "destination": "http://91.183.13.81:3200/analytics"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "http://91.183.13.81:3200/dashboard"
+    }
   ]
 }
