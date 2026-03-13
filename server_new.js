@@ -204,7 +204,7 @@ const CONFIG = {
     process.env.META_REDIRECT_URI || process.env.REDIRECT_URI || 'https://botmatic.be/auth/instagram/callback',
   IG_SCOPES: (
     process.env.IG_SCOPES ||
-    'instagram_basic,instagram_manage_messages,pages_show_list,pages_manage_metadata,pages_read_engagement'
+    'instagram_basic,instagram_manage_messages,pages_show_list,pages_manage_metadata,pages_read_engagement,business_management'
   ),
   IG_SUBSCRIBED_FIELDS: (
     process.env.IG_SUBSCRIBED_FIELDS ||
@@ -294,6 +294,14 @@ app.get('/auth/instagram/connect', (req, res) => {
 
 app.get('/auth/connect', (req, res) => {
   res.sendFile(path.join(__dirname, 'channels.html'));
+});
+
+app.get('/auth/api/debug/channels', (req, res) => {
+  const result = store.bots.map((bot) => ({
+    botId: bot.id,
+    channels: getChannelsByBotId(bot.id),
+  }));
+  res.json(result);
 });
 
 app.get('/auth/api/bots', (req, res) => {
@@ -1435,7 +1443,10 @@ app.post('/webhook/instagram', async (req, res) => {
 
       // Save incoming message to DB
       const igClientId = findClientIdByChannel('instagram', entry.id)
-        || findClientIdByChannel('instagram', channel.instagram?.pageId || '');
+        || findClientIdByChannel('instagram', channel.instagram?.pageId || '')
+        || findClientAndBotIdByBot(channel.bot?.id)?.clientId
+        || channel.bot?.id
+        || null;
       saveMessageToDb(igClientId, 'instagram', senderId, text, 'in', event);
 
       const igChat = igClientId ? D.chats.byThread.get(igClientId, 'instagram', senderId) : null;
