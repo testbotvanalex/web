@@ -2,19 +2,23 @@
   "rewrites": [
     {
       "source": "/auth/:path*",
-      "destination": "http://91.183.13.81:3200/auth/:path*"
+      "destination": "http://195.49.212.252:3200/auth/:path*"
     },
     {
       "source": "/api/admin/:path*",
-      "destination": "http://91.183.13.81:3200/api/admin/:path*"
+      "destination": "http://195.49.212.252:3200/api/admin/:path*"
+    },
+    {
+      "source": "/api/send-message",
+      "destination": "http://195.49.212.252:3200/api/send-message"
     },
     {
       "source": "/analytics",
-      "destination": "http://91.183.13.81:3200/analytics"
+      "destination": "http://195.49.212.252:3200/analytics"
     },
     {
       "source": "/dashboard",
-      "destination": "http://91.183.13.81:3200/dashboard"
+      "destination": "http://195.49.212.252:3200/dashboard"
     }
   ]
 }
