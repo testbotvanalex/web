@@ -248,6 +248,72 @@ app.get('/auth', (req, res) => {
   res.redirect(`/auth/connect?botId=${encodeURIComponent(getDefaultBot().id)}`);
 });
 
+// ── Instagram send-message interceptor (store-backed fallback) ─────────────────
+// The admin router looks up channels in SQLite. Instagram connections live in
+// the in-memory store, so we intercept before the router and handle IG sends here.
+app.post('/api/admin/send-message', async (req, res, next) => {
+  try {
+    const { chat_id, channel: chOverride, client_id: cidOverride, sender_id: sidOverride, text } = req.body;
+    if (!text?.trim()) return next();
+
+    let channel = chOverride;
+    let clientId = cidOverride;
+    let senderId = sidOverride;
+
+    if (chat_id) {
+      const chat = D.chats.byId.get(chat_id);
+      if (!chat) return next();
+      channel = chat.channel;
+      clientId = chat.client_id;
+      senderId = chat.sender_id;
+    }
+
+    if (channel !== 'instagram') return next();
+
+    // Find Instagram token from store by botId (clientId may be a bot id)
+    let igToken = null;
+    for (const bot of store.bots) {
+      if (bot.id === clientId) {
+        const ch = getChannelsByBotId(bot.id);
+        igToken = ch.instagram?.pageToken || ch.instagram?.token || ch.messenger?.pageToken || null;
+        break;
+      }
+    }
+
+    // Also try finding by any connected Instagram channel if only one exists
+    if (!igToken) {
+      const connected = store.bots
+        .map((b) => ({ bot: b, ch: getChannelsByBotId(b.id) }))
+        .filter(({ ch }) => ch.instagram?.pageToken || ch.instagram?.token || ch.messenger?.pageToken);
+      if (connected.length === 1) {
+        const { ch } = connected[0];
+        igToken = ch.instagram?.pageToken || ch.instagram?.token || ch.messenger?.pageToken || null;
+      }
+    }
+
+    if (!igToken) return next(); // fall through to admin router which will return 404
+
+    await sendInstagramMessage(igToken, senderId, text.trim());
+
+    const now = new Date().toISOString();
+    const chat = D.chats.byId.get(chat_id) ||
+      D.chats.byThread.get(clientId, 'instagram', senderId);
+    if (chat) {
+      D.messages.insert.run({
+        id: D.genId('msg_'), client_id: clientId, channel: 'instagram',
+        sender_id: senderId, sender_name: senderId,
+        text: text.trim(), direction: 'out', raw: null,
+      });
+      D.chats.touchOutgoing.run({ id: chat.id, sender_name: senderId, last_message_at: now });
+    }
+
+    return res.json({ ok: true, sent: true });
+  } catch (e) {
+    console.error('[IG send interceptor]', e.response?.data || e.message);
+    return res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
 // ── Admin API ──────────────────────────────────────────────────────────────────
 app.use('/api/admin', adminRouter);
 
