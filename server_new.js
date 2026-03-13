@@ -1033,9 +1033,12 @@ app.get('/auth/instagram/callback', async (req, res) => {
     }
 
     if (!selectedPage || !igBusinessId) {
+      const debugInfo = pages.length
+        ? pages.map(p => `• ${p.name} (${p.id})\n  ig_business: ${p.instagram_business_account?.id || '—'}\n  connected_ig: ${p.connected_instagram_account?.id || '—'}`).join('\n')
+        : 'No pages returned from /me/accounts';
       return renderErrorPage(res, {
         title: 'Could not connect Instagram',
-        description: 'No linked Instagram Business/Professional account found. Ensure your Instagram account is linked to a Facebook Page.',
+        description: `No Instagram found. Debug:\n${debugInfo}`,
         actionHref,
         actionLabel: 'Back to channels',
       });
