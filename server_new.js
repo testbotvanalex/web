@@ -975,17 +975,42 @@ app.get('/auth/instagram/callback', async (req, res) => {
     let igBusinessId = '';
     let igProfile = {};
 
-    console.log('[Instagram Connect] Final pages list for inspection:', JSON.stringify(pages, null, 2));
+    console.log('[Instagram Connect] Pages from /me/accounts:', JSON.stringify(pages.map(p => ({ id: p.id, name: p.name, ig: p.instagram_business_account, cig: p.connected_instagram_account })), null, 2));
 
+    // First pass: check fields returned directly from /me/accounts
     for (const page of pages) {
       const igId = page.instagram_business_account?.id || page.connected_instagram_account?.id;
       if (igId) {
         selectedPage = page;
         igBusinessId = igId;
-        console.log('[Instagram Connect] Selected Page:', page.name, `(ID: ${page.id})`, 'Linked IG:', igBusinessId);
+        console.log('[Instagram Connect] Found IG via /me/accounts on page:', page.name, 'IG:', igBusinessId);
         break;
-      } else {
-        console.log('[Instagram Connect] Skipping Page (no linked IG):', page.name, `(ID: ${page.id})`);
+      }
+    }
+
+    // ── 4.2 Re-fetch each page with PAGE token to get instagram_business_account ──
+    if (!igBusinessId) {
+      console.log('[Instagram Connect] Retrying with page tokens...');
+      for (const page of pages) {
+        if (!page.access_token) continue;
+        try {
+          const pageRes = await axios.get(`https://graph.facebook.com/${CONFIG.API_VERSION}/${page.id}`, {
+            params: {
+              access_token: page.access_token,
+              fields: 'id,name,instagram_business_account,connected_instagram_account',
+            },
+          });
+          const igId = pageRes.data.instagram_business_account?.id || pageRes.data.connected_instagram_account?.id;
+          console.log('[Instagram Connect] Page token re-fetch for', page.name, ':', JSON.stringify({ ig: pageRes.data.instagram_business_account, cig: pageRes.data.connected_instagram_account }));
+          if (igId) {
+            selectedPage = page;
+            igBusinessId = igId;
+            console.log('[Instagram Connect] Found IG via page token on page:', page.name, 'IG:', igBusinessId);
+            break;
+          }
+        } catch (e) {
+          console.warn('[Instagram Connect] Page token re-fetch failed for', page.name, ':', e.response?.data || e.message);
+        }
       }
     }
 
@@ -1000,7 +1025,6 @@ app.get('/auth/instagram/callback', async (req, res) => {
         console.log('[Instagram Connect] Direct IG accounts:', JSON.stringify(igAccounts, null, 2));
         if (igAccounts.length > 0) {
           igBusinessId = igAccounts[0].id;
-          // Find the page token to use — pick first page that has a token
           selectedPage = pages.find(p => p.access_token) || { access_token: longToken, id: null, name: 'Direct' };
         }
       } catch (e) {
