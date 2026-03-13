@@ -201,7 +201,7 @@ const CONFIG = {
   META_APP_SECRET: process.env.META_APP_SECRET || process.env.INSTAGRAM_APP_SECRET || '',
   // ── Instagram (via Facebook Login → Graph API) ──
   IG_REDIRECT_URI:
-    process.env.META_REDIRECT_URI || process.env.REDIRECT_URI || 'https://ocenka02.ru/auth/instagram/callback',
+    process.env.META_REDIRECT_URI || process.env.REDIRECT_URI || 'https://botmatic.be/auth/instagram/callback',
   IG_SCOPES: (
     process.env.IG_SCOPES ||
     'instagram_basic,instagram_manage_messages,pages_show_list,pages_manage_metadata,pages_read_engagement'
@@ -214,7 +214,7 @@ const CONFIG = {
   MESSENGER_APP_ID: process.env.MESSENGER_APP_ID || process.env.META_APP_ID || '',
   MESSENGER_APP_SECRET: process.env.MESSENGER_APP_SECRET || process.env.META_APP_SECRET || '',
   MESSENGER_REDIRECT_URI:
-    process.env.MESSENGER_REDIRECT_URI || 'https://ocenka02.ru/auth/messenger/callback',
+    process.env.MESSENGER_REDIRECT_URI || 'https://botmatic.be/auth/messenger/callback',
   MESSENGER_SCOPES:
     process.env.MESSENGER_SCOPES || 'pages_show_list,pages_messaging,pages_manage_metadata',
   // ── General ──
@@ -222,7 +222,7 @@ const CONFIG = {
   PORT: Number(process.env.PORT || 3200),
   STORE_FILE: process.env.CHANNEL_STORE_FILE || path.join(__dirname, 'data', 'channel-store.json'),
   API_VERSION: 'v25.0',
-  BASE_URL: process.env.BASE_URL || 'https://ocenka02.ru',
+  BASE_URL: process.env.BASE_URL || 'https://botmatic.be',
 };
 
 const missingConfig = ['META_APP_ID', 'META_APP_SECRET', 'IG_REDIRECT_URI', 'WEBHOOK_VERIFY_TOKEN']

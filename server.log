@@ -2,7 +2,7 @@
 > botmatic-instagram-oauth@1.0.0 start
 > node server_new.js
 
-(node:6715) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/botmatic/consturctror/whatsapp-hub/src/core/router.js is not specified and it doesn't parse as CommonJS.
+(node:15190) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/botmatic/consturctror/whatsapp-hub/src/core/router.js is not specified and it doesn't parse as CommonJS.
 Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
 To eliminate this warning, add "type": "module" to /Users/botmatic/consturctror/package.json.
 (Use `node --trace-warnings ...` to show where the warning was created)
@@ -20,21 +20,4 @@ Telegram webhook set for bot main: https://botmatic.be/auth/webhook/telegram/mai
 BotMatic channel server running on port 3200
 Instagram redirect URI: https://botmatic.be/auth/instagram/callback
 Messenger redirect URI: https://botmatic.be/auth/messenger/callback
-(node:6822) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/botmatic/consturctror/whatsapp-hub/src/core/router.js is not specified and it doesn't parse as CommonJS.
-Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
-To eliminate this warning, add "type": "module" to /Users/botmatic/consturctror/package.json.
-(Use `node --trace-warnings ...` to show where the warning was created)
-✅ Database initialized: /Users/botmatic/consturctror/whatsapp-hub/storage/sqlite.db
-📦 Tenants cache refreshed: 1 active tenants
-[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
-📂 Scanning for bots in: /Users/botmatic/consturctror/bots
-🎨 Loaded Visual Flow: main
-🤖 Loaded Internal: defaultBot
-❌ Failed to load notaries CSV: ENOENT: no such file or directory, open '/Users/botmatic/consturctror/notatius.csv'
-✅ SQLite DB schema initialized (notaries + sessions + events).
-🤖 Loaded Internal: dockz
-✅ WhatsApp router loaded
-Telegram webhook set for bot main: https://botmatic.be/auth/webhook/telegram/main
-BotMatic channel server running on port 3200
-Instagram redirect URI: https://botmatic.be/auth/instagram/callback
-Messenger redirect URI: https://botmatic.be/auth/messenger/callback
+Base URL: https://botmatic.be
