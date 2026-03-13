@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -187,7 +187,7 @@
   <div class="top">
     <div>
       <h1 class="title">Inbox</h1>
-      <div class="sub">Demo Company · Demo Owner</div>
+      <div class="sub" id="botSubtitle">BotMatic · Message Inbox</div>
     </div>
     <form action="/api/auth/logout" method="post"><button class="btn">Logout</button></form>
   </div>
@@ -411,6 +411,10 @@
     });
 
     async function init() {
+      fetch('/auth/api/bots').then(r => r.json()).then(data => {
+        const active = (data.bots || []).find(b => b.id === data.activeBotId);
+        if (active) document.getElementById('botSubtitle').textContent = 'BotMatic · ' + active.name;
+      }).catch(() => {});
       await loadChats();
       setInterval(async () => {
         const activeId = state.activeChat?.id || null;
