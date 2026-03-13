@@ -942,7 +942,7 @@ app.get('/auth/instagram/callback', async (req, res) => {
     const pagesRes = await axios.get(`https://graph.facebook.com/${CONFIG.API_VERSION}/me/accounts`, {
       params: {
         access_token: longToken,
-        fields: 'id,name,access_token,instagram_business_account',
+        fields: 'id,name,access_token,instagram_business_account,connected_instagram_account',
       },
     });
 
@@ -957,10 +957,10 @@ app.get('/auth/instagram/callback', async (req, res) => {
             const extraRes = await axios.get(`https://graph.facebook.com/${CONFIG.API_VERSION}/${ch.messenger.pageId}`, {
               params: {
                 access_token: longToken,
-                fields: 'id,name,access_token,instagram_business_account'
+                fields: 'id,name,access_token,instagram_business_account,connected_instagram_account'
               }
             });
-            if (extraRes.data.instagram_business_account) {
+            if (extraRes.data.instagram_business_account || extraRes.data.connected_instagram_account) {
               pages.push(extraRes.data);
             }
           } catch (e) {
@@ -978,13 +978,33 @@ app.get('/auth/instagram/callback', async (req, res) => {
     console.log('[Instagram Connect] Final pages list for inspection:', JSON.stringify(pages, null, 2));
 
     for (const page of pages) {
-      if (page.instagram_business_account) {
+      const igId = page.instagram_business_account?.id || page.connected_instagram_account?.id;
+      if (igId) {
         selectedPage = page;
-        igBusinessId = page.instagram_business_account.id;
+        igBusinessId = igId;
         console.log('[Instagram Connect] Selected Page:', page.name, `(ID: ${page.id})`, 'Linked IG:', igBusinessId);
         break;
       } else {
         console.log('[Instagram Connect] Skipping Page (no linked IG):', page.name, `(ID: ${page.id})`);
+      }
+    }
+
+    // ── 4.5 Fallback: get Instagram accounts directly from user token ──
+    if (!igBusinessId) {
+      console.log('[Instagram Connect] Trying direct /me/instagram_accounts fallback...');
+      try {
+        const igDirectRes = await axios.get(`https://graph.facebook.com/${CONFIG.API_VERSION}/me/instagram_accounts`, {
+          params: { access_token: longToken, fields: 'id,name,username' },
+        });
+        const igAccounts = igDirectRes.data?.data || [];
+        console.log('[Instagram Connect] Direct IG accounts:', JSON.stringify(igAccounts, null, 2));
+        if (igAccounts.length > 0) {
+          igBusinessId = igAccounts[0].id;
+          // Find the page token to use — pick first page that has a token
+          selectedPage = pages.find(p => p.access_token) || { access_token: longToken, id: null, name: 'Direct' };
+        }
+      } catch (e) {
+        console.warn('[Instagram Connect] Direct fallback failed:', e.response?.data || e.message);
       }
     }
 
