@@ -255,6 +255,20 @@
               <div class="section-title">Knowledge Base</div>
               <div class="prompt-preview" id="knowledgePreview">No knowledge base available.</div>
             </div>
+            <div class="section">
+              <div class="section-title">🔐 Client Portal</div>
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <div style="display:flex;gap:8px;">
+                  <input id="portalLogin" placeholder="Login (email или username)" style="flex:1;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:13px;font-family:inherit;outline:none;">
+                  <input id="portalPassword" type="text" placeholder="Пароль" style="flex:1;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:13px;font-family:inherit;outline:none;">
+                  <button onclick="savePortal()" style="padding:8px 14px;border-radius:8px;background:var(--accent);color:#fff;border:none;font-size:13px;font-weight:600;cursor:pointer;">Сохранить</button>
+                </div>
+                <div id="portalLink" style="font-size:12px;color:var(--muted);display:none;">
+                  Ссылка: <a id="portalLinkHref" href="#" target="_blank" style="color:var(--accent);text-decoration:none;"></a>
+                  <button onclick="copyPortalLink()" style="margin-left:8px;padding:2px 8px;border-radius:6px;background:transparent;border:1px solid var(--border);color:var(--muted);font-size:11px;cursor:pointer;">Копировать</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -557,6 +571,7 @@
       S.tasks = workspaceData.tasks || [];
       S.activity = workspaceData.activity || [];
       S.bot = inferBot();
+      loadPortal();
       S.conversations = (chatsData.chats || []).filter((chat) => chat.client_id === S.workspace.id);
       S.filtered = [...S.conversations];
       renderTop();
@@ -579,6 +594,42 @@
         sendReply();
       }
     });
+
+    // ── Portal password management ─────────────────────────────────────────────
+    async function loadPortal() {
+      const client = S.workspace;
+      if (!client) return;
+      if (client.portal_login) document.getElementById('portalLogin').value = client.portal_login;
+      if (client.portal_password) document.getElementById('portalPassword').value = client.portal_password;
+      if (client.portal_password) {
+        const link = `https://botmatic.be/client/inbox`;
+        const el = document.getElementById('portalLink');
+        const href = document.getElementById('portalLinkHref');
+        el.style.display = 'block';
+        href.href = link;
+        href.textContent = link;
+      }
+    }
+    async function savePortal() {
+      const login = document.getElementById('portalLogin').value.trim();
+      const password = document.getElementById('portalPassword').value.trim();
+      if (!login || !password) { showToast('Заполни логин и пароль', 'error'); return; }
+      const r = await fetch(`${API}/clients/${encodeURIComponent(workspaceId)}/portal`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ portal_login: login, portal_password: password })
+      });
+      if (r.ok) {
+        S.workspace.portal_login = login;
+        S.workspace.portal_password = password;
+        loadPortal();
+        showToast('Портал сохранён ✓', 'success');
+      } else { showToast('Ошибка сохранения', 'error'); }
+    }
+    function copyPortalLink() {
+      navigator.clipboard.writeText('https://botmatic.be/client/inbox');
+      showToast('Ссылка скопирована ✓', 'success');
+    }
 
     load().catch((e) => {
       document.getElementById('workspaceTitle').textContent = 'Workspace not available';

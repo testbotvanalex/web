@@ -131,6 +131,8 @@ db.exec(`
 
 // ── Migrations (safe: ignore if column already exists) ────────────────────────
 try { db.exec(`ALTER TABLE bots ADD COLUMN flow TEXT DEFAULT NULL`); } catch (_) {}
+try { db.exec(`ALTER TABLE clients ADD COLUMN portal_password TEXT DEFAULT NULL`); } catch (_) {}
+try { db.exec(`ALTER TABLE clients ADD COLUMN portal_login TEXT DEFAULT NULL`); } catch (_) {}
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 

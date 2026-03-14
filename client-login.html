@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BotMatic — Войти</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f5efe3;
+    --ink: #12151f;
+    --panel: rgba(255,255,255,0.72);
+    --border: rgba(18,21,31,0.12);
+    --muted: #5f6779;
+    --shadow: 0 24px 80px rgba(36,31,24,0.18);
+    --error: #a23a2b;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    font-family: "Manrope", sans-serif;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+      radial-gradient(circle at top left,  rgba(255,159,90,0.28), transparent 28%),
+      radial-gradient(circle at top right, rgba(68,131,255,0.22), transparent 24%),
+      linear-gradient(180deg, #f7f2e8 0%, #efe4d3 100%);
+  }
+  body::before {
+    content: "";
+    position: fixed; inset: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(18,21,31,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(18,21,31,0.025) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: radial-gradient(circle at center, black, transparent 80%);
+  }
+  .card {
+    background: var(--panel);
+    backdrop-filter: blur(18px);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    border-radius: 28px;
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::after {
+    content: "";
+    position: absolute; right: -80px; top: -80px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,167,120,0.35) 0%, transparent 72%);
+    pointer-events: none;
+  }
+  .logo {
+    font-family: "Syne", sans-serif; font-weight: 800; font-size: 22px;
+    background: linear-gradient(135deg, #7c3aed, #db2777);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 4px;
+  }
+  .subtitle { font-size: 13px; color: var(--muted); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 32px; }
+  .field { margin-bottom: 16px; }
+  label { display: block; font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 7px; }
+  input {
+    width: 100%; background: rgba(255,255,255,0.7); border: 1px solid var(--border);
+    border-radius: 12px; padding: 12px 16px; color: var(--ink);
+    font-family: "Manrope", sans-serif; font-size: 14px; font-weight: 500; outline: none;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  input:focus { border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124,58,237,0.12); }
+  .btn {
+    width: 100%; margin-top: 8px; padding: 14px;
+    background: linear-gradient(135deg, #7c3aed, #db2777);
+    color: #fff; border: none; border-radius: 12px;
+    font-family: "Syne", sans-serif; font-weight: 700; font-size: 15px;
+    cursor: pointer; transition: opacity .2s, transform .15s;
+  }
+  .btn:hover { opacity: .9; transform: translateY(-1px); }
+  .btn:disabled { opacity: .6; cursor: default; transform: none; }
+  .error-box {
+    background: rgba(162,58,43,0.08); border: 1px solid rgba(162,58,43,0.25);
+    color: var(--error); border-radius: 12px; padding: 11px 16px;
+    font-size: 13px; font-weight: 600; margin-bottom: 18px; display: none;
+  }
+  .error-box.show { display: block; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">BotMatic</div>
+  <div class="subtitle">Клиентский портал</div>
+  <div class="error-box" id="errMsg">Неверный логин или пароль</div>
+  <form id="loginForm">
+    <div class="field">
+      <label>Логин / Email</label>
+      <input type="text" id="login" autocomplete="username" placeholder="your@email.com" required>
+    </div>
+    <div class="field">
+      <label>Пароль</label>
+      <input type="password" id="password" autocomplete="current-password" placeholder="••••••••" required>
+    </div>
+    <button type="submit" class="btn" id="btn">Войти</button>
+  </form>
+</div>
+<script>
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('btn');
+    btn.disabled = true; btn.textContent = 'Вход...';
+    document.getElementById('errMsg').classList.remove('show');
+    const r = await fetch('/client/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        login: document.getElementById('login').value,
+        password: document.getElementById('password').value,
+      })
+    });
+    if (r.ok) {
+      location.href = '/client/inbox';
+    } else {
+      document.getElementById('errMsg').classList.add('show');
+      btn.disabled = false; btn.textContent = 'Войти';
+    }
+  });
+</script>
+</body>
+</html>

@@ -318,6 +318,124 @@ app.get('/admin/logout', (req, res) => {
   res.redirect('/admin/login');
 });
 
+// ── Client Portal Auth ─────────────────────────────────────────────────────────
+const CLIENT_COOKIE = 'bm_client';
+
+function makeClientToken(clientId) {
+  return crypto.createHmac('sha256', AUTH_SECRET).update('client:' + clientId).digest('hex');
+}
+function getClientSession(req) {
+  const cookies = parseCookies(req);
+  const raw = cookies[CLIENT_COOKIE] || '';
+  const [clientId, token] = raw.split(':');
+  if (!clientId || !token) return null;
+  if (token !== makeClientToken(clientId)) return null;
+  const client = D.clients.byId.get(clientId);
+  return client || null;
+}
+function requireClientAuth(req, res, next) {
+  const client = getClientSession(req);
+  if (client) { req.clientSession = client; return next(); }
+  if (req.path.startsWith('/api/')) return res.status(401).json({ error: 'Unauthorized' });
+  res.redirect('/client/login');
+}
+
+// Client login page
+app.get('/client/login', (req, res) => res.sendFile(path.join(__dirname, 'client-login.html')));
+
+// Client login POST
+app.post('/client/login', (req, res) => {
+  const { login, password } = req.body || {};
+  if (!login || !password) return res.status(400).json({ ok: false, error: 'Missing fields' });
+
+  const client = D.db.prepare(
+    `SELECT * FROM clients WHERE (portal_login = ? OR contact_email = ?) AND portal_password = ?`
+  ).get(login.trim(), login.trim(), password);
+
+  if (!client) return res.status(401).json({ ok: false, error: 'Invalid credentials' });
+
+  const token = makeClientToken(client.id);
+  const expires = new Date(Date.now() + COOKIE_TTL).toUTCString();
+  res.setHeader('Set-Cookie', `${CLIENT_COOKIE}=${client.id}:${token}; Path=/; HttpOnly; SameSite=Strict; Expires=${expires}`);
+  res.json({ ok: true });
+});
+
+// Client logout
+app.get('/client/logout', (req, res) => {
+  res.setHeader('Set-Cookie', `${CLIENT_COOKIE}=; Path=/; HttpOnly; Expires=Thu, 01 Jan 1970 00:00:00 GMT`);
+  res.redirect('/client/login');
+});
+
+// Client inbox page
+app.get('/client/inbox', requireClientAuth, (req, res) => res.sendFile(path.join(__dirname, 'client-inbox.html')));
+
+// ── Client Portal API ──────────────────────────────────────────────────────────
+app.get('/api/client/me', requireClientAuth, (req, res) => {
+  const c = req.clientSession;
+  res.json({ id: c.id, company: c.company, contact_name: c.contact_name });
+});
+
+app.get('/api/client/chats', requireClientAuth, (req, res) => {
+  try {
+    const clientId = req.clientSession.id;
+    const mode   = req.query.mode   || 'all';
+    const search = (req.query.search || '').toLowerCase();
+
+    let rows = D.db.prepare(`
+      SELECT ch.*, c.company,
+        (SELECT m.text FROM messages m
+         WHERE m.client_id = ch.client_id AND m.channel = ch.channel AND m.sender_id = ch.sender_id
+         ORDER BY m.created_at DESC LIMIT 1) AS last_message_text
+      FROM chats ch
+      LEFT JOIN clients c ON c.id = ch.client_id
+      WHERE ch.client_id = ?
+      ORDER BY ch.last_message_at DESC
+    `).all(clientId);
+
+    if (mode !== 'all') rows = rows.filter(r => r.mode === mode);
+    if (search) rows = rows.filter(r =>
+      (r.sender_name || '').toLowerCase().includes(search) ||
+      (r.sender_id   || '').toLowerCase().includes(search)
+    );
+    res.json({ chats: rows });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/client/chats/:id/messages', requireClientAuth, (req, res) => {
+  try {
+    const clientId = req.clientSession.id;
+    const chat = D.chats.byId.get(req.params.id);
+    if (!chat || chat.client_id !== clientId) return res.status(404).json({ error: 'Not found' });
+    const msgs = D.db.prepare(
+      `SELECT * FROM messages WHERE client_id = ? AND channel = ? AND sender_id = ? ORDER BY created_at ASC LIMIT 300`
+    ).all(chat.client_id, chat.channel, chat.sender_id);
+    res.json({ messages: msgs });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/client/send-message', requireClientAuth, (req, res) => {
+  const clientId = req.clientSession.id;
+  const { chat_id, text } = req.body || {};
+  if (!text?.trim() || !chat_id) return res.status(400).json({ error: 'Missing fields' });
+  const chat = D.chats.byId.get(chat_id);
+  if (!chat || chat.client_id !== clientId) return res.status(403).json({ error: 'Forbidden' });
+  // Delegate to admin send-message (reuse same logic via internal fetch trick or direct call)
+  req.body = { chat_id, text };
+  // Forward to admin send endpoint handler directly
+  res.redirect(307, '/api/admin/send-message');
+});
+
+// ── Admin: set client portal password ─────────────────────────────────────────
+app.put('/api/admin/clients/:id/portal', requireAdminAuth, (req, res) => {
+  const { portal_login, portal_password } = req.body || {};
+  const client = D.clients.byId.get(req.params.id);
+  if (!client) return res.status(404).json({ error: 'Not found' });
+  D.db.prepare(
+    `UPDATE clients SET portal_login = ?, portal_password = ?, updated_at = datetime('now') WHERE id = ?`
+  ).run(portal_login || null, portal_password || null, req.params.id);
+  res.json({ ok: true });
+});
+
 const CONFIG = {
   // ── Meta App (Unified for Instagram and Messenger) ──
   META_APP_ID: process.env.META_APP_ID || process.env.INSTAGRAM_APP_ID || '',
