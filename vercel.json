@@ -18,6 +18,8 @@
     { "source": "/webhook/:path*",  "destination": "https://botmatic.be/webhook/:path*" },
     { "source": "/admin/:path*",    "destination": "https://botmatic.be/admin/:path*" },
     { "source": "/admin",           "destination": "https://botmatic.be/admin" },
+    { "source": "/client/:path*",   "destination": "https://botmatic.be/client/:path*" },
+    { "source": "/client",          "destination": "https://botmatic.be/client" },
     { "source": "/inbox",           "destination": "https://botmatic.be/inbox" },
     { "source": "/dashboard",       "destination": "https://botmatic.be/dashboard" },
     { "source": "/analytics",       "destination": "https://botmatic.be/analytics" },
