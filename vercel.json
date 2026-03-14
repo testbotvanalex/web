@@ -13,18 +13,18 @@
     }
   ],
   "rewrites": [
-    { "source": "/auth/:path*",     "destination": "https://ocenka02.ru/auth/:path*" },
-    { "source": "/api/:path*",      "destination": "https://ocenka02.ru/api/:path*" },
-    { "source": "/webhook/:path*",  "destination": "https://ocenka02.ru/webhook/:path*" },
-    { "source": "/admin/:path*",    "destination": "https://ocenka02.ru/admin/:path*" },
-    { "source": "/admin",           "destination": "https://ocenka02.ru/admin" },
-    { "source": "/inbox",           "destination": "https://ocenka02.ru/inbox" },
-    { "source": "/dashboard",       "destination": "https://ocenka02.ru/dashboard" },
-    { "source": "/analytics",       "destination": "https://ocenka02.ru/analytics" },
-    { "source": "/bots",            "destination": "https://ocenka02.ru/bots" },
-    { "source": "/bot",             "destination": "https://ocenka02.ru/bot" },
-    { "source": "/constructor",     "destination": "https://ocenka02.ru/constructor" },
-    { "source": "/train",           "destination": "https://ocenka02.ru/train" },
-    { "source": "/start",           "destination": "https://ocenka02.ru/start" }
+    { "source": "/auth/:path*",     "destination": "https://botmatic.be/auth/:path*" },
+    { "source": "/api/:path*",      "destination": "https://botmatic.be/api/:path*" },
+    { "source": "/webhook/:path*",  "destination": "https://botmatic.be/webhook/:path*" },
+    { "source": "/admin/:path*",    "destination": "https://botmatic.be/admin/:path*" },
+    { "source": "/admin",           "destination": "https://botmatic.be/admin" },
+    { "source": "/inbox",           "destination": "https://botmatic.be/inbox" },
+    { "source": "/dashboard",       "destination": "https://botmatic.be/dashboard" },
+    { "source": "/analytics",       "destination": "https://botmatic.be/analytics" },
+    { "source": "/bots",            "destination": "https://botmatic.be/bots" },
+    { "source": "/bot",             "destination": "https://botmatic.be/bot" },
+    { "source": "/constructor",     "destination": "https://botmatic.be/constructor" },
+    { "source": "/train",           "destination": "https://botmatic.be/train" },
+    { "source": "/start",           "destination": "https://botmatic.be/start" }
   ]
 }
