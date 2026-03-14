@@ -272,6 +272,52 @@ app.use(cors({
 app.use('/webhook/instagram', express.raw({ type: '*/*' }));
 app.use(express.json());
 
+// ── Admin Auth ─────────────────────────────────────────────────────────────────
+const ADMIN_USER   = process.env.ADMIN_USER || 'admin';
+const ADMIN_PASS   = process.env.ADMIN_PASS || '';
+const AUTH_SECRET  = process.env.AUTH_SECRET || process.env.META_APP_SECRET || 'botmatic-secret-key';
+const COOKIE_NAME  = 'bm_admin';
+const COOKIE_TTL   = 7 * 24 * 60 * 60 * 1000; // 7 дней
+
+function makeToken(user) {
+  return crypto.createHmac('sha256', AUTH_SECRET).update(user).digest('hex');
+}
+function parseCookies(req) {
+  const raw = req.headers.cookie || '';
+  return Object.fromEntries(raw.split(';').map(c => c.trim().split('=').map(decodeURIComponent)));
+}
+function isAuthenticated(req) {
+  const cookies = parseCookies(req);
+  return cookies[COOKIE_NAME] === makeToken(ADMIN_USER);
+}
+function requireAdminAuth(req, res, next) {
+  if (isAuthenticated(req)) return next();
+  if (req.path.startsWith('/api/')) return res.status(401).json({ error: 'Unauthorized' });
+  const redirect = encodeURIComponent(req.originalUrl);
+  res.redirect(`/admin/login?redirect=${redirect}`);
+}
+
+// Login page
+app.get('/admin/login', (req, res) => res.sendFile(path.join(__dirname, 'admin-login.html')));
+
+// Login POST
+app.post('/admin/login', express.json(), (req, res) => {
+  const { username, password } = req.body || {};
+  if (username === ADMIN_USER && password === ADMIN_PASS && ADMIN_PASS !== '') {
+    const token = makeToken(ADMIN_USER);
+    const expires = new Date(Date.now() + COOKIE_TTL).toUTCString();
+    res.setHeader('Set-Cookie', `${COOKIE_NAME}=${token}; Path=/; HttpOnly; SameSite=Strict; Expires=${expires}`);
+    return res.json({ ok: true });
+  }
+  res.status(401).json({ ok: false, error: 'Invalid credentials' });
+});
+
+// Logout
+app.get('/admin/logout', (req, res) => {
+  res.setHeader('Set-Cookie', `${COOKIE_NAME}=; Path=/; HttpOnly; Expires=Thu, 01 Jan 1970 00:00:00 GMT`);
+  res.redirect('/admin/login');
+});
+
 const CONFIG = {
   // ── Meta App (Unified for Instagram and Messenger) ──
   META_APP_ID: process.env.META_APP_ID || process.env.INSTAGRAM_APP_ID || '',
@@ -394,13 +440,13 @@ app.post('/api/admin/send-message', async (req, res, next) => {
   }
 });
 
-// ── Admin API ──────────────────────────────────────────────────────────────────
-app.use('/api/admin', adminRouter);
+// ── Admin API (protected) ──────────────────────────────────────────────────────
+app.use('/api/admin', requireAdminAuth, adminRouter);
 
-// ── Admin Pages ────────────────────────────────────────────────────────────────
-app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'admin-clients.html')));
-app.get('/admin/clients', (req, res) => res.sendFile(path.join(__dirname, 'admin-clients.html')));
-app.get('/admin/client', (req, res) => res.sendFile(path.join(__dirname, 'admin-client.html')));
+// ── Admin Pages (protected) ────────────────────────────────────────────────────
+app.get('/admin', requireAdminAuth, (req, res) => res.sendFile(path.join(__dirname, 'admin-clients.html')));
+app.get('/admin/clients', requireAdminAuth, (req, res) => res.sendFile(path.join(__dirname, 'admin-clients.html')));
+app.get('/admin/client', requireAdminAuth, (req, res) => res.sendFile(path.join(__dirname, 'admin-client.html')));
 
 // ── .html → route redirects (for old links/bookmarks) ─────────────────────────
 app.get('/dashboard.html',         (req, res) => res.redirect('/dashboard'));
@@ -411,35 +457,35 @@ app.get('/constructor.html',       (req, res) => res.redirect('/constructor'));
 app.get('/admin-clients.html',     (req, res) => res.redirect('/admin'));
 app.get('/admin-client.html',      (req, res) => res.redirect(`/admin/client${req.query.id ? '?id=' + req.query.id : ''}`));
 
-app.get('/auth/channels', (req, res) => {
+app.get('/auth/channels', requireAdminAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'channels.html'));
 });
 
-app.get('/dashboard', (req, res) => {
+app.get('/dashboard', requireAdminAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'dashboard.html'));
 });
 
-app.get('/bots', (req, res) => {
+app.get('/bots', requireAdminAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'bots.html'));
 });
 
-app.get('/bot', (req, res) => {
+app.get('/bot', requireAdminAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'bot.html'));
 });
 
-app.get('/workspace-app', (req, res) => {
+app.get('/workspace-app', requireAdminAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'workspace-app.html'));
 });
 
-app.get('/bot-scope-app', (req, res) => {
+app.get('/bot-scope-app', requireAdminAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'bot-scope-app.html'));
 });
 
-app.get('/bot-inbox-lite', (req, res) => {
+app.get('/bot-inbox-lite', requireAdminAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'bot-scope-app.html'));
 });
 
-app.get('/auth/bot-scope-app', (req, res) => {
+app.get('/auth/bot-scope-app', requireAdminAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'bot-scope-app.html'));
 });
 
@@ -451,11 +497,11 @@ app.get('/train', (req, res) => {
   res.sendFile(path.join(__dirname, 'train.html'));
 });
 
-app.get('/analytics', (req, res) => {
+app.get('/analytics', requireAdminAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'analytics.html'));
 });
 
-app.get('/inbox', (req, res) => {
+app.get('/inbox', requireAdminAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'inbox.html'));
 });
 

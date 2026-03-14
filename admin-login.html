@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BotMatic — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --border: #1e1e2e;
+    --accent: #7c6cfc;
+    --accent-hover: #6a5ae0;
+    --text: #e8e8f0;
+    --muted: #6b6b8a;
+    --error: #ff4d4d;
+  }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+    width: 100%;
+    max-width: 380px;
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 32px;
+  }
+  label {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color .2s;
+    margin-bottom: 16px;
+  }
+  input:focus { border-color: var(--accent); }
+  button {
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 13px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background .2s;
+    margin-top: 4px;
+  }
+  button:hover { background: var(--accent-hover); }
+  button:disabled { opacity: .6; cursor: default; }
+  .error {
+    background: rgba(255,77,77,.1);
+    border: 1px solid rgba(255,77,77,.3);
+    color: var(--error);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    margin-bottom: 16px;
+    display: none;
+  }
+  .error.show { display: block; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">BotMatic</div>
+  <div class="subtitle">Admin Panel</div>
+  <div class="error" id="errMsg">Неверный логин или пароль</div>
+  <form id="loginForm">
+    <label>Логин</label>
+    <input type="text" id="username" autocomplete="username" placeholder="admin" required>
+    <label>Пароль</label>
+    <input type="password" id="password" autocomplete="current-password" placeholder="••••••••" required>
+    <button type="submit" id="btn">Войти</button>
+  </form>
+</div>
+<script>
+  const params = new URLSearchParams(location.search);
+  if (params.get('error')) document.getElementById('errMsg').classList.add('show');
+
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('btn');
+    btn.disabled = true;
+    btn.textContent = 'Вход...';
+    document.getElementById('errMsg').classList.remove('show');
+
+    const r = await fetch('/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: document.getElementById('username').value,
+        password: document.getElementById('password').value,
+      })
+    });
+
+    if (r.ok) {
+      const redirect = params.get('redirect') || '/admin';
+      location.href = redirect;
+    } else {
+      document.getElementById('errMsg').classList.add('show');
+      btn.disabled = false;
+      btn.textContent = 'Войти';
+    }
+  });
+</script>
+</body>
+</html>
