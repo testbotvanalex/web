@@ -75,7 +75,7 @@
     <div class="sidebar-logo">BotMatic</div>
     <a href="/admin/clients" class="nav-item">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      Clients
+      Workspaces
     </a>
     <a href="/dashboard" class="nav-item">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
@@ -107,15 +107,15 @@
 
     <div class="content">
       <div class="stats-row">
-        <div class="stat-card"><div class="stat-label">Total Clients</div><div class="stat-value accent" id="st-total">—</div><div class="stat-sub">in database</div></div>
+        <div class="stat-card"><div class="stat-label">Total Workspaces</div><div class="stat-value accent" id="st-total">—</div><div class="stat-sub">in database</div></div>
         <div class="stat-card"><div class="stat-label">Live</div><div class="stat-value green" id="st-live">—</div><div class="stat-sub">active</div></div>
         <div class="stat-card"><div class="stat-label">Channels</div><div class="stat-value blue" id="st-ch">—</div><div class="stat-sub">connected</div></div>
         <div class="stat-card"><div class="stat-label">Tasks</div><div class="stat-value yellow" id="st-tasks">—</div><div class="stat-sub">open</div></div>
       </div>
 
-      <!-- Clients table -->
+      <!-- Workspaces table -->
       <div class="card">
-        <div class="card-header"><h3>All Clients</h3></div>
+        <div class="card-header"><h3>All Workspaces</h3></div>
         <div class="table-wrap">
           <table>
             <thead>
@@ -202,7 +202,7 @@ async function load(){
           </td>
           <td style="font-size:12px">${PRI[cl.priority]||cl.priority||'—'}</td>
         </tr>`).join('')
-      :'<tr><td colspan="6" class="empty-state">No clients</td></tr>';
+      :'<tr><td colspan="6" class="empty-state">No workspaces</td></tr>';
 
     const acts=(s.activity||[]).slice(0,30);
     document.getElementById('actList').innerHTML=acts.length

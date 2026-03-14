@@ -3,6 +3,29 @@ import axios from "axios";
 
 const VERSION = process.env.API_VERSION || "v22.0";
 const BASE_URL = `https://graph.facebook.com/${VERSION}`;
+const BOTMATIC_MIRROR_URL = process.env.BOTMATIC_MIRROR_URL || "http://127.0.0.1:3200/auth/api/whatsapp/mirror-outgoing";
+
+async function mirrorOutgoing(phoneNumberId, payload) {
+    const to = String(payload?.to || "").trim();
+    if (!phoneNumberId || !to) return;
+
+    const text =
+        payload?.text?.body ||
+        payload?.interactive?.body?.text ||
+        payload?.document?.caption ||
+        payload?.video?.caption ||
+        `[${payload?.type || "message"}]`;
+
+    try {
+        await axios.post(BOTMATIC_MIRROR_URL, {
+            phoneNumberId: String(phoneNumberId),
+            to,
+            text,
+        });
+    } catch (e) {
+        console.error("❌ BotMatic outgoing mirror failed:", e.response?.data || e.message);
+    }
+}
 
 /**
  * Send message via WhatsApp Cloud API
@@ -40,6 +63,7 @@ async function sendToWhatsApp(phoneNumberId, payload) {
                 "Content-Type": "application/json",
             },
         });
+        await mirrorOutgoing(phoneNumberId, payload);
         return response.data;
     } catch (e) {
         console.error("❌ WhatsApp API error:", e.response?.data || e.message);

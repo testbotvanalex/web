@@ -142,13 +142,13 @@
       <h1>Дашборд</h1>
       <div style="display:flex;align-items:center;gap:12px">
         <span style="font-size:13px;color:var(--muted)" id="topDate"></span>
-        <a href="/admin/clients" style="background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;padding:9px 18px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;">+ Новый клиент</a>
+        <a href="/admin/clients" style="background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;padding:9px 18px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;">+ Новый workspace</a>
       </div>
     </div>
 
     <div class="content">
       <div class="stats-row">
-        <div class="stat-card"><div class="stat-label">Всего клиентов</div><div class="stat-value accent" id="st-total">—</div><div class="stat-sub" id="st-live-sub">— live</div></div>
+        <div class="stat-card"><div class="stat-label">Всего workspaces</div><div class="stat-value accent" id="st-total">—</div><div class="stat-sub" id="st-live-sub">— live</div></div>
         <div class="stat-card"><div class="stat-label">Сообщений сегодня</div><div class="stat-value green" id="st-today">—</div><div class="stat-sub" id="st-week-sub">— за неделю</div></div>
         <div class="stat-card"><div class="stat-label">Каналов активно</div><div class="stat-value blue" id="st-ch">—</div><div class="stat-sub">подключено</div></div>
         <div class="stat-card"><div class="stat-label">Всего сообщений</div><div class="stat-value yellow" id="st-total-msg">—</div><div class="stat-sub" id="st-tasks-sub">— открытых задач</div></div>
@@ -157,7 +157,7 @@
       <div class="quick-grid">
         <a href="/admin/clients" class="quick-btn">
           <div class="quick-icon qi-p">👥</div>
-          <div class="quick-text"><strong>Клиенты</strong><span>Pipeline и карточки</span></div>
+          <div class="quick-text"><strong>Workspaces</strong><span>Pipeline и карточки</span></div>
         </a>
         <a href="/inbox" class="quick-btn">
           <div class="quick-icon qi-b">💬</div>
@@ -181,7 +181,7 @@
       </div>
 
       <div class="card">
-        <div class="card-header"><h3>Последние клиенты</h3><a href="/admin/clients" class="card-link">Все →</a></div>
+      <div class="card-header"><h3>Последние workspaces</h3><a href="/admin/clients" class="card-link">Все →</a></div>
         <div id="clientList"><div class="empty-feed">Загрузка…</div></div>
       </div>
     </div>
@@ -207,7 +207,7 @@ function ago(ds) {
   return h<24 ? `${h} ч. назад` : `${Math.floor(h/24)} дн. назад`;
 }
 
-const AL = { client_created:'🆕 Новый клиент', client_updated:'✏️ Обновлён', client_deleted:'🗑️ Удалён',
+const AL = { client_created:'🆕 Новый workspace', client_updated:'✏️ Обновлён', client_deleted:'🗑️ Удалён',
   status_changed:'🔄 Статус изменён', bot_created:'🤖 Бот создан', bot_updated:'🤖 Бот сохранён',
   flow_updated:'🔧 Flow обновлён', channel_connected:'🔗 Канал подключён', channel_disconnected:'❌ Канал отключён' };
 
@@ -259,7 +259,7 @@ async function load() {
           <div style="flex:1;min-width:0"><div class="client-name">${esc(cl.company)}</div><div class="client-niche">${esc(cl.niche||'—')}</div></div>
           <span class="badge badge-${cl.status}">${SL[cl.status]||cl.status}</span>
         </div>`).join('')
-      : '<div class="empty-feed">Клиентов нет — <a href="/admin/clients" style="color:var(--accent)">добавить</a></div>';
+      : '<div class="empty-feed">Workspaces нет — <a href="/admin/clients" style="color:var(--accent)">добавить</a></div>';
   } catch(e){console.error(e);}
 }
 

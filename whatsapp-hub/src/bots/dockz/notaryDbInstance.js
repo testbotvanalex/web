@@ -9,5 +9,5 @@ try {
   const res = notaryDb.loadFromFile(NOTARIES_CSV_PATH);
   console.log(`✅ Loaded ${res.count} notaries from CSV (${NOTARIES_CSV_PATH}).`);
 } catch (e) {
-  console.error("❌ Failed to load notaries CSV:", e.message);
+  // CSV живёт только на сервере (/var/www/dockz/), локально не нужен
 }

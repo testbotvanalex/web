@@ -1,48 +1,30 @@
 {
-  "rewrites": [
+  "buildCommand": null,
+  "outputDirectory": ".",
+  "framework": null,
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "headers": [
     {
-      "source": "/auth/:path*",
-      "destination": "https://ocenka02.ru/auth/:path*"
-    },
-    {
-      "source": "/api/:path*",
-      "destination": "https://ocenka02.ru/api/:path*"
-    },
-    {
-      "source": "/webhook/:path*",
-      "destination": "https://ocenka02.ru/webhook/:path*"
-    },
-    {
-      "source": "/admin/:path*",
-      "destination": "https://ocenka02.ru/admin/:path*"
-    },
-    {
-      "source": "/admin",
-      "destination": "https://ocenka02.ru/admin"
-    },
-    {
-      "source": "/inbox",
-      "destination": "https://ocenka02.ru/inbox"
-    },
-    {
-      "source": "/dashboard",
-      "destination": "https://ocenka02.ru/dashboard"
-    },
-    {
-      "source": "/analytics",
-      "destination": "https://ocenka02.ru/analytics"
-    },
-    {
-      "source": "/bots",
-      "destination": "https://ocenka02.ru/bots"
-    },
-    {
-      "source": "/constructor",
-      "destination": "https://ocenka02.ru/constructor"
-    },
-    {
-      "source": "/train",
-      "destination": "https://ocenka02.ru/train"
+      "source": "/start",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate" }
+      ]
     }
+  ],
+  "rewrites": [
+    { "source": "/auth/:path*",     "destination": "https://ocenka02.ru/auth/:path*" },
+    { "source": "/api/:path*",      "destination": "https://ocenka02.ru/api/:path*" },
+    { "source": "/webhook/:path*",  "destination": "https://ocenka02.ru/webhook/:path*" },
+    { "source": "/admin/:path*",    "destination": "https://ocenka02.ru/admin/:path*" },
+    { "source": "/admin",           "destination": "https://ocenka02.ru/admin" },
+    { "source": "/inbox",           "destination": "https://ocenka02.ru/inbox" },
+    { "source": "/dashboard",       "destination": "https://ocenka02.ru/dashboard" },
+    { "source": "/analytics",       "destination": "https://ocenka02.ru/analytics" },
+    { "source": "/bots",            "destination": "https://ocenka02.ru/bots" },
+    { "source": "/bot",             "destination": "https://ocenka02.ru/bot" },
+    { "source": "/constructor",     "destination": "https://ocenka02.ru/constructor" },
+    { "source": "/train",           "destination": "https://ocenka02.ru/train" },
+    { "source": "/start",           "destination": "https://ocenka02.ru/start" }
   ]
 }

@@ -37,6 +37,13 @@ router.post("/", async (req, res) => {
             return;
         }
 
+        // Mirror every incoming WhatsApp webhook into BotMatic unified inbox.
+        try {
+            await axios.post("http://127.0.0.1:3200/auth/api/whatsapp/webhook", req.body);
+        } catch (err) {
+            console.error("❌ BotMatic WhatsApp mirror failed:", err.message);
+        }
+
         const parsed = parseIncoming(req.body);
 
         // --- PROXY LOGIC FOR AUTOSCOUT ---

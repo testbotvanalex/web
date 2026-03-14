@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BotMatic — Workspace App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:#f4f5f9; --surface:#fff; --surface2:#f0f1f6; --surface3:#e8eaf2;
+      --border:#e2e4ed; --text:#1a1a2e; --muted:#6b7280; --accent:#7c3aed;
+      --green:#059669; --blue:#2563eb; --red:#dc2626; --yellow:#d97706;
+      --ig-bg:#fce7f3; --ig-text:#be185d; --wa-bg:#dcfce7; --wa-text:#15803d;
+      --tg-bg:#e0f2fe; --tg-text:#0369a1; --ms-bg:#dbeafe; --ms-text:#1d4ed8;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+    .layout{display:flex;min-height:100vh}
+    .sidebar{width:260px;background:var(--surface);border-right:1px solid var(--border);padding:22px 0;display:flex;flex-direction:column;gap:8px}
+    .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;background:linear-gradient(135deg,#7c3aed,#db2777);-webkit-background-clip:text;-webkit-text-fill-color:transparent;padding:0 20px 12px}
+    .workspace-select{padding:0 20px 14px}
+    .workspace-select label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:8px;font-weight:700}
+    .workspace-select select{width:100%;padding:10px 12px;border:1px solid var(--border);background:var(--surface2);border-radius:10px;font:inherit;outline:none}
+    .workspace-select select:focus{border-color:var(--accent)}
+    .nav-item{display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:12px 20px;color:var(--muted);text-decoration:none;font-size:14px;cursor:pointer;border:none;background:none;text-align:left;width:100%}
+    .nav-item strong{font-size:14px;font-weight:700;color:var(--text)}
+    .nav-item span{font-size:12px;color:var(--muted)}
+    .nav-item.active,.nav-item:hover{background:rgba(124,58,237,.08);border-left:2px solid var(--accent)}
+    .nav-item.active strong,.nav-item:hover strong{color:var(--accent)}
+    .sidebar-footer{margin-top:auto;padding:14px 20px 0;border-top:1px solid var(--border);font-size:12px;color:var(--muted)}
+    .main{flex:1;display:flex;flex-direction:column;min-width:0}
+    .topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 26px;border-bottom:1px solid var(--border);background:var(--surface)}
+    .top-left{display:flex;flex-direction:column;gap:6px}
+    .title{font-family:'Syne',sans-serif;font-size:24px;font-weight:700}
+    .meta{display:flex;gap:8px;flex-wrap:wrap}
+    .pill{display:inline-flex;align-items:center;padding:5px 10px;border-radius:999px;background:var(--surface2);border:1px solid var(--border);font-size:11px;font-weight:700;color:var(--text)}
+    .top-actions{display:flex;gap:10px;align-items:center}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:10px;padding:9px 14px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;font-weight:700;text-decoration:none;cursor:pointer}
+    .btn-primary{background:linear-gradient(135deg,#7c3aed,#6d28d9);border-color:transparent;color:#fff}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+    .content{padding:22px 26px;display:flex;flex-direction:column;gap:16px;min-width:0}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .stat{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px}
+    .stat-label{font-size:11px;text-transform:uppercase;color:var(--muted);letter-spacing:.05em;margin-bottom:8px}
+    .stat-value{font-family:'Outfit',sans-serif;font-size:34px;font-weight:800;line-height:1}
+    .tab-panel{display:none}
+    .tab-panel.active{display:block}
+    .grid{display:grid;gap:16px}
+    .grid.two{grid-template-columns:1.2fr .8fr}
+    .grid.three{grid-template-columns:1fr 1fr 1fr}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+    .card-head{padding:14px 16px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .card-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700}
+    .card-body{padding:16px}
+    .kv{display:grid;gap:10px}
+    .kv-row{display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid var(--border);padding-bottom:10px}
+    .kv-row:last-child{border-bottom:none;padding-bottom:0}
+    .kv-label{font-size:12px;color:var(--muted)}
+    .kv-value{font-size:13px;text-align:right;word-break:break-word}
+    .badge-row{display:flex;gap:8px;flex-wrap:wrap}
+    .channel-badge{display:inline-flex;align-items:center;padding:5px 10px;border-radius:999px;font-size:11px;font-weight:700}
+    .ig{background:var(--ig-bg);color:var(--ig-text)} .wa{background:var(--wa-bg);color:var(--wa-text)} .tg{background:var(--tg-bg);color:var(--tg-text)} .ms{background:var(--ms-bg);color:var(--ms-text)}
+    .member{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}
+    .member:last-child{border-bottom:none}
+    .member-name{font-size:14px;font-weight:700}
+    .member-meta{font-size:12px;color:var(--muted)}
+    .role{font-size:11px;padding:4px 10px;border-radius:999px;background:var(--surface2);border:1px solid var(--border);font-weight:700}
+    .inbox-shell{display:grid;grid-template-columns:320px minmax(0,1fr);gap:16px;min-height:560px}
+    .conversation-list{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+    .search{padding:14px 16px;border-bottom:1px solid var(--border)}
+    .search input{width:100%;padding:10px 12px;border:1px solid var(--border);background:var(--surface2);border-radius:10px;font:inherit;outline:none}
+    .search input:focus{border-color:var(--accent)}
+    .conv-scroll{overflow:auto;min-height:0}
+    .conv-item{padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+    .conv-item:hover{background:var(--surface2)}
+    .conv-item.active{background:rgba(124,58,237,.08);border-left:3px solid var(--accent)}
+    .conv-top{display:flex;justify-content:space-between;gap:10px}
+    .conv-name{font-size:14px;font-weight:700}
+    .conv-time{font-size:11px;color:var(--muted)}
+    .conv-route,.conv-preview{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.45}
+    .conv-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+    .chat-shell{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:grid;grid-template-rows:auto 1fr auto;min-width:0}
+    .chat-head{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+    .chat-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:700}
+    .chat-meta{font-size:12px;color:var(--muted);margin-top:6px}
+    .messages{background:linear-gradient(180deg,#fafbff 0%,#f4f5f9 100%);padding:18px;overflow:auto;display:flex;flex-direction:column;gap:14px;min-height:0}
+    .day{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:11px;text-transform:uppercase}
+    .day:before,.day:after{content:'';height:1px;flex:1;background:var(--border)}
+    .msg-wrap{display:flex;flex-direction:column;gap:4px;max-width:72%}
+    .msg-wrap.out{align-self:flex-end;align-items:flex-end}
+    .msg-wrap.in{align-self:flex-start}
+    .msg-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase}
+    .msg{padding:12px 14px;border-radius:14px;font-size:14px;line-height:1.55;white-space:pre-wrap;word-break:break-word;box-shadow:0 8px 24px rgba(17,24,39,.04)}
+    .msg.in{background:var(--surface);border:1px solid var(--border);border-bottom-left-radius:4px}
+    .msg.out{background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;border-bottom-right-radius:4px}
+    .msg-time{font-size:10px;color:var(--muted)}
+    .composer{padding:14px 16px;border-top:1px solid var(--border);display:flex;gap:10px;align-items:flex-end}
+    .composer textarea{flex:1;min-height:54px;max-height:140px;resize:vertical;padding:12px 14px;border:1px solid var(--border);background:var(--surface2);border-radius:12px;font:inherit;outline:none}
+    .composer textarea:focus{border-color:var(--accent)}
+    .empty{padding:40px 24px;text-align:center;color:var(--muted)}
+    .error{color:var(--red)}
+    @media (max-width:1280px){.stats{grid-template-columns:repeat(2,1fr)}.grid.two,.grid.three{grid-template-columns:1fr}.inbox-shell{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo">BotMatic</div>
+      <div class="workspace-select">
+        <label for="workspaceSelect">Choose client</label>
+        <select id="workspaceSelect"></select>
+      </div>
+      <button class="nav-item active" data-tab="overview"><strong>Home</strong><span>Main info and quick status</span></button>
+      <button class="nav-item" data-tab="inbox"><strong>Messages</strong><span>Read and reply to customers</span></button>
+      <button class="nav-item" data-tab="channels"><strong>Channels</strong><span>See what is connected</span></button>
+      <button class="nav-item" data-tab="team"><strong>Access</strong><span>Who can log in and use this</span></button>
+      <div class="sidebar-footer">Local prototype only</div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div class="top-left">
+          <div class="title" id="workspaceTitle">Loading…</div>
+          <div class="meta" id="workspaceMeta"></div>
+        </div>
+        <div class="top-actions">
+          <a class="btn" id="botLink" href="#">Bot settings</a>
+          <button class="btn btn-primary" id="inviteBtn" type="button">Invite user</button>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="stats">
+          <div class="stat"><div class="stat-label">Conversations</div><div class="stat-value" id="statConversations">0</div></div>
+          <div class="stat"><div class="stat-label">Messages</div><div class="stat-value" id="statMessages">0</div></div>
+          <div class="stat"><div class="stat-label">Channels</div><div class="stat-value" id="statChannels">0</div></div>
+          <div class="stat"><div class="stat-label">Bot Replies</div><div class="stat-value" id="statReplies">0</div></div>
+        </div>
+
+        <section class="tab-panel active" id="tab-overview">
+          <div class="grid two">
+            <div class="card">
+              <div class="card-head"><div class="card-title">Client</div></div>
+              <div class="card-body"><div class="kv" id="overviewWorkspace"></div></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><div class="card-title">Bot</div></div>
+              <div class="card-body"><div class="kv" id="overviewBot"></div></div>
+            </div>
+          </div>
+          <div class="grid three">
+            <div class="card">
+              <div class="card-head"><div class="card-title">Channels</div></div>
+              <div class="card-body"><div class="badge-row" id="overviewChannels"></div></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><div class="card-title">Access</div></div>
+              <div class="card-body" id="overviewTeam"></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><div class="card-title">Quick Numbers</div></div>
+              <div class="card-body"><div class="kv" id="overviewQuick"></div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel" id="tab-inbox">
+          <div class="inbox-shell">
+            <div class="conversation-list">
+              <div class="search"><input id="conversationSearch" placeholder="Search conversations..." /></div>
+              <div class="conv-scroll" id="conversationList"></div>
+            </div>
+            <div class="chat-shell">
+              <div class="chat-head" id="chatHead"><div class="empty">Select a conversation</div></div>
+              <div class="messages" id="messageList"><div class="empty">Choose a conversation to view messages</div></div>
+              <div class="composer">
+                <textarea id="replyInput" placeholder="Type a reply... (Enter to send)"></textarea>
+                <button class="btn btn-primary" id="sendBtn" type="button">Send</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel" id="tab-channels">
+          <div class="card">
+            <div class="card-head"><div class="card-title">Channel Routing</div></div>
+            <div class="card-body"><div class="kv" id="channelsPanel"></div></div>
+          </div>
+        </section>
+
+        <section class="tab-panel" id="tab-team">
+          <div class="card">
+            <div class="card-head"><div class="card-title">Who Has Access</div></div>
+            <div class="card-body" id="teamPanel"></div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+<script>
+const S = {
+  workspaces: [],
+  workspace: null,
+  bot: null,
+  channels: [],
+  tasks: [],
+  activity: [],
+  conversations: [],
+  filteredConversations: [],
+  activeConversation: null,
+  messages: [],
+};
+
+const params = new URLSearchParams(location.search);
+const allowedTabs = new Set(['overview', 'inbox', 'channels', 'team']);
+const stateTab = allowedTabs.has(params.get('tab')) ? params.get('tab') : 'overview';
+
+const esc = (s) => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const fmtDate = (v) => v ? new Date(v).toLocaleString('en-GB', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }) : '—';
+const ago = (v) => {
+  if (!v) return '—';
+  const diff = Date.now() - new Date(v).getTime();
+  const min = Math.max(0, Math.floor(diff / 60000));
+  if (min < 1) return 'just now';
+  if (min < 60) return `${min}m ago`;
+  const h = Math.floor(min / 60);
+  if (h < 24) return `${h}h ago`;
+  return `${Math.floor(h / 24)}d ago`;
+};
+const channelClass = (type) => ({ instagram:'ig', whatsapp:'wa', telegram:'tg', messenger:'ms' }[type] || '');
+const inferWorkspaceType = (w) => {
+  if (!w) return 'Workspace';
+  if (String(w.id).startsWith('client-wa-')) return 'WhatsApp Workspace';
+  if (/\(Instagram\)/i.test(w.company || '')) return 'Instagram Workspace';
+  if (/\(Main\)/i.test(w.company || '')) return 'Core Workspace';
+  return 'Workspace';
+};
+const buildSyntheticBot = (workspace, apiBot) => {
+  if (apiBot) return apiBot;
+  if (!workspace) return null;
+  return {
+    id: workspace.workspace_bot_id || workspace.id,
+    name: workspace.workspace_bot_name || String(workspace.company || 'Workspace Bot').replace(/\s*\([^)]*\)\s*$/, '').trim(),
+    prompt: '',
+    knowledge_base: '',
+    version: 1,
+    synthetic: true,
+    updated_at: workspace.updated_at,
+  };
+};
+
+function switchTab(tab) {
+  document.querySelectorAll('.nav-item[data-tab]').forEach((el) => el.classList.toggle('active', el.dataset.tab === tab));
+  document.querySelectorAll('.tab-panel').forEach((el) => el.classList.toggle('active', el.id === `tab-${tab}`));
+  const p = new URLSearchParams(location.search);
+  p.set('tab', tab);
+  history.replaceState({}, '', `${location.pathname}?${p.toString()}`);
+}
+
+function renderWorkspaceSelect() {
+  const select = document.getElementById('workspaceSelect');
+  select.innerHTML = S.workspaces.map((w) => `<option value="${esc(w.id)}">${esc(w.company)}</option>`).join('');
+  if (S.workspace) select.value = S.workspace.id;
+}
+
+function renderTop() {
+  document.title = `BotMatic — ${S.workspace.company}`;
+  document.getElementById('workspaceTitle').textContent = S.workspace.company;
+  document.getElementById('workspaceMeta').innerHTML = `
+    <span class="pill">${esc(inferWorkspaceType(S.workspace))}</span>
+    <span class="pill">${esc(S.channels.filter((c) => c.status === 'connected').length)} channels connected</span>
+    <span class="pill">${esc(S.bot?.name || 'No bot')}</span>
+  `;
+  document.getElementById('botLink').href = S.bot ? `/constructor?botId=${encodeURIComponent(S.bot.id)}` : '#';
+}
+
+function renderStats() {
+  const replies = S.messages.filter((m) => m.direction === 'out').length;
+  document.getElementById('statConversations').textContent = S.conversations.length;
+  document.getElementById('statMessages').textContent = S.conversations.reduce((sum, c) => sum + (c.message_count || 0), 0);
+  document.getElementById('statChannels').textContent = S.channels.filter((c) => c.status === 'connected').length;
+  document.getElementById('statReplies').textContent = replies;
+}
+
+function renderOverview() {
+  document.getElementById('overviewWorkspace').innerHTML = `
+    <div class="kv-row"><div class="kv-label">Name</div><div class="kv-value">${esc(S.workspace.company)}</div></div>
+    <div class="kv-row"><div class="kv-label">Type</div><div class="kv-value">${esc(inferWorkspaceType(S.workspace))}</div></div>
+    <div class="kv-row"><div class="kv-label">Status</div><div class="kv-value">${esc(S.workspace.status || '—')}</div></div>
+    <div class="kv-row"><div class="kv-label">Main goal</div><div class="kv-value">${esc(S.workspace.goal || '—')}</div></div>
+    <div class="kv-row"><div class="kv-label">Contact person</div><div class="kv-value">${esc(S.workspace.contact_name || '—')}</div></div>
+    <div class="kv-row"><div class="kv-label">Phone</div><div class="kv-value">${esc(S.workspace.contact_phone || '—')}</div></div>
+  `;
+  document.getElementById('overviewBot').innerHTML = `
+    <div class="kv-row"><div class="kv-label">Name</div><div class="kv-value">${esc(S.bot?.name || '—')}</div></div>
+    <div class="kv-row"><div class="kv-label">Bot ID</div><div class="kv-value">${esc(S.bot?.id || '—')}</div></div>
+    <div class="kv-row"><div class="kv-label">Version</div><div class="kv-value">v${esc(S.bot?.version || 1)}</div></div>
+    <div class="kv-row"><div class="kv-label">Source</div><div class="kv-value">${esc(S.bot?.synthetic ? 'workspace fallback' : 'bot registry')}</div></div>
+  `;
+  document.getElementById('overviewChannels').innerHTML = S.channels.length
+    ? S.channels.map((c) => `<span class="channel-badge ${channelClass(c.type)}">${esc(c.type)} · ${esc(c.status || 'unknown')}</span>`).join('')
+    : '<div class="empty">No channels connected</div>';
+  document.getElementById('overviewTeam').innerHTML = `
+    <div class="member"><div><div class="member-name">Agency Admin</div><div class="member-meta">Full access</div></div><span class="role">Owner</span></div>
+    <div class="member"><div><div class="member-name">Client User</div><div class="member-meta">Sees this client only</div></div><span class="role">Client</span></div>
+  `;
+  document.getElementById('overviewQuick').innerHTML = `
+    <div class="kv-row"><div class="kv-label">Conversations</div><div class="kv-value">${S.conversations.length}</div></div>
+    <div class="kv-row"><div class="kv-label">Messages</div><div class="kv-value">${S.conversations.reduce((sum, c) => sum + (c.message_count || 0), 0)}</div></div>
+    <div class="kv-row"><div class="kv-label">Replies sent</div><div class="kv-value">${S.messages.filter((m) => m.direction === 'out').length}</div></div>
+    <div class="kv-row"><div class="kv-label">Open chats</div><div class="kv-value">${S.conversations.filter((c) => c.status === 'open').length}</div></div>
+  `;
+}
+
+function renderChannels() {
+  const target = document.getElementById('channelsPanel');
+  if (!S.channels.length) {
+    target.innerHTML = '<div class="empty">No channels yet</div>';
+    return;
+  }
+  target.innerHTML = S.channels.map((c) => `
+    <div class="kv-row"><div class="kv-label">${esc(c.type)}</div><div class="kv-value">${esc(c.status || 'unknown')} ${c.username ? '· ' + esc(c.username) : ''} ${c.page_name ? '· ' + esc(c.page_name) : ''}</div></div>
+  `).join('');
+}
+
+function renderTeam() {
+  document.getElementById('teamPanel').innerHTML = `
+    <div class="member"><div><div class="member-name">Agency Admin</div><div class="member-meta">Can edit everything</div></div><span class="role">Owner</span></div>
+    <div class="member"><div><div class="member-name">Client User</div><div class="member-meta">Can read and reply</div></div><span class="role">Client</span></div>
+    <div class="member"><div><div class="member-name">Support Agent</div><div class="member-meta">Replies only</div></div><span class="role">Operator</span></div>
+  `;
+}
+
+function renderConversationList() {
+  const list = document.getElementById('conversationList');
+  if (!S.filteredConversations.length) {
+    list.innerHTML = '<div class="empty">No conversations in this workspace</div>';
+    return;
+  }
+  list.innerHTML = S.filteredConversations.map((c) => `
+    <div class="conv-item ${S.activeConversation?.id === c.id ? 'active' : ''}" data-id="${esc(c.id)}">
+      <div class="conv-top"><div class="conv-name">${esc(c.sender_name || c.sender_id)}</div><div class="conv-time">${esc(ago(c.last_message_at))}</div></div>
+      <div class="conv-route">${esc(c.channel)} · ${esc(c.mode || 'bot')}</div>
+      <div class="conv-preview">${esc(c.last_message_text || 'No messages yet')}</div>
+      <div class="conv-badges"><span class="channel-badge ${channelClass(c.channel)}">${esc(c.channel)}</span></div>
+    </div>
+  `).join('');
+  list.querySelectorAll('.conv-item').forEach((el) => el.addEventListener('click', () => openConversation(el.dataset.id)));
+}
+
+function renderChatHead() {
+  const head = document.getElementById('chatHead');
+  if (!S.activeConversation) {
+    head.innerHTML = '<div class="empty" style="padding:0;text-align:left">Select a conversation</div>';
+    return;
+  }
+  head.innerHTML = `
+    <div>
+      <div class="chat-name">${esc(S.activeConversation.sender_name || S.activeConversation.sender_id)}</div>
+      <div class="chat-meta">${esc(S.workspace.company)} · ${esc(S.bot?.name || '—')} · ${esc(S.activeConversation.channel)}</div>
+    </div>
+    <a class="btn" href="/inbox?botId=${encodeURIComponent(S.bot?.id || '')}">Open scoped inbox</a>
+  `;
+}
+
+function renderMessages() {
+  const target = document.getElementById('messageList');
+  if (!S.activeConversation) {
+    target.innerHTML = '<div class="empty">Choose a conversation to view messages</div>';
+    return;
+  }
+  if (!S.messages.length) {
+    target.innerHTML = '<div class="empty">No messages yet</div>';
+    return;
+  }
+  let currentDay = '';
+  const html = [];
+  S.messages.forEach((m) => {
+    const day = new Date(m.created_at).toLocaleDateString('en-GB', { day:'2-digit', month:'long' });
+    if (day !== currentDay) {
+      currentDay = day;
+      html.push(`<div class="day">${esc(day)}</div>`);
+    }
+    const dir = m.direction === 'out' ? 'out' : 'in';
+    const label = dir === 'out' ? `Bot · ${esc(S.bot?.name || S.workspace.company)}` : `Customer · ${esc(S.activeConversation.sender_name || S.activeConversation.sender_id)}`;
+    html.push(`
+      <div class="msg-wrap ${dir}">
+        <div class="msg-label">${label}</div>
+        <div class="msg ${dir}">${esc(m.text || '')}</div>
+        <div class="msg-time">${esc(fmtDate(m.created_at))}</div>
+      </div>
+    `);
+  });
+  target.innerHTML = html.join('');
+  target.scrollTop = target.scrollHeight;
+}
+
+function filterConversations() {
+  const q = document.getElementById('conversationSearch').value.trim().toLowerCase();
+  S.filteredConversations = S.conversations.filter((c) => {
+    if (!q) return true;
+    return [c.sender_name, c.sender_id, c.last_message_text, c.channel].filter(Boolean).some((v) => String(v).toLowerCase().includes(q));
+  });
+  renderConversationList();
+}
+
+async function openConversation(id) {
+  const chat = S.conversations.find((c) => c.id === id);
+  if (!chat) return;
+  S.activeConversation = chat;
+  renderConversationList();
+  renderChatHead();
+  const data = await fetch(`/api/admin/chats/${encodeURIComponent(id)}/messages?limit=200`).then((r) => r.json());
+  S.messages = Array.isArray(data.messages) ? data.messages : [];
+  renderMessages();
+  renderStats();
+  renderAnalytics();
+}
+
+async function sendReply() {
+  if (!S.activeConversation) return;
+  const input = document.getElementById('replyInput');
+  const btn = document.getElementById('sendBtn');
+  const text = input.value.trim();
+  if (!text) return;
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+  try {
+    const res = await fetch('/api/admin/send-message', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        client_id: S.workspace.id,
+        channel: S.activeConversation.channel,
+        sender_id: S.activeConversation.sender_id,
+        text,
+      }),
+    }).then((r) => r.json());
+    if (!res.ok) throw new Error(res.error || 'Send failed');
+    input.value = '';
+    await openConversation(S.activeConversation.id);
+  } catch (e) {
+    document.getElementById('messageList').innerHTML = `<div class="empty error">${esc(e.message)}</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Send';
+  }
+}
+
+async function loadWorkspace(workspaceId) {
+  const data = await fetch(`/api/admin/clients/${encodeURIComponent(workspaceId)}`).then((r) => r.json());
+  if (!data.ok) throw new Error(data.error || 'Workspace not found');
+  S.workspace = data.client;
+  S.channels = data.channels || [];
+  S.tasks = data.tasks || [];
+  S.activity = data.activity || [];
+  S.bot = buildSyntheticBot(S.workspace, (data.bots || [])[0]);
+  const chatsData = await fetch('/api/admin/chats').then((r) => r.json());
+  S.conversations = (chatsData.chats || []).filter((c) => c.client_id === workspaceId);
+  S.filteredConversations = [...S.conversations];
+  S.activeConversation = null;
+  S.messages = [];
+  renderTop();
+  renderStats();
+  renderOverview();
+  renderChannels();
+  renderTeam();
+  renderConversationList();
+  renderChatHead();
+  renderMessages();
+  if (S.filteredConversations[0]) await openConversation(S.filteredConversations[0].id);
+}
+
+async function bootstrap() {
+  const all = await fetch('/api/admin/clients').then((r) => r.json());
+  S.workspaces = all.clients || [];
+  if (!S.workspaces.length) throw new Error('No local workspaces found');
+  let workspaceId = params.get('id');
+  if (!workspaceId || !S.workspaces.some((w) => w.id === workspaceId)) workspaceId = S.workspaces[0].id;
+  renderWorkspaceSelect();
+  await loadWorkspace(workspaceId);
+  renderWorkspaceSelect();
+  const p = new URLSearchParams(location.search);
+  p.set('id', workspaceId);
+  history.replaceState({}, '', `${location.pathname}?${p.toString()}`);
+  switchTab(stateTab);
+}
+
+Array.from(document.querySelectorAll('.nav-item[data-tab]')).forEach((btn) => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
+document.getElementById('workspaceSelect').addEventListener('change', async (e) => {
+  const id = e.target.value;
+  const p = new URLSearchParams(location.search);
+  p.set('id', id);
+  history.replaceState({}, '', `${location.pathname}?${p.toString()}`);
+  await loadWorkspace(id);
+});
+document.getElementById('conversationSearch').addEventListener('input', filterConversations);
+document.getElementById('sendBtn').addEventListener('click', sendReply);
+document.getElementById('replyInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendReply();
+  }
+});
+document.getElementById('inviteBtn').addEventListener('click', () => {
+  alert('Next step: add real workspace users + roles. For now this is only a local prototype.');
+});
+
+bootstrap().catch((e) => {
+  document.getElementById('workspaceTitle').textContent = 'Local prototype error';
+  document.getElementById('workspaceMeta').innerHTML = `<span class="pill">${esc(e.message)}</span>`;
+  document.querySelectorAll('.tab-panel').forEach((el) => el.innerHTML = `<div class="empty error">${esc(e.message)}</div>`);
+});
+</script>
+</body>
+</html>

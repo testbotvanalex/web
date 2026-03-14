@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welkom bij BotMatic</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent: #7c3aed;
+      --accent-light: #ede9fe;
+      --green: #16a34a;
+      --green-light: #dcfce7;
+      --bg: #f8f7ff;
+      --surface: #ffffff;
+      --border: #e5e7eb;
+      --text: #111827;
+      --muted: #6b7280;
+      --radius: 16px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 32px rgba(124,58,237,0.08);
+      width: 100%;
+      max-width: 520px;
+      padding: 40px 40px 36px;
+    }
+
+    /* Logo */
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text);
+      text-decoration: none;
+      margin-bottom: 32px;
+      display: block;
+    }
+    .logo span { color: var(--accent); }
+
+    /* Steps indicator */
+    .steps {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 36px;
+    }
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+    }
+    .step-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      background: var(--border);
+      color: var(--muted);
+      transition: all 0.3s;
+    }
+    .step-circle.done {
+      background: var(--green);
+      color: #fff;
+    }
+    .step-circle.active {
+      background: var(--accent);
+      color: #fff;
+    }
+    .step-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .step-label.active { color: var(--accent); }
+    .step-label.done { color: var(--green); }
+    .step-line {
+      flex: 1;
+      height: 2px;
+      background: var(--border);
+      margin: 0 8px;
+      transition: background 0.3s;
+    }
+    .step-line.done { background: var(--green); }
+
+    /* Step content panels */
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
+
+    h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+    .company-name {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* Channel cards */
+    .channel-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .channel-card {
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+      background: var(--surface);
+    }
+    .channel-card:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+    .channel-card.selected {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+    .channel-card.disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .channel-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .channel-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: block;
+    }
+    .channel-note {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 4px;
+      display: block;
+    }
+    .channel-badge {
+      display: inline-block;
+      background: var(--green-light);
+      color: var(--green);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 99px;
+      margin-top: 6px;
+    }
+
+    /* Telegram token form */
+    .tg-instructions {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    .tg-instructions ol {
+      padding-left: 18px;
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: #0369a1;
+    }
+    .tg-instructions a { color: var(--accent); font-weight: 600; }
+    .tg-instructions code {
+      background: #e0f2fe;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.875rem;
+      margin-bottom: 6px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus { border-color: var(--accent); }
+    .form-group input.error { border-color: #ef4444; }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 24px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #7c3aed, #5b21b6);
+      color: #fff;
+      width: 100%;
+    }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1.5px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .btn-row .btn-ghost { flex-shrink: 0; }
+    .btn-row .btn-primary { flex: 1; }
+
+    /* Success */
+    .success-icon {
+      font-size: 3.5rem;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .success-box {
+      background: var(--green-light);
+      border: 1px solid #86efac;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      color: #166534;
+      line-height: 1.6;
+    }
+
+    /* Error / loading */
+    .loading-state {
+      text-align: center;
+      padding: 32px 0;
+      color: var(--muted);
+    }
+    .spinner {
+      width: 32px; height: 32px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error-msg {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 0.875rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .error-msg.show { display: block; }
+
+    @media (max-width: 480px) {
+      .card { padding: 28px 20px 24px; }
+      .channel-grid { grid-template-columns: 1fr 1fr; }
+      .step-label { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <a class="logo" href="https://botmatic.be">BotMatic<span>.</span></a>
+
+  <!-- Steps indicator -->
+  <div class="steps" id="stepsBar">
+    <div class="step-item">
+      <div class="step-circle active" id="sc1">1</div>
+      <span class="step-label active" id="sl1">Welkom</span>
+    </div>
+    <div class="step-line" id="line1"></div>
+    <div class="step-item">
+      <div class="step-circle" id="sc2">2</div>
+      <span class="step-label" id="sl2">Kanaal</span>
+    </div>
+    <div class="step-line" id="line2"></div>
+    <div class="step-item">
+      <div class="step-circle" id="sc3">3</div>
+      <span class="step-label" id="sl3">Verbinden</span>
+    </div>
+  </div>
+
+  <!-- Step 1: Welcome / Register -->
+  <div class="step-panel active" id="panel1">
+
+    <!-- Loading -->
+    <div class="loading-state" id="loadingState">
+      <div class="spinner"></div>
+      <p>Even laden…</p>
+    </div>
+
+    <!-- Existing client: welkom -->
+    <div id="welcomeContent" style="display:none;">
+      <h2>Welkom, <span class="company-name" id="companyName">—</span>!</h2>
+      <p class="subtitle">Je BotMatic setup staat klaar. In 2 stappen verbind je jouw kanaal en gaat de bot live.</p>
+      <ul style="list-style:none; margin-bottom:28px; display:flex; flex-direction:column; gap:10px;">
+        <li style="display:flex; gap:10px; align-items:flex-start; font-size:0.9rem;">
+          <span style="color:#16a34a; font-size:1.1rem; flex-shrink:0;">✅</span>
+          <span><strong>Bot is geconfigureerd</strong> — prompt en kennisbasis staan klaar</span>
+        </li>
+        <li style="display:flex; gap:10px; align-items:flex-start; font-size:0.9rem;">
+          <span style="color:#16a34a; font-size:1.1rem; flex-shrink:0;">✅</span>
+          <span><strong>Inbox is actief</strong> — je team kan live overnemen wanneer nodig</span>
+        </li>
+        <li style="display:flex; gap:10px; align-items:flex-start; font-size:0.9rem;">
+          <span style="color:#7c3aed; font-size:1.1rem; flex-shrink:0;">👉</span>
+          <span><strong>Kanaal verbinden</strong> — nog één stap en je bot gaat live</span>
+        </li>
+      </ul>
+      <button class="btn btn-primary" onclick="goToStep(2)">Verder →</button>
+    </div>
+
+    <!-- New visitor: registratie form -->
+    <div id="registerContent" style="display:none;">
+      <h2>Aan de slag met BotMatic</h2>
+      <p class="subtitle">Vul je gegevens in en verbind je kanaal in 2 minuten.</p>
+      <div class="error-msg" id="regError"></div>
+      <div class="form-group">
+        <label for="regCompany">Bedrijfsnaam *</label>
+        <input type="text" id="regCompany" placeholder="Kapsalon De Stijl" />
+      </div>
+      <div class="form-group">
+        <label for="regNiche">Type bedrijf *</label>
+        <select id="regNiche" style="width:100%; padding:12px 14px; border:1.5px solid var(--border); border-radius:10px; font-size:0.95rem; font-family:inherit; outline:none; background:#fff; cursor:pointer;">
+          <option value="">— Kies jouw sector —</option>
+          <option value="kapsalon">✂️ Kapsalon</option>
+          <option value="schoonheid">💅 Schoonheidssalon / Nagelstudio</option>
+          <option value="restaurant">🍽️ Restaurant / Café / Bakkerij</option>
+          <option value="garage">🔧 Garage / Autorijschool</option>
+          <option value="advocaat">⚖️ Advocaat / Notaris</option>
+          <option value="zorg">🏥 Fysiotherapeut / Dokter / Zorg</option>
+          <option value="vastgoed">🏠 Vastgoed / Immo</option>
+          <option value="fitness">💪 Fitness / Yoga / Sport</option>
+          <option value="andere">📋 Andere</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="regName">Jouw naam *</label>
+        <input type="text" id="regName" placeholder="Jan Janssen" />
+      </div>
+      <div class="form-group">
+        <label for="regPhone">Telefoonnummer *</label>
+        <input type="tel" id="regPhone" placeholder="+32 470 12 34 56" />
+      </div>
+      <div class="form-group">
+        <label for="regEmail">E-mailadres</label>
+        <input type="email" id="regEmail" placeholder="jan@bedrijf.be" />
+      </div>
+      <button class="btn btn-primary" id="regBtn" onclick="registerAndContinue()">Verder → Kanaal kiezen</button>
+    </div>
+
+  </div>
+
+  <!-- Step 2: Choose channel -->
+  <div class="step-panel" id="panel2">
+    <h2>Kies jouw kanaal</h2>
+    <p class="subtitle">Via welk kanaal wil jij de bot activeren?</p>
+
+    <div class="channel-grid" id="channelGrid">
+      <div class="channel-card" onclick="selectChannel('instagram')">
+        <span class="channel-icon">📸</span>
+        <span class="channel-name">Instagram</span>
+        <span class="channel-note">Direct Messages</span>
+      </div>
+      <div class="channel-card" onclick="selectChannel('messenger')">
+        <span class="channel-icon">💬</span>
+        <span class="channel-name">Messenger</span>
+        <span class="channel-note">Facebook pagina</span>
+      </div>
+      <div class="channel-card" onclick="selectChannel('telegram')">
+        <span class="channel-icon">✈️</span>
+        <span class="channel-name">Telegram</span>
+        <span class="channel-note">Bot via BotFather</span>
+      </div>
+      <div class="channel-card disabled">
+        <span class="channel-icon">🟢</span>
+        <span class="channel-name">WhatsApp</span>
+        <span class="channel-note">Binnenkort</span>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="goToStep(1)">← Terug</button>
+      <button class="btn btn-primary" id="channelNextBtn" disabled onclick="goToStep(3)">Verbinden →</button>
+    </div>
+  </div>
+
+  <!-- Step 3: Connect -->
+  <div class="step-panel" id="panel3">
+
+    <!-- Instagram -->
+    <div id="connectInstagram" style="display:none;">
+      <h2>Instagram verbinden</h2>
+      <p class="subtitle">Log in met het Facebook account dat gekoppeld is aan jouw Instagram zakelijk profiel.</p>
+      <div style="background:#fdf4ff; border:1px solid #e9d5ff; border-radius:10px; padding:14px; margin-bottom:20px; font-size:0.875rem; color:#6b21a8; line-height:1.6;">
+        💡 Zorg dat jouw Instagram profiel is ingesteld als <strong>Zakelijk</strong> of <strong>Creator</strong> en gekoppeld is aan een Facebook pagina.
+      </div>
+      <div class="error-msg" id="igError"></div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="goToStep(2)">← Terug</button>
+        <a class="btn btn-primary" id="igConnectBtn" href="#">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          Verbinden via Facebook
+        </a>
+      </div>
+    </div>
+
+    <!-- Messenger -->
+    <div id="connectMessenger" style="display:none;">
+      <h2>Messenger verbinden</h2>
+      <p class="subtitle">Log in met de beheerder van jouw Facebook pagina om Messenger te activeren.</p>
+      <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:10px; padding:14px; margin-bottom:20px; font-size:0.875rem; color:#1d4ed8; line-height:1.6;">
+        💡 Je hebt <strong>beheerderrechten</strong> nodig op de Facebook pagina waarvan je berichten wil automatiseren.
+      </div>
+      <div class="error-msg" id="msError"></div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="goToStep(2)">← Terug</button>
+        <a class="btn btn-primary" id="msConnectBtn" href="#">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.744 6.614 4.469 8.652V24l4.088-2.242c1.092.3 2.246.464 3.443.464 6.627 0 12-4.975 12-11.111C24 4.974 18.627 0 12 0zm1.191 14.963l-3.055-3.26-5.963 3.26L10.732 8l3.131 3.259L19.752 8l-6.561 6.963z"/></svg>
+          Verbinden via Facebook
+        </a>
+      </div>
+    </div>
+
+    <!-- Telegram -->
+    <div id="connectTelegram" style="display:none;">
+      <h2>Telegram verbinden</h2>
+      <p class="subtitle">Maak een Telegram bot aan via BotFather en plak hier jouw token.</p>
+
+      <div class="tg-instructions">
+        <ol>
+          <li>Open Telegram en zoek <a href="https://t.me/BotFather" target="_blank">@BotFather</a></li>
+          <li>Stuur het commando <code>/newbot</code></li>
+          <li>Geef je bot een naam en gebruikersnaam</li>
+          <li>Kopieer het token dat je ontvangt (bijv. <code>7123456789:AAH...</code>)</li>
+        </ol>
+      </div>
+
+      <div class="error-msg" id="tgError"></div>
+
+      <div class="form-group">
+        <label for="tgToken">Bot Token</label>
+        <input type="text" id="tgToken" placeholder="7123456789:AAHxxxxxxx..." autocomplete="off" />
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="goToStep(2)">← Terug</button>
+        <button class="btn btn-primary" id="tgSaveBtn" onclick="saveTelegramToken()">Bot activeren →</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Step 4: Success -->
+  <div class="step-panel" id="panel4">
+    <div class="success-icon">🎉</div>
+    <h2>Alles staat live!</h2>
+    <p class="subtitle">Jouw bot is verbonden en actief. Stuur een testbericht om te controleren of alles werkt.</p>
+    <div class="success-box" id="successDetails">
+      De bot staat klaar om berichten te beantwoorden. BotMatic heeft jouw aanmelding ontvangen en neemt binnenkort contact op.
+    </div>
+    <div style="text-align:center; margin-top:8px; color:#6b7280; font-size:0.875rem;">
+      Vragen? Stuur ons een berichtje via <a href="https://wa.me/32456912464" target="_blank" style="color:#7c3aed; font-weight:600;">WhatsApp</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const params = new URLSearchParams(location.search);
+  let clientId = params.get('clientId') || params.get('client_id') || '';
+  let botId = '';
+  let selectedChannel = '';
+
+  // ── Load client info (existing client via link) ──
+  async function loadClient() {
+    if (!clientId) {
+      // No clientId → show registration form
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('registerContent').style.display = 'block';
+      document.getElementById('sl1').textContent = 'Jouw info';
+      return;
+    }
+    try {
+      const res = await fetch(`/api/admin/clients/${clientId}`);
+      if (!res.ok) throw new Error('not found');
+      const data = await res.json();
+      document.getElementById('companyName').textContent = data.company || 'jouw bedrijf';
+
+      // Get bot id
+      const botsRes = await fetch(`/api/admin/clients/${clientId}/bots`);
+      if (botsRes.ok) {
+        const bots = await botsRes.json();
+        if (bots.length) botId = bots[0].id;
+      }
+
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('welcomeContent').style.display = 'block';
+    } catch (e) {
+      // Invalid clientId → show registration form anyway
+      clientId = '';
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('registerContent').style.display = 'block';
+      document.getElementById('sl1').textContent = 'Jouw info';
+    }
+  }
+
+  // ── Self-registration ──
+  async function registerAndContinue() {
+    const company = document.getElementById('regCompany').value.trim();
+    const niche   = document.getElementById('regNiche').value;
+    const name    = document.getElementById('regName').value.trim();
+    const phone   = document.getElementById('regPhone').value.trim();
+    const email   = document.getElementById('regEmail').value.trim();
+    const errEl   = document.getElementById('regError');
+    const btn     = document.getElementById('regBtn');
+
+    errEl.classList.remove('show');
+    if (!company || !niche || !name || !phone) {
+      errEl.textContent = 'Vul bedrijfsnaam, type bedrijf, naam en telefoonnummer in.';
+      errEl.classList.add('show');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Aanmaken…';
+
+    try {
+      const res = await fetch('/api/onboarding/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ company, niche, contact_name: name, contact_phone: phone, contact_email: email })
+      });
+      if (!res.ok) throw new Error('Registratie mislukt');
+      const data = await res.json();
+      clientId = data.clientId;
+      botId = data.botId || '';
+      goToStep(2);
+    } catch (e) {
+      errEl.textContent = e.message;
+      errEl.classList.add('show');
+      btn.disabled = false;
+      btn.textContent = 'Verder → Kanaal kiezen';
+    }
+  }
+
+  // ── Steps navigation ──
+  let currentStep = 1;
+
+  function goToStep(n) {
+    // Hide all panels
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById(`panel${n}`).classList.add('active');
+
+    // Update circles
+    for (let i = 1; i <= 3; i++) {
+      const circle = document.getElementById(`sc${i}`);
+      const label = document.getElementById(`sl${i}`);
+      circle.className = 'step-circle';
+      label.className = 'step-label';
+      if (i < n) { circle.classList.add('done'); circle.innerHTML = '✓'; label.classList.add('done'); }
+      else if (i === n) { circle.classList.add('active'); circle.innerHTML = i; label.classList.add('active'); }
+      else { circle.innerHTML = i; }
+    }
+
+    // Lines
+    document.getElementById('line1').className = 'step-line' + (n > 1 ? ' done' : '');
+    document.getElementById('line2').className = 'step-line' + (n > 2 ? ' done' : '');
+
+    if (n === 3) showConnectPanel();
+    currentStep = n;
+  }
+
+  // ── Channel selection ──
+  function selectChannel(ch) {
+    selectedChannel = ch;
+    document.querySelectorAll('.channel-card').forEach(c => c.classList.remove('selected'));
+    event.currentTarget.classList.add('selected');
+    document.getElementById('channelNextBtn').disabled = false;
+  }
+
+  // ── Connect panel ──
+  function showConnectPanel() {
+    ['connectInstagram', 'connectMessenger', 'connectTelegram'].forEach(id => {
+      document.getElementById(id).style.display = 'none';
+    });
+
+    const baseUrl = '';
+    if (selectedChannel === 'instagram') {
+      document.getElementById('connectInstagram').style.display = 'block';
+      const url = botId
+        ? `/auth/instagram/login?botId=${botId}&redirect=/start?clientId=${clientId}&step=done`
+        : `/auth/instagram/login?redirect=/start?clientId=${clientId}&step=done`;
+      document.getElementById('igConnectBtn').href = url;
+    } else if (selectedChannel === 'messenger') {
+      document.getElementById('connectMessenger').style.display = 'block';
+      const url = botId
+        ? `/auth/messenger/login?botId=${botId}&redirect=/start?clientId=${clientId}&step=done`
+        : `/auth/messenger/login?redirect=/start?clientId=${clientId}&step=done`;
+      document.getElementById('msConnectBtn').href = url;
+    } else if (selectedChannel === 'telegram') {
+      document.getElementById('connectTelegram').style.display = 'block';
+    }
+  }
+
+  // ── Telegram token save ──
+  async function saveTelegramToken() {
+    const token = document.getElementById('tgToken').value.trim();
+    const errEl = document.getElementById('tgError');
+    const btn = document.getElementById('tgSaveBtn');
+
+    errEl.classList.remove('show');
+    if (!token || !token.includes(':')) {
+      errEl.textContent = 'Vul een geldig Telegram bot token in (bijv. 123456:AAH...).';
+      errEl.classList.add('show');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Activeren…';
+
+    try {
+      const res = await fetch(`/api/onboarding/${clientId}/telegram`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token, botId })
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || 'Fout bij activeren');
+      }
+      // Success
+      document.getElementById('successDetails').textContent =
+        'Je Telegram bot is verbonden en staat klaar om berichten te beantwoorden. Je team kan via de BotMatic inbox altijd overnemen.';
+      showSuccess();
+    } catch (e) {
+      errEl.textContent = e.message;
+      errEl.classList.add('show');
+      btn.disabled = false;
+      btn.textContent = 'Bot activeren →';
+    }
+  }
+
+  // ── Success ──
+  function showSuccess() {
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel4').classList.add('active');
+    // Mark all steps done
+    for (let i = 1; i <= 3; i++) {
+      const c = document.getElementById(`sc${i}`);
+      c.className = 'step-circle done';
+      c.innerHTML = '✓';
+      document.getElementById(`sl${i}`).className = 'step-label done';
+    }
+    document.getElementById('line1').className = 'step-line done';
+    document.getElementById('line2').className = 'step-line done';
+  }
+
+  // ── Check if returning from OAuth ──
+  if (params.get('step') === 'done') {
+    window.addEventListener('DOMContentLoaded', () => {
+      loadClient().then(() => showSuccess());
+    });
+  } else {
+    window.addEventListener('DOMContentLoaded', loadClient);
+  }
+</script>
+</body>
+</html>

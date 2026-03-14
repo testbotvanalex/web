@@ -153,8 +153,26 @@
       display: flex; align-items: center; justify-content: space-between;
       gap: 6px; margin-bottom: 2px;
     }
+    .chat-label-row {
+      display: flex; align-items: center; gap: 6px;
+      margin-bottom: 4px;
+    }
+    .mini-label {
+      display: inline-flex; align-items: center;
+      padding: 2px 7px; border-radius: 999px;
+      font-size: 10px; font-weight: 700; letter-spacing: .02em;
+      text-transform: uppercase;
+      background: var(--surface3); color: var(--muted);
+    }
+    .mini-label.customer { background: #eef2ff; color: #4338ca; }
+    .mini-label.bot { background: #ecfdf5; color: #047857; }
     .chat-name { font-weight: 500; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .chat-time { font-size: 11px; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
+    .chat-route {
+      font-size: 12px; color: var(--text); opacity: .82;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      margin-bottom: 3px;
+    }
     .chat-preview { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 5px; }
     .chat-chips { display: flex; align-items: center; gap: 5px; }
 
@@ -180,17 +198,25 @@
       padding: 14px 24px; border-bottom: 1px solid var(--border);
       background: var(--surface); flex-shrink: 0; gap: 16px;
     }
+    .chat-topbar-main { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
     .chat-topbar-name { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; }
-    .chat-topbar-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .chat-topbar-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
-
-    .btn { padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid transparent; font-family: inherit; transition: all .15s; }
-    .btn-ghost { background: var(--surface); border-color: var(--border); color: var(--text); }
-    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
-    .btn-take { background: #fef3c7; border-color: #fde68a; color: #92400e; }
-    .btn-take:hover { background: #fde68a; }
-    .btn-release { background: #dcfce7; border-color: #bbf7d0; color: #065f46; }
-    .btn-release:hover { background: #bbf7d0; }
+    .chat-topbar-route { font-size: 13px; color: var(--text); opacity: .82; margin-top: 3px; }
+    .chat-topbar-meta { font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .chat-facts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chat-fact {
+      display: flex; flex-direction: column; gap: 2px;
+      padding: 8px 10px; border-radius: 10px;
+      background: var(--surface2); border: 1px solid var(--border);
+      min-width: 120px;
+    }
+    .chat-fact-label {
+      font-size: 10px; font-weight: 700; letter-spacing: .04em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .chat-fact-value {
+      font-size: 12px; color: var(--text); white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
+    }
     .mode-pill {
       display: inline-flex; align-items: center; gap: 4px;
       font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px;
@@ -216,6 +242,11 @@
     .msg-group { display: flex; flex-direction: column; }
     .msg-group.out { align-items: flex-end; }
     .msg-group.in { align-items: flex-start; }
+    .msg-sender {
+      font-size: 11px; font-weight: 700; color: var(--muted);
+      margin: 0 2px 4px;
+      text-transform: uppercase; letter-spacing: .03em;
+    }
 
     .msg {
       max-width: 62%; padding: 10px 14px;
@@ -276,7 +307,7 @@
     <div class="sidebar-logo">BotMatic</div>
     <a href="/admin/clients" class="nav-item">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      Clients
+      Workspaces
     </a>
     <a href="/dashboard" class="nav-item">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
@@ -377,6 +408,8 @@
 
 <script>
 const API = '/api/admin';
+const pageParams = new URLSearchParams(location.search);
+const scopedBotId = pageParams.get('botId') || '';
 const S = { chats: [], filtered: [], active: null, filter: 'all', q: '' };
 
 const $ = id => document.getElementById(id);
@@ -416,6 +449,41 @@ function chBadge(ch) {
   const cls = ch==='instagram'?'badge-ig':ch==='telegram'?'badge-tg':ch==='whatsapp'?'badge-wa':'';
   return `badge ${cls}`;
 }
+function displayCustomer(chat) {
+  return chat.sender_name || chat.sender_id || 'Unknown';
+}
+function prettifyRouteValue(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+  return raw
+    .replace(/^Imported\s*·\s*/i, '')
+    .replace(/^client-wa-/i, 'WhatsApp ')
+    .replace(/^bot-wa-/i, 'WhatsApp ')
+    .replace(/[-_]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+function displayBotRoute(chat) {
+  const route = prettifyRouteValue(chat.company || chat.client_id || '');
+  if (!route) return 'Bot route unavailable';
+  return chat.channel === 'whatsapp'
+    ? `Bot number: ${route}`
+    : chat.channel === 'instagram'
+      ? `Instagram account: ${route}`
+      : chat.channel === 'telegram'
+        ? `Telegram bot: ${route}`
+        : `Bot account: ${route}`;
+}
+function displayPreview(chat) {
+  return chat.last_message_text || '—';
+}
+function displayChannelRoute(chat) {
+  const route = prettifyRouteValue(chat.company || chat.client_id || '');
+  if (chat.channel === 'whatsapp') return route || 'Unknown bot number';
+  if (chat.channel === 'instagram') return route || 'Unknown Instagram account';
+  if (chat.channel === 'telegram') return route || 'Unknown Telegram bot';
+  return route || 'Unknown route';
+}
 
 function applyFilters() {
   const q = S.q.toLowerCase().trim();
@@ -450,11 +518,16 @@ function renderList() {
           ${chDot(c.channel)}
         </div>
         <div class="chat-info">
+          <div class="chat-label-row">
+            <span class="mini-label customer">Customer</span>
+            <span class="mini-label bot">Bot</span>
+          </div>
           <div class="chat-name-row">
-            <div class="chat-name">${esc(c.sender_name||c.sender_id||'Unknown')}</div>
+            <div class="chat-name">${esc(displayCustomer(c))}</div>
             <div class="chat-time">${fmtTime(c.last_message_at)}</div>
           </div>
-          <div class="chat-preview">${esc(c.last_message_text||'—')}</div>
+          <div class="chat-route">${esc(displayBotRoute(c))}</div>
+          <div class="chat-preview">${esc(displayPreview(c))}</div>
           <div class="chat-chips">
             <span class="${chBadge(c.channel)}">${chIcon(c.channel)} ${c.channel}</span>
             <span class="badge ${c.mode==='human'?'badge-human':'badge-bot'}">${c.mode||'bot'}</span>
@@ -471,7 +544,8 @@ function renderList() {
 
 async function loadChats() {
   try {
-    const d = await fetch(`${API}/chats`).then(r=>r.json());
+    const query = scopedBotId ? `?botId=${encodeURIComponent(scopedBotId)}` : '';
+    const d = await fetch(`${API}/chats${query}`).then(r=>r.json());
     S.chats = Array.isArray(d.chats) ? d.chats : [];
     renderList();
     if (S.active) {
@@ -486,6 +560,7 @@ function renderMessages(msgs) {
     messagesEl.innerHTML = `<div class="empty"><div class="empty-icon">💬</div><div>No messages yet</div></div>`;
     return;
   }
+  const activeChat = S.active || {};
   let html = '';
   msgs.forEach((m, i) => {
     const prev = msgs[i-1];
@@ -494,8 +569,12 @@ function renderMessages(msgs) {
       html += `<div class="day-sep"><span>${lbl}</span></div>`;
     }
     const dir = m.direction==='out' ? 'out' : 'in';
+    const senderLabel = dir === 'out'
+      ? `Bot · ${displayChannelRoute(activeChat)}`
+      : `Customer · ${displayCustomer(activeChat)}`;
     html += `
       <div class="msg-group ${dir}">
+        <div class="msg-sender">${esc(senderLabel)}</div>
         <div class="msg ${dir}">${esc(m.text||'')}</div>
         <div class="msg-time">${fmtTime(m.created_at)}</div>
       </div>`;
@@ -510,9 +589,10 @@ async function openChat(chatId) {
   renderList();
 
   chatTopbarEl.innerHTML = `
-    <div>
-      <div class="chat-topbar-name">${esc(chat.sender_name||chat.sender_id||'Unknown')}</div>
-      <div class="chat-topbar-meta">${chIcon(chat.channel)} ${esc(chat.channel)}${chat.company?' · '+esc(chat.company):''}</div>
+    <div class="chat-topbar-main">
+      <div class="chat-topbar-name">${esc(displayCustomer(chat))}</div>
+      <div class="chat-topbar-route">${esc(displayBotRoute(chat))}</div>
+      <div class="chat-topbar-meta">${chIcon(chat.channel)} ${esc(chat.channel)}</div>
     </div>`;
   messagesEl.innerHTML = `<div class="empty"><div class="empty-icon" style="font-size:28px;opacity:.2;">⏳</div></div>`;
 
@@ -522,30 +602,31 @@ async function openChat(chatId) {
     const mode = d.chat?.mode || chat.mode || 'bot';
 
     chatTopbarEl.innerHTML = `
-      <div>
-        <div class="chat-topbar-name">${esc(chat.sender_name||chat.sender_id||'Unknown')}</div>
+      <div class="chat-topbar-main">
+        <div class="chat-topbar-name">${esc(displayCustomer(chat))}</div>
+        <div class="chat-topbar-route">${esc(displayBotRoute(chat))}</div>
+        <div class="chat-facts">
+          <div class="chat-fact">
+            <div class="chat-fact-label">Customer</div>
+            <div class="chat-fact-value">${esc(displayCustomer(chat))}</div>
+          </div>
+          <div class="chat-fact">
+            <div class="chat-fact-label">Handled by</div>
+            <div class="chat-fact-value">${esc(displayChannelRoute(chat))}</div>
+          </div>
+          <div class="chat-fact">
+            <div class="chat-fact-label">Channel</div>
+            <div class="chat-fact-value">${esc(chat.channel || 'unknown')}</div>
+          </div>
+        </div>
         <div class="chat-topbar-meta">
           ${chIcon(chat.channel)} ${esc(chat.channel)}
-          ${chat.company?' · '+esc(chat.company):''}
           · <span class="mode-pill ${mode}">${mode==='human'?'👤 Human':'🤖 Bot'}</span>
         </div>
-      </div>
-      <div class="chat-topbar-actions">
-        <button class="btn btn-take" id="takeBtn">Take over</button>
-        <button class="btn btn-release" id="releaseBtn">Release to bot</button>
       </div>`;
 
     renderMessages(msgs);
     messagesEl.scrollTop = messagesEl.scrollHeight;
-
-    $('takeBtn')?.addEventListener('click', async () => {
-      await fetch(`${API}/chats/${chat.id}/takeover`, {method:'POST'});
-      loadChats(); openChat(chat.id);
-    });
-    $('releaseBtn')?.addEventListener('click', async () => {
-      await fetch(`${API}/chats/${chat.id}/release`, {method:'POST'});
-      loadChats(); openChat(chat.id);
-    });
   } catch(e) {}
 }
 
@@ -594,8 +675,9 @@ $('searchInput').addEventListener('input', e => { S.q = e.target.value; renderLi
 
 async function init() {
   try {
-    const d = await fetch('/auth/api/bots').then(r=>r.json());
-    const active = (d.bots||[]).find(b=>b.id===d.activeBotId);
+    const query = scopedBotId ? `?botId=${encodeURIComponent(scopedBotId)}` : '';
+    const d = await fetch(`/auth/api/bots${query}`).then(r=>r.json());
+    const active = (d.bots||[]).find(b=>b.id === (scopedBotId || d.activeBotId)) || (d.bots||[]).find(b=>b.id===d.activeBotId);
     $('botPill').textContent = active ? active.name : 'BotMatic';
   } catch(e) { $('botPill').textContent = 'BotMatic'; }
 

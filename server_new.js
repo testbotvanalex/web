@@ -112,15 +112,43 @@ function resolveStoreChannelForClient(channelType, clientId) {
 }
 
 function findClientForWhatsapp(phoneNumberId) {
+  const normalizedPhoneNumberId = String(phoneNumberId || '').trim();
+
   if (phoneNumberId) {
     try {
       const row = D.db.prepare(
         `SELECT client_id, bot_id FROM channels WHERE type = 'whatsapp' AND page_id = ? AND status = 'connected' LIMIT 1`
-      ).get(String(phoneNumberId));
+      ).get(normalizedPhoneNumberId);
       if (row?.client_id) {
         return {
           clientId: row.client_id,
           botId: row.bot_id || null,
+        };
+      }
+    } catch {}
+  }
+
+  if (phoneNumberId) {
+    const matchingBotIds = [];
+    for (const bot of store.bots) {
+      const ch = getChannelsByBotId(bot.id);
+      if (!ch?.whatsapp?.connected) continue;
+      if (String(ch.whatsapp.pageId || '').trim() !== normalizedPhoneNumberId) continue;
+      matchingBotIds.push(bot.id);
+    }
+
+    if (matchingBotIds.length === 1) {
+      return findClientAndBotIdByBot(matchingBotIds[0]);
+    }
+
+    const directClientId = `client-wa-${normalizedPhoneNumberId}`;
+    const directBotId = `bot-wa-${normalizedPhoneNumberId}`;
+    try {
+      const directClient = D.clients.byId.get(directClientId);
+      if (directClient?.id) {
+        return {
+          clientId: directClientId,
+          botId: D.bots.byId.get(directBotId)?.id || null,
         };
       }
     } catch {}
@@ -395,6 +423,26 @@ app.get('/bots', (req, res) => {
   res.sendFile(path.join(__dirname, 'bots.html'));
 });
 
+app.get('/bot', (req, res) => {
+  res.sendFile(path.join(__dirname, 'bot.html'));
+});
+
+app.get('/workspace-app', (req, res) => {
+  res.sendFile(path.join(__dirname, 'workspace-app.html'));
+});
+
+app.get('/bot-scope-app', (req, res) => {
+  res.sendFile(path.join(__dirname, 'bot-scope-app.html'));
+});
+
+app.get('/bot-inbox-lite', (req, res) => {
+  res.sendFile(path.join(__dirname, 'bot-scope-app.html'));
+});
+
+app.get('/auth/bot-scope-app', (req, res) => {
+  res.sendFile(path.join(__dirname, 'bot-scope-app.html'));
+});
+
 app.get('/constructor', (req, res) => {
   res.sendFile(path.join(__dirname, 'constructor.html'));
 });
@@ -409,6 +457,11 @@ app.get('/analytics', (req, res) => {
 
 app.get('/inbox', (req, res) => {
   res.sendFile(path.join(__dirname, 'inbox.html'));
+});
+
+app.get('/start', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.sendFile(path.join(__dirname, 'start.html'));
 });
 
 app.get('/auth/instagram/connect', (req, res) => {
@@ -450,14 +503,26 @@ app.get('/auth/api/debug/channels', (req, res) => {
 
 app.get('/auth/api/bots', (req, res) => {
   const selectedBot = getBotOrDefault(req.query.botId);
-  res.json({
-    activeBotId: selectedBot.id,
-    bots: store.bots.map((bot) => ({
+  const mergedBots = [
+    ...store.bots.map((bot) => ({
       id: bot.id,
       name: bot.name,
       createdAt: bot.createdAt,
       updatedAt: bot.updatedAt,
     })),
+    ...getDbWhatsappBots()
+      .map((row) => ({
+        id: row.name || row.id,
+        name: row.name || row.id,
+        createdAt: row.created_at || row.connected_at || '',
+        updatedAt: row.updated_at || row.connected_at || '',
+      }))
+      .filter((row) => row.id && !store.bots.some((bot) => bot.id === row.id)),
+  ];
+
+  res.json({
+    activeBotId: selectedBot.id,
+    bots: mergedBots,
   });
 });
 
@@ -477,14 +542,34 @@ app.get('/auth/api/channels', async (req, res) => {
   const bot = getBotOrDefault(req.query.botId);
   const channels = getChannelsByBotId(bot.id);
   const liveWhatsapp = getLiveWhatsappConfig();
+  const dbWhatsappChannel = bot.dbWhatsapp || (() => {
+    try {
+      return D.db.prepare(`
+        SELECT c.*
+        FROM channels c
+        JOIN bots b ON b.id = c.bot_id
+        WHERE c.type = 'whatsapp'
+          AND c.status = 'connected'
+          AND (b.id = ? OR b.name = ?)
+        LIMIT 1
+      `).get(String(bot.id), String(bot.id));
+    } catch {
+      return null;
+    }
+  })();
 
   const instagramConnected = Boolean(channels.instagram.token && channels.instagram.id);
   const messengerConnected = Boolean(channels.messenger.pageToken && channels.messenger.pageId);
   const telegramConnected = Boolean(channels.telegram.token && channels.telegram.id);
   const whatsappConnected = Boolean(
-    channels.whatsapp.connected &&
-    (channels.whatsapp.pageId || liveWhatsapp.phoneNumberId) &&
-    (channels.whatsapp.token || liveWhatsapp.token)
+    (
+      channels.whatsapp.connected &&
+      (channels.whatsapp.pageId || liveWhatsapp.phoneNumberId) &&
+      (channels.whatsapp.token || liveWhatsapp.token)
+    ) || (
+      dbWhatsappChannel?.page_id &&
+      dbWhatsappChannel?.token
+    )
   );
   const botParam = `botId=${encodeURIComponent(bot.id)}`;
 
@@ -527,11 +612,11 @@ app.get('/auth/api/channels', async (req, res) => {
     },
     whatsapp: {
       connected: whatsappConnected,
-      connectedAt: channels.whatsapp.connectedAt || '',
-      pageId: channels.whatsapp.pageId || liveWhatsapp.phoneNumberId || '',
-      pageName: channels.whatsapp.pageName || liveWhatsapp.displayNumber || 'WhatsApp Business',
-      source: channels.whatsapp.source || liveWhatsapp.source || '',
-      lastStatus: channels.whatsapp.lastStatus || (liveWhatsapp.available ? 'connected' : ''),
+      connectedAt: channels.whatsapp.connectedAt || dbWhatsappChannel?.connected_at || '',
+      pageId: channels.whatsapp.pageId || dbWhatsappChannel?.page_id || liveWhatsapp.phoneNumberId || '',
+      pageName: channels.whatsapp.pageName || dbWhatsappChannel?.page_name || liveWhatsapp.displayNumber || 'WhatsApp Business',
+      source: channels.whatsapp.source || (dbWhatsappChannel ? 'meta-live-db' : '') || liveWhatsapp.source || '',
+      lastStatus: channels.whatsapp.lastStatus || dbWhatsappChannel?.status || (liveWhatsapp.available ? 'connected' : ''),
       available: liveWhatsapp.available,
       connectUrl: '#',
       disconnectUrl: `/auth/api/channels/whatsapp?${botParam}`,
@@ -885,8 +970,50 @@ function getBotById(botId) {
   return store.bots.find((bot) => bot.id === String(botId)) || null;
 }
 
+function getDbWhatsappBots() {
+  try {
+    return D.db.prepare(`
+      SELECT
+        b.id,
+        b.client_id,
+        b.name,
+        b.created_at,
+        b.updated_at,
+        c.page_id,
+        c.page_name,
+        c.connected_at,
+        c.status,
+        c.token
+      FROM bots b
+      JOIN channels c ON c.bot_id = b.id
+      WHERE c.type = 'whatsapp'
+      ORDER BY b.name COLLATE NOCASE
+    `).all();
+  } catch {
+    return [];
+  }
+}
+
+function getVirtualBotById(botId) {
+  const normalized = String(botId || '').trim();
+  if (!normalized) return null;
+
+  const dbRow = getDbWhatsappBots().find((row) => row.id === normalized || row.name === normalized);
+  if (!dbRow) return null;
+
+  return {
+    id: dbRow.name || dbRow.id,
+    name: dbRow.name || dbRow.id,
+    createdAt: dbRow.created_at || dbRow.connected_at || '',
+    updatedAt: dbRow.updated_at || dbRow.connected_at || '',
+    dbBotId: dbRow.id,
+    clientId: dbRow.client_id,
+    dbWhatsapp: dbRow,
+  };
+}
+
 function getBotOrDefault(botId) {
-  return getBotById(botId) || getDefaultBot();
+  return getBotById(botId) || getVirtualBotById(botId) || getDefaultBot();
 }
 
 function getChannelsByBotId(botId) {
@@ -1022,6 +1149,149 @@ function renderPrivacyPolicy(req, res) {
 
 app.get('/privacy-policy', renderPrivacyPolicy);
 app.get('/webhook/instagram/privacy-policy', renderPrivacyPolicy);
+
+// ── Onboarding API (client self-connect) ──
+
+// Default prompts per niche
+const NICHE_PROMPTS = {
+  kapsalon: `Je bent de vriendelijke assistent van {company}, een kapsalon in België. Je helpt klanten met het maken van afspraken, beantwoordt vragen over diensten en prijzen, en geeft informatie over openingsuren. Spreek altijd in het Nederlands. Wees vriendelijk, kort en professioneel. Als je iets niet weet, verwijs dan door naar de medewerkers.`,
+  schoonheid: `Je bent de vriendelijke assistent van {company}, een schoonheidssalon in België. Je helpt klanten met afspraken voor behandelingen, beantwoordt vragen over diensten (nagels, gezichtsbehandeling, epilatie, etc.) en geeft info over prijzen en beschikbaarheid. Spreek altijd in het Nederlands. Wees warm, kort en professioneel.`,
+  restaurant: `Je bent de vriendelijke assistent van {company}, een horecazaak in België. Je helpt klanten met reserveringen, beantwoordt vragen over het menu, allergieën, openingsuren en speciale aanbiedingen. Spreek in het Nederlands. Wees gastvrij en behulpzaam. Voor complexe vragen verwijs je door naar het personeel.`,
+  garage: `Je bent de behulpzame assistent van {company}, een garage in België. Je helpt klanten met het plannen van onderhoud of herstellingen, geeft info over diensten en prijzen, en beantwoordt technische vragen op een begrijpelijke manier. Spreek in het Nederlands. Wees duidelijk, correct en professioneel.`,
+  advocaat: `Je bent de professionele assistent van {company}, een juridisch kantoor in België. Je beantwoordt algemene vragen over juridische diensten en helpt bij het plannen van een kennismakingsgesprek. Geef nooit juridisch advies — verwijs altijd door naar een advocaat voor inhoudelijke vragen. Spreek in het Nederlands. Wees formeel en discreet.`,
+  zorg: `Je bent de vriendelijke assistent van {company}, een zorgverlener in België. Je helpt patiënten met het maken van afspraken, geeft info over diensten en bereikbaarheid, en beantwoordt algemene vragen. Geef nooit medisch advies. Bij dringende klachten verwijs je altijd door naar de huisarts of 112. Spreek in het Nederlands.`,
+  vastgoed: `Je bent de professionele assistent van {company}, een vastgoedkantoor in België. Je helpt geïnteresseerden met info over beschikbare panden, bezichtigingen plannen, en algemene vragen over kopen, huren of verkopen. Spreek in het Nederlands. Wees vriendelijk, discreet en professioneel.`,
+  fitness: `Je bent de enthousiaste assistent van {company}, een fitness- of sportcentrum in België. Je helpt leden en nieuwe klanten met info over lidmaatschappen, lessen, schema's en prijzen. Spreek in het Nederlands. Wees motiverend, energiek en behulpzaam.`,
+  andere: `Je bent de vriendelijke assistent van {company}. Je helpt klanten met vragen over de diensten en producten, afspraken plannen, en algemene informatie. Spreek in het Nederlands. Wees professioneel, vriendelijk en behulpzaam. Verwijs complexe vragen door naar een medewerker.`,
+};
+
+// Self-registration: create new client + bot
+app.post('/api/onboarding/register', (req, res) => {
+  const { company, niche, contact_name, contact_phone, contact_email } = req.body || {};
+  if (!company || !contact_name || !contact_phone) {
+    return res.status(400).json({ error: 'company, contact_name en contact_phone zijn verplicht' });
+  }
+
+  const clientId = D.genId('cl_');
+  const botId = D.genId('bot_');
+  const now = new Date().toISOString();
+
+  // Build prompt from niche template
+  const nicheKey = (niche || 'andere').toLowerCase();
+  const promptTemplate = NICHE_PROMPTS[nicheKey] || NICHE_PROMPTS.andere;
+  const botPrompt = promptTemplate.replace(/\{company\}/g, company.trim());
+
+  D.clients.insert.run({
+    id: clientId,
+    company: company.trim(),
+    niche: '',
+    contact_name: contact_name.trim(),
+    contact_phone: contact_phone.trim(),
+    contact_email: (contact_email || '').trim(),
+    contract_url: '',
+    goal: 'leads',
+    tone: 'friendly',
+    language: 'nl',
+    restrictions: '[]',
+    status: 'new',
+    sla_owner: '',
+    sla_deadline: '',
+    priority: 'normal',
+    niche: nicheKey,
+    notes: 'Via onboarding pagina aangemeld',
+    created_at: now,
+    updated_at: now,
+  });
+
+  D.bots.insert.run({
+    id: botId,
+    client_id: clientId,
+    name: `Bot van ${company.trim()}`,
+    prompt: botPrompt,
+    knowledge_base: '',
+    flow: null,
+    version: 1,
+    last_deploy: now,
+    created_at: now,
+    updated_at: now,
+  });
+
+  console.log(`[Onboarding] New client registered: ${company} (${clientId}) niche: ${nicheKey}`);
+
+  // Notify admin via WhatsApp Cloud API (fire-and-forget)
+  const WA_PHONE_ID = process.env.WA_NOTIFY_PHONE_ID;
+  const WA_TOKEN    = process.env.WA_NOTIFY_TOKEN;
+  const ADMIN_PHONE = process.env.ADMIN_NOTIFY_PHONE || '32456912464';
+  const nicheLabel  = { kapsalon: '✂️ Kapsalon', schoonheid: '💅 Schoonheid', restaurant: '🍽️ Restaurant', garage: '🔧 Garage', advocaat: '⚖️ Advocaat', zorg: '🏥 Zorg', vastgoed: '🏠 Vastgoed', fitness: '💪 Fitness', andere: '📋 Andere' }[nicheKey] || nicheKey;
+  if (WA_PHONE_ID && WA_TOKEN) {
+    const msgText = `🆕 *Nieuwe aanmelding BotMatic*\n\n🏢 ${company.trim()}\n🏷️ ${nicheLabel}\n👤 ${contact_name.trim()}\n📞 ${contact_phone.trim()}${(contact_email || '').trim() ? '\n📧 ' + contact_email.trim() : ''}\n\n✅ Bot prompt automatisch ingesteld\n👉 botmatic.be/admin/client?id=${clientId}`;
+    axios.post(
+      `https://graph.facebook.com/v19.0/${WA_PHONE_ID}/messages`,
+      {
+        messaging_product: 'whatsapp',
+        to: ADMIN_PHONE,
+        type: 'text',
+        text: { body: msgText }
+      },
+      { headers: { Authorization: `Bearer ${WA_TOKEN}`, 'Content-Type': 'application/json' } }
+    ).then(() => console.log(`[Onboarding] Admin WA notification sent to ${ADMIN_PHONE}`))
+     .catch(e => console.warn('[Onboarding] WA notify failed:', e.response?.data || e.message));
+  }
+
+  return res.json({ ok: true, clientId, botId });
+});
+
+app.post('/api/onboarding/:clientId/telegram', async (req, res) => {
+  const { clientId } = req.params;
+  const { token, botId } = req.body || {};
+
+  if (!clientId || !token) {
+    return res.status(400).json({ error: 'clientId en token zijn verplicht' });
+  }
+
+  // Verify token with Telegram API
+  try {
+    const tgRes = await axios.get(`https://api.telegram.org/bot${token}/getMe`);
+    if (!tgRes.data.ok) throw new Error('Ongeldig token');
+    const tgBot = tgRes.data.result;
+
+    // Save channel to DB
+    const chId = D.genId('ch_');
+    const now = new Date().toISOString();
+
+    D.channels.upsert.run({
+      id: chId,
+      client_id: clientId,
+      bot_id: botId || null,
+      type: 'telegram',
+      status: 'connected',
+      page_id: String(tgBot.id),
+      page_name: tgBot.username || tgBot.first_name,
+      token,
+      token_expiry: null,
+      username: tgBot.username || null,
+      connected_at: now,
+      connected_by: 'onboarding',
+      webhook_active: 1,
+    });
+
+    // Set webhook
+    try {
+      await axios.post(`https://api.telegram.org/bot${token}/setWebhook`, {
+        url: `https://botmatic.be/webhook/telegram/${clientId}`,
+      });
+    } catch (whErr) {
+      console.warn('[Onboarding] Telegram setWebhook failed:', whErr.message);
+    }
+
+    console.log(`[Onboarding] Telegram bot @${tgBot.username} connected for client ${clientId}`);
+    return res.json({ ok: true, botUsername: tgBot.username });
+  } catch (err) {
+    console.error('[Onboarding] Telegram connect error:', err.response?.data || err.message);
+    const msg = err.response?.data?.description || err.message || 'Token verificatie mislukt';
+    return res.status(400).json({ error: msg });
+  }
+});
 
 // --- Bot Flow Constructor API ---
 
@@ -1845,13 +2115,17 @@ app.post('/auth/messenger/webhook', async (req, res) => {
     if (!channel || !channel.messenger.pageToken) continue;
 
     for (const event of entry.messaging || []) {
-      if (!event.message || event.message.is_echo) continue;
+      // Skip echoes; allow messages AND postbacks
+      if (event.message?.is_echo) continue;
+      if (!event.message && !event.postback) continue;
 
       const senderId = event.sender?.id || event.from?.id || '';
       let text = '';
 
       if (event.message?.text) {
         text = event.message.text;
+      } else if (event.message?.quick_reply?.payload) {
+        text = event.message.quick_reply.payload;
       } else if (event.postback?.payload) {
         text = event.postback.payload;
       } else if (event.message?.attachments) {
@@ -2129,6 +2403,35 @@ app.post('/auth/api/whatsapp/webhook', async (req, res) => {
   } catch (err) {
     console.error('❌ WhatsApp Webhook Error:', err.message);
     res.status(500).json({ error: 'Failed to process WhatsApp message' });
+  }
+});
+
+app.post('/auth/api/whatsapp/mirror-outgoing', (req, res) => {
+  try {
+    const phoneNumberId = String(req.body?.phoneNumberId || '').trim();
+    const to = String(req.body?.to || '').trim();
+    const text = String(req.body?.text || '').trim();
+    if (!phoneNumberId || !to || !text) {
+      return res.status(400).json({ error: 'phoneNumberId, to, text required' });
+    }
+
+    const mapping = findClientForWhatsapp(phoneNumberId);
+    if (!mapping?.clientId) {
+      return res.status(404).json({ error: 'WhatsApp client mapping not found' });
+    }
+
+    saveChannelToDb(mapping.clientId, mapping.botId, 'whatsapp', {
+      pageId: phoneNumberId || null,
+      pageName: req.body?.pageName || null,
+      token: process.env.WHATSAPP_TOKEN || null,
+      username: req.body?.pageName || null,
+    });
+    saveMessageToDb(mapping.clientId, 'whatsapp', to, text, 'out', req.body);
+
+    return res.json({ ok: true, clientId: mapping.clientId, botId: mapping.botId || null });
+  } catch (err) {
+    console.error('❌ WhatsApp outgoing mirror error:', err.message);
+    return res.status(500).json({ error: 'Failed to mirror outgoing WhatsApp message' });
   }
 });
 

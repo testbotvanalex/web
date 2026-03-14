@@ -304,7 +304,7 @@ const chatQ = {
         LIMIT 1
       ) AS last_message_text
     FROM chats ch
-    LEFT JOIN clients c ON c.id = ch.client_id
+    INNER JOIN clients c ON c.id = ch.client_id
     ORDER BY ch.last_message_at DESC
   `),
 

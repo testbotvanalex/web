@@ -1,0 +1,36 @@
+<svg width="640" height="380" viewBox="0 0 640 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="32" y="22" width="576" height="336" rx="22" fill="#FFFFFF" stroke="#DCE6E1"/>
+  <rect x="62" y="50" width="516" height="38" rx="12" fill="#F4FAF6"/>
+  <circle cx="84" cy="69" r="7" fill="#1FA564"/>
+  <text x="100" y="74" fill="#61756A" font-size="13" font-family="Inter, sans-serif" font-weight="600">Korte demo</text>
+
+  <g>
+    <rect x="62" y="106" width="306" height="58" rx="14" fill="#F8FBF9" stroke="#E4ECE7"/>
+    <text x="78" y="130" fill="#42544B" font-size="13" font-family="Inter, sans-serif">Klant: Hebben jullie morgen nog plaats?</text>
+    <text x="78" y="148" fill="#74867C" font-size="12" font-family="Inter, sans-serif">10:12</text>
+  </g>
+
+  <g>
+    <rect x="248" y="182" width="330" height="72" rx="14" fill="#ECFFF3" stroke="#CFE8DB">
+      <animate attributeName="x" values="260;248;260" dur="4s" repeatCount="indefinite"/>
+    </rect>
+    <text x="264" y="206" fill="#2A6B47" font-size="13" font-family="Inter, sans-serif">
+      Assistent: Zeker. Voormiddag of namiddag?
+      <animate attributeName="x" values="276;264;276" dur="4s" repeatCount="indefinite"/>
+    </text>
+    <text x="264" y="224" fill="#2A6B47" font-size="13" font-family="Inter, sans-serif">
+      Dan geef ik het meteen door aan je team.
+      <animate attributeName="x" values="276;264;276" dur="4s" repeatCount="indefinite"/>
+    </text>
+    <text x="264" y="242" fill="#67977A" font-size="12" font-family="Inter, sans-serif">
+      10:12
+      <animate attributeName="x" values="276;264;276" dur="4s" repeatCount="indefinite"/>
+    </text>
+  </g>
+
+  <g>
+    <rect x="62" y="272" width="250" height="56" rx="14" fill="#F8FBF9" stroke="#E4ECE7"/>
+    <text x="78" y="296" fill="#42544B" font-size="13" font-family="Inter, sans-serif">Klant: Namiddag graag.</text>
+    <text x="78" y="314" fill="#74867C" font-size="12" font-family="Inter, sans-serif">10:13</text>
+  </g>
+</svg>

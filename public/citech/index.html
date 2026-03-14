@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Citech helper</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+/* ── Reset & base ── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;min-height:100vh}
+
+/* ── Topbar ── */
+.topbar{background:#1a1a2e;color:white;padding:0 24px;display:flex;align-items:stretch;height:56px;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.topbar-inner{width:100%;max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:8px}
+.brand-icon{font-size:20px}
+.brand-title{font-size:16px;font-weight:800;letter-spacing:.3px}
+.topbar-center{display:flex;justify-content:center}
+.seg-group{display:flex;background:rgba(255,255,255,.1);border-radius:10px;padding:3px;gap:2px}
+.seg{border:none;background:transparent;color:#94a3b8;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;padding:5px 16px;border-radius:8px;cursor:pointer;transition:background .15s,color .15s;white-space:nowrap}
+.seg:hover{color:white;background:rgba(255,255,255,.12)}
+.seg.active{background:#6366f1;color:white}
+.nav-tabs{display:flex;gap:4px;align-items:center;justify-content:flex-end}
+.tab{text-decoration:none;color:#94a3b8;font-size:13px;font-weight:600;padding:6px 16px;border-radius:8px;transition:background .15s,color .15s;cursor:pointer;border:none;font-family:'Inter',sans-serif;background:transparent}
+.tab:hover{background:rgba(255,255,255,.08);color:white}
+.tab.active{background:#6366f1;color:white}
+
+/* ── Pages ── */
+.page{display:none}.page.active{display:block}
+
+/* ── App wrapper ── */
+.app{max-width:900px;margin:0 auto;padding:28px 16px 60px}
+.header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:24px}
+.header h1{font-size:22px;font-weight:800;color:#1a1a2e}
+.subtitle{font-size:13px;color:#64748b;margin-top:4px;max-width:520px}
+.panel{background:white;border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:20px;overflow:hidden}
+.panel-header{padding:18px 22px 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;border-bottom:1px solid #f1f5f9}
+.panel-title{font-size:15px;font-weight:700;color:#1a1a2e}
+.panel-hint{font-size:12px;color:#94a3b8;flex:1}
+.panel-sub{font-size:12px;color:#94a3b8;padding:8px 22px 0;margin:0}
+.status-pill{font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;background:#f1f5f9;color:#64748b;white-space:nowrap}
+.status-pill.ok{background:#dcfce7;color:#15803d}
+.status-pill.warn{background:#fef9c3;color:#a16207}
+.status-pill.err{background:#fee2e2;color:#dc2626}
+.totals-pill{font-size:13px;font-weight:700;padding:6px 16px;border-radius:20px;background:#ede9fe;color:#6366f1;white-space:nowrap}
+textarea{display:block;width:100%;height:120px;border:none;border-top:1px solid #f1f5f9;border-bottom:1px solid #f1f5f9;padding:14px 22px;font-size:12px;font-family:monospace;resize:vertical;outline:none;background:#f8fafc;color:#334155}
+textarea:focus{background:#f0f4ff;border-color:#6366f1}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:9px;border:2px solid #e2e8f0;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;background:white;color:#1a1a2e;transition:all .15s;white-space:nowrap}
+.btn:hover{border-color:#6366f1;color:#6366f1}
+.btn-primary{background:#6366f1;color:white;border-color:#6366f1}
+.btn-primary:hover{background:#4f46e5;border-color:#4f46e5;color:white}
+.btn-ghost{background:white;color:#64748b;border-color:#e2e8f0}
+.btn-ghost:hover{border-color:#94a3b8;color:#1a1a2e}
+.small-btn{padding:6px 12px;font-size:12px}
+.panel-actions{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:14px 22px}
+.panel-actions-left,.panel-actions-right{display:flex;gap:8px;flex-wrap:wrap}
+.panel-actions-bottom{border-top:1px solid #f1f5f9}
+.table-wrapper{overflow-x:auto;padding:0 22px;margin:16px 0}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead tr{background:#1a1a2e}
+thead th{padding:12px 14px;text-align:center;font-size:11px;font-weight:700;color:white;text-transform:uppercase;letter-spacing:.6px;white-space:nowrap}
+thead th:first-child{text-align:left;border-radius:8px 0 0 0}
+thead th:last-child{border-radius:0 8px 0 0}
+tbody tr{border-bottom:1px solid #f1f5f9;transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:#f8fafc}
+tbody td{padding:11px 14px;text-align:center;color:#334155;font-size:13px}
+tbody td:first-child{text-align:left;font-weight:600;color:#1a1a2e}
+tbody td input[type="number"]{width:72px;border:2px solid #e2e8f0;border-radius:7px;padding:5px 8px;font-size:13px;font-family:'Inter',sans-serif;text-align:center;outline:none;background:white;color:#1a1a2e;transition:border-color .15s}
+tbody td input[type="number"]:focus{border-color:#6366f1}
+tbody td input[readonly]{background:#f8fafc;color:#64748b}
+.output{margin:0 22px 16px;background:#f8fafc;border:2px solid #e2e8f0;border-radius:10px;padding:16px;font-size:13px;font-family:monospace;white-space:pre-wrap;min-height:80px;color:#334155;line-height:1.6}
+.sticky-actions{position:fixed;bottom:0;left:0;right:0;background:rgba(26,26,46,.95);backdrop-filter:blur(8px);padding:12px 24px;display:flex;justify-content:flex-end;z-index:200;box-shadow:0 -2px 12px rgba(0,0,0,.2)}
+.sticky-actions .btn-primary{padding:12px 28px;font-size:14px}
+.footer{text-align:center;font-size:11px;color:#94a3b8;margin-top:40px;padding-bottom:70px}
+.row-red td:first-child{border-left:3px solid #f87171}
+.row-green td:first-child{border-left:3px solid #4ade80}
+.row-amber td:first-child{border-left:3px solid #fbbf24}
+.row-orange td:first-child{border-left:3px solid #fb923c}
+.readonly-input{background:#f8fafc!important;color:#64748b!important}
+
+/* ── Machines ── */
+.mach-error{background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:14px 18px;color:#dc2626;font-size:13px;margin-bottom:16px;white-space:pre-wrap}
+.mach-header{background:#1a1a2e;border-radius:14px;padding:18px 22px;margin-bottom:14px;color:white;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.mach-name{font-size:20px;font-weight:800}
+.mach-date{font-size:12px;color:#94a3b8;margin-top:3px}
+.mach-meta{font-size:13px;color:#94a3b8;text-align:right;line-height:1.5}
+.mach-sum-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+.mach-sum-card{background:white;border-radius:14px;padding:18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.msc-label{font-size:11px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.msc-value{font-size:24px;font-weight:800}
+.mach-banner{border-radius:14px;padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;gap:14px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.mach-banner-card{background:#eff6ff;border:2px solid #93c5fd}
+.mach-banner-card .mb-label{color:#1d4ed8}
+.mach-banner-card .mb-amount{color:#1d4ed8}
+.mach-banner-card .mb-sub{color:#3b82f6}
+.mach-banner-warn{background:#fffbeb;border:2px solid #fcd34d}
+.mach-banner-warn .mb-label{color:#b45309}
+.mach-banner-warn .mb-amount{color:#d97706}
+.mach-banner-warn .mb-sub{color:#92400e}
+.mach-banner-no{background:#f8fafc;border:2px solid #e2e8f0}
+.mach-banner-no .mb-label{color:#64748b}
+.mach-banner-no .mb-amount{color:#94a3b8}
+.mach-alert-red{background:#fff1f2;border:2px solid #f87171;border-radius:14px;padding:16px 20px;margin-bottom:14px;display:flex;align-items:flex-start;gap:14px;box-shadow:0 2px 12px rgba(220,38,38,.15);animation:pulse-red 2s infinite}
+.mar-icon{font-size:28px;flex-shrink:0;margin-top:2px}
+.mar-title{font-size:15px;font-weight:800;color:#dc2626;margin-bottom:6px}
+.mar-body{font-size:14px;color:#991b1b;margin-bottom:4px}
+.mar-hint{font-size:12px;color:#b91c1c;opacity:.8}
+@keyframes pulse-red{0%,100%{box-shadow:0 2px 12px rgba(220,38,38,.15)}50%{box-shadow:0 2px 20px rgba(220,38,38,.40)}}
+.mb-icon{font-size:32px}
+.mb-label{font-size:13px;font-weight:600}
+.mb-amount{font-size:26px;font-weight:800}
+.mb-sub{font-size:12px;color:#94a3b8;margin-top:2px}
+.mach-vtabs{display:flex;gap:8px;margin-bottom:20px}
+.mach-vtab{flex:1;padding:12px;border-radius:10px;border:2px solid #e2e8f0;background:white;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;text-align:center;color:#64748b;transition:all .15s}
+.mach-vtab.active{background:#6366f1;color:white;border-color:#6366f1}
+.mach-vtab:hover:not(.active){border-color:#6366f1;color:#6366f1}
+.mach-section-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#94a3b8;margin-bottom:12px}
+.mach-day{margin-bottom:24px}
+.mach-day-header{background:#1e3a5f;border-radius:12px 12px 0 0;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.mach-day-header:hover{background:#1a3356}
+.mach-day-title{font-size:16px;font-weight:800;color:white}
+.mach-day-stats{display:flex;gap:16px}
+.mds{text-align:right}
+.mds-l{font-size:10px;color:#94a3b8;text-transform:uppercase}
+.mds-v{font-size:14px;font-weight:700;color:white}
+.mach-day-toggle{color:#94a3b8;font-size:13px;margin-left:12px;transition:transform .2s}
+.mach-day-toggle.open{transform:rotate(180deg)}
+.mach-day-body{background:white;border-radius:0 0 12px 12px;border:1px solid #e2e8f0;border-top:none;overflow:hidden}
+.mach-day-sum{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#f1f5f9;border-bottom:2px solid #e2e8f0}
+.mach-day-sum-cell{background:white;padding:14px 16px}
+.mdsc-l{font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mdsc-v{font-size:17px;font-weight:800}
+.mach-pcard{border-bottom:1px solid #f1f5f9}
+.mach-pcard:last-child{border-bottom:none}
+.mach-phead{display:flex;align-items:center;gap:14px;padding:14px 20px;cursor:pointer}
+.mach-phead:hover{background:#fafbfc}
+.mach-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:white;flex-shrink:0}
+.mach-pinfo{flex:1}
+.mach-card-num{font-size:16px;font-weight:700}
+.mach-ptime{font-size:12px;color:#94a3b8;margin-top:2px}
+.mach-presult{text-align:right}
+.mach-rlabel{font-size:11px;color:#94a3b8;margin-top:4px}
+.mach-badge{display:inline-block;padding:6px 14px;border-radius:20px;font-size:14px;font-weight:800}
+.mach-badge.win{background:#dcfce7;color:#15803d}
+.mach-badge.lose{background:#fee2e2;color:#dc2626}
+.mach-badge.zero{background:#f1f5f9;color:#64748b}
+.mach-badge.warn{background:#fef9c3;color:#a16207}
+.mach-pdetails{display:none;border-top:1px solid #f8fafc;padding:14px 20px;background:#fafbfc}
+.mach-pdetails.open{display:block}
+.mach-drow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:12px}
+.mdi-l{font-size:10px;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.mdi-v{font-size:15px;font-weight:700}
+.mdi-v.pos{color:#15803d}
+.mdi-v.neg{color:#dc2626}
+.mdi-v.warn{color:#d97706}
+.mach-warn-box{background:#fef9c3;border:1px solid #fde68a;border-radius:9px;padding:11px 14px;margin-bottom:10px;font-size:13px;color:#a16207}
+.mach-left-banner{border-radius:9px;padding:11px 14px;display:flex;align-items:center;justify-content:space-between}
+.mach-left-banner.yes{background:#f0fdf4;border:1px solid #bbf7d0}
+.mach-left-banner.no{background:#f8fafc;border:1px solid #e2e8f0}
+.mach-left-banner.yes span{color:#15803d;font-size:13px;font-weight:600}
+.mach-left-banner.no span{color:#64748b;font-size:13px;font-weight:600}
+.mlb-amount{font-size:16px;font-weight:800}
+.mach-left-banner.yes .mlb-amount{color:#15803d}
+.mach-left-banner.no .mlb-amount{color:#94a3b8}
+#machOut .mach-pcard{background:white;border-radius:14px;margin-bottom:10px;border:none;box-shadow:0 2px 8px rgba(0,0,0,.06);overflow:hidden}
+
+@media(max-width:600px){
+  .mach-sum-row{grid-template-columns:1fr 1fr}
+  .mach-day-sum{grid-template-columns:1fr 1fr}
+  .mach-day-stats{display:none}
+  .header{flex-direction:column}
+  .panel-actions{flex-direction:column;align-items:flex-start}
+  thead th{font-size:10px;padding:10px 8px}
+  tbody td{padding:9px 8px;font-size:12px}
+  .topbar-inner{grid-template-columns:auto 1fr}
+  .brand-title{display:none}
+}
+
+/* ── Drink cards grid ── */
+.drink-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.dk-card{border-radius:12px;padding:14px;border:2px solid #e2e8f0;background:white;transition:all .15s;position:relative}
+.dk-card.needs-order{border-color:#fca5a5;background:#fff5f5}
+.dk-card.ok{border-color:#bbf7d0;background:#f0fdf4}
+.dk-card.amber{border-color:#fde68a;background:#fffbeb}
+.dk-card.zero-stock{border-color:#fb923c;background:#fff7ed}
+.dk-name{font-size:14px;font-weight:800;color:#1a1a2e;margin-bottom:10px}
+.dk-rows{display:flex;flex-direction:column;gap:5px}
+.dk-row{display:flex;justify-content:space-between;align-items:center;font-size:12px}
+.dk-lbl{color:#94a3b8;font-weight:600}
+.dk-val{font-weight:700;color:#334155}
+.dk-val input[type="number"]{width:60px;border:1.5px solid #e2e8f0;border-radius:6px;padding:3px 6px;font-size:12px;font-weight:700;text-align:right;outline:none;font-family:inherit;color:#1a1a2e}
+.dk-val input[type="number"]:focus{border-color:#6366f1}
+.dk-badge{display:inline-block;margin-top:10px;width:100%;text-align:center;padding:6px 0;border-radius:8px;font-size:13px;font-weight:800}
+.dk-badge.order{background:#dc2626;color:white}
+.dk-badge.good{background:#dcfce7;color:#15803d}
+.dk-badge.warn{background:#fef9c3;color:#a16207}
+
+/* ── Cash cards grid ── */
+.cash-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.cs-card{border-radius:12px;padding:14px;border:2px solid #e2e8f0;background:white;transition:all .15s}
+.cs-card.needs-order{border-color:#fca5a5;background:#fff5f5}
+.cs-card.ok{border-color:#bbf7d0;background:#f0fdf4}
+.cs-denom{font-size:22px;font-weight:800;color:#6366f1;margin-bottom:10px}
+.cs-rows{display:flex;flex-direction:column;gap:5px}
+.cs-row{display:flex;justify-content:space-between;align-items:center;font-size:12px}
+.cs-lbl{color:#94a3b8;font-weight:600}
+.cs-val{font-weight:700;color:#334155}
+.cs-val input[type="number"]{width:70px;border:1.5px solid #e2e8f0;border-radius:6px;padding:3px 6px;font-size:12px;font-weight:700;text-align:right;outline:none;font-family:inherit;color:#1a1a2e}
+.cs-val input[type="number"]:focus{border-color:#6366f1}
+.cs-badge{display:inline-block;margin-top:10px;width:100%;text-align:center;padding:6px 0;border-radius:8px;font-size:13px;font-weight:800}
+.cs-badge.order{background:#dc2626;color:white}
+.cs-badge.good{background:#dcfce7;color:#15803d}
+  </style>
+</head>
+<body>
+
+<select id="hall" style="display:none">
+  <option value="nieuwpoort">GP Nieuwpoort</option>
+  <option value="blankenberge">GP Blankenberge</option>
+</select>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="brand-icon">🎰</span>
+      <span class="brand-title">Citech helper</span>
+    </div>
+    <div class="topbar-center">
+      <div class="seg-group" id="hallToggle">
+        <button class="seg active" data-hall="nieuwpoort">Nieuwpoort</button>
+        <button class="seg" data-hall="blankenberge">Blankenberge</button>
+      </div>
+    </div>
+    <nav class="nav-tabs">
+      <button class="tab active" data-page="drank">🍺 Drank</button>
+      <button class="tab" data-page="geld">💶 Geld</button>
+      <button class="tab" data-page="machines">🎰 Machines</button>
+    </nav>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE: DRANK
+════════════════════════════════════════════════ -->
+<div class="page active" id="page-drank">
+<div class="app">
+  <header class="header">
+    <div>
+      <h1>Drank bestelling</h1>
+      <p class="subtitle">Plak de <strong>STOCK actuel</strong> tabel uit Citech — de tool rekent automatisch.</p>
+    </div>
+    <button class="btn btn-ghost small-btn" id="resetAllBtn">↺ Reset alles</button>
+  </header>
+  <main class="main">
+    <section class="panel">
+      <div class="panel-header">
+        <h2 class="panel-title">Stap 1 — STOCK actuel plakken</h2>
+        <span class="status-pill" id="stockStatus">Nog niet berekend</span>
+      </div>
+      <p class="panel-sub">Volledige tabel plakken, inclusief datum/uur – parser pakt zelf de juiste cijfers.</p>
+      <textarea id="stockInput" placeholder="Plak hier de STOCK actuel tabel van Citech..."></textarea>
+      <div class="panel-actions">
+        <div class="panel-actions-left">
+          <button class="btn btn-primary" id="readStockBtn">▶ Lees STOCK &amp; bereken</button>
+          <button class="btn btn-ghost" id="sampleStockBtn">Voorbeeld</button>
+        </div>
+        <div class="panel-actions-right">
+          <button class="btn btn-ghost" id="clearStockBtn">Clear</button>
+          <button class="btn btn-ghost" id="resetDefaultsBtn">Reset defaults</button>
+        </div>
+      </div>
+    </section>
+    <section class="panel">
+      <div class="panel-header">
+        <h2 class="panel-title">Stap 2 — Controleer &amp; pas aan</h2>
+        <div class="totals-pill" id="totals">Totaal bestellen: 0 bak(ken)</div>
+      </div>
+      <div id="drankGrid" class="drink-grid" style="padding:16px 22px"></div>
+      <div class="panel-actions panel-actions-bottom">
+        <div class="panel-actions-left">
+          <button class="btn btn-primary" id="genTextBtn">Genereer bestelling</button>
+          <button class="btn" id="genCopyBtn">Genereer + Copy</button>
+        </div>
+        <div class="panel-actions-right">
+          <button class="btn" id="copyBtn">COPY</button>
+          <button class="btn" id="printBtn">PRINT</button>
+        </div>
+      </div>
+    </section>
+    <section class="panel">
+      <div class="panel-header">
+        <h2 class="panel-title">Bestellingstekst</h2>
+        <span class="panel-hint">Klaar om te plakken in mail of WhatsApp.</span>
+      </div>
+      <div id="output" class="output"></div>
+      <div class="panel-actions">
+        <div class="panel-actions-left">
+          <button class="btn" id="copyTableBtn">Copy tabel (TSV)</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">Lokaal hulpmiddel – alle gegevens blijven in jouw browser.</footer>
+</div>
+<div class="sticky-actions" id="drankSticky">
+  <button class="btn btn-primary" id="stickyGenCopyBtn">⚡ Genereer + Copy</button>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE: GELD
+════════════════════════════════════════════════ -->
+<div class="page" id="page-geld">
+<div class="app">
+  <header class="header">
+    <div>
+      <h1>Geld bestelling</h1>
+      <p class="subtitle">Plak de volledige cash-pagina uit Citech (ATM, cassettes, safe) — de tool berekent wat je bij Brinks moet bestellen.</p>
+    </div>
+    <button class="btn btn-ghost small-btn" id="cashResetAllBtn">↺ Reset alles</button>
+  </header>
+  <main class="main">
+    <section class="panel">
+      <div class="panel-header">
+        <h2 class="panel-title">Stap 1 — Cash-rapport uit Citech plakken</h2>
+        <span class="status-pill" id="cashStatus">Nog niet berekend</span>
+      </div>
+      <p class="panel-sub">Gewoon alles kopiëren (ATM cassette configuration, counters, cassettes(€), safe(€)).</p>
+      <textarea id="cashInput" placeholder="Plak hier de cash-pagina uit Citech..."></textarea>
+      <div class="panel-actions">
+        <div class="panel-actions-left">
+          <button class="btn btn-primary" id="readCashBtn">▶ Lees STOCK &amp; bereken</button>
+          <button class="btn btn-ghost" id="sampleCashBtn">Voorbeeld</button>
+        </div>
+        <div class="panel-actions-right">
+          <button class="btn btn-ghost" id="clearCashBtn">Clear</button>
+        </div>
+      </div>
+    </section>
+    <section class="panel">
+      <div class="panel-header">
+        <h2 class="panel-title">Stap 2 — Controleer bedragen per coupure</h2>
+        <div class="totals-pill" id="cashTotals">Totaal bestellen: 0 biljetten / €0,00</div>
+      </div>
+      <div id="cashGrid" class="cash-grid" style="padding:16px 22px"></div>
+      <div class="panel-actions panel-actions-bottom">
+        <div class="panel-actions-left">
+          <button class="btn btn-primary" id="cashGenTextBtn">Genereer bestelling</button>
+          <button class="btn" id="cashGenCopyBtn">Genereer + Copy</button>
+        </div>
+        <div class="panel-actions-right">
+          <button class="btn" id="cashCopyBtn">COPY</button>
+          <button class="btn" id="cashPrintBtn">PRINT</button>
+        </div>
+      </div>
+    </section>
+    <section class="panel">
+      <div class="panel-header">
+        <h2 class="panel-title">E-mail tekst</h2>
+        <span class="panel-hint">Klaar om te mailen naar Brinks / bank.</span>
+      </div>
+      <div id="cashOutput" class="output"></div>
+      <div class="panel-actions">
+        <div class="panel-actions-left">
+          <button class="btn" id="copyCashTableBtn">Copy tabel (TSV)</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">Lokaal hulpmiddel – alle gegevens blijven in jouw browser.</footer>
+</div>
+<div class="sticky-actions" id="geldSticky" style="display:none">
+  <button class="btn btn-primary" id="stickyCashGenCopyBtn">⚡ Genereer + Copy</button>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE: MACHINES
+════════════════════════════════════════════════ -->
+<div class="page" id="page-machines">
+<div class="app">
+  <header class="header">
+    <div>
+      <h1>Machine analyse</h1>
+      <p class="subtitle">Plak de data van citech.be (Ctrl+A → Ctrl+C op de machine-pagina) en klik Bereken.</p>
+    </div>
+  </header>
+  <main class="main">
+    <section class="panel">
+      <div class="panel-header">
+        <h2 class="panel-title">Data plakken</h2>
+        <span class="status-pill" id="machStatus">Wacht op data</span>
+      </div>
+      <p class="panel-sub">Kopieer de volledige machine-pagina van Citech (inclusief naam bovenaan).</p>
+      <textarea id="machInp" placeholder="Plak hier de machine-data van citech.be..."></textarea>
+      <div class="panel-actions">
+        <div class="panel-actions-left">
+          <button class="btn btn-primary" onclick="go()">▶ Bereken</button>
+        </div>
+        <div class="panel-actions-right">
+          <button class="btn btn-ghost" onclick="document.getElementById('machInp').value='';document.getElementById('machOut').style.display='none';document.getElementById('machErr').style.display='none';">Clear</button>
+        </div>
+      </div>
+    </section>
+    <div class="mach-error" id="machErr" style="display:none"></div>
+    <div id="machOut" style="display:none"></div>
+  </main>
+  <footer class="footer">Lokaal hulpmiddel – alle gegevens blijven in jouw browser.</footer>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<!-- ═══════════════════════════════════════════════
+     NAVIGATION
+════════════════════════════════════════════════ -->
+<script>
+(function() {
+  var pages = ['drank','geld','machines'];
+  var stickies = {drank:'drankSticky', geld:'geldSticky'};
+
+  function showPage(name) {
+    pages.forEach(function(p) {
+      var el = document.getElementById('page-'+p);
+      if(el) el.classList.toggle('active', p===name);
+    });
+    document.querySelectorAll('.nav-tabs .tab').forEach(function(t) {
+      t.classList.toggle('active', t.dataset.page===name);
+    });
+    // sticky bars
+    Object.keys(stickies).forEach(function(k) {
+      var s = document.getElementById(stickies[k]);
+      if(s) s.style.display = (k===name) ? 'flex' : 'none';
+    });
+    localStorage.setItem('citech_page', name);
+  }
+
+  document.querySelectorAll('.nav-tabs .tab').forEach(function(btn) {
+    btn.addEventListener('click', function() { showPage(btn.dataset.page); });
+  });
+
+  // Hall toggle — shared
+  document.querySelectorAll('#hallToggle .seg').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('#hallToggle .seg').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('hall').value = btn.dataset.hall;
+      document.getElementById('hall').dispatchEvent(new Event('change'));
+    });
+  });
+
+  // Restore last page
+  var lastPage = localStorage.getItem('citech_page') || 'drank';
+  showPage(lastPage);
+
+  // Restore hall
+  var savedHallD = JSON.parse(localStorage.getItem('drink_state_v1') || '{}').hall;
+  var savedHallC = JSON.parse(localStorage.getItem('cash_state_v1') || '{}').hall;
+  var sh = savedHallD || savedHallC;
+  if(sh) {
+    document.getElementById('hall').value = sh;
+    document.querySelectorAll('#hallToggle .seg').forEach(function(b) {
+      b.classList.toggle('active', b.dataset.hall===sh);
+    });
+  }
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════
+     DRANK JS  (app.js)
+════════════════════════════════════════════════ -->
+<script>
+(function() {
+const HALL_LABELS = { nieuwpoort:"GP Nieuwpoort", blankenberge:"GP Blankenberge" };
+const DRINKS = [
+  {key:"Carlsberg 0%",short:"Carlsberg"},{key:"Coca Cola",short:"Cola"},{key:"Coca Zero",short:"Zero"},
+  {key:"Eau gaz",short:"Bruis"},{key:"Eau plate",short:"Plat"},{key:"Fanta Orange",short:"Fanta"},
+  {key:"FuzeTea Peach",short:"Fuze-tea"},{key:"Liefmans 0%",short:"Liefmans"},{key:"MM Ace",short:"Ace"},
+  {key:"MM Orange",short:"Orange"},{key:"Nalu",short:"Nalu"},{key:"Red Bull",short:"Red Bull"},
+  {key:"Sprite",short:"Sprite"}
+];
+const HALL_DEFAULTS = {
+  nieuwpoort:{
+    "Carlsberg 0%":{gewenst:72,bar:16},"Coca Cola":{gewenst:336,bar:30},"Coca Zero":{gewenst:336,bar:18},
+    "Eau gaz":{gewenst:336,bar:18},"Eau plate":{gewenst:336,bar:15},"Fanta Orange":{gewenst:120,bar:18},
+    "FuzeTea Peach":{gewenst:72,bar:10},"Liefmans 0%":{gewenst:72,bar:12},"MM Ace":{gewenst:48,bar:5},
+    "Nalu":{gewenst:72,bar:10},"Red Bull":{gewenst:72,bar:15},"Sprite":{gewenst:72,bar:18}
+  },
+  blankenberge:{
+    "Carlsberg 0%":{gewenst:72,bar:10},"Coca Cola":{gewenst:336,bar:36},"Coca Zero":{gewenst:336,bar:36},
+    "Eau gaz":{gewenst:336,bar:24},"Eau plate":{gewenst:336,bar:24},"Fanta Orange":{gewenst:120,bar:10},
+    "FuzeTea Peach":{gewenst:72,bar:5},"Liefmans 0%":{gewenst:72,bar:10},"MM Ace":{gewenst:48,bar:5},
+    "MM Orange":{gewenst:48,bar:5},"Nalu":{gewenst:72,bar:5},"Red Bull":{gewenst:72,bar:10},
+    "Sprite":{gewenst:72,bar:10}
+  }
+};
+const BOTTLES_PER_BAK = 24;
+const STORAGE_KEY = "drink_state_v1";
+const SAMPLE_STOCK = `2024-02-05 11:00:00\nCarlsberg 0% 0 0 24\nCoca Cola 0 0 120\nCoca Zero 0 0 96\nEau gaz 0 0 144\nEau plate 0 0 132\nFanta Orange 0 0 36\nFuzeTea Peach 0 0 12\nLiefmans 0% 0 0 24\nMM Ace 0 0 6\nMM Orange 0 0 12\nNalu 0 0 24\nRed Bull 0 0 48\nSprite 0 0 24`;
+
+const hallEl = document.getElementById('hall');
+const bodyEl = document.getElementById('drankGrid');
+const totalsEl = document.getElementById('totals');
+const stockInputEl = document.getElementById('stockInput');
+const stockStatusEl = document.getElementById('stockStatus');
+
+let isRestoring = false, stockDebounce = null, lastFound = [];
+
+DRINKS.forEach(function(d,idx) {
+  var card = document.createElement('div');
+  card.id = 'row_'+idx;
+  card.className = 'dk-card';
+  card.innerHTML = `<div class="dk-name">${d.short}</div>
+    <div class="dk-rows">
+      <div class="dk-row"><span class="dk-lbl">Doel</span><span class="dk-val"><input type="number" id="gew_${idx}" min="0" readonly class="readonly-input"> fl</span></div>
+      <div class="dk-row"><span class="dk-lbl">Bar</span><span class="dk-val"><input type="number" id="bar_${idx}" min="0" readonly class="readonly-input"> fl</span></div>
+      <div class="dk-row"><span class="dk-lbl">Stock</span><span class="dk-val"><input type="number" id="stock_${idx}" min="0" value="0"> fl</span></div>
+      <div class="dk-row" id="achterfl_row_${idx}" style="display:none"><span class="dk-lbl">Achter</span><span class="dk-val"><input type="number" id="achterfl_${idx}" readonly> fl</span></div>
+    </div>
+    <input type="number" id="achterbak_${idx}" style="display:none" readonly>
+    <input type="number" id="rest_${idx}" style="display:none" readonly>
+    <input type="number" id="bestel_${idx}" style="display:none" readonly>
+    <div class="dk-badge good" id="bestelbadge_${idx}">✓ OK</div>`;
+  document.getElementById('drankGrid').appendChild(card);
+});
+
+function curHall() { return hallEl.value; }
+function toInt(v) { var n=parseInt(v||'0',10); return isNaN(n)?0:n; }
+function updateStatus(text,mode) {
+  if(!stockStatusEl) return;
+  stockStatusEl.textContent=text;
+  stockStatusEl.classList.remove('ok','warn','error');
+  if(mode) stockStatusEl.classList.add(mode);
+}
+
+function saveState() {
+  if(isRestoring) return;
+  var state={hall:curHall(),stockInput:stockInputEl.value,gew:[],bar:[],stock:[]};
+  DRINKS.forEach(function(_,idx){
+    state.gew.push(toInt(document.getElementById('gew_'+idx).value));
+    state.bar.push(toInt(document.getElementById('bar_'+idx).value));
+    state.stock.push(toInt(document.getElementById('stock_'+idx).value));
+  });
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+}
+
+function applyDefaults() {
+  var defs = HALL_DEFAULTS[curHall()];
+  DRINKS.forEach(function(d,idx){
+    var def = defs[d.key];
+    document.getElementById('gew_'+idx).value = def ? def.gewenst : '';
+    document.getElementById('bar_'+idx).value = def ? def.bar : '';
+    document.getElementById('stock_'+idx).value = 0;
+    document.getElementById('achterfl_'+idx).value = 0;
+    document.getElementById('achterbak_'+idx).value = 0;
+    document.getElementById('rest_'+idx).value = 0;
+    document.getElementById('bestel_'+idx).value = 0;
+  });
+  recalc(); saveState(); updateStatus('defaults geladen','ok');
+}
+
+function loadState() {
+  var raw = localStorage.getItem(STORAGE_KEY);
+  if(!raw) { applyDefaults(); return; }
+  var data; try { data=JSON.parse(raw); } catch(e) { applyDefaults(); return; }
+  if(data.hall && HALL_DEFAULTS[data.hall]) hallEl.value = data.hall;
+  applyDefaults();
+  isRestoring = true;
+  if(Array.isArray(data.gew)) {
+    DRINKS.forEach(function(_,idx){
+      if(data.gew[idx]!==undefined) document.getElementById('gew_'+idx).value=data.gew[idx];
+      if(data.bar[idx]!==undefined) document.getElementById('bar_'+idx).value=data.bar[idx];
+      if(data.stock[idx]!==undefined) document.getElementById('stock_'+idx).value=data.stock[idx];
+    });
+  }
+  if(typeof data.stockInput==='string') stockInputEl.value=data.stockInput;
+  isRestoring=false; recalc();
+}
+
+function readStock(silent) {
+  var txt = stockInputEl.value.trim();
+  if(!txt) { if(!silent) alert('Plak eerst de STOCK actuel'); updateStatus('Geen input','warn'); return; }
+  var lines = txt.split(/\r?\n/).map(function(l){return l.trim();});
+  var normalize = function(s){ return (s||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim(); };
+  var matchKey = function(line,key){ var ln=normalize(line),k=normalize(key); if(ln.includes(k)) return true; return k.split(' ').every(function(t){return ln.includes(t);}); };
+  var isTimestamp = function(l){ return /\d{4}-\d{2}-\d{2}/.test(l)||/\d{2}:\d{2}:\d{2}/.test(l); };
+  lastFound=[];
+  DRINKS.forEach(function(d,idx){
+    var val=0,found=false;
+    for(var i=0;i<lines.length;i++){
+      if(matchKey(lines[i],d.key)){
+        found=true;
+        var nums=(lines[i].match(/-?\d+/g)||[]).map(function(x){return+x;});
+        if(nums.length>=1){ val=isTimestamp(lines[i])?nums[nums.length-1]:nums.length>=3?nums[2]:nums[nums.length-1]; }
+        break;
+      }
+    }
+    document.getElementById('stock_'+idx).value=val;
+    lastFound[idx]=found;
+  });
+  recalc(); saveState();
+  var okCount=lastFound.filter(Boolean).length;
+  if(okCount===0) updateStatus('Geen regels herkend','warn');
+  else if(okCount<DRINKS.length) updateStatus('Gedeeltelijk ('+okCount+'/'+DRINKS.length+')','warn');
+  else updateStatus('Succesvol berekend','ok');
+}
+
+function recalc() {
+  var total=0;
+  DRINKS.forEach(function(d,idx){
+    var gewenst=toInt(document.getElementById('gew_'+idx).value);
+    var bar=toInt(document.getElementById('bar_'+idx).value);
+    var stock=toInt(document.getElementById('stock_'+idx).value);
+    var achterTotaal=Math.max(0,stock-bar);
+    var achterBakken=Math.floor(achterTotaal/BOTTLES_PER_BAK);
+    var restFlessen=achterTotaal%BOTTLES_PER_BAK;
+    var voorraadBakken=Math.floor(stock/BOTTLES_PER_BAK);
+    var gewenstBakken=Math.ceil(gewenst/BOTTLES_PER_BAK||0);
+    var bestelBakken=Math.max(0,gewenstBakken-voorraadBakken);
+    document.getElementById('achterfl_'+idx).value=achterTotaal;
+    document.getElementById('achterbak_'+idx).value=achterBakken;
+    document.getElementById('rest_'+idx).value=restFlessen;
+    document.getElementById('bestel_'+idx).value=bestelBakken;
+    var row=document.getElementById('row_'+idx);
+    var badge = document.getElementById('bestelbadge_'+idx);
+    row.classList.remove('needs-order','ok','amber','zero-stock');
+    if(bestelBakken>0){
+      row.classList.add('needs-order');
+      badge.className='dk-badge order'; badge.textContent='+'+bestelBakken+' bak';
+    } else if(achterBakken===0&&restFlessen===0){
+      row.classList.add('zero-stock');
+      badge.className='dk-badge warn'; badge.textContent='⚠ Leeg achter';
+    } else {
+      row.classList.add('ok');
+      badge.className='dk-badge good'; badge.textContent='✓ OK';
+    }
+    if(lastFound[idx]===false){ row.classList.remove('ok'); row.classList.add('amber'); badge.className='dk-badge warn'; badge.textContent='? Niet gevonden'; }
+    total+=bestelBakken;
+  });
+  totalsEl.textContent='Totaal bestellen: '+total+' bak(ken)';
+  saveState();
+}
+
+function generateText() {
+  recalc();
+  var hall=HALL_LABELS[curHall()];
+  var text='Drankbestelling – '+hall+'\n\n';
+  DRINKS.forEach(function(d,idx){ var b=toInt(document.getElementById('bestel_'+idx).value); if(b>0) text+='• '+d.short+': '+b+' bak(ken)\n'; });
+  document.getElementById('output').textContent=text.trim();
+  saveState();
+}
+
+function copyText() {
+  var c=document.getElementById('output').textContent;
+  if(!c) return;
+  navigator.clipboard.writeText(c).then(function(){alert('Gekopieerd!');});
+}
+
+function copyTable() {
+  var headers=['Naam','Gewenst (fl)','Bar (fl)','Stock (fl)','Achter fl','Achter bak','Aangebroken','Bestel bak'];
+  var rows=[headers.join('\t')];
+  DRINKS.forEach(function(d,idx){
+    rows.push([d.short,document.getElementById('gew_'+idx).value,document.getElementById('bar_'+idx).value,
+      document.getElementById('stock_'+idx).value,document.getElementById('achterfl_'+idx).value,
+      document.getElementById('achterbak_'+idx).value,document.getElementById('rest_'+idx).value,
+      document.getElementById('bestel_'+idx).value].join('\t'));
+  });
+  navigator.clipboard.writeText(rows.join('\n')).then(function(){updateStatus('Tabel gekopieerd','ok');});
+}
+
+function generateAndCopy() { generateText(); copyText(); }
+function clearStockInput() {
+  stockInputEl.value='';
+  DRINKS.forEach(function(_,idx){
+    ['stock','achterfl','achterbak','rest','bestel'].forEach(function(f){document.getElementById(f+'_'+idx).value=0;});
+  });
+  recalc(); saveState();
+}
+function resetAll() {
+  localStorage.removeItem(STORAGE_KEY); stockInputEl.value=''; lastFound=[];
+  document.getElementById('output').textContent='';
+  applyDefaults(); updateStatus('Alles gereset','ok');
+}
+
+document.getElementById('readStockBtn').addEventListener('click',function(){readStock(false);});
+document.getElementById('genTextBtn').addEventListener('click',generateText);
+document.getElementById('genCopyBtn').addEventListener('click',generateAndCopy);
+document.getElementById('copyBtn').addEventListener('click',copyText);
+document.getElementById('printBtn').addEventListener('click',function(){ var w=window.open(''); w.document.write('<pre>'+document.getElementById('output').textContent+'</pre>'); w.print(); w.close(); });
+document.getElementById('clearStockBtn').addEventListener('click',clearStockInput);
+document.getElementById('resetDefaultsBtn').addEventListener('click',function(){ stockInputEl.value=''; applyDefaults(); });
+document.getElementById('sampleStockBtn').addEventListener('click',function(){ stockInputEl.value=SAMPLE_STOCK; readStock(true); });
+document.getElementById('stickyGenCopyBtn').addEventListener('click',generateAndCopy);
+document.getElementById('copyTableBtn').addEventListener('click',copyTable);
+document.getElementById('resetAllBtn').addEventListener('click',resetAll);
+
+stockInputEl.addEventListener('paste',function(){ if(stockDebounce) clearTimeout(stockDebounce); stockDebounce=setTimeout(function(){readStock(true);},200); });
+stockInputEl.addEventListener('input',function(){ if(stockDebounce) clearTimeout(stockDebounce); stockDebounce=setTimeout(function(){readStock(true);},350); });
+
+bodyEl.addEventListener('input',function(e){
+  if(e.target&&e.target.tagName==='INPUT'){
+    if(e.target.type==='number'&&e.target.value.includes('-')) e.target.value=e.target.value.replace(/-/g,'');
+    recalc();
+  }
+});
+
+hallEl.addEventListener('change',applyDefaults);
+loadState();
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════
+     GELD JS  (cash.js)
+════════════════════════════════════════════════ -->
+<script>
+(function() {
+const CASH_DENOMS = [5,10,20,50,100,200,500];
+const CASH_ITEMS = CASH_DENOMS.map(function(v){return{value:v,label:'€'+v};});
+const CASH_DEFAULTS = {
+  nieuwpoort:{targetTotal:30000,drawer:2500,min:{5:500,10:1000,20:3000,50:0,100:0,200:0,500:0}},
+  blankenberge:{targetTotal:35000,drawer:3000,min:{5:1500,10:3000,20:6000,50:0,100:0,200:0,500:0}}
+};
+const HALL_LABELS_CASH = {nieuwpoort:"GP Nieuwpoort",blankenberge:"GP Blankenberge"};
+const NOTES_PACK_SIZE = 100;
+const CASH_STORAGE_KEY = "cash_state_v1";
+const CASH_SAMPLE = `ATM cassette configuration: 2024-02-05 11:00:00\nATM Cassettes\nTotal: 0 0 0 0 0 0 0\n\nCassettes(€)\nTotal: 500 1500 4000 3000 0 0 0\n\nSafe(€)\nTotal: 1000 2000 4000 6000 0 0 0`;
+
+const cashBodyEl = document.getElementById('cashGrid');
+const cashTotalsEl = document.getElementById('cashTotals');
+const cashOutputEl = document.getElementById('cashOutput');
+const cashInputEl = document.getElementById('cashInput');
+const cashStatusEl = document.getElementById('cashStatus');
+const hallEl = document.getElementById('hall');
+
+let cashRestoring=false, cashDebounce=null;
+let lastCashTotals={cassettes:[],safe:[]};
+
+function curHall() { return hallEl.value; }
+function toEuro(v) { var n=parseFloat(String(v||'0').replace(',','.').trim()); return isNaN(n)?0:n; }
+function formatMoney(a) { return a.toFixed(2).replace('.',','); }
+function setCashStatus(text,mode) {
+  if(!cashStatusEl) return;
+  cashStatusEl.textContent=text;
+  cashStatusEl.classList.remove('ok','warn','error');
+  if(mode) cashStatusEl.classList.add(mode);
+}
+
+CASH_ITEMS.forEach(function(item,idx){
+  var card=document.createElement('div');
+  card.id='cash_row_'+idx;
+  card.className='cs-card';
+  card.innerHTML=`<div class="cs-denom">${item.label}</div>
+    <div class="cs-rows">
+      <div class="cs-row"><span class="cs-lbl">Doel</span><span class="cs-val"><input type="number" id="cash_goal_${idx}" min="0" step="10"> €</span></div>
+      <div class="cs-row"><span class="cs-lbl">Stock</span><span class="cs-val"><input type="number" id="cash_stock_${idx}" min="0" step="10" readonly> €</span></div>
+    </div>
+    <input type="text" id="cash_order_eur_${idx}" style="display:none" readonly>
+    <input type="number" id="cash_order_units_${idx}" style="display:none" readonly>
+    <div class="cs-badge good" id="cashbadge_${idx}">✓ OK</div>`;
+  document.getElementById('cashGrid').appendChild(card);
+});
+
+function applyCashDefaults() {
+  var cfg=CASH_DEFAULTS[curHall()]||{};
+  var effectiveTarget=Math.max(0,(cfg.targetTotal||0)-(cfg.drawer||0));
+  var min=cfg.min||{};
+  var baseTotal=0;
+  CASH_ITEMS.forEach(function(item,idx){
+    var m=min[item.value]||0; baseTotal+=m;
+    document.getElementById('cash_goal_'+idx).value=m;
+  });
+  var rest=Math.max(0,effectiveTarget-baseTotal);
+  var idx50=CASH_ITEMS.findIndex(function(i){return i.value===50;});
+  if(idx50>=0){ var cur=toEuro(document.getElementById('cash_goal_'+idx50).value); document.getElementById('cash_goal_'+idx50).value=cur+rest; }
+  recalcCash(); setCashStatus('Defaults geladen','ok');
+}
+
+function saveCashState() {
+  if(cashRestoring) return;
+  var state={hall:curHall(),input:cashInputEl.value,goals:[],stock:[]};
+  CASH_ITEMS.forEach(function(_,idx){
+    state.goals.push(toEuro(document.getElementById('cash_goal_'+idx).value));
+    state.stock.push(toEuro(document.getElementById('cash_stock_'+idx).value));
+  });
+  localStorage.setItem(CASH_STORAGE_KEY,JSON.stringify(state));
+}
+
+function loadCashState() {
+  var raw=localStorage.getItem(CASH_STORAGE_KEY);
+  if(!raw){ applyCashDefaults(); return; }
+  var data; try{data=JSON.parse(raw);}catch(e){applyCashDefaults();return;}
+  if(data.hall&&CASH_DEFAULTS[data.hall]) hallEl.value=data.hall;
+  applyCashDefaults();
+  cashRestoring=true;
+  if(Array.isArray(data.goals)){
+    CASH_ITEMS.forEach(function(_,idx){
+      if(data.goals[idx]!==undefined) document.getElementById('cash_goal_'+idx).value=data.goals[idx];
+      if(data.stock&&data.stock[idx]!==undefined) document.getElementById('cash_stock_'+idx).value=data.stock[idx];
+    });
+  }
+  if(typeof data.input==='string') cashInputEl.value=data.input;
+  cashRestoring=false; recalcCash();
+}
+
+function extractTotalsFromSection(lines,sectionLabel) {
+  var result=new Array(CASH_DENOMS.length).fill(0);
+  var labelLc=sectionLabel.toLowerCase();
+  var startIdx=-1;
+  for(var i=0;i<lines.length;i++){ if(lines[i].toLowerCase().startsWith(labelLc)){startIdx=i;break;} }
+  if(startIdx===-1) return result;
+  for(var i=startIdx+1;i<lines.length;i++){
+    var lc=lines[i].toLowerCase();
+    if(lc.startsWith('total:')){
+      var nums=lines[i].match(/-?\d+/g)||[];
+      for(var k=0;k<CASH_DENOMS.length;k++) result[k]=nums[k]?+nums[k]:0;
+      return result;
+    }
+    if((lc.startsWith('coins(')||lc.startsWith('cassettes(')||lc.startsWith('safe(')||lc.startsWith('atm cassette'))&&!lc.startsWith(labelLc)) break;
+  }
+  return result;
+}
+
+function readCashStock() {
+  var txt=cashInputEl.value.trim();
+  if(!txt){ alert('Plak eerst de cash-pagina uit Citech'); setCashStatus('Geen input','warn'); return; }
+  var lines=txt.split(/\r?\n/).map(function(l){return l.trim();}).filter(function(l){return l.length;});
+  var cassettesTotals=extractTotalsFromSection(lines,'cassettes(€)');
+  var safeTotals=extractTotalsFromSection(lines,'safe(€)');
+  lastCashTotals={cassettes:cassettesTotals,safe:safeTotals};
+  CASH_ITEMS.forEach(function(item,idx){
+    document.getElementById('cash_stock_'+idx).value=(cassettesTotals[idx]||0)+(safeTotals[idx]||0);
+  });
+  recalcCash(); saveCashState();
+  var sumDetected=[...cassettesTotals,...safeTotals].reduce(function(a,b){return a+b;},0);
+  if(sumDetected===0) setCashStatus('Geen totals gevonden','warn');
+  else setCashStatus('Succesvol berekend','ok');
+}
+
+function recalcCash() {
+  var totalOrderUnits=0, totalOrderAmount=0;
+  CASH_ITEMS.forEach(function(item,idx){
+    var goal=toEuro(document.getElementById('cash_goal_'+idx).value);
+    var stock=toEuro(document.getElementById('cash_stock_'+idx).value);
+    var diff=Math.max(0,goal-stock);
+    var notes=0,orderAmount=0;
+    if(diff>0&&item.value>0){ var packs=Math.ceil(diff/item.value/NOTES_PACK_SIZE); notes=packs*NOTES_PACK_SIZE; orderAmount=notes*item.value; }
+    var oEur=document.getElementById('cash_order_eur_'+idx);
+    var oUnits=document.getElementById('cash_order_units_'+idx);
+    oEur.value=notes>0?'€ '+formatMoney(orderAmount):'';
+    oUnits.value=notes;
+    var row=document.getElementById('cash_row_'+idx);
+    var badge=document.getElementById('cashbadge_'+idx);
+    row.classList.remove('needs-order','ok');
+    if(notes>0){
+      row.classList.add('needs-order');
+      badge.className='cs-badge order';
+      badge.textContent=notes+' st = '+formatMoney(orderAmount)+' euro';
+    } else {
+      row.classList.add('ok');
+      badge.className='cs-badge good';
+      badge.textContent='✓ Voldoende';
+    }
+    totalOrderUnits+=notes; totalOrderAmount+=orderAmount;
+  });
+  cashTotalsEl.textContent='Totaal bestellen: '+totalOrderUnits+' biljetten (per '+NOTES_PACK_SIZE+') / €'+formatMoney(totalOrderAmount);
+  saveCashState();
+}
+
+function generateCashText() {
+  recalcCash();
+  var hallLabel=HALL_LABELS_CASH[curHall()]||curHall();
+  var lines=['Goeiemorgen,','','Zou het mogelijk zijn om het volgende te bestellen bij Brinks voor de kust?','',hallLabel+':'];
+  var hasAny=false,totalAmount=0;
+  CASH_ITEMS.forEach(function(item,idx){
+    var notes=parseInt(document.getElementById('cash_order_units_'+idx).value||'0',10);
+    if(notes>0){ hasAny=true; var amount=notes*item.value; totalAmount+=amount; lines.push(notes+' x '+item.value+' € = '+Math.round(amount).toLocaleString('nl-NL')+' euro'); }
+  });
+  if(!hasAny) lines.push('Geen bijbestelling nodig.');
+  else{ lines.push(''); lines.push('Totaal '+hallLabel+' = '+Math.round(totalAmount).toLocaleString('nl-NL')+' euro'); lines.push('Geen storting'); }
+  lines.push(''); lines.push('Dank u.');
+  cashOutputEl.textContent=lines.join('\n'); saveCashState();
+}
+
+function copyCashText() {
+  var c=cashOutputEl.textContent||''; if(!c) return;
+  navigator.clipboard.writeText(c).then(function(){alert('Gekopieerd!');});
+}
+
+function generateCashAndCopy() { generateCashText(); copyCashText(); }
+
+function clearCashInput() {
+  cashInputEl.value='';
+  CASH_ITEMS.forEach(function(_,idx){
+    document.getElementById('cash_stock_'+idx).value=0;
+    document.getElementById('cash_order_eur_'+idx).value='';
+    document.getElementById('cash_order_units_'+idx).value=0;
+  });
+  recalcCash(); saveCashState();
+}
+
+function resetCashAll() {
+  localStorage.removeItem(CASH_STORAGE_KEY); cashInputEl.value='';
+  lastCashTotals={cassettes:[],safe:[]}; cashOutputEl.textContent='';
+  applyCashDefaults(); setCashStatus('Alles gereset','ok');
+}
+
+document.getElementById('readCashBtn').addEventListener('click',readCashStock);
+document.getElementById('clearCashBtn').addEventListener('click',clearCashInput);
+document.getElementById('cashGenTextBtn').addEventListener('click',generateCashText);
+document.getElementById('cashGenCopyBtn').addEventListener('click',generateCashAndCopy);
+document.getElementById('cashCopyBtn').addEventListener('click',copyCashText);
+document.getElementById('cashPrintBtn').addEventListener('click',function(){ var w=window.open(''); w.document.write('<pre>'+(cashOutputEl.textContent||'')+'</pre>'); w.print(); w.close(); });
+document.getElementById('sampleCashBtn').addEventListener('click',function(){ cashInputEl.value=CASH_SAMPLE; readCashStock(); });
+document.getElementById('stickyCashGenCopyBtn').addEventListener('click',generateCashAndCopy);
+document.getElementById('copyCashTableBtn').addEventListener('click',function(){
+  var headers=['Coupure','Gewenst (€)','Stock (€)','Order (€)','Order (biljetten)'];
+  var rows=[headers.join('\t')];
+  CASH_ITEMS.forEach(function(item,idx){
+    rows.push([item.label,document.getElementById('cash_goal_'+idx).value,document.getElementById('cash_stock_'+idx).value,
+      document.getElementById('cash_order_eur_'+idx).value.replace(/[€\s]/g,''),document.getElementById('cash_order_units_'+idx).value].join('\t'));
+  });
+  navigator.clipboard.writeText(rows.join('\n')).then(function(){setCashStatus('Tabel gekopieerd','ok');});
+});
+document.getElementById('cashResetAllBtn').addEventListener('click',resetCashAll);
+
+cashBodyEl.addEventListener('input',function(e){
+  if(e.target&&e.target.tagName==='INPUT'){
+    if(e.target.type==='number'&&e.target.value.includes('-')) e.target.value=e.target.value.replace(/-/g,'');
+    recalcCash();
+  }
+});
+
+cashInputEl.addEventListener('paste',function(){ if(cashDebounce) clearTimeout(cashDebounce); cashDebounce=setTimeout(function(){ if(cashInputEl.value.trim()) readCashStock(); },200); });
+cashInputEl.addEventListener('input',function(){ if(cashDebounce) clearTimeout(cashDebounce); cashDebounce=setTimeout(function(){ if(cashInputEl.value.trim()) readCashStock(); },350); });
+
+hallEl.addEventListener('change',applyCashDefaults);
+loadCashState();
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════
+     MACHINES JS  (machines.js — с фиксом diff)
+════════════════════════════════════════════════ -->
+<script>
+function f(v){var n=parseFloat(String(v||'0').replace(',','.').replace('€','').trim());return isNaN(n)?0:n;}
+function eur(n){return(Math.abs(n)/100).toLocaleString('fr-BE',{minimumFractionDigits:2})+' €';}
+function eurS(n){return(n>0?'+':'')+(n/100).toLocaleString('fr-BE',{minimumFractionDigits:2})+' €';}
+function fmtVal(n){return n.toLocaleString('fr-BE',{minimumFractionDigits:2})+' €';}
+function fmtDate(d){var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+
+var COLORS=['#6366f1','#0ea5e9','#f59e0b','#ec4899','#14b8a6','#f97316','#8b5cf6','#06b6d4'];
+
+function parse(text){
+  text=text.replace(/\r\n/g,'\n').replace(/\r/g,'\n').replace(/^\uFEFF/,'');
+  var lines=text.split('\n').filter(function(l){return l.trim();});
+  if(!lines.length) throw new Error('Geen data geplakt');
+  var machine=lines[0].trim();
+  var hi=-1;
+  for(var i=0;i<lines.length;i++){
+    if(lines[i].startsWith('Card Time')||lines[i].includes('Date\t')){hi=i;break;}
+  }
+  if(hi===-1) throw new Error('Header niet gevonden.\nKopieer de hele pagina: Ctrl+A → Ctrl+C');
+  var rows=[];
+  for(var i=hi+1;i<lines.length;i++){
+    var p=lines[i].split('\t');
+    if(p.length<10) continue;
+    var first=p[0].trim();
+    if(!first.match(/^\d{2}[/-]\d{2}[/-]\d{4}/)&&!first.match(/^\d{4}-\d{2}-\d{2}/)) continue;
+    var dateStr=first;
+    if(first.match(/^\d{2}\/\d{2}\/\d{4}/)){var pts=first.slice(0,10).split('/');dateStr=pts[2]+'-'+pts[1]+'-'+pts[0]+first.slice(10);}
+    var dayKey=dateStr.slice(0,10);
+    var card=p[1].trim().replace(/\s/g,'');
+    var value=f(p[2]);
+    var isSitechFormatA=p.length>=15&&p[4]&&p[4].trim().match(/^\d{4}-\d{2}-\d{2}/);
+    var row=isSitechFormatA?{
+      day:dayKey,time:dateStr,card:card,value:value,
+      coinIn:f(p[5]),coinOut:f(p[6]),bet:f(p[7]),win:f(p[8]),
+      keyOut:f(p[9]),games:f(p[10]),cardOut:f(p[12]||0),billIn:f(p[13]||0),cardIn:f(p[14]||0),hipayIn:f(p[15]||0)
+    }:{
+      day:dayKey,time:dateStr,card:card,value:value,
+      coinIn:f(p[3]),coinOut:f(p[4]),bet:f(p[5]),win:f(p[6]),
+      cardOut:f(p[7]),cardIn:f(p[8]),keyOut:f(p[9]),billIn:f(p[10]),games:0,hipayIn:0
+    };
+    rows.push(row);
+  }
+  if(!rows.length) throw new Error('Geen data-rijen gevonden.');
+  return{machine:machine,rows:rows};
+}
+
+function sessionStats(sess,nextSessFirstRow){
+  var F=sess[0],L=sess[sess.length-1],N=nextSessFirstRow||L;
+  var coinIn=N.coinIn-F.coinIn,coinOut=N.coinOut-F.coinOut;
+  var bet=N.bet-F.bet,win=N.win-F.win;
+  var cardIn=N.cardIn-F.cardIn,cardOut=N.cardOut-F.cardOut;
+  var billIn=N.billIn-F.billIn,keyOut=N.keyOut-F.keyOut,games=N.games-F.games;
+  var coinIO=coinIn-coinOut,betWin=bet-win;
+  var credLeft=L.value;
+  return{
+    card:F.card,day:F.day,timeFrom:F.time,timeTo:L.time,
+    trans:sess.length,games:Math.round(games),
+    coinIn:coinIn,coinOut:coinOut,bet:bet,win:win,
+    cardIn:cardIn,cardOut:cardOut,billIn:billIn,keyOut:keyOut,
+    coinIO:coinIO,betWin:betWin,playerPnl:coinOut-coinIn,credLeft:credLeft,
+    suspicious:cardIn>5000&&Math.abs(bet)<500
+  };
+}
+
+function groupRows(rows){
+  var allSessions=[],cur=null,sess=[];
+  for(var i=0;i<rows.length;i++){
+    var r=rows[i];
+    if(r.card!==cur){if(sess.length) allSessions.push(sess);sess=[];cur=r.card;}
+    sess.push(r);
+  }
+  if(sess.length) allSessions.push(sess);
+
+  var allStats=allSessions.map(function(s,i){
+    var nextFirst=i+1<allSessions.length?allSessions[i+1][0]:null;
+    return sessionStats(s,nextFirst);
+  });
+
+  var byDay={};
+  allStats.forEach(function(s){if(!byDay[s.day]) byDay[s.day]=[];byDay[s.day].push(s);});
+
+  return Object.keys(byDay).sort().map(function(day){
+    var stats=byDay[day].filter(function(s){return s.card!=='88888';});
+    var tot={
+      coinIn:0,coinOut:0,bet:0,win:0,cardIn:0,cardOut:0,keyOut:0,players:stats.length
+    };
+    stats.forEach(function(s){
+      tot.coinIn+=s.coinIn;tot.coinOut+=s.coinOut;tot.bet+=s.bet;tot.win+=s.win;
+      tot.cardIn+=s.cardIn;tot.cardOut+=s.cardOut;tot.keyOut+=s.keyOut;
+    });
+    tot.coinIO=tot.coinIn-tot.coinOut;
+    tot.betWin=tot.bet-tot.win;
+    tot.credLeft=stats.length?stats[stats.length-1].credLeft:0;
+    tot.diff=tot.betWin-tot.coinIO;
+    return{day:day,sessions:stats,totals:tot};
+  });
+}
+
+var currentData=null,currentView='days';
+
+function go(){
+  var errEl=document.getElementById('machErr');
+  var outEl=document.getElementById('machOut');
+  errEl.style.display='none'; outEl.style.display='none';
+  try{
+    var parsed=parse(document.getElementById('machInp').value);
+    var days=groupRows(parsed.rows);
+    currentData={machine:parsed.machine,rows:parsed.rows,days:days};
+    render(currentData,'days');
+    document.getElementById('machStatus').textContent='Klaar';
+    document.getElementById('machStatus').className='status-pill ok';
+  }catch(e){
+    errEl.textContent='⚠ '+e.message; errEl.style.display='block';
+    document.getElementById('machStatus').textContent='Fout';
+    document.getElementById('machStatus').className='status-pill err';
+  }
+}
+
+function switchView(v){currentView=v;if(currentData) render(currentData,v);}
+
+function render(data,view){
+  var machine=data.machine,rows=data.rows,days=data.days;
+  var allStats=days.reduce(function(a,d){return a.concat(d.sessions);},[]);
+  var totalPnl=allStats.reduce(function(a,s){return a+s.playerPnl;},0);
+  var pColor=totalPnl>0?'#15803d':totalPnl<0?'#dc2626':'#94a3b8';
+  var pTxt=totalPnl>0?'Spelers wonnen':totalPnl<0?'Machine won':'Nul';
+  var allDays=days.map(function(d){return d.day;});
+  var dateRange=allDays.length===1?fmtDate(allDays[0]):fmtDate(allDays[0])+' → '+fmtDate(allDays[allDays.length-1]);
+  var lastDay=days[days.length-1];
+  var credLeft=lastDay.totals.credLeft;
+  var STUCK_THRESHOLD=50;
+  var lastCard=lastDay.sessions.length?lastDay.sessions[lastDay.sessions.length-1].card:'';
+  var html='';
+
+  html+=`<div class="mach-header">
+    <div><div class="mach-name">🎰 ${machine}</div><div class="mach-date">📅 ${dateRange}</div></div>
+    <div class="mach-meta">${days.length} dag · ${allStats.length} spelers<br>${rows.filter(function(r){return r.card!=='88888';}).length} transacties</div>
+  </div>`;
+
+  html+=`<div class="mach-sum-row">
+    <div class="mach-sum-card"><div class="msc-label">Totaal dagen</div><div class="msc-value" style="color:#6366f1">${days.length}</div></div>
+    <div class="mach-sum-card"><div class="msc-label">Totaal spelers</div><div class="msc-value" style="color:#0ea5e9">${allStats.length}</div></div>
+    <div class="mach-sum-card"><div class="msc-label">${pTxt}</div><div class="msc-value" style="color:${pColor}">${eur(Math.abs(totalPnl))}</div></div>
+  </div>`;
+
+  if(credLeft>STUCK_THRESHOLD){
+    html+=`<div class="mach-banner mach-banner-card"><span class="mb-icon">💳</span><div>
+      <div class="mb-label">Tegoed op kaart bij sessie-einde</div>
+      <div class="mb-amount">${fmtVal(credLeft)}</div>
+      <div class="mb-sub">Kaart ${lastCard} — speler nam kaart mee</div>
+    </div></div>`;
+  } else if(credLeft>0.009){
+    html+=`<div class="mach-banner mach-banner-warn"><span class="mb-icon">⚠️</span><div>
+      <div class="mb-label">Mogelijk geld op machine!</div>
+      <div class="mb-amount">${fmtVal(credLeft)}</div>
+      <div class="mb-sub">Kaart ${lastCard} pakte geld mogelijk niet mee</div>
+    </div></div>`;
+  } else {
+    html+=`<div class="mach-banner mach-banner-no"><span class="mb-icon">✅</span><div>
+      <div class="mb-label">Niets achtergebleven op machine</div>
+      <div class="mb-amount" style="color:#94a3b8">0,00 €</div>
+    </div></div>`;
+  }
+
+  var suspDays=days.filter(function(d){return d.totals.credLeft>0.009&&d.totals.credLeft<=STUCK_THRESHOLD&&Math.abs(d.totals.diff)>10;});
+  suspDays.forEach(function(sd){
+    var t=sd.totals;
+    html+=`<div class="mach-alert-red"><div class="mar-icon">🔴</div><div>
+      <div class="mar-title">VERDACHT: geld op machine + verschil!</div>
+      <div class="mar-body">📅 ${fmtDate(sd.day)} · Op machine: <b>${fmtVal(t.credLeft)}</b> · Verschil: <b>${eurS(t.diff)}</b></div>
+      <div class="mar-hint">Mogelijk: machine vastgelopen, kaart te vroeg uitgehaald of onvolledige data — controleer handmatig.</div>
+    </div></div>`;
+  });
+
+  html+=`<div class="mach-vtabs">
+    <button class="mach-vtab ${view==='days'?'active':''}" onclick="switchView('days')">📅 Per dag</button>
+    <button class="mach-vtab ${view==='players'?'active':''}" onclick="switchView('players')">👤 Alle spelers</button>
+  </div>`;
+
+  if(view==='days'){
+    html+='<div>';
+    days.forEach(function(d,di){html+=renderDay(d,di);});
+    html+='</div>';
+  } else {
+    html+='<div><div class="mach-section-label">ALLE SPELERS</div>';
+    var ci=0;
+    allStats.forEach(function(s,i){html+=renderPlayer(s,'P_'+i,COLORS[ci%COLORS.length]);if(s.card!=='88888') ci++;});
+    html+='</div>';
+  }
+
+  var outEl=document.getElementById('machOut');
+  outEl.innerHTML=html; outEl.style.display='block';
+  outEl.scrollIntoView({behavior:'smooth'});
+  if(view==='days'){
+    setTimeout(function(){
+      var el=document.getElementById('mdb0');
+      if(el){el.style.display='block';var ar=document.getElementById('mdtog0');if(ar) ar.classList.add('open');}
+    },50);
+  }
+}
+
+function renderDay(d,di){
+  var t=d.totals,dayLabel=fmtDate(d.day);
+  var diffSuppressed = t.credLeft > 50; // игрок взял карту с большим балансом
+  var diffEmoji = (!diffSuppressed && Math.abs(t.diff)>1) ? '⚠️' : '';
+  var diffColor = diffSuppressed ? '#94a3b8' : (Math.abs(t.diff)<0.1?'#94a3b8':Math.abs(t.diff)<5?'#d97706':'#dc2626');
+  var html=`<div class="mach-day">
+    <div class="mach-day-header" onclick="togDay(${di})">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="mach-day-title">📅 ${dayLabel}</div>
+        <div style="font-size:12px;color:#94a3b8">${d.sessions.length} spelers</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:20px">
+        <div class="mach-day-stats">
+          <div class="mds"><div class="mds-l">Coin In-Out</div><div class="mds-v" style="color:${t.coinIO>=0?'#4ade80':'#f87171'}">${eurS(t.coinIO)}</div></div>
+          ${t.credLeft>0?`<div class="mds"><div class="mds-l">${t.credLeft>50?'Tegoed kaart':'Op machine'}</div><div class="mds-v" style="color:${t.credLeft>50?'#60a5fa':'#fbbf24'}">${fmtVal(t.credLeft)}</div></div>`:''}
+        </div>
+        <div class="mach-day-toggle" id="mdtog${di}">▼</div>
+      </div>
+    </div>
+    <div class="mach-day-body" id="mdb${di}" style="display:none">
+      <div class="mach-day-sum">
+        <div class="mach-day-sum-cell"><div class="mdsc-l">Coin In / Out</div><div class="mdsc-v">${eur(t.coinIn)} / ${eur(t.coinOut)}</div></div>
+        <div class="mach-day-sum-cell"><div class="mdsc-l">REC2 (Coin In-Out)</div><div class="mdsc-v" style="color:${t.coinIO>=0?'#15803d':'#dc2626'}">${eurS(t.coinIO)}</div></div>
+        <div class="mach-day-sum-cell"><div class="mdsc-l">Bet-Win</div><div class="mdsc-v" style="color:${t.betWin>=0?'#15803d':'#dc2626'}">${eurS(t.betWin)}</div></div>
+        <div class="mach-day-sum-cell"><div class="mdsc-l">Verschil ${diffEmoji}</div><div class="mdsc-v" style="color:${diffColor}">${eurS(t.diff)}</div></div>
+      </div>`;
+  d.sessions.forEach(function(s,i){html+=renderPlayer(s,'D'+di+'P'+i,COLORS[i%COLORS.length]);});
+  html+='</div></div>';
+  return html;
+}
+
+function renderPlayer(s,uid,color){
+  var pnl=s.playerPnl,bCls,bTxt,rLbl;
+  if(s.suspicious){bCls='warn';bTxt='⚠ VERDACHT';rLbl='controleren';}
+  else if(pnl>0){bCls='win';bTxt='+'+eur(pnl);rLbl='GEWONNEN';}
+  else if(pnl<0){bCls='lose';bTxt='-'+eur(Math.abs(pnl));rLbl='VERLOREN';}
+  else{bCls='zero';bTxt='0,00 €';rLbl='NUL';}
+  var tF=s.timeFrom.slice(11,16)||s.timeFrom.slice(0,10);
+  var tT=s.timeTo.slice(11,16)||s.timeTo.slice(0,10);
+  var init=s.card.slice(-2);
+  var leftYes=s.credLeft>0.009;
+  return `<div class="mach-pcard">
+    <div class="mach-phead" onclick="togPlayer('${uid}')">
+      <div class="mach-avatar" style="background:${color}">${init}</div>
+      <div class="mach-pinfo">
+        <div class="mach-card-num">Kaart: ${s.card}</div>
+        <div class="mach-ptime">🕐 ${tF} → ${tT} · ${s.trans} trans. · ${s.games} spellen</div>
+      </div>
+      <div class="mach-presult">
+        <div class="mach-badge ${bCls}">${bTxt}</div>
+        <div class="mach-rlabel">${rLbl}</div>
+      </div>
+    </div>
+    <div class="mach-pdetails" id="md_${uid}">
+      <div class="mach-drow">
+        <div class="mach-ditem"><div class="mdi-l">Spellen</div><div class="mdi-v">${s.games}</div></div>
+        <div class="mach-ditem"><div class="mdi-l">Coin In</div><div class="mdi-v">${eur(s.coinIn)}</div></div>
+        <div class="mach-ditem"><div class="mdi-l">Coin Out</div><div class="mdi-v">${eur(s.coinOut)}</div></div>
+        <div class="mach-ditem"><div class="mdi-l">Inzetten</div><div class="mdi-v">${eur(s.bet)}</div></div>
+        <div class="mach-ditem"><div class="mdi-l">Uitbetalingen</div><div class="mdi-v">${eur(s.win)}</div></div>
+        <div class="mach-ditem"><div class="mdi-l">Card In</div><div class="mdi-v ${s.suspicious?'warn':''}">${eur(s.cardIn)}</div></div>
+        <div class="mach-ditem"><div class="mdi-l">Card Out</div><div class="mdi-v">${eur(s.cardOut)}</div></div>
+        <div class="mach-ditem"><div class="mdi-l">Resultaat</div><div class="mdi-v ${pnl>=0?'pos':'neg'}">${eurS(pnl)}</div></div>
+      </div>
+      ${s.suspicious?`<div class="mach-warn-box">⚠️ <b>Verdachte transactie:</b> Card In ${eur(s.cardIn)} — bijna geen inzetten.</div>`:''}
+      <div class="mach-left-banner ${leftYes?'yes':'no'}">
+        <span>${leftYes?'💵 Geld achtergebleven op machine':'✅ Geld meegenomen'}</span>
+        <span class="mlb-amount">${leftYes?fmtVal(s.credLeft):'0,00 €'}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+function togDay(di){
+  var body=document.getElementById('mdb'+di);
+  var arrow=document.getElementById('mdtog'+di);
+  var open=body.style.display==='none';
+  body.style.display=open?'block':'none';
+  arrow.classList.toggle('open',open);
+}
+function togPlayer(uid){document.getElementById('md_'+uid).classList.toggle('open');}
+
+document.getElementById('machInp').addEventListener('paste',function(){
+  setTimeout(function(){if(document.getElementById('machInp').value.trim()) go();},200);
+});
+
+document.addEventListener('keydown',function(e){
+  if((e.ctrlKey||e.metaKey)&&e.key==='Enter') go();
+});
+</script>
+</body>
+</html>

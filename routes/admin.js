@@ -40,6 +40,47 @@ function ensureChatForThread({ client_id, channel, sender_id, sender_name = '', 
   return chat;
 }
 
+function enrichWorkspace(client) {
+  if (!client) return client;
+
+  const ownBot = D.db.prepare(`
+    SELECT id, name
+    FROM bots
+    WHERE client_id = ?
+    ORDER BY created_at DESC
+    LIMIT 1
+  `).get(client.id);
+
+  const linkedChannelBot = D.db.prepare(`
+    SELECT b.id, b.name
+    FROM channels c
+    JOIN bots b ON b.id = c.bot_id
+    WHERE c.client_id = ?
+      AND c.bot_id IS NOT NULL
+    ORDER BY COALESCE(c.connected_at, c.id) DESC
+    LIMIT 1
+  `).get(client.id);
+
+  const exactBot = D.bots.byId.get(client.id);
+  const resolvedBot = ownBot || linkedChannelBot || exactBot || null;
+
+  return {
+    ...client,
+    workspace_bot_id: resolvedBot?.id || null,
+    workspace_bot_name: resolvedBot?.name || null,
+  };
+}
+
+function matchesBotScope(workspace, botId) {
+  const target = String(botId || '').trim().toLowerCase();
+  if (!target) return true;
+  return [
+    workspace.id,
+    workspace.workspace_bot_id,
+    workspace.workspace_bot_name,
+  ].filter(Boolean).some((value) => String(value).trim().toLowerCase() === target);
+}
+
 // ── Stats ─────────────────────────────────────────────────────────────────────
 
 router.get('/stats', (req, res) => {
@@ -55,7 +96,7 @@ router.get('/stats', (req, res) => {
 
 router.get('/clients', (req, res) => {
   try {
-    const rows = D.clients.all.all();
+    const rows = D.clients.all.all().map(enrichWorkspace);
     ok(res, { clients: rows });
   } catch (e) { err(res, e.message, 500); }
 });
@@ -92,10 +133,11 @@ router.post('/clients', (req, res) => {
 
 router.get('/clients/:id', (req, res) => {
   try {
-    const client = D.clients.byId.get(req.params.id);
+    const client = enrichWorkspace(D.clients.byId.get(req.params.id));
     if (!client) return err(res, 'not found', 404);
 
-    const bots     = D.bots.byClient.all(client.id);
+    const exactBot = D.bots.byId.get(client.id);
+    const bots     = exactBot ? [exactBot] : D.bots.byClient.all(client.id);
     const channels = D.channels.byClient.all(client.id);
     const tasks    = D.tasks.byClient.all(client.id);
     const activity = D.activity.byClient.all(client.id);
@@ -151,7 +193,8 @@ router.delete('/clients/:id', (req, res) => {
 
 router.get('/clients/:id/bots', (req, res) => {
   try {
-    const bots = D.bots.byClient.all(req.params.id);
+    const exactBot = D.bots.byId.get(req.params.id);
+    const bots = exactBot ? [exactBot] : D.bots.byClient.all(req.params.id);
     ok(res, { bots });
   } catch (e) { err(res, e.message, 500); }
 });
@@ -320,11 +363,21 @@ router.get('/clients/:id/messages', (req, res) => {
 router.get('/chats', (req, res) => {
   try {
     D.chats.ensureFromMessages.run();
+    const botId = String(req.query.botId || '').trim();
     const mode = String(req.query.mode || 'all');
     const status = String(req.query.status || 'all');
     const search = String(req.query.search || '').trim().toLowerCase();
 
     let rows = D.chats.list.all();
+    if (botId) {
+      const allowedClientIds = new Set(
+        D.clients.all.all()
+          .map(enrichWorkspace)
+          .filter((workspace) => matchesBotScope(workspace, botId))
+          .map((workspace) => workspace.id)
+      );
+      rows = rows.filter((r) => allowedClientIds.has(r.client_id));
+    }
     if (mode !== 'all') rows = rows.filter((r) => r.mode === mode);
     if (status !== 'all') rows = rows.filter((r) => r.status === status);
     if (search) {

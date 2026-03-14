@@ -86,19 +86,57 @@
     .btn-ghost { background: var(--surface); border: 1px solid var(--border); color: var(--text); }
     .btn-ghost:hover { border-color: var(--accent); }
     .btn-link { background: var(--surface3); border: 1px solid var(--border); color: var(--text); font-size: 12px; padding: 7px 12px; }
-    .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-    table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    thead th {
-      text-align: left; padding: 12px 16px; font-size: 11px; font-weight: 500;
-      color: var(--muted); text-transform: uppercase; letter-spacing: .5px;
-      border-bottom: 1px solid var(--border); background: var(--surface2);
+    .bot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 16px; }
+    .bot-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+      overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      display: flex; flex-direction: column;
     }
-    tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: var(--surface2); }
-    td { padding: 14px 16px; vertical-align: middle; }
-    .bot-name { font-weight: 600; }
-    .bot-meta { font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .bot-card-head {
+      padding: 18px 20px; border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, #ffffff 0%, #f8f9fd 100%);
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .bot-head-top {
+      display:flex; align-items:flex-start; justify-content:space-between; gap:16px;
+    }
+    .bot-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; }
+    .bot-meta { font-size: 12px; color: var(--muted); margin-top: 5px; }
+    .bot-head-right { display:flex; flex-direction:column; align-items:flex-end; gap:10px; }
+    .section-channels { display:flex; gap:6px; flex-wrap:wrap; }
+    .bot-kpis { display:grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .bot-kpi {
+      background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px;
+    }
+    .bot-kpi-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
+    .bot-kpi-value { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 800; }
+    .bot-card-body { padding: 16px 20px 20px; display:flex; flex-direction:column; gap:16px; }
+    .subcard-head {
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 0 0 12px; border: none; background: none;
+    }
+    .subcard-head h3 { font-size: 13px; font-weight: 700; font-family: 'Syne', sans-serif; }
+    .workspace-list { display:grid; gap:10px; }
+    .workspace-item {
+      background: var(--surface2); border:1px solid var(--border); border-radius:12px;
+      padding: 12px 14px;
+    }
+    .workspace-top { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+    .workspace-name { font-weight: 700; font-size: 14px; }
+    .workspace-meta { font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .workspace-route { font-size: 12px; color: var(--text); margin-top: 8px; }
+    .workspace-actions { display:flex; gap:6px; flex-wrap:wrap; margin-top: 10px; }
+    .tiny-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 600;
+      background: var(--surface3); color: var(--muted); border: 1px solid var(--border);
+    }
+    .tiny-core { background:#ede9fe; color:#6d28d9; border-color:#ddd6fe; }
+    .tiny-instagram { background:#fce7f3; color:#be185d; border-color:#fbcfe8; }
+    .tiny-whatsapp { background:#dcfce7; color:#15803d; border-color:#bbf7d0; }
+    .tiny-client { background:#e0f2fe; color:#0369a1; border-color:#bae6fd; }
+    .bot-card-actions { display:flex; gap:8px; flex-wrap:wrap; }
+    .empty-mini { color: var(--muted); font-size: 13px; padding: 8px 0; }
     .badge {
       display: inline-flex; align-items: center; gap: 5px;
       padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500;
@@ -170,7 +208,7 @@
     <div class="sidebar-logo">BotMatic</div>
     <a href="/admin/clients" class="nav-item">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      Clients
+      Workspaces
     </a>
     <a href="/dashboard" class="nav-item">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
@@ -222,6 +260,7 @@
         <div class="pipe-pill" data-filter="instagram" onclick="setFilter(this, 'instagram')">Instagram <span class="cnt" id="cnt-instagram"></span></div>
         <div class="pipe-pill" data-filter="messenger" onclick="setFilter(this, 'messenger')">Messenger <span class="cnt" id="cnt-messenger"></span></div>
         <div class="pipe-pill" data-filter="telegram" onclick="setFilter(this, 'telegram')">Telegram <span class="cnt" id="cnt-telegram"></span></div>
+        <div class="pipe-pill" data-filter="whatsapp" onclick="setFilter(this, 'whatsapp')">WhatsApp <span class="cnt" id="cnt-whatsapp"></span></div>
       </div>
 
       <div class="toolbar">
@@ -229,22 +268,8 @@
         <a class="btn btn-ghost" href="/auth/connect">Open Channels</a>
       </div>
 
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Bot</th>
-              <th>Status</th>
-              <th>Channels</th>
-              <th>Updated</th>
-              <th>Created</th>
-              <th>Workspace</th>
-            </tr>
-          </thead>
-          <tbody id="botsBody">
-            <tr><td colspan="6" class="empty"><div><h3>Loading...</h3></div></td></tr>
-          </tbody>
-        </table>
+      <div id="botSections" class="bot-grid">
+        <div class="bot-card"><div class="empty"><h3>Loading...</h3></div></div>
       </div>
 
       <div class="grid-2">
@@ -252,8 +277,8 @@
           <div class="card-header"><h3>Quick Launch</h3></div>
           <div class="launch-list" id="launchList">
             <div class="launch-row">
-              <div class="launch-copy"><strong>Open Inbox</strong><span>Jump straight into human and bot conversations</span></div>
-              <a class="btn btn-link" href="/inbox">Go</a>
+              <div class="launch-copy"><strong>Open Bots</strong><span>Go inside a specific bot and then open its conversations</span></div>
+              <a class="btn btn-link" href="/bots">Stay here</a>
             </div>
             <div class="launch-row">
               <div class="launch-copy"><strong>Channel Center</strong><span>Connect Instagram, Messenger and Telegram per bot</span></div>
@@ -298,6 +323,7 @@
 
 <script>
 const rows = [];
+let workspaces = [];
 let activeBotId = '';
 let currentFilter = 'all';
 let searchQuery = '';
@@ -318,7 +344,7 @@ function ago(value) {
   return h < 24 ? `${h} h ago` : `${Math.floor(h / 24)} d ago`;
 }
 function channelCount(item) {
-  return ['instagram','messenger','telegram'].filter(k => item.channels[k]?.connected).length;
+  return ['instagram','messenger','telegram','whatsapp'].filter(k => item.channels[k]?.connected).length;
 }
 function hasChannel(item, key) {
   return !!item.channels[key]?.connected;
@@ -337,8 +363,9 @@ function renderChannels(item) {
     instagram: { label: 'IG', cls: 'ch-ig' },
     messenger: { label: 'MS', cls: 'ch-ms' },
     telegram: { label: 'TG', cls: 'ch-tg' },
+    whatsapp: { label: 'WA', cls: 'ch-tg' },
   };
-  return ['instagram','messenger','telegram'].map((key) => {
+  return ['instagram','messenger','telegram','whatsapp'].map((key) => {
     const cfg = item.channels[key] || {};
     const base = map[key];
     if (cfg.connected) return `<span class="ch-icon ${base.cls}" title="${key}: ${esc(cfg.statusLabel || 'Connected')}">${base.label}</span>`;
@@ -349,11 +376,38 @@ function renderActions(item) {
   const id = encodeURIComponent(item.bot.id);
   return `
     <div class="actions">
+      <a class="btn btn-link" href="/bot?id=${id}">Open Bot</a>
       <a class="btn btn-link" href="/auth/connect?botId=${id}">Channels</a>
-      <a class="btn btn-link" href="/inbox?botId=${id}">Inbox</a>
+      <a class="btn btn-link" href="/bot?id=${id}">Conversations</a>
       <a class="btn btn-link" href="/constructor?botId=${id}">Constructor</a>
       <a class="btn btn-link" href="/train?botId=${id}">Training</a>
     </div>`;
+}
+function normalize(str) {
+  return String(str || '').toLowerCase().replace(/[^a-z0-9]+/g, '');
+}
+function workspaceType(client) {
+  const name = String(client.company || '');
+  if (/\(main\)/i.test(name)) return { label: 'Core Workspace', cls: 'tiny-core' };
+  if (/\(instagram\)/i.test(name)) return { label: 'Instagram Workspace', cls: 'tiny-instagram' };
+  if ((client.channel_types || '').includes('whatsapp') || /whatsapp/i.test(name)) return { label: 'WhatsApp Workspace', cls: 'tiny-whatsapp' };
+  return { label: 'Client Workspace', cls: 'tiny-client' };
+}
+function workspaceRoute(client) {
+  return [client.contact_name, client.contact_phone].filter(Boolean).join(' · ')
+    || ((client.channel_types || '').includes('whatsapp') ? 'WhatsApp route' : 'Manual route');
+}
+function matchWorkspaces(bot) {
+  const botId = String(bot.id || '');
+  const botName = normalize(bot.name);
+  return workspaces.filter((c) => {
+    const linkedId = String(c.workspace_bot_id || '');
+    const linkedName = normalize(c.workspace_bot_name || '');
+    return c.id === botId
+      || linkedId === botId
+      || linkedName === normalize(botId)
+      || linkedName === botName;
+  });
 }
 function setCounts(list) {
   const counts = {
@@ -363,6 +417,7 @@ function setCounts(list) {
     instagram: list.filter(i => hasChannel(i,'instagram')).length,
     messenger: list.filter(i => hasChannel(i,'messenger')).length,
     telegram: list.filter(i => hasChannel(i,'telegram')).length,
+    whatsapp: list.filter(i => hasChannel(i,'whatsapp')).length,
   };
   document.getElementById('cnt-all').textContent = counts.all ? `(${counts.all})` : '';
   document.getElementById('cnt-live').textContent = counts.live ? `(${counts.live})` : '';
@@ -370,6 +425,7 @@ function setCounts(list) {
   document.getElementById('cnt-instagram').textContent = counts.instagram ? `(${counts.instagram})` : '';
   document.getElementById('cnt-messenger').textContent = counts.messenger ? `(${counts.messenger})` : '';
   document.getElementById('cnt-telegram').textContent = counts.telegram ? `(${counts.telegram})` : '';
+  document.getElementById('cnt-whatsapp').textContent = counts.whatsapp ? `(${counts.whatsapp})` : '';
 }
 function renderStats(list) {
   const live = list.filter(i => botState(i) === 'live').length;
@@ -394,7 +450,7 @@ function renderHighlights(list) {
     return `<div class="act-item">
       <div class="act-dot ${dot}"></div>
       <div>
-        <div class="act-action"><b>${esc(item.bot.name)}</b> · ${count}/3 connected</div>
+        <div class="act-action"><b>${esc(item.bot.name)}</b> · ${count}/4 connected</div>
         <div class="act-meta">Updated ${ago(item.bot.updatedAt)} · ${esc(item.bot.id)}</div>
       </div>
     </div>`;
@@ -408,31 +464,91 @@ function render() {
   let list = rows.slice();
   if (currentFilter === 'live') list = list.filter(i => botState(i) === 'live');
   if (currentFilter === 'setup') list = list.filter(i => botState(i) === 'setup');
-  if (['instagram','messenger','telegram'].includes(currentFilter)) list = list.filter(i => hasChannel(i, currentFilter));
+  if (['instagram','messenger','telegram','whatsapp'].includes(currentFilter)) list = list.filter(i => hasChannel(i, currentFilter));
   if (searchQuery) {
     const q = searchQuery.toLowerCase();
-    list = list.filter(i => i.bot.name.toLowerCase().includes(q) || i.bot.id.toLowerCase().includes(q));
+    list = list.filter(i => {
+      const ws = matchWorkspaces(i.bot);
+      return i.bot.name.toLowerCase().includes(q)
+        || i.bot.id.toLowerCase().includes(q)
+        || ws.some(w => `${w.company || ''} ${w.contact_name || ''} ${w.contact_phone || ''}`.toLowerCase().includes(q));
+    });
   }
 
-  const tbody = document.getElementById('botsBody');
+  const sections = document.getElementById('botSections');
   if (!list.length) {
-    tbody.innerHTML = '<tr><td colspan="6"><div class="empty"><h3>No bots</h3><p>Try another filter or create a new bot.</p></div></td></tr>';
+    sections.innerHTML = '<div class="bot-card"><div class="empty"><h3>No bots</h3><p>Try another filter or create a new bot.</p></div></div>';
     return;
   }
 
-  tbody.innerHTML = list.map((item) => `
-    <tr>
-      <td>
-        <div class="bot-name">${esc(item.bot.name)}</div>
-        <div class="bot-meta">${esc(item.bot.id)}</div>
-      </td>
-      <td>${botBadge(item)}</td>
-      <td><div class="channel-icons">${renderChannels(item)}</div></td>
-      <td>${ago(item.bot.updatedAt)}</td>
-      <td>${fmtDate(item.bot.createdAt)}</td>
-      <td>${renderActions(item)}</td>
-    </tr>
-  `).join('');
+  sections.innerHTML = list.map((item) => {
+    const ws = matchWorkspaces(item.bot);
+    const connected = channelCount(item);
+    return `
+      <section class="bot-card">
+        <div class="bot-card-head">
+          <div class="bot-head-top">
+            <div>
+              <div class="bot-title">${esc(item.bot.name)}</div>
+              <div class="bot-meta">Bot ID: ${esc(item.bot.id)} · Updated ${ago(item.bot.updatedAt)} · Created ${fmtDate(item.bot.createdAt)}</div>
+            </div>
+            <div class="bot-head-right">
+              ${botBadge(item)}
+              <div class="section-channels">${renderChannels(item)}</div>
+            </div>
+          </div>
+          <div class="bot-kpis">
+            <div class="bot-kpi">
+              <div class="bot-kpi-label">Workspaces</div>
+              <div class="bot-kpi-value">${ws.length}</div>
+            </div>
+            <div class="bot-kpi">
+              <div class="bot-kpi-label">Connected</div>
+              <div class="bot-kpi-value">${connected}</div>
+            </div>
+            <div class="bot-kpi">
+              <div class="bot-kpi-label">State</div>
+              <div class="bot-kpi-value">${botState(item) === 'live' ? 'Live' : 'Setup'}</div>
+            </div>
+          </div>
+        </div>
+        <div class="bot-card-body">
+          <div>
+            <div class="subcard-head">
+              <h3>Workspaces</h3>
+              <span class="top-chip">${ws.length} linked</span>
+            </div>
+            <div class="workspace-list">
+              ${ws.length ? ws.slice(0, 3).map((c) => {
+                const type = workspaceType(c);
+                return `
+                  <div class="workspace-item">
+                    <div class="workspace-top">
+                      <div>
+                        <div class="workspace-name">${esc(c.company)}</div>
+                        <div class="workspace-meta">Workspace ID: ${esc(c.id)}</div>
+                      </div>
+                      <span class="tiny-badge ${type.cls}">${type.label}</span>
+                    </div>
+                    <div class="workspace-route">Route: ${esc(workspaceRoute(c))}</div>
+                    <div class="workspace-actions">
+                      <a class="btn btn-link" href="/admin/client?id=${encodeURIComponent(c.id)}">Open Workspace</a>
+                      <a class="btn btn-link" href="/bot?id=${encodeURIComponent(item.bot.id)}">Open Bot</a>
+                    </div>
+                  </div>`;
+              }).join('') : '<div class="empty-mini">No linked workspaces yet.</div>'}
+              ${ws.length > 3 ? `<div class="empty-mini">+ ${ws.length - 3} more workspaces inside this bot</div>` : ''}
+            </div>
+          </div>
+          <div class="bot-card-actions">
+            <a class="btn btn-primary" href="/bot?id=${encodeURIComponent(item.bot.id)}">Open Bot</a>
+            <a class="btn btn-link" href="/auth/connect?botId=${encodeURIComponent(item.bot.id)}">Channels</a>
+            <a class="btn btn-link" href="/bot?id=${encodeURIComponent(item.bot.id)}">Conversations</a>
+            <a class="btn btn-link" href="/constructor?botId=${encodeURIComponent(item.bot.id)}">Constructor</a>
+          </div>
+        </div>
+      </section>`;
+  }).join('');
 }
 function setFilter(el, filter) {
   document.querySelectorAll('.pipe-pill').forEach(p => p.classList.remove('active'));
@@ -469,16 +585,20 @@ async function createBot() {
   }
 }
 async function load() {
-  const data = await fetch('/auth/api/bots').then(r => r.json());
+  const [data, clientsData] = await Promise.all([
+    fetch('/auth/api/bots').then(r => r.json()),
+    fetch('/api/admin/clients').then(r => r.json())
+  ]);
   activeBotId = data.activeBotId || '';
   const bots = data.bots || [];
+  workspaces = clientsData.clients || [];
   rows.length = 0;
   const results = await Promise.all(bots.map(async (bot) => {
     try {
       const channels = await fetch(`/auth/api/channels?botId=${encodeURIComponent(bot.id)}`).then(r => r.json());
       return { bot, channels };
     } catch {
-      return { bot, channels: { instagram:{connected:false}, messenger:{connected:false}, telegram:{connected:false} } };
+      return { bot, channels: { instagram:{connected:false}, messenger:{connected:false}, telegram:{connected:false}, whatsapp:{connected:false} } };
     }
   }));
   results.forEach(r => rows.push(r));
