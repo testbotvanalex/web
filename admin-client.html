@@ -191,7 +191,6 @@
         <div class="top-actions">
           <button class="btn" id="onboardingLinkBtn" onclick="copyOnboardingLink()" title="Kopieer onboarding link voor de klant">📋 Onboarding link</button>
           <a class="btn" id="channelsBtn" href="/auth/connect">Channels</a>
-          <a class="btn" id="constructorBtn" href="/constructor">Constructor</a>
           <a class="btn btn-primary" id="botInboxBtn" href="/inbox">Open Bot Inbox</a>
         </div>
       </div>
@@ -436,7 +435,6 @@
       `;
       const botId = S.bot?.id || '';
       document.getElementById('channelsBtn').href = botId ? `/auth/connect?botId=${encodeURIComponent(botId)}` : '/auth/connect';
-      document.getElementById('constructorBtn').href = botId ? `/constructor?botId=${encodeURIComponent(botId)}` : '/constructor';
       document.getElementById('botInboxBtn').href = botId ? `/inbox?botId=${encodeURIComponent(botId)}` : '/inbox';
     }
 
@@ -569,7 +567,6 @@
         <a class="btn" href="/admin/clients">All Workspaces</a>
         <a class="btn" href="${S.bot ? `/bots` : '/auth/connect'}">${S.bot ? 'Bots' : 'Connect Bot'}</a>
         <a class="btn" href="/auth/connect${S.bot ? `?botId=${encodeURIComponent(S.bot.id)}` : ''}">Channels</a>
-        <a class="btn" href="/constructor${S.bot ? `?botId=${encodeURIComponent(S.bot.id)}` : ''}">Constructor</a>
       `;
 
       promptPreview.textContent = S.bot?.prompt?.trim() || 'No prompt available.';
