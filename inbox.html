@@ -121,11 +121,19 @@
 
     .chat-item {
       display: flex; align-items: flex-start; gap: 12px;
-      padding: 12px 16px; cursor: pointer;
+      padding: 12px 16px; cursor: pointer; position: relative;
       border-bottom: 1px solid var(--border); transition: background .1s;
     }
     .chat-item:hover { background: var(--surface2); }
     .chat-item.active { background: rgba(124,58,237,0.08); border-left: 3px solid var(--accent); }
+    .trash-btn {
+      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+      opacity: 0; transition: opacity .12s; background: none; border: none;
+      cursor: pointer; color: var(--muted); padding: 5px; border-radius: 6px;
+      display: flex; align-items: center;
+    }
+    .chat-item:hover .trash-btn { opacity: 1; }
+    .trash-btn:hover { color: var(--red); background: rgba(220,38,38,0.09); }
 
     .avatar {
       width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
@@ -153,26 +161,8 @@
       display: flex; align-items: center; justify-content: space-between;
       gap: 6px; margin-bottom: 2px;
     }
-    .chat-label-row {
-      display: flex; align-items: center; gap: 6px;
-      margin-bottom: 4px;
-    }
-    .mini-label {
-      display: inline-flex; align-items: center;
-      padding: 2px 7px; border-radius: 999px;
-      font-size: 10px; font-weight: 700; letter-spacing: .02em;
-      text-transform: uppercase;
-      background: var(--surface3); color: var(--muted);
-    }
-    .mini-label.customer { background: #eef2ff; color: #4338ca; }
-    .mini-label.bot { background: #ecfdf5; color: #047857; }
-    .chat-name { font-weight: 500; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .chat-name { font-weight: 600; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .chat-time { font-size: 11px; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
-    .chat-route {
-      font-size: 12px; color: var(--text); opacity: .82;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-      margin-bottom: 3px;
-    }
     .chat-preview { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 5px; }
     .chat-chips { display: flex; align-items: center; gap: 5px; }
 
@@ -195,31 +185,15 @@
 
     .chat-topbar {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 24px; border-bottom: 1px solid var(--border);
+      padding: 12px 24px; border-bottom: 1px solid var(--border);
       background: var(--surface); flex-shrink: 0; gap: 16px;
     }
-    .chat-topbar-main { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
-    .chat-topbar-name { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; }
-    .chat-topbar-route { font-size: 13px; color: var(--text); opacity: .82; margin-top: 3px; }
-    .chat-topbar-meta { font-size: 12px; color: var(--muted); margin-top: 3px; }
-    .chat-facts { display: flex; flex-wrap: wrap; gap: 8px; }
-    .chat-fact {
-      display: flex; flex-direction: column; gap: 2px;
-      padding: 8px 10px; border-radius: 10px;
-      background: var(--surface2); border: 1px solid var(--border);
-      min-width: 120px;
-    }
-    .chat-fact-label {
-      font-size: 10px; font-weight: 700; letter-spacing: .04em;
-      text-transform: uppercase; color: var(--muted);
-    }
-    .chat-fact-value {
-      font-size: 12px; color: var(--text); white-space: nowrap;
-      overflow: hidden; text-overflow: ellipsis;
-    }
+    .chat-topbar-main { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+    .chat-topbar-name { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; }
+    .chat-topbar-sub { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
     .mode-pill {
       display: inline-flex; align-items: center; gap: 4px;
-      font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px;
+      font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px;
     }
     .mode-pill.bot { background: #f3f4f6; color: var(--muted); }
     .mode-pill.human { background: #fee2e2; color: var(--red); }
@@ -709,22 +683,19 @@ function renderList() {
           ${chDot(c.channel)}
         </div>
         <div class="chat-info">
-          <div class="chat-label-row">
-            <span class="mini-label customer">Customer</span>
-            <span class="mini-label bot">Bot</span>
-          </div>
           <div class="chat-name-row">
             <div class="chat-name">${esc(displayCustomer(c))}</div>
             <div class="chat-time">${fmtTime(c.last_message_at)}</div>
           </div>
-          <div class="chat-route">${esc(displayBotRoute(c))}</div>
           <div class="chat-preview">${esc(displayPreview(c))}</div>
           <div class="chat-chips">
-            <span class="${chBadge(c.channel)}">${chIcon(c.channel)} ${c.channel}</span>
-            <span class="badge ${c.mode==='human'?'badge-human':'badge-bot'}">${c.mode||'bot'}</span>
+            <span class="badge ${c.mode==='human'?'badge-human':'badge-bot'}">${c.mode==='human'?'👤':'🤖'} ${c.mode||'bot'}</span>
             ${c.unread_count>0?`<span class="badge badge-unread">${c.unread_count}</span>`:''}
           </div>
         </div>
+        <button class="trash-btn" title="Delete chat" onclick="deleteChat('${c.id}',event)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        </button>
       </div>`;
   }).join('');
 
@@ -783,8 +754,7 @@ async function openChat(chatId) {
   chatTopbarEl.innerHTML = `
     <div class="chat-topbar-main">
       <div class="chat-topbar-name">${esc(displayCustomer(chat))}</div>
-      <div class="chat-topbar-route">${esc(displayBotRoute(chat))}</div>
-      <div class="chat-topbar-meta">${chIcon(chat.channel)} ${esc(chat.channel)}</div>
+      <div class="chat-topbar-sub">${chIcon(chat.channel)} ${esc(chat.channel)}</div>
     </div>`;
   messagesEl.innerHTML = `<div class="empty"><div class="empty-icon" style="font-size:28px;opacity:.2;">⏳</div></div>`;
 
@@ -792,27 +762,14 @@ async function openChat(chatId) {
     const d = await fetch(`${API}/chats/${chat.id}/messages?limit=300`).then(r=>r.json());
     const msgs = Array.isArray(d.messages) ? d.messages : [];
     const mode = d.chat?.mode || chat.mode || 'bot';
+    const route = displayChannelRoute(chat);
 
     chatTopbarEl.innerHTML = `
       <div class="chat-topbar-main">
         <div class="chat-topbar-name">${esc(displayCustomer(chat))}</div>
-        <div class="chat-topbar-route">${esc(displayBotRoute(chat))}</div>
-        <div class="chat-facts">
-          <div class="chat-fact">
-            <div class="chat-fact-label">Customer</div>
-            <div class="chat-fact-value">${esc(displayCustomer(chat))}</div>
-          </div>
-          <div class="chat-fact">
-            <div class="chat-fact-label">Handled by</div>
-            <div class="chat-fact-value">${esc(displayChannelRoute(chat))}</div>
-          </div>
-          <div class="chat-fact">
-            <div class="chat-fact-label">Channel</div>
-            <div class="chat-fact-value">${esc(chat.channel || 'unknown')}</div>
-          </div>
-        </div>
-        <div class="chat-topbar-meta">
+        <div class="chat-topbar-sub">
           ${chIcon(chat.channel)} ${esc(chat.channel)}
+          ${route ? `· ${esc(route)}` : ''}
           · <span class="mode-pill ${mode}">${mode==='human'?'👤 Human':'🤖 Bot'}</span>
         </div>
       </div>`;
@@ -867,6 +824,27 @@ document.querySelectorAll('.ftab').forEach(btn => {
   });
 });
 $('searchInput').addEventListener('input', e => { S.q = e.target.value; renderList(); });
+
+async function deleteChat(chatId, event) {
+  event.stopPropagation();
+  if (!confirm('Delete this conversation and all its messages?')) return;
+  try {
+    const r = await fetch(`${API}/chats/${chatId}`, { method: 'DELETE' });
+    if (!r.ok) throw new Error('Delete failed');
+    if (S.active?.id === chatId) {
+      S.active = null;
+      _hideSuggestion();
+      chatTopbarEl.innerHTML = `
+        <div class="empty" style="flex-direction:row;gap:8px;flex:1;justify-content:flex-start;padding:0;">
+          <span style="font-size:22px;opacity:.3;">←</span>
+          <span style="color:var(--muted);font-size:14px;">Select a conversation</span>
+        </div>`;
+      messagesEl.innerHTML = `<div class="empty"><div class="empty-icon">✉️</div><h3>No conversation selected</h3><div>Pick one from the left</div></div>`;
+    }
+    S.chats = S.chats.filter(c => c.id !== chatId);
+    renderList();
+  } catch(e) { alert('Could not delete chat'); }
+}
 
 async function init() {
   try {

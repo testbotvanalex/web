@@ -458,6 +458,18 @@ router.post('/chats/:id/release', (req, res) => {
   } catch (e) { err(res, e.message, 500); }
 });
 
+router.delete('/chats/:id', (req, res) => {
+  try {
+    const chat = D.chats.byId.get(req.params.id);
+    if (!chat) return err(res, 'chat not found', 404);
+    D.db.prepare('DELETE FROM messages WHERE client_id = ? AND channel = ? AND sender_id = ?')
+      .run(chat.client_id, chat.channel, chat.sender_id);
+    D.db.prepare('DELETE FROM ai_suggestions WHERE chat_id = ?').run(chat.id);
+    D.db.prepare('DELETE FROM chats WHERE id = ?').run(chat.id);
+    ok(res, { deleted: true });
+  } catch (e) { err(res, e.message, 500); }
+});
+
 // ── Send message manually from Inbox ─────────────────────────────────────────
 router.post('/send-message', async (req, res) => {
   const { chat_id, client_id, channel, sender_id, text } = req.body;
