@@ -314,6 +314,7 @@ app.use(cors({
 // Raw body needed for webhook signature verification
 app.use('/webhook/instagram', express.raw({ type: '*/*' }));
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
 // ── Admin Auth ─────────────────────────────────────────────────────────────────
 const ADMIN_USER   = process.env.ADMIN_USER || 'admin';

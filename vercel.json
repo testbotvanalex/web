@@ -1,6 +1,6 @@
 {
   "buildCommand": null,
-  "outputDirectory": ".",
+  "outputDirectory": "public",
   "framework": null,
   "cleanUrls": true,
   "trailingSlash": false,
