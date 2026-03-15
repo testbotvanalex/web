@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BotMatic — Live Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f4f5f9; --surface: #ffffff; --surface2: #f0f1f6; --surface3: #e8eaf2;
+      --border: #e2e4ed; --accent: #7c3aed; --accent2: #db2777;
+      --text: #1a1a2e; --muted: #6b7280;
+      --green: #059669; --red: #dc2626;
+      --ig: #e1306c; --tg: #0088cc; --wa: #25d366; --ms: #0084ff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; height: 100vh; overflow: hidden; }
+
+    /* ── Demo banner ── */
+    .demo-banner {
+      background: linear-gradient(135deg, #7c3aed, #db2777);
+      color: #fff; text-align: center; padding: 8px 16px;
+      font-size: 13px; font-weight: 600; letter-spacing: .02em;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      flex-shrink: 0;
+    }
+    .demo-banner a {
+      color: #fff; background: rgba(255,255,255,0.2); padding: 3px 12px;
+      border-radius: 20px; text-decoration: none; font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.4); transition: background .15s;
+    }
+    .demo-banner a:hover { background: rgba(255,255,255,0.3); }
+
+    /* ── Layout ── */
+    .layout { display: flex; height: calc(100vh - 37px); overflow: hidden; }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 220px; flex-shrink: 0; background: var(--surface);
+      border-right: 1px solid var(--border); padding: 20px 0;
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .sidebar-logo {
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px;
+      background: linear-gradient(135deg, #7c3aed, #db2777);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      padding: 0 20px 20px;
+    }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 20px; color: var(--muted); font-size: 14px;
+      cursor: pointer; transition: all .15s; border: none; background: none; width: 100%;
+      text-align: left; text-decoration: none;
+    }
+    .nav-item:hover { color: var(--text); background: var(--surface2); }
+    .nav-item.active { color: var(--accent); background: rgba(124,108,252,0.1); border-left: 2px solid var(--accent); }
+    .nav-sep { height: 1px; background: var(--border); margin: 8px 0; }
+    .nav-badge {
+      margin-left: auto; background: var(--accent); color: #fff;
+      font-size: 10px; font-weight: 700; padding: 2px 6px;
+      border-radius: 999px; min-width: 18px; text-align: center;
+    }
+
+    /* ── Main ── */
+    .main { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 28px; border-bottom: 1px solid var(--border);
+      background: var(--surface); flex-shrink: 0;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 10px; }
+    .topbar-left h1 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; }
+    .online-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; }
+    .bot-pill {
+      font-size: 12px; color: var(--muted); background: var(--surface2);
+      padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border);
+    }
+
+    /* ── Shell ── */
+    .shell { display: flex; flex: 1; min-height: 0; overflow: hidden; }
+
+    /* ── Chat list ── */
+    .panel-left {
+      width: 320px; flex-shrink: 0; background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .panel-left-head {
+      padding: 14px 16px; border-bottom: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 10px; flex-shrink: 0;
+    }
+    .panel-left-title {
+      font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .total-badge {
+      font-size: 11px; font-weight: 500; color: var(--muted);
+      background: var(--surface2); border: 1px solid var(--border);
+      padding: 2px 8px; border-radius: 99px;
+    }
+    .filter-tabs { display: flex; gap: 6px; }
+    .ftab {
+      padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 500;
+      background: var(--surface2); border: 1px solid var(--border);
+      cursor: pointer; transition: all .15s; color: var(--muted); font-family: inherit;
+    }
+    .ftab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    .chat-list { flex: 1; overflow-y: auto; }
+    .chat-list::-webkit-scrollbar { width: 4px; }
+    .chat-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .chat-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 16px; cursor: pointer;
+      border-bottom: 1px solid var(--border); transition: background .1s;
+    }
+    .chat-item:hover { background: var(--surface2); }
+    .chat-item.active { background: rgba(124,58,237,0.08); border-left: 3px solid var(--accent); }
+
+    .avatar {
+      width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 700; font-family: 'Syne', sans-serif;
+      position: relative;
+    }
+    .av-ig { background: linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); color:#fff; }
+    .av-tg { background: #0088cc; color:#fff; }
+    .av-wa { background: #25d366; color:#fff; }
+    .av-ms { background: #0084ff; color:#fff; }
+    .av-default { background: rgba(124,58,237,0.12); color: var(--accent); }
+
+    .ch-dot {
+      position: absolute; bottom: -2px; right: -2px;
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 2px solid var(--surface);
+      display: flex; align-items: center; justify-content: center; font-size: 8px;
+    }
+    .dot-ig { background: var(--ig); }
+    .dot-tg { background: var(--tg); }
+    .dot-wa { background: var(--wa); }
+    .dot-ms { background: var(--ms); }
+
+    .chat-info { flex: 1; min-width: 0; }
+    .chat-name-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 2px; }
+    .chat-name { font-weight: 500; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .chat-time { font-size: 11px; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
+    .chat-preview { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 5px; }
+    .chat-chips { display: flex; align-items: center; gap: 5px; }
+
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 7px; border-radius: 20px; font-size: 10px; font-weight: 500;
+    }
+    .badge-ig { background: #fce7f3; color: #be185d; }
+    .badge-tg { background: #e0f2fe; color: #0369a1; }
+    .badge-wa { background: #dcfce7; color: #15803d; }
+    .badge-ms { background: #eff6ff; color: #1d4ed8; }
+    .badge-bot { background: #f3f4f6; color: var(--muted); }
+    .badge-human { background: #fee2e2; color: var(--red); }
+    .badge-unread { background: var(--accent); color: #fff; margin-left: auto; min-width: 18px; text-align: center; }
+
+    /* ── Chat View ── */
+    .panel-right {
+      flex: 1; display: flex; flex-direction: column;
+      background: var(--bg); min-width: 0; overflow: hidden;
+    }
+    .chat-topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 24px; border-bottom: 1px solid var(--border);
+      background: var(--surface); flex-shrink: 0; gap: 16px;
+    }
+    .chat-topbar-name { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; }
+    .chat-topbar-meta { font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .chat-facts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .chat-fact {
+      display: flex; flex-direction: column; gap: 2px;
+      padding: 7px 10px; border-radius: 10px;
+      background: var(--surface2); border: 1px solid var(--border);
+    }
+    .chat-fact-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+    .chat-fact-value { font-size: 12px; color: var(--text); }
+    .mode-pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px;
+    }
+    .mode-pill.bot { background: #f3f4f6; color: var(--muted); }
+    .mode-pill.human { background: #fee2e2; color: var(--red); }
+    .takeover-btn {
+      padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600;
+      cursor: pointer; font-family: inherit; transition: all .15s; border: 1.5px solid var(--border);
+      background: var(--surface); color: var(--text); white-space: nowrap;
+    }
+    .takeover-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .takeover-btn.active { background: #fee2e2; border-color: var(--red); color: var(--red); }
+
+    /* ── Messages ── */
+    .messages-area {
+      flex: 1; overflow-y: auto; padding: 20px 28px;
+      display: flex; flex-direction: column; gap: 6px; background: var(--bg);
+    }
+    .messages-area::-webkit-scrollbar { width: 4px; }
+    .messages-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .day-sep {
+      text-align: center; font-size: 11px; color: var(--muted);
+      margin: 8px 0; position: relative;
+    }
+    .day-sep span { position: relative; z-index: 1; background: var(--bg); padding: 0 12px; }
+    .day-sep::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border); }
+
+    .msg-group { display: flex; flex-direction: column; }
+    .msg-group.out { align-items: flex-end; }
+    .msg-group.in  { align-items: flex-start; }
+    .msg-sender {
+      font-size: 11px; font-weight: 700; color: var(--muted);
+      margin: 0 2px 4px; text-transform: uppercase; letter-spacing: .03em;
+    }
+    .msg {
+      max-width: 62%; padding: 10px 14px;
+      font-size: 14px; line-height: 1.5; white-space: pre-wrap; word-break: break-word;
+    }
+    .msg.in {
+      background: var(--surface); color: var(--text);
+      border: 1px solid var(--border); border-radius: 12px 12px 12px 3px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06);
+    }
+    .msg.out {
+      background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff;
+      border-radius: 12px 12px 3px 12px;
+      box-shadow: 0 2px 8px rgba(124,58,237,0.3);
+    }
+    .msg-time { font-size: 10px; color: var(--muted); margin-top: 3px; padding: 0 2px; }
+    .typing-indicator {
+      display: flex; align-items: center; gap: 4px; padding: 8px 0;
+    }
+    .typing-dot {
+      width: 7px; height: 7px; border-radius: 50%; background: var(--muted);
+      animation: typingPulse 1.2s infinite;
+    }
+    .typing-dot:nth-child(2) { animation-delay: .2s; }
+    .typing-dot:nth-child(3) { animation-delay: .4s; }
+    @keyframes typingPulse { 0%,80%,100%{opacity:.3;transform:scale(1)} 40%{opacity:1;transform:scale(1.2)} }
+
+    /* ── AI Suggestion Panel ── */
+    .suggestion-panel {
+      border-top: 1px solid var(--border); padding: 12px 24px 14px;
+      background: linear-gradient(135deg, rgba(124,58,237,0.04) 0%, rgba(219,39,119,0.03) 100%);
+      flex-shrink: 0;
+    }
+    .suggestion-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .suggestion-label {
+      font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+      background: linear-gradient(135deg, #7c3aed, #db2777);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .sug-generating { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 5px; }
+    .sug-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: sugPulse 1s infinite; }
+    @keyframes sugPulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .suggestion-text {
+      font-size: 14px; color: var(--text); line-height: 1.5;
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 8px; padding: 10px 13px; margin-bottom: 10px;
+      white-space: pre-wrap; word-break: break-word;
+      min-height: 38px; outline: none; transition: border-color .15s;
+    }
+    .suggestion-text[contenteditable="true"] { border-color: var(--accent); background: #fff; }
+    .suggestion-actions { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+    .sug-btn {
+      padding: 6px 13px; border-radius: 8px; font-size: 12px; font-weight: 600;
+      cursor: pointer; font-family: inherit; transition: all .15s;
+      border: 1px solid var(--border); background: var(--surface2); color: var(--text);
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .sug-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(124,58,237,0.06); }
+    .sug-btn-send {
+      background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff;
+      border-color: transparent; box-shadow: 0 2px 8px rgba(124,58,237,0.28);
+    }
+    .sug-btn-send:hover { box-shadow: 0 4px 14px rgba(124,58,237,0.38); color: #fff; background: linear-gradient(135deg,#6d28d9,#5b21b6); border-color: transparent; }
+    .sug-btn-dismiss { margin-left: auto; color: var(--muted); }
+    .sug-btn-dismiss:hover { border-color: var(--red); color: var(--red); background: rgba(220,38,38,0.06); }
+
+    /* ── Composer ── */
+    .composer {
+      border-top: 1px solid var(--border); padding: 14px 24px;
+      display: flex; align-items: flex-end; gap: 10px;
+      background: var(--surface); flex-shrink: 0;
+    }
+    .compose-input {
+      flex: 1; min-height: 42px; max-height: 140px; resize: none;
+      background: var(--surface2); border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 10px 14px;
+      font-size: 14px; color: var(--text); font-family: inherit;
+      outline: none; line-height: 1.45; transition: border-color .15s;
+    }
+    .compose-input:focus { border-color: var(--accent); background: #fff; }
+    .btn-send {
+      background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff;
+      border: none; border-radius: 10px; padding: 10px 22px;
+      font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
+      box-shadow: 0 2px 8px rgba(124,58,237,0.3); transition: all .15s;
+      white-space: nowrap; flex-shrink: 0; display: flex; align-items: center; gap: 6px;
+    }
+    .btn-send:hover { box-shadow: 0 4px 16px rgba(124,58,237,0.4); }
+
+    /* ── Empty ── */
+    .empty {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; flex: 1; gap: 10px;
+      color: var(--muted); font-size: 14px; text-align: center; padding: 40px;
+    }
+    .empty-icon { font-size: 44px; opacity: .3; }
+    .empty h3 { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); opacity: .5; }
+
+    /* ── Demo send animation ── */
+    .demo-sent-flash {
+      position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+      background: var(--green); color: #fff; padding: 10px 22px;
+      border-radius: 10px; font-weight: 700; font-size: 13px;
+      box-shadow: 0 4px 16px rgba(5,150,105,0.4);
+      animation: flashIn .3s ease, flashOut .4s ease 1.5s forwards;
+      pointer-events: none; z-index: 999;
+    }
+    @keyframes flashIn  { from{opacity:0;transform:translateX(-50%) translateY(10px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
+    @keyframes flashOut { from{opacity:1} to{opacity:0;transform:translateX(-50%) translateY(-6px)} }
+  </style>
+</head>
+<body>
+
+<!-- Demo Banner -->
+<div class="demo-banner">
+  ✨ This is a live interactive demo &nbsp;·&nbsp; All chats are simulated
+  <a href="https://botmatic.be">Get BotMatic →</a>
+</div>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">BotMatic</div>
+    <a class="nav-item" href="#">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+      Workspaces
+    </a>
+    <a class="nav-item" href="#">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </a>
+    <a class="nav-item active" href="#">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Inbox
+      <span class="nav-badge">3</span>
+    </a>
+    <a class="nav-item" href="#">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/></svg>
+      Bots
+    </a>
+    <div class="nav-sep"></div>
+    <a class="nav-item" href="#">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Analytics
+    </a>
+  </nav>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="online-dot"></div>
+        <h1>Inbox</h1>
+      </div>
+      <div class="bot-pill">Demo Bot · BotMatic</div>
+    </div>
+
+    <div class="shell">
+
+      <!-- Chat List -->
+      <div class="panel-left">
+        <div class="panel-left-head">
+          <div class="panel-left-title">
+            Conversations <span class="total-badge">5</span>
+          </div>
+          <div class="filter-tabs">
+            <button class="ftab active">All</button>
+            <button class="ftab">Open</button>
+            <button class="ftab">Bot</button>
+            <button class="ftab">Human</button>
+          </div>
+        </div>
+        <div class="chat-list" id="chatList"></div>
+      </div>
+
+      <!-- Chat View -->
+      <div class="panel-right" id="panelRight">
+        <div class="chat-topbar" id="chatTopbar">
+          <div class="empty" style="flex-direction:row;gap:8px;flex:1;justify-content:flex-start;padding:0;">
+            <span style="font-size:22px;opacity:.3;">←</span>
+            <span style="color:var(--muted);font-size:14px;">Select a conversation</span>
+          </div>
+        </div>
+        <div class="messages-area" id="messagesArea">
+          <div class="empty">
+            <div class="empty-icon">✉️</div>
+            <h3>No conversation selected</h3>
+            <div>Click any chat on the left to see the conversation</div>
+          </div>
+        </div>
+        <div id="suggestionPanel" class="suggestion-panel" style="display:none;">
+          <div class="suggestion-header">
+            <span class="suggestion-label">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="-webkit-text-fill-color:unset;background:none;"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z"/></svg>
+              AI Suggestion
+            </span>
+            <span id="sugGenerating" class="sug-generating" style="display:none;">
+              <span class="sug-dot"></span> Generating…
+            </span>
+          </div>
+          <div id="sugText" class="suggestion-text" contenteditable="false"></div>
+          <div class="suggestion-actions">
+            <button class="sug-btn sug-btn-send" onclick="demoSend()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Use reply
+            </button>
+            <button class="sug-btn" onclick="toggleDemoEdit()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Edit
+            </button>
+            <button class="sug-btn" onclick="demoRegen()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.6"/></svg>
+              Regenerate
+            </button>
+            <button class="sug-btn sug-btn-dismiss" onclick="hideSug()">Dismiss</button>
+          </div>
+        </div>
+        <div class="composer">
+          <textarea id="composeInput" class="compose-input" placeholder="Type your reply… (Enter to send)" rows="1"></textarea>
+          <button class="btn-send" onclick="demoSendManual()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Send
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Demo data ─────────────────────────────────────────────────────────────────
+const CHATS = [
+  {
+    id: 'c1', channel: 'whatsapp', name: 'Marie Janssen', company: 'Kapper Stijl',
+    mode: 'bot', unread: 2, time: '2 min ago',
+    preview: 'Kan ik morgen een afspraak maken?',
+    messages: [
+      { dir:'in',  text:'Hallo! Hebben jullie nog plek morgen voor een knipbeurt?', time:'10:12' },
+      { dir:'out', text:'Goedemiddag Marie! Ja, we hebben morgen nog plaatsen vrij. Welk tijdstip past u het beste?', time:'10:12', sender:'Bot' },
+      { dir:'in',  text:'Super! Is 14:00 mogelijk?', time:'10:14' },
+      { dir:'in',  text:'Kan ik morgen een afspraak maken?', time:'10:15' },
+    ],
+    suggestion: 'Ja, 14:00 is beschikbaar! Ik heb u ingeschreven. Tot morgen, Marie! 😊',
+  },
+  {
+    id: 'c2', channel: 'telegram', name: 'Thomas Bakker', company: 'AutoDeal',
+    mode: 'bot', unread: 1, time: '15 min ago',
+    preview: 'Wat is de prijs van de Golf?',
+    messages: [
+      { dir:'in',  text:'Goedemiddag, ik ben geïnteresseerd in de Volkswagen Golf op uw site.', time:'09:45' },
+      { dir:'out', text:'Dag Thomas! De VW Golf 2022 staat bij ons voor €24.500. Wilt u meer weten of een proefrit plannen?', time:'09:46', sender:'Bot' },
+      { dir:'in',  text:'Wat is de prijs van de Golf?', time:'09:58' },
+    ],
+    suggestion: 'De VW Golf 2022 staat bij ons voor €24.500 inclusief garantie. Wilt u hem ook bekijken of een proefrit plannen?',
+  },
+  {
+    id: 'c3', channel: 'instagram', name: 'sophie_beauty', company: 'Beauty Studio',
+    mode: 'human', unread: 0, time: '1 hour ago',
+    preview: 'Do you do lash extensions?',
+    messages: [
+      { dir:'in',  text:'Hi! Do you do lash extensions?', time:'08:30' },
+      { dir:'out', text:'Yes we do! We offer classic, hybrid and volume lashes. Would you like to book a consultation? 💕', time:'08:31', sender:'Bot' },
+      { dir:'in',  text:'Amazing! How much for volume?', time:'08:33' },
+      { dir:'out', text:'Volume lashes start from €75. We can book you in this week if you like! 🌟', time:'08:45', sender:'Operator' },
+      { dir:'in',  text:'Perfect, Thursday works for me!', time:'08:50' },
+    ],
+    suggestion: 'Great! I\'ve booked you in for Thursday. What time works best for you — morning or afternoon?',
+  },
+  {
+    id: 'c4', channel: 'whatsapp', name: 'Jan de Vries', company: 'AutoDeal',
+    mode: 'bot', unread: 3, time: '2 hours ago',
+    preview: 'Wanneer zijn jullie open?',
+    messages: [
+      { dir:'in',  text:'Hallo, wanneer zijn jullie open?', time:'07:20' },
+      { dir:'out', text:'Wij zijn open ma-vr van 9:00-18:00 en op zaterdag van 10:00-16:00. Waarmee kan ik u helpen?', time:'07:20', sender:'Bot' },
+      { dir:'in',  text:'Ik zoek een tweedehands auto onder €15.000', time:'07:22' },
+      { dir:'out', text:'We hebben momenteel 12 auto\'s beschikbaar onder €15.000. Heeft u voorkeur voor merk of type?', time:'07:23', sender:'Bot' },
+      { dir:'in',  text:'Liefst een SUV', time:'07:25' },
+      { dir:'in',  text:'Of een combi is ook goed', time:'07:25' },
+      { dir:'in',  text:'Wanneer zijn jullie open?', time:'07:30' },
+    ],
+    suggestion: 'We hebben 3 SUV\'s en 2 combi\'s beschikbaar onder €15.000. Zal ik u een overzicht sturen of wilt u langskomen voor een kijkje?',
+  },
+  {
+    id: 'c5', channel: 'messenger', name: 'Alex Martens', company: 'Advocaat NL',
+    mode: 'bot', unread: 0, time: 'Yesterday',
+    preview: 'I need legal advice about my contract',
+    messages: [
+      { dir:'in',  text:'Hello, I need legal advice about a contract dispute with my employer.', time:'Yesterday' },
+      { dir:'out', text:'Good afternoon! I\'d be happy to help with your contract dispute. Could you briefly describe the situation?', time:'Yesterday', sender:'Bot' },
+      { dir:'in',  text:'My employer is refusing to pay my final month salary after I resigned.', time:'Yesterday' },
+      { dir:'out', text:'That is a clear case of wage theft. You have the right to claim your full salary. I recommend we schedule a consultation to review your contract. Shall I check availability?', time:'Yesterday', sender:'Bot' },
+      { dir:'in',  text:'I need legal advice about my contract', time:'Yesterday' },
+    ],
+    suggestion: 'Of course. Based on what you\'ve described, you have strong grounds to claim your unpaid salary. Let me arrange a free 30-minute consultation — would this week work for you?',
+  },
+];
+
+let activeChat = null;
+let editMode = false;
+const $ = id => document.getElementById(id);
+
+// ── Render chat list ──────────────────────────────────────────────────────────
+function chIcon(ch) {
+  return ch==='instagram'?'📷':ch==='telegram'?'✈️':ch==='whatsapp'?'💬':ch==='messenger'?'💬':'💬';
+}
+function avClass(ch) {
+  return ch==='instagram'?'av-ig':ch==='telegram'?'av-tg':ch==='whatsapp'?'av-wa':ch==='messenger'?'av-ms':'av-default';
+}
+function dotClass(ch) {
+  return ch==='instagram'?'dot-ig':ch==='telegram'?'dot-tg':ch==='whatsapp'?'dot-wa':ch==='messenger'?'dot-ms':'';
+}
+function badgeClass(ch) {
+  return ch==='instagram'?'badge-ig':ch==='telegram'?'badge-tg':ch==='whatsapp'?'badge-wa':ch==='messenger'?'badge-ms':'';
+}
+
+function renderList() {
+  $('chatList').innerHTML = CHATS.map(c => `
+    <div class="chat-item${activeChat?.id===c.id?' active':''}" onclick="openChat('${c.id}')">
+      <div class="avatar ${avClass(c.channel)}">
+        ${c.name.charAt(0).toUpperCase()}
+        <div class="ch-dot ${dotClass(c.channel)}">${chIcon(c.channel)}</div>
+      </div>
+      <div class="chat-info">
+        <div class="chat-name-row">
+          <div class="chat-name">${c.name}</div>
+          <div class="chat-time">${c.time}</div>
+        </div>
+        <div class="chat-preview">${c.preview}</div>
+        <div class="chat-chips">
+          <span class="badge ${badgeClass(c.channel)}">${chIcon(c.channel)} ${c.channel}</span>
+          <span class="badge ${c.mode==='human'?'badge-human':'badge-bot'}">${c.mode}</span>
+          ${c.unread>0?`<span class="badge badge-unread">${c.unread}</span>`:''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── Open chat ─────────────────────────────────────────────────────────────────
+function openChat(id) {
+  activeChat = CHATS.find(c => c.id === id);
+  if (!activeChat) return;
+  activeChat.unread = 0;
+  hideSug();
+  renderList();
+
+  const topbar = $('chatTopbar');
+  topbar.innerHTML = `
+    <div>
+      <div class="chat-topbar-name">${activeChat.name}</div>
+      <div class="chat-topbar-meta">${chIcon(activeChat.channel)} ${activeChat.channel} · ${activeChat.company}</div>
+      <div class="chat-facts">
+        <div class="chat-fact"><div class="chat-fact-label">Customer</div><div class="chat-fact-value">${activeChat.name}</div></div>
+        <div class="chat-fact"><div class="chat-fact-label">Channel</div><div class="chat-fact-value">${activeChat.channel}</div></div>
+        <div class="chat-fact"><div class="chat-fact-label">Bot</div><div class="chat-fact-value">${activeChat.company}</div></div>
+      </div>
+      <div style="margin-top:8px;font-size:12px;color:var(--muted);">
+        · <span class="mode-pill ${activeChat.mode}">${activeChat.mode==='human'?'👤 Human':'🤖 Bot'}</span>
+      </div>
+    </div>
+    <button class="takeover-btn${activeChat.mode==='human'?' active':''}" onclick="toggleMode()">
+      ${activeChat.mode==='human'?'👤 Release to bot':'🤖 Take over'}
+    </button>
+  `;
+
+  renderMessages();
+  setTimeout(() => showSug(activeChat.suggestion), 600);
+}
+
+// ── Render messages ───────────────────────────────────────────────────────────
+function renderMessages(extra) {
+  const msgs = [...activeChat.messages, ...(extra||[])];
+  const el = $('messagesArea');
+  el.innerHTML = msgs.map(m => `
+    <div class="msg-group ${m.dir}">
+      <div class="msg-sender">${m.dir==='out' ? (m.sender||'Bot') + ' · ' + activeChat.company : 'Customer · ' + activeChat.name}</div>
+      <div class="msg ${m.dir}">${m.text}</div>
+      <div class="msg-time">${m.time}</div>
+    </div>
+  `).join('');
+  el.scrollTop = el.scrollHeight;
+}
+
+// ── Suggestion ────────────────────────────────────────────────────────────────
+function showSug(text) {
+  if (!text) return;
+  $('sugText').contentEditable = 'false';
+  $('sugText').textContent = text;
+  $('sugGenerating').style.display = 'none';
+  $('suggestionPanel').style.display = '';
+  editMode = false;
+}
+
+function hideSug() {
+  $('suggestionPanel').style.display = 'none';
+  editMode = false;
+}
+
+function toggleDemoEdit() {
+  editMode = !editMode;
+  const el = $('sugText');
+  el.contentEditable = editMode ? 'true' : 'false';
+  if (editMode) {
+    el.focus();
+    const r = document.createRange(); r.selectNodeContents(el); r.collapse(false);
+    const s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+  }
+}
+
+const REGEN_VARIANTS = [
+  idx => [
+    'Perfect, we have availability! Shall I book you in for 14:00 tomorrow then?',
+    'Ja, 14:00 is prima! Uw afspraak is geregistreerd. Tot morgen! 😊',
+    'Super! 14u is vrij. Mag ik uw naam voor de reservering?',
+    'Great choice! I\'ll get that booked right away.',
+  ][idx % 4],
+];
+
+let regenCount = 0;
+function demoRegen() {
+  if (!activeChat) return;
+  hideSug();
+  $('sugGenerating').style.display = '';
+  $('suggestionPanel').style.display = '';
+  $('sugText').textContent = '';
+  setTimeout(() => {
+    regenCount++;
+    const variants = [
+      activeChat.suggestion,
+      activeChat.suggestion.split('.')[0] + '. Can I help with anything else?',
+      'Of course! ' + activeChat.suggestion,
+      activeChat.suggestion + ' Looking forward to hearing from you!',
+    ];
+    showSug(variants[regenCount % variants.length]);
+  }, 1200);
+}
+
+function demoSend() {
+  const text = $('sugText').textContent.trim();
+  if (!text) return;
+  const compose = $('composeInput');
+  compose.value = text;
+  hideSug();
+  demoSendManual();
+}
+
+function demoSendManual() {
+  const compose = $('composeInput');
+  const text = compose.value.trim();
+  if (!text || !activeChat) return;
+
+  const now = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  activeChat.messages.push({ dir:'out', text, time: now, sender:'Operator' });
+  compose.value = '';
+  compose.style.height = 'auto';
+  renderMessages();
+  hideSug();
+
+  // Show toast
+  const toast = document.createElement('div');
+  toast.className = 'demo-sent-flash';
+  toast.textContent = '✓ Message sent to ' + activeChat.name;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2000);
+
+  // Simulate customer typing then replying
+  setTimeout(() => {
+    const el = $('messagesArea');
+    const typingHtml = `<div class="msg-group in" id="typing-indicator">
+      <div class="msg-sender">Customer · ${activeChat.name}</div>
+      <div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>
+    </div>`;
+    el.insertAdjacentHTML('beforeend', typingHtml);
+    el.scrollTop = el.scrollHeight;
+
+    const replies = [
+      'Super, dank u!', 'Perfect, thank you!', 'Geweldig, tot dan!',
+      'Great, I\'ll be there!', 'Fantastisch, bedankt!', 'Ok perfect 👍',
+    ];
+    const reply = replies[Math.floor(Math.random() * replies.length)];
+
+    setTimeout(() => {
+      const typing = document.getElementById('typing-indicator');
+      if (typing) typing.remove();
+      const t = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+      activeChat.messages.push({ dir:'in', text: reply, time: t });
+      renderMessages();
+
+      // Show new AI suggestion after customer reply
+      setTimeout(() => {
+        const newSugs = [
+          'Graag gedaan! Als u nog vragen heeft, staan wij voor u klaar. 😊',
+          'You\'re welcome! Feel free to reach out if you need anything else.',
+          'Geen probleem! Tot ziens! 👋',
+          'Perfect! See you soon. Have a great day! ✨',
+        ];
+        showSug(newSugs[Math.floor(Math.random() * newSugs.length)]);
+      }, 800);
+    }, 2000);
+  }, 800);
+}
+
+// ── Takeover toggle ───────────────────────────────────────────────────────────
+function toggleMode() {
+  if (!activeChat) return;
+  activeChat.mode = activeChat.mode === 'bot' ? 'human' : 'bot';
+  openChat(activeChat.id);
+}
+
+// ── Filter tabs (visual only) ─────────────────────────────────────────────────
+document.querySelectorAll('.ftab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.ftab').forEach(x => x.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+// ── Compose textarea auto-grow ────────────────────────────────────────────────
+$('composeInput').addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 140) + 'px';
+});
+$('composeInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); demoSendManual(); }
+});
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+renderList();
+openChat('c1');
+</script>
+</body>
+</html>

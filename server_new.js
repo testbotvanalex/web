@@ -627,6 +627,10 @@ app.get('/inbox', requireAdminAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'inbox.html'));
 });
 
+app.get('/demo', (req, res) => {
+  res.sendFile(path.join(__dirname, 'demo.html'));
+});
+
 app.get('/start', (req, res) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
   res.sendFile(path.join(__dirname, 'start.html'));
