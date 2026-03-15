@@ -289,6 +289,64 @@
     .btn-send:hover:not(:disabled) { box-shadow: 0 4px 16px rgba(124,58,237,0.4); }
     .btn-send:disabled { opacity: .5; cursor: default; }
 
+    /* ── AI Suggestion Panel ── */
+    .suggestion-panel {
+      border-top: 1px solid var(--border);
+      padding: 12px 24px 14px;
+      background: linear-gradient(135deg, rgba(124,58,237,0.04) 0%, rgba(219,39,119,0.03) 100%);
+      flex-shrink: 0;
+    }
+    .suggestion-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .suggestion-label {
+      font-size: 10px; font-weight: 700; letter-spacing: .07em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #7c3aed, #db2777);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .suggestion-label svg { flex-shrink: 0; }
+    .sug-generating {
+      font-size: 12px; color: var(--muted);
+      display: flex; align-items: center; gap: 5px;
+    }
+    .sug-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); animation: sugPulse 1s infinite;
+    }
+    @keyframes sugPulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    .suggestion-text {
+      font-size: 14px; color: var(--text); line-height: 1.5;
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 8px; padding: 10px 13px; margin-bottom: 10px;
+      white-space: pre-wrap; word-break: break-word;
+      min-height: 38px; outline: none; transition: border-color .15s;
+    }
+    .suggestion-text:focus,
+    .suggestion-text[contenteditable="true"]:focus { border-color: var(--accent); background: #fff; }
+
+    .suggestion-actions { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+    .sug-btn {
+      padding: 6px 13px; border-radius: 8px; font-size: 12px; font-weight: 600;
+      cursor: pointer; font-family: inherit; transition: all .15s;
+      border: 1px solid var(--border); background: var(--surface2); color: var(--text);
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .sug-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(124,58,237,0.06); }
+    .sug-btn:disabled { opacity: .45; cursor: default; pointer-events: none; }
+    .sug-btn-send {
+      background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff;
+      border-color: transparent;
+      box-shadow: 0 2px 8px rgba(124,58,237,0.28);
+    }
+    .sug-btn-send:hover { box-shadow: 0 4px 14px rgba(124,58,237,0.38); color: #fff; background: linear-gradient(135deg,#6d28d9,#5b21b6); border-color: transparent; }
+    .sug-btn-edit.is-editing { border-color: var(--accent); color: var(--accent); background: rgba(124,58,237,0.08); }
+    .sug-btn-dismiss { margin-left: auto; color: var(--muted); }
+    .sug-btn-dismiss:hover { border-color: var(--red); color: var(--red); background: rgba(220,38,38,0.06); }
+
     /* ── Empty states ── */
     .empty {
       display: flex; flex-direction: column; align-items: center;
@@ -393,6 +451,35 @@
             <div>Pick one from the left</div>
           </div>
         </div>
+        <!-- AI Suggestion Panel -->
+        <div id="suggestionPanel" class="suggestion-panel" style="display:none;">
+          <div class="suggestion-header">
+            <span class="suggestion-label">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="-webkit-text-fill-color:unset;background:none;"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z"/></svg>
+              AI Suggestion
+            </span>
+            <span id="sugGenerating" class="sug-generating" style="display:none;">
+              <span class="sug-dot"></span> Generating…
+            </span>
+          </div>
+          <div id="sugText" class="suggestion-text" contenteditable="false"></div>
+          <div class="suggestion-actions">
+            <button class="sug-btn sug-btn-send" id="sugSendBtn" onclick="sendSuggestion()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Use reply
+            </button>
+            <button class="sug-btn sug-btn-edit" id="sugEditBtn" onclick="toggleSugEdit()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Edit
+            </button>
+            <button class="sug-btn sug-btn-regen" id="sugRegenBtn" onclick="regenerateSuggestion()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.6"/></svg>
+              Regenerate
+            </button>
+            <button class="sug-btn sug-btn-dismiss" onclick="dismissSuggestion()">Dismiss</button>
+          </div>
+        </div>
+
         <div class="composer">
           <textarea id="composeInput" class="compose-input" placeholder="Type your reply… (Enter to send)" rows="1"></textarea>
           <button id="sendBtn" class="btn-send">
@@ -411,6 +498,110 @@ const API = '/api/admin';
 const pageParams = new URLSearchParams(location.search);
 const scopedBotId = pageParams.get('botId') || '';
 const S = { chats: [], filtered: [], active: null, filter: 'all', q: '' };
+
+// ── AI Suggestion state ───────────────────────────────────────────────────────
+let _sug = null;           // current suggestion object
+let _sugEditing = false;   // edit mode flag
+
+const sugPanel    = () => document.getElementById('suggestionPanel');
+const sugTextEl   = () => document.getElementById('sugText');
+const sugGenEl    = () => document.getElementById('sugGenerating');
+const sugEditBtn  = () => document.getElementById('sugEditBtn');
+const sugSendBtn  = () => document.getElementById('sugSendBtn');
+const sugRegenBtn = () => document.getElementById('sugRegenBtn');
+
+function _showSuggestion(sug) {
+  _sug = sug;
+  _sugEditing = false;
+  const el = sugTextEl();
+  el.contentEditable = 'false';
+  el.textContent = sug.suggestion_text || '';
+  sugEditBtn().classList.remove('is-editing');
+  sugGenEl().style.display = 'none';
+  sugPanel().style.display = '';
+}
+
+function _hideSuggestion() {
+  sugPanel().style.display = 'none';
+  _sug = null;
+  _sugEditing = false;
+}
+
+function _setRegenLoading(on) {
+  sugGenEl().style.display = on ? '' : 'none';
+  if (on) { sugTextEl().textContent = ''; }
+  [sugSendBtn(), sugEditBtn(), sugRegenBtn()].forEach(b => { if (b) b.disabled = on; });
+}
+
+async function loadSuggestion(chatId) {
+  try {
+    const d = await fetch(`${API}/chats/${chatId}/suggestion`).then(r => r.json());
+    if (d.suggestion) {
+      _showSuggestion(d.suggestion);
+    } else {
+      _hideSuggestion();
+    }
+  } catch (_) {
+    _hideSuggestion();
+  }
+}
+
+function sendSuggestion() {
+  if (!_sug) return;
+  const text = (sugTextEl().textContent || '').trim();
+  if (!text) return;
+  // Put text into the compose box and send
+  composeEl.value = text;
+  composeEl.style.height = 'auto';
+  composeEl.style.height = Math.min(composeEl.scrollHeight, 140) + 'px';
+  _hideSuggestion();
+  sendMessage();
+}
+
+function toggleSugEdit() {
+  _sugEditing = !_sugEditing;
+  const el = sugTextEl();
+  el.contentEditable = _sugEditing ? 'true' : 'false';
+  sugEditBtn().classList.toggle('is-editing', _sugEditing);
+  if (_sugEditing) {
+    el.focus();
+    // Move cursor to end
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    range.collapse(false);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+}
+
+async function regenerateSuggestion() {
+  if (!S.active) return;
+  _setRegenLoading(true);
+  sugPanel().style.display = '';
+  try {
+    const d = await fetch(`${API}/chats/${S.active.id}/suggestion/regenerate`, {
+      method: 'POST',
+    }).then(r => r.json());
+    if (d.suggestion) {
+      _showSuggestion(d.suggestion);
+    } else {
+      _hideSuggestion();
+    }
+  } catch (_) {
+    _hideSuggestion();
+  } finally {
+    _setRegenLoading(false);
+  }
+}
+
+async function dismissSuggestion() {
+  if (!S.active) return _hideSuggestion();
+  _hideSuggestion();
+  try {
+    await fetch(`${API}/chats/${S.active.id}/suggestion/discard`, { method: 'POST' });
+  } catch (_) {}
+}
 
 const $ = id => document.getElementById(id);
 const chatListEl   = $('chatList');
@@ -586,6 +777,7 @@ async function openChat(chatId) {
   const chat = S.chats.find(x=>x.id===chatId);
   if (!chat) return;
   S.active = chat;
+  _hideSuggestion(); // clear previous chat's suggestion
   renderList();
 
   chatTopbarEl.innerHTML = `
@@ -627,6 +819,9 @@ async function openChat(chatId) {
 
     renderMessages(msgs);
     messagesEl.scrollTop = messagesEl.scrollHeight;
+
+    // Load AI suggestion for this chat
+    loadSuggestion(chat.id);
   } catch(e) {}
 }
 
@@ -694,6 +889,8 @@ async function init() {
         const atBottom = messagesEl.scrollHeight - messagesEl.scrollTop - messagesEl.clientHeight < 60;
         renderMessages(msgs);
         if (atBottom) messagesEl.scrollTop = messagesEl.scrollHeight;
+        // Refresh suggestion if none is currently showing
+        if (!_sug) loadSuggestion(prevId);
       } catch(e) {}
     }
   }, 4000);

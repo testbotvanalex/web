@@ -5,6 +5,40 @@ const D = require('../db');
 
 const BASE_URL = process.env.BASE_URL || 'https://admin.botmatic.be';
 
+// ── OpenAI client for suggestion regeneration ─────────────────────────────────
+let _adminOAI = null;
+try {
+  if (process.env.OPENAI_API_KEY) {
+    const { OpenAI } = require('openai');
+    _adminOAI = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  }
+} catch (_) {}
+
+const SUGGESTION_SYSTEM_PROMPT =
+  'You are a customer support assistant helping a business operator reply to customer messages.\n' +
+  'Write a short, natural reply in the same language as the customer.\n' +
+  'Keep it concise and professional.\n' +
+  'Output only the reply text.';
+
+async function _buildSuggestion(chat) {
+  if (!_adminOAI) return null;
+  const history = D.messages.historyByThread.all(
+    chat.client_id, chat.channel, chat.sender_id, 10
+  );
+  if (!history.length) return null;
+  const histMsgs = [...history].reverse().map(m => ({
+    role: m.direction === 'out' ? 'assistant' : 'user',
+    content: m.text || '',
+  }));
+  const resp = await _adminOAI.chat.completions.create({
+    model: process.env.OPENAI_MODEL || 'gpt-4.1-mini',
+    messages: [{ role: 'system', content: SUGGESTION_SYSTEM_PROMPT }, ...histMsgs],
+    max_tokens: 500,
+    temperature: 0.7,
+  });
+  return resp.choices[0].message.content?.trim() || null;
+}
+
 async function setupTelegramWebhook(channelId, token) {
   const url = `${BASE_URL}/webhook/telegram/${channelId}`;
   await axios.post(`https://api.telegram.org/bot${token}/setWebhook`, {
@@ -534,6 +568,65 @@ router.post('/send-message', async (req, res) => {
     console.error('[send-message]', e.response?.data || e.message);
     err(res, e.response?.data?.error?.message || e.message, 500);
   }
+});
+
+// ── AI Suggestions ────────────────────────────────────────────────────────────
+
+// GET  /api/admin/chats/:chatId/suggestion
+// Returns the latest pending suggestion (or null)
+router.get('/chats/:chatId/suggestion', (req, res) => {
+  try {
+    const chat = D.chats.byId.get(req.params.chatId);
+    if (!chat) return err(res, 'chat not found', 404);
+    const suggestion = D.suggestions.getLatest.get(chat.id);
+    ok(res, { suggestion: suggestion || null });
+  } catch (e) { err(res, e.message, 500); }
+});
+
+// POST /api/admin/chats/:chatId/suggestion/regenerate
+// Discards current pending suggestion, generates and stores a new one
+router.post('/chats/:chatId/suggestion/regenerate', async (req, res) => {
+  try {
+    const chat = D.chats.byId.get(req.params.chatId);
+    if (!chat) return err(res, 'chat not found', 404);
+
+    // Discard any existing pending suggestion
+    const existing = D.suggestions.getLatest.get(chat.id);
+    if (existing) D.suggestions.updateStatus.run('discarded', Date.now(), existing.id);
+
+    if (!_adminOAI) return ok(res, { suggestion: null, reason: 'OPENAI_API_KEY not set' });
+
+    const text = await _buildSuggestion(chat);
+    if (!text) return ok(res, { suggestion: null, reason: 'No history to suggest from' });
+
+    const newSug = {
+      id:              D.genId('sug_'),
+      chat_id:         chat.id,
+      message_id:      null,
+      suggestion_text: text,
+      status:          'pending',
+      created_at:      Date.now(),
+      updated_at:      Date.now(),
+    };
+    D.suggestions.insert.run(newSug);
+
+    ok(res, { suggestion: newSug });
+  } catch (e) {
+    console.error('[suggestion/regenerate]', e.message);
+    err(res, e.message, 500);
+  }
+});
+
+// POST /api/admin/chats/:chatId/suggestion/discard
+// Marks current pending suggestion as discarded
+router.post('/chats/:chatId/suggestion/discard', (req, res) => {
+  try {
+    const chat = D.chats.byId.get(req.params.chatId);
+    if (!chat) return err(res, 'chat not found', 404);
+    const sug = D.suggestions.getLatest.get(chat.id);
+    if (sug) D.suggestions.updateStatus.run('discarded', Date.now(), sug.id);
+    ok(res, { discarded: true });
+  } catch (e) { err(res, e.message, 500); }
 });
 
 module.exports = router;

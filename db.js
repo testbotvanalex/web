@@ -117,6 +117,16 @@ db.exec(`
     created_at  TEXT DEFAULT (datetime('now'))
   );
 
+  CREATE TABLE IF NOT EXISTS ai_suggestions (
+    id              TEXT PRIMARY KEY,
+    chat_id         TEXT NOT NULL,
+    message_id      TEXT,
+    suggestion_text TEXT,
+    status          TEXT DEFAULT 'pending',
+    created_at      INTEGER DEFAULT (CAST(strftime('%s','now') * 1000 AS INTEGER)),
+    updated_at      INTEGER DEFAULT (CAST(strftime('%s','now') * 1000 AS INTEGER))
+  );
+
   CREATE INDEX IF NOT EXISTS idx_bots_client        ON bots(client_id);
   CREATE INDEX IF NOT EXISTS idx_channels_client    ON channels(client_id);
   CREATE INDEX IF NOT EXISTS idx_tasks_client       ON tasks(client_id);
@@ -127,6 +137,7 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_chats_last_message ON chats(last_message_at);
   CREATE INDEX IF NOT EXISTS idx_activity_client    ON activity_log(client_id);
   CREATE INDEX IF NOT EXISTS idx_clients_status     ON clients(status);
+  CREATE INDEX IF NOT EXISTS idx_suggestions_chat   ON ai_suggestions(chat_id);
 `);
 
 // ── Migrations (safe: ignore if column already exists) ────────────────────────
@@ -375,6 +386,37 @@ const chatQ = {
   `),
 };
 
+// ── AI Suggestions ────────────────────────────────────────────────────────────
+
+const suggestionQ = {
+  insert: db.prepare(`
+    INSERT INTO ai_suggestions (id, chat_id, message_id, suggestion_text, status, created_at, updated_at)
+    VALUES (@id, @chat_id, @message_id, @suggestion_text, @status, @created_at, @updated_at)
+  `),
+
+  // Get the most recent pending suggestion for a chat
+  getLatest: db.prepare(`
+    SELECT * FROM ai_suggestions
+    WHERE chat_id = ? AND status = 'pending'
+    ORDER BY created_at DESC LIMIT 1
+  `),
+
+  // Get any (including sent/discarded) for dedup — used to check if a suggestion was ever made for a chat recently
+  getLatestAny: db.prepare(`
+    SELECT * FROM ai_suggestions
+    WHERE chat_id = ?
+    ORDER BY created_at DESC LIMIT 1
+  `),
+
+  updateStatus: db.prepare(`
+    UPDATE ai_suggestions SET status = ?, updated_at = ? WHERE id = ?
+  `),
+
+  updateText: db.prepare(`
+    UPDATE ai_suggestions SET suggestion_text = ?, status = 'pending', updated_at = ? WHERE id = ?
+  `),
+};
+
 // ── Activity ──────────────────────────────────────────────────────────────────
 
 const activityQ = {
@@ -413,12 +455,13 @@ module.exports = {
   genId,
   touch,
   log,
-  clients:  clientQ,
-  bots:     botQ,
-  channels: channelQ,
-  tasks:    taskQ,
-  messages: messageQ,
-  chats:    chatQ,
-  activity: activityQ,
-  stats:    statsQ,
+  clients:     clientQ,
+  bots:        botQ,
+  channels:    channelQ,
+  tasks:       taskQ,
+  messages:    messageQ,
+  chats:       chatQ,
+  suggestions: suggestionQ,
+  activity:    activityQ,
+  stats:       statsQ,
 };

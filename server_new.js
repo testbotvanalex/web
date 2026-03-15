@@ -206,6 +206,10 @@ function saveMessageToDb(clientId, channel, senderId, text, direction, raw) {
           sender_name: threadSenderId,
           last_message_at: now,
         });
+        // Fire-and-forget AI suggestion for inbox operators
+        if (typeof generateAndStoreSuggestion === 'function') {
+          generateAndStoreSuggestion(clientId, channel, threadSenderId).catch(() => {});
+        }
       } else {
         D.chats.touchOutgoing.run({
           id: chat.id,
@@ -3157,6 +3161,60 @@ const openaiClient = process.env.OPENAI_API_KEY
   : null;
 
 if (!openaiClient) console.warn('[OpenAI] OPENAI_API_KEY not set — bots will reply with fallback text');
+
+// ── AI Suggestion for Inbox operators ────────────────────────────────────────
+
+async function generateAndStoreSuggestion(clientId, channel, senderId) {
+  if (!openaiClient) return;
+  try {
+    const chat = D.chats.byThread.get(clientId, channel, senderId);
+    if (!chat) return;
+
+    // Dedup: skip if there's already a pending suggestion for this chat
+    const existing = D.suggestions.getLatest.get(chat.id);
+    if (existing) return;
+
+    // Get recent conversation history (last 10 messages, DESC)
+    const history = D.messages.historyByThread.all(clientId, channel, senderId, 10);
+    if (!history.length) return;
+
+    // Reverse to chronological order for the prompt
+    const histMsgs = [...history].reverse().map(m => ({
+      role: m.direction === 'out' ? 'assistant' : 'user',
+      content: m.text || '',
+    }));
+
+    const response = await openaiClient.chat.completions.create({
+      model: process.env.OPENAI_MODEL || 'gpt-4.1-mini',
+      messages: [
+        {
+          role: 'system',
+          content: 'You are a customer support assistant helping a business operator reply to customer messages.\nWrite a short, natural reply in the same language as the customer.\nKeep it concise and professional.\nOutput only the reply text.',
+        },
+        ...histMsgs,
+      ],
+      max_tokens: 500,
+      temperature: 0.7,
+    });
+
+    const text = response.choices[0].message.content?.trim();
+    if (!text) return;
+
+    D.suggestions.insert.run({
+      id:              D.genId('sug_'),
+      chat_id:         chat.id,
+      message_id:      null,
+      suggestion_text: text,
+      status:          'pending',
+      created_at:      Date.now(),
+      updated_at:      Date.now(),
+    });
+
+    console.log(`[AI Suggestion] Generated for chat ${chat.id}`);
+  } catch (e) {
+    console.error('[AI Suggestion] Error:', e.message);
+  }
+}
 
 async function askOpenAI(bot, userMessage, history = []) {
   if (!openaiClient) return null;
