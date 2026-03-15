@@ -148,10 +148,16 @@
 
     <div class="content">
       <div class="stats-row">
-        <div class="stat-card"><div class="stat-label">Всего workspaces</div><div class="stat-value accent" id="st-total">—</div><div class="stat-sub" id="st-live-sub">— live</div></div>
+        <div class="stat-card"><div class="stat-label">Workspaces</div><div class="stat-value accent" id="st-total">—</div><div class="stat-sub" id="st-live-sub">— live</div></div>
         <div class="stat-card"><div class="stat-label">Сообщений сегодня</div><div class="stat-value green" id="st-today">—</div><div class="stat-sub" id="st-week-sub">— за неделю</div></div>
-        <div class="stat-card"><div class="stat-label">Каналов активно</div><div class="stat-value blue" id="st-ch">—</div><div class="stat-sub">подключено</div></div>
-        <div class="stat-card"><div class="stat-label">Всего сообщений</div><div class="stat-value yellow" id="st-total-msg">—</div><div class="stat-sub" id="st-tasks-sub">— открытых задач</div></div>
+        <div class="stat-card" style="cursor:pointer" onclick="location='/inbox'"><div class="stat-label">Непрочитанных чатов</div><div class="stat-value" id="st-unread" style="color:var(--red)">—</div><div class="stat-sub" id="st-human-sub">— ждут ответа</div></div>
+        <div class="stat-card"><div class="stat-label">Чатов сегодня</div><div class="stat-value blue" id="st-chats-today">—</div><div class="stat-sub" id="st-tasks-sub">— открытых задач</div></div>
+      </div>
+
+      <div id="attentionBanner" style="display:none;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.25);border-radius:12px;padding:14px 20px;margin-bottom:16px;display:none;align-items:center;gap:14px;">
+        <span style="font-size:22px">🔔</span>
+        <div style="flex:1"><strong id="attentionTitle" style="font-size:14px">Непрочитанных чатов</strong><div id="attentionSub" style="font-size:12px;color:var(--muted);margin-top:2px">Требуется ответ</div></div>
+        <a href="/inbox" style="background:var(--red);color:#fff;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;flex-shrink:0">Открыть Inbox →</a>
       </div>
 
       <div class="quick-grid">
@@ -161,7 +167,7 @@
         </a>
         <a href="/inbox" class="quick-btn">
           <div class="quick-icon qi-b">💬</div>
-          <div class="quick-text"><strong>Inbox</strong><span>Входящие сообщения</span></div>
+          <div class="quick-text"><strong>Inbox</strong><span id="inboxSubText">Входящие сообщения</span></div>
         </a>
         <a href="/analytics" class="quick-btn">
           <div class="quick-icon qi-g">📊</div>
@@ -226,13 +232,33 @@ async function load() {
       fetch('/api/admin/clients').then(r=>r.json()),
     ]);
     const ov = s.overview;
-    document.getElementById('st-total').textContent     = ov.total_clients;
-    document.getElementById('st-live-sub').textContent  = `${ov.live_clients} live`;
-    document.getElementById('st-today').textContent     = ov.messages_today;
-    document.getElementById('st-week-sub').textContent  = `${ov.messages_week} за неделю`;
-    document.getElementById('st-ch').textContent        = ov.connected_channels;
-    document.getElementById('st-total-msg').textContent = ov.messages_total;
-    document.getElementById('st-tasks-sub').textContent = `${ov.open_tasks} открытых задач`;
+    document.getElementById('st-total').textContent       = ov.total_clients;
+    document.getElementById('st-live-sub').textContent    = `${ov.live_clients} live`;
+    document.getElementById('st-today').textContent       = ov.messages_today;
+    document.getElementById('st-week-sub').textContent    = `${ov.messages_week} за неделю`;
+    const unread = ov.chats_unread || 0;
+    const human  = ov.chats_human  || 0;
+    document.getElementById('st-unread').textContent      = unread;
+    document.getElementById('st-unread').style.color      = unread > 0 ? 'var(--red)' : 'var(--green)';
+    document.getElementById('st-human-sub').textContent   = `${human} ждут ответа`;
+    document.getElementById('st-chats-today').textContent = ov.chats_today || 0;
+    document.getElementById('st-tasks-sub').textContent   = `${ov.open_tasks} открытых задач`;
+
+    // Attention banner
+    const banner = document.getElementById('attentionBanner');
+    if (unread > 0 || human > 0) {
+      banner.style.display = 'flex';
+      document.getElementById('attentionTitle').textContent = unread > 0
+        ? `${unread} непрочитанных чата`
+        : `${human} чата ждут ответа`;
+      document.getElementById('attentionSub').textContent = unread > 0
+        ? `${human} передано на ручное управление`
+        : 'Бот переключён в ручной режим';
+      document.getElementById('inboxSubText').textContent = `${unread} непрочитанных`;
+    } else {
+      banner.style.display = 'none';
+      document.getElementById('inboxSubText').textContent = 'Входящие сообщения';
+    }
 
     const bm={}; (s.byStatus||[]).forEach(r=>bm[r.status]=r.count);
     const mx=Math.max(1,...Object.values(bm));

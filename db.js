@@ -442,7 +442,10 @@ const statsQ = {
       (SELECT COUNT(*) FROM tasks WHERE status != 'done') AS open_tasks,
       (SELECT COUNT(*) FROM messages WHERE direction = 'in' AND date(created_at) = date('now')) AS messages_today,
       (SELECT COUNT(*) FROM messages WHERE direction = 'in') AS messages_total,
-      (SELECT COUNT(*) FROM messages WHERE direction = 'in' AND date(created_at) >= date('now','-7 days')) AS messages_week
+      (SELECT COUNT(*) FROM messages WHERE direction = 'in' AND date(created_at) >= date('now','-7 days')) AS messages_week,
+      (SELECT COUNT(*) FROM chats WHERE unread_count > 0) AS chats_unread,
+      (SELECT COUNT(*) FROM chats WHERE mode = 'human') AS chats_human,
+      (SELECT COUNT(*) FROM chats WHERE date(last_message_at) = date('now')) AS chats_today
   `),
 
   byStatus: db.prepare(`

@@ -669,6 +669,7 @@ function renderList() {
   const su = $('sideUnread');
   su.style.display = unread > 0 ? '' : 'none';
   su.textContent = unread;
+  document.title = unread > 0 ? `(${unread}) BotMatic — Inbox` : 'BotMatic — Inbox';
 
   if (!S.filtered.length) {
     chatListEl.innerHTML = `<div class="empty" style="padding:40px 0;"><div class="empty-icon">🔍</div><div>No chats found</div></div>`;
