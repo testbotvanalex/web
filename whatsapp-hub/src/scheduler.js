@@ -88,6 +88,16 @@ async function checkReminders() {
             ux_greeting: '👋 Приветствие',
             doc_menu: '📋 Меню документов',
             doc_fill: '✍️ Заполнение документа',
+            doc_confirm: '✅ Подтверждение документа',
+            doc_edit: '✏️ Редактирование документа',
+            doc_payment: '💳 Оплата',
+            consent_check: '🔒 Проверка согласия',
+            consent_entry: '🔒 Ввод согласия',
+            contact_specialist: '📞 Связь со специалистом',
+            after_delivery: '📬 После доставки',
+            rate_menu: '⭐ Меню оценки',
+            rate_thanks: '🙏 Спасибо за оценку',
+            thanks_screen: '🏁 Экран благодарности',
         };
         return stepMap[step] || step;
     }
