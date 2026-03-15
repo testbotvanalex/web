@@ -513,8 +513,7 @@ const missingConfig = ['META_APP_ID', 'META_APP_SECRET', 'IG_REDIRECT_URI', 'WEB
   .filter((key) => !CONFIG[key]);
 
 if (missingConfig.length > 0) {
-  console.error('Missing required config keys:', missingConfig.join(', '));
-  process.exit(1);
+  console.warn('Warning: missing config keys (Instagram/Facebook OAuth will not work):', missingConfig.join(', '));
 }
 
 const DEFAULT_BOT_ID = process.env.DEFAULT_BOT_ID || 'main';
