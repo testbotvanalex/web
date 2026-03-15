@@ -39,7 +39,7 @@ export async function sendTelegramMessage(text) {
       try {
         await axios.post(
           url,
-          { chat_id: chatId, text: chunk, disable_web_page_preview: true },
+          { chat_id: chatId, text: chunk, parse_mode: 'HTML', disable_web_page_preview: true },
           { timeout: 15000 }
         );
       } catch (e) {
