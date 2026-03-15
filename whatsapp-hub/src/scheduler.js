@@ -85,6 +85,9 @@ async function checkReminders() {
             after_doc: '🏁 Document Downloaded',
             after_question_text: '❓ Asking Question',
             after_feedback_text: '⭐ Writing Feedback',
+            ux_greeting: '👋 Приветствие',
+            doc_menu: '📋 Меню документов',
+            doc_fill: '✍️ Заполнение документа',
         };
         return stepMap[step] || step;
     }
