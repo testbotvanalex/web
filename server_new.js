@@ -166,6 +166,43 @@ function findClientForWhatsapp(phoneNumberId) {
   return null;
 }
 
+// ── Telegram admin notifications ──────────────────────────────────────────────
+const _tgCooldown = new Map(); // chatKey → last notified timestamp
+
+async function notifyAdmin(clientId, channel, senderId, text) {
+  const token    = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId   = process.env.TELEGRAM_CHAT_ID;
+  if (!token || !chatId) return;
+
+  // Cooldown: max 1 notification per chat per 60 seconds
+  const key = `${clientId}:${channel}:${senderId}`;
+  const last = _tgCooldown.get(key) || 0;
+  if (Date.now() - last < 60_000) return;
+  _tgCooldown.set(key, Date.now());
+
+  // Find workspace name
+  let workspaceName = clientId;
+  try {
+    const ws = D.db.prepare('SELECT company FROM clients WHERE id = ?').get(clientId);
+    if (ws?.company) workspaceName = ws.company;
+  } catch (_) {}
+
+  const chIcon = { whatsapp: '💬', telegram: '✈️', instagram: '📷', messenger: '💙' }[channel] || '📩';
+  const preview = String(text || '').slice(0, 120);
+  const msg = `🔔 *Новое сообщение*\n\n${chIcon} ${channel} · \`${senderId}\`\n🏢 ${workspaceName}\n💬 _${preview}_\n\n👉 [Открыть Inbox](https://admin.botmatic.be/inbox)`;
+
+  try {
+    await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
+      chat_id: chatId,
+      text: msg,
+      parse_mode: 'Markdown',
+      disable_web_page_preview: true,
+    });
+  } catch (e) {
+    console.error('[TG NOTIFY] failed:', e.message);
+  }
+}
+
 // ── Save incoming message to SQLite ───────────────────────────────────────────
 function saveMessageToDb(clientId, channel, senderId, text, direction, raw) {
   if (!clientId) return;
@@ -210,6 +247,8 @@ function saveMessageToDb(clientId, channel, senderId, text, direction, raw) {
         if (typeof generateAndStoreSuggestion === 'function') {
           generateAndStoreSuggestion(clientId, channel, threadSenderId).catch(() => {});
         }
+        // Telegram notification to admin
+        notifyAdmin(clientId, channel, threadSenderId, text).catch(() => {});
       } else {
         D.chats.touchOutgoing.run({
           id: chat.id,
