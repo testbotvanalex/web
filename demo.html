@@ -325,6 +325,63 @@
     }
     @keyframes flashIn  { from{opacity:0;transform:translateX(-50%) translateY(10px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
     @keyframes flashOut { from{opacity:1} to{opacity:0;transform:translateX(-50%) translateY(-6px)} }
+
+    .demo-cta-bar {
+      position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%);
+      width: min(960px, calc(100vw - 32px));
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+      padding: 16px 18px; border-radius: 18px;
+      background: rgba(26, 26, 46, 0.94); color: #fff;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 18px 48px rgba(0,0,0,0.24);
+      backdrop-filter: blur(14px);
+      z-index: 998;
+    }
+    .demo-cta-copy { display: flex; flex-direction: column; gap: 4px; }
+    .demo-cta-kicker {
+      font-size: 11px; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: rgba(255,255,255,0.66);
+    }
+    .demo-cta-title {
+      font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 700; line-height: 1.05;
+    }
+    .demo-cta-text { font-size: 14px; color: rgba(255,255,255,0.74); }
+    .demo-cta-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .demo-cta-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 18px; border-radius: 12px; text-decoration: none; font-weight: 700;
+      font-size: 14px; transition: transform .15s, opacity .15s, background .15s;
+    }
+    .demo-cta-btn:hover { transform: translateY(-1px); }
+    .demo-cta-btn-primary {
+      background: linear-gradient(135deg, #25d366, #16a34a); color: #062b15;
+      box-shadow: 0 10px 26px rgba(37,211,102,0.24);
+    }
+    .demo-cta-btn-secondary {
+      background: rgba(255,255,255,0.08); color: #fff;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    @media (max-width: 900px) {
+      .demo-cta-bar {
+        flex-direction: column; align-items: stretch; gap: 14px;
+      }
+      .demo-cta-title { font-size: 21px; }
+      .demo-cta-actions { width: 100%; }
+      .demo-cta-btn { flex: 1; }
+    }
+
+    @media (max-width: 640px) {
+      .demo-cta-bar {
+        bottom: 12px; width: calc(100vw - 20px);
+        padding: 14px;
+      }
+      .demo-cta-actions {
+        flex-direction: column; align-items: stretch;
+      }
+      .demo-cta-title { font-size: 18px; }
+      .demo-cta-text { font-size: 13px; }
+    }
   </style>
 </head>
 <body>
@@ -444,6 +501,18 @@
       </div>
 
     </div>
+  </div>
+</div>
+
+<div class="demo-cta-bar">
+  <div class="demo-cta-copy">
+    <span class="demo-cta-kicker">Klaar om dit live te gebruiken?</span>
+    <strong class="demo-cta-title">Start je demo via WhatsApp</strong>
+    <span class="demo-cta-text">Stuur ons een kort bericht. We tonen hoe dit werkt voor jouw zaak.</span>
+  </div>
+  <div class="demo-cta-actions">
+    <a class="demo-cta-btn demo-cta-btn-primary" href="https://wa.me/32456912464?text=Hallo%20BotMatic%2C%20ik%20wil%20graag%20een%20live%20demo%20zien." target="_blank" rel="noopener noreferrer">Open WhatsApp</a>
+    <a class="demo-cta-btn demo-cta-btn-secondary" href="https://www.botmatic.be/">Terug naar site</a>
   </div>
 </div>
 

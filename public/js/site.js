@@ -59,7 +59,7 @@ function initSmoothScroll() {
 function initLangSwitch() {
   const translations = {
     nl: {
-      "nav-cta":       "Bekijk demo via WhatsApp",
+      "nav-cta":       "Bekijk live demo",
       "nav-how":       "Hoe werkt het",
       "nav-who":       "Voor wie",
       "nav-price":     "Prijzen",
@@ -130,7 +130,7 @@ function initLangSwitch() {
       "verg-cta-p":    "Wij tonen het verschil met jouw eigen cases en berichten.",
     },
     fr: {
-      "nav-cta":       "Voir la démo via WhatsApp",
+      "nav-cta":       "Voir la démo live",
       "nav-how":       "Comment ça marche",
       "nav-who":       "Pour qui",
       "nav-price":     "Tarifs",
