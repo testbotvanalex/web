@@ -1,11 +1,10 @@
 const WA_NUMBER = "+32456912464";
 const WA_TEXT = "Hallo BotMatic, ik wil graag een demo zien.";
+const DEMO_PAGE = "/demo";
 
 function setWhatsAppLinks() {
-  const encoded = encodeURIComponent(WA_TEXT);
-  const href = `https://wa.me/${WA_NUMBER.replace(/[^\d]/g, "")}?text=${encoded}`;
   document.querySelectorAll(".wa-link").forEach((link) => {
-    link.setAttribute("href", href);
+    link.setAttribute("href", DEMO_PAGE);
   });
 }
 
