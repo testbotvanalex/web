@@ -13,8 +13,10 @@
     }
   ],
   "rewrites": [
-    { "source": "/citecht",        "destination": "/citech" },
-    { "source": "/citecht/",       "destination": "/citech" },
+    { "source": "/citech",         "destination": "/public/citech" },
+    { "source": "/citech/",        "destination": "/public/citech" },
+    { "source": "/citecht",        "destination": "/public/citech" },
+    { "source": "/citecht/",       "destination": "/public/citech" },
     { "source": "/auth/:path*",     "destination": "https://botmatic.be/auth/:path*" },
     { "source": "/api/:path*",      "destination": "https://botmatic.be/api/:path*" },
     { "source": "/webhook/:path*",  "destination": "https://botmatic.be/webhook/:path*" },
