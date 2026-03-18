@@ -2677,6 +2677,52 @@ app.post('/auth/api/whatsapp/success', (req, res) => {
   res.json({ ok: true });
 });
 
+// ── Web Chat Widget ────────────────────────────────────────────────────────────
+
+app.get('/widget.js', (req, res) => {
+  res.setHeader('Content-Type', 'application/javascript');
+  res.setHeader('Cache-Control', 'public, max-age=300');
+  res.sendFile(path.join(__dirname, 'widget.js'));
+});
+
+app.get('/api/widget/:clientId/config', (req, res) => {
+  const { clientId } = req.params;
+  const client = D.db.prepare('SELECT company, tone, language FROM clients WHERE id = ?').get(clientId);
+  if (!client) return res.status(404).json({ error: 'Not found' });
+  const bot = D.bots.byClient.all(clientId)[0];
+  res.json({
+    name: bot?.name || client.company || 'Ассистент',
+    greeting: `Привет! Я ваш ассистент${client.company ? ' ' + client.company : ''}. Чем могу помочь?`,
+    language: client.language || 'ru',
+  });
+});
+
+app.post('/api/widget/:clientId/chat', async (req, res) => {
+  const { clientId } = req.params;
+  const { message, sessionId } = req.body || {};
+  if (!message || !sessionId) return res.status(400).json({ error: 'message and sessionId required' });
+
+  const client = D.db.prepare('SELECT id FROM clients WHERE id = ?').get(clientId);
+  if (!client) return res.status(404).json({ error: 'Not found' });
+
+  const bot = D.bots.byClient.all(clientId)[0] || null;
+
+  saveMessageToDb(clientId, 'widget', sessionId, message, 'in', null);
+  const history = D.messages.history.all(clientId, sessionId, 20);
+
+  let reply = 'Здравствуйте! Как я могу вам помочь?';
+  if (bot) {
+    const aiReply = await askOpenAI(bot, message, history).catch(e => {
+      console.error('[Widget] OpenAI error:', e.message);
+      return null;
+    });
+    if (aiReply) reply = aiReply;
+  }
+
+  saveMessageToDb(clientId, 'widget', sessionId, reply, 'out', null);
+  res.json({ reply });
+});
+
 app.post('/auth/webhook/telegram/:botId', async (req, res) => {
   res.sendStatus(200); // Fast Telegram ACK
 
