@@ -125,10 +125,16 @@
             </div>
           </div>
           <div class="phone-chat" id="hero-chat"></div>
-          <div class="phone-quick">
-            <span class="quick">Afspraak maken</span>
-            <span class="quick">Openingsuren</span>
-            <span class="quick">Prijslijst</span>
+          <div class="phone-quick" id="hero-quick">
+            <span class="quick" data-msg="Afspraak maken">Afspraak maken</span>
+            <span class="quick" data-msg="Openingsuren">Openingsuren</span>
+            <span class="quick" data-msg="Prijslijst">Prijslijst</span>
+          </div>
+          <div class="phone-input-row">
+            <input id="hero-input" type="text" placeholder="Stel een vraag..." autocomplete="off" />
+            <button id="hero-send" aria-label="Verstuur">
+              <svg viewBox="0 0 24 24" fill="none" width="15" height="15"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
           </div>
         </aside>
       </div>
