@@ -385,7 +385,7 @@ function initHeroChat() {
       addBubble("in", text);
       heroHistory.push({ role: "user", content: text });
       const typingEl = addTyping();
-      fetch("/api/chat", {
+      fetch("https://admin.botmatic.be/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text, history: heroHistory.slice(-8) }),
