@@ -311,9 +311,12 @@ function initSectorDemo() {
 function initHeroChat() {
   const chatEl = document.getElementById("hero-chat");
   if (!chatEl) return;
-  const quickEl = chatEl.closest(".phone") && chatEl.closest(".phone").querySelector(".phone-quick");
+  const phone = chatEl.closest(".phone");
+  const quickEl = phone && phone.querySelector(".phone-quick");
+  const inputEl = phone && phone.querySelector("#hero-input");
+  const sendEl = phone && phone.querySelector("#hero-send");
 
-  const messages = [
+  const demoMessages = [
     { from: "in",  text: "Hallo! Hebben jullie morgen nog plaats?" },
     { from: "out", text: "Ja, zeker. Voormiddag of namiddag?" },
     { from: "in",  text: "Namiddag rond 14u." },
@@ -322,6 +325,9 @@ function initHeroChat() {
   ];
 
   let timers = [];
+  let liveMode = false;
+  let busy = false;
+  const heroHistory = [];
 
   function addBubble(from, text) {
     const el = document.createElement("div");
@@ -355,15 +361,86 @@ function initHeroChat() {
     return el;
   }
 
+  function enterLiveMode() {
+    if (liveMode) return;
+    liveMode = true;
+    timers.forEach(clearTimeout);
+    timers = [];
+    chatEl.innerHTML = "";
+    if (quickEl) quickEl.style.display = "none";
+    const typingEl = addTyping();
+    setTimeout(() => {
+      typingEl.remove();
+      addBubble("out", "Hallo! 👋 Stel me gerust een vraag over BotMatic.");
+    }, 700);
+  }
+
+  function sendHeroMessage(text) {
+    text = text.trim();
+    if (!text || busy) return;
+    if (!liveMode) enterLiveMode();
+    busy = true;
+    if (sendEl) sendEl.disabled = true;
+    setTimeout(() => {
+      addBubble("in", text);
+      heroHistory.push({ role: "user", content: text });
+      const typingEl = addTyping();
+      fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text, history: heroHistory.slice(-8) }),
+      })
+        .then(r => r.json())
+        .then(data => {
+          typingEl.remove();
+          const reply = data.reply || "Probeer opnieuw!";
+          heroHistory.push({ role: "assistant", content: reply });
+          addBubble("out", reply);
+        })
+        .catch(() => {
+          typingEl.remove();
+          addBubble("out", "Sorry, even een probleem. Stuur ons een WhatsApp! 💬");
+        })
+        .finally(() => {
+          busy = false;
+          if (sendEl) sendEl.disabled = false;
+          if (inputEl) inputEl.focus();
+        });
+    }, liveMode ? 0 : 900);
+  }
+
+  if (quickEl) {
+    quickEl.querySelectorAll(".quick").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const msg = btn.dataset.msg || btn.textContent.trim();
+        sendHeroMessage(msg);
+        if (inputEl) { inputEl.value = ""; inputEl.focus(); }
+      });
+    });
+  }
+
+  if (inputEl) {
+    inputEl.addEventListener("keydown", e => {
+      if (e.key === "Enter") { sendHeroMessage(inputEl.value); inputEl.value = ""; }
+    });
+    inputEl.addEventListener("focus", () => { if (!liveMode) enterLiveMode(); });
+  }
+
+  if (sendEl) {
+    sendEl.addEventListener("click", () => {
+      if (inputEl) { sendHeroMessage(inputEl.value); inputEl.value = ""; }
+    });
+  }
+
   function play() {
     chatEl.innerHTML = "";
-    if (quickEl) quickEl.classList.remove("visible");
+    if (quickEl) { quickEl.classList.remove("visible"); quickEl.style.display = ""; }
     timers.forEach(clearTimeout);
     timers = [];
 
     let delay = 800;
-    messages.forEach((msg, i) => {
-      const isLast = i === messages.length - 1;
+    demoMessages.forEach((msg, i) => {
+      const isLast = i === demoMessages.length - 1;
       if (msg.from === "out") {
         const tStart = delay;
         delay += 500;

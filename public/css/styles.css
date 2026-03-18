@@ -382,10 +382,15 @@ h3 {
 .phone-chat {
   background: #fafafa;
   padding: 0.9rem;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 0.5rem;
-  min-height: 330px;
+  min-height: 220px;
+  max-height: 280px;
+  overflow-y: auto;
 }
+.phone-chat::-webkit-scrollbar { width: 3px; }
+.phone-chat::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 3px; }
 
 .bubble {
   max-width: 82%;
@@ -429,7 +434,45 @@ h3 {
   border-radius: 100px;
   padding: 0.22rem 0.58rem;
   font-size: 0.75rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
 }
+.quick:hover { background: #3797f0; color: #fff; }
+
+.phone-input-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.9rem;
+  border-top: 1px solid #ececec;
+  background: var(--surface);
+}
+.phone-input-row input {
+  flex: 1;
+  border: 1.5px solid #ececec;
+  border-radius: 100px;
+  padding: 0.42rem 0.8rem;
+  font-size: 0.82rem;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.15s;
+}
+.phone-input-row input:focus { border-color: #3797f0; }
+.phone-input-row button {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #3797f0;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.phone-input-row button:hover { background: #2276cc; }
+.phone-input-row button:disabled { background: #ccc; cursor: default; }
 
 .metric {
   background: var(--surface);

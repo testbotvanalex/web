@@ -2677,6 +2677,34 @@ app.post('/auth/api/whatsapp/success', (req, res) => {
   res.json({ ok: true });
 });
 
+// ── Landing page demo chatbot ─────────────────────────────────────────────────
+
+app.post('/api/chat', async (req, res) => {
+  const { message, history = [] } = req.body || {};
+  if (!message) return res.status(400).json({ error: 'message required' });
+
+  if (!openaiClient) return res.json({ reply: 'De demo is even niet beschikbaar. Stuur ons een WhatsApp!' });
+
+  const systemPrompt = `Je bent de BotMatic-assistent op de website botmatic.be. BotMatic bouwt slimme chatbots voor Belgische KMO's die automatisch klantvragen beantwoorden via WhatsApp, Instagram, Messenger en meer — 24/7, zonder dat je team iets hoeft te doen. Je helpt websitebezoekers met vragen over BotMatic's diensten, hoe het werkt, prijzen en opzet. Wees vriendelijk, kort en concreet. Als iemand een demo wil, meer info wil of een afspraak wil: stuur ze naar WhatsApp: https://wa.me/32456912464. Antwoord altijd in dezelfde taal als de bezoeker (NL of FR).`;
+
+  try {
+    const response = await openaiClient.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        ...history.slice(-8).map(h => ({ role: h.role, content: h.content })),
+        { role: 'user', content: message },
+      ],
+      max_tokens: 300,
+      temperature: 0.7,
+    });
+    res.json({ reply: response.choices[0].message.content?.trim() });
+  } catch (e) {
+    console.error('[/api/chat] Error:', e.message);
+    res.status(500).json({ reply: 'Sorry, even een probleem. Probeer opnieuw!' });
+  }
+});
+
 // ── Web Chat Widget ────────────────────────────────────────────────────────────
 
 app.get('/widget.js', (req, res) => {
