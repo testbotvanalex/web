@@ -377,6 +377,27 @@
       font-size: 15px;
       line-height: 1.7;
     }
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      background: #171a2d;
+      color: #fff;
+      border-radius: 14px;
+      padding: 12px 16px;
+      box-shadow: var(--shadow);
+      font-size: 14px;
+      font-weight: 700;
+      z-index: 30;
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: .2s ease;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
     @media (max-width: 1280px) {
       .app, .inbox-layout, .channels-layout {
         grid-template-columns: 1fr;
@@ -460,7 +481,7 @@
             <input id="botNameInput" class="field" placeholder="Bot name" />
             <textarea id="botPromptInput" placeholder="Prompt"></textarea>
             <textarea id="botKbInput" placeholder="Knowledge base"></textarea>
-            <button class="btn primary" type="button">Save bot</button>
+            <button id="saveBotBtn" class="btn primary" type="button">Save bot</button>
           </div>
         </div>
       </section>
@@ -472,12 +493,13 @@
             <div class="empty">Optional. Give the client a portal login only if you want them to read or answer messages themselves.</div>
             <input id="portalLoginInput" class="field" placeholder="Portal login" />
             <input id="portalPasswordInput" class="field" placeholder="Portal password" />
-            <button class="btn primary" type="button">Save access</button>
+            <button id="saveAccessBtn" class="btn primary" type="button">Save access</button>
           </div>
         </div>
       </section>
     </main>
   </div>
+  <div id="toast" class="toast"></div>
 
   <script>
     const demo = {
@@ -625,6 +647,14 @@
       return `<span class="chip ${cls}">${esc(text)}</span>`;
     }
 
+    function showToast(text) {
+      const el = document.getElementById('toast');
+      el.textContent = text;
+      el.classList.add('show');
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => el.classList.remove('show'), 1800);
+    }
+
     function getClient() {
       return demo.clients.find((item) => item.id === state.currentClientId) || demo.clients[0];
     }
@@ -729,7 +759,7 @@
             const data = client.channels.instagram;
             return `
               <div class="card-stack">
-                <a class="btn primary" href="#" onclick="return false;">Connect Instagram</a>
+                <button class="btn primary" type="button" data-action="connect-instagram">Connect Instagram</button>
                 <div class="mini-box guide">
                   <h4>How it works</h4>
                   <ol>
@@ -754,7 +784,7 @@
             const data = client.channels.messenger;
             return `
               <div class="card-stack">
-                <a class="btn primary" href="#" onclick="return false;">Connect Messenger</a>
+                <button class="btn primary" type="button" data-action="connect-messenger">Connect Messenger</button>
                 <div class="mini-box guide">
                   <h4>How it works</h4>
                   <ol>
@@ -779,8 +809,8 @@
             const data = client.channels.telegram;
             return `
               <div class="card-stack">
-                <input class="field" placeholder="Telegram bot token" />
-                <button class="btn primary" type="button">Connect Telegram</button>
+                <input id="telegramTokenInput" class="field" placeholder="Telegram bot token" value="${esc(data.token || '')}" />
+                <button class="btn primary" type="button" data-action="connect-telegram">Connect Telegram</button>
                 <div class="mini-box guide">
                   <h4>How to get token</h4>
                   <ol>
@@ -805,19 +835,19 @@
             const data = client.channels.whatsapp;
             return `
               <div class="card-stack">
-                <input class="field" placeholder="Display name (optional)" value="${esc(bot.name)}" />
-                <input class="field" placeholder="Permanent access token" />
-                <input class="field" placeholder="Phone number ID" />
-                <button class="btn primary" type="button">Connect WhatsApp</button>
+                <input id="waDisplayNameInput" class="field" placeholder="Display name (optional)" value="${esc(data.account && data.account !== 'Not connected' ? data.account : bot.name)}" />
+                <input id="waTokenInput" class="field" placeholder="Permanent access token" value="${esc(data.token || '')}" />
+                <input id="waPhoneIdInput" class="field" placeholder="Phone number ID" value="${esc(data.id && data.id !== '—' ? data.id : '')}" />
+                <button class="btn primary" type="button" data-action="connect-whatsapp">Connect WhatsApp</button>
                 <div class="mini-box guide">
                   <h4>Webhook for Meta</h4>
                   <div class="copy-row">
                     <div class="copy-value">https://botmatic.be/auth/api/whatsapp/webhook</div>
-                    <button class="btn" type="button">Copy</button>
+                    <button class="btn" type="button" data-copy="https://botmatic.be/auth/api/whatsapp/webhook">Copy</button>
                   </div>
                   <div class="copy-row">
                     <div class="copy-value">botmatic_secret_2024</div>
-                    <button class="btn" type="button">Copy</button>
+                    <button class="btn" type="button" data-copy="botmatic_secret_2024">Copy</button>
                   </div>
                 </div>
                 <div class="mini-box guide">
@@ -878,6 +908,76 @@
       document.getElementById('channelPanelHint').textContent = selected.hint;
       document.getElementById('channelStatusChip').innerHTML = chip(channelState.connected ? 'connected' : 'not connected', channelState.connected ? 'status' : 'channel');
       document.getElementById('channelFormWrap').innerHTML = selected.render();
+
+      document.querySelectorAll('[data-copy]').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(btn.dataset.copy);
+            showToast('Copied');
+          } catch {
+            showToast('Copy failed');
+          }
+        });
+      });
+
+      const wireConnect = (selector, handler) => {
+        const el = document.querySelector(selector);
+        if (el) el.addEventListener('click', handler);
+      };
+
+      wireConnect('[data-action="connect-instagram"]', () => {
+        client.channels.instagram.connected = true;
+        client.channels.instagram.account = '@' + bot.name.toLowerCase().replace(/[^a-z0-9]+/g, '_');
+        if (!client.channels.instagram.id || client.channels.instagram.id === '—') {
+          client.channels.instagram.id = 'ig-demo-' + client.id;
+        }
+        renderChannels();
+        renderClients();
+        showToast('Instagram connected');
+      });
+
+      wireConnect('[data-action="connect-messenger"]', () => {
+        client.channels.messenger.connected = true;
+        client.channels.messenger.account = bot.name + ' Page';
+        if (!client.channels.messenger.id || client.channels.messenger.id === '—') {
+          client.channels.messenger.id = 'fb-page-' + client.id;
+        }
+        renderChannels();
+        renderClients();
+        showToast('Messenger connected');
+      });
+
+      wireConnect('[data-action="connect-telegram"]', () => {
+        const token = document.getElementById('telegramTokenInput')?.value.trim();
+        if (!token) {
+          showToast('Paste Telegram token');
+          return;
+        }
+        client.channels.telegram.connected = true;
+        client.channels.telegram.token = token;
+        client.channels.telegram.account = '@' + bot.name.toLowerCase().replace(/[^a-z0-9]+/g, '_') + '_bot';
+        client.channels.telegram.id = token.split(':')[0] || 'tg-demo';
+        renderChannels();
+        renderClients();
+        showToast('Telegram connected');
+      });
+
+      wireConnect('[data-action="connect-whatsapp"]', () => {
+        const displayName = document.getElementById('waDisplayNameInput')?.value.trim();
+        const token = document.getElementById('waTokenInput')?.value.trim();
+        const phoneId = document.getElementById('waPhoneIdInput')?.value.trim();
+        if (!token || !phoneId) {
+          showToast('Paste token and phone ID');
+          return;
+        }
+        client.channels.whatsapp.connected = true;
+        client.channels.whatsapp.token = token;
+        client.channels.whatsapp.account = displayName || bot.name;
+        client.channels.whatsapp.id = phoneId;
+        renderChannels();
+        renderClients();
+        showToast('WhatsApp connected');
+      });
 
       const installed = Object.entries(client.channels)
         .filter(([, value]) => value.connected)
@@ -940,6 +1040,26 @@
       chat.time = 'just now';
       input.value = '';
       renderInbox();
+      showToast('Reply saved');
+    });
+
+    document.getElementById('saveBotBtn').addEventListener('click', () => {
+      const bot = getBot();
+      bot.name = document.getElementById('botNameInput').value.trim() || bot.name;
+      bot.prompt = document.getElementById('botPromptInput').value.trim();
+      bot.kb = document.getElementById('botKbInput').value.trim();
+      renderHeader();
+      renderClients();
+      renderBotSetup();
+      renderChannels();
+      showToast('Bot saved');
+    });
+
+    document.getElementById('saveAccessBtn').addEventListener('click', () => {
+      const portal = getClient().portal;
+      portal.login = document.getElementById('portalLoginInput').value.trim();
+      portal.password = document.getElementById('portalPasswordInput').value.trim();
+      showToast('Access saved');
     });
 
     renderAll();

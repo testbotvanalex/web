@@ -1,2 +1,1068 @@
 <!DOCTYPE html>
-<meta http-equiv="refresh" content="0; url=/agency-console-demo">
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BotMatic - Agency Console Demo</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --line: #e6e8f2;
+      --soft: #f3f5fb;
+      --text: #171a2d;
+      --muted: #6f778c;
+      --accent: #7c3aed;
+      --accent-dark: #6328cb;
+      --green: #15803d;
+      --green-bg: #dcfce7;
+      --blue: #1d4ed8;
+      --blue-bg: #dbeafe;
+      --pink: #be185d;
+      --pink-bg: #fce7f3;
+      --shadow: 0 18px 42px rgba(15, 23, 42, 0.06);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .app {
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+    .sidebar {
+      background: var(--panel);
+      border-right: 1px solid var(--line);
+      padding: 22px;
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+    .brand {
+      font-family: 'Syne', sans-serif;
+      font-size: 30px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), #db2777);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .sidebar-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .field, .select, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 14px;
+      font: inherit;
+      outline: none;
+    }
+    .field, .select {
+      height: 48px;
+      padding: 0 14px;
+    }
+    .field:focus, .select:focus, textarea:focus {
+      border-color: var(--accent);
+    }
+    .client-list {
+      display: grid;
+      gap: 10px;
+      max-height: calc(100vh - 170px);
+      overflow: auto;
+      padding-right: 4px;
+    }
+    .client-item {
+      border: 1px solid var(--line);
+      background: var(--soft);
+      border-radius: 18px;
+      padding: 14px;
+      display: grid;
+      gap: 8px;
+      text-align: left;
+      cursor: pointer;
+    }
+    .client-item.active {
+      background: #fff;
+      border-color: rgba(124, 58, 237, .28);
+      box-shadow: var(--shadow);
+    }
+    .client-name {
+      font-size: 18px;
+      font-weight: 800;
+    }
+    .client-meta {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .chip.status { background: var(--green-bg); color: var(--green); }
+    .chip.goal { background: var(--blue-bg); color: var(--blue); }
+    .chip.channel { background: var(--pink-bg); color: var(--pink); }
+    .main {
+      padding: 28px;
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+    .title {
+      font-family: 'Syne', sans-serif;
+      font-size: 40px;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .sub {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+      max-width: 840px;
+    }
+    .tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .tab {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--muted);
+      border-radius: 999px;
+      height: 42px;
+      padding: 0 16px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .tab.active {
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: #fff;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .panel-head {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfbfe;
+    }
+    .panel-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .panel-body {
+      padding: 20px;
+    }
+    .hidden { display: none !important; }
+    .inbox-layout {
+      display: grid;
+      grid-template-columns: 360px minmax(0, 1fr);
+      gap: 18px;
+    }
+    .chat-list {
+      display: grid;
+      gap: 10px;
+      max-height: 650px;
+      overflow: auto;
+    }
+    .chat-item {
+      border: 1px solid var(--line);
+      background: var(--soft);
+      border-radius: 16px;
+      padding: 14px;
+      display: grid;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .chat-item.active {
+      background: #fff;
+      border-color: rgba(124, 58, 237, .28);
+    }
+    .chat-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .chat-name {
+      font-size: 18px;
+      font-weight: 800;
+    }
+    .chat-preview {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .messages {
+      display: grid;
+      gap: 14px;
+      min-height: 540px;
+      max-height: 650px;
+      overflow: auto;
+    }
+    .message {
+      max-width: 78%;
+      padding: 14px 16px;
+      border-radius: 18px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .message.in {
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+    .message.out {
+      margin-left: auto;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: #fff;
+    }
+    .message-meta {
+      font-size: 12px;
+      margin-bottom: 6px;
+      opacity: .72;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .reply-box {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 120px;
+      gap: 10px;
+    }
+    .btn {
+      border: none;
+      border-radius: 14px;
+      height: 48px;
+      padding: 0 16px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--soft);
+      color: var(--text);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: #fff;
+    }
+    .channels-layout {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 18px;
+    }
+    .channel-nav {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+    .channel-nav-item {
+      border: 1px solid var(--line);
+      background: var(--soft);
+      border-radius: 16px;
+      padding: 14px;
+      text-align: left;
+      display: grid;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .channel-nav-item.active {
+      background: #fff;
+      border-color: rgba(124, 58, 237, .28);
+      box-shadow: var(--shadow);
+    }
+    .channel-nav-name {
+      font-size: 18px;
+      font-weight: 800;
+    }
+    .card-stack {
+      display: grid;
+      gap: 16px;
+    }
+    .mini-box {
+      border: 1px solid var(--line);
+      background: var(--soft);
+      border-radius: 16px;
+      padding: 14px;
+      display: grid;
+      gap: 8px;
+    }
+    .mini-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .mini-name {
+      font-size: 18px;
+      font-weight: 800;
+    }
+    .muted { color: var(--muted); }
+    .guide {
+      display: grid;
+      gap: 8px;
+    }
+    .guide h4 {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted);
+    }
+    .guide ol {
+      margin-left: 18px;
+      display: grid;
+      gap: 6px;
+    }
+    .guide a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .copy-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 96px;
+      gap: 8px;
+      align-items: center;
+    }
+    .copy-value {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      min-height: 44px;
+      padding: 10px 12px;
+      font-size: 13px;
+      word-break: break-all;
+    }
+    .stack {
+      display: grid;
+      gap: 14px;
+    }
+    textarea {
+      min-height: 170px;
+      padding: 14px;
+      resize: vertical;
+    }
+    .empty {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      background: #171a2d;
+      color: #fff;
+      border-radius: 14px;
+      padding: 12px 16px;
+      box-shadow: var(--shadow);
+      font-size: 14px;
+      font-weight: 700;
+      z-index: 30;
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: .2s ease;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    @media (max-width: 1280px) {
+      .app, .inbox-layout, .channels-layout {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+      .reply-box {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">BotMatic</div>
+      <div class="sidebar-label">Clients</div>
+      <input id="clientSearch" class="field" placeholder="Search company" />
+      <div class="client-list" id="clientList"></div>
+    </aside>
+
+    <main class="main">
+      <div>
+        <div class="title" id="clientTitle">Agency Console Demo</div>
+        <div class="sub" id="clientSubtitle">Static demo. No backend. Test only the structure: client first, then inbox, channels, bot setup and access.</div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="inbox" type="button">Inbox</button>
+        <button class="tab" data-tab="channels" type="button">Channels</button>
+        <button class="tab" data-tab="bot" type="button">Bot Setup</button>
+        <button class="tab" data-tab="access" type="button">Access</button>
+      </div>
+
+      <section id="tab-inbox" class="tab-panel">
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title">Client Inbox</div></div>
+          <div class="panel-body inbox-layout">
+            <div class="chat-list" id="chatList"></div>
+            <div>
+              <div class="messages" id="messageList"></div>
+              <div class="reply-box">
+                <input id="replyInput" class="field" placeholder="Reply to this client" />
+                <button id="sendReplyBtn" class="btn primary" type="button">Send</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-channels" class="tab-panel hidden">
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title">Channels</div></div>
+          <div class="panel-body channels-layout">
+            <div class="channel-nav" id="channelNav"></div>
+            <div class="card-stack">
+              <select id="channelBotSelect" class="select"></select>
+              <div class="mini-box">
+                <div class="mini-head">
+                  <div class="mini-name" id="channelPanelTitle">Instagram</div>
+                  <div id="channelStatusChip"></div>
+                </div>
+                <div class="muted" id="channelPanelHint">Choose one channel on the left. Connect only that one here.</div>
+              </div>
+              <div class="panel">
+                <div class="panel-body" id="channelFormWrap"></div>
+              </div>
+              <div class="card-stack" id="channelInstalledList"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-bot" class="tab-panel hidden">
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title" id="botEditorTitle">Bot Setup</div></div>
+          <div class="panel-body stack">
+            <select id="botSelect" class="select"></select>
+            <input id="botNameInput" class="field" placeholder="Bot name" />
+            <textarea id="botPromptInput" placeholder="Prompt"></textarea>
+            <textarea id="botKbInput" placeholder="Knowledge base"></textarea>
+            <button id="saveBotBtn" class="btn primary" type="button">Save bot</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-access" class="tab-panel hidden">
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title">Access</div></div>
+          <div class="panel-body stack" style="max-width:640px">
+            <div class="empty">Optional. Give the client a portal login only if you want them to read or answer messages themselves.</div>
+            <input id="portalLoginInput" class="field" placeholder="Portal login" />
+            <input id="portalPasswordInput" class="field" placeholder="Portal password" />
+            <button id="saveAccessBtn" class="btn primary" type="button">Save access</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div id="toast" class="toast"></div>
+
+  <script>
+    const demo = {
+      clients: [
+        {
+          id: 'dockz',
+          company: 'dockz',
+          status: 'live',
+          goal: 'lead intake',
+          bots: [
+            {
+              id: 'dockz-main',
+              name: 'dockz WhatsApp',
+              prompt: 'Lead intake bot for debt collection requests.',
+              kb: 'Collect phone, document type, amount, and preferred callback time.'
+            }
+          ],
+          channels: {
+            instagram: { connected: false, account: 'Not connected', id: '—' },
+            messenger: { connected: false, account: 'Not connected', id: '—' },
+            telegram: { connected: false, account: 'Not connected', id: '—' },
+            whatsapp: { connected: true, account: '+7 771 488 1848', id: '869621806240205' }
+          },
+          chats: [
+            {
+              id: 'dockz-chat-1',
+              name: '324000000004',
+              channel: 'whatsapp',
+              preview: '[interactive]',
+              mode: 'bot',
+              time: 'just now',
+              messages: [
+                { direction: 'in', text: '✂ KapSalon', meta: 'Client · 09:37' },
+                { direction: 'out', text: 'Здравствуйте! Подготовим возражение на исполнительную надпись. Стоимость: 1990 ₸.', meta: 'Bot · dockz WhatsApp' }
+              ]
+            },
+            {
+              id: 'dockz-chat-2',
+              name: '32456912464',
+              channel: 'whatsapp',
+              preview: 'privert eto alex! i eto test',
+              mode: 'human',
+              time: '4m ago',
+              messages: [
+                { direction: 'in', text: 'privert eto alex! i eto test', meta: 'Client · 10:12' },
+                { direction: 'out', text: 'Принял. Смотрю канал и маршрут.', meta: 'Operator · 10:13' }
+              ]
+            }
+          ],
+          portal: { login: 'dockz', password: 'dockz123' }
+        },
+        {
+          id: 'autoscout',
+          company: 'Autoscout',
+          status: 'live',
+          goal: 'booking',
+          bots: [
+            {
+              id: 'autoscout-main',
+              name: 'Autoscout WhatsApp',
+              prompt: 'Booking bot for salon appointments in Dutch.',
+              kb: 'Show services, offer time slots, confirm booking.'
+            }
+          ],
+          channels: {
+            instagram: { connected: false, account: 'Not connected', id: '—' },
+            messenger: { connected: false, account: 'Not connected', id: '—' },
+            telegram: { connected: false, account: 'Not connected', id: '—' },
+            whatsapp: { connected: true, account: '+32 456 86 28 86', id: '869710229554065' }
+          },
+          chats: [
+            {
+              id: 'autoscout-chat-1',
+              name: '32488883927',
+              channel: 'whatsapp',
+              preview: 'Kies een diensten-categorie:',
+              mode: 'bot',
+              time: 'just now',
+              messages: [
+                { direction: 'in', text: 'KapSalon', meta: 'Client · 09:37' },
+                { direction: 'out', text: 'Welkom bij Kapsalon Diri Oostende. Snel boeken in 1 minuut.', meta: 'Bot · Autoscout WhatsApp' },
+                { direction: 'in', text: 'Diensten', meta: 'Client · 09:37' },
+                { direction: 'out', text: 'Kies een diensten-categorie:', meta: 'Bot · Autoscout WhatsApp' }
+              ]
+            }
+          ],
+          portal: { login: 'autoscout', password: 'autoscout123' }
+        },
+        {
+          id: 'golden-palace',
+          company: 'Golden Palace Blankenberge',
+          status: 'new',
+          goal: 'support',
+          bots: [
+            {
+              id: 'golden-main',
+              name: 'Golden Palace Bot',
+              prompt: 'Answer customer questions about opening hours and table reservations.',
+              kb: 'Opening hours, reservation phone number, address and menu.'
+            }
+          ],
+          channels: {
+            instagram: { connected: true, account: '@alexbotmatic', id: '17841479737292641' },
+            messenger: { connected: false, account: 'Not connected', id: '—' },
+            telegram: { connected: true, account: '@golden_support_bot', id: '646761764' },
+            whatsapp: { connected: false, account: 'Not connected', id: '—' }
+          },
+          chats: [
+            {
+              id: 'golden-chat-1',
+              name: 'alexandrestoliarov',
+              channel: 'instagram',
+              preview: 'Hello from BotMatic inbox',
+              mode: 'human',
+              time: '18:58',
+              messages: [
+                { direction: 'in', text: 'Hi, I want to test BotMatic', meta: 'Client · 18:57' },
+                { direction: 'out', text: 'Hello from BotMatic inbox', meta: 'Operator · 18:58' }
+              ]
+            }
+          ],
+          portal: { login: '', password: '' }
+        }
+      ]
+    };
+
+    const state = {
+      filteredClients: [],
+      currentClientId: demo.clients[0].id,
+      currentTab: 'inbox',
+      currentChatId: '',
+      currentChannelKey: 'instagram',
+      currentBotId: ''
+    };
+
+    function esc(v) {
+      return String(v || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function chip(text, cls) {
+      return `<span class="chip ${cls}">${esc(text)}</span>`;
+    }
+
+    function showToast(text) {
+      const el = document.getElementById('toast');
+      el.textContent = text;
+      el.classList.add('show');
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => el.classList.remove('show'), 1800);
+    }
+
+    function getClient() {
+      return demo.clients.find((item) => item.id === state.currentClientId) || demo.clients[0];
+    }
+
+    function getBot() {
+      const client = getClient();
+      return client.bots.find((item) => item.id === state.currentBotId) || client.bots[0];
+    }
+
+    function getChat() {
+      const client = getClient();
+      return client.chats.find((item) => item.id === state.currentChatId) || client.chats[0] || null;
+    }
+
+    function renderClients() {
+      const q = document.getElementById('clientSearch').value.trim().toLowerCase();
+      state.filteredClients = demo.clients.filter((client) => !q || client.company.toLowerCase().includes(q));
+      document.getElementById('clientList').innerHTML = state.filteredClients.map((client) => {
+        const channelChips = Object.entries(client.channels)
+          .filter(([, value]) => value.connected)
+          .map(([key]) => chip(key.toUpperCase(), 'channel'))
+          .join('');
+        return `
+          <button class="client-item ${client.id === state.currentClientId ? 'active' : ''}" data-id="${esc(client.id)}" type="button">
+            <div class="client-name">${esc(client.company)}</div>
+            <div class="client-meta">${esc(client.bots[0]?.name || 'No bot')}</div>
+            <div class="chips">
+              ${chip(client.status, 'status')}
+              ${chip(client.goal, 'goal')}
+              ${channelChips}
+            </div>
+          </button>
+        `;
+      }).join('');
+      document.querySelectorAll('.client-item').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          state.currentClientId = btn.dataset.id;
+          state.currentChatId = '';
+          state.currentBotId = '';
+          renderAll();
+        });
+      });
+    }
+
+    function renderHeader() {
+      const client = getClient();
+      document.getElementById('clientTitle').textContent = client.company;
+      document.getElementById('clientSubtitle').textContent = `${client.goal} · ${client.bots[0]?.name || 'No bot'} · ${client.status}`;
+    }
+
+    function renderTabs() {
+      document.querySelectorAll('.tab').forEach((tab) => {
+        tab.classList.toggle('active', tab.dataset.tab === state.currentTab);
+      });
+      document.querySelectorAll('.tab-panel').forEach((panel) => {
+        panel.classList.toggle('hidden', panel.id !== `tab-${state.currentTab}`);
+      });
+    }
+
+    function renderInbox() {
+      const client = getClient();
+      if (!state.currentChatId) state.currentChatId = client.chats[0]?.id || '';
+      const chat = getChat();
+
+      document.getElementById('chatList').innerHTML = client.chats.length ? client.chats.map((item) => `
+        <button class="chat-item ${item.id === state.currentChatId ? 'active' : ''}" data-id="${esc(item.id)}" type="button">
+          <div class="chat-top">
+            <div class="chat-name">${esc(item.name)}</div>
+            <div class="muted">${esc(item.time)}</div>
+          </div>
+          <div class="chat-preview">${esc(item.preview)}</div>
+          <div class="chips">
+            ${chip(item.channel, 'channel')}
+            ${chip(item.mode, item.mode === 'human' ? 'goal' : 'status')}
+          </div>
+        </button>
+      `).join('') : `<div class="empty">No chats yet.</div>`;
+
+      document.querySelectorAll('.chat-item').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          state.currentChatId = btn.dataset.id;
+          renderInbox();
+        });
+      });
+
+      document.getElementById('messageList').innerHTML = chat ? chat.messages.map((msg) => `
+        <div class="message ${msg.direction}">
+          <div class="message-meta">${esc(msg.meta)}</div>
+          <div>${esc(msg.text)}</div>
+        </div>
+      `).join('') : `<div class="empty">Choose a chat on the left.</div>`;
+    }
+
+    function renderChannels() {
+      const client = getClient();
+      const bot = getBot();
+      const defs = {
+        instagram: {
+          title: 'Instagram',
+          hint: 'OAuth flow. Click connect, approve access, return connected.',
+          render() {
+            const data = client.channels.instagram;
+            return `
+              <div class="card-stack">
+                <button class="btn primary" type="button" data-action="connect-instagram">Connect Instagram</button>
+                <div class="mini-box guide">
+                  <h4>How it works</h4>
+                  <ol>
+                    <li>Click connect.</li>
+                    <li>Login with Meta.</li>
+                    <li>Choose page and Instagram account.</li>
+                    <li>Approve access and come back.</li>
+                  </ol>
+                </div>
+                <div class="mini-box">
+                  <div class="mini-head"><div class="mini-name">Current status</div>${chip(data.connected ? 'connected' : 'not connected', data.connected ? 'status' : 'channel')}</div>
+                  <div class="muted">${esc(data.account)}</div>
+                </div>
+              </div>
+            `;
+          }
+        },
+        messenger: {
+          title: 'Messenger',
+          hint: 'OAuth flow. Choose the Facebook page for this bot.',
+          render() {
+            const data = client.channels.messenger;
+            return `
+              <div class="card-stack">
+                <button class="btn primary" type="button" data-action="connect-messenger">Connect Messenger</button>
+                <div class="mini-box guide">
+                  <h4>How it works</h4>
+                  <ol>
+                    <li>Click connect.</li>
+                    <li>Login with Meta.</li>
+                    <li>Choose the Facebook page.</li>
+                    <li>Approve access and return connected.</li>
+                  </ol>
+                </div>
+                <div class="mini-box">
+                  <div class="mini-head"><div class="mini-name">Current status</div>${chip(data.connected ? 'connected' : 'not connected', data.connected ? 'status' : 'channel')}</div>
+                  <div class="muted">${esc(data.account)}</div>
+                </div>
+              </div>
+            `;
+          }
+        },
+        telegram: {
+          title: 'Telegram',
+          hint: 'Paste BotFather token. One field. One button.',
+          render() {
+            const data = client.channels.telegram;
+            return `
+              <div class="card-stack">
+                <input id="telegramTokenInput" class="field" placeholder="Telegram bot token" value="${esc(data.token || '')}" />
+                <button class="btn primary" type="button" data-action="connect-telegram">Connect Telegram</button>
+                <div class="mini-box guide">
+                  <h4>How to get token</h4>
+                  <ol>
+                    <li>Open <a href="https://t.me/BotFather" target="_blank" rel="noopener">BotFather</a>.</li>
+                    <li>Create bot or open existing one.</li>
+                    <li>Copy the API token.</li>
+                    <li>Paste it here and click connect.</li>
+                  </ol>
+                </div>
+                <div class="mini-box">
+                  <div class="mini-head"><div class="mini-name">Current status</div>${chip(data.connected ? 'connected' : 'not connected', data.connected ? 'status' : 'channel')}</div>
+                  <div class="muted">${esc(data.account)}</div>
+                </div>
+              </div>
+            `;
+          }
+        },
+        whatsapp: {
+          title: 'WhatsApp',
+          hint: 'Paste Meta permanent token and phone number ID.',
+          render() {
+            const data = client.channels.whatsapp;
+            return `
+              <div class="card-stack">
+                <input id="waDisplayNameInput" class="field" placeholder="Display name (optional)" value="${esc(data.account && data.account !== 'Not connected' ? data.account : bot.name)}" />
+                <input id="waTokenInput" class="field" placeholder="Permanent access token" value="${esc(data.token || '')}" />
+                <input id="waPhoneIdInput" class="field" placeholder="Phone number ID" value="${esc(data.id && data.id !== '—' ? data.id : '')}" />
+                <button class="btn primary" type="button" data-action="connect-whatsapp">Connect WhatsApp</button>
+                <div class="mini-box guide">
+                  <h4>Webhook for Meta</h4>
+                  <div class="copy-row">
+                    <div class="copy-value">https://botmatic.be/auth/api/whatsapp/webhook</div>
+                    <button class="btn" type="button" data-copy="https://botmatic.be/auth/api/whatsapp/webhook">Copy</button>
+                  </div>
+                  <div class="copy-row">
+                    <div class="copy-value">botmatic_secret_2024</div>
+                    <button class="btn" type="button" data-copy="botmatic_secret_2024">Copy</button>
+                  </div>
+                </div>
+                <div class="mini-box guide">
+                  <h4>How to get WhatsApp data</h4>
+                  <ol>
+                    <li>Open <a href="https://developers.facebook.com/apps" target="_blank" rel="noopener">Meta Developers</a>.</li>
+                    <li>Open your app and add WhatsApp.</li>
+                    <li>Go to WhatsApp API setup.</li>
+                    <li>Copy the access token.</li>
+                    <li>Copy the phone number ID.</li>
+                    <li>Paste the webhook URL and verify token into Meta webhook configuration.</li>
+                    <li>Paste both here and click connect.</li>
+                  </ol>
+                </div>
+                <div class="mini-box">
+                  <div class="mini-head"><div class="mini-name">Current status</div>${chip(data.connected ? 'connected' : 'not connected', data.connected ? 'status' : 'channel')}</div>
+                  <div class="muted">${esc(data.account)} · ${esc(data.id)}</div>
+                </div>
+              </div>
+            `;
+          }
+        }
+      };
+
+      const keys = Object.keys(defs);
+      if (!keys.includes(state.currentChannelKey)) state.currentChannelKey = 'instagram';
+
+      document.getElementById('channelNav').innerHTML = keys.map((key) => {
+        const channel = client.channels[key];
+        return `
+          <button class="channel-nav-item ${key === state.currentChannelKey ? 'active' : ''}" data-key="${esc(key)}" type="button">
+            <div class="channel-nav-name">${esc(defs[key].title)}</div>
+            <div class="muted">${esc(channel.connected ? 'Connected' : defs[key].hint)}</div>
+            ${chip(channel.connected ? 'connected' : 'not connected', channel.connected ? 'status' : 'channel')}
+          </button>
+        `;
+      }).join('');
+
+      document.querySelectorAll('.channel-nav-item').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          state.currentChannelKey = btn.dataset.key;
+          renderChannels();
+        });
+      });
+
+      document.getElementById('channelBotSelect').innerHTML = client.bots.map((botItem) => `
+        <option value="${esc(botItem.id)}" ${botItem.id === state.currentBotId ? 'selected' : ''}>${esc(botItem.name)}</option>
+      `).join('');
+
+      document.getElementById('channelBotSelect').addEventListener('change', (e) => {
+        state.currentBotId = e.target.value;
+        renderChannels();
+      });
+
+      const selected = defs[state.currentChannelKey];
+      const channelState = client.channels[state.currentChannelKey];
+      document.getElementById('channelPanelTitle').textContent = selected.title;
+      document.getElementById('channelPanelHint').textContent = selected.hint;
+      document.getElementById('channelStatusChip').innerHTML = chip(channelState.connected ? 'connected' : 'not connected', channelState.connected ? 'status' : 'channel');
+      document.getElementById('channelFormWrap').innerHTML = selected.render();
+
+      document.querySelectorAll('[data-copy]').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(btn.dataset.copy);
+            showToast('Copied');
+          } catch {
+            showToast('Copy failed');
+          }
+        });
+      });
+
+      const wireConnect = (selector, handler) => {
+        const el = document.querySelector(selector);
+        if (el) el.addEventListener('click', handler);
+      };
+
+      wireConnect('[data-action="connect-instagram"]', () => {
+        client.channels.instagram.connected = true;
+        client.channels.instagram.account = '@' + bot.name.toLowerCase().replace(/[^a-z0-9]+/g, '_');
+        if (!client.channels.instagram.id || client.channels.instagram.id === '—') {
+          client.channels.instagram.id = 'ig-demo-' + client.id;
+        }
+        renderChannels();
+        renderClients();
+        showToast('Instagram connected');
+      });
+
+      wireConnect('[data-action="connect-messenger"]', () => {
+        client.channels.messenger.connected = true;
+        client.channels.messenger.account = bot.name + ' Page';
+        if (!client.channels.messenger.id || client.channels.messenger.id === '—') {
+          client.channels.messenger.id = 'fb-page-' + client.id;
+        }
+        renderChannels();
+        renderClients();
+        showToast('Messenger connected');
+      });
+
+      wireConnect('[data-action="connect-telegram"]', () => {
+        const token = document.getElementById('telegramTokenInput')?.value.trim();
+        if (!token) {
+          showToast('Paste Telegram token');
+          return;
+        }
+        client.channels.telegram.connected = true;
+        client.channels.telegram.token = token;
+        client.channels.telegram.account = '@' + bot.name.toLowerCase().replace(/[^a-z0-9]+/g, '_') + '_bot';
+        client.channels.telegram.id = token.split(':')[0] || 'tg-demo';
+        renderChannels();
+        renderClients();
+        showToast('Telegram connected');
+      });
+
+      wireConnect('[data-action="connect-whatsapp"]', () => {
+        const displayName = document.getElementById('waDisplayNameInput')?.value.trim();
+        const token = document.getElementById('waTokenInput')?.value.trim();
+        const phoneId = document.getElementById('waPhoneIdInput')?.value.trim();
+        if (!token || !phoneId) {
+          showToast('Paste token and phone ID');
+          return;
+        }
+        client.channels.whatsapp.connected = true;
+        client.channels.whatsapp.token = token;
+        client.channels.whatsapp.account = displayName || bot.name;
+        client.channels.whatsapp.id = phoneId;
+        renderChannels();
+        renderClients();
+        showToast('WhatsApp connected');
+      });
+
+      const installed = Object.entries(client.channels)
+        .filter(([, value]) => value.connected)
+        .map(([key, value]) => `
+          <div class="mini-box">
+            <div class="mini-head"><div class="mini-name">${esc(key)}</div>${chip('connected', 'status')}</div>
+            <div class="muted">${esc(value.account)} · ${esc(value.id)}</div>
+          </div>
+        `).join('');
+      document.getElementById('channelInstalledList').innerHTML = installed || `<div class="empty">No channels connected yet.</div>`;
+    }
+
+    function renderBotSetup() {
+      const bot = getBot();
+      document.getElementById('botSelect').innerHTML = getClient().bots.map((item) => `
+        <option value="${esc(item.id)}" ${item.id === state.currentBotId ? 'selected' : ''}>${esc(item.name)}</option>
+      `).join('');
+      document.getElementById('botSelect').addEventListener('change', (e) => {
+        state.currentBotId = e.target.value;
+        renderBotSetup();
+      });
+      document.getElementById('botEditorTitle').textContent = bot.name;
+      document.getElementById('botNameInput').value = bot.name;
+      document.getElementById('botPromptInput').value = bot.prompt;
+      document.getElementById('botKbInput').value = bot.kb;
+    }
+
+    function renderAccess() {
+      const portal = getClient().portal;
+      document.getElementById('portalLoginInput').value = portal.login;
+      document.getElementById('portalPasswordInput').value = portal.password;
+    }
+
+    function renderAll() {
+      const client = getClient();
+      if (!state.currentBotId) state.currentBotId = client.bots[0]?.id || '';
+      renderClients();
+      renderHeader();
+      renderTabs();
+      renderInbox();
+      renderChannels();
+      renderBotSetup();
+      renderAccess();
+    }
+
+    document.getElementById('clientSearch').addEventListener('input', renderClients);
+    document.querySelectorAll('.tab').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        state.currentTab = tab.dataset.tab;
+        renderTabs();
+      });
+    });
+    document.getElementById('sendReplyBtn').addEventListener('click', () => {
+      const chat = getChat();
+      const input = document.getElementById('replyInput');
+      const text = input.value.trim();
+      if (!chat || !text) return;
+      chat.messages.push({ direction: 'out', text, meta: 'Operator · just now' });
+      chat.preview = text;
+      chat.time = 'just now';
+      input.value = '';
+      renderInbox();
+      showToast('Reply saved');
+    });
+
+    document.getElementById('saveBotBtn').addEventListener('click', () => {
+      const bot = getBot();
+      bot.name = document.getElementById('botNameInput').value.trim() || bot.name;
+      bot.prompt = document.getElementById('botPromptInput').value.trim();
+      bot.kb = document.getElementById('botKbInput').value.trim();
+      renderHeader();
+      renderClients();
+      renderBotSetup();
+      renderChannels();
+      showToast('Bot saved');
+    });
+
+    document.getElementById('saveAccessBtn').addEventListener('click', () => {
+      const portal = getClient().portal;
+      portal.login = document.getElementById('portalLoginInput').value.trim();
+      portal.password = document.getElementById('portalPasswordInput').value.trim();
+      showToast('Access saved');
+    });
+
+    renderAll();
+  </script>
+</body>
+</html>
