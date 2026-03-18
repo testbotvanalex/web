@@ -8,45 +8,153 @@
     {
       "source": "/start",
       "headers": [
-        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate" }
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate"
+        }
       ]
     }
   ],
   "rewrites": [
-    { "source": "/css/:path*",      "destination": "/public/css/:path*" },
-    { "source": "/js/:path*",       "destination": "/public/js/:path*" },
-    { "source": "/assets/:path*",   "destination": "/public/assets/:path*" },
-    { "source": "/hoe-werkt-het",   "destination": "/public/hoe-werkt-het" },
-    { "source": "/voor-wie",        "destination": "/public/voor-wie" },
-    { "source": "/prijzen",         "destination": "/public/prijzen" },
-    { "source": "/cases",           "destination": "/public/cases" },
-    { "source": "/vergelijking",    "destination": "/public/vergelijking" },
-    { "source": "/faq",             "destination": "/public/faq" },
-    { "source": "/contact",         "destination": "/public/contact" },
-    { "source": "/privacy-policy",  "destination": "/public/privacy-policy" },
-    { "source": "/terms",           "destination": "/public/terms" },
-    { "source": "/data-deletion",   "destination": "/public/data-deletion" },
-    { "source": "/privacy",         "destination": "/public/privacy" },
-    { "source": "/cookies",         "destination": "/public/cookies" },
-    { "source": "/instagram-demo",  "destination": "/public/instagram-demo" },
-    { "source": "/citech",         "destination": "/public/citech" },
-    { "source": "/citech/",        "destination": "/public/citech" },
-    { "source": "/citecht",        "destination": "/public/citech" },
-    { "source": "/citecht/",       "destination": "/public/citech" },
-    { "source": "/auth/:path*",     "destination": "https://botmatic.be/auth/:path*" },
-    { "source": "/api/:path*",      "destination": "https://botmatic.be/api/:path*" },
-    { "source": "/webhook/:path*",  "destination": "https://botmatic.be/webhook/:path*" },
-    { "source": "/admin/:path*",    "destination": "https://botmatic.be/admin/:path*" },
-    { "source": "/admin",           "destination": "https://botmatic.be/admin" },
-    { "source": "/client/:path*",   "destination": "https://botmatic.be/client/:path*" },
-    { "source": "/client",          "destination": "https://botmatic.be/client" },
-    { "source": "/inbox",           "destination": "https://botmatic.be/inbox" },
-    { "source": "/dashboard",       "destination": "https://botmatic.be/dashboard" },
-    { "source": "/analytics",       "destination": "https://botmatic.be/analytics" },
-    { "source": "/bots",            "destination": "https://botmatic.be/bots" },
-    { "source": "/bot",             "destination": "https://botmatic.be/bot" },
-    { "source": "/constructor",     "destination": "https://botmatic.be/constructor" },
-    { "source": "/train",           "destination": "https://botmatic.be/train" },
-    { "source": "/start",           "destination": "https://botmatic.be/start" }
+    {
+      "source": "/css/:path*",
+      "destination": "/public/css/:path*"
+    },
+    {
+      "source": "/js/:path*",
+      "destination": "/public/js/:path*"
+    },
+    {
+      "source": "/assets/:path*",
+      "destination": "/public/assets/:path*"
+    },
+    {
+      "source": "/hoe-werkt-het",
+      "destination": "/public/hoe-werkt-het"
+    },
+    {
+      "source": "/voor-wie",
+      "destination": "/public/voor-wie"
+    },
+    {
+      "source": "/prijzen",
+      "destination": "/public/prijzen"
+    },
+    {
+      "source": "/cases",
+      "destination": "/public/cases"
+    },
+    {
+      "source": "/vergelijking",
+      "destination": "/public/vergelijking"
+    },
+    {
+      "source": "/faq",
+      "destination": "/public/faq"
+    },
+    {
+      "source": "/contact",
+      "destination": "/public/contact"
+    },
+    {
+      "source": "/privacy-policy",
+      "destination": "/public/privacy-policy"
+    },
+    {
+      "source": "/terms",
+      "destination": "/public/terms"
+    },
+    {
+      "source": "/data-deletion",
+      "destination": "/public/data-deletion"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/public/privacy"
+    },
+    {
+      "source": "/cookies",
+      "destination": "/public/cookies"
+    },
+    {
+      "source": "/instagram-demo",
+      "destination": "/public/instagram-demo"
+    },
+    {
+      "source": "/citech",
+      "destination": "/public/citech"
+    },
+    {
+      "source": "/citech/",
+      "destination": "/public/citech"
+    },
+    {
+      "source": "/citecht",
+      "destination": "/public/citech"
+    },
+    {
+      "source": "/citecht/",
+      "destination": "/public/citech"
+    },
+    {
+      "source": "/auth/:path*",
+      "destination": "https://botmatic.be/auth/:path*"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://botmatic.be/api/:path*"
+    },
+    {
+      "source": "/webhook/:path*",
+      "destination": "https://botmatic.be/webhook/:path*"
+    },
+    {
+      "source": "/admin/:path*",
+      "destination": "https://botmatic.be/admin/:path*"
+    },
+    {
+      "source": "/admin",
+      "destination": "https://botmatic.be/admin"
+    },
+    {
+      "source": "/client/:path*",
+      "destination": "https://botmatic.be/client/:path*"
+    },
+    {
+      "source": "/client",
+      "destination": "https://botmatic.be/client"
+    },
+    {
+      "source": "/inbox",
+      "destination": "https://botmatic.be/inbox"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "https://botmatic.be/dashboard"
+    },
+    {
+      "source": "/analytics",
+      "destination": "https://botmatic.be/analytics"
+    },
+    {
+      "source": "/bots",
+      "destination": "https://botmatic.be/bots"
+    },
+    {
+      "source": "/bot",
+      "destination": "https://botmatic.be/bot"
+    },
+    {
+      "source": "/constructor",
+      "destination": "https://botmatic.be/constructor"
+    },
+    {
+      "source": "/train",
+      "destination": "https://botmatic.be/train"
+    },
+    {
+      "source": "/start",
+      "destination": "https://botmatic.be/start"
+    }
   ]
 }
