@@ -14,28 +14,8 @@
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/styles.css" />
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Organization",
-        "@id": "https://www.botmatic.be/#organization",
-        "name": "BotMatic",
-        "url": "https://www.botmatic.be",
-        "logo": "https://www.botmatic.be/assets/og.png",
-        "description": "BotMatic neemt terugkerende vragen en afspraken over via WhatsApp, Instagram, Messenger en meer. Speciaal voor Belgische KMO's.",
-        "telephone": "+32456912464",
-        "address": { "@type": "PostalAddress", "addressCountry": "BE" },
-        "areaServed": "BE",
-        "knowsLanguage": ["nl", "fr"],
-        "sameAs": []
-      }
-    ]
-  }
-  </script>
   <script src="/js/cookie-consent.js"></script>
 </head>
 <body>
@@ -59,7 +39,8 @@
           <span class="lang-divider">|</span>
           <button class="lang-btn" data-lang="fr">FR</button>
         </div>
-        <a class="btn btn-primary" href="/start" data-key="nav-cta">Gratis starten</a>
+        <a class="btn btn-nav-ghost" href="/demo">Demo bekijken</a>
+        <a class="btn btn-nav-primary" href="/start">Gratis starten →</a>
         <button class="menu-toggle" aria-label="Menu" aria-expanded="false"><span></span></button>
       </div>
     </div>
@@ -69,53 +50,57 @@
 
     <!-- ── HERO ── -->
     <section class="hero-section">
-      <div class="hero-bg-grid"></div>
       <div class="container hero-grid">
 
-        <!-- Left: copy -->
         <div class="hero-copy">
-          <div class="hero-badge">
-            <span class="hero-badge-dot"></span>
+          <div class="hero-pill">
+            <span class="hero-pill-dot"></span>
             <span data-key="hero-tag">Chatbot voor WhatsApp, Instagram &amp; meer</span>
           </div>
-          <h1 data-key="hero-title">De chatbot die klantvragen beantwoordt.<br /><em>Automatisch, 24/7.</em></h1>
-          <p class="hero-lead" data-key="hero-lead">BotMatic stuurt automatisch antwoord op terugkerende vragen, plant afspraken in en verbindt door naar jouw team — via WhatsApp, Instagram, Messenger en meer.</p>
-          <div class="hero-actions">
-            <a class="btn btn-hero-primary" href="/start">🚀 Gratis starten</a>
-            <a class="btn btn-hero-ghost wa-link" href="/demo" data-key="nav-cta">Bekijk live demo</a>
+
+          <h1 data-key="hero-title">
+            De chatbot die<br />
+            klantvragen beantwoordt.<br />
+            <span class="hero-accent">Automatisch, 24/7.</span>
+          </h1>
+
+          <p class="hero-sub" data-key="hero-lead">
+            BotMatic stuurt automatisch antwoord op terugkerende vragen, plant afspraken in en verbindt door naar jouw team — via WhatsApp, Instagram, Messenger en meer.
+          </p>
+
+          <div class="hero-btns">
+            <a class="btn btn-cta" href="/start">🚀 Gratis starten</a>
+            <a class="btn btn-outline wa-link" href="/demo" data-key="nav-cta">Bekijk live demo</a>
           </div>
-          <ul class="hero-checks">
-            <li data-key="hero-li1">FAQ automatisch beantwoord: openingsuren, prijzen, beschikbaarheid</li>
-            <li data-key="hero-li2">Afspraken ingepland zonder tussenkomst van je team</li>
-            <li data-key="hero-li3">Complexe vragen doorgestuurd naar de juiste persoon</li>
-          </ul>
-          <!-- Channel badges -->
-          <div class="channel-badges">
-            <span class="ch-badge ch-wa">
-              <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.561 4.14 1.535 5.879L.057 23.882a.5.5 0 00.61.61l6.003-1.478A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.955 9.955 0 01-5.192-1.453l-.372-.221-3.857.95.966-3.748-.243-.386A9.955 9.955 0 012 12C2 6.478 6.478 2 12 2s10 4.478 10 10-4.478 10-10 10z"/></svg>
+
+          <p class="hero-micro">Klaar in 3–5 dagen &nbsp;·&nbsp; Geen contract &nbsp;·&nbsp; NL + FR</p>
+
+          <div class="channel-row">
+            <span class="ch ch-wa">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.561 4.14 1.535 5.879L.057 23.882a.5.5 0 00.61.61l6.003-1.478A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.955 9.955 0 01-5.192-1.453l-.372-.221-3.857.95.966-3.748-.243-.386A9.955 9.955 0 012 12C2 6.478 6.478 2 12 2s10 4.478 10 10-4.478 10-10 10z"/></svg>
               WhatsApp
             </span>
-            <span class="ch-badge ch-ig">
-              <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            <span class="ch ch-ig">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
               Instagram
             </span>
-            <span class="ch-badge ch-ms">
-              <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-2.9 4.507L17.4 16.5H13.2l-1.8-2.496L9.6 16.5H6l3.024-4.162L6.6 8.248H10.8l1.35 2.023 1.35-2.023h4.062z"/></svg>
+            <span class="ch ch-ms">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-2.9 4.507L17.4 16.5H13.2l-1.8-2.496L9.6 16.5H6l3.024-4.162L6.6 8.248H10.8l1.35 2.023 1.35-2.023h4.062z"/></svg>
               Messenger
             </span>
-            <span class="ch-badge ch-tg">
-              <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+            <span class="ch ch-tg">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
               Telegram
             </span>
           </div>
         </div>
 
-        <!-- Right: live chat widget -->
-        <aside class="hero-widget" aria-label="Live demo chat">
-          <div class="widget-chrome">
-            <div class="widget-bar">
-              <span class="widget-dot r"></span><span class="widget-dot y"></span><span class="widget-dot g"></span>
-              <span class="widget-bar-label">BotMatic — Live demo</span>
+        <!-- Chat widget -->
+        <aside class="hero-chat-wrap" aria-label="Live demo">
+          <div class="chat-card">
+            <div class="chat-card-bar">
+              <span class="cbar-dot r"></span><span class="cbar-dot y"></span><span class="cbar-dot g"></span>
+              <span class="cbar-title">BotMatic — Live demo</span>
             </div>
             <div class="phone-head">
               <div class="avatar">BM</div>
@@ -146,25 +131,13 @@
     <!-- ── TRUST BAR ── -->
     <section class="trust-strip">
       <div class="container trust-strip-inner">
-        <div class="trust-item">
-          <strong>⚡ Live in 3–5 dagen</strong>
-          <span>Wij regelen de volledige setup</span>
-        </div>
+        <div class="trust-item"><strong>⚡ Live in 3–5 dagen</strong><span>Wij regelen de volledige setup</span></div>
         <div class="trust-sep"></div>
-        <div class="trust-item">
-          <strong>🇧🇪 100% Belgisch</strong>
-          <span>NL + FR, lokale support</span>
-        </div>
+        <div class="trust-item"><strong>🇧🇪 100% Belgisch</strong><span>NL + FR, lokale support</span></div>
         <div class="trust-sep"></div>
-        <div class="trust-item">
-          <strong>💶 Vaste prijs</strong>
-          <span>Geen verborgen kosten</span>
-        </div>
+        <div class="trust-item"><strong>💶 Vaste prijs</strong><span>Geen verborgen kosten</span></div>
         <div class="trust-sep"></div>
-        <div class="trust-item">
-          <strong>🔄 Maandelijks opzegbaar</strong>
-          <span>Geen langetermijncontract</span>
-        </div>
+        <div class="trust-item"><strong>🔄 Maandelijks opzegbaar</strong><span>Geen langetermijncontract</span></div>
       </div>
     </section>
 
@@ -198,24 +171,24 @@
       </div>
     </section>
 
-    <!-- ── PAIN SECTION ── -->
+    <!-- ── PAIN ── -->
     <section class="section pain-section">
       <div class="container">
         <div class="section-head">
           <span class="section-tag">Herkenbaar?</span>
-          <h2 data-key="pain-title">Dit kost jouw team elke dag tijd</h2>
+          <h2>Dit kost jouw team elke dag tijd</h2>
         </div>
         <div class="pain-grid">
-          <div class="pain-item"><span class="pain-emoji">😤</span><span data-key="pain-1">Gemiste klanten omdat niemand op tijd antwoordde</span></div>
-          <div class="pain-item"><span class="pain-emoji">😮‍💨</span><span data-key="pain-2">Eindeloze herhalende vragen die je team energie kosten</span></div>
-          <div class="pain-item"><span class="pain-emoji">🤯</span><span data-key="pain-3">Berichten van WhatsApp, Instagram, Messenger tegelijk</span></div>
-          <div class="pain-item"><span class="pain-emoji">😑</span><span data-key="pain-4">Klanten die uren wachten op een simpele bevestiging</span></div>
-          <div class="pain-item"><span class="pain-emoji">😡</span><span data-key="pain-5">Nieuw personeel telkens opnieuw inwerken</span></div>
-          <div class="pain-item"><span class="pain-emoji">😰</span><span data-key="pain-6">Afspraken die verloren gaan in de chaos van je inbox</span></div>
+          <div class="pain-item"><span class="pain-emoji">😤</span><span>Gemiste klanten omdat niemand op tijd antwoordde</span></div>
+          <div class="pain-item"><span class="pain-emoji">😮‍💨</span><span>Eindeloze herhalende vragen die je team energie kosten</span></div>
+          <div class="pain-item"><span class="pain-emoji">🤯</span><span>Berichten van WhatsApp, Instagram, Messenger tegelijk</span></div>
+          <div class="pain-item"><span class="pain-emoji">😑</span><span>Klanten die uren wachten op een simpele bevestiging</span></div>
+          <div class="pain-item"><span class="pain-emoji">😡</span><span>Nieuw personeel telkens opnieuw inwerken</span></div>
+          <div class="pain-item"><span class="pain-emoji">😰</span><span>Afspraken die verloren gaan in de chaos van je inbox</span></div>
         </div>
         <div class="pain-cta">
           <p class="pain-cta-text">BotMatic neemt dit volledig over.</p>
-          <a class="btn btn-primary wa-link" href="/demo">Bekijk hoe →</a>
+          <a class="btn btn-cta" href="/demo">Bekijk hoe →</a>
         </div>
       </div>
     </section>
@@ -225,7 +198,7 @@
       <div class="container">
         <div class="section-head">
           <span class="section-tag">Vergelijking</span>
-          <h2 data-key="compare-h2">BotMatic vs manueel werken</h2>
+          <h2>BotMatic vs manueel werken</h2>
         </div>
         <table class="compare-table">
           <thead>
@@ -236,74 +209,40 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td><strong>Responstijd</strong></td>
-              <td>2–4 uur gemiddeld</td>
-              <td class="col-botmatic">&lt; 1 min, 24/7</td>
-            </tr>
-            <tr>
-              <td><strong>Herhalende vragen</strong></td>
-              <td>Telkens handmatig</td>
-              <td class="col-botmatic">Automatisch afgehandeld</td>
-            </tr>
-            <tr>
-              <td><strong>Bereikbaarheid</strong></td>
-              <td>Kantooruren</td>
-              <td class="col-botmatic">Dag en nacht</td>
-            </tr>
-            <tr>
-              <td><strong>Meerdere kanalen</strong></td>
-              <td>Chaos en gemiste berichten</td>
-              <td class="col-botmatic">Één overzichtelijk systeem</td>
-            </tr>
-            <tr>
-              <td><strong>Nieuw personeel</strong></td>
-              <td>Weken inwerken</td>
-              <td class="col-botmatic">Direct klaar</td>
-            </tr>
+            <tr><td><strong>Responstijd</strong></td><td>2–4 uur gemiddeld</td><td class="col-botmatic">&lt; 1 min, 24/7</td></tr>
+            <tr><td><strong>Herhalende vragen</strong></td><td>Telkens handmatig</td><td class="col-botmatic">Automatisch afgehandeld</td></tr>
+            <tr><td><strong>Bereikbaarheid</strong></td><td>Kantooruren</td><td class="col-botmatic">Dag en nacht</td></tr>
+            <tr><td><strong>Meerdere kanalen</strong></td><td>Chaos en gemiste berichten</td><td class="col-botmatic">Één overzichtelijk systeem</td></tr>
+            <tr><td><strong>Nieuw personeel</strong></td><td>Weken inwerken</td><td class="col-botmatic">Direct klaar</td></tr>
           </tbody>
         </table>
       </div>
     </section>
 
-    <!-- ── SETUP STEPS ── -->
+    <!-- ── SETUP ── -->
     <section class="section setup-section">
       <div class="container">
         <div class="section-head">
           <span class="section-tag">Onboarding</span>
-          <h2 data-key="start-h2">Live in 3 stappen</h2>
+          <h2>Live in 3 stappen</h2>
         </div>
         <div class="setup-steps">
-          <div class="setup-step">
-            <div class="setup-icon">📋</div>
-            <h3 data-key="start-step1-h">1. Korte intake</h3>
-            <p data-key="start-step1-p">We bekijken je FAQ, afspraken en tone of voice. Duurt max. 30 minuten.</p>
-          </div>
-          <div class="setup-step">
-            <div class="setup-icon">⚙️</div>
-            <h3 data-key="start-step2-h">2. Setup op maat</h3>
-            <p data-key="start-step2-p">We bouwen jouw flows per kanaal. Volledig door ons verzorgd.</p>
-          </div>
-          <div class="setup-step">
-            <div class="setup-icon">🚀</div>
-            <h3 data-key="start-step3-h">3. Live &amp; bijsturen</h3>
-            <p data-key="start-step3-p">BotMatic draait mee. We finetunen op basis van echte gesprekken.</p>
-          </div>
+          <div class="setup-step"><div class="setup-icon">📋</div><h3>1. Korte intake</h3><p>We bekijken je FAQ, afspraken en tone of voice. Duurt max. 30 minuten.</p></div>
+          <div class="setup-step"><div class="setup-icon">⚙️</div><h3>2. Setup op maat</h3><p>We bouwen jouw flows per kanaal. Volledig door ons verzorgd.</p></div>
+          <div class="setup-step"><div class="setup-icon">🚀</div><h3>3. Live &amp; bijsturen</h3><p>BotMatic draait mee. We finetunen op basis van echte gesprekken.</p></div>
         </div>
       </div>
     </section>
 
     <!-- ── FINAL CTA ── -->
-    <section class="section cta-section">
+    <section class="final-cta-section">
       <div class="container">
-        <div class="final-cta">
-          <div class="final-cta-inner">
-            <h2 data-key="final-h2">Wil je dit live zien voor jouw zaak?</h2>
-            <p data-key="final-p">Stuur één WhatsApp en krijg een korte demo op maat.</p>
-            <div class="button-row" style="justify-content:center; margin-bottom:0;">
-              <a class="btn btn-primary wa-link" href="/demo">Bekijk live demo</a>
-              <a class="btn btn-ghost-white" href="/contact">Contact opnemen</a>
-            </div>
+        <div class="final-cta-box">
+          <h2>Wil je dit live zien voor jouw zaak?</h2>
+          <p>Stuur één WhatsApp en krijg een korte demo op maat.</p>
+          <div class="button-row" style="justify-content:center; margin-bottom:0;">
+            <a class="btn btn-cta" href="/demo">Bekijk live demo</a>
+            <a class="btn btn-outline-dark" href="/contact">Contact opnemen</a>
           </div>
         </div>
       </div>
