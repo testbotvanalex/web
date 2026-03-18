@@ -105,7 +105,7 @@
 
     history.push({ role: 'user', content: text });
 
-    fetch('https://admin.botmatic.be/api/chat', {
+    fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: text, history: history.slice(-6) })
