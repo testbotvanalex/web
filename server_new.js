@@ -655,6 +655,76 @@ app.get('/connect-studio', requireAdminAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'connect-studio.html'));
 });
 
+app.get('/whatsapp-connect', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.sendFile(path.join(__dirname, 'whatsapp-connect.html'));
+});
+
+// Embedded Signup — обмен code на токен и сохранение WABA
+app.post('/api/whatsapp/embedded-signup', async (req, res) => {
+  const { code, client_id } = req.body;
+  if (!code) return res.json({ success: false, error: 'No code provided' });
+
+  try {
+    const appId = process.env.META_APP_ID;
+    const appSecret = process.env.META_APP_SECRET;
+
+    // 1. Обмен code на user access token
+    const tokenRes = await axios.get('https://graph.facebook.com/v23.0/oauth/access_token', {
+      params: {
+        client_id: appId,
+        client_secret: appSecret,
+        code: code,
+        redirect_uri: '' // для Embedded Signup redirect_uri не нужен
+      }
+    });
+    const userToken = tokenRes.data.access_token;
+
+    // 2. Получаем список WABA доступных через этот токен
+    const debugRes = await axios.get('https://graph.facebook.com/v23.0/debug_token', {
+      params: {
+        input_token: userToken,
+        access_token: `${appId}|${appSecret}`
+      }
+    });
+    const granularity = debugRes.data.data?.granular_scopes || [];
+    const wabaScope = granularity.find(s => s.scope === 'whatsapp_business_management');
+    const wabaId = wabaScope?.target_ids?.[0] || null;
+
+    // 3. Получаем phone_number_id для этого WABA
+    let phoneNumberId = null;
+    if (wabaId) {
+      const phonesRes = await axios.get(`https://graph.facebook.com/v23.0/${wabaId}/phone_numbers`, {
+        params: { access_token: userToken }
+      });
+      phoneNumberId = phonesRes.data?.data?.[0]?.id || null;
+    }
+
+    // 4. Сохраняем в БД если есть client_id
+    if (client_id && wabaId) {
+      const db = require('./db');
+      const existing = db.prepare(
+        `SELECT id FROM channels WHERE client_id=? AND type='whatsapp'`
+      ).get(client_id);
+
+      if (existing) {
+        db.prepare(
+          `UPDATE channels SET token=?, page_id=?, status='connected', connected_at=CURRENT_TIMESTAMP WHERE id=?`
+        ).run(userToken, phoneNumberId || wabaId, existing.id);
+      } else {
+        db.prepare(
+          `INSERT INTO channels (client_id, type, token, page_id, status, connected_at) VALUES (?,?,?,?,'connected',CURRENT_TIMESTAMP)`
+        ).run(client_id, 'whatsapp', userToken, phoneNumberId || wabaId);
+      }
+    }
+
+    res.json({ success: true, waba_id: wabaId, phone_number_id: phoneNumberId });
+  } catch (e) {
+    console.error('Embedded signup error:', e.response?.data || e.message);
+    res.json({ success: false, error: e.response?.data?.error?.message || e.message });
+  }
+});
+
 app.get('/auth/connect-studio', requireAdminAuth, (req, res) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
   res.sendFile(path.join(__dirname, 'connect-studio.html'));
@@ -736,6 +806,61 @@ app.get('/local/api/agency/clients/:id', (req, res) => {
 });
 
 app.get('/local/api/agency/chats/:id/messages', (req, res) => {
+  try {
+    const chat = D.chats.byId.get(req.params.id);
+    if (!chat) return res.status(404).json({ error: 'chat not found' });
+    const messages = D.messages.byThread.all(chat.client_id, chat.channel, chat.sender_id, 300);
+    res.json({ chat, messages });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/admin/agency-console', requireAdminAuth, (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.sendFile(path.join(__dirname, 'agency-console.html'));
+});
+
+app.get('/api/admin/agency/clients', requireAdminAuth, (req, res) => {
+  try {
+    const clients = D.clients.all.all().map((client) => {
+      const workspace = enrichLocalWorkspace(client);
+      const channels = D.channels.byClient.all(client.id);
+      return {
+        ...workspace,
+        workspace_type: workspace.workspace_bot_id === workspace.id ? 'Bot Workspace' : 'Client Workspace',
+        channel_types: [...new Set(channels.map((ch) => ch.type).filter(Boolean))],
+      };
+    });
+    res.json({ clients });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/api/admin/agency/clients/:id', requireAdminAuth, (req, res) => {
+  try {
+    const client = enrichLocalWorkspace(D.clients.byId.get(req.params.id));
+    if (!client) return res.status(404).json({ error: 'Not found' });
+    const exactBot = D.bots.byId.get(client.id);
+    const bots = exactBot ? [exactBot] : D.bots.byClient.all(client.id);
+    const channels = D.channels.byClient.all(client.id);
+    D.chats.ensureFromMessages.run();
+    const chats = D.chats.list.all().filter((chat) => chat.client_id === client.id);
+    const messageCountRow = D.db.prepare('SELECT COUNT(*) AS count FROM messages WHERE client_id = ?').get(client.id);
+    res.json({
+      client,
+      bots,
+      channels,
+      chats,
+      message_count: messageCountRow?.count || 0,
+    });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/api/admin/agency/chats/:id/messages', requireAdminAuth, (req, res) => {
   try {
     const chat = D.chats.byId.get(req.params.id);
     if (!chat) return res.status(404).json({ error: 'chat not found' });
@@ -2050,7 +2175,14 @@ app.get('/auth/messenger/login', (req, res) => {
 });
 
 app.get('/auth/messenger/callback', async (req, res) => {
-  const { code, state, error, error_description: errorDescription } = req.query;
+  const {
+    code,
+    state,
+    error,
+    error_code: errorCode,
+    error_description: errorDescription,
+    error_message: errorMessage,
+  } = req.query;
   const oauthData = state ? messengerOauthStates.get(state) : null;
   const bot = getBotOrDefault(oauthData?.botId || req.query.botId);
   const msClientId = oauthData?.clientId || null;
@@ -2058,10 +2190,12 @@ app.get('/auth/messenger/callback', async (req, res) => {
     ? `/admin/client?id=${msClientId}`
     : `/auth/connect?botId=${encodeURIComponent(bot.id)}`;
 
-  if (error) {
+  if (error || errorCode || errorMessage) {
+    const parts = [errorDescription || errorMessage || error];
+    if (errorCode) parts.push(`Facebook error code: ${errorCode}`);
     return renderErrorPage(res, {
       title: 'Could not connect Messenger',
-      description: errorDescription || error,
+      description: parts.filter(Boolean).join('\n'),
       actionHref,
       actionLabel: 'Back to channels',
     });
@@ -2204,6 +2338,22 @@ app.get('/auth/messenger/select', async (req, res) => {
       actionLabel: 'Back to Channels',
     });
   }
+});
+
+// WhatsApp webhook verification
+app.get('/webhook', (req, res) => {
+  const mode = req.query['hub.mode'];
+  const token = req.query['hub.verify_token'];
+  const challenge = req.query['hub.challenge'];
+  if (mode === 'subscribe' && token === CONFIG.WEBHOOK_VERIFY_TOKEN) {
+    res.status(200).send(challenge);
+  } else {
+    res.sendStatus(403);
+  }
+});
+
+app.post('/webhook', (req, res) => {
+  res.sendStatus(200);
 });
 
 app.get('/webhook/instagram', (req, res) => {
@@ -2641,6 +2791,18 @@ app.get('/auth/api/whatsapp/connect', async (req, res) => {
     console.error('WhatsApp Baileys proxy error:', err.message);
     res.status(500).json({ error: 'WhatsApp backend offline' });
   }
+});
+
+app.get('/auth/api/whatsapp/webhook', (req, res) => {
+  const mode = req.query['hub.mode'];
+  const token = req.query['hub.verify_token'];
+  const challenge = req.query['hub.challenge'];
+
+  if (mode === 'subscribe' && token === CONFIG.WEBHOOK_VERIFY_TOKEN) {
+    return res.status(200).send(challenge);
+  }
+
+  res.sendStatus(403);
 });
 
 /**
