@@ -140,25 +140,45 @@
       max-width: 840px;
     }
     .tabs {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 10px;
-      flex-wrap: wrap;
     }
     .tab {
       border: 1px solid var(--line);
       background: #fff;
       color: var(--muted);
-      border-radius: 999px;
-      height: 42px;
-      padding: 0 16px;
+      border-radius: 18px;
+      min-height: 82px;
+      padding: 14px 16px;
       font: inherit;
       font-weight: 700;
       cursor: pointer;
+      text-align: left;
+      display: grid;
+      gap: 6px;
+      align-content: start;
     }
     .tab.active {
       border-color: transparent;
       background: linear-gradient(135deg, var(--accent), var(--accent-dark));
       color: #fff;
+    }
+    .tab-step {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      opacity: .72;
+    }
+    .tab-title {
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1.05;
+    }
+    .tab-help {
+      font-size: 13px;
+      line-height: 1.35;
+      opacity: .82;
     }
     .panel {
       background: var(--panel);
@@ -309,6 +329,24 @@
       display: grid;
       gap: 16px;
     }
+    .flow-box {
+      border: 1px solid rgba(124, 58, 237, .18);
+      background: linear-gradient(180deg, #faf7ff 0%, #ffffff 100%);
+      border-radius: 16px;
+      padding: 16px;
+      display: grid;
+      gap: 10px;
+    }
+    .flow-title {
+      font-size: 18px;
+      font-weight: 800;
+    }
+    .flow-steps {
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 14px;
+    }
     .mini-box {
       border: 1px solid var(--line);
       background: var(--soft);
@@ -399,7 +437,7 @@
       transform: translateY(0);
     }
     @media (max-width: 1280px) {
-      .app, .inbox-layout, .channels-layout {
+      .app, .inbox-layout, .channels-layout, .tabs {
         grid-template-columns: 1fr;
       }
       .sidebar {
@@ -428,15 +466,31 @@
       </div>
 
       <div class="tabs">
-        <button class="tab active" data-tab="inbox" type="button">Inbox</button>
-        <button class="tab" data-tab="channels" type="button">Channels</button>
-        <button class="tab" data-tab="bot" type="button">Bot Setup</button>
-        <button class="tab" data-tab="access" type="button">Access</button>
+        <button class="tab active" data-tab="inbox" type="button">
+          <div class="tab-step">Step 1</div>
+          <div class="tab-title">Messages</div>
+          <div class="tab-help">Open chats and reply to clients.</div>
+        </button>
+        <button class="tab" data-tab="channels" type="button">
+          <div class="tab-step">Step 2</div>
+          <div class="tab-title">Connect Channels</div>
+          <div class="tab-help">Instagram, Messenger, Telegram, WhatsApp.</div>
+        </button>
+        <button class="tab" data-tab="bot" type="button">
+          <div class="tab-step">Step 3</div>
+          <div class="tab-title">Bot Text</div>
+          <div class="tab-help">Prompt and knowledge for this client.</div>
+        </button>
+        <button class="tab" data-tab="access" type="button">
+          <div class="tab-step">Step 4</div>
+          <div class="tab-title">Client Access</div>
+          <div class="tab-help">Optional login for the client.</div>
+        </button>
       </div>
 
       <section id="tab-inbox" class="tab-panel">
         <div class="panel">
-          <div class="panel-head"><div class="panel-title">Client Inbox</div></div>
+          <div class="panel-head"><div class="panel-title">Client Messages</div></div>
           <div class="panel-body inbox-layout">
             <div class="chat-list" id="chatList"></div>
             <div>
@@ -452,11 +506,20 @@
 
       <section id="tab-channels" class="tab-panel hidden">
         <div class="panel">
-          <div class="panel-head"><div class="panel-title">Channels</div></div>
+          <div class="panel-head"><div class="panel-title">Connect Channels</div></div>
           <div class="panel-body channels-layout">
             <div class="channel-nav" id="channelNav"></div>
             <div class="card-stack">
-              <select id="channelBotSelect" class="select"></select>
+              <div class="flow-box">
+                <div class="flow-title">How connection works</div>
+                <div class="flow-steps">
+                  <div>1. Choose one channel on the left.</div>
+                  <div>2. If Meta channel: click login. If manual channel: paste token fields.</div>
+                  <div>3. Click connect or save.</div>
+                  <div>4. Status changes to connected.</div>
+                </div>
+              </div>
+              <div id="channelBotWrap"></div>
               <div class="mini-box">
                 <div class="mini-head">
                   <div class="mini-name" id="channelPanelTitle">Instagram</div>
@@ -475,7 +538,7 @@
 
       <section id="tab-bot" class="tab-panel hidden">
         <div class="panel">
-          <div class="panel-head"><div class="panel-title" id="botEditorTitle">Bot Setup</div></div>
+          <div class="panel-head"><div class="panel-title" id="botEditorTitle">Bot Text</div></div>
           <div class="panel-body stack">
             <select id="botSelect" class="select"></select>
             <input id="botNameInput" class="field" placeholder="Bot name" />
@@ -488,7 +551,7 @@
 
       <section id="tab-access" class="tab-panel hidden">
         <div class="panel">
-          <div class="panel-head"><div class="panel-title">Access</div></div>
+          <div class="panel-head"><div class="panel-title">Client Access</div></div>
           <div class="panel-body stack" style="max-width:640px">
             <div class="empty">Optional. Give the client a portal login only if you want them to read or answer messages themselves.</div>
             <input id="portalLoginInput" class="field" placeholder="Portal login" />
@@ -759,7 +822,7 @@
             const data = client.channels.instagram;
             return `
               <div class="card-stack">
-                <button class="btn primary" type="button" data-action="connect-instagram">Connect Instagram</button>
+                <button class="btn primary" type="button" data-action="connect-instagram">Start Instagram login</button>
                 <div class="mini-box guide">
                   <h4>How it works</h4>
                   <ol>
@@ -784,7 +847,7 @@
             const data = client.channels.messenger;
             return `
               <div class="card-stack">
-                <button class="btn primary" type="button" data-action="connect-messenger">Connect Messenger</button>
+                <button class="btn primary" type="button" data-action="connect-messenger">Start Messenger login</button>
                 <div class="mini-box guide">
                   <h4>How it works</h4>
                   <ol>
@@ -810,7 +873,7 @@
             return `
               <div class="card-stack">
                 <input id="telegramTokenInput" class="field" placeholder="Telegram bot token" value="${esc(data.token || '')}" />
-                <button class="btn primary" type="button" data-action="connect-telegram">Connect Telegram</button>
+                <button class="btn primary" type="button" data-action="connect-telegram">Save Telegram token</button>
                 <div class="mini-box guide">
                   <h4>How to get token</h4>
                   <ol>
@@ -838,7 +901,7 @@
                 <input id="waDisplayNameInput" class="field" placeholder="Display name (optional)" value="${esc(data.account && data.account !== 'Not connected' ? data.account : bot.name)}" />
                 <input id="waTokenInput" class="field" placeholder="Permanent access token" value="${esc(data.token || '')}" />
                 <input id="waPhoneIdInput" class="field" placeholder="Phone number ID" value="${esc(data.id && data.id !== '—' ? data.id : '')}" />
-                <button class="btn primary" type="button" data-action="connect-whatsapp">Connect WhatsApp</button>
+                <button class="btn primary" type="button" data-action="connect-whatsapp">Save WhatsApp data</button>
                 <div class="mini-box guide">
                   <h4>Webhook for Meta</h4>
                   <div class="copy-row">
@@ -893,14 +956,26 @@
         });
       });
 
-      document.getElementById('channelBotSelect').innerHTML = client.bots.map((botItem) => `
-        <option value="${esc(botItem.id)}" ${botItem.id === state.currentBotId ? 'selected' : ''}>${esc(botItem.name)}</option>
-      `).join('');
-
-      document.getElementById('channelBotSelect').addEventListener('change', (e) => {
-        state.currentBotId = e.target.value;
-        renderChannels();
-      });
+      if (client.bots.length <= 1) {
+        document.getElementById('channelBotWrap').innerHTML = `
+          <div class="mini-box">
+            <div class="mini-name">Bot</div>
+            <div class="muted">${esc(bot.name)}</div>
+          </div>
+        `;
+      } else {
+        document.getElementById('channelBotWrap').innerHTML = `
+          <select id="channelBotSelect" class="select">
+            ${client.bots.map((botItem) => `
+              <option value="${esc(botItem.id)}" ${botItem.id === state.currentBotId ? 'selected' : ''}>${esc(botItem.name)}</option>
+            `).join('')}
+          </select>
+        `;
+        document.getElementById('channelBotSelect').addEventListener('change', (e) => {
+          state.currentBotId = e.target.value;
+          renderChannels();
+        });
+      }
 
       const selected = defs[state.currentChannelKey];
       const channelState = client.channels[state.currentChannelKey];
