@@ -12,6 +12,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["start"],
       "port": 3200
+    },
+    {
+      "name": "Homepage Preview (static)",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["preview-server.js"],
+      "port": 3201
     }
   ]
 }

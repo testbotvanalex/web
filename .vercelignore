@@ -1,0 +1,11 @@
+node_modules
+data
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.log
+*.mov
+*.mp4
+bots/
+backups/
+.env
