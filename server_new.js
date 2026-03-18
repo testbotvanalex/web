@@ -650,6 +650,102 @@ app.get('/auth/bot-scope-app', requireAdminAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'bot-scope-app.html'));
 });
 
+app.get('/connect-studio', requireAdminAuth, (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.sendFile(path.join(__dirname, 'connect-studio.html'));
+});
+
+app.get('/auth/connect-studio', requireAdminAuth, (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.sendFile(path.join(__dirname, 'connect-studio.html'));
+});
+
+app.get('/local/agency-console', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.sendFile(path.join(__dirname, 'agency-console.html'));
+});
+
+function enrichLocalWorkspace(client) {
+  if (!client) return null;
+
+  const ownBot = D.db.prepare(`
+    SELECT id, name
+    FROM bots
+    WHERE client_id = ?
+    ORDER BY created_at DESC
+    LIMIT 1
+  `).get(client.id);
+
+  const linkedChannelBot = D.db.prepare(`
+    SELECT b.id, b.name
+    FROM channels c
+    JOIN bots b ON b.id = c.bot_id
+    WHERE c.client_id = ?
+      AND c.bot_id IS NOT NULL
+    ORDER BY COALESCE(c.connected_at, c.id) DESC
+    LIMIT 1
+  `).get(client.id);
+
+  const exactBot = D.bots.byId.get(client.id);
+  const resolvedBot = ownBot || linkedChannelBot || exactBot || null;
+
+  return {
+    ...client,
+    workspace_bot_id: resolvedBot?.id || null,
+    workspace_bot_name: resolvedBot?.name || null,
+  };
+}
+
+app.get('/local/api/agency/clients', (req, res) => {
+  try {
+    const clients = D.clients.all.all().map((client) => {
+      const workspace = enrichLocalWorkspace(client);
+      const channels = D.channels.byClient.all(client.id);
+      return {
+        ...workspace,
+        workspace_type: workspace.workspace_bot_id === workspace.id ? 'Bot Workspace' : 'Client Workspace',
+        channel_types: [...new Set(channels.map((ch) => ch.type).filter(Boolean))],
+      };
+    });
+    res.json({ clients });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/local/api/agency/clients/:id', (req, res) => {
+  try {
+    const client = enrichLocalWorkspace(D.clients.byId.get(req.params.id));
+    if (!client) return res.status(404).json({ error: 'Not found' });
+    const exactBot = D.bots.byId.get(client.id);
+    const bots = exactBot ? [exactBot] : D.bots.byClient.all(client.id);
+    const channels = D.channels.byClient.all(client.id);
+    D.chats.ensureFromMessages.run();
+    const chats = D.chats.list.all().filter((chat) => chat.client_id === client.id);
+    const messageCountRow = D.db.prepare('SELECT COUNT(*) AS count FROM messages WHERE client_id = ?').get(client.id);
+    res.json({
+      client,
+      bots,
+      channels,
+      chats,
+      message_count: messageCountRow?.count || 0,
+    });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/local/api/agency/chats/:id/messages', (req, res) => {
+  try {
+    const chat = D.chats.byId.get(req.params.id);
+    if (!chat) return res.status(404).json({ error: 'chat not found' });
+    const messages = D.messages.byThread.all(chat.client_id, chat.channel, chat.sender_id, 300);
+    res.json({ chat, messages });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.get('/constructor', (req, res) => {
   res.sendFile(path.join(__dirname, 'constructor.html'));
 });
