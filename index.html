@@ -16,7 +16,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/styles.css" />
-  <!-- Schema.org structured data -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -29,38 +28,10 @@
         "logo": "https://www.botmatic.be/assets/og.png",
         "description": "BotMatic neemt terugkerende vragen en afspraken over via WhatsApp, Instagram, Messenger en meer. Speciaal voor Belgische KMO's.",
         "telephone": "+32456912464",
-        "address": {
-          "@type": "PostalAddress",
-          "addressCountry": "BE"
-        },
+        "address": { "@type": "PostalAddress", "addressCountry": "BE" },
         "areaServed": "BE",
         "knowsLanguage": ["nl", "fr"],
         "sameAs": []
-      },
-      {
-        "@type": "WebSite",
-        "@id": "https://www.botmatic.be/#website",
-        "url": "https://www.botmatic.be",
-        "name": "BotMatic",
-        "publisher": {
-          "@id": "https://www.botmatic.be/#organization"
-        }
-      },
-      {
-        "@type": "Service",
-        "@id": "https://www.botmatic.be/#service",
-        "name": "BotMatic chatbot voor KMO's",
-        "provider": {
-          "@id": "https://www.botmatic.be/#organization"
-        },
-        "description": "Virtuele assistent voor Belgische KMO's via WhatsApp, Instagram en Messenger — geautomatiseerde FAQ, afspraken en opvolging.",
-        "areaServed": "BE",
-        "serviceType": "Chatbot automatisering",
-        "offers": {
-          "@type": "Offer",
-          "priceCurrency": "EUR",
-          "availability": "https://schema.org/InStock"
-        }
       }
     ]
   }
@@ -68,18 +39,19 @@
   <script src="/js/cookie-consent.js"></script>
 </head>
 <body>
+
+  <!-- ── HEADER ── -->
   <header class="site-header">
     <div class="container nav-row">
       <a class="logo" href="/">BotMatic<span>.</span></a>
       <nav class="site-nav" aria-label="Hoofdmenu">
         <a class="active" href="/">Home</a>
-        <a href="/hoe-werkt-het.html" data-key="nav-how">Hoe werkt het</a>
-        <a href="/voor-wie.html" data-key="nav-who">Voor wie</a>
-        <a href="/prijzen.html" data-key="nav-price">Prijzen</a>
-        <a href="/cases.html">Cases</a>
-        <a href="/vergelijking.html">Vergelijking</a>
-        <a href="/faq.html">FAQ</a>
-        <a href="/contact.html">Contact</a>
+        <a href="/hoe-werkt-het" data-key="nav-how">Hoe werkt het</a>
+        <a href="/voor-wie" data-key="nav-who">Voor wie</a>
+        <a href="/prijzen" data-key="nav-price">Prijzen</a>
+        <a href="/cases">Cases</a>
+        <a href="/faq">FAQ</a>
+        <a href="/contact">Contact</a>
       </nav>
       <div class="header-cta">
         <div class="lang-switch">
@@ -87,111 +59,180 @@
           <span class="lang-divider">|</span>
           <button class="lang-btn" data-lang="fr">FR</button>
         </div>
-        <a class="btn btn-primary wa-link" href="/demo" data-key="nav-cta">Bekijk live demo</a>
+        <a class="btn btn-primary" href="/start" data-key="nav-cta">Gratis starten</a>
         <button class="menu-toggle" aria-label="Menu" aria-expanded="false"><span></span></button>
       </div>
     </div>
   </header>
 
-  <main class="page">
-    <section class="section">
+  <main>
+
+    <!-- ── HERO ── -->
+    <section class="hero-section">
+      <div class="hero-bg-grid"></div>
       <div class="container hero-grid">
-        <div>
-          <span class="tag"><span class="tag-dot"></span><span data-key="hero-tag">Chatbot voor WhatsApp, Instagram &amp; meer</span></span>
-          <h1 data-key="hero-title">De chatbot die klantvragen beantwoordt.<br />Automatisch, 24/7.</h1>
-          <p class="lead" data-key="hero-lead">BotMatic stuurt automatisch antwoord op terugkerende vragen, plant afspraken in en verbindt door naar jouw team — via WhatsApp, Instagram, Messenger en andere chatkanalen.</p>
-          <div class="button-row">
-            <a class="btn btn-primary" href="/start">🚀 Aan de slag — gratis setup</a>
-            <a class="btn btn-ghost wa-link" href="/demo" data-key="nav-cta">Bekijk live demo</a>
+
+        <!-- Left: copy -->
+        <div class="hero-copy">
+          <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            <span data-key="hero-tag">Chatbot voor WhatsApp, Instagram &amp; meer</span>
           </div>
-          <ul class="check-list">
-            <li data-key="hero-li1">FAQ automatisch beantwoord: openingsuren, prijzen, beschikbaarheid.</li>
-            <li data-key="hero-li2">Afspraken ingepland zonder tussenkomst van je team.</li>
-            <li data-key="hero-li3">Complexe vragen doorgestuurd naar de juiste persoon.</li>
+          <h1 data-key="hero-title">De chatbot die klantvragen beantwoordt.<br /><em>Automatisch, 24/7.</em></h1>
+          <p class="hero-lead" data-key="hero-lead">BotMatic stuurt automatisch antwoord op terugkerende vragen, plant afspraken in en verbindt door naar jouw team — via WhatsApp, Instagram, Messenger en meer.</p>
+          <div class="hero-actions">
+            <a class="btn btn-hero-primary" href="/start">🚀 Gratis starten</a>
+            <a class="btn btn-hero-ghost wa-link" href="/demo" data-key="nav-cta">Bekijk live demo</a>
+          </div>
+          <ul class="hero-checks">
+            <li data-key="hero-li1">FAQ automatisch beantwoord: openingsuren, prijzen, beschikbaarheid</li>
+            <li data-key="hero-li2">Afspraken ingepland zonder tussenkomst van je team</li>
+            <li data-key="hero-li3">Complexe vragen doorgestuurd naar de juiste persoon</li>
           </ul>
-          <div class="pill-row">
-            <span class="pill" data-key="hero-pill1">Belgische KMO-focus</span>
-            <span class="pill" data-key="hero-pill2">Klaar in enkele dagen</span>
-            <span class="pill" data-key="hero-pill3">Maandelijks opzegbaar</span>
+          <!-- Channel badges -->
+          <div class="channel-badges">
+            <span class="ch-badge ch-wa">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.561 4.14 1.535 5.879L.057 23.882a.5.5 0 00.61.61l6.003-1.478A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.955 9.955 0 01-5.192-1.453l-.372-.221-3.857.95.966-3.748-.243-.386A9.955 9.955 0 012 12C2 6.478 6.478 2 12 2s10 4.478 10 10-4.478 10-10 10z"/></svg>
+              WhatsApp
+            </span>
+            <span class="ch-badge ch-ig">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+              Instagram
+            </span>
+            <span class="ch-badge ch-ms">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-2.9 4.507L17.4 16.5H13.2l-1.8-2.496L9.6 16.5H6l3.024-4.162L6.6 8.248H10.8l1.35 2.023 1.35-2.023h4.062z"/></svg>
+              Messenger
+            </span>
+            <span class="ch-badge ch-tg">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+              Telegram
+            </span>
           </div>
         </div>
 
-        <aside class="phone" aria-label="Voorbeeld chat">
-          <div class="phone-head">
-            <div class="avatar">BM</div>
-            <div class="avatar-meta">
-              <strong>BotMatic Assistent</strong>
-              <span>Online</span>
+        <!-- Right: live chat widget -->
+        <aside class="hero-widget" aria-label="Live demo chat">
+          <div class="widget-chrome">
+            <div class="widget-bar">
+              <span class="widget-dot r"></span><span class="widget-dot y"></span><span class="widget-dot g"></span>
+              <span class="widget-bar-label">BotMatic — Live demo</span>
+            </div>
+            <div class="phone-head">
+              <div class="avatar">BM</div>
+              <div class="avatar-meta">
+                <strong>BotMatic Assistent</strong>
+                <span>Online</span>
+              </div>
+            </div>
+            <div class="phone-chat" id="hero-chat"></div>
+            <div class="phone-quick" id="hero-quick">
+              <span class="quick" data-msg="Afspraak maken">Afspraak maken</span>
+              <span class="quick" data-msg="Openingsuren">Openingsuren</span>
+              <span class="quick" data-msg="Prijslijst">Prijslijst</span>
+            </div>
+            <div class="phone-live-hint"><span class="live-dot"></span>Live — typ hieronder en test het zelf</div>
+            <div class="phone-input-row">
+              <input id="hero-input" type="text" placeholder="✍️ Stel een vraag..." autocomplete="off" />
+              <button id="hero-send" aria-label="Verstuur">
+                <svg viewBox="0 0 24 24" fill="none" width="15" height="15"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
             </div>
           </div>
-          <div class="phone-chat" id="hero-chat"></div>
-          <div class="phone-quick" id="hero-quick">
-            <span class="quick" data-msg="Afspraak maken">Afspraak maken</span>
-            <span class="quick" data-msg="Openingsuren">Openingsuren</span>
-            <span class="quick" data-msg="Prijslijst">Prijslijst</span>
-          </div>
-          <div class="phone-live-hint"><span class="live-dot"></span>Live demo — typ hieronder en test het zelf</div>
-          <div class="phone-input-row">
-            <input id="hero-input" type="text" placeholder="✍️ Stel een vraag en zie het live..." autocomplete="off" />
-            <button id="hero-send" aria-label="Verstuur">
-              <svg viewBox="0 0 24 24" fill="none" width="15" height="15"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-          </div>
         </aside>
+
       </div>
     </section>
 
-    <section class="trust-bar">
-      <div class="container trust-bar-inner">
+    <!-- ── TRUST BAR ── -->
+    <section class="trust-strip">
+      <div class="container trust-strip-inner">
         <div class="trust-item">
-          <span class="trust-icon">⚡</span>
-          <div><strong>Live in 3–5 dagen</strong><span>Wij regelen de volledige setup</span></div>
+          <strong>⚡ Live in 3–5 dagen</strong>
+          <span>Wij regelen de volledige setup</span>
         </div>
+        <div class="trust-sep"></div>
         <div class="trust-item">
-          <span class="trust-icon">🇧🇪</span>
-          <div><strong>100% Belgisch</strong><span>NL + FR, lokale support</span></div>
+          <strong>🇧🇪 100% Belgisch</strong>
+          <span>NL + FR, lokale support</span>
         </div>
+        <div class="trust-sep"></div>
         <div class="trust-item">
-          <span class="trust-icon">💶</span>
-          <div><strong>Vaste prijs</strong><span>Geen verborgen kosten</span></div>
+          <strong>💶 Vaste prijs</strong>
+          <span>Geen verborgen kosten</span>
         </div>
+        <div class="trust-sep"></div>
         <div class="trust-item">
-          <span class="trust-icon">🔄</span>
-          <div><strong>Maandelijks opzegbaar</strong><span>Geen langetermijncontract</span></div>
+          <strong>🔄 Maandelijks opzegbaar</strong>
+          <span>Geen langetermijncontract</span>
         </div>
       </div>
     </section>
 
+    <!-- ── HOW IT WORKS ── -->
+    <section class="section hiw-section">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-tag">Hoe werkt het</span>
+          <h2>Van vraag naar antwoord — in seconden</h2>
+          <p class="section-sub">Jouw klant stuurt een bericht. BotMatic herkent de vraag en geeft meteen een correct antwoord — dag en nacht, op elk kanaal.</p>
+        </div>
+        <div class="hiw-steps">
+          <div class="hiw-step">
+            <div class="hiw-num">01</div>
+            <h3>Klant stuurt bericht</h3>
+            <p>Via WhatsApp, Instagram, Messenger of Telegram — BotMatic vangt alles op.</p>
+          </div>
+          <div class="hiw-arrow">→</div>
+          <div class="hiw-step">
+            <div class="hiw-num">02</div>
+            <h3>BotMatic analyseert</h3>
+            <p>AI herkent de intentie en zoekt het juiste antwoord in jouw kennisbank.</p>
+          </div>
+          <div class="hiw-arrow">→</div>
+          <div class="hiw-step">
+            <div class="hiw-num">03</div>
+            <h3>Direct antwoord</h3>
+            <p>In &lt; 1 minuut krijgt de klant een correct, persoonlijk antwoord. Jij doet niets.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PAIN SECTION ── -->
     <section class="section pain-section">
       <div class="container">
-        <div class="pain-header">
-          <span class="section-tag" data-key="pain-tag">Herkenbaar?</span>
-          <h2 data-key="pain-title">Dit kost jouw team elke dag tijd en energie</h2>
+        <div class="section-head">
+          <span class="section-tag">Herkenbaar?</span>
+          <h2 data-key="pain-title">Dit kost jouw team elke dag tijd</h2>
         </div>
         <div class="pain-grid">
           <div class="pain-item"><span class="pain-emoji">😤</span><span data-key="pain-1">Gemiste klanten omdat niemand op tijd antwoordde</span></div>
           <div class="pain-item"><span class="pain-emoji">😮‍💨</span><span data-key="pain-2">Eindeloze herhalende vragen die je team energie kosten</span></div>
-          <div class="pain-item"><span class="pain-emoji">🤯</span><span data-key="pain-3">Berichten van WhatsApp, Instagram, Messenger en nog meer tegelijk</span></div>
+          <div class="pain-item"><span class="pain-emoji">🤯</span><span data-key="pain-3">Berichten van WhatsApp, Instagram, Messenger tegelijk</span></div>
           <div class="pain-item"><span class="pain-emoji">😑</span><span data-key="pain-4">Klanten die uren wachten op een simpele bevestiging</span></div>
-          <div class="pain-item"><span class="pain-emoji">😡</span><span data-key="pain-5">Nieuw personeel telkens opnieuw inwerken voor dezelfde antwoorden</span></div>
+          <div class="pain-item"><span class="pain-emoji">😡</span><span data-key="pain-5">Nieuw personeel telkens opnieuw inwerken</span></div>
           <div class="pain-item"><span class="pain-emoji">😰</span><span data-key="pain-6">Afspraken die verloren gaan in de chaos van je inbox</span></div>
         </div>
         <div class="pain-cta">
-          <p data-key="pain-cta">BotMatic neemt dit volledig over.</p>
+          <p class="pain-cta-text">BotMatic neemt dit volledig over.</p>
           <a class="btn btn-primary wa-link" href="/demo">Bekijk hoe →</a>
         </div>
       </div>
     </section>
 
+    <!-- ── COMPARE ── -->
     <section class="section compare-table-section">
       <div class="container">
-        <h2 data-key="compare-h2">BotMatic vs manueel werken</h2>
+        <div class="section-head">
+          <span class="section-tag">Vergelijking</span>
+          <h2 data-key="compare-h2">BotMatic vs manueel werken</h2>
+        </div>
         <table class="compare-table">
           <thead>
             <tr>
               <th></th>
               <th>Manueel</th>
-              <th class="col-botmatic">BotMatic</th>
+              <th class="col-botmatic">✅ BotMatic</th>
             </tr>
           </thead>
           <tbody>
@@ -225,27 +266,49 @@
       </div>
     </section>
 
-    <section class="section">
+    <!-- ── SETUP STEPS ── -->
+    <section class="section setup-section">
       <div class="container">
-        <h2 data-key="start-h2">Zo starten we</h2>
-        <div class="timeline">
-          <article class="timeline-item"><h3 data-key="start-step1-h">1. Korte intake</h3><p data-key="start-step1-p">We bekijken je FAQ, afspraken en tone of voice.</p></article>
-          <article class="timeline-item"><h3 data-key="start-step2-h">2. Setup op maat</h3><p data-key="start-step2-p">We bereiden jouw flows per kanaal voor met duidelijke regels.</p></article>
-          <article class="timeline-item"><h3 data-key="start-step3-h">3. Live en bijsturen</h3><p data-key="start-step3-p">BotMatic draait mee. We finetunen op basis van echte gesprekken.</p></article>
+        <div class="section-head">
+          <span class="section-tag">Onboarding</span>
+          <h2 data-key="start-h2">Live in 3 stappen</h2>
+        </div>
+        <div class="setup-steps">
+          <div class="setup-step">
+            <div class="setup-icon">📋</div>
+            <h3 data-key="start-step1-h">1. Korte intake</h3>
+            <p data-key="start-step1-p">We bekijken je FAQ, afspraken en tone of voice. Duurt max. 30 minuten.</p>
+          </div>
+          <div class="setup-step">
+            <div class="setup-icon">⚙️</div>
+            <h3 data-key="start-step2-h">2. Setup op maat</h3>
+            <p data-key="start-step2-p">We bouwen jouw flows per kanaal. Volledig door ons verzorgd.</p>
+          </div>
+          <div class="setup-step">
+            <div class="setup-icon">🚀</div>
+            <h3 data-key="start-step3-h">3. Live &amp; bijsturen</h3>
+            <p data-key="start-step3-p">BotMatic draait mee. We finetunen op basis van echte gesprekken.</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section">
-      <div class="container final-cta">
-        <h2 data-key="final-h2">Wil je dit live zien voor jouw zaak?</h2>
-        <p data-key="final-p">Stuur één WhatsApp en krijg een korte demo op maat.</p>
-        <div class="button-row" style="justify-content:center; margin-bottom:0;">
-          <a class="btn btn-primary wa-link" href="/demo">Bekijk live demo</a>
-          <a class="btn btn-ghost" href="/contact.html">Contact opnemen</a>
+    <!-- ── FINAL CTA ── -->
+    <section class="section cta-section">
+      <div class="container">
+        <div class="final-cta">
+          <div class="final-cta-inner">
+            <h2 data-key="final-h2">Wil je dit live zien voor jouw zaak?</h2>
+            <p data-key="final-p">Stuur één WhatsApp en krijg een korte demo op maat.</p>
+            <div class="button-row" style="justify-content:center; margin-bottom:0;">
+              <a class="btn btn-primary wa-link" href="/demo">Bekijk live demo</a>
+              <a class="btn btn-ghost-white" href="/contact">Contact opnemen</a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
+
   </main>
 
   <footer class="site-footer">
@@ -255,7 +318,7 @@
         <a href="/privacy-policy">Privacy Policy</a>
         <a href="/terms">Terms</a>
         <a href="/data-deletion">Data Deletion</a>
-        <a href="/contact.html">Contact</a>
+        <a href="/contact">Contact</a>
       </div>
     </div>
   </footer>
@@ -266,6 +329,6 @@
   </a>
 
   <script src="/js/site.js"></script>
-    <script src="/js/chatbot.js"></script>
+  <script src="/js/chatbot.js"></script>
 </body>
 </html>
