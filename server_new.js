@@ -660,6 +660,11 @@ app.get('/whatsapp-connect', (req, res) => {
   res.sendFile(path.join(__dirname, 'whatsapp-connect.html'));
 });
 
+app.get('/whatsapp-connect-client', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.sendFile(path.join(__dirname, 'whatsapp-connect-client.html'));
+});
+
 // Embedded Signup — обмен code на токен и сохранение WABA
 app.post('/api/whatsapp/embedded-signup', async (req, res) => {
   const { code, client_id } = req.body;
@@ -700,21 +705,50 @@ app.post('/api/whatsapp/embedded-signup', async (req, res) => {
       phoneNumberId = phonesRes.data?.data?.[0]?.id || null;
     }
 
-    // 4. Сохраняем в БД если есть client_id
+    // 4. Продлеваем user token до long-lived (60 дней)
+    let longToken = userToken;
+    try {
+      const ltRes = await axios.get('https://graph.facebook.com/v23.0/oauth/access_token', {
+        params: {
+          grant_type: 'fb_exchange_token',
+          client_id: appId,
+          client_secret: appSecret,
+          fb_exchange_token: userToken,
+        }
+      });
+      if (ltRes.data.access_token) longToken = ltRes.data.access_token;
+    } catch (e) {
+      console.warn('[EmbeddedSignup] Could not extend token:', e.response?.data || e.message);
+    }
+
+    // 5. Подписываем WABA на наш webhook
+    if (wabaId) {
+      try {
+        await axios.post(
+          `https://graph.facebook.com/v23.0/${wabaId}/subscribed_apps`,
+          {},
+          { params: { access_token: longToken } }
+        );
+        console.log(`[EmbeddedSignup] WABA ${wabaId} subscribed to webhooks`);
+      } catch (e) {
+        console.warn('[EmbeddedSignup] Webhook subscription failed:', e.response?.data || e.message);
+      }
+    }
+
+    // 6. Сохраняем в БД если есть client_id
     if (client_id && wabaId) {
-      const db = require('./db');
-      const existing = db.prepare(
+      const existing = D.db.prepare(
         `SELECT id FROM channels WHERE client_id=? AND type='whatsapp'`
       ).get(client_id);
 
       if (existing) {
-        db.prepare(
+        D.db.prepare(
           `UPDATE channels SET token=?, page_id=?, status='connected', connected_at=CURRENT_TIMESTAMP WHERE id=?`
-        ).run(userToken, phoneNumberId || wabaId, existing.id);
+        ).run(longToken, phoneNumberId || wabaId, existing.id);
       } else {
-        db.prepare(
+        D.db.prepare(
           `INSERT INTO channels (client_id, type, token, page_id, status, connected_at) VALUES (?,?,?,?,'connected',CURRENT_TIMESTAMP)`
-        ).run(client_id, 'whatsapp', userToken, phoneNumberId || wabaId);
+        ).run(client_id, 'whatsapp', longToken, phoneNumberId || wabaId);
       }
     }
 
@@ -766,6 +800,29 @@ function enrichLocalWorkspace(client) {
   };
 }
 
+app.post('/local/api/agency/clients', express.json(), (req, res) => {
+  try {
+    const { company, contact_name, contact_phone, contact_email, niche } = req.body || {};
+    if (!company) return res.status(400).json({ error: 'Company name required' });
+    const id = D.genId('client_');
+    const botId = D.genId('bot_');
+    const now = new Date().toISOString();
+    D.clients.insert.run({
+      id, company, niche: niche || 'andere',
+      contact_name: contact_name || '', contact_phone: contact_phone || '', contact_email: contact_email || '',
+      contract_url: '', goal: 'support', tone: 'friendly', language: 'nl',
+      restrictions: '', status: 'new', sla_owner: '', sla_deadline: '', priority: 'normal', notes: '',
+    });
+    D.bots.insert.run({
+      id: botId, client_id: id, name: company + ' Bot',
+      prompt: '', knowledge_base: '',
+    });
+    res.json({ ok: true, id });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.get('/local/api/agency/clients', (req, res) => {
   try {
     const clients = D.clients.all.all().map((client) => {
@@ -816,9 +873,45 @@ app.get('/local/api/agency/chats/:id/messages', (req, res) => {
   }
 });
 
+app.put('/local/api/agency/bots/:id', express.json(), (req, res) => {
+  try {
+    const bot = D.bots.byId.get(req.params.id);
+    if (!bot) return res.status(404).json({ error: 'Bot not found' });
+    const { name = bot.name, prompt = bot.prompt, knowledge_base = bot.knowledge_base, buttons } = req.body || {};
+    D.bots.update.run({ id: bot.id, name, prompt, knowledge_base });
+    if (buttons !== undefined) D.db.prepare('UPDATE bots SET buttons=? WHERE id=?').run(buttons || null, bot.id);
+    res.json({ ok: true });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.get('/admin/agency-console', requireAdminAuth, (req, res) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
   res.sendFile(path.join(__dirname, 'agency-console.html'));
+});
+
+app.post('/api/admin/agency/clients', requireAdminAuth, express.json(), (req, res) => {
+  try {
+    const { company, contact_name, contact_phone, contact_email, niche } = req.body || {};
+    if (!company) return res.status(400).json({ error: 'Company name required' });
+    const id = D.genId('client_');
+    const botId = D.genId('bot_');
+    const now = new Date().toISOString();
+    D.clients.insert.run({
+      id, company, niche: niche || 'andere',
+      contact_name: contact_name || '', contact_phone: contact_phone || '', contact_email: contact_email || '',
+      contract_url: '', goal: 'support', tone: 'friendly', language: 'nl',
+      restrictions: '', status: 'new', sla_owner: '', sla_deadline: '', priority: 'normal', notes: '',
+    });
+    D.bots.insert.run({
+      id: botId, client_id: id, name: company + ' Bot',
+      prompt: '', knowledge_base: '',
+    });
+    res.json({ ok: true, id });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
 app.get('/api/admin/agency/clients', requireAdminAuth, (req, res) => {
@@ -2857,6 +2950,81 @@ app.post('/auth/api/whatsapp/webhook', async (req, res) => {
               `[${msg?.type || 'message'}]`;
 
             saveMessageToDb(mapping.clientId, 'whatsapp', senderId, text, 'in', msg);
+
+            // Cloud API авто-ответ через GPT
+            if (text && !text.startsWith('[')) {
+              (async () => {
+                try {
+                  // Получаем токен клиента из channels DB
+                  const chRow = D.db.prepare(
+                    `SELECT token, page_id FROM channels WHERE client_id=? AND type='whatsapp' AND status='connected' LIMIT 1`
+                  ).get(mapping.clientId);
+                  if (!chRow?.token || !chRow?.page_id) return;
+
+                  // Получаем бота клиента
+                  const bots = D.bots.byClient.all(mapping.clientId);
+                  const bot = bots[0];
+                  if (!bot?.prompt) return;
+
+                  // История переписки
+                  const history = D.messages.historyByThread.all(mapping.clientId, 'whatsapp', senderId, 20);
+                  const isFirstMessage = history.length <= 1; // только текущее сообщение
+
+                  // Кнопки меню из бота
+                  const botRow = D.db.prepare('SELECT buttons FROM bots WHERE id=?').get(bot.id);
+                  const menuButtons = (botRow?.buttons || '')
+                    .split('\n').map(b => b.trim()).filter(Boolean).slice(0, 3);
+
+                  // Генерируем ответ через GPT
+                  const userInput = msg?.interactive?.button_reply?.title
+                    ? `Клиент нажал кнопку: ${msg.interactive.button_reply.title}`
+                    : text;
+                  const reply = await askOpenAI(bot, userInput, history);
+                  if (!reply) return;
+
+                  // Если первое сообщение и есть кнопки — отправляем интерактивное меню
+                  if (isFirstMessage && menuButtons.length > 0 && !msg?.interactive) {
+                    await axios.post(
+                      `https://graph.facebook.com/v23.0/${chRow.page_id}/messages`,
+                      {
+                        messaging_product: 'whatsapp',
+                        to: senderId,
+                        type: 'interactive',
+                        interactive: {
+                          type: 'button',
+                          body: { text: reply },
+                          action: {
+                            buttons: menuButtons.map((btn, i) => ({
+                              type: 'reply',
+                              reply: { id: `menu_${i}`, title: btn.slice(0, 20) }
+                            }))
+                          }
+                        }
+                      },
+                      { headers: { Authorization: `Bearer ${chRow.token}`, 'Content-Type': 'application/json' } }
+                    );
+                  } else {
+                    // Обычный текстовый ответ
+                    await axios.post(
+                      `https://graph.facebook.com/v23.0/${chRow.page_id}/messages`,
+                      {
+                        messaging_product: 'whatsapp',
+                        to: senderId,
+                        type: 'text',
+                        text: { body: reply },
+                      },
+                      { headers: { Authorization: `Bearer ${chRow.token}`, 'Content-Type': 'application/json' } }
+                    );
+                  }
+
+                  // Сохраняем исходящее
+                  saveMessageToDb(mapping.clientId, 'whatsapp', senderId, reply, 'out', {});
+                  console.log(`[CloudWA] ✅ Auto-replied to ${senderId} for client ${mapping.clientId}`);
+                } catch (e) {
+                  console.error('[CloudWA] Auto-reply error:', e.response?.data || e.message);
+                }
+              })();
+            }
           }
         }
       }
@@ -2864,11 +3032,11 @@ app.post('/auth/api/whatsapp/webhook', async (req, res) => {
       console.error('⚠️ Failed to mirror WhatsApp webhook to Inbox DB:', mirrorErr.message);
     }
 
-    // Route to bot logic
-    const response = await routeMessage(payload);
+    // Route to legacy Baileys bot logic (for non-DB clients)
+    const response = await routeMessage(payload).catch(() => null);
 
-    // Send 200 OK back to Baileys
-    res.json({ ok: true, processed: !!response });
+    // Send 200 OK back to Meta
+    res.json({ ok: true, processed: true });
   } catch (err) {
     console.error('❌ WhatsApp Webhook Error:', err.message);
     res.status(500).json({ error: 'Failed to process WhatsApp message' });

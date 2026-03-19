@@ -87,6 +87,12 @@
     .channel-panel { display: grid; gap: 16px; }
     .form-grid { display: grid; gap: 12px; }
     .inline-help { color: var(--muted); font-size: 14px; line-height: 1.6; }
+    .guide { display: grid; gap: 8px; }
+    .guide h4 { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+    .guide ol { margin-left: 18px; color: var(--text); display: grid; gap: 6px; }
+    .guide a { color: var(--accent); text-decoration: none; font-weight: 700; }
+    .copy-row { display: grid; grid-template-columns: minmax(0,1fr) 96px; gap: 8px; align-items: center; }
+    .copy-value { border: 1px solid var(--line); background: #fff; border-radius: 12px; min-height: 44px; padding: 10px 12px; font-size: 13px; color: var(--text); word-break: break-all; }
     .mini-box { border: 1px solid var(--line); background: var(--soft); border-radius: 16px; padding: 14px; display:grid; gap:8px; }
     .mini-head { display:flex; justify-content: space-between; gap:10px; align-items:flex-start; }
     .mini-name { font-size: 18px; font-weight: 800; }
@@ -104,12 +110,41 @@
   <div class="app">
     <aside class="sidebar">
       <div class="brand">BotMatic</div>
-      <div>
+      <div style="display:flex;align-items:center;justify-content:space-between;">
         <h2>Clients</h2>
+        <button id="newClientBtn" class="btn primary" type="button" style="padding:6px 14px;font-size:13px;">+ New</button>
       </div>
       <input id="clientSearch" class="field" placeholder="Search company" />
       <div class="client-list" id="clientList"></div>
     </aside>
+
+    <!-- New Client Modal -->
+    <div id="newClientModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center;">
+      <div style="background:#fff;border-radius:20px;padding:32px;max-width:440px;width:100%;margin:16px;display:grid;gap:14px;">
+        <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#15182d;">New Client</div>
+        <input id="nc_company" class="field" placeholder="Company name *" />
+        <input id="nc_contact" class="field" placeholder="Contact name" />
+        <input id="nc_phone" class="field" placeholder="Phone" />
+        <input id="nc_email" class="field" placeholder="Email" />
+        <select id="nc_niche" class="field select">
+          <option value="">Niche (optional)</option>
+          <option value="restaurant">Restaurant</option>
+          <option value="kapsalon">Kapsalon</option>
+          <option value="schoonheid">Beauty</option>
+          <option value="garage">Garage</option>
+          <option value="vastgoed">Real Estate</option>
+          <option value="fitness">Fitness</option>
+          <option value="advocaat">Legal</option>
+          <option value="zorg">Healthcare</option>
+          <option value="andere">Other</option>
+        </select>
+        <div id="nc_error" style="color:#b91c1c;font-size:13px;display:none;"></div>
+        <div style="display:flex;gap:10px;">
+          <button id="nc_cancel" class="btn" type="button" style="flex:1;">Cancel</button>
+          <button id="nc_save" class="btn primary" type="button" style="flex:2;">Create Client</button>
+        </div>
+      </div>
+    </div>
 
     <main class="main">
       <div class="header">
@@ -179,8 +214,13 @@
             <div class="card-head"><div class="card-title" id="botEditorTitle">Bot setup</div></div>
             <div class="card-body stack">
               <input id="botNameInput" class="field" placeholder="Bot name" />
-              <textarea id="botPromptInput" placeholder="Prompt"></textarea>
-              <textarea id="botKbInput" placeholder="Knowledge base"></textarea>
+              <textarea id="botPromptInput" placeholder="Prompt — опиши кто этот бот и как он должен отвечать"></textarea>
+              <textarea id="botKbInput" placeholder="Knowledge base — FAQ, прайс, адрес, часы работы"></textarea>
+              <div style="border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:8px;">
+                <div style="font-size:13px;font-weight:700;color:var(--text);">Кнопки меню (WhatsApp)</div>
+                <div style="font-size:12px;color:var(--muted);">До 3 кнопок — по одной на строку. Макс. 20 символов каждая.</div>
+                <textarea id="botButtonsInput" class="field" rows="3" placeholder="💰 Цены&#10;📅 Записаться&#10;📞 Контакты" style="min-height:80px;font-size:13px;"></textarea>
+              </div>
               <button id="saveBotBtn" class="btn primary" type="button">Save bot</button>
             </div>
           </div>
@@ -215,6 +255,10 @@
     botChannelState: null
   };
 
+  const agencyApiBase = location.pathname.startsWith('/admin/')
+    ? '/api/admin/agency'
+    : '/local/api/agency';
+
   function esc(v) {
     return String(v || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
@@ -239,7 +283,7 @@
   }
 
   async function loadClients() {
-    const data = await j('/local/api/agency/clients');
+    const data = await j(`${agencyApiBase}/clients`);
     state.clients = data.clients || [];
     const qp = new URLSearchParams(location.search).get('clientId') || '';
     state.currentClientId = qp || state.clients[0]?.id || '';
@@ -289,7 +333,7 @@
       history.replaceState({}, '', url.pathname + url.search);
     }
     renderClientList();
-    const data = await j(`/local/api/agency/clients/${encodeURIComponent(clientId)}`);
+    const data = await j(`${agencyApiBase}/clients/${encodeURIComponent(clientId)}`);
     state.currentClientData = data;
     state.currentClient = data.client;
     state.chats = data.chats || [];
@@ -331,7 +375,7 @@
   async function loadMessages(chatId) {
     state.currentChatId = chatId;
     renderChats();
-    const data = await j(`/local/api/agency/chats/${encodeURIComponent(chatId)}/messages`);
+    const data = await j(`${agencyApiBase}/chats/${encodeURIComponent(chatId)}/messages`);
     state.currentMessages = data.messages || [];
     renderMessages();
   }
@@ -363,6 +407,15 @@
             <div class="form-grid">
               <div class="inline-help">Use the connected professional Instagram account for this bot.</div>
               <a class="btn primary" href="${esc(href)}" style="width:fit-content;padding:0 18px;text-decoration:none;">Connect Instagram</a>
+              <div class="mini-box guide">
+                <h4>How it works</h4>
+                <ol>
+                  <li>Click connect.</li>
+                  <li>Login with Meta.</li>
+                  <li>Choose page and Instagram account.</li>
+                  <li>Approve access and come back.</li>
+                </ol>
+              </div>
             </div>
           `;
         }
@@ -377,6 +430,15 @@
             <div class="form-grid">
               <div class="inline-help">Use Facebook Login and attach one page to this bot.</div>
               <a class="btn primary" href="${esc(href)}" style="width:fit-content;padding:0 18px;text-decoration:none;">Connect Messenger</a>
+              <div class="mini-box guide">
+                <h4>How it works</h4>
+                <ol>
+                  <li>Click connect.</li>
+                  <li>Login with Meta.</li>
+                  <li>Choose the Facebook page.</li>
+                  <li>Approve access and return connected.</li>
+                </ol>
+              </div>
             </div>
           `;
         }
@@ -389,20 +451,66 @@
             <div class="form-grid">
               <input id="telegramTokenField" class="field" placeholder="Telegram bot token" />
               <button id="telegramConnectBtn" class="btn primary" type="button">Connect Telegram</button>
+              <div class="mini-box guide">
+                <h4>How to get token</h4>
+                <ol>
+                  <li>Open <a href="https://t.me/BotFather" target="_blank" rel="noopener">BotFather</a>.</li>
+                  <li>Create bot or open existing one.</li>
+                  <li>Copy the API token.</li>
+                  <li>Paste it here and click connect.</li>
+                </ol>
+              </div>
             </div>
           `;
         }
       },
       whatsapp: {
         title: 'WhatsApp',
-        hint: 'Paste Meta permanent token and phone number id.',
+        hint: 'Send magic link to client or paste token manually.',
         render() {
+          const webhookUrl = 'https://botmatic.be/auth/api/whatsapp/webhook';
+          const verifyToken = 'botmatic_secret_2024';
+          const magicLink = `https://botmatic.be/whatsapp-connect-client?client_id=${encodeURIComponent(state.currentClientId)}`;
           return `
             <div class="form-grid">
+              <div class="mini-box guide" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-color:#86efac;">
+                <h4 style="color:#166534;">Magic Link — отправь клиенту</h4>
+                <div style="font-size:13px;color:#15803d;margin-bottom:4px;">Клиент жмёт кнопку, логинится через Facebook и его WhatsApp подключается автоматически.</div>
+                <div class="copy-row">
+                  <div class="copy-value" id="waMagicLinkValue" style="font-size:12px;">${esc(magicLink)}</div>
+                  <button id="copyWaMagicLinkBtn" class="btn small" type="button" style="background:#22c55e;color:#fff;border-color:#22c55e;">Copy</button>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;">
+                <div style="flex:1;height:1px;background:var(--line);"></div>или вручную<div style="flex:1;height:1px;background:var(--line);"></div>
+              </div>
               <input id="waNameField" class="field" placeholder="Display name (optional)" />
               <input id="waTokenField" class="field" placeholder="Permanent access token" />
               <input id="waPhoneIdField" class="field" placeholder="Phone number ID" />
               <button id="waConnectBtn" class="btn primary" type="button">Connect WhatsApp</button>
+              <div class="mini-box guide">
+                <h4>Webhook for Meta</h4>
+                <div class="copy-row">
+                  <div class="copy-value" id="waWebhookValue">${esc(webhookUrl)}</div>
+                  <button id="copyWaWebhookBtn" class="btn small" type="button">Copy</button>
+                </div>
+                <div class="copy-row">
+                  <div class="copy-value" id="waVerifyTokenValue">${esc(verifyToken)}</div>
+                  <button id="copyWaVerifyBtn" class="btn small" type="button">Copy</button>
+                </div>
+              </div>
+              <div class="mini-box guide">
+                <h4>How to get WhatsApp data</h4>
+                <ol>
+                  <li>Open <a href="https://developers.facebook.com/apps" target="_blank" rel="noopener">Meta Developers</a>.</li>
+                  <li>Open your app and add WhatsApp.</li>
+                  <li>Go to WhatsApp API setup.</li>
+                  <li>Copy the access token.</li>
+                  <li>Copy the phone number ID.</li>
+                  <li>Paste the webhook URL and verify token from the block above into Meta webhook configuration.</li>
+                  <li>Paste both here and click connect.</li>
+                </ol>
+              </div>
             </div>
           `;
         }
@@ -460,6 +568,20 @@
 
     const waBtn = document.getElementById('waConnectBtn');
     if (waBtn) waBtn.addEventListener('click', () => connectWhatsappChannel().catch(err => alert(err.message)));
+
+    const copyWaMagicLinkBtn = document.getElementById('copyWaMagicLinkBtn');
+    if (copyWaMagicLinkBtn) copyWaMagicLinkBtn.addEventListener('click', () => {
+      const magicLink = `https://botmatic.be/whatsapp-connect-client?client_id=${encodeURIComponent(state.currentClientId)}`;
+      copyText(magicLink);
+      copyWaMagicLinkBtn.textContent = 'Copied!';
+      setTimeout(() => { copyWaMagicLinkBtn.textContent = 'Copy'; }, 2000);
+    });
+
+    const copyWaWebhookBtn = document.getElementById('copyWaWebhookBtn');
+    if (copyWaWebhookBtn) copyWaWebhookBtn.addEventListener('click', () => copyText('https://botmatic.be/auth/api/whatsapp/webhook'));
+
+    const copyWaVerifyBtn = document.getElementById('copyWaVerifyBtn');
+    if (copyWaVerifyBtn) copyWaVerifyBtn.addEventListener('click', () => copyText('botmatic_secret_2024'));
   }
 
   async function connectTelegramChannel() {
@@ -503,6 +625,71 @@
     setTab('channels');
   }
 
+  // ── New Client Modal ───────────────────────────────────────────────────────
+  function openNewClientModal() {
+    const modal = document.getElementById('newClientModal');
+    modal.style.display = 'flex';
+    document.getElementById('nc_company').value = '';
+    document.getElementById('nc_contact').value = '';
+    document.getElementById('nc_phone').value = '';
+    document.getElementById('nc_email').value = '';
+    document.getElementById('nc_niche').value = '';
+    document.getElementById('nc_error').style.display = 'none';
+    document.getElementById('nc_company').focus();
+  }
+
+  function closeNewClientModal() {
+    document.getElementById('newClientModal').style.display = 'none';
+  }
+
+  async function createClient() {
+    const company = document.getElementById('nc_company').value.trim();
+    if (!company) {
+      const err = document.getElementById('nc_error');
+      err.textContent = 'Company name is required';
+      err.style.display = 'block';
+      return;
+    }
+    const btn = document.getElementById('nc_save');
+    btn.disabled = true;
+    btn.textContent = 'Creating...';
+    try {
+      await j(`${agencyApiBase}/clients`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          company,
+          contact_name: document.getElementById('nc_contact').value.trim(),
+          contact_phone: document.getElementById('nc_phone').value.trim(),
+          contact_email: document.getElementById('nc_email').value.trim(),
+          niche: document.getElementById('nc_niche').value || 'andere',
+        })
+      });
+      closeNewClientModal();
+      await loadClients();
+    } catch (e) {
+      const err = document.getElementById('nc_error');
+      err.textContent = e.message;
+      err.style.display = 'block';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Create Client';
+    }
+  }
+
+  document.getElementById('newClientBtn').addEventListener('click', openNewClientModal);
+  document.getElementById('nc_cancel').addEventListener('click', closeNewClientModal);
+  document.getElementById('nc_save').addEventListener('click', createClient);
+  document.getElementById('newClientModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeNewClientModal(); });
+
+  async function copyText(value) {
+    try {
+      await navigator.clipboard.writeText(value);
+    } catch (_) {
+      window.prompt('Copy this value', value);
+    }
+  }
+
   function pickBot(botId) {
     const bot = (state.currentClientData?.bots || []).find(item => item.id === botId) || null;
     state.currentBotId = botId || '';
@@ -510,11 +697,22 @@
     document.getElementById('botNameInput').value = bot?.name || '';
     document.getElementById('botPromptInput').value = bot?.prompt || '';
     document.getElementById('botKbInput').value = bot?.knowledge_base || '';
+    document.getElementById('botButtonsInput').value = bot?.buttons || '';
     renderBots();
   }
 
   function renderBots() {
     const bots = state.currentClientData?.bots || [];
+    // Auto-select first bot if none selected — but don't recurse through pickBot
+    if (bots.length && (!state.currentBotId || !bots.find(b => b.id === state.currentBotId))) {
+      const first = bots[0];
+      state.currentBotId = first.id;
+      document.getElementById('botEditorTitle').textContent = first.name || 'Bot setup';
+      document.getElementById('botNameInput').value = first.name || '';
+      document.getElementById('botPromptInput').value = first.prompt || '';
+      document.getElementById('botKbInput').value = first.knowledge_base || '';
+      document.getElementById('botButtonsInput').value = first.buttons || '';
+    }
     document.getElementById('botTabList').innerHTML = bots.length ? bots.map(bot => `
       <button class="mini-box ${bot.id === state.currentBotId ? 'active' : ''}" data-id="${esc(bot.id)}" type="button">
         <div class="mini-head"><div class="mini-name">${esc(bot.name)}</div>${statusChip(bot.id === state.currentClient?.workspace_bot_id ? 'Primary' : 'Bot', 'goal')}</div>
@@ -522,9 +720,6 @@
       </button>
     `).join('') : `<div class="empty">No bots yet.</div>`;
     document.querySelectorAll('#botTabList .mini-box[data-id]').forEach(btn => btn.addEventListener('click', () => pickBot(btn.dataset.id)));
-    if (!bots.length) pickBot('');
-    else if (!state.currentBotId || !bots.find(bot => bot.id === state.currentBotId)) pickBot(bots[0].id);
-    else pickBot(state.currentBotId);
   }
 
   function renderAccess() {
@@ -534,17 +729,33 @@
   }
 
   async function saveBot() {
-    if (!state.currentBotId) return;
-    await j(`/api/admin/bots/${encodeURIComponent(state.currentBotId)}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', accept: 'application/json' },
-      body: JSON.stringify({
-        name: document.getElementById('botNameInput').value.trim(),
-        prompt: document.getElementById('botPromptInput').value,
-        knowledge_base: document.getElementById('botKbInput').value,
-      })
-    });
-    await selectClient(state.currentClientId, false);
+    if (!state.currentBotId) { alert('Сначала выбери клиента с ботом'); return; }
+    const btn = document.getElementById('saveBotBtn');
+    btn.textContent = 'Saving...';
+    btn.disabled = true;
+    try {
+      const botApiUrl = location.pathname.startsWith('/admin/')
+        ? `/api/admin/bots/${encodeURIComponent(state.currentBotId)}`
+        : `/local/api/agency/bots/${encodeURIComponent(state.currentBotId)}`;
+      await j(botApiUrl, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', accept: 'application/json' },
+        body: JSON.stringify({
+          name: document.getElementById('botNameInput').value.trim(),
+          prompt: document.getElementById('botPromptInput').value,
+          knowledge_base: document.getElementById('botKbInput').value,
+          buttons: document.getElementById('botButtonsInput').value,
+        })
+      });
+      btn.textContent = '✅ Saved!';
+      setTimeout(() => { btn.textContent = 'Save bot'; }, 2000);
+      await selectClient(state.currentClientId, false);
+    } catch (e) {
+      btn.textContent = 'Save bot';
+      throw e;
+    } finally {
+      btn.disabled = false;
+    }
   }
 
   async function saveAccess() {
