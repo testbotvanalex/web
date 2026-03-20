@@ -8,7 +8,20 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy via SSH
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Sync files to server via rsync
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avz --delete --exclude='.git' --exclude='.env' --exclude='node_modules' --exclude='data/' --exclude='*.log'
+          path: ./
+          remote_path: /home/ubuntu/botmatic/
+          remote_host: 51.68.189.147
+          remote_user: ubuntu
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Restart PM2 via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: 51.68.189.147
@@ -16,6 +29,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /home/ubuntu/botmatic
-            git pull origin main
+            npm install --production 2>/dev/null || true
             pm2 restart botmatic
             echo "Deployed successfully at $(date)"
