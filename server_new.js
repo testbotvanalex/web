@@ -17,14 +17,20 @@ function saveChannelToDb(clientId, botId, type, data) {
   try {
     // Find existing channel for this client+type
     const existing = D.db.prepare(
-      `SELECT id FROM channels WHERE client_id = ? AND type = ?`
+      `SELECT id, page_id FROM channels WHERE client_id = ? AND type = ?`
     ).get(clientId, type);
 
+    const isNew = !existing;
     const id = existing?.id || D.genId('ch_');
+    const newPageId = data.pageId || data.page_id || null;
+
+    // Skip update if nothing important changed (prevents activity log spam)
+    if (!isNew && existing.page_id === newPageId) return;
+
     D.channels.upsert.run({
       id, client_id: clientId, bot_id: botId || null, type,
       status: 'connected',
-      page_id:   data.pageId   || data.page_id   || null,
+      page_id:   newPageId,
       page_name: data.pageName || data.page_name || null,
       token:     data.token    || data.pageToken  || null,
       token_expiry: null,
@@ -33,7 +39,8 @@ function saveChannelToDb(clientId, botId, type, data) {
       connected_by: 'admin',
       webhook_active: 1,
     });
-    D.log(clientId, 'channel_connected', `${type}: ${data.pageName || data.username || data.pageId || ''}`);
+    // Логируем только при реальном изменении
+    D.log(clientId, 'channel_connected', `${type}: ${data.pageName || data.username || newPageId || ''}`);
     console.log(`[DB] Channel saved: client=${clientId} type=${type}`);
   } catch (e) {
     console.error('[DB] saveChannelToDb error:', e.message);
@@ -249,6 +256,8 @@ function saveMessageToDb(clientId, channel, senderId, text, direction, raw) {
         }
         // Telegram notification to admin
         notifyAdmin(clientId, channel, threadSenderId, text).catch(() => {});
+        // Live push to SSE clients
+        broadcastSSE({ type: 'new_message', clientId, channel, senderId: threadSenderId, text, direction, chatId: chat?.id });
       } else {
         D.chats.touchOutgoing.run({
           id: chat.id,
@@ -264,6 +273,15 @@ function saveMessageToDb(clientId, channel, senderId, text, direction, raw) {
 
 const app = express();
 const cors = require('cors');
+
+// ── SSE live events ───────────────────────────────────────────────────────────
+const sseClients = new Set();
+function broadcastSSE(event) {
+  const data = `data: ${JSON.stringify(event)}\n\n`;
+  for (const client of sseClients) {
+    try { client.write(data); } catch { sseClients.delete(client); }
+  }
+}
 
 // [NEW] Imports from WhatsApp Hub (Dynamic)
 let routeMessage = null;
@@ -482,7 +500,9 @@ app.put('/api/admin/clients/:id/portal', requireAdminAuth, (req, res) => {
 const CONFIG = {
   // ── Meta App (Unified for Instagram and Messenger) ──
   META_APP_ID: process.env.META_APP_ID || process.env.INSTAGRAM_APP_ID || '',
-  META_APP_SECRET: process.env.META_APP_SECRET || process.env.INSTAGRAM_APP_SECRET || '',
+  META_APP_SECRET: process.env.META_APP_SECRET || '',
+  // Instagram Business API sub-app secret (may differ from META_APP_SECRET)
+  INSTAGRAM_APP_SECRET: process.env.INSTAGRAM_APP_SECRET || process.env.META_APP_SECRET || '',
   // ── Instagram (via Facebook Login → Graph API) ──
   IG_REDIRECT_URI:
     process.env.META_REDIRECT_URI || process.env.REDIRECT_URI || 'https://botmatic.be/auth/instagram/callback',
@@ -604,10 +624,25 @@ app.post('/api/admin/send-message', async (req, res, next) => {
 // ── Admin API (protected) ──────────────────────────────────────────────────────
 app.use('/api/admin', requireAdminAuth, adminRouter);
 
+// ── SSE endpoint for live updates ─────────────────────────────────────────────
+app.get('/api/admin/sse', requireAdminAuth, (req, res) => {
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  res.setHeader('X-Accel-Buffering', 'no'); // disable nginx buffering
+  res.flushHeaders();
+  res.write(`data: ${JSON.stringify({ type: 'connected' })}\n\n`);
+  sseClients.add(res);
+  req.on('close', () => sseClients.delete(res));
+});
+
 // ── Admin Pages (protected) ────────────────────────────────────────────────────
 app.get('/admin', requireAdminAuth, (req, res) => res.sendFile(path.join(__dirname, 'admin-clients.html')));
 app.get('/admin/clients', requireAdminAuth, (req, res) => res.sendFile(path.join(__dirname, 'admin-clients.html')));
 app.get('/admin/client', requireAdminAuth, (req, res) => res.sendFile(path.join(__dirname, 'admin-client.html')));
+app.get('/broadcasts', requireAdminAuth, (req, res) => res.sendFile(path.join(__dirname, 'admin-broadcasts.html')));
+app.get('/settings',   requireAdminAuth, (req, res) => res.sendFile(path.join(__dirname, 'admin-settings.html')));
+app.get('/channels',   requireAdminAuth, (req, res) => res.sendFile(path.join(__dirname, 'admin-channels.html')));
 
 // ── .html → route redirects (for old links/bookmarks) ─────────────────────────
 app.get('/dashboard.html',         (req, res) => res.redirect('/dashboard'));
@@ -735,24 +770,49 @@ app.post('/api/whatsapp/embedded-signup', async (req, res) => {
       }
     }
 
-    // 6. Сохраняем в БД если есть client_id
-    if (client_id && wabaId) {
-      const existing = D.db.prepare(
-        `SELECT id FROM channels WHERE client_id=? AND type='whatsapp'`
-      ).get(client_id);
-
-      if (existing) {
-        D.db.prepare(
-          `UPDATE channels SET token=?, page_id=?, status='connected', connected_at=CURRENT_TIMESTAMP WHERE id=?`
-        ).run(longToken, phoneNumberId || wabaId, existing.id);
-      } else {
-        D.db.prepare(
-          `INSERT INTO channels (client_id, type, token, page_id, status, connected_at) VALUES (?,?,?,?,'connected',CURRENT_TIMESTAMP)`
-        ).run(client_id, 'whatsapp', longToken, phoneNumberId || wabaId);
+    // 5b. Регистрируем номер в Cloud API (нужно после удаления личного WhatsApp)
+    let registrationStatus = 'skipped';
+    if (phoneNumberId) {
+      try {
+        const regRes = await axios.post(
+          `https://graph.facebook.com/v23.0/${phoneNumberId}/register`,
+          { messaging_product: 'whatsapp', pin: '000000' },
+          { headers: { Authorization: `Bearer ${longToken}`, 'Content-Type': 'application/json' } }
+        );
+        if (regRes.data?.success) {
+          registrationStatus = 'success';
+          console.log(`[EmbeddedSignup] Phone ${phoneNumberId} registered in Cloud API ✅`);
+        }
+      } catch (e) {
+        const errCode = e.response?.data?.error?.code;
+        // 136025 = уже зарегистрирован — это нормально
+        if (errCode === 136025) {
+          registrationStatus = 'already_registered';
+          console.log(`[EmbeddedSignup] Phone ${phoneNumberId} already registered (ok)`);
+        } else {
+          registrationStatus = 'failed';
+          console.warn('[EmbeddedSignup] Registration failed:', e.response?.data || e.message);
+        }
       }
     }
 
-    res.json({ success: true, waba_id: wabaId, phone_number_id: phoneNumberId });
+    // 6. Сохраняем в БД если есть client_id
+    if (client_id && wabaId) {
+      // Ищем бота клиента для bot_id
+      const clientBot = D.bots.byClient.all(client_id)[0];
+      const botId = clientBot?.id || null;
+      const channelId = D.genId('ch');
+      const pageIdToSave = phoneNumberId || wabaId;
+
+      // DELETE + INSERT чтобы избежать проблем с null id и дубликатами
+      D.db.prepare(`DELETE FROM channels WHERE client_id=? AND type='whatsapp'`).run(client_id);
+      D.db.prepare(
+        `INSERT INTO channels (id, client_id, bot_id, type, token, page_id, status, connected_at) VALUES (?,?,?,?,?,?,'connected',CURRENT_TIMESTAMP)`
+      ).run(channelId, client_id, botId, 'whatsapp', longToken, pageIdToSave);
+      console.log(`[EmbeddedSignup] Channel saved: client=${client_id} phone=${pageIdToSave} bot=${botId}`);
+    }
+
+    res.json({ success: true, waba_id: wabaId, phone_number_id: phoneNumberId, registration: registrationStatus });
   } catch (e) {
     console.error('Embedded signup error:', e.response?.data || e.message);
     res.json({ success: false, error: e.response?.data?.error?.message || e.message });
@@ -2466,11 +2526,12 @@ app.post('/webhook/instagram', async (req, res) => {
   const signature = req.headers['x-hub-signature-256'];
   const rawBody = req.body; // raw body thanks to express.raw() middleware
 
-  if (CONFIG.META_APP_SECRET && signature && Buffer.isBuffer(rawBody)) {
+  const igSecret = CONFIG.INSTAGRAM_APP_SECRET || CONFIG.META_APP_SECRET;
+  if (igSecret && signature && Buffer.isBuffer(rawBody)) {
     const expected = 'sha256=' +
-      crypto.createHmac('sha256', CONFIG.META_APP_SECRET).update(rawBody).digest('hex');
+      crypto.createHmac('sha256', igSecret).update(rawBody).digest('hex');
     if (!crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature))) {
-      console.warn('[Webhook] Invalid X-Hub-Signature-256. Rejecting.');
+      console.warn('[Webhook] Invalid X-Hub-Signature-256. Rejecting. sig:', signature.slice(0,20), 'expected:', expected.slice(0,20));
       return res.sendStatus(403);
     }
   }
@@ -2484,7 +2545,26 @@ app.post('/webhook/instagram', async (req, res) => {
   console.log(JSON.stringify(body, null, 2));
 
   for (const entry of body.entry || []) {
-    const channel = findInstagramChannelByEntryId(entry.id);
+    // ── DB-first lookup (new multi-tenant system) ──
+    const dbChannel = D.db.prepare(
+      `SELECT c.token, c.page_id, c.client_id FROM channels c
+       WHERE c.type='instagram' AND (c.page_id=? OR c.id=?) AND c.status='connected' LIMIT 1`
+    ).get(String(entry.id), String(entry.id));
+
+    let channel = findInstagramChannelByEntryId(entry.id);
+
+    // Build unified channel object from DB if old store doesn't have it
+    if (!channel && dbChannel?.token) {
+      channel = {
+        bot: { id: dbChannel.client_id },
+        instagram: { pageToken: dbChannel.token, token: dbChannel.token, pageId: dbChannel.page_id, id: entry.id },
+        messenger: null,
+        _fromDb: true,
+        _clientId: dbChannel.client_id,
+      };
+      console.log(`[Webhook] Found Instagram channel via DB for entry.id=${entry.id}, client_id=${dbChannel.client_id}`);
+    }
+
     if (!channel) {
       console.log(`[Webhook] No channel found for entry.id: ${entry.id}`);
       continue;
@@ -2497,8 +2577,6 @@ app.post('/webhook/instagram', async (req, res) => {
     }
 
     // For IG reply, a valid Page token is needed.
-    // Sometimes a user token (IGA...) is saved from IG OAuth, so we use a fallback
-    // to messenger.pageToken (if the Messenger channel is already connected for the same bot).
     const instagramToken = channel.instagram.pageToken || channel.instagram.token || '';
     const messengerPageToken = channel.messenger?.pageToken || '';
     const pageToken =
@@ -2549,7 +2627,8 @@ app.post('/webhook/instagram', async (req, res) => {
       }
 
       // Save incoming message to DB
-      const igClientId = findClientIdByChannel('instagram', entry.id)
+      const igClientId = channel._clientId
+        || findClientIdByChannel('instagram', entry.id)
         || findClientIdByChannel('instagram', channel.instagram?.pageId || '')
         || findClientAndBotIdByBot(channel.bot?.id)?.clientId
         || channel.bot?.id
@@ -3855,6 +3934,87 @@ async function setTelegramWebhookForChannel(channelId, token) {
   });
   console.log(`[TG] Webhook set: ${webhookUrl}`);
 }
+
+// ── Auto token refresh (every 24h, extends 60-day Meta tokens) ───────────────
+
+async function refreshAllWhatsappTokens() {
+  const appId     = process.env.META_APP_ID;
+  const appSecret = process.env.META_APP_SECRET;
+  if (!appId || !appSecret) return;
+
+  const channels = D.db.prepare(
+    `SELECT id, client_id, token, page_id FROM channels WHERE type='whatsapp' AND status='connected' AND token IS NOT NULL`
+  ).all();
+
+  if (!channels.length) return;
+  console.log(`[TokenRefresh] Checking ${channels.length} WhatsApp channel(s)...`);
+
+  for (const ch of channels) {
+    try {
+      // 1. Проверяем токен: делаем лёгкий запрос к WhatsApp API
+      let tokenValid = false;
+      let wabaId = null;
+      try {
+        const testRes = await axios.get(`https://graph.facebook.com/v23.0/${ch.page_id}`, {
+          params: { access_token: ch.token, fields: 'id,display_phone_number' }
+        });
+        tokenValid = !!testRes.data?.id;
+      } catch (testErr) {
+        const errCode = testErr.response?.data?.error?.code;
+        if (errCode === 190 || errCode === 102) {
+          // Токен истёк или невалиден
+          console.warn(`[TokenRefresh] ⚠️  client=${ch.client_id} token INVALID (${errCode}) — marking disconnected`);
+          D.db.prepare(`UPDATE channels SET status='disconnected' WHERE id=?`).run(ch.id);
+          continue;
+        }
+        // Другие ошибки (e.g. permissions) — считаем токен рабочим
+        tokenValid = true;
+      }
+
+      // 2. Пробуем рефрешить токен через наш app
+      try {
+        const resp = await axios.get('https://graph.facebook.com/v23.0/oauth/access_token', {
+          params: {
+            grant_type:        'fb_exchange_token',
+            client_id:         appId,
+            client_secret:     appSecret,
+            fb_exchange_token: ch.token,
+          }
+        });
+        const newToken  = resp.data?.access_token;
+        const expiresIn = resp.data?.expires_in || 5184000; // 60 дней
+        if (newToken && newToken !== ch.token) {
+          const expiryDate = new Date(Date.now() + expiresIn * 1000).toISOString();
+          D.db.prepare(`UPDATE channels SET token=?, token_expiry=? WHERE id=?`)
+            .run(newToken, expiryDate, ch.id);
+          console.log(`[TokenRefresh] ✅ client=${ch.client_id} token refreshed! Expires: ${expiryDate}`);
+
+          // Переподписываем WABA на вебхуки с новым токеном
+          if (wabaId) {
+            await axios.post(`https://graph.facebook.com/v23.0/${wabaId}/subscribed_apps`, {},
+              { params: { access_token: newToken } }).catch(() => {});
+          }
+        } else {
+          console.log(`[TokenRefresh] ✅ client=${ch.client_id} token is valid and up to date`);
+        }
+      } catch (refreshErr) {
+        // Токен принадлежит другому приложению — рефреш невозможен, но он всё ещё работает
+        const msg = refreshErr.response?.data?.error?.message || refreshErr.message;
+        if (tokenValid) {
+          console.log(`[TokenRefresh] ℹ️  client=${ch.client_id} token works but can't refresh (${msg.slice(0,60)}). Client should reconnect via embedded signup.`);
+        }
+      }
+    } catch (e) {
+      console.error(`[TokenRefresh] ❌ client=${ch.client_id}:`, e.response?.data?.error?.message || e.message);
+    }
+  }
+}
+
+// Запускаем сразу при старте и потом каждые 24 часа
+refreshAllWhatsappTokens().catch(() => {});
+setInterval(refreshAllWhatsappTokens, 24 * 60 * 60 * 1000);
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 ensureStartupSubscription().finally(() => {
   app.listen(CONFIG.PORT, () => {

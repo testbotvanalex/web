@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BotMatic — Settings</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root { --bg:#0a0a0f;--surface:#13131a;--border:#1e1e2e;--accent:#7c6cfc;--text:#e0e0e0;--muted:#666;--red:#ef4444;--green:#10b981;--yellow:#f59e0b; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); display:flex; min-height:100vh; }
+  .sidebar { width:220px; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; padding:20px 0; flex-shrink:0; }
+  .logo { font-family:'Syne',sans-serif; font-size:18px; font-weight:700; color:#fff; padding:0 20px 24px; }
+  .nav-item { display:flex; align-items:center; gap:10px; padding:10px 20px; color:var(--muted); font-size:14px; text-decoration:none; cursor:pointer; transition:.15s; }
+  .nav-item:hover,.nav-item.active { color:#fff; background:#ffffff08; }
+  .nav-item.active { border-left:2px solid var(--accent); }
+  .main { flex:1; display:flex; flex-direction:column; min-width:0; }
+  .topbar { padding:20px 32px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+  .topbar h1 { font-family:'Syne',sans-serif; font-size:22px; font-weight:700; }
+  .content { padding:32px; display:flex; gap:24px; flex:1; align-items:flex-start; }
+  .panel { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:24px; flex:1; }
+  .panel-title { font-family:'Syne',sans-serif; font-weight:600; font-size:15px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; }
+  .btn { padding:8px 16px; border-radius:8px; border:none; font-size:13px; font-weight:600; cursor:pointer; transition:.15s; }
+  .btn-primary { background:var(--accent); color:#fff; }
+  .btn-primary:hover { opacity:.85; }
+  .btn-danger { background:#ef444422; color:var(--red); border:1px solid #ef444433; }
+  .btn-danger:hover { background:#ef444433; }
+  .btn-ghost { background:transparent; color:var(--muted); border:1px solid var(--border); }
+  .btn-ghost:hover { color:var(--text); border-color:#444; }
+  .btn-sm { padding:5px 10px; font-size:12px; }
+  input, textarea, select { background:#0d0d14; border:1px solid var(--border); color:var(--text); border-radius:8px; padding:9px 12px; font-size:13px; font-family:inherit; width:100%; outline:none; }
+  input:focus, textarea:focus, select:focus { border-color:var(--accent); }
+  textarea { resize:vertical; min-height:80px; }
+  label { font-size:12px; color:var(--muted); margin-bottom:5px; display:block; }
+  .form-group { margin-bottom:14px; }
+  .form-row { display:flex; gap:10px; }
+  .form-row .form-group { flex:1; }
+  .divider { height:1px; background:var(--border); margin:16px 0; }
+  .empty { text-align:center; color:var(--muted); padding:24px; font-size:13px; }
+
+  /* Agent card */
+  .agent-card { background:#0d0d14; border:1px solid var(--border); border-radius:10px; padding:14px 16px; display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+  .agent-avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; color:#fff; flex-shrink:0; }
+  .agent-info { flex:1; min-width:0; }
+  .agent-name { font-weight:600; font-size:14px; }
+  .agent-email { font-size:12px; color:var(--muted); margin-top:2px; }
+  .agent-actions { display:flex; gap:6px; }
+
+  /* Quick reply card */
+  .qr-card { background:#0d0d14; border:1px solid var(--border); border-radius:10px; padding:12px 16px; margin-bottom:10px; }
+  .qr-header { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+  .qr-shortcut { background:#7c6cfc22; color:var(--accent); border:1px solid #7c6cfc44; border-radius:6px; padding:2px 8px; font-size:12px; font-weight:600; font-family:monospace; }
+  .qr-title { font-weight:600; font-size:13px; }
+  .qr-body { font-size:12px; color:#aaa; line-height:1.5; white-space:pre-wrap; word-break:break-word; }
+  .qr-actions { display:flex; gap:6px; margin-top:8px; }
+
+  /* Modal */
+  .modal-bg { position:fixed; inset:0; background:#000000aa; display:flex; align-items:center; justify-content:center; z-index:100; }
+  .modal { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:28px; width:460px; max-width:90vw; }
+  .modal-title { font-family:'Syne',sans-serif; font-size:16px; font-weight:700; margin-bottom:20px; }
+  .modal-footer { display:flex; gap:8px; justify-content:flex-end; margin-top:20px; }
+  .color-options { display:flex; gap:8px; flex-wrap:wrap; }
+  .color-dot { width:28px; height:28px; border-radius:50%; cursor:pointer; border:2px solid transparent; transition:.15s; }
+  .color-dot.selected { border-color:#fff; transform:scale(1.15); }
+  /* Confirm dialog */
+  .confirm-modal { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:24px 28px; width:340px; max-width:90vw; }
+  .confirm-msg { font-size:14px; margin-bottom:20px; line-height:1.5; }
+  .toast { position:fixed; bottom:24px; right:24px; background:#1e1e2e; border:1px solid var(--border); border-radius:10px; padding:12px 18px; font-size:13px; z-index:200; opacity:0; transition:opacity .3s; pointer-events:none; }
+  .toast.show { opacity:1; }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="logo">BotMatic</div>
+  <a class="nav-item" href="/admin/clients">👥 Workspaces</a>
+  <a class="nav-item" href="/dashboard">📊 Dashboard</a>
+  <a class="nav-item" href="/bots">🤖 Bots</a>
+  <a class="nav-item" href="/inbox">💬 Inbox</a>
+  <a class="nav-item" href="/channels">🔗 Channels</a>
+  <a class="nav-item" href="/broadcasts">📢 Broadcasts</a>
+  <a class="nav-item" href="/analytics">📈 Analytics</a>
+  <a class="nav-item active" href="/settings">⚙️ Settings</a>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <h1>⚙️ Settings</h1>
+  </div>
+
+  <div class="content">
+
+    <!-- Agents -->
+    <div class="panel" style="max-width:480px">
+      <div class="panel-title">
+        <span>👤 Agents</span>
+        <button class="btn btn-primary btn-sm" onclick="openAgentModal()">+ Add Agent</button>
+      </div>
+      <div id="agentsList"><div class="empty">Loading…</div></div>
+    </div>
+
+    <!-- Quick Replies -->
+    <div class="panel">
+      <div class="panel-title">
+        <span>⚡ Quick Replies</span>
+        <button class="btn btn-primary btn-sm" onclick="openQRModal()">+ Add Reply</button>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px">
+        Type <code style="background:#ffffff11;padding:2px 5px;border-radius:4px">/shortcut</code> in the inbox compose box to use quick replies.
+      </div>
+      <div id="qrList"><div class="empty">Loading…</div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast"></div>
+
+<!-- Confirm Modal -->
+<div id="confirmModal" class="modal-bg" style="display:none;z-index:200">
+  <div class="confirm-modal">
+    <div class="confirm-msg" id="confirmMsg"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-ghost" id="confirmNo">Cancel</button>
+      <button class="btn btn-danger" id="confirmYes">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Agent Modal -->
+<div id="agentModal" class="modal-bg" style="display:none" onclick="if(event.target===this)closeAgentModal()">
+  <div class="modal">
+    <div class="modal-title" id="agentModalTitle">Add Agent</div>
+    <div class="form-row">
+      <div class="form-group"><label>Name *</label><input id="agentName" placeholder="e.g. Maria"/></div>
+      <div class="form-group"><label>Email</label><input id="agentEmail" placeholder="maria@company.com" type="email"/></div>
+    </div>
+    <div class="form-group">
+      <label>Color</label>
+      <div class="color-options" id="colorOptions"></div>
+    </div>
+    <input type="hidden" id="agentId"/>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeAgentModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveAgent()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Reply Modal -->
+<div id="qrModal" class="modal-bg" style="display:none" onclick="if(event.target===this)closeQRModal()">
+  <div class="modal">
+    <div class="modal-title" id="qrModalTitle">Add Quick Reply</div>
+    <div class="form-row">
+      <div class="form-group" style="max-width:140px">
+        <label>Shortcut *</label>
+        <input id="qrShortcut" placeholder="e.g. greeting" oninput="this.value=this.value.replace(/[^a-z0-9_]/gi,'').toLowerCase()"/>
+      </div>
+      <div class="form-group">
+        <label>Title *</label>
+        <input id="qrTitle" placeholder="e.g. Greeting message"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Message body *</label>
+      <textarea id="qrBody" placeholder="Hello! How can I help you today?"></textarea>
+    </div>
+    <input type="hidden" id="qrId"/>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeQRModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveQR()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = '/api/admin';
+const COLORS = ['#7c6cfc','#10b981','#f59e0b','#ef4444','#3b82f6','#ec4899','#8b5cf6','#06b6d4','#f97316','#84cc16'];
+let S = { agents: [], quickReplies: [], selectedColor: COLORS[0] };
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.nav-item').forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === location.pathname);
+  });
+  buildColorPicker();
+  loadAll();
+});
+
+async function loadAll() {
+  const [agR, qrR] = await Promise.all([
+    fetch(`${API}/agents`).then(r => r.json()).catch(() => ({})),
+    fetch(`${API}/quick-replies`).then(r => r.json()).catch(() => ({})),
+  ]);
+  S.agents = agR.agents || [];
+  S.quickReplies = qrR.quick_replies || [];
+  renderAgents();
+  renderQR();
+}
+
+// ─── Agents ───────────────────────────────────────────────────────────────────
+function renderAgents() {
+  const el = document.getElementById('agentsList');
+  if (!S.agents.length) { el.innerHTML = '<div class="empty">No agents yet. Add your first team member.</div>'; return; }
+  el.innerHTML = S.agents.map(a => `
+    <div class="agent-card">
+      <div class="agent-avatar" style="background:${esc(a.color||'#7c6cfc')}">${esc(a.name[0].toUpperCase())}</div>
+      <div class="agent-info">
+        <div class="agent-name">${esc(a.name)}</div>
+        ${a.email ? `<div class="agent-email">${esc(a.email)}</div>` : ''}
+      </div>
+      <div class="agent-actions">
+        <button class="btn btn-ghost btn-sm" onclick="openAgentModal('${a.id}')">✏️</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteAgent('${a.id}')">🗑</button>
+      </div>
+    </div>`).join('');
+}
+
+function buildColorPicker() {
+  document.getElementById('colorOptions').innerHTML = COLORS.map(c => `
+    <div class="color-dot ${c === S.selectedColor ? 'selected' : ''}"
+      style="background:${c}"
+      data-color="${c}"
+      onclick="selectColor('${c}')">
+    </div>`).join('');
+}
+
+function selectColor(c) {
+  S.selectedColor = c;
+  document.querySelectorAll('.color-dot').forEach(d => {
+    d.classList.toggle('selected', d.dataset.color === c);
+  });
+}
+
+function openAgentModal(id) {
+  const a = id ? S.agents.find(x => x.id === id) : null;
+  document.getElementById('agentModalTitle').textContent = a ? 'Edit Agent' : 'Add Agent';
+  document.getElementById('agentId').value = a?.id || '';
+  document.getElementById('agentName').value = a?.name || '';
+  document.getElementById('agentEmail').value = a?.email || '';
+  S.selectedColor = a?.color || COLORS[0];
+  buildColorPicker();
+  document.getElementById('agentModal').style.display = 'flex';
+  setTimeout(() => document.getElementById('agentName').focus(), 50);
+}
+
+function closeAgentModal() { document.getElementById('agentModal').style.display = 'none'; }
+
+async function saveAgent() {
+  const id = document.getElementById('agentId').value;
+  const name = document.getElementById('agentName').value.trim();
+  const email = document.getElementById('agentEmail').value.trim();
+  const color = S.selectedColor;
+  if (!name) { toast('Name is required', 'var(--red)'); return; }
+
+  if (id) {
+    const r = await fetch(`${API}/agents/${id}`, {
+      method: 'PUT', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, color })
+    }).then(r => r.json());
+    if (!r.ok) { toast(r.error || 'Error', 'var(--red)'); return; }
+    const idx = S.agents.findIndex(a => a.id === id);
+    if (idx >= 0) S.agents[idx] = r.agent;
+  } else {
+    const r = await fetch(`${API}/agents`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, color })
+    }).then(r => r.json());
+    if (!r.ok) { toast(r.error || 'Error', 'var(--red)'); return; }
+    S.agents.push(r.agent);
+  }
+  closeAgentModal();
+  toast('Agent saved ✓', 'var(--green)');
+  renderAgents();
+}
+
+async function deleteAgent(id) {
+  const a = S.agents.find(x => x.id === id);
+  if (!await confirmDialog(`Delete agent "${a?.name}"?`)) return;
+  await fetch(`${API}/agents/${id}`, { method: 'DELETE' });
+  S.agents = S.agents.filter(a => a.id !== id);
+  toast('Agent deleted', 'var(--red)');
+  renderAgents();
+}
+
+// ─── Quick Replies ────────────────────────────────────────────────────────────
+function renderQR() {
+  const el = document.getElementById('qrList');
+  if (!S.quickReplies.length) { el.innerHTML = '<div class="empty">No quick replies yet. Add shortcuts to speed up your support.</div>'; return; }
+  el.innerHTML = S.quickReplies.map(qr => `
+    <div class="qr-card">
+      <div class="qr-header">
+        <span class="qr-shortcut">/${esc(qr.shortcut)}</span>
+        <span class="qr-title">${esc(qr.title)}</span>
+      </div>
+      <div class="qr-body">${esc(qr.body)}</div>
+      <div class="qr-actions">
+        <button class="btn btn-ghost btn-sm" onclick="openQRModal('${qr.id}')">✏️ Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteQR('${qr.id}')">🗑 Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+function openQRModal(id) {
+  const qr = id ? S.quickReplies.find(x => x.id === id) : null;
+  document.getElementById('qrModalTitle').textContent = qr ? 'Edit Quick Reply' : 'Add Quick Reply';
+  document.getElementById('qrId').value = qr?.id || '';
+  document.getElementById('qrShortcut').value = qr?.shortcut || '';
+  document.getElementById('qrTitle').value = qr?.title || '';
+  document.getElementById('qrBody').value = qr?.body || '';
+  document.getElementById('qrModal').style.display = 'flex';
+  setTimeout(() => document.getElementById('qrShortcut').focus(), 50);
+}
+
+function closeQRModal() { document.getElementById('qrModal').style.display = 'none'; }
+
+async function saveQR() {
+  const id = document.getElementById('qrId').value;
+  const shortcut = document.getElementById('qrShortcut').value.trim().toLowerCase();
+  const title = document.getElementById('qrTitle').value.trim();
+  const body = document.getElementById('qrBody').value.trim();
+  if (!shortcut || !title || !body) { toast('All fields are required', 'var(--red)'); return; }
+
+  if (id) {
+    const r = await fetch(`${API}/quick-replies/${id}`, {
+      method: 'PUT', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ shortcut, title, body })
+    }).then(r => r.json());
+    if (!r.ok) { toast(r.error || 'Error', 'var(--red)'); return; }
+    const idx = S.quickReplies.findIndex(q => q.id === id);
+    if (idx >= 0) S.quickReplies[idx] = r.quick_reply;
+  } else {
+    const r = await fetch(`${API}/quick-replies`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ shortcut, title, body })
+    }).then(r => r.json());
+    if (!r.ok) { toast(r.error || 'Error', 'var(--red)'); return; }
+    S.quickReplies.push(r.quick_reply);
+  }
+  closeQRModal();
+  toast('Quick reply saved ✓', 'var(--green)');
+  renderQR();
+}
+
+async function deleteQR(id) {
+  const qr = S.quickReplies.find(x => x.id === id);
+  if (!await confirmDialog(`Delete quick reply "/${qr?.shortcut}"?`)) return;
+  await fetch(`${API}/quick-replies/${id}`, { method: 'DELETE' });
+  S.quickReplies = S.quickReplies.filter(q => q.id !== id);
+  toast('Quick reply deleted', 'var(--red)');
+  renderQR();
+}
+
+function esc(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+function toast(msg, color) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.borderLeftColor = color || 'var(--accent)';
+  el.style.borderLeft = `3px solid ${color || 'var(--accent)'}`;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+function confirmDialog(msg) {
+  return new Promise(resolve => {
+    document.getElementById('confirmMsg').textContent = msg;
+    const modal = document.getElementById('confirmModal');
+    modal.style.display = 'flex';
+    const yes = document.getElementById('confirmYes');
+    const no  = document.getElementById('confirmNo');
+    const cleanup = (val) => {
+      modal.style.display = 'none';
+      yes.replaceWith(yes.cloneNode(true));
+      no.replaceWith(no.cloneNode(true));
+      resolve(val);
+    };
+    document.getElementById('confirmYes').onclick = () => cleanup(true);
+    document.getElementById('confirmNo').onclick  = () => cleanup(false);
+  });
+}
+</script>
+</body>
+</html>

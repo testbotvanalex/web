@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BotMatic — Channels</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root { --bg:#0a0a0f;--surface:#13131a;--border:#1e1e2e;--accent:#7c6cfc;--text:#e0e0e0;--muted:#666;--red:#ef4444;--green:#10b981;--yellow:#f59e0b; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); display:flex; min-height:100vh; }
+  .sidebar { width:220px; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; padding:20px 0; flex-shrink:0; }
+  .logo { font-family:'Syne',sans-serif; font-size:18px; font-weight:700; color:#fff; padding:0 20px 24px; }
+  .nav-item { display:flex; align-items:center; gap:10px; padding:10px 20px; color:var(--muted); font-size:14px; text-decoration:none; cursor:pointer; transition:.15s; }
+  .nav-item:hover,.nav-item.active { color:#fff; background:#ffffff08; }
+  .nav-item.active { border-left:2px solid var(--accent); }
+  .main { flex:1; display:flex; flex-direction:column; min-width:0; }
+  .topbar { padding:20px 32px; border-bottom:1px solid var(--border); }
+  .topbar h1 { font-family:'Syne',sans-serif; font-size:22px; font-weight:700; }
+  .topbar p { color:var(--muted); font-size:13px; margin-top:4px; }
+  .content { padding:32px; flex:1; }
+
+  /* Workspace selector */
+  .ws-tabs { display:flex; gap:8px; margin-bottom:28px; flex-wrap:wrap; }
+  .ws-tab { padding:7px 16px; border-radius:8px; border:1px solid var(--border); background:transparent; color:var(--muted); font-size:13px; cursor:pointer; transition:.15s; font-family:inherit; }
+  .ws-tab:hover { color:var(--text); border-color:#444; }
+  .ws-tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+
+  /* Channel cards grid */
+  .channels-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:20px; }
+
+  .channel-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:24px; position:relative; overflow:hidden; }
+  .channel-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+  .channel-card.whatsapp::before { background:linear-gradient(90deg,#25d366,#128c7e); }
+  .channel-card.instagram::before { background:linear-gradient(90deg,#e1306c,#833ab4,#fd1d1d); }
+  .channel-card.messenger::before { background:linear-gradient(90deg,#0084ff,#00c6ff); }
+  .channel-card.telegram::before { background:linear-gradient(90deg,#2ca5e0,#0088cc); }
+
+  .ch-header { display:flex; align-items:center; gap:14px; margin-bottom:16px; }
+  .ch-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0; }
+  .ch-icon.whatsapp { background:#25d36622; }
+  .ch-icon.instagram { background:#e1306c22; }
+  .ch-icon.messenger { background:#0084ff22; }
+  .ch-icon.telegram { background:#2ca5e022; }
+  .ch-name { font-family:'Syne',sans-serif; font-weight:700; font-size:16px; }
+  .ch-desc { font-size:12px; color:var(--muted); margin-top:2px; }
+
+  .ch-status { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; padding:4px 10px; border-radius:20px; margin-bottom:14px; }
+  .ch-status.connected { background:#10b98122; color:var(--green); }
+  .ch-status.disconnected { background:#66666622; color:var(--muted); }
+  .ch-status .dot { width:6px; height:6px; border-radius:50%; }
+  .ch-status.connected .dot { background:var(--green); }
+  .ch-status.disconnected .dot { background:var(--muted); }
+
+  .ch-info { font-size:12px; color:var(--muted); margin-bottom:16px; line-height:1.6; }
+  .ch-info span { color:var(--text); font-weight:500; }
+
+  .ch-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .btn { padding:8px 16px; border-radius:8px; border:none; font-size:13px; font-weight:600; cursor:pointer; transition:.15s; font-family:inherit; display:inline-flex; align-items:center; gap:6px; text-decoration:none; }
+  .btn-primary { background:var(--accent); color:#fff; }
+  .btn-primary:hover { opacity:.85; }
+  .btn-success { background:#10b98122; color:var(--green); border:1px solid #10b98133; }
+  .btn-success:hover { background:#10b98133; }
+  .btn-danger { background:#ef444422; color:var(--red); border:1px solid #ef444433; }
+  .btn-danger:hover { background:#ef444433; }
+  .btn-ghost { background:transparent; color:var(--muted); border:1px solid var(--border); }
+  .btn-ghost:hover { color:var(--text); border-color:#444; }
+
+  /* WhatsApp embedded signup */
+  .waba-section { border-top:1px solid var(--border); padding-top:16px; margin-top:16px; }
+  .waba-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:10px; }
+  #fb-root { }
+
+  /* Toast */
+  .toast { position:fixed; bottom:24px; right:24px; background:#1e1e2e; border:1px solid var(--border); border-radius:10px; padding:12px 18px; font-size:13px; z-index:200; opacity:0; transition:opacity .3s; pointer-events:none; border-left:3px solid var(--accent); }
+  .toast.show { opacity:1; }
+
+  .empty-ws { text-align:center; color:var(--muted); padding:60px 0; font-size:14px; }
+</style>
+</head>
+<body>
+<div class="sidebar">
+  <div class="logo">BotMatic</div>
+  <a href="/workspaces" class="nav-item">👥 Workspaces</a>
+  <a href="/dashboard" class="nav-item">📊 Dashboard</a>
+  <a href="/bots" class="nav-item">🤖 Bots</a>
+  <a href="/inbox" class="nav-item">💬 Inbox</a>
+  <a href="/channels" class="nav-item active">🔗 Channels</a>
+  <a href="/broadcasts" class="nav-item">📢 Broadcasts</a>
+  <a href="/analytics" class="nav-item">📈 Analytics</a>
+  <a href="/settings" class="nav-item">⚙️ Settings</a>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <h1>🔗 Channels</h1>
+    <p>Connect and manage communication channels for each workspace</p>
+  </div>
+  <div class="content">
+    <div id="wsTabs" class="ws-tabs">
+      <div style="color:var(--muted);font-size:13px;padding:8px 0">Loading workspaces…</div>
+    </div>
+    <div id="channelsGrid" class="channels-grid"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+
+<script>
+const API = '/api/admin';
+const S = { clients: [], activeClientId: null };
+
+function toast(msg, color) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.borderLeftColor = color || 'var(--accent)';
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── Load clients ──────────────────────────────────────────────────────────────
+async function loadClients() {
+  const r = await fetch(`${API}/clients`).then(r=>r.json());
+  S.clients = r.clients || [];
+  renderWsTabs();
+  if (S.clients.length) selectClient(S.clients[0].id);
+}
+
+function renderWsTabs() {
+  const el = document.getElementById('wsTabs');
+  if (!S.clients.length) { el.innerHTML = '<div class="empty-ws">No workspaces yet. <a href="/workspaces" style="color:var(--accent)">Create one →</a></div>'; return; }
+  el.innerHTML = S.clients.map(c => `
+    <button class="ws-tab ${c.id === S.activeClientId ? 'active' : ''}" onclick="selectClient('${c.id}')">
+      ${esc(c.company)}
+    </button>`).join('');
+}
+
+async function selectClient(id) {
+  S.activeClientId = id;
+  renderWsTabs();
+  const r = await fetch(`${API}/clients/${id}`).then(r=>r.json());
+  const channels = r.channels || [];
+  renderChannels(id, channels);
+}
+
+// ── Render channel cards ──────────────────────────────────────────────────────
+function renderChannels(clientId, channels) {
+  const byType = {};
+  for (const ch of channels) byType[ch.type] = ch;
+
+  const defs = [
+    {
+      type: 'whatsapp',
+      icon: '📱',
+      name: 'WhatsApp',
+      desc: 'WhatsApp Business Cloud API',
+      connectMethod: 'embeddedSignup',
+    },
+    {
+      type: 'instagram',
+      icon: '📷',
+      name: 'Instagram',
+      desc: 'Instagram Direct Messages via Meta',
+      connectMethod: 'instagramOAuth',
+    },
+    {
+      type: 'messenger',
+      icon: '💙',
+      name: 'Messenger',
+      desc: 'Facebook Messenger via Page Token',
+      connectMethod: 'messengerOAuth',
+    },
+    {
+      type: 'telegram',
+      icon: '✈️',
+      name: 'Telegram',
+      desc: 'Telegram Bot API',
+      connectMethod: 'telegramToken',
+    },
+  ];
+
+  document.getElementById('channelsGrid').innerHTML = defs.map(def => {
+    const ch = byType[def.type];
+    const connected = ch?.status === 'connected';
+    return `
+    <div class="channel-card ${def.type}">
+      <div class="ch-header">
+        <div class="ch-icon ${def.type}">${def.icon}</div>
+        <div>
+          <div class="ch-name">${def.name}</div>
+          <div class="ch-desc">${def.desc}</div>
+        </div>
+      </div>
+      <div class="ch-status ${connected ? 'connected' : 'disconnected'}">
+        <div class="dot"></div>
+        ${connected ? 'Connected' : 'Not connected'}
+      </div>
+      ${connected ? `
+        <div class="ch-info">
+          ${ch.page_id ? `Account: <span>${esc(ch.page_id)}</span><br>` : ''}
+          ${ch.connected_at ? `Since: <span>${new Date(ch.connected_at).toLocaleDateString('ru')}</span>` : ''}
+        </div>` : ''}
+      <div class="ch-actions">
+        ${renderConnectBtn(def, clientId, ch, connected)}
+      </div>
+      ${def.type === 'whatsapp' && !connected ? renderWABASignup(clientId) : ''}
+    </div>`;
+  }).join('');
+
+  // Init FB SDK for WhatsApp embedded signup
+  initFBSdk();
+}
+
+function renderConnectBtn(def, clientId, ch, connected) {
+  if (connected) {
+    return `<button class="btn btn-danger" onclick="disconnectChannel('${clientId}','${ch.id}','${def.type}')">🔌 Disconnect</button>`;
+  }
+  switch (def.connectMethod) {
+    case 'embeddedSignup':
+      return `<button class="btn btn-primary" onclick="launchWABASignup('${clientId}')">➕ Connect WhatsApp</button>`;
+    case 'instagramOAuth':
+      return `<a class="btn btn-primary" href="/auth/instagram/login?client_id=${clientId}" style="color:#fff">📷 Connect Instagram</a>`;
+    case 'messengerOAuth':
+      return `<a class="btn btn-primary" href="/auth/messenger/login?client_id=${clientId}" style="color:#fff">💙 Connect Messenger</a>`;
+    case 'telegramToken':
+      return `<button class="btn btn-primary" onclick="showTelegramInput('${clientId}')">✈️ Connect Telegram</button>`;
+  }
+  return '';
+}
+
+function renderWABASignup(clientId) {
+  return `
+  <div class="waba-section">
+    <div class="waba-label">Or use embedded signup</div>
+    <button class="btn btn-ghost" onclick="launchWABASignup('${clientId}')" style="font-size:12px">
+      🔐 Connect via Meta Business
+    </button>
+  </div>`;
+}
+
+// ── WhatsApp Embedded Signup ──────────────────────────────────────────────────
+let fbSdkReady = false;
+function initFBSdk() {
+  window.fbAsyncInit = function() {
+    FB.init({ appId: '559823206838974', autoLogAppEvents:true, xfbml:true, version:'v23.0' });
+    fbSdkReady = true;
+  };
+}
+
+function launchWABASignup(clientId) {
+  if (!fbSdkReady && typeof FB === 'undefined') {
+    toast('Facebook SDK loading… try again in a second', 'var(--yellow)');
+    return;
+  }
+  FB.login(response => {
+    if (response.authResponse?.code) {
+      handleWABACode(response.authResponse.code, clientId);
+    }
+  }, {
+    config_id: '1407449110280148',
+    response_type: 'code',
+    override_default_response_type: true,
+    extras: { setup: {}, featureType: '', sessionInfoVersion: '3' },
+  });
+}
+
+async function handleWABACode(code, clientId) {
+  toast('Connecting WhatsApp…', 'var(--yellow)');
+  try {
+    const r = await fetch('/auth/whatsapp/embedded-signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code, client_id: clientId }),
+    }).then(r => r.json());
+
+    if (r.ok || r.success) {
+      toast('WhatsApp connected! ✅', 'var(--green)');
+      selectClient(clientId);
+    } else {
+      toast('Error: ' + (r.error || 'Unknown'), 'var(--red)');
+    }
+  } catch (e) {
+    toast('Connection error: ' + e.message, 'var(--red)');
+  }
+}
+
+// ── Disconnect ────────────────────────────────────────────────────────────────
+async function disconnectChannel(clientId, channelId, type) {
+  const r = await fetch(`${API}/channels/${channelId}/disconnect`, { method: 'PATCH' }).then(r=>r.json());
+  if (r.ok) {
+    toast(`${type} disconnected`, 'var(--red)');
+    selectClient(clientId);
+  }
+}
+
+// ── Telegram token input (inline) ─────────────────────────────────────────────
+function showTelegramInput(clientId) {
+  const token = prompt('Enter your Telegram Bot Token (from @BotFather):');
+  if (!token?.trim()) return;
+  connectTelegram(clientId, token.trim());
+}
+
+async function connectTelegram(clientId, token) {
+  toast('Connecting Telegram…', 'var(--yellow)');
+  const r = await fetch(`${API}/clients/${clientId}/channels`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type: 'telegram', token, page_id: '', status: 'connected' }),
+  }).then(r=>r.json());
+  if (r.ok) { toast('Telegram connected ✅', 'var(--green)'); selectClient(clientId); }
+  else toast('Error: ' + (r.error||'Unknown'), 'var(--red)');
+}
+
+loadClients();
+</script>
+</body>
+</html>
