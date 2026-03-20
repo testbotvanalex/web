@@ -41,6 +41,10 @@
       "destination": "/public/prijzen"
     },
     {
+      "source": "/whatsapp-bots",
+      "destination": "/public/whatsapp-bots"
+    },
+    {
       "source": "/cases",
       "destination": "/public/cases"
     },

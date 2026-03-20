@@ -21,6 +21,7 @@ const REWRITES = [
   [/^\/css\/(.+)$/, '/public/css/$1'],
   [/^\/js\/(.+)$/, '/public/js/$1'],
   [/^\/assets\/(.+)$/, '/public/assets/$1'],
+  [/^\/whatsapp-bots$/, '/public/whatsapp-bots.html'],
 ];
 
 http.createServer((req, res) => {
