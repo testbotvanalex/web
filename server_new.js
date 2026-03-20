@@ -1668,65 +1668,128 @@ function renderPrivacyPolicy(req, res) {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>BotMatic Privacy Policy</title>
+    <title>BotMatic – Privacy Policy</title>
     <style>
       body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         max-width: 760px;
         margin: 40px auto;
         padding: 0 20px;
-        line-height: 1.6;
+        line-height: 1.7;
         color: #1f2937;
       }
-      h1, h2 {
-        line-height: 1.25;
-      }
-      a {
-        color: #2563eb;
-      }
+      h1 { font-size: 1.8rem; margin-bottom: 4px; }
+      h2 { font-size: 1.15rem; margin-top: 2rem; border-bottom: 1px solid #e5e7eb; padding-bottom: 4px; }
+      a  { color: #2563eb; }
+      .meta { color: #6b7280; font-size: 0.9rem; margin-bottom: 2rem; }
     </style>
   </head>
   <body>
-    <h1>BotMatic Privacy Policy</h1>
-    <p>Effective Date: March 4, 2026</p>
-
-    <p>
-      BotMatic provides message automation for Instagram and Messenger
-      Business accounts. This policy explains what data we process
-      when a user connects an account to our application.
+    <h1>BotMatic – Privacy Policy</h1>
+    <p class="meta">
+      Effective Date: March 20, 2026 &nbsp;|&nbsp;
+      Owner: BotMatic &nbsp;|&nbsp;
+      Website: <a href="https://botmatic.be">https://botmatic.be</a>
     </p>
 
-    <h2>What Data We Process</h2>
     <p>
-      We may process account identifiers, profile data, access tokens,
-      message metadata, and message content necessary to
-      send, receive, and automate responses through the Meta Platform APIs.
+      <strong>BotMatic</strong> is a Belgian messaging-automation platform
+      operating at <a href="https://botmatic.be">botmatic.be</a>. We build
+      AI-powered chat bots for business Instagram, Messenger, and WhatsApp
+      accounts. This Privacy Policy applies to our website, our Meta Platform
+      applications (<em>Botmatic</em> and <em>Botmatic-IG</em>), and all
+      connected business messaging channels.
     </p>
 
-    <h2>How We Use Data</h2>
+    <h2>1. Data Controller</h2>
     <p>
-      We use this data only to authorize connected accounts,
-      receive webhook events, send replies, support service functionality,
-      and troubleshoot technical issues.
+      BotMatic<br />
+      Belgium<br />
+      Email: <a href="mailto:info@botmatic.be">info@botmatic.be</a>
     </p>
 
-    <h2>Data Sharing</h2>
+    <h2>2. What Data We Collect</h2>
+    <p>When a business connects their Instagram or Messenger account we may collect:</p>
+    <ul>
+      <li>Meta Page and Instagram Business account identifiers (page IDs, IGSID)</li>
+      <li>OAuth access tokens required to operate the connected channel</li>
+      <li>Incoming message content and metadata (sender ID, timestamp, message text/attachments)</li>
+      <li>Profile information available via the Meta Graph API (name, profile picture)</li>
+      <li>Webhook event payloads delivered by the Meta Platform</li>
+    </ul>
     <p>
-      We do not sell personal data. Information is shared only with
-      contractors and platform partners when necessary for the service's
-      operation or to fulfill legal obligations.
+      We use the following Meta Platform permissions:
+      <strong>instagram_business_basic</strong>,
+      <strong>instagram_business_manage_messages</strong>,
+      <strong>pages_messaging</strong>, and
+      <strong>pages_manage_metadata</strong>.
     </p>
 
-    <h2>Retention Period</h2>
+    <h2>3. How We Use Data</h2>
+    <ul>
+      <li>Authenticate and authorize connected business accounts</li>
+      <li>Receive and process incoming messages via Meta webhooks</li>
+      <li>Generate and send automated AI replies on behalf of the business</li>
+      <li>Store conversation history to improve bot accuracy for the business client</li>
+      <li>Diagnose technical issues and ensure service reliability</li>
+    </ul>
+    <p>We do <strong>not</strong> use this data for advertising or sell it to third parties.</p>
+
+    <h2>4. Data Sharing</h2>
     <p>
-      We retain data only for as long as needed to provide the service,
-      comply with security requirements, and fulfill legal obligations.
+      We share data only with:
+    </p>
+    <ul>
+      <li><strong>OpenAI</strong> – message text is sent to OpenAI's API to generate bot responses</li>
+      <li><strong>Meta Platform APIs</strong> – to send outgoing messages and manage subscriptions</li>
+      <li>Technical contractors engaged to operate or improve the BotMatic platform</li>
+    </ul>
+    <p>All processors are bound by appropriate data-processing agreements.</p>
+
+    <h2>5. Retention</h2>
+    <p>
+      Conversation records are retained for a maximum of 12 months or until a
+      client terminates their account, whichever comes first. Access tokens are
+      deleted immediately upon channel disconnection.
     </p>
 
-    <h2>Contact Us</h2>
+    <h2>6. User Rights</h2>
     <p>
-      For questions regarding privacy or data deletion, please email
-      <a href="mailto:info@botmatic.be">info@botmatic.be</a>.
+      Under GDPR you have the right to access, correct, or delete personal data
+      we hold about you. To exercise these rights, email
+      <a href="mailto:info@botmatic.be">info@botmatic.be</a> with subject
+      <strong>Privacy Request</strong>.
+    </p>
+
+    <h2>7. Data Deletion</h2>
+    <p>
+      To request deletion of all data associated with your Instagram or Facebook
+      account, email <a href="mailto:info@botmatic.be">info@botmatic.be</a>
+      with subject <strong>Data Deletion Request</strong> and include your
+      Instagram username or Facebook Page name. We will process the request
+      within 30 days.
+    </p>
+
+    <h2>8. Security</h2>
+    <p>
+      All data is transmitted over TLS. Access tokens are stored encrypted.
+      We validate every Meta webhook request using HMAC-SHA256 signature
+      verification before processing.
+    </p>
+
+    <h2>9. Changes To This Policy</h2>
+    <p>
+      We may update this policy periodically. The current version is always
+      available at
+      <a href="https://botmatic.be/privacy-policy">https://botmatic.be/privacy-policy</a>.
+    </p>
+
+    <h2>10. Contact</h2>
+    <p>
+      <strong>BotMatic</strong><br />
+      Belgium<br />
+      <a href="mailto:info@botmatic.be">info@botmatic.be</a><br />
+      <a href="https://botmatic.be">https://botmatic.be</a>
     </p>
   </body>
 </html>`);
