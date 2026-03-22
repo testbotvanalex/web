@@ -710,7 +710,7 @@
               ? `<button class="channel-btn copy" onclick="copyLink('${connectUrl}')">Ссылка</button>
                  <button class="channel-btn disconnect" onclick="disconnectChannel('${ch.id}')">Отключить</button>`
               : `<button class="channel-btn copy" onclick="copyLink(window.location.origin+'${connectUrl}')">📋 Скопировать ссылку</button>
-                 <button class="channel-btn connect" onclick="window.open('${connectUrl}','_blank')">Подключить</button>`
+                 <button class="channel-btn connect" onclick="${t.type === 'whatsapp' ? 'connectWhatsApp()' : `window.open('${connectUrl}','_blank')`}">Подключить</button>`
             }
           </div>
         </div>`;
@@ -880,9 +880,57 @@
     es.onerror = () => setTimeout(connectSSE, 5000);
   }
 
+  // ── WHATSAPP EMBEDDED SIGNUP ──
+  window.fbAsyncInit = function() {
+    FB.init({ appId: '2379887685742138', autoLogAppEvents: true, xfbml: true, version: 'v23.0' });
+  };
+
+  async function connectWhatsApp() {
+    const btn = event.target;
+    btn.disabled = true;
+    btn.textContent = 'Открываем...';
+
+    FB.login(async function(response) {
+      if (!response.authResponse?.code) {
+        btn.disabled = false;
+        btn.textContent = 'Подключить';
+        toast('Отменено', 'error');
+        return;
+      }
+      btn.textContent = 'Подключаем...';
+      try {
+        const r = await fetch('/api/whatsapp/embedded-signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code: response.authResponse.code, client_id: activeClient.id })
+        });
+        const data = await r.json();
+        if (data.success) {
+          toast('✅ WhatsApp подключён!');
+          await selectClient(activeClient.id);
+          switchTab('channels');
+        } else {
+          toast('Ошибка: ' + (data.error || 'неизвестная'), 'error');
+          btn.disabled = false;
+          btn.textContent = 'Подключить';
+        }
+      } catch(e) {
+        toast('Ошибка сети', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Подключить';
+      }
+    }, {
+      config_id: '1447475470090009',
+      response_type: 'code',
+      override_default_response_type: true,
+      extras: { setup: {}, featureType: '', sessionInfoVersion: '3' }
+    });
+  }
+
   // ── INIT ──
   loadClients();
   connectSSE();
 </script>
+<script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
 </body>
 </html>
