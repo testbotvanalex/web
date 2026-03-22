@@ -1800,6 +1800,7 @@ function renderPrivacyPolicy(req, res) {
 }
 
 app.get('/privacy-policy', renderPrivacyPolicy);
+app.get('/privacy', renderPrivacyPolicy);
 app.get('/webhook/instagram/privacy-policy', renderPrivacyPolicy);
 
 // ── Onboarding API (client self-connect) ──
