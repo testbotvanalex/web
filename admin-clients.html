@@ -1,700 +1,886 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BotMatic — Workspaces</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet" />
+  <title>BotMatic</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #f4f5f9; --surface: #ffffff; --surface2: #f0f1f6; --surface3: #e8eaf2;
-      --border: #e2e4ed; --accent: #7c3aed; --accent2: #db2777;
-      --accent-glow: rgba(124,58,237,0.2); --text: #1a1a2e; --muted: #6b7280;
-      --green: #059669; --yellow: #d97706; --red: #dc2626; --blue: #2563eb;
+      --bg: #0f0f13;
+      --surface: #18181f;
+      --surface2: #22222c;
+      --surface3: #2a2a36;
+      --border: rgba(255,255,255,0.07);
+      --accent: #7c6cfc;
+      --accent-soft: rgba(124,108,252,0.15);
+      --text: #f0f0f5;
+      --muted: #6b6b80;
+      --green: #22c55e;
+      --yellow: #f59e0b;
+      --red: #ef4444;
+      --blue: #3b82f6;
+      --wa: #25d366;
+      --tg: #2aabee;
+      --ig: #e1306c;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; height: 100vh; overflow: hidden; display: flex; }
 
-    /* ── Layout ── */
-    .layout { display: flex; min-height: 100vh; }
+    /* ── LEFT SIDEBAR ── */
     .sidebar {
-      width: 220px; flex-shrink: 0; background: var(--surface);
-      border-right: 1px solid var(--border); padding: 24px 0;
-      display: flex; flex-direction: column; gap: 4px;
+      width: 260px; flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      height: 100vh;
     }
     .sidebar-logo {
-      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px;
-      background: linear-gradient(135deg, #7c3aed, #db2777);
+      padding: 20px 18px 16px;
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 17px;
+      background: linear-gradient(135deg, #7c6cfc, #db2777);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      padding: 0 20px 20px; letter-spacing: -0.5px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
     }
-    .nav-item {
+
+    .client-list {
+      flex: 1; overflow-y: auto; padding: 10px 8px;
+    }
+    .client-list::-webkit-scrollbar { width: 4px; }
+    .client-list::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 4px; }
+
+    .section-label {
+      font-size: 10px; text-transform: uppercase; letter-spacing: 1px;
+      color: var(--muted); padding: 8px 10px 4px; font-weight: 600;
+    }
+
+    .client-card {
       display: flex; align-items: center; gap: 10px;
-      padding: 10px 20px; color: var(--muted); text-decoration: none;
-      font-size: 14px; border-radius: 0; transition: all .15s;
-      cursor: pointer; border: none; background: none; width: 100%; text-align: left;
+      padding: 10px 10px; border-radius: 10px;
+      cursor: pointer; transition: all .15s;
+      margin-bottom: 2px; border: 1px solid transparent;
     }
-    .nav-item:hover { color: var(--text); background: var(--surface2); }
-    .nav-item.active { color: var(--accent); background: rgba(124,108,252,0.1); border-left: 2px solid var(--accent); }
-    .nav-sep { height: 1px; background: var(--border); margin: 8px 0; }
-
-    .main { flex: 1; overflow-y: auto; }
-    .topbar {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 20px 32px; border-bottom: 1px solid var(--border);
-      background: var(--surface); position: sticky; top: 0; z-index: 10;
+    .client-card:hover { background: var(--surface2); }
+    .client-card.active {
+      background: var(--accent-soft);
+      border-color: rgba(124,108,252,0.3);
     }
-    .topbar h1 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; }
-    .topbar-actions { display:flex; align-items:center; gap:10px; }
-    .content { padding: 28px 32px; }
-
-    /* ── Notification Bell ── */
-    .notif-wrap { position:relative; }
-    .notif-btn { width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;position:relative; }
-    .notif-btn:hover { border-color:var(--accent); }
-    .notif-dot { position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--accent);display:none; }
-    .notif-panel { position:absolute;top:44px;right:0;width:320px;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.1);z-index:100;display:none;overflow:hidden; }
-    .notif-panel.open { display:block; }
-    .notif-header { padding:12px 16px;border-bottom:1px solid var(--border);font-family:'Syne',sans-serif;font-size:13px;font-weight:700; }
-    .notif-list { max-height:320px;overflow-y:auto; }
-    .notif-item { display:flex;align-items:flex-start;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);cursor:pointer; }
-    .notif-item:last-child { border-bottom:none; }
-    .notif-item:hover { background:var(--surface2); }
-    .notif-dot2 { width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px; }
-    .notif-text { font-size:12px;flex:1; }
-    .notif-meta { font-size:11px;color:var(--muted);margin-top:1px; }
-    .notif-time { font-size:11px;color:var(--muted);white-space:nowrap; }
-    .notif-empty { padding:20px;text-align:center;color:var(--muted);font-size:13px; }
-
-    /* ── Cmd+K Search ── */
-    .search-overlay { position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:1000;display:none;align-items:flex-start;justify-content:center;padding-top:15vh; }
-    .search-overlay.open { display:flex; }
-    .search-modal { width:540px;background:var(--surface);border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.2);overflow:hidden; }
-    .search-input-wrap { display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--border); }
-    .search-input-wrap svg { flex-shrink:0;color:var(--muted); }
-    .search-input { flex:1;border:none;outline:none;font-size:15px;font-family:inherit;background:transparent;color:var(--text); }
-    .search-input::placeholder { color:var(--muted); }
-    .search-hint { font-size:11px;color:var(--muted);white-space:nowrap; }
-    .search-results { max-height:340px;overflow-y:auto; }
-    .search-result { display:flex;align-items:center;gap:12px;padding:10px 18px;cursor:pointer;transition:background .1s; }
-    .search-result:hover, .search-result.focused { background:var(--surface2); }
-    .search-result-icon { width:32px;height:32px;border-radius:8px;background:rgba(124,58,237,.1);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0; }
-    .search-result-name { font-size:13px;font-weight:500; }
-    .search-result-meta { font-size:11px;color:var(--muted); }
-    .search-empty { padding:20px;text-align:center;color:var(--muted);font-size:13px; }
-    .search-footer { padding:8px 18px;border-top:1px solid var(--border);display:flex;gap:16px; }
-    .search-key { font-size:11px;color:var(--muted);display:flex;align-items:center;gap:4px; }
-    .kbd { background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-size:10px;font-family:monospace; }
-
-    /* ── Stats row ── */
-    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
-    .stat-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 20px 24px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    .client-avatar {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), #db2777);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 14px; flex-shrink: 0;
+      font-family: 'Syne', sans-serif;
     }
-    .stat-card .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; font-weight: 500; }
-    .stat-card .value { font-family: 'Outfit', sans-serif; font-size: 34px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.1; letter-spacing: -1px; }
-    .stat-card .value.green { color: var(--green); }
-    .stat-card .value.accent { color: var(--accent); }
+    .client-avatar.demo { background: linear-gradient(135deg, #7c6cfc, #3b82f6); }
+    .client-avatar.green { background: linear-gradient(135deg, #059669, #22c55e); }
+    .client-avatar.orange { background: linear-gradient(135deg, #d97706, #f59e0b); }
+    .client-info { flex: 1; min-width: 0; }
+    .client-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .client-channels { display: flex; gap: 4px; margin-top: 3px; }
+    .ch-badge {
+      font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 4px;
+      text-transform: uppercase; letter-spacing: .3px;
+    }
+    .ch-badge.wa { background: rgba(37,211,102,.15); color: var(--wa); }
+    .ch-badge.tg { background: rgba(42,171,238,.15); color: var(--tg); }
+    .ch-badge.ig { background: rgba(225,48,108,.15); color: var(--ig); }
+    .ch-badge.off { background: var(--surface3); color: var(--muted); }
 
-    /* ── Pipeline pills ── */
-    .pipeline { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
-    .pipe-pill {
-      padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500;
+    .client-unread {
+      background: var(--accent); color: white;
+      font-size: 10px; font-weight: 700;
+      width: 18px; height: 18px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .add-client-btn {
+      margin: 0 8px 8px; padding: 10px;
+      border: 1px dashed var(--border); border-radius: 10px;
+      display: flex; align-items: center; gap: 8px;
+      cursor: pointer; color: var(--muted); font-size: 13px;
+      transition: all .15s; background: none;
+      width: calc(100% - 16px);
+    }
+    .add-client-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+    /* ── MAIN AREA ── */
+    .main {
+      flex: 1; display: flex; flex-direction: column;
+      height: 100vh; overflow: hidden;
+    }
+
+    /* Empty state */
+    .empty-state {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      color: var(--muted); gap: 12px;
+    }
+    .empty-state svg { opacity: .3; }
+    .empty-state h2 { font-family: 'Syne', sans-serif; font-size: 18px; color: var(--text); opacity: .4; }
+    .empty-state p { font-size: 13px; }
+
+    /* Client header */
+    .client-header {
+      padding: 16px 24px; border-bottom: 1px solid var(--border);
+      background: var(--surface); flex-shrink: 0;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .client-header-avatar {
+      width: 42px; height: 42px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), #db2777);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 16px; font-family: 'Syne', sans-serif;
+    }
+    .client-header-info { flex: 1; }
+    .client-header-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; }
+    .client-header-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .client-header-channels { display: flex; gap: 6px; }
+    .ch-pill {
+      display: flex; align-items: center; gap: 5px;
+      padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;
+      border: 1px solid transparent;
+    }
+    .ch-pill.wa { background: rgba(37,211,102,.1); color: var(--wa); border-color: rgba(37,211,102,.2); }
+    .ch-pill.tg { background: rgba(42,171,238,.1); color: var(--tg); border-color: rgba(42,171,238,.2); }
+    .ch-pill.ig { background: rgba(225,48,108,.1); color: var(--ig); border-color: rgba(225,48,108,.2); }
+    .ch-pill.off { background: var(--surface2); color: var(--muted); border-color: var(--border); }
+    .ch-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+    /* Tabs */
+    .tabs {
+      display: flex; gap: 0; border-bottom: 1px solid var(--border);
+      background: var(--surface); flex-shrink: 0; padding: 0 24px;
+    }
+    .tab {
+      padding: 12px 16px; font-size: 13px; font-weight: 500;
+      color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent;
+      transition: all .15s; display: flex; align-items: center; gap: 6px;
+    }
+    .tab:hover { color: var(--text); }
+    .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* Tab content */
+    .tab-content { flex: 1; overflow-y: auto; display: none; }
+    .tab-content.active { display: flex; flex-direction: column; }
+    .tab-content::-webkit-scrollbar { width: 4px; }
+    .tab-content::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 4px; }
+
+    /* ── INBOX TAB ── */
+    .inbox-layout { display: flex; flex: 1; overflow: hidden; }
+    .chat-list { width: 300px; flex-shrink: 0; border-right: 1px solid var(--border); overflow-y: auto; }
+    .chat-list::-webkit-scrollbar { width: 3px; }
+    .chat-list::-webkit-scrollbar-thumb { background: var(--surface3); }
+    .chat-item {
+      padding: 12px 16px; cursor: pointer; border-bottom: 1px solid var(--border);
+      transition: background .1s; display: flex; gap: 10px; align-items: flex-start;
+    }
+    .chat-item:hover { background: var(--surface2); }
+    .chat-item.active { background: var(--accent-soft); }
+    .chat-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--surface3); display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0; font-weight: 600;
+    }
+    .chat-info { flex: 1; min-width: 0; }
+    .chat-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .chat-preview { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+    .chat-meta { flex-shrink: 0; text-align: right; }
+    .chat-time { font-size: 11px; color: var(--muted); }
+    .chat-ch { font-size: 10px; font-weight: 700; margin-top: 3px; }
+    .chat-ch.wa { color: var(--wa); }
+    .chat-ch.tg { color: var(--tg); }
+    .chat-ch.ig { color: var(--ig); }
+    .chat-unread {
+      background: var(--accent); color: white; font-size: 10px; font-weight: 700;
+      padding: 1px 6px; border-radius: 10px; margin-top: 3px; display: inline-block;
+    }
+
+    .messages-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .messages-header {
+      padding: 12px 20px; border-bottom: 1px solid var(--border);
+      background: var(--surface); display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+    }
+    .messages-header-name { font-weight: 600; font-size: 14px; }
+    .messages-header-meta { font-size: 12px; color: var(--muted); }
+    .messages-list { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+    .messages-list::-webkit-scrollbar { width: 3px; }
+    .messages-list::-webkit-scrollbar-thumb { background: var(--surface3); }
+    .msg { display: flex; gap: 8px; max-width: 75%; }
+    .msg.out { align-self: flex-end; flex-direction: row-reverse; }
+    .msg-bubble {
+      padding: 9px 13px; border-radius: 12px;
+      font-size: 13px; line-height: 1.5;
       background: var(--surface2); border: 1px solid var(--border);
-      cursor: pointer; transition: all .15s; color: var(--muted);
     }
-    .pipe-pill:hover { border-color: var(--accent); color: var(--text); }
-    .pipe-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-    .pipe-pill .cnt { opacity: .7; margin-left: 4px; }
-
-    /* ── Toolbar ── */
-    .toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-    .search-box {
-      flex: 1; background: var(--surface); border: 1px solid var(--border);
-      border-radius: 8px; padding: 9px 14px; color: var(--text); font-size: 14px;
-      font-family: inherit; outline: none;
+    .msg.out .msg-bubble { background: var(--accent-soft); border-color: rgba(124,108,252,.3); }
+    .msg-time { font-size: 10px; color: var(--muted); margin-top: 4px; padding: 0 4px; align-self: flex-end; }
+    .msg-input-area {
+      padding: 12px 16px; border-top: 1px solid var(--border);
+      background: var(--surface); display: flex; gap: 10px; flex-shrink: 0;
     }
-    .search-box:focus { border-color: var(--accent); }
-    .search-box::placeholder { color: var(--muted); }
-
-    .btn {
-      padding: 9px 18px; border-radius: 8px; font-size: 14px; font-weight: 500;
-      cursor: pointer; border: none; font-family: inherit; transition: all .15s;
+    .msg-input {
+      flex: 1; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px 14px; color: var(--text);
+      font-family: inherit; font-size: 13px; resize: none; outline: none;
+      transition: border-color .15s;
     }
-    .btn-primary { background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff; box-shadow: 0 2px 8px rgba(124,58,237,0.3); }
-    .btn-primary:hover { background: linear-gradient(135deg, #6d28d9, #5b21b6); box-shadow: 0 4px 16px rgba(124,58,237,0.4); }
-    .btn-ghost { background: var(--surface); border: 1px solid var(--border); color: var(--text); }
-    .btn-ghost:hover { border-color: var(--accent); }
-
-    /* ── Table ── */
-    .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-    table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    thead th {
-      text-align: left; padding: 12px 16px; font-size: 11px; font-weight: 500;
-      color: var(--muted); text-transform: uppercase; letter-spacing: .5px;
-      border-bottom: 1px solid var(--border); background: var(--surface2);
+    .msg-input:focus { border-color: var(--accent); }
+    .msg-send-btn {
+      background: var(--accent); color: white; border: none; border-radius: 10px;
+      padding: 0 16px; cursor: pointer; font-size: 13px; font-weight: 600;
+      font-family: inherit; transition: opacity .15s;
     }
-    tbody tr { border-bottom: 1px solid var(--border); cursor: pointer; transition: background .1s; }
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: var(--surface2); }
-    td { padding: 14px 16px; vertical-align: middle; }
+    .msg-send-btn:hover { opacity: .85; }
 
-    .company { font-weight: 500; }
-    .niche { font-size: 12px; color: var(--muted); }
-    .entity-type {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 4px 10px; border-radius: 999px;
-      font-size: 11px; font-weight: 600;
-      border: 1px solid var(--border);
-      background: var(--surface2); color: var(--text);
+    .no-chat {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      color: var(--muted); flex-direction: column; gap: 8px;
     }
-    .entity-core { background: #ede9fe; color: #6d28d9; border-color: #ddd6fe; }
-    .entity-instagram { background: #fce7f3; color: #be185d; border-color: #fbcfe8; }
-    .entity-whatsapp { background: #dcfce7; color: #15803d; border-color: #bbf7d0; }
-    .entity-client { background: #e0f2fe; color: #0369a1; border-color: #bae6fd; }
-    .route { font-size: 12px; color: var(--muted); }
 
-    /* status badge */
-    .badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500;
+    /* ── BOT TAB ── */
+    .bot-form { padding: 24px; max-width: 720px; display: flex; flex-direction: column; gap: 20px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+    .form-textarea {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px 14px; color: var(--text);
+      font-family: inherit; font-size: 13px; resize: vertical; outline: none;
+      min-height: 120px; transition: border-color .15s; line-height: 1.6;
     }
-    .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-    .badge-new      { color: #a0a0c0; background: rgba(160,160,192,.12); }
-    .badge-brief    { color: var(--blue); background: rgba(96,165,250,.12); }
-    .badge-connecting { color: var(--yellow); background: rgba(251,191,36,.12); }
-    .badge-setup    { color: #c084fc; background: rgba(192,132,252,.12); }
-    .badge-test     { color: var(--yellow); background: rgba(251,191,36,.12); }
-    .badge-live     { color: var(--green); background: rgba(74,222,128,.12); }
-    .badge-support  { color: var(--blue); background: rgba(96,165,250,.12); }
-
-    .priority-badge {
-      display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px;
+    .form-textarea:focus { border-color: var(--accent); }
+    .form-input {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px 14px; color: var(--text);
+      font-family: inherit; font-size: 13px; outline: none; transition: border-color .15s;
     }
-    .pri-high   { background: rgba(248,113,113,.15); color: var(--red); }
-    .pri-normal { background: rgba(96,165,250,.1);  color: var(--blue); }
-    .pri-low    { background: rgba(96,96,128,.1);   color: var(--muted); }
-
-    .channel-icons { display: flex; gap: 4px; }
-    .ch-icon {
-      width: 22px; height: 22px; border-radius: 5px; display: flex;
-      align-items: center; justify-content: center; font-size: 11px;
+    .form-input:focus { border-color: var(--accent); }
+    .save-btn {
+      background: var(--accent); color: white; border: none; border-radius: 10px;
+      padding: 11px 22px; cursor: pointer; font-size: 13px; font-weight: 600;
+      font-family: inherit; align-self: flex-start; transition: opacity .15s;
     }
-    .ch-ig { background: rgba(252,108,143,.15); color: var(--accent2); }
-    .ch-ms { background: rgba(96,165,250,.15);  color: var(--blue); }
-    .ch-tg { background: rgba(96,165,250,.12);  color: #38bdf8; }
-    .ch-wa { background: rgba(74,222,128,.12);  color: var(--green); }
+    .save-btn:hover { opacity: .85; }
+    .save-btn:disabled { opacity: .5; cursor: not-allowed; }
 
-    .actions { display: flex; gap: 6px; opacity: 0; transition: opacity .15s; }
-    tr:hover .actions { opacity: 1; }
-    .act-btn {
-      padding: 4px 10px; border-radius: 6px; font-size: 12px; cursor: pointer;
-      border: 1px solid var(--border); background: var(--surface3); color: var(--text);
-      font-family: inherit;
+    /* ── CHANNELS TAB ── */
+    .channels-grid { padding: 24px; display: flex; flex-direction: column; gap: 16px; max-width: 600px; }
+    .channel-card {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 18px 20px;
+      display: flex; align-items: center; gap: 16px;
     }
-    .act-btn:hover { border-color: var(--accent); }
-    .act-btn.del:hover { border-color: var(--red); color: var(--red); }
+    .channel-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center; font-size: 20px;
+      flex-shrink: 0;
+    }
+    .channel-icon.wa { background: rgba(37,211,102,.1); }
+    .channel-icon.tg { background: rgba(42,171,238,.1); }
+    .channel-icon.ig { background: rgba(225,48,108,.1); }
+    .channel-info { flex: 1; }
+    .channel-title { font-weight: 600; font-size: 14px; }
+    .channel-status { font-size: 12px; margin-top: 3px; }
+    .channel-status.connected { color: var(--green); }
+    .channel-status.disconnected { color: var(--muted); }
+    .channel-btn {
+      padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 600;
+      font-family: inherit; cursor: pointer; transition: all .15s; border: 1px solid;
+    }
+    .channel-btn.connect { background: var(--accent); color: white; border-color: var(--accent); }
+    .channel-btn.connect:hover { opacity: .85; }
+    .channel-btn.disconnect { background: transparent; color: var(--red); border-color: rgba(239,68,68,.3); }
+    .channel-btn.disconnect:hover { background: rgba(239,68,68,.1); }
+    .channel-btn.copy { background: var(--surface3); color: var(--text); border-color: var(--border); }
+    .channel-btn.copy:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* ── Modal ── */
+    /* ── SETTINGS TAB ── */
+    .settings-form { padding: 24px; max-width: 500px; display: flex; flex-direction: column; gap: 18px; }
+    .status-select {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px 14px; color: var(--text);
+      font-family: inherit; font-size: 13px; outline: none;
+      cursor: pointer; transition: border-color .15s;
+    }
+    .status-select:focus { border-color: var(--accent); }
+
+    /* ── ADD CLIENT MODAL ── */
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 100;
-      display: none; align-items: center; justify-content: center;
+      position: fixed; inset: 0; background: rgba(0,0,0,.6);
+      display: none; align-items: center; justify-content: center; z-index: 100;
     }
     .modal-overlay.open { display: flex; }
     .modal {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-      width: 560px; max-height: 90vh; overflow-y: auto;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px; width: 440px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
     }
-    .modal-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 20px 24px; border-bottom: 1px solid var(--border);
+    .modal-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; margin-bottom: 20px; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 24px; justify-content: flex-end; }
+    .btn-ghost {
+      padding: 9px 18px; border-radius: 8px; border: 1px solid var(--border);
+      background: transparent; color: var(--text); cursor: pointer;
+      font-family: inherit; font-size: 13px; transition: all .15s;
     }
-    .modal-header h2 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; }
-    .close-btn { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; line-height: 1; }
-    .modal-body { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
-    .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+    .btn-ghost:hover { border-color: var(--accent); }
 
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
-    .form-group label { font-size: 12px; color: var(--muted); font-weight: 500; }
-    .form-group input, .form-group select, .form-group textarea {
-      background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
-      padding: 9px 12px; color: var(--text); font-size: 14px; font-family: inherit; outline: none;
-    }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); }
-    .form-group select option { background: var(--surface2); }
-    .form-group textarea { resize: vertical; min-height: 72px; }
-
-    .empty { text-align: center; padding: 60px; color: var(--muted); }
-    .empty h3 { font-size: 16px; margin-bottom: 8px; }
-    .empty p { font-size: 14px; }
-
-    /* ── Toast ── */
+    /* Toast */
     .toast {
-      position: fixed; bottom: 24px; right: 24px; z-index: 999;
-      background: var(--surface3); border: 1px solid var(--border);
-      border-radius: 10px; padding: 12px 18px; font-size: 14px;
-      transform: translateY(80px); opacity: 0; transition: all .25s;
+      position: fixed; bottom: 24px; right: 24px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px 18px; font-size: 13px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.3); z-index: 200;
+      transform: translateY(80px); opacity: 0; transition: all .3s;
+      display: flex; align-items: center; gap: 8px;
     }
     .toast.show { transform: translateY(0); opacity: 1; }
-    .toast.success { border-color: var(--green); color: var(--green); }
-    .toast.error { border-color: var(--red); color: var(--red); }
+    .toast.success { border-color: rgba(34,197,94,.3); }
+    .toast.error { border-color: rgba(239,68,68,.3); }
+
+    .loading { display: flex; align-items: center; justify-content: center; padding: 40px; color: var(--muted); font-size: 13px; }
   </style>
 </head>
 <body>
 
-<div class="layout">
-  <!-- Sidebar -->
-  <nav class="sidebar">
-    <div class="sidebar-logo">BotMatic</div>
-    <a href="/admin/clients" class="nav-item active">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      Workspaces
-    </a>
-    <a href="/dashboard" class="nav-item">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-      Dashboard
-    </a>
-    <a href="/bots" class="nav-item">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
-      Bots
-    </a>
-    <a href="/inbox" class="nav-item">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      Inbox
-    </a>
-    <a href="/auth/connect" class="nav-item">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v2"/><path d="M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M20 16v2a2 2 0 0 1-2 2h-2"/><path d="M4 8V6a2 2 0 0 1 2-2h2"/><circle cx="12" cy="12" r="3"/></svg>
-      Channels
-    </a>
-    <a href="/analytics" class="nav-item">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-      Analytics
-    </a>
-  </nav>
+<!-- LEFT SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-logo">BotMatic</div>
+  <div class="client-list" id="clientList">
+    <div class="loading">Загрузка...</div>
+  </div>
+  <button class="add-client-btn" onclick="openAddModal()">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+    Новый клиент
+  </button>
+</div>
 
-  <!-- Main -->
-  <div class="main">
-    <div class="topbar">
-      <h1>Workspaces</h1>
-      <div class="topbar-actions">
-        <div class="notif-wrap">
-          <div class="notif-btn" onclick="toggleNotif()" title="Notifications">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-            <div class="notif-dot" id="notifDot"></div>
-          </div>
-          <div class="notif-panel" id="notifPanel">
-            <div class="notif-header">Recent Events</div>
-            <div class="notif-list" id="notifList"><div class="notif-empty">Loading...</div></div>
-          </div>
-        </div>
-        <button class="btn btn-primary" onclick="openModal()">+ Add Client</button>
-      </div>
-    </div>
-
-    <div class="content">
-      <!-- Stats -->
-      <div class="stats-row" id="statsRow">
-        <div class="stat-card"><div class="label">Total Workspaces</div><div class="value accent" id="st-total">—</div></div>
-        <div class="stat-card"><div class="label">Live</div><div class="value green" id="st-live">—</div></div>
-        <div class="stat-card"><div class="label">Active Channels</div><div class="value" id="st-channels">—</div></div>
-        <div class="stat-card"><div class="label">Open Tasks</div><div class="value" id="st-tasks">—</div></div>
-      </div>
-
-      <!-- Pipeline filter -->
-      <div class="pipeline" id="pipeline">
-        <div class="pipe-pill active" data-status="all" onclick="filterStatus(this, 'all')">All <span class="cnt" id="cnt-all"></span></div>
-        <div class="pipe-pill" data-status="new" onclick="filterStatus(this, 'new')">New <span class="cnt" id="cnt-new"></span></div>
-        <div class="pipe-pill" data-status="brief" onclick="filterStatus(this, 'brief')">Brief <span class="cnt" id="cnt-brief"></span></div>
-        <div class="pipe-pill" data-status="connecting" onclick="filterStatus(this, 'connecting')">Connecting <span class="cnt" id="cnt-connecting"></span></div>
-        <div class="pipe-pill" data-status="setup" onclick="filterStatus(this, 'setup')">Setup <span class="cnt" id="cnt-setup"></span></div>
-        <div class="pipe-pill" data-status="test" onclick="filterStatus(this, 'test')">Test <span class="cnt" id="cnt-test"></span></div>
-        <div class="pipe-pill" data-status="live" onclick="filterStatus(this, 'live')">Live <span class="cnt" id="cnt-live"></span></div>
-        <div class="pipe-pill" data-status="support" onclick="filterStatus(this, 'support')">Support <span class="cnt" id="cnt-support"></span></div>
-      </div>
-
-      <!-- Toolbar -->
-      <div class="toolbar">
-        <input class="search-box" type="text" placeholder="Search by workspace, route, channel..." oninput="onSearch(this.value)" />
-      </div>
-
-      <!-- Table -->
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Workspace</th>
-              <th>Type</th>
-              <th>Status</th>
-              <th>Goal</th>
-              <th>Channels</th>
-              <th>Route</th>
-              <th>Tasks</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="clientsBody">
-            <tr><td colspan="8" class="empty"><div><h3>Loading...</h3></div></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+<!-- MAIN AREA -->
+<div class="main" id="mainArea">
+  <div class="empty-state">
+    <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+    <h2>Выбери клиента</h2>
+    <p>Кликни на клиента слева чтобы открыть</p>
   </div>
 </div>
 
-<!-- Add Client Modal -->
-<div class="modal-overlay" id="modal">
+<!-- ADD CLIENT MODAL -->
+<div class="modal-overlay" id="addModal">
   <div class="modal">
-    <div class="modal-header">
-      <h2>New Workspace</h2>
-      <button class="close-btn" onclick="closeModal()">×</button>
-    </div>
-    <div class="modal-body">
+    <div class="modal-title">Новый клиент</div>
+    <div style="display:flex;flex-direction:column;gap:14px">
       <div class="form-group">
-        <label>Company *</label>
-        <input id="f-company" type="text" placeholder="Golden Palace, Salon Lara..." autofocus />
+        <div class="form-label">Название компании</div>
+        <input class="form-input" id="newClientName" placeholder="Dock KZ" />
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Niche</label>
-          <input id="f-niche" type="text" placeholder="Restaurant, lawyer, salon..." />
-        </div>
-        <div class="form-group">
-          <label>Contact</label>
-          <input id="f-contact_name" type="text" placeholder="Name / phone" />
-        </div>
+      <div class="form-group">
+        <div class="form-label">Ниша</div>
+        <input class="form-input" id="newClientNiche" placeholder="Нотариус, ресторан, магазин..." />
       </div>
-      <p style="font-size:12px;color:var(--muted);margin-top:-4px;">The rest is configured inside the workspace card.</p>
+      <div class="form-group">
+        <div class="form-label">Контакт (имя или телефон)</div>
+        <input class="form-input" id="newClientContact" placeholder="+7 777 123 45 67" />
+      </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="createClient()">Create Client</button>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeAddModal()">Отмена</button>
+      <button class="save-btn" onclick="createClient()">Создать</button>
     </div>
   </div>
 </div>
 
+<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-const API = '/api/admin';
-let allClients = [];
-let currentFilter = 'all';
-let searchQuery = '';
+  const API = '/api/admin';
+  let clients = [];
+  let activeClient = null;
+  let activeTab = 'inbox';
+  let chats = [];
+  let activeChat = null;
 
-const STATUS_LABELS = {
-  new: 'New', brief: 'Brief', connecting: 'Connecting',
-  setup: 'Setup', test: 'Test', live: 'Live', support: 'Support'
-};
-const GOAL_LABELS = { leads: 'Leads', support: 'Support', faq: 'FAQ', sales: 'Sales' };
-const PHONE_RE = /^\+?\d[\d\s]{6,}$/;
-
-function inferEntity(client) {
-  const name = String(client.company || '').trim();
-  const channelTypes = String(client.channel_types || '').split(',').filter(Boolean);
-  if (/\(Main\)/i.test(name)) return { label: 'Core Workspace', cls: 'entity-core' };
-  if (/\(Instagram\)/i.test(name) || channelTypes.includes('instagram')) return { label: 'Instagram Workspace', cls: 'entity-instagram' };
-  if (PHONE_RE.test(name) || channelTypes.includes('whatsapp')) return { label: 'WhatsApp Bot', cls: 'entity-whatsapp' };
-  return { label: 'Client Workspace', cls: 'entity-client' };
-}
-
-function inferRoute(client) {
-  const name = String(client.company || '').trim();
-  if (PHONE_RE.test(name)) return name;
-  if (client.contact_name || client.contact_phone) {
-    return [client.contact_name, client.contact_phone].filter(Boolean).join(' · ');
+  // ── COLORS FOR AVATARS ──
+  const avatarColors = ['demo', 'green', 'orange', ''];
+  function getAvatarClass(id) {
+    const classes = ['demo', 'green', 'orange', ''];
+    let hash = 0;
+    for (let c of (id || '')) hash = (hash * 31 + c.charCodeAt(0)) % classes.length;
+    return classes[hash];
   }
-  if (/\(Instagram\)/i.test(name)) return 'Instagram linked account';
-  if (/\(Main\)/i.test(name)) return 'Primary workspace';
-  return 'Manual workspace';
-}
+  function getInitials(name) {
+    return (name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+  }
 
-async function load() {
-  try {
-    const [clientsRes, statsRes] = await Promise.all([
-      fetch(`${API}/clients`).then(r => r.json()),
-      fetch(`${API}/stats`).then(r => r.json()),
-    ]);
+  // ── CHANNEL ICONS ──
+  const chIcon = { wa: '💬', tg: '✈️', ig: '📸', messenger: '💬' };
+  const chLabel = { wa: 'WA', tg: 'TG', ig: 'IG', messenger: 'FB' };
 
-    allClients = clientsRes.clients || [];
+  // ── TOAST ──
+  function toast(msg, type = 'success') {
+    const el = document.getElementById('toast');
+    el.textContent = (type === 'success' ? '✅ ' : '❌ ') + msg;
+    el.className = `toast show ${type}`;
+    setTimeout(() => el.className = 'toast', 3000);
+  }
 
-    // Stats
-    if (statsRes.ok) {
-      const ov = statsRes.overview;
-      document.getElementById('st-total').textContent = ov.total_clients;
-      document.getElementById('st-live').textContent = ov.live_clients;
-      document.getElementById('st-channels').textContent = ov.connected_channels;
-      document.getElementById('st-tasks').textContent = ov.open_tasks;
+  // ── LOAD CLIENTS ──
+  async function loadClients() {
+    const r = await fetch(`${API}/clients`);
+    const data = await r.json();
+    clients = data.clients || data;
+    renderClientList();
+  }
 
-      // Pipeline counts
-      const counts = { all: allClients.length };
-      (statsRes.byStatus || []).forEach(r => counts[r.status] = r.count);
-      Object.keys(counts).forEach(s => {
-        const el = document.getElementById(`cnt-${s}`);
-        if (el) el.textContent = counts[s] ? `(${counts[s]})` : '';
-      });
+  function clientChannels(c) { return c._channels || c.channels || []; }
+  function clientName(c) { return c.company || c.company_name || '?'; }
+
+  function renderClientList() {
+    const el = document.getElementById('clientList');
+    if (!clients.length) {
+      el.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:12px">Нет клиентов</div>';
+      return;
     }
-
-    render();
-  } catch (e) {
-    showToast('Load error: ' + e.message, 'error');
-  }
-}
-
-function render() {
-  let list = allClients;
-  if (currentFilter !== 'all') list = list.filter(c => c.status === currentFilter);
-  if (searchQuery) {
-    const q = searchQuery.toLowerCase();
-    list = list.filter(c =>
-      (c.company||'').toLowerCase().includes(q) ||
-      (c.niche||'').toLowerCase().includes(q) ||
-      inferEntity(c).label.toLowerCase().includes(q) ||
-      inferRoute(c).toLowerCase().includes(q) ||
-      (c.contact_name||'').toLowerCase().includes(q) ||
-      (c.contact_email||'').toLowerCase().includes(q)
-    );
-  }
-
-  const tbody = document.getElementById('clientsBody');
-  if (!list.length) {
-    tbody.innerHTML = `<tr><td colspan="8"><div class="empty"><h3>No workspaces</h3><p>${searchQuery ? 'Try another query' : 'Add first workspace'}</p></div></td></tr>`;
-    return;
+    el.innerHTML = clients.map(c => {
+      const channels = clientChannels(c);
+      const hasWa = channels.find(ch => ch.type === 'whatsapp' && ch.status === 'active');
+      const hasTg = channels.find(ch => ch.type === 'telegram' && ch.status === 'active');
+      const hasIg = channels.find(ch => ch.type === 'instagram' && ch.status === 'active');
+      const isActive = activeClient?.id === c.id;
+      return `<div class="client-card ${isActive ? 'active' : ''}" onclick="selectClient('${c.id}')">
+        <div class="client-avatar ${getAvatarClass(c.id)}">${getInitials(clientName(c))}</div>
+        <div class="client-info">
+          <div class="client-name">${clientName(c)}</div>
+          <div class="client-channels">
+            ${hasWa ? '<span class="ch-badge wa">WA</span>' : ''}
+            ${hasTg ? '<span class="ch-badge tg">TG</span>' : ''}
+            ${hasIg ? '<span class="ch-badge ig">IG</span>' : ''}
+            ${!hasWa && !hasTg && !hasIg ? '<span class="ch-badge off">нет каналов</span>' : ''}
+          </div>
+        </div>
+        ${c.unread_count ? `<div class="client-unread">${c.unread_count}</div>` : ''}
+      </div>`;
+    }).join('');
   }
 
-  tbody.innerHTML = list.map(c => `
-    <tr onclick="openClient('${c.id}')">
-      <td>
-        <div class="company">${esc(c.company)}</div>
-        <div class="niche">${esc(c.id)}</div>
-      </td>
-      <td>
-        <span class="entity-type ${inferEntity(c).cls}">${inferEntity(c).label}</span>
-      </td>
-      <td><span class="badge badge-${c.status}">${STATUS_LABELS[c.status] || c.status}</span></td>
-      <td>${GOAL_LABELS[c.goal] || c.goal || '—'}</td>
-      <td>
-        <div class="channel-icons">
-          ${(() => {
-            const types = (c.channel_types || '').split(',').filter(Boolean);
-            if (!types.length) return `<span style="color:var(--muted);font-size:12px">—</span>`;
-            return types.map(t => {
-              const map = { instagram:'IG', messenger:'MS', telegram:'TG', whatsapp:'WA' };
-              const cls = { instagram:'ch-ig', messenger:'ch-ms', telegram:'ch-tg', whatsapp:'ch-wa' };
-              return `<div class="ch-icon ${cls[t]||''}" title="${t}">${map[t]||t.slice(0,2).toUpperCase()}</div>`;
-            }).join('');
-          })()}
+  // ── SELECT CLIENT ──
+  async function selectClient(id) {
+    const r = await fetch(`${API}/clients/${id}`);
+    const data = await r.json();
+    // API returns { client, bots, channels, ... } OR just the client object
+    activeClient = data.client || data;
+    activeClient._channels = data.channels || activeClient.channels || [];
+    activeClient._bots = data.bots || [];
+    activeTab = 'inbox';
+    renderClientList();
+    renderMain();
+    loadInbox();
+  }
+
+  // ── RENDER MAIN ──
+  function renderMain() {
+    if (!activeClient) return;
+    const c = activeClient;
+    const channels = clientChannels(c);
+    const hasWa = channels.find(ch => ch.type === 'whatsapp' && ch.status === 'active');
+    const hasTg = channels.find(ch => ch.type === 'telegram' && ch.status === 'active');
+    const hasIg = channels.find(ch => ch.type === 'instagram' && ch.status === 'active');
+
+    document.getElementById('mainArea').innerHTML = `
+      <div class="client-header">
+        <div class="client-header-avatar ${getAvatarClass(c.id)}" style="background:linear-gradient(135deg,var(--accent),#db2777)">${getInitials(clientName(c))}</div>
+        <div class="client-header-info">
+          <div class="client-header-name">${clientName(c)}</div>
+          <div class="client-header-meta">${c.niche || ''} ${c.contact_name ? '· ' + c.contact_name : ''}</div>
         </div>
-      </td>
-      <td><div class="route">${esc(inferRoute(c))}</div></td>
-      <td>${c.tasks_open > 0 ? `<span style="color:var(--yellow)">${c.tasks_open} open.</span>` : '<span style="color:var(--muted)">—</span>'}</td>
-      <td>
-        <div class="actions" onclick="event.stopPropagation()">
-          <button class="act-btn" onclick="openClient('${c.id}')">Open</button>
-          <button class="act-btn del" onclick="deleteClient('${c.id}', '${esc(c.company)}')">Delete</button>
+        <div class="client-header-channels">
+          <div class="ch-pill ${hasWa ? 'wa' : 'off'}"><div class="ch-dot"></div>WhatsApp</div>
+          <div class="ch-pill ${hasTg ? 'tg' : 'off'}"><div class="ch-dot"></div>Telegram</div>
+          <div class="ch-pill ${hasIg ? 'ig' : 'off'}"><div class="ch-dot"></div>Instagram</div>
         </div>
-      </td>
-    </tr>
-  `).join('');
-}
-
-function filterStatus(el, status) {
-  document.querySelectorAll('.pipe-pill').forEach(p => p.classList.remove('active'));
-  el.classList.add('active');
-  currentFilter = status;
-  render();
-}
-
-function onSearch(val) {
-  searchQuery = val;
-  render();
-}
-
-function openClient(id) {
-  window.location.href = `/admin/client?id=${id}`;
-}
-
-// ── Modal ──────────────────────────────────────────────────────────────────────
-function openModal() { document.getElementById('modal').classList.add('open'); }
-function closeModal() { document.getElementById('modal').classList.remove('open'); }
-
-async function createClient() {
-  const company = document.getElementById('f-company').value.trim();
-  if (!company) { showToast('Specify company', 'error'); return; }
-
-  const body = {
-    company,
-    niche:         document.getElementById('f-niche').value.trim(),
-    contact_name:  document.getElementById('f-contact_name').value.trim(),
-    contact_phone: document.getElementById('f-contact_phone').value.trim(),
-    contact_email: document.getElementById('f-contact_email').value.trim(),
-    contract_url:  document.getElementById('f-contract_url').value.trim(),
-    goal:          document.getElementById('f-goal').value,
-    tone:          document.getElementById('f-tone').value,
-    language:      document.getElementById('f-language').value,
-    priority:      document.getElementById('f-priority').value,
-    sla_owner:     document.getElementById('f-sla_owner').value.trim(),
-    sla_deadline:  document.getElementById('f-sla_deadline').value,
-    notes:         document.getElementById('f-notes').value.trim(),
-  };
-
-  try {
-    const res = await fetch(`${API}/clients`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
-    }).then(r => r.json());
-
-    if (!res.ok) throw new Error(res.error);
-    closeModal();
-    showToast(`Client "${company}" created`, 'success');
-    await load();
-    // Navigate to workspace card
-    window.location.href = `/admin/client?id=${res.client.id}`;
-  } catch (e) { showToast(e.message, 'error'); }
-}
-
-async function deleteClient(id, name) {
-  if (!confirm(`Delete workspace "${name}"? This will delete all bots, channels and data.`)) return;
-  try {
-    const res = await fetch(`${API}/clients/${id}`, { method: 'DELETE' }).then(r => r.json());
-    if (!res.ok) throw new Error(res.error);
-    showToast(`Client deleted`, 'success');
-    await load();
-  } catch (e) { showToast(e.message, 'error'); }
-}
-
-// ── Toast ──────────────────────────────────────────────────────────────────────
-function showToast(msg, type = 'success') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = `toast ${type} show`;
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-// Close modal on overlay click
-document.getElementById('modal').addEventListener('click', e => {
-  if (e.target === e.currentTarget) closeModal();
-});
-
-load();
-</script>
-
-<!-- Cmd+K Search Modal -->
-<div class="search-overlay" id="searchOverlay" onclick="if(event.target===this)closeSearch()">
-  <div class="search-modal">
-    <div class="search-input-wrap">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input class="search-input" id="searchInput" placeholder="Search workspace…" oninput="runSearch(this.value)" onkeydown="searchKey(event)" autocomplete="off" />
-      <span class="search-hint"><kbd class="kbd">Esc</kbd></span>
-    </div>
-    <div class="search-results" id="searchResults"><div class="search-empty">Start typing…</div></div>
-    <div class="search-footer">
-      <span class="search-key"><kbd class="kbd">↑↓</kbd> navigation</span>
-      <span class="search-key"><kbd class="kbd">Enter</kbd> open</span>
-      <span class="search-key"><kbd class="kbd">Esc</kbd> close</span>
-    </div>
-  </div>
-</div>
-
-<script>
-// ── Notifications ─────────────────────────────────────────────────────────────
-const AL2 = {client_created:'🆕 New Client',client_updated:'✏️ Updated',status_changed:'🔄 Status Changed',
-  bot_created:'🤖 Bot Created',bot_updated:'🤖 Bot Saved',flow_updated:'🔧 Flow Updated',
-  channel_connected:'🔗 Channel Connected',channel_disconnected:'❌ Channel Disconnected',client_deleted:'🗑️ Deleted'};
-const dotColors2 = {client_created:'#7c3aed',status_changed:'#059669',bot_created:'#2563eb',
-  bot_updated:'#2563eb',flow_updated:'#2563eb',channel_connected:'#7c3aed',channel_disconnected:'#d97706',default:'#6b7280'};
-
-function ago2(ds) {
-  const m = Math.floor((Date.now() - new Date(ds.includes('T')?ds:ds+' UTC')) / 60000);
-  if (m < 1) return 'just now'; if (m < 60) return `${m} min ago`;
-  const h = Math.floor(m/60); return h < 24 ? `${h} h ago` : `${Math.floor(h/24)} days ago`;
-}
-
-async function loadNotifs() {
-  try {
-    const data = await fetch('/api/admin/stats').then(r => r.json());
-    const acts = (data.activity || []).slice(0, 15);
-    const list = document.getElementById('notifList');
-    if (!acts.length) { list.innerHTML = '<div class="notif-empty">No events</div>'; return; }
-    document.getElementById('notifDot').style.display = 'block';
-    list.innerHTML = acts.map(a => `
-      <div class="notif-item" onclick="toggleNotif()">
-        <div class="notif-dot2" style="background:${dotColors2[a.action]||dotColors2.default}"></div>
-        <div class="notif-text">
-          ${AL2[a.action]||a.action}${a.company?' · <b>'+a.company+'</b>':''}
-          <div class="notif-meta">${a.details||''}</div>
-        </div>
-        <div class="notif-time">${ago2(a.created_at)}</div>
-      </div>`).join('');
-  } catch(e) {}
-}
-
-function toggleNotif() {
-  document.getElementById('notifPanel').classList.toggle('open');
-  loadNotifs();
-}
-document.addEventListener('click', e => {
-  if (!e.target.closest('.notif-wrap')) document.getElementById('notifPanel').classList.remove('open');
-});
-
-// ── Cmd+K Search ─────────────────────────────────────────────────────────────
-let searchClients = [];
-let focusIdx = -1;
-
-async function initSearch() {
-  const r = await fetch('/api/admin/clients').then(x => x.json());
-  searchClients = r.clients || [];
-}
-initSearch();
-
-function openSearch() {
-  document.getElementById('searchOverlay').classList.add('open');
-  setTimeout(() => document.getElementById('searchInput').focus(), 50);
-}
-function closeSearch() {
-  document.getElementById('searchOverlay').classList.remove('open');
-  document.getElementById('searchInput').value = '';
-  document.getElementById('searchResults').innerHTML = '<div class="search-empty">Start typing…</div>';
-  focusIdx = -1;
-}
-
-const SL2 = {new:'New',brief:'Brief',connecting:'Connecting',setup:'Setup',test:'Test',live:'Live',support:'Support'};
-function runSearch(q) {
-  focusIdx = -1;
-  if (!q.trim()) { document.getElementById('searchResults').innerHTML = '<div class="search-empty">Start typing…</div>'; return; }
-  const res = searchClients.filter(c =>
-    c.company.toLowerCase().includes(q.toLowerCase()) ||
-    (c.niche||'').toLowerCase().includes(q.toLowerCase()) ||
-    (c.contact_name||'').toLowerCase().includes(q.toLowerCase())
-  ).slice(0, 8);
-  const el = document.getElementById('searchResults');
-  if (!res.length) { el.innerHTML = '<div class="search-empty">Nothing found</div>'; return; }
-  el.innerHTML = res.map((c,i) => `
-    <div class="search-result" data-id="${c.id}" data-idx="${i}" onclick="goClient('${c.id}')">
-      <div class="search-result-icon">🏢</div>
-      <div>
-        <div class="search-result-name">${c.company}</div>
-        <div class="search-result-meta">${c.niche||'—'} · ${SL2[c.status]||c.status}</div>
       </div>
-    </div>`).join('');
-}
-function goClient(id) { window.location.href = `/admin/client?id=${id}`; }
-function searchKey(e) {
-  const rows = document.querySelectorAll('.search-result');
-  if (e.key === 'Escape') { closeSearch(); return; }
-  if (e.key === 'ArrowDown') { focusIdx = Math.min(focusIdx+1, rows.length-1); }
-  else if (e.key === 'ArrowUp') { focusIdx = Math.max(focusIdx-1, 0); }
-  else if (e.key === 'Enter' && focusIdx >= 0) { rows[focusIdx]?.click(); return; }
-  rows.forEach((r,i) => r.classList.toggle('focused', i === focusIdx));
-}
+      <div class="tabs">
+        <div class="tab ${activeTab==='inbox'?'active':''}" data-tab="inbox" onclick="switchTab('inbox')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+          Инбокс
+        </div>
+        <div class="tab ${activeTab==='bot'?'active':''}" data-tab="bot" onclick="switchTab('bot')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+          Бот
+        </div>
+        <div class="tab ${activeTab==='channels'?'active':''}" data-tab="channels" onclick="switchTab('channels')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/></svg>
+          Каналы
+        </div>
+        <div class="tab ${activeTab==='settings'?'active':''}" data-tab="settings" onclick="switchTab('settings')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+          Настройки
+        </div>
+      </div>
+      <div class="tab-content ${activeTab==='inbox'?'active':''}" id="tab-inbox"></div>
+      <div class="tab-content ${activeTab==='bot'?'active':''}" id="tab-bot"></div>
+      <div class="tab-content ${activeTab==='channels'?'active':''}" id="tab-channels"></div>
+      <div class="tab-content ${activeTab==='settings'?'active':''}" id="tab-settings"></div>
+    `;
 
-document.addEventListener('keydown', e => {
-  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
-});
+    if (activeTab === 'bot') loadBot();
+    if (activeTab === 'channels') loadChannels();
+    if (activeTab === 'settings') loadSettings();
+  }
+
+  function switchTab(tab) {
+    activeTab = tab;
+    activeChat = null;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelector(`.tab[data-tab="${tab}"]`)?.classList.add('active');
+    document.getElementById(`tab-${tab}`)?.classList.add('active');
+    if (tab === 'inbox') loadInbox();
+    if (tab === 'bot') loadBot();
+    if (tab === 'channels') loadChannels();
+    if (tab === 'settings') loadSettings();
+  }
+
+  // ── INBOX ──
+  async function loadInbox() {
+    const el = document.getElementById('tab-inbox');
+    if (!el) return;
+    el.innerHTML = '<div class="loading">Загрузка чатов...</div>';
+    const r = await fetch(`${API}/chats?client_id=${activeClient.id}`);
+    chats = await r.json();
+    renderInbox();
+  }
+
+  function renderInbox() {
+    const el = document.getElementById('tab-inbox');
+    if (!el) return;
+    el.innerHTML = `<div class="inbox-layout">
+      <div class="chat-list" id="chatList">${renderChatList()}</div>
+      <div class="messages-area" id="messagesArea">
+        <div class="no-chat">
+          <svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+          <span style="font-size:13px;color:var(--muted)">Выбери чат</span>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  function renderChatList() {
+    if (!chats.length) return '<div style="padding:20px;text-align:center;color:var(--muted);font-size:12px">Нет диалогов</div>';
+    return chats.map(ch => {
+      const channel = ch.channel || 'wa';
+      const name = ch.sender_name || ch.sender_id || 'Пользователь';
+      const preview = ch.last_message || '...';
+      const time = ch.last_at ? new Date(ch.last_at).toLocaleTimeString('ru', {hour:'2-digit',minute:'2-digit'}) : '';
+      return `<div class="chat-item ${activeChat?.id === ch.id ? 'active' : ''}" onclick="openChat('${ch.id}')">
+        <div class="chat-avatar">${name[0]?.toUpperCase() || '?'}</div>
+        <div class="chat-info">
+          <div class="chat-name">${name}</div>
+          <div class="chat-preview">${preview}</div>
+        </div>
+        <div class="chat-meta">
+          <div class="chat-time">${time}</div>
+          <div class="chat-ch ${channel}">${chLabel[channel] || channel.toUpperCase()}</div>
+          ${ch.unread_count ? `<div class="chat-unread">${ch.unread_count}</div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  async function openChat(chatId) {
+    activeChat = chats.find(c => c.id === chatId);
+    document.getElementById('chatList').innerHTML = renderChatList();
+    const area = document.getElementById('messagesArea');
+    area.innerHTML = '<div class="loading">Загрузка...</div>';
+    const r = await fetch(`${API}/chats/${chatId}/messages`);
+    const msgs = await r.json();
+    const name = activeChat?.sender_name || activeChat?.sender_id || 'Пользователь';
+    const ch = activeChat?.channel || 'wa';
+    area.innerHTML = `
+      <div class="messages-header">
+        <div class="chat-avatar" style="width:32px;height:32px;font-size:12px">${name[0]?.toUpperCase() || '?'}</div>
+        <div>
+          <div class="messages-header-name">${name}</div>
+          <div class="messages-header-meta">${chLabel[ch] || ch} · ${activeChat?.sender_id || ''}</div>
+        </div>
+      </div>
+      <div class="messages-list" id="msgList">
+        ${msgs.map(m => `<div class="msg ${m.direction === 'out' ? 'out' : ''}">
+          <div class="msg-bubble">${m.text || ''}</div>
+          <div class="msg-time">${new Date(m.created_at || m.ts || 0).toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'})}</div>
+        </div>`).join('')}
+      </div>
+      <div class="msg-input-area">
+        <textarea class="msg-input" id="msgInput" rows="2" placeholder="Написать сообщение..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"></textarea>
+        <button class="msg-send-btn" onclick="sendMsg()">Отправить</button>
+      </div>`;
+    const list = document.getElementById('msgList');
+    if (list) list.scrollTop = list.scrollHeight;
+  }
+
+  async function sendMsg() {
+    const input = document.getElementById('msgInput');
+    const text = input?.value?.trim();
+    if (!text || !activeChat) return;
+    input.value = '';
+    await fetch(`${API}/send-message`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ chat_id: activeChat.id, text, client_id: activeClient.id })
+    });
+    await openChat(activeChat.id);
+  }
+
+  // ── BOT ──
+  async function loadBot() {
+    const el = document.getElementById('tab-bot');
+    if (!el) return;
+    el.innerHTML = '<div class="loading">Загрузка...</div>';
+    const r = await fetch(`${API}/clients/${activeClient.id}/bots`);
+    const bots = await r.json();
+    const bot = Array.isArray(bots) ? bots[0] : bots;
+    if (!bot) {
+      el.innerHTML = '<div class="loading">Бот не найден</div>';
+      return;
+    }
+    el.innerHTML = `<div class="bot-form">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px">Настройки бота</div>
+      <div class="form-group">
+        <div class="form-label">Системный промпт</div>
+        <textarea class="form-textarea" id="botPrompt" rows="8" placeholder="Ты — ИИ-ассистент компании...">${bot.prompt || ''}</textarea>
+      </div>
+      <div class="form-group">
+        <div class="form-label">База знаний</div>
+        <textarea class="form-textarea" id="botKnowledge" rows="6" placeholder="Часы работы, цены, контакты...">${bot.knowledge_base || ''}</textarea>
+      </div>
+      <button class="save-btn" id="saveBotBtn" onclick="saveBot('${bot.id}')">Сохранить</button>
+    </div>`;
+  }
+
+  async function saveBot(botId) {
+    const btn = document.getElementById('saveBotBtn');
+    btn.disabled = true; btn.textContent = 'Сохраняю...';
+    const r = await fetch(`${API}/bots/${botId}`, {
+      method: 'PUT',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        prompt: document.getElementById('botPrompt').value,
+        knowledge_base: document.getElementById('botKnowledge').value
+      })
+    });
+    btn.disabled = false; btn.textContent = 'Сохранить';
+    if (r.ok) toast('Бот сохранён');
+    else toast('Ошибка сохранения', 'error');
+  }
+
+  // ── CHANNELS ──
+  async function loadChannels() {
+    const el = document.getElementById('tab-channels');
+    if (!el) return;
+    el.innerHTML = '<div class="loading">Загрузка...</div>';
+    const r = await fetch(`${API}/clients/${activeClient.id}/channels`);
+    const data = await r.json();
+    const channels = data.channels || data;
+
+    const types = [
+      { type: 'whatsapp', label: 'WhatsApp', cls: 'wa', icon: '💬' },
+      { type: 'telegram', label: 'Telegram', cls: 'tg', icon: '✈️' },
+      { type: 'instagram', label: 'Instagram', cls: 'ig', icon: '📸' },
+    ];
+
+    el.innerHTML = `<div class="channels-grid">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px">Каналы</div>
+      ${types.map(t => {
+        const ch = channels.find(c => c.type === t.type);
+        const connected = ch?.status === 'active';
+        const connectUrl = `/auth/${t.type}/connect?client_id=${activeClient.id}`;
+        return `<div class="channel-card">
+          <div class="channel-icon ${t.cls}">${t.icon}</div>
+          <div class="channel-info">
+            <div class="channel-title">${t.label}</div>
+            <div class="channel-status ${connected ? 'connected' : 'disconnected'}">
+              ${connected ? '● Подключено' + (ch.page_name ? ' · ' + ch.page_name : '') : '○ Не подключено'}
+            </div>
+          </div>
+          <div style="display:flex;gap:8px">
+            ${connected
+              ? `<button class="channel-btn copy" onclick="copyLink('${connectUrl}')">Ссылка</button>
+                 <button class="channel-btn disconnect" onclick="disconnectChannel('${ch.id}')">Отключить</button>`
+              : `<button class="channel-btn copy" onclick="copyLink(window.location.origin+'${connectUrl}')">📋 Скопировать ссылку</button>
+                 <button class="channel-btn connect" onclick="window.open('${connectUrl}','_blank')">Подключить</button>`
+            }
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  function copyLink(url) {
+    navigator.clipboard.writeText(url);
+    toast('Ссылка скопирована');
+  }
+
+  async function disconnectChannel(chId) {
+    if (!confirm('Отключить канал?')) return;
+    await fetch(`${API}/channels/${chId}/disconnect`, { method: 'PATCH' });
+    toast('Канал отключён');
+    loadChannels();
+    selectClient(activeClient.id);
+  }
+
+  // ── SETTINGS ──
+  async function loadSettings() {
+    const el = document.getElementById('tab-settings');
+    if (!el || !activeClient) return;
+    const c = activeClient;
+    el.innerHTML = `<div class="settings-form">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px">Настройки клиента</div>
+      <div class="form-group">
+        <div class="form-label">Название компании</div>
+        <input class="form-input" id="settingName" value="${clientName(c)}" />
+      </div>
+      <div class="form-group">
+        <div class="form-label">Ниша</div>
+        <input class="form-input" id="settingNiche" value="${c.niche || ''}" />
+      </div>
+      <div class="form-group">
+        <div class="form-label">Контакт</div>
+        <input class="form-input" id="settingContact" value="${c.contact_name || ''}" />
+      </div>
+      <div class="form-group">
+        <div class="form-label">Статус</div>
+        <select class="status-select" id="settingStatus">
+          ${['new','brief','connecting','setup','test','live','support'].map(s =>
+            `<option value="${s}" ${(c.pipeline_status||c.status) === s ? 'selected' : ''}>${s}</option>`
+          ).join('')}
+        </select>
+      </div>
+      <button class="save-btn" onclick="saveSettings()">Сохранить</button>
+
+      <div style="padding-top:20px;border-top:1px solid var(--border);margin-top:8px">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:12px;color:var(--text-muted)">ДОСТУП КЛИЕНТА</div>
+        <div class="form-group">
+          <div class="form-label">Логин</div>
+          <input class="form-input" id="portalLogin" value="${c.portal_login || ''}" placeholder="email или логин" />
+        </div>
+        <div class="form-group">
+          <div class="form-label">Пароль</div>
+          <input class="form-input" id="portalPassword" value="${c.portal_password || ''}" placeholder="задайте пароль" />
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="save-btn" onclick="savePortal()" style="flex:1">Сохранить доступ</button>
+          ${c.portal_login ? `<button class="channel-btn" onclick="copyPortalLink()" style="font-size:12px;padding:8px 12px">📋 Ссылка</button>` : ''}
+        </div>
+        ${c.portal_login ? `<div style="font-size:11px;color:var(--text-muted);margin-top:6px">Ссылка: <a href="/client/login" target="_blank" style="color:var(--accent)">/client/login</a></div>` : ''}
+      </div>
+
+      <div style="padding-top:12px;border-top:1px solid var(--border)">
+        <button class="channel-btn disconnect" style="font-size:13px" onclick="deleteClient()">Удалить клиента</button>
+      </div>
+    </div>`;
+  }
+
+  async function saveSettings() {
+    const r = await fetch(`${API}/clients/${activeClient.id}`, {
+      method: 'PUT',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        company: document.getElementById('settingName').value,
+        niche: document.getElementById('settingNiche').value,
+        contact_name: document.getElementById('settingContact').value,
+        status: document.getElementById('settingStatus').value
+      })
+    });
+    if (r.ok) {
+      toast('Настройки сохранены');
+      await selectClient(activeClient.id);
+    } else toast('Ошибка', 'error');
+  }
+
+  async function savePortal() {
+    const login = document.getElementById('portalLogin').value.trim();
+    const password = document.getElementById('portalPassword').value.trim();
+    if (!login || !password) return toast('Заполни логин и пароль', 'error');
+    const r = await fetch(`/api/admin/clients/${activeClient.id}/portal`, {
+      method: 'PUT',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ portal_login: login, portal_password: password })
+    });
+    if (r.ok) {
+      toast('Доступ сохранён ✓');
+      await selectClient(activeClient.id);
+    } else toast('Ошибка', 'error');
+  }
+
+  function copyPortalLink() {
+    const url = `${location.origin}/client/login`;
+    navigator.clipboard.writeText(url).then(() => toast('Ссылка скопирована'));
+  }
+
+  async function deleteClient() {
+    if (!confirm(`Удалить клиента "${activeClient.company_name}"? Это нельзя отменить.`)) return;
+    const r = await fetch(`${API}/clients/${activeClient.id}`, { method: 'DELETE' });
+    if (r.ok) {
+      toast('Клиент удалён');
+      activeClient = null;
+      document.getElementById('mainArea').innerHTML = `<div class="empty-state">
+        <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+        <h2>Выбери клиента</h2><p>Кликни на клиента слева</p></div>`;
+      loadClients();
+    }
+  }
+
+  // ── ADD CLIENT MODAL ──
+  function openAddModal() { document.getElementById('addModal').classList.add('open'); }
+  function closeAddModal() { document.getElementById('addModal').classList.remove('open'); }
+
+  async function createClient() {
+    const name = document.getElementById('newClientName').value.trim();
+    if (!name) return;
+    const r = await fetch(`${API}/clients`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        company: name,
+        niche: document.getElementById('newClientNiche').value,
+        contact_name: document.getElementById('newClientContact').value,
+        status: 'new'
+      })
+    });
+    if (r.ok) {
+      const data = await r.json();
+      const client = data.client || data;
+      closeAddModal();
+      document.getElementById('newClientName').value = '';
+      document.getElementById('newClientNiche').value = '';
+      document.getElementById('newClientContact').value = '';
+      toast(`Клиент создан`);
+      await loadClients();
+      selectClient(client.id);
+    } else toast('Ошибка создания', 'error');
+  }
+
+  // ── SSE for real-time updates ──
+  function connectSSE() {
+    const es = new EventSource(`${API}/sse`);
+    es.onmessage = (e) => {
+      try {
+        const data = JSON.parse(e.data);
+        if (data.type === 'new_message') {
+          if (activeClient && data.client_id === activeClient.id && activeTab === 'inbox') {
+            loadInbox();
+          }
+          loadClients();
+        }
+      } catch {}
+    };
+    es.onerror = () => setTimeout(connectSSE, 5000);
+  }
+
+  // ── INIT ──
+  loadClients();
+  connectSSE();
 </script>
 </body>
 </html>
