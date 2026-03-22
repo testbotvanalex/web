@@ -693,7 +693,7 @@
       <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px">Каналы</div>
       ${types.map(t => {
         const ch = channels.find(c => c.type === t.type);
-        const connected = ch?.status === 'active';
+        const connected = ch?.status === 'connected' || ch?.status === 'active';
         const connectUrl = t.type === 'whatsapp'
           ? `/whatsapp-connect?client_id=${activeClient.id}`
           : `/auth/${t.type}/connect?client_id=${activeClient.id}`;
