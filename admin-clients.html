@@ -444,9 +444,10 @@
     }
     el.innerHTML = clients.map(c => {
       const channels = clientChannels(c);
-      const hasWa = channels.find(ch => ch.type === 'whatsapp' && ch.status === 'active');
-      const hasTg = channels.find(ch => ch.type === 'telegram' && ch.status === 'active');
-      const hasIg = channels.find(ch => ch.type === 'instagram' && ch.status === 'active');
+      const ok = s => s === 'active' || s === 'connected';
+      const hasWa = channels.find(ch => ch.type === 'whatsapp' && ok(ch.status));
+      const hasTg = channels.find(ch => ch.type === 'telegram' && ok(ch.status));
+      const hasIg = channels.find(ch => ch.type === 'instagram' && ok(ch.status));
       const isActive = activeClient?.id === c.id;
       return `<div class="client-card ${isActive ? 'active' : ''}" onclick="selectClient('${c.id}')">
         <div class="client-avatar ${getAvatarClass(c.id)}">${getInitials(clientName(c))}</div>
@@ -483,9 +484,10 @@
     if (!activeClient) return;
     const c = activeClient;
     const channels = clientChannels(c);
-    const hasWa = channels.find(ch => ch.type === 'whatsapp' && ch.status === 'active');
-    const hasTg = channels.find(ch => ch.type === 'telegram' && ch.status === 'active');
-    const hasIg = channels.find(ch => ch.type === 'instagram' && ch.status === 'active');
+    const ok2 = s => s === 'active' || s === 'connected';
+    const hasWa = channels.find(ch => ch.type === 'whatsapp' && ok2(ch.status));
+    const hasTg = channels.find(ch => ch.type === 'telegram' && ok2(ch.status));
+    const hasIg = channels.find(ch => ch.type === 'instagram' && ok2(ch.status));
 
     document.getElementById('mainArea').innerHTML = `
       <div class="client-header">

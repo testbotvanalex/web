@@ -98,10 +98,13 @@ function enrichWorkspace(client) {
   const exactBot = D.bots.byId.get(client.id);
   const resolvedBot = ownBot || linkedChannelBot || exactBot || null;
 
+  const channels = D.channels.byClient.all(client.id);
+
   return {
     ...client,
     workspace_bot_id: resolvedBot?.id || null,
     workspace_bot_name: resolvedBot?.name || null,
+    channels,
   };
 }
 
