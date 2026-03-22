@@ -217,8 +217,11 @@
       });
       const data = await res.json();
       if (data.success) {
-        setStatus('WhatsApp успешно подключен! WABA ID: ' + data.waba_id, 'success');
+        setStatus('✅ WhatsApp подключён! Возвращаемся...', 'success');
         document.getElementById('connectBtn').textContent = '✓ Подключено';
+        setTimeout(() => {
+          window.opener ? window.close() : window.location.href = '/admin';
+        }, 1500);
       } else {
         setStatus('Ошибка: ' + (data.error || 'Неизвестная ошибка'), 'error');
         document.getElementById('connectBtn').disabled = false;
