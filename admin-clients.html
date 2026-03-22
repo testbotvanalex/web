@@ -675,47 +675,123 @@
   }
 
   // ── CHANNELS ──
+  const CH_TYPES = [
+    { type: 'whatsapp',  label: 'WhatsApp',  sub: '',       icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>` },
+    { type: 'telegram',  label: 'Telegram',  sub: '',       icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="#229ED9"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>` },
+    { type: 'instagram', label: 'Instagram', sub: '',       icon: `<svg width="22" height="22" viewBox="0 0 24 24"><defs><linearGradient id="ig" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#f09433"/><stop offset="25%" style="stop-color:#e6683c"/><stop offset="50%" style="stop-color:#dc2743"/><stop offset="75%" style="stop-color:#cc2366"/><stop offset="100%" style="stop-color:#bc1888"/></linearGradient></defs><path fill="url(#ig)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>` },
+    { type: 'messenger', label: 'Messenger', sub: '',       icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="#0084FF"><path d="M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.744 6.614 4.469 8.652V24l4.088-2.242c1.092.3 2.246.464 3.443.464 6.627 0 12-4.975 12-11.111S18.627 0 12 0zm1.191 14.963l-3.055-3.26-5.963 3.26L10.732 8l3.131 3.259L19.752 8l-6.561 6.963z"/></svg>` },
+  ];
+
+  let _chData = [];
+  let _selectedCh = 'whatsapp';
+
   async function loadChannels() {
     const el = document.getElementById('tab-channels');
     if (!el) return;
     el.innerHTML = '<div class="loading">Загрузка...</div>';
     const r = await fetch(`${API}/clients/${activeClient.id}/channels`);
     const data = await r.json();
-    const channels = data.channels || data;
+    _chData = data.channels || data;
+    _selectedCh = _selectedCh || 'whatsapp';
+    renderChannelsUI();
+  }
 
-    const types = [
-      { type: 'whatsapp', label: 'WhatsApp', cls: 'wa', icon: '💬' },
-      { type: 'telegram', label: 'Telegram', cls: 'tg', icon: '✈️' },
-      { type: 'instagram', label: 'Instagram', cls: 'ig', icon: '📸' },
-    ];
+  function renderChannelsUI() {
+    const el = document.getElementById('tab-channels');
+    if (!el) return;
+    el.innerHTML = `
+      <div style="display:flex;height:100%;min-height:420px">
+        <div style="width:200px;border-right:1px solid var(--border);padding:8px 0;flex-shrink:0">
+          ${CH_TYPES.map(t => {
+            const ch = _chData.find(c => c.type === t.type);
+            const on = ch?.status === 'connected' || ch?.status === 'active';
+            return `<div onclick="selectChType('${t.type}')" style="display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;border-radius:10px;margin:2px 8px;transition:background .15s;${_selectedCh===t.type ? 'background:var(--surface2)' : ''}">
+              <div style="width:36px;height:36px;border-radius:10px;background:var(--surface2);display:flex;align-items:center;justify-content:center;flex-shrink:0">${t.icon}</div>
+              <div>
+                <div style="font-size:13px;font-weight:600">${t.label}</div>
+                <div style="font-size:11px;margin-top:2px;color:${on ? '#4ade80' : 'var(--text-muted)'}">${on ? '● Подключено' : '○ Не подключено'}</div>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+        <div style="flex:1;padding:32px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;max-width:480px">
+          ${renderChPanel()}
+        </div>
+      </div>`;
+  }
 
-    el.innerHTML = `<div class="channels-grid">
-      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px">Каналы</div>
-      ${types.map(t => {
-        const ch = channels.find(c => c.type === t.type);
-        const connected = ch?.status === 'connected' || ch?.status === 'active';
-        const connectUrl = t.type === 'whatsapp'
-          ? `/whatsapp-connect?client_id=${activeClient.id}`
-          : `/auth/${t.type}/connect?client_id=${activeClient.id}`;
-        return `<div class="channel-card">
-          <div class="channel-icon ${t.cls}">${t.icon}</div>
-          <div class="channel-info">
-            <div class="channel-title">${t.label}</div>
-            <div class="channel-status ${connected ? 'connected' : 'disconnected'}">
-              ${connected ? '● Подключено' + (ch.page_name ? ' · ' + ch.page_name : '') : '○ Не подключено'}
-            </div>
-          </div>
-          <div style="display:flex;gap:8px">
-            ${connected
-              ? `<button class="channel-btn copy" onclick="copyLink('${connectUrl}')">Ссылка</button>
-                 <button class="channel-btn disconnect" onclick="disconnectChannel('${ch.id}')">Отключить</button>`
-              : `<button class="channel-btn copy" onclick="copyLink(window.location.origin+'${connectUrl}')">📋 Скопировать ссылку</button>
-                 <button class="channel-btn connect" onclick="${t.type === 'whatsapp' ? 'connectWhatsApp()' : `window.open('${connectUrl}','_blank')`}">Подключить</button>`
-            }
-          </div>
-        </div>`;
-      }).join('')}
-    </div>`;
+  function selectChType(type) {
+    _selectedCh = type;
+    renderChannelsUI();
+  }
+
+  function renderChPanel() {
+    const t = CH_TYPES.find(x => x.type === _selectedCh);
+    const ch = _chData.find(c => c.type === _selectedCh);
+    const on = ch?.status === 'connected' || ch?.status === 'active';
+
+    if (on) return `
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
+        <div style="width:48px;height:48px;border-radius:14px;background:var(--surface2);display:flex;align-items:center;justify-content:center">${t.icon}</div>
+        <div>
+          <div style="font-size:20px;font-weight:700">${t.label}</div>
+          <div style="color:#4ade80;font-size:13px;margin-top:2px">● Подключено${ch.page_name ? ' · ' + ch.page_name : ''}</div>
+        </div>
+      </div>
+      ${ch.page_id ? `<div style="background:var(--surface2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--text-muted);margin-bottom:20px;width:100%">Phone/Page ID: <b style="color:var(--text)">${ch.page_id}</b></div>` : ''}
+      <div style="display:flex;gap:10px">
+        <button class="channel-btn copy" onclick="copyChLink()">📋 Скопировать ссылку</button>
+        <button class="channel-btn disconnect" onclick="disconnectChannel('${ch.id}')">Отключить</button>
+      </div>`;
+
+    switch(_selectedCh) {
+      case 'whatsapp': return `
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+          <div style="width:48px;height:48px;border-radius:14px;background:rgba(37,211,102,.1);display:flex;align-items:center;justify-content:center">${t.icon}</div>
+          <div style="font-size:20px;font-weight:700">Подключить WhatsApp</div>
+        </div>
+        <p style="color:var(--text-muted);font-size:14px;margin-bottom:24px;line-height:1.6">Подключите WhatsApp Business аккаунт через официальный Meta Embedded Signup.</p>
+        <button class="save-btn" style="display:flex;align-items:center;gap:8px" onclick="connectWhatsApp()">
+          ${t.icon} Продолжить через WhatsApp
+        </button>`;
+
+      case 'telegram': return `
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+          <div style="width:48px;height:48px;border-radius:14px;background:rgba(34,158,217,.1);display:flex;align-items:center;justify-content:center">${t.icon}</div>
+          <div style="font-size:20px;font-weight:700">Подключить Telegram</div>
+        </div>
+        <p style="color:var(--text-muted);font-size:14px;margin-bottom:8px;line-height:1.6">Введите токен бота от <b>@BotFather</b></p>
+        <input class="form-input" id="tgTokenInput" placeholder="123456789:ABCDefGhIJKlmNoPQRsTUVwxyZ" style="margin-bottom:16px;width:100%" />
+        <button class="save-btn" onclick="connectTelegram()">Подключить</button>
+        <a href="https://t.me/BotFather" target="_blank" style="font-size:12px;color:var(--text-muted);margin-top:12px;display:block">Как получить токен? →</a>`;
+
+      case 'instagram': return `
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+          <div style="width:48px;height:48px;border-radius:14px;background:rgba(220,39,67,.1);display:flex;align-items:center;justify-content:center">${t.icon}</div>
+          <div style="font-size:20px;font-weight:700">Подключить Instagram</div>
+        </div>
+        <p style="color:var(--text-muted);font-size:14px;margin-bottom:24px;line-height:1.6">Войдите в бизнес-профиль Instagram или переключитесь на него во время подключения.</p>
+        <button class="save-btn" style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)" onclick="window.open('/auth/instagram/connect?client_id=${activeClient.id}','_blank')">
+          ${t.icon} Продолжить через Instagram
+        </button>`;
+
+      case 'messenger': return `
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+          <div style="width:48px;height:48px;border-radius:14px;background:rgba(0,132,255,.1);display:flex;align-items:center;justify-content:center">${t.icon}</div>
+          <div style="font-size:20px;font-weight:700">Подключить Messenger</div>
+        </div>
+        <p style="color:var(--text-muted);font-size:14px;margin-bottom:24px;line-height:1.6">Подключите Facebook страницу для приёма сообщений через Messenger.</p>
+        <button class="save-btn" onclick="window.open('/auth/messenger/connect?client_id=${activeClient.id}','_blank')">
+          ${t.icon} Продолжить через Facebook
+        </button>`;
+    }
+    return '';
+  }
+
+  function copyChLink() {
+    const url = `${location.origin}/whatsapp-connect?client_id=${activeClient.id}`;
+    navigator.clipboard.writeText(url);
+    toast('Ссылка скопирована');
   }
 
   function copyLink(url) {
@@ -723,12 +799,31 @@
     toast('Ссылка скопирована');
   }
 
+  async function connectTelegram() {
+    const token = document.getElementById('tgTokenInput')?.value?.trim();
+    if (!token) return toast('Введи токен бота', 'error');
+    const btn = event.target;
+    btn.disabled = true; btn.textContent = 'Подключаем...';
+    try {
+      const r = await fetch(`${API}/clients/${activeClient.id}/telegram`, {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ token, client_id: activeClient.id })
+      });
+      const d = await r.json();
+      if (d.ok || d.success) {
+        toast('✅ Telegram подключён!');
+        await selectClient(activeClient.id);
+        loadChannels();
+      } else { toast('Ошибка: ' + (d.error || 'неверный токен'), 'error'); btn.disabled = false; btn.textContent = 'Подключить'; }
+    } catch(e) { toast('Ошибка сети', 'error'); btn.disabled = false; btn.textContent = 'Подключить'; }
+  }
+
   async function disconnectChannel(chId) {
     if (!confirm('Отключить канал?')) return;
     await fetch(`${API}/channels/${chId}/disconnect`, { method: 'PATCH' });
     toast('Канал отключён');
+    await selectClient(activeClient.id);
     loadChannels();
-    selectClient(activeClient.id);
   }
 
   // ── SETTINGS ──

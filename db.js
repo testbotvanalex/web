@@ -145,6 +145,56 @@ try { db.exec(`ALTER TABLE bots ADD COLUMN flow TEXT DEFAULT NULL`); } catch (_)
 try { db.exec(`ALTER TABLE clients ADD COLUMN portal_password TEXT DEFAULT NULL`); } catch (_) {}
 try { db.exec(`ALTER TABLE clients ADD COLUMN portal_login TEXT DEFAULT NULL`); } catch (_) {}
 
+// ── Agents ────────────────────────────────────────────────────────────────────
+db.exec(`
+  CREATE TABLE IF NOT EXISTS agents (
+    id         TEXT PRIMARY KEY,
+    name       TEXT NOT NULL,
+    email      TEXT,
+    color      TEXT DEFAULT '#7c6cfc',
+    created_at TEXT DEFAULT (datetime('now'))
+  )
+`);
+try { db.exec(`ALTER TABLE chats ADD COLUMN assigned_to TEXT DEFAULT NULL`); } catch (_) {}
+try { db.exec(`ALTER TABLE messages ADD COLUMN direction TEXT DEFAULT 'in'`); } catch (_) {}
+
+// ── Broadcasts ────────────────────────────────────────────────────────────────
+db.exec(`
+  CREATE TABLE IF NOT EXISTS broadcasts (
+    id           TEXT PRIMARY KEY,
+    client_id    TEXT NOT NULL,
+    name         TEXT NOT NULL,
+    message      TEXT NOT NULL,
+    channel      TEXT DEFAULT 'whatsapp',
+    status       TEXT DEFAULT 'draft',
+    sent_count   INTEGER DEFAULT 0,
+    fail_count   INTEGER DEFAULT 0,
+    scheduled_at TEXT,
+    sent_at      TEXT,
+    created_at   TEXT DEFAULT (datetime('now'))
+  );
+  CREATE TABLE IF NOT EXISTS broadcast_recipients (
+    id           TEXT PRIMARY KEY,
+    broadcast_id TEXT NOT NULL,
+    phone        TEXT NOT NULL,
+    status       TEXT DEFAULT 'pending',
+    error        TEXT,
+    sent_at      TEXT
+  );
+`);
+
+// ── Quick Replies ─────────────────────────────────────────────────────────────
+db.exec(`
+  CREATE TABLE IF NOT EXISTS quick_replies (
+    id         TEXT PRIMARY KEY,
+    shortcut   TEXT NOT NULL,
+    title      TEXT NOT NULL,
+    body       TEXT NOT NULL,
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT DEFAULT (datetime('now'))
+  )
+`);
+
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 function genId(prefix = '') {
@@ -467,4 +517,34 @@ module.exports = {
   suggestions: suggestionQ,
   activity:    activityQ,
   stats:       statsQ,
+  broadcasts: {
+    list:        db.prepare(`SELECT * FROM broadcasts ORDER BY created_at DESC`),
+    byClient:    db.prepare(`SELECT * FROM broadcasts WHERE client_id=? ORDER BY created_at DESC`),
+    byId:        db.prepare(`SELECT * FROM broadcasts WHERE id=?`),
+    insert:      db.prepare(`INSERT INTO broadcasts (id,client_id,name,message,channel) VALUES (@id,@client_id,@name,@message,@channel)`),
+    update:      db.prepare(`UPDATE broadcasts SET name=@name,message=@message,channel=@channel WHERE id=@id`),
+    delete:      db.prepare(`DELETE FROM broadcasts WHERE id=?`),
+    setStatus:   db.prepare(`UPDATE broadcasts SET status=?,sent_at=datetime('now') WHERE id=?`),
+    updateStats: db.prepare(`UPDATE broadcasts SET sent_count=sent_count+?,fail_count=fail_count+? WHERE id=?`),
+    recipients:  db.prepare(`SELECT * FROM broadcast_recipients WHERE broadcast_id=?`),
+    addRecipient:db.prepare(`INSERT OR IGNORE INTO broadcast_recipients (id,broadcast_id,phone,status) VALUES (@id,@broadcast_id,@phone,'pending')`),
+    setRecipient:db.prepare(`UPDATE broadcast_recipients SET status=?,error=?,sent_at=datetime('now') WHERE id=?`),
+  },
+  agents: {
+    list:   db.prepare(`SELECT * FROM agents ORDER BY name ASC`),
+    byId:   db.prepare(`SELECT * FROM agents WHERE id = ?`),
+    insert: db.prepare(`INSERT INTO agents (id, name, email, color) VALUES (@id, @name, @email, @color)`),
+    update: db.prepare(`UPDATE agents SET name=@name, email=@email, color=@color WHERE id=@id`),
+    delete: db.prepare(`DELETE FROM agents WHERE id = ?`),
+    assignChat:   db.prepare(`UPDATE chats SET assigned_to=? WHERE id=?`),
+    unassignChat: db.prepare(`UPDATE chats SET assigned_to=NULL WHERE id=?`),
+  },
+  quickReplies: {
+    list:   db.prepare(`SELECT * FROM quick_replies ORDER BY shortcut ASC`),
+    search: db.prepare(`SELECT * FROM quick_replies WHERE shortcut LIKE ? OR title LIKE ? OR body LIKE ? ORDER BY shortcut ASC LIMIT 10`),
+    byId:   db.prepare(`SELECT * FROM quick_replies WHERE id = ?`),
+    insert: db.prepare(`INSERT INTO quick_replies (id, shortcut, title, body) VALUES (@id, @shortcut, @title, @body)`),
+    update: db.prepare(`UPDATE quick_replies SET shortcut=@shortcut, title=@title, body=@body, updated_at=datetime('now') WHERE id=@id`),
+    delete: db.prepare(`DELETE FROM quick_replies WHERE id = ?`),
+  },
 };

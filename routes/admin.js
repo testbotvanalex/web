@@ -175,8 +175,10 @@ router.get('/clients/:id', (req, res) => {
     const channels = D.channels.byClient.all(client.id);
     const tasks    = D.tasks.byClient.all(client.id);
     const activity = D.activity.byClient.all(client.id);
+    const msgRow   = D.db.prepare('SELECT COUNT(*) AS count FROM messages WHERE client_id = ?').get(client.id);
+    const message_count = msgRow?.count || 0;
 
-    ok(res, { client, bots, channels, tasks, activity });
+    ok(res, { client, bots, channels, tasks, activity, message_count });
   } catch (e) { err(res, e.message, 500); }
 });
 
@@ -248,8 +250,9 @@ router.put('/bots/:id', (req, res) => {
     const bot = D.bots.byId.get(req.params.id);
     if (!bot) return err(res, 'not found', 404);
 
-    const { name = bot.name, prompt = bot.prompt, knowledge_base = bot.knowledge_base } = req.body;
+    const { name = bot.name, prompt = bot.prompt, knowledge_base = bot.knowledge_base, buttons = bot.buttons } = req.body;
     D.bots.update.run({ id: bot.id, name, prompt, knowledge_base });
+    if (buttons !== undefined) D.db.prepare('UPDATE bots SET buttons=? WHERE id=?').run(buttons || null, bot.id);
     D.log(bot.client_id, 'bot_updated', `Bot: ${name}, version +1`);
 
     ok(res, { bot: D.bots.byId.get(bot.id) });
@@ -638,6 +641,222 @@ router.post('/chats/:chatId/suggestion/discard', (req, res) => {
     const sug = D.suggestions.getLatest.get(chat.id);
     if (sug) D.suggestions.updateStatus.run('discarded', Date.now(), sug.id);
     ok(res, { discarded: true });
+  } catch (e) { err(res, e.message, 500); }
+});
+
+// ── Broadcasts ────────────────────────────────────────────────────────────────
+router.get('/broadcasts', (req, res) => {
+  try {
+    const rows = req.query.client_id
+      ? D.broadcasts.byClient.all(req.query.client_id)
+      : D.broadcasts.list.all();
+    ok(res, { broadcasts: rows });
+  } catch (e) { err(res, e.message, 500); }
+});
+
+router.post('/broadcasts', (req, res) => {
+  try {
+    const { client_id, name, message, channel = 'whatsapp' } = req.body || {};
+    if (!client_id || !name || !message) return err(res, 'client_id, name, message required');
+    const id = D.genId('bc_');
+    D.broadcasts.insert.run({ id, client_id, name, message, channel });
+    ok(res, { broadcast: D.broadcasts.byId.get(id) });
+  } catch (e) { err(res, e.message, 500); }
+});
+
+router.put('/broadcasts/:id', (req, res) => {
+  try {
+    const bc = D.broadcasts.byId.get(req.params.id);
+    if (!bc) return err(res, 'not found', 404);
+    if (bc.status === 'sent') return err(res, 'Cannot edit a sent broadcast');
+    const { name = bc.name, message = bc.message, channel = bc.channel } = req.body || {};
+    D.broadcasts.update.run({ id: bc.id, name, message, channel });
+    ok(res, { broadcast: D.broadcasts.byId.get(bc.id) });
+  } catch (e) { err(res, e.message, 500); }
+});
+
+router.delete('/broadcasts/:id', (req, res) => {
+  try {
+    D.db.prepare('DELETE FROM broadcast_recipients WHERE broadcast_id=?').run(req.params.id);
+    D.broadcasts.delete.run(req.params.id);
+    ok(res, { deleted: true });
+  } catch (e) { err(res, e.message, 500); }
+});
+
+router.get('/broadcasts/:id/recipients', (req, res) => {
+  try {
+    ok(res, { recipients: D.broadcasts.recipients.all(req.params.id) });
+  } catch (e) { err(res, e.message, 500); }
+});
+
+// GET contacts for a client (unique senders from messages)
+router.get('/clients/:id/contacts', (req, res) => {
+  try {
+    const contacts = D.db.prepare(`
+      SELECT DISTINCT sender_id as phone, MAX(sender_name) as name, MAX(created_at) as last_seen
+      FROM messages WHERE client_id=? AND channel='whatsapp' AND direction='in' AND sender_id IS NOT NULL
+      GROUP BY sender_id ORDER BY last_seen DESC
+    `).all(req.params.id);
+    ok(res, { contacts });
+  } catch (e) { err(res, e.message, 500); }
+});
+
+// POST /broadcasts/:id/send — fire the broadcast
+router.post('/broadcasts/:id/send', async (req, res) => {
+  try {
+    const bc = D.broadcasts.byId.get(req.params.id);
+    if (!bc) return err(res, 'not found', 404);
+    if (bc.status === 'sent') return err(res, 'Already sent');
+
+    // Get channel token
+    const ch = D.db.prepare(`SELECT token, page_id FROM channels WHERE client_id=? AND type=? AND status='connected' LIMIT 1`).get(bc.client_id, bc.channel);
+    if (!ch?.token || !ch?.page_id) return err(res, 'No connected channel found');
+
+    // Get recipients from request body or all contacts
+    const { phones } = req.body || {};
+    const contacts = phones?.length
+      ? phones.map(p => ({ phone: String(p).replace(/\D/g, '') }))
+      : D.db.prepare(`SELECT DISTINCT sender_id as phone FROM messages WHERE client_id=? AND channel=? AND direction='in'`).all(bc.client_id, bc.channel);
+
+    if (!contacts.length) return err(res, 'No recipients');
+
+    // Add recipients
+    for (const c of contacts) {
+      D.broadcasts.addRecipient.run({ id: D.genId('br_'), broadcast_id: bc.id, phone: c.phone });
+    }
+
+    D.broadcasts.setStatus.run('sending', bc.id);
+    res.json({ ok: true, total: contacts.length, broadcast_id: bc.id });
+
+    // Send in background
+    (async () => {
+      const axios = require('axios');
+      const recipients = D.broadcasts.recipients.all(bc.id);
+      let sent = 0, failed = 0;
+      for (const r of recipients) {
+        try {
+          await axios.post(
+            `https://graph.facebook.com/v23.0/${ch.page_id}/messages`,
+            { messaging_product: 'whatsapp', to: r.phone, type: 'text', text: { body: bc.message } },
+            { headers: { Authorization: `Bearer ${ch.token}`, 'Content-Type': 'application/json' } }
+          );
+          D.broadcasts.setRecipient.run('sent', null, r.id);
+          sent++;
+        } catch (e) {
+          const errMsg = e.response?.data?.error?.message || e.message;
+          D.broadcasts.setRecipient.run('failed', errMsg, r.id);
+          failed++;
+        }
+        await new Promise(r => setTimeout(r, 200)); // rate limit
+      }
+      D.broadcasts.updateStats.run(sent, failed, bc.id);
+      D.broadcasts.setStatus.run('sent', bc.id);
+    })();
+  } catch (e) { err(res, e.message, 500); }
+});
+
+// ── Agents ────────────────────────────────────────────────────────────────────
+router.get('/agents', (req, res) => {
+  try { ok(res, { agents: D.agents.list.all() }); } catch (e) { err(res, e.message, 500); }
+});
+
+router.post('/agents', (req, res) => {
+  try {
+    const { name, email = '', color = '#7c6cfc' } = req.body || {};
+    if (!name) return err(res, 'name required');
+    const id = D.genId('agent_');
+    D.agents.insert.run({ id, name, email, color });
+    ok(res, { agent: D.agents.byId.get(id) });
+  } catch (e) { err(res, e.message, 500); }
+});
+
+router.put('/agents/:id', (req, res) => {
+  try {
+    const a = D.agents.byId.get(req.params.id);
+    if (!a) return err(res, 'not found', 404);
+    const { name = a.name, email = a.email, color = a.color } = req.body || {};
+    D.agents.update.run({ id: a.id, name, email, color });
+    ok(res, { agent: D.agents.byId.get(a.id) });
+  } catch (e) { err(res, e.message, 500); }
+});
+
+router.delete('/agents/:id', (req, res) => {
+  try {
+    D.agents.delete.run(req.params.id);
+    ok(res, { deleted: true });
+  } catch (e) { err(res, e.message, 500); }
+});
+
+router.patch('/chats/:id/assign', (req, res) => {
+  try {
+    const chat = D.chats.byId.get(req.params.id);
+    if (!chat) return err(res, 'chat not found', 404);
+    const { agent_id } = req.body || {};
+    if (agent_id) {
+      D.agents.assignChat.run(agent_id, chat.id);
+    } else {
+      D.agents.unassignChat.run(chat.id);
+    }
+    ok(res, { chat: D.chats.byId.get(chat.id) });
+  } catch (e) { err(res, e.message, 500); }
+});
+
+// Internal notes (stored as messages with direction='note')
+router.post('/chats/:id/notes', (req, res) => {
+  try {
+    const chat = D.chats.byId.get(req.params.id);
+    if (!chat) return err(res, 'chat not found', 404);
+    const { text } = req.body || {};
+    if (!text) return err(res, 'text required');
+    D.messages.insert.run({
+      id: D.genId('note_'),
+      client_id: chat.client_id,
+      channel: chat.channel,
+      sender_id: chat.sender_id,
+      sender_name: 'Admin',
+      text,
+      direction: 'note',
+      raw: null,
+    });
+    ok(res, { ok: true });
+  } catch (e) { err(res, e.message, 500); }
+});
+
+// ── Quick Replies ─────────────────────────────────────────────────────────────
+router.get('/quick-replies', (req, res) => {
+  try {
+    const q = req.query.q ? `%${req.query.q}%` : null;
+    const rows = q
+      ? D.quickReplies.search.all(q, q, q)
+      : D.quickReplies.list.all();
+    ok(res, { quick_replies: rows });
+  } catch (e) { err(res, e.message, 500); }
+});
+
+router.post('/quick-replies', (req, res) => {
+  try {
+    const { shortcut, title, body } = req.body || {};
+    if (!shortcut || !body) return err(res, 'shortcut and body required');
+    const id = D.genId('qr_');
+    D.quickReplies.insert.run({ id, shortcut: shortcut.replace(/^\//, ''), title: title || shortcut, body });
+    ok(res, { quick_reply: D.quickReplies.byId.get(id) });
+  } catch (e) { err(res, e.message, 500); }
+});
+
+router.put('/quick-replies/:id', (req, res) => {
+  try {
+    const qr = D.quickReplies.byId.get(req.params.id);
+    if (!qr) return err(res, 'not found', 404);
+    const { shortcut = qr.shortcut, title = qr.title, body = qr.body } = req.body || {};
+    D.quickReplies.update.run({ id: qr.id, shortcut: shortcut.replace(/^\//, ''), title, body });
+    ok(res, { quick_reply: D.quickReplies.byId.get(qr.id) });
+  } catch (e) { err(res, e.message, 500); }
+});
+
+router.delete('/quick-replies/:id', (req, res) => {
+  try {
+    D.quickReplies.delete.run(req.params.id);
+    ok(res, { deleted: true });
   } catch (e) { err(res, e.message, 500); }
 });
 
