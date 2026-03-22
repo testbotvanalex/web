@@ -695,6 +695,10 @@ app.get('/whatsapp-connect', (req, res) => {
   res.sendFile(path.join(__dirname, 'whatsapp-connect.html'));
 });
 
+app.get('/auth/whatsapp/connect', (req, res) => {
+  res.redirect('/whatsapp-connect' + (req.query.client_id ? '?client_id=' + req.query.client_id : ''));
+});
+
 app.get('/whatsapp-connect-client', (req, res) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
   res.sendFile(path.join(__dirname, 'whatsapp-connect-client.html'));
