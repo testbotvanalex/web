@@ -694,7 +694,9 @@
       ${types.map(t => {
         const ch = channels.find(c => c.type === t.type);
         const connected = ch?.status === 'active';
-        const connectUrl = `/auth/${t.type}/connect?client_id=${activeClient.id}`;
+        const connectUrl = t.type === 'whatsapp'
+          ? `/whatsapp-connect?client_id=${activeClient.id}`
+          : `/auth/${t.type}/connect?client_id=${activeClient.id}`;
         return `<div class="channel-card">
           <div class="channel-icon ${t.cls}">${t.icon}</div>
           <div class="channel-info">
