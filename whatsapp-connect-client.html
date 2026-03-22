@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Connect WhatsApp — Botmatic</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #f6f7fb;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 48px;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    .logo {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, #4aec7b, #1eb954);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 32px;
+    }
+    h1 { font-family: 'Syne', sans-serif; font-size: 24px; color: #15182d; margin-bottom: 12px; }
+    p { color: #6f778c; font-size: 15px; line-height: 1.6; margin-bottom: 32px; }
+    .btn-wa {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #25D366;
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 16px 32px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      width: 100%;
+      justify-content: center;
+    }
+    .btn-wa:hover { background: #1eb954; }
+    .btn-wa:disabled { background: #ccc; cursor: not-allowed; }
+    .status { margin-top: 24px; padding: 16px; border-radius: 12px; font-size: 14px; display: none; }
+    .status.success { background: #dcfce7; color: #166534; display: block; }
+    .status.error { background: #fef2f2; color: #b91c1c; display: block; }
+    .status.loading { background: #f0f4ff; color: #3b4bdb; display: block; }
+    .steps { text-align: left; margin-bottom: 32px; }
+    .step { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 16px; }
+    .step-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: #7c3aed; color: white;
+      font-size: 13px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .step-text { font-size: 14px; color: #4b5563; padding-top: 4px; }
+    .powered { margin-top: 24px; font-size: 12px; color: #9ca3af; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo">💬</div>
+  <h1>Connect WhatsApp</h1>
+  <p>Link your WhatsApp Business account to Botmatic in just a few clicks.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text">Click the button below and log in with Facebook</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-text">Select or create your WhatsApp Business account</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text">Verify your phone number and confirm access</div>
+    </div>
+  </div>
+
+  <button class="btn-wa" id="connectBtn" onclick="launchWhatsAppSignup()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    Connect WhatsApp Business
+  </button>
+
+  <div class="status" id="status"></div>
+  <div class="powered">Powered by Botmatic × Meta WhatsApp Business Platform</div>
+</div>
+
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId: '909780111676020',
+      autoLogAppEvents: true,
+      xfbml: true,
+      version: 'v23.0'
+    });
+  };
+</script>
+<script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
+
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const clientId = urlParams.get('client_id') || '';
+
+  function showStatus(msg, type) {
+    const el = document.getElementById('status');
+    el.textContent = msg;
+    el.className = 'status ' + type;
+  }
+
+  function launchWhatsAppSignup() {
+    const btn = document.getElementById('connectBtn');
+    btn.disabled = true;
+    showStatus('Opening WhatsApp Business signup...', 'loading');
+
+    FB.login(function(response) {
+      if (response.authResponse) {
+        const code = response.authResponse.code;
+        showStatus('Processing your account...', 'loading');
+
+        fetch('/api/whatsapp/embedded-signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code, client_id: clientId })
+        })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            showStatus('✅ WhatsApp connected! WABA ID: ' + data.waba_id, 'success');
+            btn.textContent = '✅ Connected!';
+            btn.style.background = '#1eb954';
+          } else {
+            showStatus('Error: ' + (data.error || 'Unknown error'), 'error');
+            btn.disabled = false;
+          }
+        })
+        .catch(err => {
+          showStatus('Error: ' + err.message, 'error');
+          btn.disabled = false;
+        });
+      } else {
+        showStatus('Connection cancelled.', 'error');
+        btn.disabled = false;
+      }
+    }, {
+      config_id: '1447475470090009',
+      response_type: 'code',
+      override_default_response_type: true,
+      extras: {
+        sessionInfoVersion: 3,
+        featureType: '',
+        setup: {}
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
