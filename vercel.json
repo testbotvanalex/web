@@ -109,6 +109,10 @@
       "destination": "https://botmatic.be/api/:path*"
     },
     {
+      "source": "/webhook",
+      "destination": "https://botmatic.be/webhook"
+    },
+    {
       "source": "/webhook/:path*",
       "destination": "https://botmatic.be/webhook/:path*"
     },

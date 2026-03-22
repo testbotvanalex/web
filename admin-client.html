@@ -442,7 +442,7 @@
       const connectedChannels = S.channels.filter((c) => c.status === 'connected').length;
       const botReplies = S.messages.filter((m) => m.direction === 'out').length;
       document.getElementById('stConversations').textContent = S.conversations.length;
-      document.getElementById('stMessages').textContent = S.conversations.reduce((sum, c) => sum + (c.message_count || 0), 0);
+      document.getElementById('stMessages').textContent = S.messageCount || S.conversations.reduce((sum, c) => sum + (c.message_count || 0), 0);
       document.getElementById('stChannels').textContent = connectedChannels;
       document.getElementById('stReplies').textContent = botReplies;
       document.getElementById('conversationCount').textContent = S.filtered.length;
@@ -649,6 +649,7 @@
       S.bot = inferBot();
       loadPortal();
       S.conversations = (chatsData.chats || []).filter((chat) => chat.client_id === S.workspace.id);
+      S.messageCount = workspaceData.message_count || 0;
       S.filtered = [...S.conversations];
       renderTop();
       renderContext();
@@ -670,6 +671,40 @@
         sendReply();
       }
     });
+
+    // SSE — live updates для этой workspace
+    let sseRetry = null;
+    function connectSSE() {
+      const es = new EventSource('/api/admin/sse');
+      es.onmessage = async (ev) => {
+        try {
+          const event = JSON.parse(ev.data);
+          if (event.type !== 'new_message') return;
+          if (event.clientId !== workspaceId) return; // только наш клиент
+          // Обновляем список чатов
+          const [chatsData] = await Promise.all([
+            fetch(`${API}/chats`).then(r => r.json()),
+          ]);
+          S.conversations = (chatsData.chats || []).filter(c => c.client_id === workspaceId);
+          S.messageCount = (S.messageCount || 0) + 1;
+          filterConversations();
+          renderStats();
+          // Если открыт этот чат — обновляем сообщения
+          if (S.active && S.active.id === event.chatId) {
+            const d = await fetch(`${API}/chats/${S.active.id}/messages?limit=300`).then(r=>r.json());
+            const msgs = Array.isArray(d.messages) ? d.messages : [];
+            if (msgs.length) {
+              const el = document.getElementById('chatMessages');
+              const atBottom = el ? el.scrollHeight - el.scrollTop - el.clientHeight < 60 : true;
+              renderMessages(msgs);
+              if (atBottom && el) el.scrollTop = el.scrollHeight;
+            }
+          }
+        } catch(e) {}
+      };
+      es.onerror = () => { es.close(); clearTimeout(sseRetry); sseRetry = setTimeout(connectSSE, 5000); };
+    }
+    connectSSE();
 
     // ── Portal password management ─────────────────────────────────────────────
     async function loadPortal() {
