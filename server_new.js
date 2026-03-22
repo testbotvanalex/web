@@ -636,6 +636,9 @@ app.get('/api/admin/sse', requireAdminAuth, (req, res) => {
   req.on('close', () => sseClients.delete(res));
 });
 
+// ── Public utility pages ───────────────────────────────────────────────────────
+app.get(['/citech', '/citecht'], (req, res) => res.sendFile(path.join(__dirname, 'public/citech/index.html')));
+
 // ── Admin Pages (protected) ────────────────────────────────────────────────────
 app.get('/admin', requireAdminAuth, (req, res) => res.sendFile(path.join(__dirname, 'admin-clients.html')));
 app.get('/admin/clients', requireAdminAuth, (req, res) => res.sendFile(path.join(__dirname, 'admin-clients.html')));
