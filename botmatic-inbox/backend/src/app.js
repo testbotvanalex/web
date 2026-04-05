@@ -7,6 +7,7 @@ import express from "express";
 import "./db/index.js";
 import authRoutes from "./routes/authRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
+import clientRoutes from "./routes/clientRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
 import webhookRoutes from "./routes/webhookRoutes.js";
 import { errorMiddleware } from "./middleware/errorMiddleware.js";
@@ -35,6 +36,7 @@ app.get("/health", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/chats", chatRoutes);
+app.use("/api/clients", clientRoutes);
 app.use("/api/chats/:id/messages", messageRoutes);
 app.use("/webhook", webhookRoutes);
 

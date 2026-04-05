@@ -20,6 +20,7 @@ export function requireAuth(req, res, next) {
       email: session.email,
       role: session.role,
       companyId: session.company_id,
+      companyName: session.company_name,
     },
   };
 

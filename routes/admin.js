@@ -238,6 +238,45 @@ router.get('/clients/:id/bots', (req, res) => {
   } catch (e) { err(res, e.message, 500); }
 });
 
+router.get('/bots-overview', (req, res) => {
+  try {
+    const rows = [];
+    const clients = D.clients.all.all();
+
+    for (const client of clients) {
+      const channels = D.channels.byClient.all(client.id);
+      const bots = D.bots.byClient.all(client.id);
+      for (const bot of bots) {
+        const connectedChannels = channels.filter((ch) => ch.status === 'connected' || ch.status === 'active');
+        rows.push({
+          id: bot.id,
+          name: bot.name || client.company || 'Bot',
+          client_id: client.id,
+          client_name: client.company,
+          niche: client.niche || '',
+          created_at: bot.created_at,
+          updated_at: bot.updated_at,
+          version: bot.version || 1,
+          has_prompt: Boolean(String(bot.prompt || '').trim()),
+          has_knowledge_base: Boolean(String(bot.knowledge_base || '').trim()),
+          connected_count: connectedChannels.length,
+          channel_types: connectedChannels.map((ch) => ch.type),
+          channels: connectedChannels.map((ch) => ({
+            id: ch.id,
+            type: ch.type,
+            status: ch.status,
+            page_id: ch.page_id,
+            page_name: ch.page_name,
+          })),
+          state: connectedChannels.length > 0 ? 'live' : 'setup',
+        });
+      }
+    }
+
+    ok(res, { bots: rows });
+  } catch (e) { err(res, e.message, 500); }
+});
+
 router.post('/clients/:id/bots', (req, res) => {
   try {
     const { name = 'Новый бот', prompt = '', knowledge_base = '' } = req.body;
@@ -253,12 +292,132 @@ router.put('/bots/:id', (req, res) => {
     const bot = D.bots.byId.get(req.params.id);
     if (!bot) return err(res, 'not found', 404);
 
-    const { name = bot.name, prompt = bot.prompt, knowledge_base = bot.knowledge_base, buttons = bot.buttons } = req.body;
+    const {
+      name = bot.name,
+      welcome_message = bot.welcome_message,
+      prompt = bot.prompt,
+      knowledge_base = bot.knowledge_base,
+      buttons = bot.buttons,
+      list_items = bot.list_items,
+      faq_rules = bot.faq_rules,
+      media_url = bot.media_url,
+      media_caption = bot.media_caption,
+      handoff_keywords = bot.handoff_keywords,
+      cta_label = bot.cta_label,
+      cta_url = bot.cta_url,
+      flow_title = bot.flow_title,
+      flow_body = bot.flow_body,
+    } = req.body;
     D.bots.update.run({ id: bot.id, name, prompt, knowledge_base });
-    if (buttons !== undefined) D.db.prepare('UPDATE bots SET buttons=? WHERE id=?').run(buttons || null, bot.id);
+    D.db.prepare(`
+      UPDATE bots
+      SET
+        buttons = ?,
+        list_items = ?,
+        faq_rules = ?,
+        media_url = ?,
+        media_caption = ?,
+        welcome_message = ?,
+        handoff_keywords = ?,
+        cta_label = ?,
+        cta_url = ?,
+        flow_title = ?,
+        flow_body = ?
+      WHERE id = ?
+    `).run(
+      buttons || null,
+      list_items || null,
+      faq_rules || null,
+      media_url || null,
+      media_caption || null,
+      welcome_message || null,
+      handoff_keywords || null,
+      cta_label || null,
+      cta_url || null,
+      flow_title || null,
+      flow_body || null,
+      bot.id
+    );
     D.log(bot.client_id, 'bot_updated', `Bot: ${name}, version +1`);
 
     ok(res, { bot: D.bots.byId.get(bot.id) });
+  } catch (e) { err(res, e.message, 500); }
+});
+
+router.post('/bots/:id/preview', async (req, res) => {
+  try {
+    const bot = D.bots.byId.get(req.params.id);
+    if (!bot) return err(res, 'not found', 404);
+    if (!_adminOAI) return ok(res, { reply: null, reason: 'OPENAI_API_KEY not set' });
+
+    const {
+      message = '',
+      prompt = bot.prompt || '',
+      knowledge_base = bot.knowledge_base || '',
+      buttons = bot.buttons || '',
+      list_items = bot.list_items || '',
+      faq_rules = bot.faq_rules || '',
+      media_url = bot.media_url || '',
+      media_caption = bot.media_caption || '',
+      handoff_keywords = bot.handoff_keywords || '',
+      cta_label = bot.cta_label || '',
+      cta_url = bot.cta_url || '',
+      flow_title = bot.flow_title || '',
+      flow_body = bot.flow_body || '',
+    } = req.body || {};
+
+    if (!String(message).trim()) return err(res, 'message required');
+
+    let systemPrompt = String(prompt || '').trim() || 'Ты полезный ассистент бизнеса.';
+    const kb = String(knowledge_base || '').trim();
+    const btns = String(buttons || '')
+      .split('\n')
+      .map((v) => v.trim())
+      .filter(Boolean)
+      .slice(0, 3);
+
+    if (kb) {
+      systemPrompt += `\n\n--- База знаний ---\n${kb}`;
+    }
+    if (btns.length) {
+      systemPrompt += `\n\n--- Доступные кнопки меню ---\n${btns.map((v) => `- ${v}`).join('\n')}\nИспользуй эти варианты, когда уместно, и предлагай клиенту выбрать один из них.`;
+    }
+    if (String(list_items || '').trim()) {
+      const listLines = String(list_items).split('\n').map((v) => v.trim()).filter(Boolean).slice(0, 10);
+      if (listLines.length) {
+        systemPrompt += `\n\n--- Пункты списка ---\n${listLines.map((v) => `- ${v}`).join('\n')}`;
+      }
+    }
+    if (String(faq_rules || '').trim()) {
+      systemPrompt += `\n\n--- FAQ правила ---\n${String(faq_rules).trim()}`;
+    }
+    if (String(media_url || '').trim()) {
+      systemPrompt += `\n\n--- Media demo ---\nURL: ${String(media_url).trim()}\nПодпись: ${String(media_caption || '').trim() || '—'}`;
+    }
+    if (String(handoff_keywords || '').trim()) {
+      systemPrompt += `\n\n--- Передача человеку ---\nКлючевые слова:\n${String(handoff_keywords).trim()}`;
+    }
+    if (String(cta_url || '').trim()) {
+      systemPrompt += `\n\n--- CTA ссылка ---\nКнопка: ${String(cta_label || 'Open').trim()}\nURL: ${String(cta_url).trim()}`;
+    }
+    if (String(flow_title || '').trim() || String(flow_body || '').trim()) {
+      systemPrompt += `\n\n--- Flow demo ---\nЗаголовок: ${String(flow_title || '').trim()}\nТекст: ${String(flow_body || '').trim()}`;
+    }
+
+    const resp = await _adminOAI.chat.completions.create({
+      model: process.env.OPENAI_MODEL || 'gpt-4.1-mini',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: String(message).trim() },
+      ],
+      max_tokens: 400,
+      temperature: 0.7,
+    });
+
+    ok(res, {
+      reply: resp.choices[0].message.content?.trim() || '',
+      buttons: btns,
+    });
   } catch (e) { err(res, e.message, 500); }
 });
 
@@ -355,6 +514,52 @@ router.delete('/channels/:id', (req, res) => {
   } catch (e) { err(res, e.message, 500); }
 });
 
+router.get('/all-channels', async (req, res) => {
+  try {
+    const results = [];
+    const clients = D.clients.all.all();
+
+    for (const client of clients) {
+      const channels = D.channels.byClient.all(client.id);
+      for (const ch of channels) {
+        const item = {
+          channel_id: ch.id,
+          client_id: client.id,
+          company: client.company,
+          type: ch.type,
+          status: ch.status,
+          phone_number_id: ch.page_id || null,
+          display_phone_number: null,
+          verified_name: null,
+          quality: null,
+          connected_at: ch.connected_at || null,
+        };
+
+        if (ch.type === 'whatsapp' && ch.page_id && ch.token) {
+          try {
+            const r = await axios.get(`https://graph.facebook.com/v23.0/${encodeURIComponent(ch.page_id)}`, {
+              params: {
+                fields: 'display_phone_number,verified_name,quality_rating',
+                access_token: ch.token,
+              },
+              timeout: 5000,
+            });
+            item.display_phone_number = r.data.display_phone_number || null;
+            item.verified_name = r.data.verified_name || null;
+            item.quality = r.data.quality_rating || null;
+          } catch (e) {
+            item.meta_error = e.response?.data?.error?.message || e.message;
+          }
+        }
+
+        results.push(item);
+      }
+    }
+
+    ok(res, { channels: results });
+  } catch (e) { err(res, e.message, 500); }
+});
+
 // ── Tasks ─────────────────────────────────────────────────────────────────────
 
 router.get('/clients/:id/tasks', (req, res) => {
@@ -404,11 +609,13 @@ router.get('/chats', (req, res) => {
   try {
     D.chats.ensureFromMessages.run();
     const botId = String(req.query.botId || '').trim();
+    const clientId = String(req.query.client_id || '').trim();
     const mode = String(req.query.mode || 'all');
     const status = String(req.query.status || 'all');
     const search = String(req.query.search || '').trim().toLowerCase();
 
     let rows = D.chats.list.all();
+    if (clientId) rows = rows.filter((r) => r.client_id === clientId);
     if (botId) {
       const allowedClientIds = new Set(
         D.clients.all.all()
@@ -460,6 +667,22 @@ router.post('/chats/:id/release', (req, res) => {
     const chat = D.chats.byId.get(req.params.id);
     if (!chat) return err(res, 'chat not found', 404);
     D.chats.setMode.run('bot', chat.id);
+    ok(res, { chat: D.chats.byId.get(chat.id) });
+  } catch (e) { err(res, e.message, 500); }
+});
+
+router.patch('/chats/:id/name', (req, res) => {
+  try {
+    const chat = D.chats.byId.get(req.params.id);
+    if (!chat) return err(res, 'chat not found', 404);
+    const senderName = String(req.body?.sender_name || '').trim();
+    if (!senderName) return err(res, 'sender_name required');
+
+    D.db.prepare('UPDATE chats SET sender_name = ?, updated_at = datetime(\'now\') WHERE id = ?')
+      .run(senderName, chat.id);
+    D.db.prepare('UPDATE messages SET sender_name = ? WHERE client_id = ? AND channel = ? AND sender_id = ?')
+      .run(senderName, chat.client_id, chat.channel, chat.sender_id);
+
     ok(res, { chat: D.chats.byId.get(chat.id) });
   } catch (e) { err(res, e.message, 500); }
 });

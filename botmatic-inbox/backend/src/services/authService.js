@@ -37,9 +37,15 @@ export function createAuthSession(user) {
 export function findAuthSession(sessionId) {
   return db
     .prepare(
-      `SELECT auth_sessions.*, users.name, users.email, users.role
+      `SELECT
+         auth_sessions.*,
+         users.name,
+         users.email,
+         users.role,
+         companies.name AS company_name
        FROM auth_sessions
        JOIN users ON users.id = auth_sessions.user_id
+       JOIN companies ON companies.id = auth_sessions.company_id
        WHERE auth_sessions.id = ?
          AND auth_sessions.expires_at > CURRENT_TIMESTAMP`
     )

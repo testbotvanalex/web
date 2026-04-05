@@ -73,6 +73,10 @@
       "destination": "/public/data-deletion"
     },
     {
+      "source": "/delete",
+      "destination": "/public/data-deletion"
+    },
+    {
       "source": "/privacy",
       "destination": "/public/privacy"
     },

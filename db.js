@@ -41,6 +41,16 @@ db.exec(`
     name         TEXT,
     prompt       TEXT DEFAULT '',
     knowledge_base TEXT DEFAULT '',
+    buttons      TEXT DEFAULT NULL,
+    list_items   TEXT DEFAULT NULL,
+    faq_rules    TEXT DEFAULT NULL,
+    media_url    TEXT DEFAULT NULL,
+    media_caption TEXT DEFAULT NULL,
+    handoff_keywords TEXT DEFAULT NULL,
+    cta_label    TEXT DEFAULT NULL,
+    cta_url      TEXT DEFAULT NULL,
+    flow_title   TEXT DEFAULT NULL,
+    flow_body    TEXT DEFAULT NULL,
     flow         TEXT DEFAULT NULL,
     version      INTEGER DEFAULT 1,
     last_deploy  TEXT,
@@ -142,6 +152,17 @@ db.exec(`
 
 // ── Migrations (safe: ignore if column already exists) ────────────────────────
 try { db.exec(`ALTER TABLE bots ADD COLUMN flow TEXT DEFAULT NULL`); } catch (_) {}
+try { db.exec(`ALTER TABLE bots ADD COLUMN buttons TEXT DEFAULT NULL`); } catch (_) {}
+try { db.exec(`ALTER TABLE bots ADD COLUMN list_items TEXT DEFAULT NULL`); } catch (_) {}
+try { db.exec(`ALTER TABLE bots ADD COLUMN faq_rules TEXT DEFAULT NULL`); } catch (_) {}
+try { db.exec(`ALTER TABLE bots ADD COLUMN media_url TEXT DEFAULT NULL`); } catch (_) {}
+try { db.exec(`ALTER TABLE bots ADD COLUMN media_caption TEXT DEFAULT NULL`); } catch (_) {}
+try { db.exec(`ALTER TABLE bots ADD COLUMN handoff_keywords TEXT DEFAULT NULL`); } catch (_) {}
+try { db.exec(`ALTER TABLE bots ADD COLUMN cta_label TEXT DEFAULT NULL`); } catch (_) {}
+try { db.exec(`ALTER TABLE bots ADD COLUMN cta_url TEXT DEFAULT NULL`); } catch (_) {}
+try { db.exec(`ALTER TABLE bots ADD COLUMN flow_title TEXT DEFAULT NULL`); } catch (_) {}
+try { db.exec(`ALTER TABLE bots ADD COLUMN flow_body TEXT DEFAULT NULL`); } catch (_) {}
+try { db.exec(`ALTER TABLE bots ADD COLUMN welcome_message TEXT DEFAULT NULL`); } catch (_) {}
 try { db.exec(`ALTER TABLE clients ADD COLUMN portal_password TEXT DEFAULT NULL`); } catch (_) {}
 try { db.exec(`ALTER TABLE clients ADD COLUMN portal_login TEXT DEFAULT NULL`); } catch (_) {}
 
@@ -365,7 +386,16 @@ const chatQ = {
           AND m.sender_id = ch.sender_id
         ORDER BY m.created_at DESC
         LIMIT 1
-      ) AS last_message_text
+      ) AS last_message_text,
+      (
+        SELECT m.raw
+        FROM messages m
+        WHERE m.client_id = ch.client_id
+          AND m.channel = ch.channel
+          AND m.sender_id = ch.sender_id
+        ORDER BY m.created_at DESC
+        LIMIT 1
+      ) AS last_message_raw
     FROM chats ch
     INNER JOIN clients c ON c.id = ch.client_id
     ORDER BY ch.last_message_at DESC

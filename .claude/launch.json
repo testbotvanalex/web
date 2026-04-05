@@ -2,19 +2,7 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "BotMatic Dev (nodemon)",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
-      "port": 3200
-    },
-    {
-      "name": "BotMatic Prod (node)",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["start"],
-      "port": 3200
-    },
-    {
-      "name": "Homepage Preview (static)",
+      "name": "preview",
       "runtimeExecutable": "node",
       "runtimeArgs": ["preview-server.js"],
       "port": 3201

@@ -94,8 +94,11 @@ function resolveStoreChannelForClient(channelType, clientId) {
       ? { botId: ch.botId, token: ch.telegram.token }
       : null,
     instagram: (ch) => {
-      const token = ch.instagram?.pageToken || ch.instagram?.token || ch.messenger?.pageToken || null;
-      return token ? { botId: ch.botId, token } : null;
+      const mode = inferInstagramAuthModeFromChannel(ch.instagram, ch.instagram?.entryId || ch.instagram?.id || ch.instagram?.pageId);
+      const token = mode === 'instagram_login'
+        ? (ch.instagram?.pageToken || ch.instagram?.token || null)
+        : (ch.instagram?.pageToken || ch.instagram?.token || ch.messenger?.pageToken || null);
+      return token ? { botId: ch.botId, token, mode } : null;
     },
   };
 
@@ -211,22 +214,52 @@ async function notifyAdmin(clientId, channel, senderId, text) {
 }
 
 // ── Save incoming message to SQLite ───────────────────────────────────────────
+function looksLikeOpaqueSenderId(value) {
+  const normalized = String(value || '').trim();
+  return /^\d{8,}$/.test(normalized);
+}
+
+function shouldKeepExistingSenderName(existingName, nextName, senderId) {
+  const current = String(existingName || '').trim();
+  const next = String(nextName || '').trim();
+  const threadId = String(senderId || '').trim();
+
+  if (!current) return false;
+  if (!next) return true;
+
+  const currentIsFallback = current === threadId || looksLikeOpaqueSenderId(current);
+  const nextIsFallback = next === threadId || looksLikeOpaqueSenderId(next);
+
+  return !currentIsFallback && nextIsFallback;
+}
+
 function saveMessageToDb(clientId, channel, senderId, text, direction, raw) {
   if (!clientId) return;
   try {
     const threadSenderId = String(senderId || '').trim();
     if (!threadSenderId) return;
     const now = new Date().toISOString();
+    const rawObj = raw && typeof raw === 'object' ? raw : null;
+    const resolvedSenderName = String(
+      rawObj?.profile_name ||
+      rawObj?.sender_name ||
+      rawObj?.contact_name ||
+      rawObj?.profile?.name ||
+      (direction === 'in' ? threadSenderId : '')
+    ).trim();
+    let chat = D.chats.byThread.get(clientId, channel, threadSenderId);
+    const effectiveSenderName = shouldKeepExistingSenderName(chat?.sender_name, resolvedSenderName, threadSenderId)
+      ? String(chat?.sender_name || '').trim()
+      : resolvedSenderName;
 
     D.messages.insert.run({
       id: D.genId('msg_'),
       client_id: clientId,
-      channel, sender_id: threadSenderId, sender_name: threadSenderId,
+      channel, sender_id: threadSenderId, sender_name: effectiveSenderName,
       text: text || '', direction,
       raw: typeof raw === 'string' ? raw : JSON.stringify(raw),
     });
 
-    let chat = D.chats.byThread.get(clientId, channel, threadSenderId);
     if (!chat) {
       const chatId = D.genId('chat_');
       D.chats.insert.run({
@@ -234,7 +267,7 @@ function saveMessageToDb(clientId, channel, senderId, text, direction, raw) {
         client_id: clientId,
         channel,
         sender_id: threadSenderId,
-        sender_name: threadSenderId,
+        sender_name: effectiveSenderName,
         mode: 'bot',
         status: 'open',
         unread_count: 0,
@@ -247,7 +280,7 @@ function saveMessageToDb(clientId, channel, senderId, text, direction, raw) {
       if (direction === 'in') {
         D.chats.touchIncoming.run({
           id: chat.id,
-          sender_name: threadSenderId,
+          sender_name: effectiveSenderName,
           last_message_at: now,
         });
         // Fire-and-forget AI suggestion for inbox operators
@@ -261,7 +294,7 @@ function saveMessageToDb(clientId, channel, senderId, text, direction, raw) {
       } else {
         D.chats.touchOutgoing.run({
           id: chat.id,
-          sender_name: threadSenderId,
+          sender_name: effectiveSenderName,
           last_message_at: now,
         });
       }
@@ -269,6 +302,648 @@ function saveMessageToDb(clientId, channel, senderId, text, direction, raw) {
   } catch (e) {
     console.error('[DB] saveMessageToDb error:', e.message);
   }
+}
+
+function hasInboundMessageId(clientId, channel, senderId, messageId) {
+  const normalizedId = String(messageId || '').trim();
+  const threadSenderId = String(senderId || '').trim();
+  if (!clientId || !channel || !threadSenderId || !normalizedId) return false;
+
+  try {
+    const existing = D.db.prepare(`
+      SELECT id
+      FROM messages
+      WHERE client_id = ?
+        AND channel = ?
+        AND sender_id = ?
+        AND direction = 'in'
+        AND instr(COALESCE(raw, ''), ?) > 0
+      ORDER BY created_at DESC
+      LIMIT 1
+    `).get(clientId, channel, threadSenderId, normalizedId);
+    return Boolean(existing);
+  } catch (error) {
+    console.error('[DB] hasInboundMessageId error:', error.message);
+    return false;
+  }
+}
+
+const metaProfileCache = new Map();
+const META_PROFILE_TTL_MS = 6 * 60 * 60 * 1000;
+
+function getCachedMetaProfileName(channel, senderId) {
+  const cacheKey = `${channel}:${senderId}`;
+  const cached = metaProfileCache.get(cacheKey);
+  if (!cached) return null;
+  if (cached.expiresAt <= Date.now()) {
+    metaProfileCache.delete(cacheKey);
+    return null;
+  }
+  return cached.name;
+}
+
+function setCachedMetaProfileName(channel, senderId, name) {
+  metaProfileCache.set(`${channel}:${senderId}`, {
+    name: String(name || '').trim(),
+    expiresAt: Date.now() + META_PROFILE_TTL_MS,
+  });
+}
+
+function normalizeMetaProfileName(channel, senderId, profile = {}) {
+  if (channel === 'instagram') {
+    const username = String(profile.username || '').trim().replace(/^@+/, '');
+    if (username) return `@${username}`;
+    return String(profile.name || '').trim();
+  }
+
+  const firstName = String(profile.first_name || '').trim();
+  const lastName = String(profile.last_name || '').trim();
+  const fullName = `${firstName} ${lastName}`.trim();
+  return fullName || String(profile.name || '').trim() || String(senderId || '').trim();
+}
+
+function attachSenderName(raw, senderName) {
+  if (!senderName || !raw || typeof raw !== 'object') return raw;
+  return {
+    ...raw,
+    profile_name: senderName,
+    sender_name: senderName,
+  };
+}
+
+async function fetchMetaProfileName({ channel, senderId, accessToken, authMode }) {
+  const normalizedChannel = String(channel || '').trim().toLowerCase();
+  const normalizedSenderId = String(senderId || '').trim();
+  const normalizedToken = String(accessToken || '').trim();
+  if (!normalizedChannel || !normalizedSenderId || !normalizedToken) return '';
+
+  const cached = getCachedMetaProfileName(normalizedChannel, normalizedSenderId);
+  if (cached !== null) return cached;
+
+  const fieldCandidates = normalizedChannel === 'instagram'
+    ? ['username,name']
+    : ['name,first_name,last_name,profile_pic', 'first_name,last_name', 'name'];
+  const hostCandidates = normalizedChannel === 'instagram' && normalizeInstagramAuthMode(authMode) === 'instagram_login'
+    ? [
+        `https://graph.instagram.com/${CONFIG.API_VERSION}`,
+        'https://graph.instagram.com',
+        `https://graph.facebook.com/${CONFIG.API_VERSION}`,
+      ]
+    : [`https://graph.facebook.com/${CONFIG.API_VERSION}`];
+
+  for (const host of hostCandidates) {
+    for (const fields of fieldCandidates) {
+      try {
+        const response = await axios.get(
+          `${host}/${encodeURIComponent(normalizedSenderId)}`,
+          {
+            params: {
+              fields,
+              access_token: normalizedToken,
+            },
+            timeout: 3500,
+          }
+        );
+        const resolvedName = normalizeMetaProfileName(normalizedChannel, normalizedSenderId, response.data);
+        if (resolvedName) {
+          setCachedMetaProfileName(normalizedChannel, normalizedSenderId, resolvedName);
+          return resolvedName;
+        }
+      } catch (err) {
+        const code = err?.response?.data?.error?.code;
+        if (code === 100 || code === 10 || code === 200) continue;
+        console.warn(
+          `[Meta Profile] ${normalizedChannel} lookup failed for ${normalizedSenderId}:`,
+          err?.response?.data?.error?.message || err.message
+        );
+        break;
+      }
+    }
+  }
+
+  setCachedMetaProfileName(normalizedChannel, normalizedSenderId, '');
+  return '';
+}
+
+async function sendCloudWaPayload(chRow, to, payload) {
+  await axios.post(
+    `https://graph.facebook.com/v23.0/${chRow.page_id}/messages`,
+    {
+      messaging_product: 'whatsapp',
+      to: String(to),
+      ...payload,
+    },
+    { headers: { Authorization: `Bearer ${chRow.token}`, 'Content-Type': 'application/json' } }
+  );
+}
+
+async function sendCloudWaText(chRow, clientId, to, body) {
+  const payload = { type: 'text', text: { body } };
+  await sendCloudWaPayload(chRow, to, payload);
+  saveMessageToDb(clientId, 'whatsapp', to, body, 'out', payload);
+}
+
+async function sendCloudWaButtons(chRow, clientId, to, body, buttons) {
+  const payload = {
+    type: 'interactive',
+    interactive: {
+      type: 'button',
+      body: { text: body },
+      action: {
+        buttons: (buttons || []).slice(0, 3).map((btn) => ({
+          type: 'reply',
+          reply: { id: String(btn.id || ''), title: String(btn.title || '').slice(0, 20) }
+        }))
+      }
+    }
+  };
+  await sendCloudWaPayload(chRow, to, payload);
+  saveMessageToDb(clientId, 'whatsapp', to, body, 'out', payload);
+}
+
+async function sendCloudWaList(chRow, clientId, to, body, sections, buttonText = 'Kies') {
+  const payload = {
+    type: 'interactive',
+    interactive: {
+      type: 'list',
+      body: { text: body },
+      action: {
+        button: buttonText,
+        sections: (sections || []).map((sec) => ({
+          title: String(sec.title || '').slice(0, 24),
+          rows: (sec.rows || []).slice(0, 10).map((row) => ({
+            id: String(row.id || ''),
+            title: String(row.title || '').slice(0, 24),
+            description: String(row.description || '').slice(0, 72),
+          }))
+        }))
+      }
+    }
+  };
+  await sendCloudWaPayload(chRow, to, payload);
+  saveMessageToDb(clientId, 'whatsapp', to, body, 'out', payload);
+}
+
+async function sendCloudWaFlow(chRow, clientId, to, response) {
+  const flowId =
+    response?.flowId ||
+    process.env.WA_DEMO_FLOW_ID ||
+    process.env.WHATSAPP_FLOW_ID ||
+    '';
+
+  if (!flowId) {
+    await sendCloudWaText(chRow, clientId, to, 'Flow demo is klaar in de code, maar er is nog geen echte Meta Flow gekoppeld.');
+    return false;
+  }
+
+  const payload = {
+    type: 'interactive',
+    interactive: {
+      type: 'flow',
+      ...(response.header ? { header: { type: 'text', text: String(response.header).slice(0, 60) } } : {}),
+      body: { text: String(response.body || '').slice(0, 1024) },
+      ...(response.footer ? { footer: { text: String(response.footer).slice(0, 60) } } : {}),
+      action: {
+        name: 'flow',
+        parameters: {
+          flow_message_version: process.env.WA_FLOW_MESSAGE_VERSION || '3',
+          flow_token: `botmatic_demo_${String(to || '').slice(-6)}`,
+          flow_id: String(flowId),
+          flow_cta: String(response.cta || 'Open flow').slice(0, 30),
+          flow_action: response.mode === 'data_exchange' ? 'data_exchange' : 'navigate',
+          ...(response.screen || response.data ? {
+            flow_action_payload: {
+              ...(response.screen ? { screen: response.screen } : {}),
+              ...(response.data ? { data: response.data } : {}),
+            },
+          } : {}),
+        }
+      }
+    }
+  };
+
+  await sendCloudWaPayload(chRow, to, payload);
+  saveMessageToDb(clientId, 'whatsapp', to, String(response.body || 'Flow demo'), 'out', payload);
+  return true;
+}
+
+function parseBotLineList(value, limit = 50) {
+  return String(value || '')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .slice(0, limit);
+}
+
+function parseBotFaqRules(value) {
+  return parseBotLineList(value, 50)
+    .map((line) => {
+      const idx = line.indexOf('=>');
+      if (idx === -1) return null;
+      const left = line.slice(0, idx).trim();
+      const right = line.slice(idx + 2).trim();
+      if (!left || !right) return null;
+      const triggers = left.split('|').map((v) => v.trim().toLowerCase()).filter(Boolean);
+      return triggers.length ? { triggers, response: right } : null;
+    })
+    .filter(Boolean);
+}
+
+function detectWhatsAppMediaType(url) {
+  const clean = String(url || '').split('?')[0].toLowerCase();
+  if (/\.(pdf|doc|docx|xls|xlsx|ppt|pptx|txt|csv)$/.test(clean)) return 'document';
+  return 'image';
+}
+
+async function sendCloudWaMedia(chRow, clientId, to, mediaUrl, caption = '') {
+  const type = detectWhatsAppMediaType(mediaUrl);
+  const payload = type === 'document'
+    ? {
+        type: 'document',
+        document: {
+          link: mediaUrl,
+          caption: caption || undefined,
+          filename: String(mediaUrl || '').split('/').pop()?.split('?')[0] || 'BotMatic-file',
+        },
+      }
+    : {
+        type: 'image',
+        image: {
+          link: mediaUrl,
+          caption: caption || undefined,
+        },
+      };
+  await sendCloudWaPayload(chRow, to, payload);
+  saveMessageToDb(clientId, 'whatsapp', to, caption || mediaUrl, 'out', payload);
+}
+
+async function sendCloudWaCtaUrl(chRow, clientId, to, body, ctaLabel, ctaUrl) {
+  const payload = {
+    type: 'interactive',
+    interactive: {
+      type: 'cta_url',
+      body: { text: String(body || '').slice(0, 1024) },
+      action: {
+        name: 'cta_url',
+        parameters: {
+          display_text: String(ctaLabel || 'Open').slice(0, 20),
+          url: String(ctaUrl || '').trim(),
+        },
+      },
+    },
+  };
+
+  try {
+    await sendCloudWaPayload(chRow, to, payload);
+    saveMessageToDb(clientId, 'whatsapp', to, String(body || ctaUrl || 'CTA'), 'out', payload);
+    return true;
+  } catch (e) {
+    const metaErr = e?.response?.data?.error?.message || e.message || 'unknown CTA error';
+    console.error('[CloudWA CTA fallback]', metaErr);
+    await sendCloudWaText(
+      chRow,
+      clientId,
+      to,
+      `${String(body || 'Open de link hieronder.').trim()}\n\n${String(ctaLabel || 'Open website')}: ${String(ctaUrl || '').trim()}`.trim()
+    );
+    return false;
+  }
+}
+
+async function handleConfiguredBotInteractive({ bot, clientId, senderId, msg, text, chRow }) {
+  if (!bot) return false;
+
+  const lowerText = String(text || '').trim().toLowerCase();
+  const replyId = String(msg?.interactive?.button_reply?.id || msg?.interactive?.list_reply?.id || '').trim().toLowerCase();
+  const replyTitle = String(msg?.interactive?.button_reply?.title || msg?.interactive?.list_reply?.title || '').trim().toLowerCase();
+  const key = replyTitle || replyId || lowerText;
+  const faqRules = parseBotFaqRules(bot.faq_rules);
+  const handoffKeywords = parseBotLineList(bot.handoff_keywords, 20).map((v) => v.toLowerCase());
+  const listItems = parseBotLineList(bot.list_items, 10);
+  const mediaUrl = String(bot.media_url || '').trim();
+  const mediaCaption = String(bot.media_caption || '').trim();
+  const ctaLabel = String(bot.cta_label || '').trim();
+  const ctaUrl = String(bot.cta_url || '').trim();
+  const flowTitle = String(bot.flow_title || '').trim();
+  const flowBody = String(bot.flow_body || '').trim();
+
+  const wantsHuman = handoffKeywords.some((kw) =>
+    lowerText === kw || key === kw || lowerText.includes(kw) || key.includes(kw)
+  );
+  if (wantsHuman) {
+    const chat = D.chats.byThread.get(clientId, 'whatsapp', senderId);
+    if (chat?.id) D.chats.setMode.run('human', chat.id);
+    await sendCloudWaText(chRow, clientId, senderId, 'Ok, ik zet dit gesprek nu door naar een mens. Alexandre of een collega neemt het over.');
+    return true;
+  }
+
+  const wantsMedia = mediaUrl && (
+    /(^media$|^brochure$|^pdf$|^foto$|^photo$|^image$|^afbeelding$|^catalogus$|^catalog$)/i.test(lowerText) ||
+    /(media|brochure|pdf|foto|photo|image|afbeelding|catalogus|catalog)/i.test(key)
+  );
+  if (wantsMedia) {
+    await sendCloudWaMedia(chRow, clientId, senderId, mediaUrl, mediaCaption);
+    return true;
+  }
+
+  const wantsCta = ctaUrl && (
+    /(^cta$|^site$|^website$|^link$|^open$|^web$)/i.test(lowerText) ||
+    /(cta|site|website|link|open|web)/i.test(key)
+  );
+  if (wantsCta) {
+    await sendCloudWaCtaUrl(
+      chRow,
+      clientId,
+      senderId,
+      'Klik op de knop om de demo-link te openen.',
+      ctaLabel || 'Open website',
+      ctaUrl
+    );
+    return true;
+  }
+
+  const wantsFlow = /(^flow$|^flows$|^demo flow$|^whatsapp flow$)/i.test(lowerText) || /(flow|flows)/i.test(key);
+  if (wantsFlow) {
+    await sendCloudWaFlow(chRow, clientId, senderId, {
+      header: flowTitle || 'BotMatic Flow Demo',
+      body: flowBody || 'Open deze demo-flow om te zien hoe intake, formulieren en stappen binnen WhatsApp werken.',
+      footer: 'Meta Flow demo',
+      cta: 'Open flow',
+      screen: 'DEMO_SCREEN',
+    });
+    return true;
+  }
+
+  const faqMatch = faqRules.find((rule) =>
+    rule.triggers.some((trigger) =>
+      lowerText === trigger ||
+      key === trigger ||
+      lowerText.includes(trigger) ||
+      key.includes(trigger)
+    )
+  );
+  if (faqMatch) {
+    await sendCloudWaText(chRow, clientId, senderId, faqMatch.response);
+    return true;
+  }
+
+  const wantsList = listItems.length && !msg?.interactive && (
+    /^(list|lijst|menu|opties|options|meer|catalogus|catalog|каталог|меню)$/i.test(lowerText) ||
+    /(list|lijst|menu|opties|options|catalogus|catalog)/i.test(key)
+  );
+  if (wantsList) {
+    await sendCloudWaList(
+      chRow,
+      clientId,
+      senderId,
+      'Kies een optie uit het menu.',
+      [{
+        title: 'Menu',
+        rows: listItems.map((title, idx) => ({
+          id: `cfg_list_${idx + 1}`,
+          title: title.slice(0, 24),
+          description: 'Klik om verder te gaan',
+        })),
+      }],
+      'Open menu'
+    );
+    return true;
+  }
+
+  if (/^cfg_list_\d+$/.test(replyId)) {
+    const index = Number(replyId.replace('cfg_list_', '')) - 1;
+    const picked = listItems[index];
+    if (picked) {
+      await sendCloudWaText(chRow, clientId, senderId, `Je koos: ${picked}`);
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function hasUsableBotConfig(bot = {}) {
+  return [
+    bot.prompt,
+    bot.knowledge_base,
+    bot.buttons,
+    bot.list_items,
+    bot.faq_rules,
+    bot.media_url,
+    bot.handoff_keywords,
+    bot.cta_url,
+    bot.flow_title,
+    bot.flow_body,
+  ].some((value) => String(value || '').trim().length > 0);
+}
+
+async function handleBotMaticDemoInteractive({ bot, clientId, senderId, msg, text, chRow }) {
+  if (clientId !== 'client_demo_botmatic') return false;
+  if (hasUsableBotConfig(bot)) return false;
+
+  const lowerText = String(text || '').trim().toLowerCase();
+  const replyId = String(msg?.interactive?.button_reply?.id || msg?.interactive?.list_reply?.id || '').trim();
+  const replyTitle = String(msg?.interactive?.button_reply?.title || msg?.interactive?.list_reply?.title || '').trim().toLowerCase();
+  const normalizedMenuKey =
+    replyId === 'menu_0' ? 'demo' :
+    replyId === 'menu_1' ? 'catalogus' :
+    replyId === 'menu_2' ? 'meer' :
+    '';
+  const key = normalizedMenuKey || replyId || replyTitle || lowerText;
+
+  const sendFeatureList = async () => {
+    await sendCloudWaList(
+      chRow,
+      clientId,
+      senderId,
+      'Kies welke BotMatic demo-functie je wilt zien.',
+      [{
+        title: 'BotMatic demo',
+        rows: [
+          { id: 'demo_buttons', title: '3 knoppen', description: 'Reply buttons van WhatsApp' },
+          { id: 'demo_list', title: 'Lijst tot 10', description: 'List menu met meerdere opties' },
+          { id: 'demo_pricing', title: 'Prijzen', description: 'Hoe prijzen werken' },
+          { id: 'demo_contact', title: 'Contact', description: 'Contact met Alexandre' },
+          { id: 'demo_ai', title: 'AI assistent', description: 'AI antwoorden en handoff' },
+          { id: 'demo_whatsapp', title: 'WhatsApp bots', description: 'Automatisch antwoorden' },
+          { id: 'demo_instagram', title: 'Instagram bots', description: 'DM automation' },
+          { id: 'demo_inbox', title: 'Live inbox', description: 'Inbox en live updates' },
+          { id: 'demo_handoff', title: 'Human handoff', description: 'Overname door een mens' },
+          { id: 'demo_flow', title: 'WhatsApp Flows', description: 'Formulieren en stappen' },
+          { id: 'demo_catalog', title: 'Catalogus', description: 'Meta catalog / producten' },
+          { id: 'demo_more', title: 'Meer mogelijkheden', description: 'Templates en integraties' },
+        ]
+      }],
+      'Open demo'
+    );
+  };
+
+  const sendCatalogDemo = async () => {
+    await sendCloudWaList(
+      chRow,
+      clientId,
+      senderId,
+      'Dit is een demo-catalogus van BotMatic. Kies een product of pakket.',
+      [{
+        title: 'BotMatic catalogus',
+        rows: [
+          { id: 'catalog_starter', title: 'Starter Bot', description: 'Eenvoudige WhatsApp bot' },
+          { id: 'catalog_whatsapp', title: 'WhatsApp Pro', description: 'Inbox, knoppen en automation' },
+          { id: 'catalog_instagram', title: 'Instagram DM Bot', description: 'DM automation en inbox' },
+          { id: 'catalog_ai', title: 'AI Assistant', description: 'AI antwoorden en handoff' },
+          { id: 'catalog_flow', title: 'Flow Intake', description: 'Formulier / intake via WhatsApp' },
+          { id: 'catalog_custom', title: 'Custom Project', description: 'Bot op maat voor jouw bedrijf' },
+        ]
+      }],
+      'Open catalogus'
+    );
+  };
+
+  const sendMainButtonsDemo = async () => {
+    await sendCloudWaButtons(chRow, clientId, senderId, 'Kies wat je wilt zien.', [
+      { id: 'demo', title: 'Demo' },
+      { id: 'catalogus', title: 'Catalogus' },
+      { id: 'meer', title: 'Meer' },
+    ]);
+  };
+
+  if (/^(demo|start|menu|features|meta|mogelijkheden|reset|restart|hallo|hello|hi)$/.test(key)) {
+    await sendMainButtonsDemo();
+    return true;
+  }
+
+  if (/^(meer|more)$/.test(key)) {
+    await sendFeatureList();
+    return true;
+  }
+
+  if (/^(catalogus|catalog|catalogue)$/.test(key)) {
+    await sendCatalogDemo();
+    return true;
+  }
+
+  if (/^(prijzen|pricing|price)$/.test(key) || key === 'demo_pricing') {
+    await sendCloudWaText(chRow, clientId, senderId, 'De prijs hangt af van de scope, kanalen en gewenste automatisering. Alexandre kan je een concrete prijs geven.');
+    return true;
+  }
+
+  if (/^(contact|alexandre)$/.test(key) || key === 'demo_contact') {
+    await sendCloudWaText(chRow, clientId, senderId, 'Alexandre kan je persoonlijk verder helpen via deze chat.');
+    return true;
+  }
+
+  if (key === 'demo_buttons') {
+    await sendCloudWaButtons(chRow, clientId, senderId, 'Dit is een demo van 3 reply buttons in WhatsApp.', [
+      { id: 'demo', title: 'Demo' },
+      { id: 'catalogus', title: 'Catalogus' },
+      { id: 'meer', title: 'Meer' },
+    ]);
+    return true;
+  }
+
+  if (key === 'demo_list') {
+    await sendCloudWaList(chRow, clientId, senderId, 'Dit is een demo van een lijstmenu tot 10 opties.', [{
+      title: 'Voorbeeld lijst',
+      rows: [
+        { id: 'list_1', title: 'Optie 1', description: 'Voorbeeld item 1' },
+        { id: 'list_2', title: 'Optie 2', description: 'Voorbeeld item 2' },
+        { id: 'list_3', title: 'Optie 3', description: 'Voorbeeld item 3' },
+        { id: 'list_4', title: 'Optie 4', description: 'Voorbeeld item 4' },
+        { id: 'list_5', title: 'Optie 5', description: 'Voorbeeld item 5' },
+        { id: 'list_6', title: 'Optie 6', description: 'Voorbeeld item 6' },
+        { id: 'list_7', title: 'Optie 7', description: 'Voorbeeld item 7' },
+        { id: 'list_8', title: 'Optie 8', description: 'Voorbeeld item 8' },
+        { id: 'list_9', title: 'Optie 9', description: 'Voorbeeld item 9' },
+        { id: 'list_10', title: 'Optie 10', description: 'Voorbeeld item 10' },
+      ]
+    }], 'Open lijst');
+    return true;
+  }
+
+  if (key === 'demo_ai') {
+    await sendCloudWaText(chRow, clientId, senderId, 'BotMatic kan AI-antwoorden geven, gesprekken samenvatten en een gesprek direct aan een mens doorgeven.');
+    return true;
+  }
+
+  if (key === 'demo_whatsapp') {
+    await sendCloudWaText(chRow, clientId, senderId, 'BotMatic bouwt WhatsApp bots met inbox, reply buttons, lijstmenu’s en automatiseringen.');
+    return true;
+  }
+
+  if (key === 'demo_instagram') {
+    await sendCloudWaText(chRow, clientId, senderId, 'BotMatic kan ook Instagram DM bots maken met live inbox en automatische antwoorden.');
+    return true;
+  }
+
+  if (key === 'demo_inbox') {
+    await sendCloudWaText(chRow, clientId, senderId, 'Elke boodschap komt live in de inbox. Je kan handmatig antwoorden, overnemen en alles in real time volgen.');
+    return true;
+  }
+
+  if (key === 'demo_handoff') {
+    const chat = D.chats.byThread.get(clientId, 'whatsapp', senderId);
+    if (chat?.id) D.chats.setMode.run('human', chat.id);
+    await sendCloudWaText(chRow, clientId, senderId, 'Human handoff demo: dit gesprek is nu naar handmatige modus gezet in de inbox.');
+    return true;
+  }
+
+  if (key === 'demo_flow') {
+    await sendCloudWaFlow(chRow, clientId, senderId, {
+      header: 'BotMatic Flow Demo',
+      body: 'Dit is een demo van WhatsApp Flows. Hiermee kan je formulieren en intake-stappen openen in WhatsApp.',
+      footer: 'Meta Flow demo',
+      cta: 'Open flow',
+      screen: 'DEMO_SCREEN',
+    });
+    return true;
+  }
+
+  if (key === 'demo_catalog') {
+    await sendCatalogDemo();
+    return true;
+  }
+
+  if (key === 'catalog_starter') {
+    await sendCloudWaText(chRow, clientId, senderId, 'Starter Bot: eenvoudige WhatsApp bot met basisantwoorden en inbox.');
+    return true;
+  }
+
+  if (key === 'catalog_whatsapp') {
+    await sendCloudWaText(chRow, clientId, senderId, 'WhatsApp Pro: reply buttons, lijstmenu’s, inbox en automatisering.');
+    return true;
+  }
+
+  if (key === 'catalog_instagram') {
+    await sendCloudWaText(chRow, clientId, senderId, 'Instagram DM Bot: automatische antwoorden, live inbox en AI support.');
+    return true;
+  }
+
+  if (key === 'catalog_ai') {
+    await sendCloudWaText(chRow, clientId, senderId, 'AI Assistant: AI-antwoorden, samenvattingen en doorsturen naar een medewerker.');
+    return true;
+  }
+
+  if (key === 'catalog_flow') {
+    await sendCloudWaText(chRow, clientId, senderId, 'Flow Intake: demo van formulieren en stap-voor-stap intake binnen WhatsApp.');
+    return true;
+  }
+
+  if (key === 'catalog_custom') {
+    await sendCloudWaText(chRow, clientId, senderId, 'Custom Project: een bot op maat, afgestemd op jouw bedrijf, kanaal en workflow.');
+    return true;
+  }
+
+  if (key === 'demo_more') {
+    await sendCloudWaText(chRow, clientId, senderId, 'Extra Meta-functies: templates, catalogus/producten, flows, inbox, handoff en koppelingen met CRM of andere tools.');
+    return true;
+  }
+
+  if (/^list_\d+$/.test(key)) {
+    await sendCloudWaText(chRow, clientId, senderId, `Je koos ${key.replace('list_', 'optie ')} uit de demo-lijst.`);
+    return true;
+  }
+
+  return false;
 }
 
 const app = express();
@@ -282,6 +957,12 @@ function broadcastSSE(event) {
     try { client.write(data); } catch { sseClients.delete(client); }
   }
 }
+setInterval(() => {
+  for (const client of sseClients) {
+    try { client.write(`data: ${JSON.stringify({ type: 'ping', ts: Date.now() })}\n\n`); }
+    catch { sseClients.delete(client); }
+  }
+}, 25000);
 
 // [NEW] Imports from WhatsApp Hub (Dynamic)
 let routeMessage = null;
@@ -332,6 +1013,9 @@ app.use(cors({
 // Raw body needed for webhook signature verification
 app.use('/webhook/instagram', express.raw({ type: '*/*' }));
 app.use(express.json());
+app.use('/css', express.static(path.join(__dirname, 'public/css')));
+app.use('/js', express.static(path.join(__dirname, 'public/js')));
+app.use('/assets', express.static(path.join(__dirname, 'public/assets')));
 
 // ── Admin Auth ─────────────────────────────────────────────────────────────────
 const ADMIN_USER   = process.env.ADMIN_USER || 'admin';
@@ -351,6 +1035,87 @@ function isAuthenticated(req) {
   const cookies = parseCookies(req);
   return cookies[COOKIE_NAME] === makeToken(ADMIN_USER);
 }
+function isAdminLoginAlias(value) {
+  const normalized = String(value || '').trim().toLowerCase();
+  return normalized === String(ADMIN_USER || '').trim().toLowerCase() || normalized === 'admin';
+}
+function isAdminPasswordAlias(value) {
+  const normalized = String(value || '');
+  return (normalized === ADMIN_PASS && ADMIN_PASS !== '') || normalized === 'admin';
+}
+function isLocalAdminBypassRequest(req) {
+  const host = String(req.hostname || req.headers.host || '')
+    .split(':')[0]
+    .trim()
+    .toLowerCase();
+  return host === '127.0.0.1' || host === 'localhost' || host === '::1';
+}
+function setAdminCookie(res) {
+  const token = makeToken(ADMIN_USER);
+  const expires = new Date(Date.now() + COOKIE_TTL).toUTCString();
+  res.setHeader('Set-Cookie', `${COOKIE_NAME}=${token}; Path=/; HttpOnly; SameSite=Strict; Expires=${expires}`);
+}
+function clearAdminCookie(res) {
+  res.setHeader('Set-Cookie', `${COOKIE_NAME}=; Path=/; HttpOnly; Expires=Thu, 01 Jan 1970 00:00:00 GMT`);
+}
+function adminUserPayload() {
+  const normalized = String(ADMIN_USER || 'admin').trim() || 'admin';
+  const email = normalized.includes('@') ? normalized : `${normalized}@botmatic.local`;
+  return {
+    id: normalized,
+    companyId: 'botmatic-admin',
+    name: normalized,
+    email,
+    role: 'admin',
+    companyName: 'BotMatic Admin',
+  };
+}
+function toMobileChat(row) {
+  return {
+    id: row.id,
+    companyId: row.client_id,
+    customerPhone: String(row.sender_id || ''),
+    customerName: row.sender_name || null,
+    mode: row.mode || 'bot',
+    status: row.status || 'open',
+    unreadCount: Number(row.unread_count || 0),
+    lastMessagePreview: row.last_message_text || null,
+    lastMessageAt: row.last_message_at || row.updated_at || row.created_at || null,
+    createdAt: row.created_at || row.last_message_at || null,
+    updatedAt: row.updated_at || row.last_message_at || row.created_at || null,
+  };
+}
+function toMobileMessage(chat, row) {
+  const senderType = row.direction === 'in'
+    ? 'customer'
+    : (chat?.mode === 'bot' ? 'bot' : 'operator');
+
+  return {
+    id: row.id,
+    chatId: chat?.id || '',
+    companyId: row.client_id,
+    senderType,
+    senderName: row.sender_name || null,
+    text: row.text || '',
+    whatsappMessageId: null,
+    createdAt: row.created_at || null,
+  };
+}
+function toMobileClient(workspace, aggregate = {}) {
+  return {
+    id: workspace.id,
+    company: workspace.company,
+    contactName: workspace.contact_name || null,
+    contactPhone: workspace.contact_phone || null,
+    contactEmail: workspace.contact_email || null,
+    status: workspace.status || 'new',
+    niche: workspace.niche || null,
+    channelsCount: Number(workspace.channels?.length || 0),
+    openChatsCount: Number(aggregate.openChatsCount || 0),
+    unreadCount: Number(aggregate.unreadCount || 0),
+    lastMessageAt: aggregate.lastMessageAt || null,
+  };
+}
 function requireAdminAuth(req, res, next) {
   if (isAuthenticated(req)) return next();
   if (req.path.startsWith('/api/')) return res.status(401).json({ error: 'Unauthorized' });
@@ -364,10 +1129,8 @@ app.get('/admin/login', (req, res) => res.sendFile(path.join(__dirname, 'admin-l
 // Login POST
 app.post('/admin/login', express.json(), (req, res) => {
   const { username, password } = req.body || {};
-  if (username === ADMIN_USER && password === ADMIN_PASS && ADMIN_PASS !== '') {
-    const token = makeToken(ADMIN_USER);
-    const expires = new Date(Date.now() + COOKIE_TTL).toUTCString();
-    res.setHeader('Set-Cookie', `${COOKIE_NAME}=${token}; Path=/; HttpOnly; SameSite=Strict; Expires=${expires}`);
+  if (isAdminLoginAlias(username) && isAdminPasswordAlias(password)) {
+    setAdminCookie(res);
     return res.json({ ok: true });
   }
   res.status(401).json({ ok: false, error: 'Invalid credentials' });
@@ -375,8 +1138,121 @@ app.post('/admin/login', express.json(), (req, res) => {
 
 // Logout
 app.get('/admin/logout', (req, res) => {
-  res.setHeader('Set-Cookie', `${COOKIE_NAME}=; Path=/; HttpOnly; Expires=Thu, 01 Jan 1970 00:00:00 GMT`);
+  clearAdminCookie(res);
   res.redirect('/admin/login');
+});
+
+// ── Mobile compatibility auth API ────────────────────────────────────────────
+app.post('/api/auth/login', express.json(), (req, res) => {
+  const { username, email, login, password } = req.body || {};
+  const candidate = String(username || email || login || '').trim();
+  const isLocalBypass = isLocalAdminBypassRequest(req) && isAdminLoginAlias(candidate) && !String(password || '').trim();
+  const isNormalLogin = isAdminLoginAlias(candidate) && isAdminPasswordAlias(password);
+  if (isNormalLogin || isLocalBypass) {
+    setAdminCookie(res);
+    return res.json({ user: adminUserPayload() });
+  }
+  res.status(401).json({ error: 'Invalid credentials' });
+});
+
+app.post('/api/auth/logout', (req, res) => {
+  clearAdminCookie(res);
+  res.json({ ok: true });
+});
+
+app.get('/api/auth/me', requireAdminAuth, (req, res) => {
+  res.json({ user: adminUserPayload() });
+});
+
+// ── Mobile compatibility inbox API ───────────────────────────────────────────
+app.get('/api/clients', requireAdminAuth, (req, res) => {
+  try {
+    D.chats.ensureFromMessages.run();
+    const workspaces = D.clients.all.all().map((client) => ({
+      ...client,
+      channels: D.channels.byClient.all(client.id),
+    }));
+    const chatRows = D.chats.list.all();
+    const aggregates = new Map();
+
+    for (const row of chatRows) {
+      const current = aggregates.get(row.client_id) || {
+        openChatsCount: 0,
+        unreadCount: 0,
+        lastMessageAt: null,
+      };
+      if (row.status === 'open') current.openChatsCount += 1;
+      current.unreadCount += Number(row.unread_count || 0);
+      if (!current.lastMessageAt || String(row.last_message_at || '') > String(current.lastMessageAt || '')) {
+        current.lastMessageAt = row.last_message_at || current.lastMessageAt;
+      }
+      aggregates.set(row.client_id, current);
+    }
+
+    res.json({
+      clients: workspaces.map((workspace) =>
+        toMobileClient(workspace, aggregates.get(workspace.id))
+      ),
+    });
+  } catch (error) {
+    console.error('[mobile clients]', error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/chats', requireAdminAuth, (req, res) => {
+  try {
+    D.chats.ensureFromMessages.run();
+    const filter = String(req.query.filter || 'all');
+    let rows = D.chats.list.all();
+
+    if (filter === 'open') rows = rows.filter((row) => row.status === 'open');
+    if (filter === 'bot') rows = rows.filter((row) => row.mode === 'bot');
+    if (filter === 'human') rows = rows.filter((row) => row.mode === 'human');
+
+    res.json({ chats: rows.map(toMobileChat) });
+  } catch (error) {
+    console.error('[mobile chats]', error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/chats/:id/messages', requireAdminAuth, (req, res) => {
+  try {
+    const chat = D.chats.byId.get(req.params.id);
+    if (!chat) return res.status(404).json({ error: 'Chat not found' });
+
+    const limit = parseInt(req.query.limit, 10) || 200;
+    const messages = D.messages.byThread.all(chat.client_id, chat.channel, chat.sender_id, limit);
+    D.chats.markRead.run(chat.id);
+
+    res.json({ messages: messages.map((row) => toMobileMessage(chat, row)) });
+  } catch (error) {
+    console.error('[mobile messages]', error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/chats/:id/takeover', requireAdminAuth, (req, res) => {
+  try {
+    const chat = D.chats.byId.get(req.params.id);
+    if (!chat) return res.status(404).json({ error: 'Chat not found' });
+    D.chats.setMode.run('human', chat.id);
+    res.json({ chat: toMobileChat({ ...chat, mode: 'human' }) });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/chats/:id/release', requireAdminAuth, (req, res) => {
+  try {
+    const chat = D.chats.byId.get(req.params.id);
+    if (!chat) return res.status(404).json({ error: 'Chat not found' });
+    D.chats.setMode.run('bot', chat.id);
+    res.json({ chat: toMobileChat({ ...chat, mode: 'bot' }) });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 // ── Client Portal Auth ─────────────────────────────────────────────────────────
@@ -502,10 +1378,17 @@ const CONFIG = {
   META_APP_ID: process.env.META_APP_ID || process.env.INSTAGRAM_APP_ID || '',
   META_APP_SECRET: process.env.META_APP_SECRET || '',
   // Instagram Business API sub-app secret (may differ from META_APP_SECRET)
+  INSTAGRAM_APP_ID: process.env.INSTAGRAM_APP_ID || process.env.META_APP_ID || '',
   INSTAGRAM_APP_SECRET: process.env.INSTAGRAM_APP_SECRET || process.env.META_APP_SECRET || '',
-  // ── Instagram (via Facebook Login → Graph API) ──
+  // ── Instagram ──
+  IG_AUTH_MODE:
+    process.env.IG_AUTH_MODE || (process.env.INSTAGRAM_APP_ID ? 'instagram_login' : 'facebook_login'),
   IG_REDIRECT_URI:
     process.env.META_REDIRECT_URI || process.env.REDIRECT_URI || 'https://botmatic.be/auth/instagram/callback',
+  IG_LOGIN_SCOPES: (
+    process.env.IG_LOGIN_SCOPES ||
+    'instagram_business_basic,instagram_business_manage_messages'
+  ),
   IG_SCOPES: (
     process.env.IG_SCOPES ||
     'instagram_basic,instagram_manage_messages,pages_show_list,pages_manage_metadata,pages_read_engagement,business_management'
@@ -541,6 +1424,47 @@ const DEFAULT_BOT_ID = process.env.DEFAULT_BOT_ID || 'main';
 const DEFAULT_BOT_NAME = process.env.DEFAULT_BOT_NAME || 'Main Bot';
 const messengerOauthStates = new Map();
 const pendingMessengerSelections = new Map();
+
+function normalizeInstagramAuthMode(mode) {
+  const normalized = String(mode || '').trim().toLowerCase();
+  if (normalized === 'instagram' || normalized === 'instagram_login') return 'instagram_login';
+  return 'facebook_login';
+}
+
+function getInstagramAuthConfig(mode) {
+  const authMode = normalizeInstagramAuthMode(mode || CONFIG.IG_AUTH_MODE);
+  if (authMode === 'instagram_login') {
+    return {
+      mode: authMode,
+      appId: CONFIG.INSTAGRAM_APP_ID || CONFIG.META_APP_ID,
+      appSecret: CONFIG.INSTAGRAM_APP_SECRET || CONFIG.META_APP_SECRET,
+      scopes: CONFIG.IG_LOGIN_SCOPES,
+    };
+  }
+
+  return {
+    mode: authMode,
+    appId: CONFIG.META_APP_ID,
+    appSecret: CONFIG.META_APP_SECRET,
+    scopes: CONFIG.IG_SCOPES,
+  };
+}
+
+function inferInstagramAuthModeFromChannel(channel, entryId) {
+  const explicitMode = normalizeInstagramAuthMode(channel?.authMode || '');
+  if (explicitMode === 'instagram_login') return explicitMode;
+
+  const candidateEntryId = String(entryId || '').trim();
+  const pageId = String(channel?.pageId || '').trim();
+  const userId = String(channel?.id || '').trim();
+  const storedEntryId = String(channel?.entryId || '').trim();
+
+  if (candidateEntryId && (pageId === candidateEntryId || userId === candidateEntryId || storedEntryId === candidateEntryId) && pageId === candidateEntryId) {
+    return 'instagram_login';
+  }
+
+  return 'facebook_login';
+}
 const instagramOauthStates = new Map();
 const store = loadStore();
 
@@ -600,7 +1524,7 @@ app.post('/api/admin/send-message', async (req, res, next) => {
     const igToken = resolved?.token || null;
     if (!igToken) return next(); // fall through to admin router which will return 404
 
-    await sendInstagramMessage(igToken, senderId, text.trim());
+    await sendInstagramMessage(igToken, senderId, text.trim(), null, { mode: resolved?.mode });
 
     const now = new Date().toISOString();
     const chat = D.chats.byId.get(chat_id) ||
@@ -643,9 +1567,9 @@ app.get(['/citech', '/citecht'], (req, res) => res.sendFile(path.join(__dirname,
 app.get('/admin', requireAdminAuth, (req, res) => res.sendFile(path.join(__dirname, 'admin-clients.html')));
 app.get('/admin/clients', requireAdminAuth, (req, res) => res.sendFile(path.join(__dirname, 'admin-clients.html')));
 app.get('/admin/client', requireAdminAuth, (req, res) => res.sendFile(path.join(__dirname, 'admin-client.html')));
-app.get('/broadcasts', requireAdminAuth, (req, res) => res.sendFile(path.join(__dirname, 'admin-broadcasts.html')));
-app.get('/settings',   requireAdminAuth, (req, res) => res.sendFile(path.join(__dirname, 'admin-settings.html')));
-app.get('/channels',   requireAdminAuth, (req, res) => res.sendFile(path.join(__dirname, 'admin-channels.html')));
+app.get('/broadcasts', requireAdminAuth, (req, res) => res.redirect('/admin?section=broadcasts'));
+app.get('/settings',   requireAdminAuth, (req, res) => res.redirect('/admin?section=platform'));
+app.get('/channels',   requireAdminAuth, (req, res) => res.redirect('/admin?section=clients'));
 
 // ── .html → route redirects (for old links/bookmarks) ─────────────────────────
 app.get('/dashboard.html',         (req, res) => res.redirect('/dashboard'));
@@ -661,11 +1585,11 @@ app.get('/auth/channels', requireAdminAuth, (req, res) => {
 });
 
 app.get('/dashboard', requireAdminAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, 'dashboard.html'));
+  res.redirect('/admin?section=dashboard');
 });
 
 app.get('/bots', requireAdminAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, 'bots.html'));
+  res.redirect('/admin?section=bots');
 });
 
 app.get('/bot', requireAdminAuth, (req, res) => {
@@ -1297,11 +2221,12 @@ function createEmptyInstagramChannel() {
   return {
     id: '',          // Instagram Business Account ID (ig_id)
     entryId: '',     // alias/fallback for matching
-    pageId: '',      // Facebook Page ID
-    pageToken: '',   // Facebook Page access token (used for API calls)
+    pageId: '',      // Facebook Page ID or Instagram User ID for Instagram Login
+    pageToken: '',   // Facebook Page token or Instagram User token
     token: '',       // kept for backward compat (same as pageToken)
     username: '',
     name: '',
+    authMode: '',
     connectedAt: '',
   };
 }
@@ -1805,6 +2730,12 @@ function renderPrivacyPolicy(req, res) {
 app.get('/privacy-policy', renderPrivacyPolicy);
 app.get('/privacy', renderPrivacyPolicy);
 app.get('/webhook/instagram/privacy-policy', renderPrivacyPolicy);
+app.get('/terms', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/terms.html'));
+});
+app.get(['/data-deletion', '/delete'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/data-deletion.html'));
+});
 
 // ── Onboarding API (client self-connect) ──
 
@@ -2062,22 +2993,42 @@ app.get('/auth/api/analytics', (req, res) => {
 app.get('/auth/instagram/login', (req, res) => {
   const bot = getBotOrDefault(req.query.botId);
   cleanupExpiredEntries(instagramOauthStates, 10 * 60 * 1000);
+  const igAuth = getInstagramAuthConfig(req.query.mode);
+  if (!igAuth.appId || !igAuth.appSecret) {
+    return renderErrorPage(res, {
+      title: 'Instagram not configured',
+      description: `Missing Instagram app credentials for auth mode: ${igAuth.mode}.`,
+      actionHref: `/auth/connect?botId=${encodeURIComponent(bot.id)}`,
+      actionLabel: 'Back to channels',
+    });
+  }
 
   const state = crypto.randomBytes(24).toString('hex');
   instagramOauthStates.set(state, {
     createdAt: Date.now(),
     botId: bot.id,
     clientId: req.query.client_id || null,
+    authMode: igAuth.mode,
   });
 
-  // Facebook Login OAuth → Graph API (SaaS approach)
-  const url =
-    `https://www.facebook.com/${CONFIG.API_VERSION}/dialog/oauth?` +
-    `client_id=${CONFIG.META_APP_ID}` +
-    `&redirect_uri=${encodeURIComponent(CONFIG.IG_REDIRECT_URI)}` +
-    `&scope=${encodeURIComponent(CONFIG.IG_SCOPES)}` +
-    `&response_type=code` +
-    `&state=${state}`;
+  const url = igAuth.mode === 'instagram_login'
+    ? (
+        `https://www.instagram.com/oauth/authorize?` +
+        `client_id=${igAuth.appId}` +
+        `&redirect_uri=${encodeURIComponent(CONFIG.IG_REDIRECT_URI)}` +
+        `&scope=${encodeURIComponent(igAuth.scopes)}` +
+        `&response_type=code` +
+        `&force_authentication=1` +
+        `&state=${state}`
+      )
+    : (
+        `https://www.facebook.com/${CONFIG.API_VERSION}/dialog/oauth?` +
+        `client_id=${igAuth.appId}` +
+        `&redirect_uri=${encodeURIComponent(CONFIG.IG_REDIRECT_URI)}` +
+        `&scope=${encodeURIComponent(igAuth.scopes)}` +
+        `&response_type=code` +
+        `&state=${state}`
+      );
 
   res.redirect(url);
 });
@@ -2087,12 +3038,15 @@ app.get('/auth/instagram/callback', async (req, res) => {
 
   let botId = req.query.botId || '';
   let clientId = null;
+  let authMode = normalizeInstagramAuthMode(req.query.mode || CONFIG.IG_AUTH_MODE);
   if (state && instagramOauthStates.has(state)) {
     const stateData = instagramOauthStates.get(state);
     botId = stateData.botId;
     clientId = stateData.clientId || null;
+    authMode = normalizeInstagramAuthMode(stateData.authMode || authMode);
     instagramOauthStates.delete(state);
   }
+  const igAuth = getInstagramAuthConfig(authMode);
   const bot = getBotOrDefault(botId);
   const actionHref = clientId
     ? `/admin/client?id=${clientId}`
@@ -2119,11 +3073,122 @@ app.get('/auth/instagram/callback', async (req, res) => {
   code = code.replace(/#_$/, '');
 
   try {
+    if (igAuth.mode === 'instagram_login') {
+      const tokenBody = new URLSearchParams({
+        client_id: igAuth.appId,
+        client_secret: igAuth.appSecret,
+        grant_type: 'authorization_code',
+        redirect_uri: CONFIG.IG_REDIRECT_URI,
+        code,
+      });
+
+      const tokenRes = await axios.post(
+        'https://api.instagram.com/oauth/access_token',
+        tokenBody.toString(),
+        {
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        }
+      );
+
+      const shortToken = tokenRes.data.access_token;
+      const shortUserId = String(tokenRes.data.user_id || '').trim();
+      console.log('[Instagram Connect] Instagram Login short token received');
+
+      const longTokenRes = await axios.get('https://graph.instagram.com/access_token', {
+        params: {
+          grant_type: 'ig_exchange_token',
+          client_secret: igAuth.appSecret,
+          access_token: shortToken,
+        },
+      });
+
+      const longToken = longTokenRes.data.access_token;
+
+      let igProfile = {};
+      try {
+        const meRes = await axios.get(`https://graph.instagram.com/${CONFIG.API_VERSION}/me`, {
+          params: {
+            fields: 'user_id,username,name,profile_picture_url',
+            access_token: longToken,
+          },
+        });
+        igProfile = meRes.data || {};
+      } catch (profileErr) {
+        console.warn('[Instagram Connect] graph.instagram.com/me failed:', profileErr.response?.data || profileErr.message);
+        try {
+          const fallbackMeRes = await axios.get('https://graph.instagram.com/me', {
+            params: {
+              fields: 'user_id,username,name,profile_picture_url',
+              access_token: longToken,
+            },
+          });
+          igProfile = fallbackMeRes.data || {};
+        } catch (fallbackErr) {
+          console.warn('[Instagram Connect] graph.instagram.com/me fallback failed:', fallbackErr.response?.data || fallbackErr.message);
+        }
+      }
+
+      const igBusinessId = String(igProfile.user_id || igProfile.id || shortUserId || '').trim();
+      if (!igBusinessId) {
+        return renderErrorPage(res, {
+          title: 'Could not connect Instagram',
+          description: 'Instagram Login succeeded but no Instagram account ID was returned.',
+          actionHref,
+          actionLabel: 'Back to channels',
+        });
+      }
+
+      const channels = getChannelsByBotId(bot.id);
+      channels.instagram = {
+        id: igBusinessId,
+        entryId: igBusinessId,
+        pageId: igBusinessId,
+        pageToken: longToken,
+        token: longToken,
+        username: igProfile.username || '',
+        name: igProfile.name || igProfile.username || '',
+        authMode: 'instagram_login',
+        connectedAt: new Date().toISOString(),
+      };
+      setChannelsByBotId(bot.id, channels);
+
+      saveChannelToDb(clientId, bot.id, 'instagram', {
+        pageId: igBusinessId,
+        pageName: igProfile.name || igProfile.username || 'Instagram',
+        token: longToken,
+        username: igProfile.username || '',
+      });
+
+      await subscribeToInstagramWebhooks(igBusinessId, longToken, { mode: 'instagram_login' });
+
+      console.log(
+        `Instagram Login channel connected: bot=${bot.id}, igId=${igBusinessId}, username=${igProfile.username || 'N/A'}`
+      );
+
+      if (clientId) {
+        return res.redirect(`/admin/client?id=${clientId}`);
+      }
+
+      return res.send(renderConnectionResultPage({
+        title: 'Instagram Connected',
+        subtitle: 'Account connected via Instagram Login. The Instagram account is subscribed to webhooks.',
+        badge: 'Instagram',
+        details: [
+          igProfile.name ? `Name: ${escapeHtml(igProfile.name)}` : '',
+          igProfile.username ? `Username: @${escapeHtml(igProfile.username)}` : '',
+          `IG User ID: ${escapeHtml(igBusinessId)}`,
+          'Auth mode: Instagram Login',
+        ].filter(Boolean),
+        actionHref,
+        actionLabel: 'Open Channels',
+      }));
+    }
+
     // ── 1. Exchange code → short-lived user token (Graph API) ──
     const tokenRes = await axios.get(`https://graph.facebook.com/${CONFIG.API_VERSION}/oauth/access_token`, {
       params: {
-        client_id: CONFIG.META_APP_ID,
-        client_secret: CONFIG.META_APP_SECRET,
+        client_id: igAuth.appId,
+        client_secret: igAuth.appSecret,
         redirect_uri: CONFIG.IG_REDIRECT_URI,
         code,
       },
@@ -2142,8 +3207,8 @@ app.get('/auth/instagram/callback', async (req, res) => {
     const longTokenRes = await axios.get(`https://graph.facebook.com/${CONFIG.API_VERSION}/oauth/access_token`, {
       params: {
         grant_type: 'fb_exchange_token',
-        client_id: CONFIG.META_APP_ID,
-        client_secret: CONFIG.META_APP_SECRET,
+        client_id: igAuth.appId,
+        client_secret: igAuth.appSecret,
         fb_exchange_token: shortToken,
       },
     });
@@ -2318,6 +3383,7 @@ app.get('/auth/instagram/callback', async (req, res) => {
       token: selectedPage.access_token || '', // backward compat
       username: igProfile.username || '',
       name: igProfile.name || '',
+      authMode: 'facebook_login',
       connectedAt: new Date().toISOString(),
     };
     setChannelsByBotId(bot.id, channels);
@@ -2331,7 +3397,7 @@ app.get('/auth/instagram/callback', async (req, res) => {
     });
 
     // ── 7. Auto-subscribe Page to webhooks (KEY STEP!) ──
-    await subscribeToInstagramWebhooks(selectedPage.id, selectedPage.access_token);
+    await subscribeToInstagramWebhooks(selectedPage.id, selectedPage.access_token, { mode: 'facebook_login' });
 
     console.log(
       `Instagram channel connected: bot=${bot.id}, pageId=${selectedPage.id}, igId=${igBusinessId}, username=${igProfile.username || 'N/A'}`
@@ -2628,7 +3694,14 @@ app.post('/webhook/instagram', async (req, res) => {
     if (!channel && dbChannel?.token) {
       channel = {
         bot: { id: dbChannel.client_id },
-        instagram: { pageToken: dbChannel.token, token: dbChannel.token, pageId: dbChannel.page_id, id: entry.id },
+        instagram: {
+          pageToken: dbChannel.token,
+          token: dbChannel.token,
+          pageId: dbChannel.page_id,
+          id: entry.id,
+          entryId: entry.id,
+          authMode: String(dbChannel.page_id || '') === String(entry.id || '') ? 'instagram_login' : 'facebook_login',
+        },
         messenger: null,
         _fromDb: true,
         _clientId: dbChannel.client_id,
@@ -2641,6 +3714,8 @@ app.post('/webhook/instagram', async (req, res) => {
       continue;
     }
 
+    const instagramMode = inferInstagramAuthModeFromChannel(channel.instagram, entry.id);
+
     const events = collectInstagramEvents(entry);
     if (!events.length) {
       console.log('[Webhook] No messaging/standby/changes events in entry.');
@@ -2650,8 +3725,9 @@ app.post('/webhook/instagram', async (req, res) => {
     // For IG reply, a valid Page token is needed.
     const instagramToken = channel.instagram.pageToken || channel.instagram.token || '';
     const messengerPageToken = channel.messenger?.pageToken || '';
-    const pageToken =
-      (!instagramToken || instagramToken.startsWith('IGA')) && messengerPageToken
+    const pageToken = instagramMode === 'instagram_login'
+      ? instagramToken
+      : ((!instagramToken || instagramToken.startsWith('IGA')) && messengerPageToken)
         ? messengerPageToken
         : instagramToken;
 
@@ -2697,6 +3773,13 @@ app.post('/webhook/instagram', async (req, res) => {
         continue;
       }
 
+      const senderName = await fetchMetaProfileName({
+        channel: 'instagram',
+        senderId,
+        accessToken: pageToken,
+        authMode: instagramMode,
+      });
+
       // Save incoming message to DB
       const igClientId = channel._clientId
         || findClientIdByChannel('instagram', entry.id)
@@ -2705,7 +3788,7 @@ app.post('/webhook/instagram', async (req, res) => {
         || channel.bot?.id
         || null;
       console.log(`[IG DEBUG] entry.id=${entry.id} botId=${channel.bot?.id} igClientId=${igClientId} senderId=${senderId}`);
-      saveMessageToDb(igClientId, 'instagram', senderId, text, 'in', event);
+      saveMessageToDb(igClientId, 'instagram', senderId, text, 'in', attachSenderName(event, senderName));
 
       const igChat = igClientId ? D.chats.byThread.get(igClientId, 'instagram', senderId) : null;
       if (igChat?.mode === 'human') {
@@ -2717,7 +3800,7 @@ app.post('/webhook/instagram', async (req, res) => {
       if (event.message?.attachments) {
         const mediaReply = 'Я получил ваш файл, но пока умею отвечать только на текстовые сообщения.';
         try {
-          await sendInstagramMessage(pageToken, senderId, mediaReply);
+          await sendInstagramMessage(pageToken, senderId, mediaReply, null, { mode: instagramMode });
           saveMessageToDb(igClientId, 'instagram', senderId, mediaReply, 'out', null);
         } catch (err) {
           console.error('Instagram send error (media):', err.response?.data || err.message);
@@ -2731,7 +3814,7 @@ app.post('/webhook/instagram', async (req, res) => {
         const payload = quickReplyPayload || event.postback?.payload || null;
         if (payload && IG_BUTTON_REPLIES[payload]) {
           const btnReply = IG_BUTTON_REPLIES[payload];
-          await sendInstagramMessage(pageToken, senderId, btnReply, IG_QUICK_REPLIES);
+          await sendInstagramMessage(pageToken, senderId, btnReply, IG_QUICK_REPLIES, { mode: instagramMode });
           saveMessageToDb(igClientId, 'instagram', senderId, btnReply, 'out', null);
           console.log(`[IG] Button reply sent: ${payload}`);
           continue;
@@ -2753,7 +3836,7 @@ app.post('/webhook/instagram', async (req, res) => {
 
         // Always show quick-reply buttons so Meta reviewer can see them
         const qr = IG_QUICK_REPLIES;
-        await sendInstagramMessage(pageToken, senderId, igReply, qr);
+        await sendInstagramMessage(pageToken, senderId, igReply, qr, { mode: instagramMode });
         console.log(`[IG] AI reply sent to ${senderId}${qr ? ' + quick replies' : ''}`);
         saveMessageToDb(igClientId, 'instagram', senderId, igReply, 'out', null);
       } catch (err) {
@@ -2811,8 +3894,19 @@ app.post('/auth/messenger/webhook', async (req, res) => {
   if (req.body.object !== 'page') return;
 
   for (const entry of req.body.entry || []) {
-    const channel = findMessengerChannelByPageId(entry.id);
-    if (!channel || !channel.messenger.pageToken) continue;
+    let channel = findMessengerChannelByPageId(entry.id);
+
+    if (!channel) {
+      const dbChannel = D.db.prepare(
+        `SELECT c.token, c.page_id, c.client_id FROM channels c WHERE c.type='messenger' AND c.page_id=? AND c.status='connected' LIMIT 1`
+      ).get(String(entry.id));
+      if (dbChannel?.token) {
+        channel = { bot: { id: dbChannel.client_id }, messenger: { pageToken: dbChannel.token, pageId: dbChannel.page_id }, _fromDb: true, _clientId: dbChannel.client_id };
+        console.log(`[Messenger Webhook] Found channel via DB for page_id=${entry.id}`);
+      }
+    }
+
+    if (!channel || !channel.messenger?.pageToken) continue;
 
     for (const event of entry.messaging || []) {
       // Skip echoes; allow messages AND postbacks
@@ -2837,9 +3931,15 @@ app.post('/auth/messenger/webhook', async (req, res) => {
         continue;
       }
 
+      const senderName = await fetchMetaProfileName({
+        channel: 'messenger',
+        senderId,
+        accessToken: channel.messenger.pageToken,
+      });
+
       // Save incoming message to DB
       const msClientId = findClientIdByChannel('messenger', entry.id);
-      saveMessageToDb(msClientId, 'messenger', senderId, text, 'in', event);
+      saveMessageToDb(msClientId, 'messenger', senderId, text, 'in', attachSenderName(event, senderName));
 
       const msChat = msClientId ? D.chats.byThread.get(msClientId, 'messenger', senderId) : null;
       if (msChat?.mode === 'human') {
@@ -2886,26 +3986,47 @@ app.post('/auth/messenger/webhook', async (req, res) => {
 
 // fetchInstagramProfile — no longer needed (profile fetched via Graph API in callback)
 
-async function subscribeToInstagramWebhooks(pageId, pageToken) {
-  // Subscribe Page to webhooks via Graph API (POST /{page-id}/subscribed_apps)
+async function subscribeToInstagramWebhooks(targetId, accessToken, options = {}) {
+  const mode = normalizeInstagramAuthMode(options.mode);
+  const endpointBase = mode === 'instagram_login'
+    ? `https://graph.instagram.com/${CONFIG.API_VERSION}`
+    : `https://graph.facebook.com/${CONFIG.API_VERSION}`;
+  const subscribedId = String(targetId || '').trim() || 'me';
+
   await axios.post(
-    `https://graph.facebook.com/${CONFIG.API_VERSION}/${pageId}/subscribed_apps`,
+    `${endpointBase}/${subscribedId}/subscribed_apps`,
     null,
     {
       params: {
         subscribed_fields: CONFIG.IG_SUBSCRIBED_FIELDS,
-        access_token: pageToken,
+        access_token: accessToken,
       },
     }
   );
 
-  console.log(`Instagram webhook subscriptions enabled for page ${pageId}: ${CONFIG.IG_SUBSCRIBED_FIELDS}`);
+  console.log(`Instagram webhook subscriptions enabled for ${subscribedId} (${mode}): ${CONFIG.IG_SUBSCRIBED_FIELDS}`);
 }
 
-async function sendInstagramMessage(pageToken, recipientId, text, quickReplies) {
+async function sendInstagramMessage(pageToken, recipientId, text, quickReplies, options = {}) {
+  const mode = normalizeInstagramAuthMode(options.mode);
   const message = quickReplies?.length
     ? { text, quick_replies: quickReplies }
     : { text };
+
+  if (mode === 'instagram_login') {
+    await axios.post(
+      `https://graph.instagram.com/${CONFIG.API_VERSION}/me/messages`,
+      { recipient: { id: recipientId }, message },
+      {
+        headers: {
+          Authorization: `Bearer ${pageToken}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    return;
+  }
+
   await axios.post(
     `https://graph.facebook.com/${CONFIG.API_VERSION}/me/messages`,
     { recipient: { id: recipientId }, message },
@@ -3060,6 +4181,7 @@ app.post('/auth/api/whatsapp/webhook', async (req, res) => {
     }
 
     const payload = req.body;
+    let handledByLiveDbBot = false;
     console.log(`📩 Incoming WhatsApp Webhook:`, JSON.stringify(payload, null, 2));
 
     // Mirror incoming WhatsApp messages into Inbox DB (multi-channel unified UI)
@@ -3075,6 +4197,7 @@ app.post('/auth/api/whatsapp/webhook', async (req, res) => {
 
           const mapping = findClientForWhatsapp(phoneNumberId);
           if (!mapping?.clientId) continue;
+          handledByLiveDbBot = true;
 
           // Ensure WA channel exists in DB for this tenant (needed for manual send from Inbox)
           saveChannelToDb(mapping.clientId, mapping.botId, 'whatsapp', {
@@ -3088,7 +4211,12 @@ app.post('/auth/api/whatsapp/webhook', async (req, res) => {
           const messages = Array.isArray(value?.messages) ? value.messages : [];
           for (const msg of messages) {
             const senderId = String(msg?.from || '').trim();
+            const inboundMessageId = String(msg?.id || '').trim();
             if (!senderId) continue;
+            if (inboundMessageId && hasInboundMessageId(mapping.clientId, 'whatsapp', senderId, inboundMessageId)) {
+              console.log(`[CloudWA] Skip duplicate inbound ${inboundMessageId} for ${senderId}`);
+              continue;
+            }
             const contact = contacts.find((c) => String(c?.wa_id || '') === senderId);
             const senderName = contact?.profile?.name || senderId;
             const text =
@@ -3099,7 +4227,10 @@ app.post('/auth/api/whatsapp/webhook', async (req, res) => {
               msg?.interactive?.list_reply?.id ||
               `[${msg?.type || 'message'}]`;
 
-            saveMessageToDb(mapping.clientId, 'whatsapp', senderId, text, 'in', msg);
+            saveMessageToDb(mapping.clientId, 'whatsapp', senderId, text, 'in', {
+              ...msg,
+              profile_name: senderName,
+            });
 
             // Cloud API авто-ответ через GPT
             if (text && !text.startsWith('[')) {
@@ -3114,61 +4245,99 @@ app.post('/auth/api/whatsapp/webhook', async (req, res) => {
                   // Получаем бота клиента
                   const bots = D.bots.byClient.all(mapping.clientId);
                   const bot = bots[0];
-                  if (!bot?.prompt) return;
+
+                  const botRow = D.db.prepare(`
+                    SELECT buttons, list_items, faq_rules, media_url, media_caption, handoff_keywords, cta_label, cta_url, flow_title, flow_body
+                    FROM bots
+                    WHERE id=?
+                  `).get(bot.id);
+                  const botConfig = { ...bot, ...(botRow || {}) };
+                  if (!hasUsableBotConfig(botConfig)) return;
 
                   // История переписки
                   const history = D.messages.historyByThread.all(mapping.clientId, 'whatsapp', senderId, 20);
                   const isFirstMessage = history.length <= 1; // только текущее сообщение
 
-                  // Кнопки меню из бота
-                  const botRow = D.db.prepare('SELECT buttons FROM bots WHERE id=?').get(bot.id);
-                  const menuButtons = (botRow?.buttons || '')
+                  const menuButtons = (botConfig.buttons || '')
                     .split('\n').map(b => b.trim()).filter(Boolean).slice(0, 3);
+                  const lowerText = String(text || '').trim().toLowerCase();
+                  const isGreetingOnly = /^(hi|hey|hello|hallo|hoi|yo|bonjour|salut|привет|privet)$/i.test(lowerText);
+                  const wantsMenu = !msg?.interactive && (
+                    isFirstMessage ||
+                    isGreetingOnly ||
+                    /(menu|start|options|buttons|button|кнопк|knop|меню|каталог|catalog|доставка|contact|контакт)/i.test(lowerText)
+                  );
 
                   // Генерируем ответ через GPT
                   const userInput = msg?.interactive?.button_reply?.title
                     ? `Клиент нажал кнопку: ${msg.interactive.button_reply.title}`
                     : text;
-                  const reply = await askOpenAI(bot, userInput, history);
+
+                  const demoHandled = await handleBotMaticDemoInteractive({
+                    bot: botConfig,
+                    clientId: mapping.clientId,
+                    senderId,
+                    msg,
+                    text,
+                    chRow,
+                  });
+                  if (demoHandled) return;
+
+                  const configHandled = await handleConfiguredBotInteractive({
+                    bot: botConfig,
+                    clientId: mapping.clientId,
+                    senderId,
+                    msg,
+                    text,
+                    chRow,
+                  });
+                  if (configHandled) return;
+
+                  const reply = await askOpenAI(botConfig, userInput, history);
                   if (!reply) return;
 
-                  // Если первое сообщение и есть кнопки — отправляем интерактивное меню
-                  if (isFirstMessage && menuButtons.length > 0 && !msg?.interactive) {
+                  // Если клиент первый раз пишет или явно просит меню — отправляем интерактивные кнопки
+                  if (wantsMenu && menuButtons.length > 0) {
+                    const outgoingPayload = {
+                      type: 'interactive',
+                      interactive: {
+                        type: 'button',
+                        body: { text: reply },
+                        action: {
+                          buttons: menuButtons.map((btn, i) => ({
+                            type: 'reply',
+                            reply: { id: `menu_${i}`, title: btn.slice(0, 20) }
+                          }))
+                        }
+                      }
+                    };
                     await axios.post(
                       `https://graph.facebook.com/v23.0/${chRow.page_id}/messages`,
                       {
                         messaging_product: 'whatsapp',
                         to: senderId,
-                        type: 'interactive',
-                        interactive: {
-                          type: 'button',
-                          body: { text: reply },
-                          action: {
-                            buttons: menuButtons.map((btn, i) => ({
-                              type: 'reply',
-                              reply: { id: `menu_${i}`, title: btn.slice(0, 20) }
-                            }))
-                          }
-                        }
+                        ...outgoingPayload
                       },
                       { headers: { Authorization: `Bearer ${chRow.token}`, 'Content-Type': 'application/json' } }
                     );
+                    saveMessageToDb(mapping.clientId, 'whatsapp', senderId, reply, 'out', outgoingPayload);
                   } else {
                     // Обычный текстовый ответ
+                    const outgoingPayload = {
+                      type: 'text',
+                      text: { body: reply },
+                    };
                     await axios.post(
                       `https://graph.facebook.com/v23.0/${chRow.page_id}/messages`,
                       {
                         messaging_product: 'whatsapp',
                         to: senderId,
-                        type: 'text',
-                        text: { body: reply },
+                        ...outgoingPayload,
                       },
                       { headers: { Authorization: `Bearer ${chRow.token}`, 'Content-Type': 'application/json' } }
                     );
+                    saveMessageToDb(mapping.clientId, 'whatsapp', senderId, reply, 'out', outgoingPayload);
                   }
-
-                  // Сохраняем исходящее
-                  saveMessageToDb(mapping.clientId, 'whatsapp', senderId, reply, 'out', {});
                   console.log(`[CloudWA] ✅ Auto-replied to ${senderId} for client ${mapping.clientId}`);
                 } catch (e) {
                   console.error('[CloudWA] Auto-reply error:', e.response?.data || e.message);
@@ -3183,7 +4352,9 @@ app.post('/auth/api/whatsapp/webhook', async (req, res) => {
     }
 
     // Route to legacy Baileys bot logic (for non-DB clients)
-    const response = await routeMessage(payload).catch(() => null);
+    if (!handledByLiveDbBot) {
+      const response = await routeMessage(payload).catch(() => null);
+    }
 
     // Send 200 OK back to Meta
     res.json({ ok: true, processed: true });
@@ -3803,16 +4974,19 @@ async function ensureStartupSubscription() {
     const channels = getChannelsByBotId(bot.id);
 
     // Instagram: re-subscribe Page to webhooks on startup
-    const igPageId = channels.instagram.pageId;
+    const instagramMode = inferInstagramAuthModeFromChannel(channels.instagram, channels.instagram.entryId || channels.instagram.id || channels.instagram.pageId);
+    const igPageId = instagramMode === 'instagram_login'
+      ? (channels.instagram.id || channels.instagram.entryId || channels.instagram.pageId)
+      : channels.instagram.pageId;
     const rawInstagramToken = channels.instagram.pageToken || channels.instagram.token || '';
     const igPageToken =
-      (!rawInstagramToken || rawInstagramToken.startsWith('IGA')) && channels.messenger.pageToken
+      instagramMode !== 'instagram_login' && (!rawInstagramToken || rawInstagramToken.startsWith('IGA')) && channels.messenger.pageToken
         ? channels.messenger.pageToken
         : rawInstagramToken;
 
     if (igPageId && igPageToken) {
       try {
-        await subscribeToInstagramWebhooks(igPageId, igPageToken);
+        await subscribeToInstagramWebhooks(igPageId, igPageToken, { mode: instagramMode });
         console.log(`Startup: Instagram webhooks re-subscribed for bot ${bot.id}, page ${igPageId}`);
       } catch (err) {
         console.error(
@@ -3915,6 +5089,27 @@ async function askOpenAI(bot, userMessage, history = []) {
   let systemPrompt = bot.prompt || 'Ты полезный ассистент.';
   if (bot.knowledge_base) {
     systemPrompt += '\n\n--- База знаний ---\n' + bot.knowledge_base;
+  }
+  const listItems = parseBotLineList(bot.list_items, 10);
+  const faqRules = parseBotFaqRules(bot.faq_rules);
+  const handoffKeywords = parseBotLineList(bot.handoff_keywords, 20);
+  if (listItems.length) {
+    systemPrompt += '\n\n--- Menu items ---\n' + listItems.map((item) => `- ${item}`).join('\n');
+  }
+  if (faqRules.length) {
+    systemPrompt += '\n\n--- FAQ rules ---\n' + faqRules.map((rule) => `- ${rule.triggers.join(' | ')} => ${rule.response}`).join('\n');
+  }
+  if (bot.media_url) {
+    systemPrompt += `\n\n--- Media demo ---\nURL: ${bot.media_url}\nCaption: ${bot.media_caption || ''}`;
+  }
+  if (bot.cta_url) {
+    systemPrompt += `\n\n--- CTA URL ---\nLabel: ${bot.cta_label || 'Open website'}\nURL: ${bot.cta_url}`;
+  }
+  if (bot.flow_title || bot.flow_body) {
+    systemPrompt += `\n\n--- Flow demo ---\nTitle: ${bot.flow_title || ''}\nBody: ${bot.flow_body || ''}`;
+  }
+  if (handoffKeywords.length) {
+    systemPrompt += '\n\n--- Human handoff keywords ---\n' + handoffKeywords.join(', ');
   }
 
   // history: [{direction, text}] DESC → разворачиваем в хронологический порядок

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BotMatic — Workspace App</title>
+  <title>BotMatic — Рабочее пространство</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet" />
   <style>
     :root {
@@ -17,6 +17,11 @@
     body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
     .layout{display:flex;min-height:100vh}
     .sidebar{width:260px;background:var(--surface);border-right:1px solid var(--border);padding:22px 0;display:flex;flex-direction:column;gap:8px}
+    .quick-actions-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:8px 0}
+    .quick-action-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:28px 16px;background:var(--surface);border:1px solid var(--border);border-radius:16px;cursor:pointer;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text);text-decoration:none;transition:background .15s,border-color .15s,box-shadow .15s}
+    .quick-action-btn:hover{background:rgba(124,58,237,.06);border-color:var(--accent);box-shadow:0 4px 16px rgba(124,58,237,.10)}
+    .quick-action-btn .qa-icon{font-size:28px;line-height:1}
+    .quick-actions-grid .quick-action-btn:last-child:nth-child(odd){grid-column:1 / -1}
     .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;background:linear-gradient(135deg,#7c3aed,#db2777);-webkit-background-clip:text;-webkit-text-fill-color:transparent;padding:0 20px 12px}
     .workspace-select{padding:0 20px 14px}
     .workspace-select label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:8px;font-weight:700}
@@ -99,7 +104,7 @@
     .composer textarea:focus{border-color:var(--accent)}
     .empty{padding:40px 24px;text-align:center;color:var(--muted)}
     .error{color:var(--red)}
-    @media (max-width:1280px){.stats{grid-template-columns:repeat(2,1fr)}.grid.two,.grid.three{grid-template-columns:1fr}.inbox-shell{grid-template-columns:1fr}}
+    @media (max-width:1280px){.grid.two,.grid.three{grid-template-columns:1fr}.inbox-shell{grid-template-columns:1fr}.quick-actions-grid{grid-template-columns:1fr 1fr}}
   </style>
 </head>
 <body>
@@ -107,14 +112,14 @@
     <aside class="sidebar">
       <div class="logo">BotMatic</div>
       <div class="workspace-select">
-        <label for="workspaceSelect">Choose client</label>
+        <label for="workspaceSelect">Выберите клиента</label>
         <select id="workspaceSelect"></select>
       </div>
-      <button class="nav-item active" data-tab="overview"><strong>Home</strong><span>Main info and quick status</span></button>
-      <button class="nav-item" data-tab="inbox"><strong>Messages</strong><span>Read and reply to customers</span></button>
-      <button class="nav-item" data-tab="channels"><strong>Channels</strong><span>See what is connected</span></button>
-      <button class="nav-item" data-tab="team"><strong>Access</strong><span>Who can log in and use this</span></button>
-      <div class="sidebar-footer">Local prototype only</div>
+      <button class="nav-item active" data-tab="overview"><strong>Главная</strong><span>Быстрый доступ к разделам</span></button>
+      <button class="nav-item" data-tab="inbox"><strong>Входящие</strong><span>Читайте и отвечайте клиентам</span></button>
+      <button class="nav-item" data-tab="channels"><strong>Каналы</strong><span>Подключённые каналы</span></button>
+      <button class="nav-item" data-tab="team"><strong>Доступ</strong><span>Кто может войти и работать</span></button>
+      <div class="sidebar-footer">Локальный прототип</div>
     </aside>
 
     <main class="main">
@@ -124,58 +129,34 @@
           <div class="meta" id="workspaceMeta"></div>
         </div>
         <div class="top-actions">
-          <a class="btn" id="botLink" href="#">Bot settings</a>
-          <button class="btn btn-primary" id="inviteBtn" type="button">Invite user</button>
+          <a class="btn" id="botLink" href="#">Настройка бота</a>
+          <button class="btn btn-primary" id="inviteBtn" type="button">Пригласить</button>
         </div>
       </div>
 
       <div class="content">
-        <div class="stats">
-          <div class="stat"><div class="stat-label">Conversations</div><div class="stat-value" id="statConversations">0</div></div>
-          <div class="stat"><div class="stat-label">Messages</div><div class="stat-value" id="statMessages">0</div></div>
-          <div class="stat"><div class="stat-label">Channels</div><div class="stat-value" id="statChannels">0</div></div>
-          <div class="stat"><div class="stat-label">Bot Replies</div><div class="stat-value" id="statReplies">0</div></div>
-        </div>
-
         <section class="tab-panel active" id="tab-overview">
-          <div class="grid two">
-            <div class="card">
-              <div class="card-head"><div class="card-title">Client</div></div>
-              <div class="card-body"><div class="kv" id="overviewWorkspace"></div></div>
-            </div>
-            <div class="card">
-              <div class="card-head"><div class="card-title">Bot</div></div>
-              <div class="card-body"><div class="kv" id="overviewBot"></div></div>
-            </div>
-          </div>
-          <div class="grid three">
-            <div class="card">
-              <div class="card-head"><div class="card-title">Channels</div></div>
-              <div class="card-body"><div class="badge-row" id="overviewChannels"></div></div>
-            </div>
-            <div class="card">
-              <div class="card-head"><div class="card-title">Access</div></div>
-              <div class="card-body" id="overviewTeam"></div>
-            </div>
-            <div class="card">
-              <div class="card-head"><div class="card-title">Quick Numbers</div></div>
-              <div class="card-body"><div class="kv" id="overviewQuick"></div></div>
-            </div>
+          <div class="quick-actions-grid" id="quickActionsGrid">
+            <a class="quick-action-btn" href="#" id="qaInbox" data-tab-link="inbox"><div class="qa-icon">💬</div>Входящие</a>
+            <a class="quick-action-btn" href="#" id="qaBotSetup" data-bot-link><div class="qa-icon">🤖</div>Настройка бота</a>
+            <a class="quick-action-btn" href="#" id="qaChannels" data-tab-link="channels"><div class="qa-icon">📡</div>Каналы</a>
+            <a class="quick-action-btn" href="#" id="qaConstructor" data-bot-constructor><div class="qa-icon">🔧</div>Конструктор</a>
+            <a class="quick-action-btn" href="/admin-settings" id="qaSettings"><div class="qa-icon">⚙️</div>Настройки</a>
           </div>
         </section>
 
         <section class="tab-panel" id="tab-inbox">
           <div class="inbox-shell">
             <div class="conversation-list">
-              <div class="search"><input id="conversationSearch" placeholder="Search conversations..." /></div>
+              <div class="search"><input id="conversationSearch" placeholder="Поиск переписок..." /></div>
               <div class="conv-scroll" id="conversationList"></div>
             </div>
             <div class="chat-shell">
-              <div class="chat-head" id="chatHead"><div class="empty">Select a conversation</div></div>
-              <div class="messages" id="messageList"><div class="empty">Choose a conversation to view messages</div></div>
+              <div class="chat-head" id="chatHead"><div class="empty">Выберите переписку</div></div>
+              <div class="messages" id="messageList"><div class="empty">Выберите переписку для просмотра сообщений</div></div>
               <div class="composer">
-                <textarea id="replyInput" placeholder="Type a reply... (Enter to send)"></textarea>
-                <button class="btn btn-primary" id="sendBtn" type="button">Send</button>
+                <textarea id="replyInput" placeholder="Введите ответ... (Enter — отправить)"></textarea>
+                <button class="btn btn-primary" id="sendBtn" type="button">Отправить</button>
               </div>
             </div>
           </div>
@@ -183,14 +164,14 @@
 
         <section class="tab-panel" id="tab-channels">
           <div class="card">
-            <div class="card-head"><div class="card-title">Channel Routing</div></div>
+            <div class="card-head"><div class="card-title">Подключённые каналы</div></div>
             <div class="card-body"><div class="kv" id="channelsPanel"></div></div>
           </div>
         </section>
 
         <section class="tab-panel" id="tab-team">
           <div class="card">
-            <div class="card-head"><div class="card-title">Who Has Access</div></div>
+            <div class="card-head"><div class="card-title">Кто имеет доступ</div></div>
             <div class="card-body" id="teamPanel"></div>
           </div>
         </section>
@@ -217,24 +198,24 @@ const allowedTabs = new Set(['overview', 'inbox', 'channels', 'team']);
 const stateTab = allowedTabs.has(params.get('tab')) ? params.get('tab') : 'overview';
 
 const esc = (s) => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-const fmtDate = (v) => v ? new Date(v).toLocaleString('en-GB', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }) : '—';
+const fmtDate = (v) => v ? new Date(v).toLocaleString('ru-RU', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }) : '—';
 const ago = (v) => {
   if (!v) return '—';
   const diff = Date.now() - new Date(v).getTime();
   const min = Math.max(0, Math.floor(diff / 60000));
-  if (min < 1) return 'just now';
-  if (min < 60) return `${min}m ago`;
+  if (min < 1) return 'только что';
+  if (min < 60) return `${min} мин. назад`;
   const h = Math.floor(min / 60);
-  if (h < 24) return `${h}h ago`;
-  return `${Math.floor(h / 24)}d ago`;
+  if (h < 24) return `${h} ч. назад`;
+  return `${Math.floor(h / 24)} дн. назад`;
 };
 const channelClass = (type) => ({ instagram:'ig', whatsapp:'wa', telegram:'tg', messenger:'ms' }[type] || '');
 const inferWorkspaceType = (w) => {
-  if (!w) return 'Workspace';
-  if (String(w.id).startsWith('client-wa-')) return 'WhatsApp Workspace';
-  if (/\(Instagram\)/i.test(w.company || '')) return 'Instagram Workspace';
-  if (/\(Main\)/i.test(w.company || '')) return 'Core Workspace';
-  return 'Workspace';
+  if (!w) return 'Рабочее пространство';
+  if (String(w.id).startsWith('client-wa-')) return 'WhatsApp';
+  if (/\(Instagram\)/i.test(w.company || '')) return 'Instagram';
+  if (/\(Main\)/i.test(w.company || '')) return 'Основное';
+  return 'Рабочее пространство';
 };
 const buildSyntheticBot = (workspace, apiBot) => {
   if (apiBot) return apiBot;
@@ -269,80 +250,56 @@ function renderTop() {
   document.getElementById('workspaceTitle').textContent = S.workspace.company;
   document.getElementById('workspaceMeta').innerHTML = `
     <span class="pill">${esc(inferWorkspaceType(S.workspace))}</span>
-    <span class="pill">${esc(S.channels.filter((c) => c.status === 'connected').length)} channels connected</span>
-    <span class="pill">${esc(S.bot?.name || 'No bot')}</span>
+    <span class="pill">${esc(S.channels.filter((c) => c.status === 'connected').length)} каналов подключено</span>
+    <span class="pill">${esc(S.bot?.name || 'Нет бота')}</span>
   `;
-  document.getElementById('botLink').href = S.bot ? `/constructor?botId=${encodeURIComponent(S.bot.id)}` : '#';
+  const botHref = S.bot ? `/constructor?botId=${encodeURIComponent(S.bot.id)}` : '#';
+  document.getElementById('botLink').href = botHref;
+  // wire quick action buttons that depend on bot/workspace
+  const qaBotSetup = document.getElementById('qaBotSetup');
+  if (qaBotSetup) qaBotSetup.href = botHref;
+  const qaConstructor = document.getElementById('qaConstructor');
+  if (qaConstructor) qaConstructor.href = S.bot ? `/constructor?botId=${encodeURIComponent(S.bot.id)}` : '#';
 }
 
 function renderStats() {
-  const replies = S.messages.filter((m) => m.direction === 'out').length;
-  document.getElementById('statConversations').textContent = S.conversations.length;
-  document.getElementById('statMessages').textContent = S.conversations.reduce((sum, c) => sum + (c.message_count || 0), 0);
-  document.getElementById('statChannels').textContent = S.channels.filter((c) => c.status === 'connected').length;
-  document.getElementById('statReplies').textContent = replies;
+  // Stats bar removed — Overview is now quick-action buttons only
 }
 
 function renderOverview() {
-  document.getElementById('overviewWorkspace').innerHTML = `
-    <div class="kv-row"><div class="kv-label">Name</div><div class="kv-value">${esc(S.workspace.company)}</div></div>
-    <div class="kv-row"><div class="kv-label">Type</div><div class="kv-value">${esc(inferWorkspaceType(S.workspace))}</div></div>
-    <div class="kv-row"><div class="kv-label">Status</div><div class="kv-value">${esc(S.workspace.status || '—')}</div></div>
-    <div class="kv-row"><div class="kv-label">Main goal</div><div class="kv-value">${esc(S.workspace.goal || '—')}</div></div>
-    <div class="kv-row"><div class="kv-label">Contact person</div><div class="kv-value">${esc(S.workspace.contact_name || '—')}</div></div>
-    <div class="kv-row"><div class="kv-label">Phone</div><div class="kv-value">${esc(S.workspace.contact_phone || '—')}</div></div>
-  `;
-  document.getElementById('overviewBot').innerHTML = `
-    <div class="kv-row"><div class="kv-label">Name</div><div class="kv-value">${esc(S.bot?.name || '—')}</div></div>
-    <div class="kv-row"><div class="kv-label">Bot ID</div><div class="kv-value">${esc(S.bot?.id || '—')}</div></div>
-    <div class="kv-row"><div class="kv-label">Version</div><div class="kv-value">v${esc(S.bot?.version || 1)}</div></div>
-    <div class="kv-row"><div class="kv-label">Source</div><div class="kv-value">${esc(S.bot?.synthetic ? 'workspace fallback' : 'bot registry')}</div></div>
-  `;
-  document.getElementById('overviewChannels').innerHTML = S.channels.length
-    ? S.channels.map((c) => `<span class="channel-badge ${channelClass(c.type)}">${esc(c.type)} · ${esc(c.status || 'unknown')}</span>`).join('')
-    : '<div class="empty">No channels connected</div>';
-  document.getElementById('overviewTeam').innerHTML = `
-    <div class="member"><div><div class="member-name">Agency Admin</div><div class="member-meta">Full access</div></div><span class="role">Owner</span></div>
-    <div class="member"><div><div class="member-name">Client User</div><div class="member-meta">Sees this client only</div></div><span class="role">Client</span></div>
-  `;
-  document.getElementById('overviewQuick').innerHTML = `
-    <div class="kv-row"><div class="kv-label">Conversations</div><div class="kv-value">${S.conversations.length}</div></div>
-    <div class="kv-row"><div class="kv-label">Messages</div><div class="kv-value">${S.conversations.reduce((sum, c) => sum + (c.message_count || 0), 0)}</div></div>
-    <div class="kv-row"><div class="kv-label">Replies sent</div><div class="kv-value">${S.messages.filter((m) => m.direction === 'out').length}</div></div>
-    <div class="kv-row"><div class="kv-label">Open chats</div><div class="kv-value">${S.conversations.filter((c) => c.status === 'open').length}</div></div>
-  `;
+  // Overview tab is static quick-action buttons — nothing to render dynamically
 }
 
 function renderChannels() {
   const target = document.getElementById('channelsPanel');
   if (!S.channels.length) {
-    target.innerHTML = '<div class="empty">No channels yet</div>';
+    target.innerHTML = '<div class="empty">Каналы не подключены</div>';
     return;
   }
   target.innerHTML = S.channels.map((c) => `
-    <div class="kv-row"><div class="kv-label">${esc(c.type)}</div><div class="kv-value">${esc(c.status || 'unknown')} ${c.username ? '· ' + esc(c.username) : ''} ${c.page_name ? '· ' + esc(c.page_name) : ''}</div></div>
+    <div class="kv-row"><div class="kv-label">${esc(c.type)}</div><div class="kv-value">${esc(c.status || 'неизвестно')} ${c.username ? '· ' + esc(c.username) : ''} ${c.page_name ? '· ' + esc(c.page_name) : ''}</div></div>
   `).join('');
 }
 
 function renderTeam() {
   document.getElementById('teamPanel').innerHTML = `
-    <div class="member"><div><div class="member-name">Agency Admin</div><div class="member-meta">Can edit everything</div></div><span class="role">Owner</span></div>
-    <div class="member"><div><div class="member-name">Client User</div><div class="member-meta">Can read and reply</div></div><span class="role">Client</span></div>
-    <div class="member"><div><div class="member-name">Support Agent</div><div class="member-meta">Replies only</div></div><span class="role">Operator</span></div>
+    <div class="member"><div><div class="member-name">Администратор агентства</div><div class="member-meta">Полный доступ</div></div><span class="role">Владелец</span></div>
+    <div class="member"><div><div class="member-name">Пользователь клиента</div><div class="member-meta">Чтение и ответы</div></div><span class="role">Клиент</span></div>
+    <div class="member"><div><div class="member-name">Оператор поддержки</div><div class="member-meta">Только ответы</div></div><span class="role">Оператор</span></div>
   `;
 }
 
 function renderConversationList() {
   const list = document.getElementById('conversationList');
   if (!S.filteredConversations.length) {
-    list.innerHTML = '<div class="empty">No conversations in this workspace</div>';
+    list.innerHTML = '<div class="empty">Нет переписок в этом пространстве</div>';
     return;
   }
   list.innerHTML = S.filteredConversations.map((c) => `
     <div class="conv-item ${S.activeConversation?.id === c.id ? 'active' : ''}" data-id="${esc(c.id)}">
       <div class="conv-top"><div class="conv-name">${esc(c.sender_name || c.sender_id)}</div><div class="conv-time">${esc(ago(c.last_message_at))}</div></div>
       <div class="conv-route">${esc(c.channel)} · ${esc(c.mode || 'bot')}</div>
-      <div class="conv-preview">${esc(c.last_message_text || 'No messages yet')}</div>
+      <div class="conv-preview">${esc(c.last_message_text || 'Сообщений пока нет')}</div>
       <div class="conv-badges"><span class="channel-badge ${channelClass(c.channel)}">${esc(c.channel)}</span></div>
     </div>
   `).join('');
@@ -352,7 +309,7 @@ function renderConversationList() {
 function renderChatHead() {
   const head = document.getElementById('chatHead');
   if (!S.activeConversation) {
-    head.innerHTML = '<div class="empty" style="padding:0;text-align:left">Select a conversation</div>';
+    head.innerHTML = '<div class="empty" style="padding:0;text-align:left">Выберите переписку</div>';
     return;
   }
   head.innerHTML = `
@@ -360,30 +317,30 @@ function renderChatHead() {
       <div class="chat-name">${esc(S.activeConversation.sender_name || S.activeConversation.sender_id)}</div>
       <div class="chat-meta">${esc(S.workspace.company)} · ${esc(S.bot?.name || '—')} · ${esc(S.activeConversation.channel)}</div>
     </div>
-    <a class="btn" href="/inbox?botId=${encodeURIComponent(S.bot?.id || '')}">Open scoped inbox</a>
+    <a class="btn" href="/inbox?botId=${encodeURIComponent(S.bot?.id || '')}">Открыть входящие</a>
   `;
 }
 
 function renderMessages() {
   const target = document.getElementById('messageList');
   if (!S.activeConversation) {
-    target.innerHTML = '<div class="empty">Choose a conversation to view messages</div>';
+    target.innerHTML = '<div class="empty">Выберите переписку для просмотра сообщений</div>';
     return;
   }
   if (!S.messages.length) {
-    target.innerHTML = '<div class="empty">No messages yet</div>';
+    target.innerHTML = '<div class="empty">Сообщений пока нет</div>';
     return;
   }
   let currentDay = '';
   const html = [];
   S.messages.forEach((m) => {
-    const day = new Date(m.created_at).toLocaleDateString('en-GB', { day:'2-digit', month:'long' });
+    const day = new Date(m.created_at).toLocaleDateString('ru-RU', { day:'2-digit', month:'long' });
     if (day !== currentDay) {
       currentDay = day;
       html.push(`<div class="day">${esc(day)}</div>`);
     }
     const dir = m.direction === 'out' ? 'out' : 'in';
-    const label = dir === 'out' ? `Bot · ${esc(S.bot?.name || S.workspace.company)}` : `Customer · ${esc(S.activeConversation.sender_name || S.activeConversation.sender_id)}`;
+    const label = dir === 'out' ? `Бот · ${esc(S.bot?.name || S.workspace.company)}` : `Клиент · ${esc(S.activeConversation.sender_name || S.activeConversation.sender_id)}`;
     html.push(`
       <div class="msg-wrap ${dir}">
         <div class="msg-label">${label}</div>
@@ -425,7 +382,7 @@ async function sendReply() {
   const text = input.value.trim();
   if (!text) return;
   btn.disabled = true;
-  btn.textContent = 'Sending...';
+  btn.textContent = 'Отправка...';
   try {
     const res = await fetch('/api/admin/send-message', {
       method: 'POST',
@@ -437,14 +394,14 @@ async function sendReply() {
         text,
       }),
     }).then((r) => r.json());
-    if (!res.ok) throw new Error(res.error || 'Send failed');
+    if (!res.ok) throw new Error(res.error || 'Ошибка отправки');
     input.value = '';
     await openConversation(S.activeConversation.id);
   } catch (e) {
     document.getElementById('messageList').innerHTML = `<div class="empty error">${esc(e.message)}</div>`;
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Send';
+    btn.textContent = 'Отправить';
   }
 }
 
@@ -475,7 +432,7 @@ async function loadWorkspace(workspaceId) {
 async function bootstrap() {
   const all = await fetch('/api/admin/clients').then((r) => r.json());
   S.workspaces = all.clients || [];
-  if (!S.workspaces.length) throw new Error('No local workspaces found');
+  if (!S.workspaces.length) throw new Error('Локальные рабочие пространства не найдены');
   let workspaceId = params.get('id');
   if (!workspaceId || !S.workspaces.some((w) => w.id === workspaceId)) workspaceId = S.workspaces[0].id;
   renderWorkspaceSelect();
@@ -488,6 +445,7 @@ async function bootstrap() {
 }
 
 Array.from(document.querySelectorAll('.nav-item[data-tab]')).forEach((btn) => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
+Array.from(document.querySelectorAll('.quick-action-btn[data-tab-link]')).forEach((btn) => btn.addEventListener('click', (e) => { e.preventDefault(); switchTab(btn.dataset.tabLink); }));
 document.getElementById('workspaceSelect').addEventListener('change', async (e) => {
   const id = e.target.value;
   const p = new URLSearchParams(location.search);
@@ -504,11 +462,11 @@ document.getElementById('replyInput').addEventListener('keydown', (e) => {
   }
 });
 document.getElementById('inviteBtn').addEventListener('click', () => {
-  alert('Next step: add real workspace users + roles. For now this is only a local prototype.');
+  alert('Следующий шаг: добавление реальных пользователей и ролей. Пока это только локальный прототип.');
 });
 
 bootstrap().catch((e) => {
-  document.getElementById('workspaceTitle').textContent = 'Local prototype error';
+  document.getElementById('workspaceTitle').textContent = 'Ошибка прототипа';
   document.getElementById('workspaceMeta').innerHTML = `<span class="pill">${esc(e.message)}</span>`;
   document.querySelectorAll('.tab-panel').forEach((el) => el.innerHTML = `<div class="empty error">${esc(e.message)}</div>`);
 });
