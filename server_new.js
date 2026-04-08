@@ -1416,8 +1416,7 @@ const missingConfig = ['META_APP_ID', 'META_APP_SECRET', 'IG_REDIRECT_URI', 'WEB
   .filter((key) => !CONFIG[key]);
 
 if (missingConfig.length > 0) {
-  console.error('Missing required config keys:', missingConfig.join(', '));
-  process.exit(1);
+  console.warn('⚠️  Missing config keys (Instagram/Meta features disabled):', missingConfig.join(', '));
 }
 
 const DEFAULT_BOT_ID = process.env.DEFAULT_BOT_ID || 'main';
@@ -1558,6 +1557,13 @@ app.get('/api/admin/sse', requireAdminAuth, (req, res) => {
   res.write(`data: ${JSON.stringify({ type: 'connected' })}\n\n`);
   sseClients.add(res);
   req.on('close', () => sseClients.delete(res));
+});
+
+// ── Public static site pages (replaces Vercel rewrites on VPS) ───────────────
+app.use(express.static(path.join(__dirname, 'public')));
+app.get('/:page', (req, res, next) => {
+  const file = path.join(__dirname, 'public', req.params.page + '.html');
+  res.sendFile(file, (err) => { if (err) next(); });
 });
 
 // ── Public utility pages ───────────────────────────────────────────────────────

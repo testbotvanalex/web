@@ -22,6 +22,8 @@ const REWRITES = [
   [/^\/js\/(.+)$/, '/public/js/$1'],
   [/^\/assets\/(.+)$/, '/public/assets/$1'],
   [/^\/whatsapp-bots$/, '/public/whatsapp-bots.html'],
+  [/^\/citech\/?$/, '/public/citech/index.html'],
+  [/^\/citecht\/?$/, '/public/citech/index.html'],
 ];
 
 http.createServer((req, res) => {
