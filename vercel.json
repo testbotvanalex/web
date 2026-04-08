@@ -90,19 +90,19 @@
     },
     {
       "source": "/citech",
-      "destination": "/public/citech/index.html"
+      "destination": "/public/citech"
     },
     {
       "source": "/citech/",
-      "destination": "/public/citech/index.html"
+      "destination": "/public/citech"
     },
     {
       "source": "/citecht",
-      "destination": "/public/citech/index.html"
+      "destination": "/public/citech"
     },
     {
       "source": "/citecht/",
-      "destination": "/public/citech/index.html"
+      "destination": "/public/citech"
     },
     {
       "source": "/auth/:path*",
