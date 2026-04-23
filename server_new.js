@@ -3775,23 +3775,7 @@ app.get('/webhook', (req, res) => {
   }
 });
 
-app.post('/webhook', (req, res) => {
-  res.sendStatus(200);
-});
-
-app.get('/webhook/instagram', (req, res) => {
-  const mode = req.query['hub.mode'];
-  const token = req.query['hub.verify_token'];
-  const challenge = req.query['hub.challenge'];
-
-  if (mode === 'subscribe' && token === CONFIG.WEBHOOK_VERIFY_TOKEN) {
-    res.status(200).send(challenge);
-  } else {
-    res.sendStatus(403);
-  }
-});
-
-app.post('/webhook/instagram', async (req, res) => {
+async function processInstagramWebhook(req, res) {
   // ── Verify X-Hub-Signature-256 ──
   const signature = req.headers['x-hub-signature-256'];
   const rawBody = req.body; // raw body thanks to express.raw() middleware
@@ -3979,7 +3963,32 @@ app.post('/webhook/instagram', async (req, res) => {
       }
     }
   }
+}
+
+app.post('/webhook', async (req, res) => {
+  const rawBody = req.body;
+  const body = Buffer.isBuffer(rawBody) ? JSON.parse(rawBody.toString()) : rawBody;
+
+  if (body?.object === 'instagram') {
+    return processInstagramWebhook(req, res);
+  }
+
+  res.sendStatus(200);
 });
+
+app.get('/webhook/instagram', (req, res) => {
+  const mode = req.query['hub.mode'];
+  const token = req.query['hub.verify_token'];
+  const challenge = req.query['hub.challenge'];
+
+  if (mode === 'subscribe' && token === CONFIG.WEBHOOK_VERIFY_TOKEN) {
+    res.status(200).send(challenge);
+  } else {
+    res.sendStatus(403);
+  }
+});
+
+app.post('/webhook/instagram', processInstagramWebhook);
 
 // Catch-all webhook for debugging misrouted events from Nginx
 app.all('/webhook', (req, res) => {
