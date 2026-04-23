@@ -3068,8 +3068,24 @@
       </div>
     </div>`;
     renderBotButtonPreview();
-    initBotFlowBuilder(bot.flow);
     switchBotSubtab(activeBotSubtab || 'setup');
+    try {
+      initBotFlowBuilder(bot.flow);
+    } catch (e) {
+      console.error('initBotFlowBuilder failed', e);
+      if (activeBotSubtab === 'flow') {
+        activeBotSubtab = 'setup';
+        switchBotSubtab('setup');
+      }
+      const blocksEl = document.getElementById('botFlowBlocks');
+      const editorEl = document.getElementById('botFlowEditor');
+      if (blocksEl) {
+        blocksEl.innerHTML = `<div class="flow-empty"><div>Flow временно недоступен</div><div>Остальные настройки бота работают. Попробуй обновить страницу или открыть Flow Studio отдельно.</div></div>`;
+      }
+      if (editorEl) {
+        editorEl.innerHTML = `<div class="flow-empty"><div>Не удалось инициализировать builder</div><div>Можно продолжить работу с основой, каналами и тестом ответа.</div></div>`;
+      }
+    }
   }
 
   async function loadBot() {
