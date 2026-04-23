@@ -2875,17 +2875,17 @@
     el.innerHTML = `<div class="bot-wrap">
       <div class="workspace-view-head">
         <div class="workspace-view-title">Bot</div>
-        <div class="workspace-view-copy">Упростил этот экран, чтобы он стабильно открывался и не ломался. Здесь только основа бота: имя, роль, знания и быстрые кнопки.</div>
+        <div class="workspace-view-copy">Простой рабочий экран: основа бота, быстрые кнопки и проверка ответа. Всё тяжёлое вынесено из этой вкладки, чтобы панель не ломалась.</div>
       </div>
 
       <div class="bot-section">
         <div class="bot-section-head">
-          <div class="bot-section-title">Основная настройка</div>
+          <div class="bot-section-title">Основа</div>
         </div>
         <div class="bot-section-body">
           <div class="bot-setup-note">
-            <div class="bot-setup-title">Сейчас важнее рабочий экран, чем перегруженный editor</div>
-            <div class="bot-setup-copy">Сначала добиваем базовую настройку бота. Flow Studio остаётся отдельной страницей, чтобы не ломать всю вкладку Bot.</div>
+            <div class="bot-setup-title">Три вещи, которые реально нужны каждый день</div>
+            <div class="bot-setup-copy">1. Кто бот и как он отвечает. 2. Что он знает. 3. Какие быстрые кнопки видит клиент. Всё остальное не трогаем здесь, чтобы не перегружать админку.</div>
             <div class="bot-template-row">
               <button class="bot-template-btn" onclick="applyBotPreset('universal')">Universal</button>
               <button class="bot-template-btn" onclick="applyBotPreset('salon')">Salon</button>
@@ -2895,31 +2895,69 @@
             </div>
           </div>
 
-          <div class="bot-field" style="margin-top:14px">
-            <div class="bot-label">Имя бота</div>
-            <input id="botNameInput" class="bot-input" value="${esc(bot.name || '')}" placeholder="Например: BotMatic Assistant" />
-          </div>
-
-          <div class="bot-field">
-            <div class="bot-label">Роль и поведение</div>
-            <textarea id="botPromptInput" class="bot-textarea prompt" placeholder="Опиши, как бот должен отвечать.">${esc(bot.prompt || '')}</textarea>
-          </div>
-
-          <div class="bot-field">
-            <div class="bot-label">Что бот должен знать</div>
-            <textarea id="botKnowledgeInput" class="bot-textarea kb" placeholder="Услуги, цены, адрес, график, контакты и всё важное.">${esc(bot.knowledge_base || '')}</textarea>
-          </div>
-
-          <div class="bot-field">
-            <div class="bot-label">Быстрые кнопки</div>
-            <textarea id="botButtonsInput" class="bot-textarea test" placeholder="Цены&#10;Адрес&#10;Контакты" oninput="renderBotButtonPreview()">${esc(bot.buttons || '')}</textarea>
-            <div class="bot-chip-row">
-              <button class="bot-chip" onclick="addBotButton('Цены')">+ Цены</button>
-              <button class="bot-chip" onclick="addBotButton('Адрес')">+ Адрес</button>
-              <button class="bot-chip" onclick="addBotButton('Контакты')">+ Контакты</button>
-              <button class="bot-chip" onclick="addBotButton('Записаться')">+ Записаться</button>
+          <div class="bot-step-grid" style="margin-top:14px">
+            <div class="bot-step-card">
+              <div class="bot-step-top">
+                <span class="bot-step-num">1</span>
+                <div class="bot-step-title">Кто этот бот</div>
+              </div>
+              <div class="bot-step-copy">Название внутри проекта и базовая роль, в которой бот отвечает.</div>
+              <div class="bot-field" style="margin-bottom:0">
+                <div class="bot-label">Имя бота</div>
+                <input id="botNameInput" class="bot-input" value="${esc(bot.name || '')}" placeholder="Например: BotMatic Assistant" />
+              </div>
+              <div class="bot-field" style="margin-bottom:0">
+                <div class="bot-label">Роль и поведение</div>
+                <textarea id="botPromptInput" class="bot-textarea prompt" placeholder="Опиши, как бот должен отвечать.">${esc(bot.prompt || '')}</textarea>
+              </div>
             </div>
-            <div id="botButtonsPreview" class="bot-btn-preview"></div>
+
+            <div class="bot-step-card">
+              <div class="bot-step-top">
+                <span class="bot-step-num">2</span>
+                <div class="bot-step-title">Что бот знает</div>
+              </div>
+              <div class="bot-step-copy">Услуги, цены, адрес, график, контакты и всё, что нужно для ответов.</div>
+              <div class="bot-field" style="margin-bottom:0">
+                <div class="bot-label">База знаний</div>
+                <textarea id="botKnowledgeInput" class="bot-textarea kb" placeholder="Услуги, цены, адрес, график, контакты и всё важное.">${esc(bot.knowledge_base || '')}</textarea>
+              </div>
+            </div>
+
+            <div class="bot-step-card">
+              <div class="bot-step-top">
+                <span class="bot-step-num">3</span>
+                <div class="bot-step-title">Быстрые кнопки</div>
+              </div>
+              <div class="bot-step-copy">Первые действия для клиента. До 3 кнопок, по одной на строку.</div>
+              <div class="bot-field" style="margin-bottom:0">
+                <div class="bot-label">Кнопки</div>
+                <textarea id="botButtonsInput" class="bot-textarea test" placeholder="Цены&#10;Адрес&#10;Контакты" oninput="renderBotButtonPreview()">${esc(bot.buttons || '')}</textarea>
+                <div class="bot-chip-row">
+                  <button class="bot-chip" onclick="addBotButton('Цены')">+ Цены</button>
+                  <button class="bot-chip" onclick="addBotButton('Адрес')">+ Адрес</button>
+                  <button class="bot-chip" onclick="addBotButton('Контакты')">+ Контакты</button>
+                  <button class="bot-chip" onclick="addBotButton('Записаться')">+ Записаться</button>
+                </div>
+                <div id="botButtonsPreview" class="bot-btn-preview"></div>
+              </div>
+            </div>
+
+            <div class="bot-step-card">
+              <div class="bot-step-top">
+                <span class="bot-step-num">4</span>
+                <div class="bot-step-title">Быстрая проверка</div>
+              </div>
+              <div class="bot-step-copy">Напиши тестовое сообщение и посмотри, как бот ответит с текущими настройками.</div>
+              <div class="bot-field" style="margin-bottom:10px">
+                <div class="bot-label">Тестовое сообщение</div>
+                <textarea id="botTestMessage" class="bot-textarea test" placeholder="Например: Какие у вас цены?"></textarea>
+              </div>
+              <div class="bot-actions">
+                <button class="btn-secondary" onclick="testBotReply()">Проверить ответ</button>
+              </div>
+              <div id="botTestReply" class="bot-test-reply">Тут будет ответ бота.</div>
+            </div>
           </div>
         </div>
       </div>
@@ -3231,34 +3269,39 @@
   }
 
   function getBotFormData() {
+    const currentBot = activeClient?._bots?.[0] || {};
     const buttons = (document.getElementById('botButtonsInput')?.value || '')
       .split('\n')
       .map(v => v.trim())
       .filter(Boolean)
       .slice(0, 3);
+    const readValue = (id, fallback = '') => {
+      const el = document.getElementById(id);
+      return el ? (el.value || '').trim() : String(fallback || '').trim();
+    };
+    const readLines = (id, fallback = '', limit = null) => {
+      const raw = document.getElementById(id)?.value;
+      const source = raw != null ? raw : fallback;
+      const lines = String(source || '')
+        .split('\n')
+        .map(v => v.trim())
+        .filter(Boolean);
+      return limit ? lines.slice(0, limit).join('\n') : lines.join('\n');
+    };
     return {
-      name: (document.getElementById('botNameInput')?.value || '').trim(),
-      prompt: (document.getElementById('botPromptInput')?.value || '').trim(),
-      knowledge_base: (document.getElementById('botKnowledgeInput')?.value || '').trim(),
-      buttons: buttons.join('\n'),
-      list_items: (document.getElementById('botListItemsInput')?.value || '')
-        .split('\n')
-        .map(v => v.trim())
-        .filter(Boolean)
-        .slice(0, 10)
-        .join('\n'),
-      faq_rules: (document.getElementById('botFaqRulesInput')?.value || '').trim(),
-      media_url: (document.getElementById('botMediaUrlInput')?.value || '').trim(),
-      media_caption: (document.getElementById('botMediaCaptionInput')?.value || '').trim(),
-      handoff_keywords: (document.getElementById('botHandoffKeywordsInput')?.value || '')
-        .split('\n')
-        .map(v => v.trim())
-        .filter(Boolean)
-        .join('\n'),
-      cta_label: (document.getElementById('botCtaLabelInput')?.value || '').trim(),
-      cta_url: (document.getElementById('botCtaUrlInput')?.value || '').trim(),
-      flow_title: (document.getElementById('botFlowTitleInput')?.value || '').trim(),
-      flow_body: (document.getElementById('botFlowBodyInput')?.value || '').trim(),
+      name: readValue('botNameInput', currentBot.name),
+      prompt: readValue('botPromptInput', currentBot.prompt),
+      knowledge_base: readValue('botKnowledgeInput', currentBot.knowledge_base),
+      buttons: buttons.length ? buttons.join('\n') : readLines('botButtonsInput', currentBot.buttons, 3),
+      list_items: readLines('botListItemsInput', currentBot.list_items, 10),
+      faq_rules: readValue('botFaqRulesInput', currentBot.faq_rules),
+      media_url: readValue('botMediaUrlInput', currentBot.media_url),
+      media_caption: readValue('botMediaCaptionInput', currentBot.media_caption),
+      handoff_keywords: readLines('botHandoffKeywordsInput', currentBot.handoff_keywords),
+      cta_label: readValue('botCtaLabelInput', currentBot.cta_label),
+      cta_url: readValue('botCtaUrlInput', currentBot.cta_url),
+      flow_title: readValue('botFlowTitleInput', currentBot.flow_title),
+      flow_body: readValue('botFlowBodyInput', currentBot.flow_body),
     };
   }
 
