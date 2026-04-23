@@ -294,7 +294,8 @@ body.admin-workspace-list .main.inbox-mode {
 }
 
 body.admin-workspace-list .main.inbox-mode .tab-panel.active {
-  display: block !important;
+  display: flex !important;
+  flex-direction: column !important;
   flex: 1 !important;
   min-height: 0 !important;
   overflow: hidden !important;
@@ -303,7 +304,10 @@ body.admin-workspace-list .main.inbox-mode .tab-panel.active {
 body.admin-workspace-list .main.inbox-mode .inbox-wrap {
   display: grid !important;
   grid-template-columns: 220px 360px minmax(0, 1fr) !important;
-  min-height: calc(100vh - 34px) !important;
+  flex: 1 !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  overflow: hidden !important;
 }
 
 body.admin-workspace-list .main.inbox-mode .inbox-rail {
@@ -313,6 +317,8 @@ body.admin-workspace-list .main.inbox-mode .inbox-rail {
   padding: 28px 18px !important;
   border-right: 1px solid #efefee !important;
   background: #fcfcfb !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
 }
 
 body.admin-workspace-list .main.inbox-mode .inbox-rail-head {
@@ -390,7 +396,9 @@ body.admin-workspace-list .main.inbox-mode .chat-list-pane {
   display: flex !important;
   flex-direction: column !important;
   min-width: 0 !important;
+  min-height: 0 !important;
   border-right: 1px solid #efefee !important;
+  overflow: hidden !important;
 }
 
 body.admin-workspace-list .main.inbox-mode .chat-list-head {
@@ -451,12 +459,15 @@ body.admin-workspace-list .tab.active {
 }
 
 body.admin-workspace-list .inbox-wrap {
-  min-height: calc(100vh - 180px) !important;
+  min-height: 0 !important;
 }
 
 body.admin-workspace-list .chat-list {
   width: 360px !important;
   border-right: 1px solid #efefee !important;
+  flex: 1 !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
 }
 
 body.admin-workspace-list .main.inbox-mode .chat-list {
@@ -508,9 +519,14 @@ body.admin-workspace-list .main.inbox-mode .msgs-area {
   display: flex !important;
   flex-direction: column !important;
   min-width: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
 }
 
 body.admin-workspace-list .msgs-list {
+  flex: 1 !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
   padding: 24px !important;
   background: #ffffff !important;
 }
