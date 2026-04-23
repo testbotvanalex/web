@@ -1,0 +1,782 @@
+body.admin-shell {
+  --bg: #f5f5f4;
+  --surface: rgba(255, 255, 255, 0.94);
+  --surface2: #fafaf9;
+  --surface3: #ececeb;
+  --border: rgba(24, 24, 27, 0.1);
+  --text: #18181b;
+  --muted: #71717a;
+  --accent: #18181b;
+  --accent2: #27272a;
+  --accent-glow: rgba(24, 24, 27, 0.08);
+  --accent-soft: rgba(24, 24, 27, 0.06);
+  --green: #0f9f6e;
+  --yellow: #c9841a;
+  --red: #d14343;
+  --blue: #334155;
+  min-height: 100vh;
+  background: #f5f5f4;
+}
+
+body.admin-shell::before {
+  display: none;
+}
+
+body.admin-shell .sidebar,
+body.admin-shell .topbar,
+body.admin-shell .card,
+body.admin-shell .panel,
+body.admin-shell .stat-card,
+body.admin-shell .stat,
+body.admin-shell .quick-btn,
+body.admin-shell .ch-card,
+body.admin-shell .bot-section,
+body.admin-shell .flow-block-editor,
+body.admin-shell .flow-raw-box,
+body.admin-shell .flow-block-list,
+body.admin-shell .search input,
+body.admin-shell .composer textarea,
+body.admin-shell .msg-input,
+body.admin-shell .bot-input,
+body.admin-shell .bot-textarea,
+body.admin-shell .prompt-preview,
+body.admin-shell .workspace-panel,
+body.admin-shell .hero-panel,
+body.admin-shell .hero-sidepanel,
+body.admin-shell .modal,
+body.admin-shell .platform-card {
+  box-shadow: 0 8px 24px rgba(24, 24, 27, 0.04);
+}
+
+body.admin-dashboard .sidebar,
+body.admin-workspace-detail .sidebar {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(18px);
+  border-right-color: rgba(17, 36, 42, 0.08);
+}
+
+body.admin-dashboard .sidebar-logo,
+body.admin-workspace-detail .sidebar-logo,
+body.admin-login .logo {
+  background: none;
+  color: #18181b;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: currentColor;
+}
+
+body.admin-dashboard .nav-item.active,
+body.admin-workspace-detail .nav-item.active {
+  color: var(--accent);
+  background: rgba(24, 24, 27, 0.05);
+  border-left-color: var(--accent);
+}
+
+body.admin-dashboard .nav-item:hover,
+body.admin-workspace-detail .nav-item:hover {
+  background: rgba(255, 255, 255, 0.62);
+}
+
+body.admin-dashboard .topbar,
+body.admin-workspace-detail .topbar {
+  background: rgba(255, 255, 255, 0.92);
+}
+
+body.admin-dashboard .stat-card,
+body.admin-workspace-detail .stat,
+body.admin-dashboard .card,
+body.admin-workspace-detail .panel {
+  background: rgba(255, 255, 255, 0.94);
+  border-color: rgba(17, 36, 42, 0.08);
+}
+
+body.admin-dashboard .quick-btn {
+  background: rgba(255, 255, 255, 0.94);
+  border-color: rgba(17, 36, 42, 0.08);
+}
+
+body.admin-dashboard .quick-btn:hover {
+  border-color: rgba(24, 24, 27, 0.14);
+  box-shadow: 0 10px 24px rgba(24, 24, 27, 0.06);
+}
+
+body.admin-dashboard .quick-icon {
+  background: #f4f4f5;
+  color: #18181b;
+}
+
+body.admin-dashboard .pipe-row:hover,
+body.admin-dashboard .client-row:hover,
+body.admin-dashboard .act-item:hover {
+  background: rgba(24, 24, 27, 0.04);
+}
+
+body.admin-workspace-detail .btn-primary,
+body.admin-dashboard .topbar a[style*="linear-gradient"],
+body.admin-workspace-list .send-btn,
+body.admin-workspace-list .btn-primary {
+  background: #18181b;
+}
+
+body.admin-workspace-detail .panel-head,
+body.admin-workspace-detail .section,
+body.admin-workspace-detail .chat-stage,
+body.admin-workspace-detail .composer,
+body.admin-workspace-list .cl-header,
+body.admin-workspace-list .tabs,
+body.admin-workspace-list .input-area {
+  background: rgba(255, 255, 255, 0.74);
+}
+
+body.admin-workspace-detail .messages {
+  background: #f7f7f5;
+}
+
+body.admin-workspace-detail .conversation-item.active,
+body.admin-workspace-list .chat-item.active,
+body.admin-workspace-list .client-card.active {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+body.admin-workspace-detail .msg.out,
+body.admin-workspace-list .msg.out .msg-bubble {
+  background: #18181b;
+}
+
+body.admin-workspace-list {
+  --sb-bg: #f5f5f4;
+  --sb-hover: rgba(24, 24, 27, 0.04);
+  --sb-active-border: transparent;
+  --sb-text: #18181b;
+  --sb-muted: #71717a;
+  --sb-border: #e7e5e4;
+}
+
+body.admin-workspace-list .sidebar {
+  width: 248px !important;
+  background: #f5f5f4 !important;
+  border-right: 1px solid #e7e5e4 !important;
+  box-shadow: none !important;
+}
+
+body.admin-workspace-list .sb-logo-icon {
+  display: none !important;
+}
+
+body.admin-workspace-list .sb-logo {
+  color: #18181b !important;
+  border-bottom: none !important;
+  padding: 22px 20px 16px !important;
+  font-size: 16px !important;
+}
+
+body.admin-workspace-list .sb-nav {
+  padding: 0 12px 10px !important;
+}
+
+body.admin-workspace-list .sb-nav-item {
+  min-height: 44px !important;
+  padding: 0 14px !important;
+  border-radius: 12px !important;
+  border-left: none !important;
+  color: #52525b !important;
+  font-size: 14px !important;
+}
+
+body.admin-workspace-list .sb-nav-item.active,
+body.admin-workspace-list .client-card.active {
+  border-left-color: transparent !important;
+}
+
+body.admin-workspace-list .sb-nav-item.active {
+  background: #e7e5e4 !important;
+  color: #18181b !important;
+  box-shadow: none !important;
+}
+
+body.admin-workspace-list .sb-divider,
+body.admin-workspace-list .sidebar-summary {
+  display: none !important;
+}
+
+body.admin-workspace-list .sb-section-label {
+  padding: 12px 20px 8px !important;
+  color: #71717a !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+}
+
+body.admin-workspace-list .sb-search {
+  padding: 0 16px 12px !important;
+  border-bottom: none !important;
+}
+
+body.admin-workspace-list .sb-search input {
+  background: #ffffff !important;
+  border-color: #e7e5e4 !important;
+  color: #18181b !important;
+  border-radius: 12px !important;
+  padding: 10px 12px !important;
+}
+
+body.admin-workspace-list .client-list {
+  padding: 0 12px 12px !important;
+}
+
+body.admin-workspace-list .client-card {
+  min-height: 52px !important;
+  padding: 10px 12px !important;
+  border-left: none !important;
+  border-radius: 14px !important;
+  margin-bottom: 4px !important;
+}
+
+body.admin-workspace-list .client-card:hover {
+  background: #fafaf9 !important;
+}
+
+body.admin-workspace-list .client-card.active {
+  background: #ffffff !important;
+  box-shadow: inset 0 0 0 1px #e7e5e4 !important;
+}
+
+body.admin-workspace-list .client-avatar,
+body.admin-workspace-list .client-avatar.c1,
+body.admin-workspace-list .client-avatar.c2,
+body.admin-workspace-list .client-avatar.c3,
+body.admin-workspace-list .client-avatar.c4 {
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 999px !important;
+  background: #27272a !important;
+  box-shadow: none !important;
+}
+
+body.admin-workspace-list .client-name {
+  color: #18181b !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+body.admin-workspace-list .client-tags {
+  margin-top: 4px !important;
+}
+
+body.admin-workspace-list .sb-add {
+  margin: 8px 12px 14px !important;
+  border: 1px solid #e7e5e4 !important;
+  background: #ffffff !important;
+  color: #18181b !important;
+  border-radius: 12px !important;
+  justify-content: center !important;
+  font-weight: 600 !important;
+}
+
+body.admin-workspace-list .cl-header,
+body.admin-workspace-list .tabs,
+body.admin-workspace-list .tab-panel.active,
+body.admin-workspace-list .chat-list,
+body.admin-workspace-list .msgs-area,
+body.admin-workspace-list .main {
+  background: #ffffff !important;
+}
+
+body.admin-workspace-list .main {
+  margin: 16px 16px 16px 0 !important;
+  border: 1px solid #e7e5e4 !important;
+  border-radius: 28px !important;
+  overflow: hidden !important;
+  box-shadow: none !important;
+}
+
+body.admin-workspace-list .main.inbox-mode {
+  background: #ffffff !important;
+}
+
+body.admin-workspace-list .main.inbox-mode .tab-panel.active {
+  display: block !important;
+  flex: 1 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+body.admin-workspace-list .main.inbox-mode .inbox-wrap {
+  display: grid !important;
+  grid-template-columns: 220px 360px minmax(0, 1fr) !important;
+  min-height: calc(100vh - 34px) !important;
+}
+
+body.admin-workspace-list .main.inbox-mode .inbox-rail {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 18px !important;
+  padding: 28px 18px !important;
+  border-right: 1px solid #efefee !important;
+  background: #fcfcfb !important;
+}
+
+body.admin-workspace-list .main.inbox-mode .inbox-rail-head {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+
+body.admin-workspace-list .main.inbox-mode .inbox-rail-title,
+body.admin-workspace-list .main.inbox-mode .chat-list-title {
+  color: #18181b !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+}
+
+body.admin-workspace-list .main.inbox-mode .inbox-rail-sub,
+body.admin-workspace-list .main.inbox-mode .chat-list-sub {
+  color: #71717a !important;
+  font-size: 13px !important;
+}
+
+body.admin-workspace-list .main.inbox-mode .inbox-filter-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+
+body.admin-workspace-list .main.inbox-mode .inbox-rail-label {
+  color: #71717a !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.02em !important;
+}
+
+body.admin-workspace-list .main.inbox-mode .inbox-filter-item {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  width: 100% !important;
+  border: 0 !important;
+  border-radius: 14px !important;
+  background: transparent !important;
+  color: #52525b !important;
+  padding: 12px 14px !important;
+  font: inherit !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  text-align: left !important;
+  cursor: pointer !important;
+}
+
+body.admin-workspace-list .main.inbox-mode .inbox-rail-link.active,
+body.admin-workspace-list .main.inbox-mode .inbox-filter-item.active {
+  background: #f0f0ef !important;
+  color: #18181b !important;
+}
+
+body.admin-workspace-list .main.inbox-mode .inbox-filter-item strong {
+  min-width: 22px !important;
+  height: 22px !important;
+  border-radius: 999px !important;
+  background: #ffffff !important;
+  border: 1px solid #ececeb !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #52525b !important;
+  font-size: 12px !important;
+}
+
+body.admin-workspace-list .main.inbox-mode .chat-list-pane {
+  display: flex !important;
+  flex-direction: column !important;
+  min-width: 0 !important;
+  border-right: 1px solid #efefee !important;
+}
+
+body.admin-workspace-list .main.inbox-mode .chat-list-head {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 12px !important;
+  padding: 28px 20px 18px !important;
+  border-bottom: 1px solid #efefee !important;
+  background: #ffffff !important;
+}
+
+body.admin-workspace-list .cl-header {
+  padding: 20px 24px 14px !important;
+  border-bottom: 1px solid #efefee !important;
+}
+
+body.admin-workspace-list .cl-header-avatar {
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 999px !important;
+  background: #27272a !important;
+}
+
+body.admin-workspace-list .cl-header-name {
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.03em !important;
+}
+
+body.admin-workspace-list .cl-header-sub {
+  font-size: 13px !important;
+  color: #71717a !important;
+  margin-top: 4px !important;
+}
+
+body.admin-workspace-list .cl-header-pills {
+  display: none !important;
+}
+
+body.admin-workspace-list .tabs {
+  padding: 0 24px !important;
+  border-bottom: 1px solid #efefee !important;
+  gap: 4px !important;
+}
+
+body.admin-workspace-list .tab {
+  min-height: 44px !important;
+  padding: 0 12px !important;
+  color: #71717a !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+
+body.admin-workspace-list .tab.active {
+  color: #18181b !important;
+  border-bottom-color: #18181b !important;
+}
+
+body.admin-workspace-list .inbox-wrap {
+  min-height: calc(100vh - 180px) !important;
+}
+
+body.admin-workspace-list .chat-list {
+  width: 360px !important;
+  border-right: 1px solid #efefee !important;
+}
+
+body.admin-workspace-list .main.inbox-mode .chat-list {
+  width: auto !important;
+  border-right: 0 !important;
+}
+
+body.admin-workspace-list .chat-item {
+  padding: 14px 16px !important;
+  border-bottom: 1px solid #f4f4f5 !important;
+}
+
+body.admin-workspace-list .chat-item:hover {
+  background: #fafaf9 !important;
+}
+
+body.admin-workspace-list .chat-item.active {
+  background: #f5f5f4 !important;
+}
+
+body.admin-workspace-list .chat-av {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 999px !important;
+  background: #f4f4f5 !important;
+  color: #18181b !important;
+  border: none !important;
+}
+
+body.admin-workspace-list .chat-name {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+
+body.admin-workspace-list .chat-preview,
+body.admin-workspace-list .chat-id-line,
+body.admin-workspace-list .chat-time,
+body.admin-workspace-list .msgs-header-sub,
+body.admin-workspace-list .mode-label {
+  color: #71717a !important;
+}
+
+body.admin-workspace-list .msgs-header {
+  padding: 16px 20px !important;
+  border-bottom: 1px solid #efefee !important;
+}
+
+body.admin-workspace-list .main.inbox-mode .msgs-area {
+  display: flex !important;
+  flex-direction: column !important;
+  min-width: 0 !important;
+}
+
+body.admin-workspace-list .msgs-list {
+  padding: 24px !important;
+  background: #ffffff !important;
+}
+
+body.admin-workspace-list .msg-bubble {
+  border-radius: 14px !important;
+  border: 1px solid #ececeb !important;
+  background: #fafaf9 !important;
+  color: #18181b !important;
+}
+
+body.admin-workspace-list .msg.out .msg-bubble {
+  background: #18181b !important;
+  border-color: #18181b !important;
+  color: #ffffff !important;
+}
+
+body.admin-workspace-list .chat-quick-flag,
+body.admin-workspace-list .chat-unread,
+body.admin-workspace-list .tab-badge {
+  background: #18181b !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+body.admin-workspace-list .input-area {
+  padding: 14px 20px 20px !important;
+  border-top: 1px solid #efefee !important;
+}
+
+body.admin-workspace-list .main.inbox-mode .no-chat-sel {
+  gap: 10px !important;
+  color: #71717a !important;
+}
+
+body.admin-workspace-list .main.inbox-mode .no-chat-sel strong {
+  color: #18181b !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}
+
+body.admin-workspace-list .main.inbox-mode .no-chat-sel span {
+  font-size: 13px !important;
+}
+
+body.admin-workspace-list .main.inbox-mode .chat-head-tools {
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+}
+
+body.admin-workspace-list .main.inbox-mode .btn-secondary,
+body.admin-workspace-list .main.inbox-mode .btn-danger {
+  min-height: 38px !important;
+  padding: 0 14px !important;
+  border: 1px solid #e7e5e4 !important;
+  background: #ffffff !important;
+}
+
+body.admin-workspace-list .main.inbox-mode .mode-toggle {
+  padding: 4px 6px !important;
+  border-radius: 999px !important;
+  background: #fafaf9 !important;
+  border: 1px solid #ececeb !important;
+}
+
+body.admin-workspace-list .msg-input {
+  background: #fafaf9 !important;
+  border: 1px solid #e7e5e4 !important;
+  border-radius: 14px !important;
+  padding: 12px 14px !important;
+}
+
+body.admin-workspace-list .msg-input:focus {
+  border-color: #d4d4d8 !important;
+  background: #ffffff !important;
+}
+
+body.admin-workspace-list .send-btn,
+body.admin-workspace-list .btn-primary {
+  background: #18181b !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+
+body.admin-workspace-list .send-btn:hover,
+body.admin-workspace-list .btn-primary:hover {
+  background: #27272a !important;
+}
+
+body.admin-workspace-list .btn-secondary,
+body.admin-workspace-list .btn-danger {
+  border-radius: 12px !important;
+  background: #fafaf9 !important;
+}
+
+body.admin-workspace-list .settings-wrap,
+body.admin-workspace-list .channels-wrap,
+body.admin-workspace-list .bot-wrap {
+  padding: 24px 24px 32px !important;
+  gap: 16px !important;
+  max-width: 780px !important;
+}
+
+body.admin-workspace-list .workspace-view-head {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+
+body.admin-workspace-list .workspace-view-title {
+  color: #18181b !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.03em !important;
+}
+
+body.admin-workspace-list .workspace-view-copy {
+  color: #71717a !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  max-width: 640px !important;
+}
+
+body.admin-workspace-list .info-card,
+body.admin-workspace-list .ch-card,
+body.admin-workspace-list .bot-section,
+body.admin-workspace-list .modal {
+  border-radius: 20px !important;
+  box-shadow: none !important;
+  border-color: #ececeb !important;
+}
+
+body.admin-workspace-list .ch-card,
+body.admin-workspace-list .bot-section-body,
+body.admin-workspace-list .info-row,
+body.admin-workspace-list .bot-actions {
+  font-size: 14px !important;
+}
+
+body.admin-workspace-list .ch-card {
+  padding: 18px 18px !important;
+}
+
+body.admin-workspace-list .info-card-head,
+body.admin-workspace-list .bot-section-head {
+  padding: 14px 18px !important;
+  background: #fafaf9 !important;
+  border-bottom: 1px solid #efefee !important;
+}
+
+body.admin-workspace-list .bot-section-title,
+body.admin-workspace-list .info-card-head {
+  color: #52525b !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+}
+
+body.admin-workspace-list .channel-connect-btn {
+  min-height: 38px !important;
+  padding: 0 14px !important;
+  border-radius: 12px !important;
+  font: inherit !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+}
+
+body.admin-workspace-list .channel-connect-btn.is-primary {
+  border: 0 !important;
+  background: #18181b !important;
+  color: #ffffff !important;
+}
+
+body.admin-workspace-list .channel-connect-btn.is-secondary {
+  border: 1px solid #e7e5e4 !important;
+  background: #fafaf9 !important;
+  color: #52525b !important;
+}
+
+body.admin-workspace-list .bot-subnav {
+  position: static !important;
+  top: auto !important;
+  z-index: auto !important;
+  padding: 0 !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+
+body.admin-workspace-list .bot-subnav-btn {
+  min-height: 38px !important;
+  padding: 0 14px !important;
+  border-radius: 12px !important;
+  background: #fafaf9 !important;
+  color: #52525b !important;
+  border: 1px solid #e7e5e4 !important;
+  box-shadow: none !important;
+}
+
+body.admin-workspace-list .bot-subnav-btn.active {
+  background: #18181b !important;
+  color: #ffffff !important;
+  border-color: #18181b !important;
+  box-shadow: none !important;
+}
+
+body.admin-workspace-list .bot-setup-note,
+body.admin-workspace-list .bot-test-box {
+  background: #fafaf9 !important;
+  border-color: #ececeb !important;
+}
+
+body.admin-workspace-list .bot-step-card,
+body.admin-workspace-list .flow-block-editor,
+body.admin-workspace-list .flow-raw-box {
+  background: #ffffff !important;
+  border-color: #ececeb !important;
+}
+
+body.admin-workspace-list .workspace-panel,
+body.admin-workspace-list .hero-panel,
+body.admin-workspace-list .hero-sidepanel {
+  display: none !important;
+}
+
+body.admin-login {
+  --paper: #f5f5f4;
+  --ink: #18181b;
+  --panel: rgba(255, 255, 255, 0.76);
+  --border: rgba(24, 24, 27, 0.1);
+  --muted: #71717a;
+  --accent: #18181b;
+  --shadow: 0 24px 60px rgba(24, 24, 27, 0.08);
+  --error: #b44343;
+}
+
+body.admin-login {
+  background: #f5f5f4;
+}
+
+body.admin-login .card {
+  border-radius: 32px;
+  box-shadow: var(--shadow);
+}
+
+body.admin-login .btn {
+  background: #18181b;
+}
+
+body.admin-login input:focus {
+  border-color: rgba(37, 99, 235, 0.65);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+@media (max-width: 1180px) {
+  body.admin-dashboard .layout,
+  body.admin-workspace-detail .layout {
+    display: block;
+  }
+
+  body.admin-dashboard .sidebar,
+  body.admin-workspace-detail .sidebar {
+    width: auto;
+    height: auto;
+    padding-bottom: 12px;
+    border-right: none;
+    border-bottom: 1px solid rgba(17, 36, 42, 0.08);
+  }
+}

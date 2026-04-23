@@ -1472,7 +1472,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/auth', (req, res) => {
-  res.redirect(`/auth/connect?botId=${encodeURIComponent(getDefaultBot().id)}`);
+  res.redirect(buildAdminClientsUrl({ tab: 'channels' }));
 });
 
 // ── Instagram send-message interceptor (store-backed fallback) ─────────────────
@@ -1569,54 +1569,95 @@ app.get('/:page', (req, res, next) => {
 // ── Public utility pages ───────────────────────────────────────────────────────
 app.get(['/citech', '/citecht'], (req, res) => res.sendFile(path.join(__dirname, 'public/citech/index.html')));
 
+function resolveAdminClientIdFromRequest(req) {
+  const directClientId = [
+    req.query.client,
+    req.query.clientId,
+    req.query.client_id,
+  ].find(Boolean);
+
+  if (directClientId) {
+    return String(directClientId).trim();
+  }
+
+  const genericId = String(req.query.id || '').trim();
+  if (genericId) {
+    try {
+      const clientRow = D.db.prepare(`SELECT id FROM clients WHERE id = ? LIMIT 1`).get(genericId);
+      if (clientRow?.id) return String(clientRow.id);
+    } catch (_) {}
+  }
+
+  const requestedBotId = String(req.query.botId || req.query.bot_id || req.query.id || '').trim();
+  if (!requestedBotId) return null;
+
+  const resolvedBot = getBotOrDefault(requestedBotId);
+  if (resolvedBot?.client_id) return String(resolvedBot.client_id);
+  if (resolvedBot?.clientId) return String(resolvedBot.clientId);
+
+  try {
+    const dbRow = D.db.prepare(`SELECT client_id FROM bots WHERE id = ? LIMIT 1`).get(requestedBotId);
+    if (dbRow?.client_id) return String(dbRow.client_id);
+  } catch (_) {}
+
+  return null;
+}
+
+function buildAdminClientsRedirect(req, tab = 'inbox') {
+  const params = new URLSearchParams({
+    section: 'clients',
+    tab,
+  });
+
+  const clientId = resolveAdminClientIdFromRequest(req);
+  if (clientId) params.set('client', clientId);
+
+  return `/admin/clients?${params.toString()}`;
+}
+
+function buildAdminClientsUrl({ clientId = null, tab = 'inbox' } = {}) {
+  const params = new URLSearchParams({
+    section: 'clients',
+    tab,
+  });
+
+  if (clientId) params.set('client', String(clientId));
+
+  return `/admin/clients?${params.toString()}`;
+}
+
 // ── Admin Pages (protected) ────────────────────────────────────────────────────
 app.get('/admin', requireAdminAuth, (req, res) => res.sendFile(path.join(__dirname, 'admin-clients.html')));
 app.get('/admin/clients', requireAdminAuth, (req, res) => res.sendFile(path.join(__dirname, 'admin-clients.html')));
-app.get('/admin/client', requireAdminAuth, (req, res) => res.sendFile(path.join(__dirname, 'admin-client.html')));
+app.get('/admin/client', requireAdminAuth, (req, res) => res.redirect(buildAdminClientsRedirect(req, 'settings')));
 app.get('/broadcasts', requireAdminAuth, (req, res) => res.redirect('/admin?section=broadcasts'));
 app.get('/settings',   requireAdminAuth, (req, res) => res.redirect('/admin?section=platform'));
-app.get('/channels',   requireAdminAuth, (req, res) => res.redirect('/admin?section=clients'));
+app.get('/channels',   requireAdminAuth, (req, res) => res.redirect(buildAdminClientsRedirect(req, 'channels')));
 
 // ── .html → route redirects (for old links/bookmarks) ─────────────────────────
-app.get('/dashboard.html',         (req, res) => res.redirect('/dashboard'));
-app.get('/bots.html',              (req, res) => res.redirect('/bots'));
-app.get('/channels.html',          (req, res) => res.redirect('/auth/channels'));
-app.get('/analytics.html',         (req, res) => res.redirect('/analytics'));
+app.get('/dashboard.html',         (req, res) => res.redirect('/admin/clients'));
+app.get('/bots.html',              (req, res) => res.redirect(buildAdminClientsRedirect(req, 'bot')));
+app.get('/channels.html',          (req, res) => res.redirect(buildAdminClientsRedirect(req, 'channels')));
+app.get('/analytics.html',         (req, res) => res.redirect('/admin/clients'));
 app.get('/constructor.html',       (req, res) => res.redirect('/constructor'));
 app.get('/admin-clients.html',     (req, res) => res.redirect('/admin'));
-app.get('/admin-client.html',      (req, res) => res.redirect(`/admin/client${req.query.id ? '?id=' + req.query.id : ''}`));
+app.get('/admin-client.html',      (req, res) => res.redirect(buildAdminClientsRedirect(req, 'settings')));
 
-app.get('/auth/channels', requireAdminAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, 'channels.html'));
-});
+app.get('/auth/channels', requireAdminAuth, (req, res) => res.redirect(buildAdminClientsRedirect(req, 'channels')));
 
-app.get('/dashboard', requireAdminAuth, (req, res) => {
-  res.redirect('/admin?section=dashboard');
-});
+app.get('/dashboard', requireAdminAuth, (req, res) => res.redirect('/admin/clients'));
 
-app.get('/bots', requireAdminAuth, (req, res) => {
-  res.redirect('/admin?section=bots');
-});
+app.get('/bots', requireAdminAuth, (req, res) => res.redirect(buildAdminClientsRedirect(req, 'bot')));
 
-app.get('/bot', requireAdminAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, 'bot.html'));
-});
+app.get('/bot', requireAdminAuth, (req, res) => res.redirect(buildAdminClientsRedirect(req, 'bot')));
 
-app.get('/workspace-app', requireAdminAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, 'workspace-app.html'));
-});
+app.get('/workspace-app', requireAdminAuth, (req, res) => res.redirect(buildAdminClientsRedirect(req, 'settings')));
 
-app.get('/bot-scope-app', requireAdminAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, 'bot-scope-app.html'));
-});
+app.get('/bot-scope-app', requireAdminAuth, (req, res) => res.redirect(buildAdminClientsRedirect(req, 'inbox')));
 
-app.get('/bot-inbox-lite', requireAdminAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, 'bot-scope-app.html'));
-});
+app.get('/bot-inbox-lite', requireAdminAuth, (req, res) => res.redirect(buildAdminClientsRedirect(req, 'inbox')));
 
-app.get('/auth/bot-scope-app', requireAdminAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, 'bot-scope-app.html'));
-});
+app.get('/auth/bot-scope-app', requireAdminAuth, (req, res) => res.redirect(buildAdminClientsRedirect(req, 'inbox')));
 
 app.get('/connect-studio', requireAdminAuth, (req, res) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
@@ -1969,13 +2010,9 @@ app.get('/train', (req, res) => {
   res.sendFile(path.join(__dirname, 'train.html'));
 });
 
-app.get('/analytics', requireAdminAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, 'analytics.html'));
-});
+app.get('/analytics', requireAdminAuth, (req, res) => res.redirect('/admin/clients'));
 
-app.get('/inbox', requireAdminAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, 'inbox.html'));
-});
+app.get('/inbox', requireAdminAuth, (req, res) => res.redirect(buildAdminClientsRedirect(req, 'inbox')));
 
 app.get('/demo', (req, res) => {
   res.sendFile(path.join(__dirname, 'demo.html'));
@@ -1991,12 +2028,10 @@ app.get('/auth/instagram/connect', (req, res) => {
 });
 
 app.get('/auth/connect', (req, res) => {
-  res.sendFile(path.join(__dirname, 'channels.html'));
+  res.redirect(buildAdminClientsRedirect(req, 'channels'));
 });
 
-app.get('/auth/permissions', (req, res) => {
-  res.sendFile(path.join(__dirname, 'permissions.html'));
-});
+app.get('/auth/permissions', (req, res) => res.redirect(buildAdminClientsRedirect(req, 'channels')));
 
 app.get('/auth/api/permissions', async (req, res) => {
   try {
@@ -2817,7 +2852,7 @@ app.post('/api/onboarding/register', (req, res) => {
   const ADMIN_PHONE = process.env.ADMIN_NOTIFY_PHONE || '32456912464';
   const nicheLabel  = { kapsalon: '✂️ Kapsalon', schoonheid: '💅 Schoonheid', restaurant: '🍽️ Restaurant', garage: '🔧 Garage', advocaat: '⚖️ Advocaat', zorg: '🏥 Zorg', vastgoed: '🏠 Vastgoed', fitness: '💪 Fitness', andere: '📋 Andere' }[nicheKey] || nicheKey;
   if (WA_PHONE_ID && WA_TOKEN) {
-    const msgText = `🆕 *Nieuwe aanmelding BotMatic*\n\n🏢 ${company.trim()}\n🏷️ ${nicheLabel}\n👤 ${contact_name.trim()}\n📞 ${contact_phone.trim()}${(contact_email || '').trim() ? '\n📧 ' + contact_email.trim() : ''}\n\n✅ Bot prompt automatisch ingesteld\n👉 botmatic.be/admin/client?id=${clientId}`;
+    const msgText = `🆕 *Nieuwe aanmelding BotMatic*\n\n🏢 ${company.trim()}\n🏷️ ${nicheLabel}\n👤 ${contact_name.trim()}\n📞 ${contact_phone.trim()}${(contact_email || '').trim() ? '\n📧 ' + contact_email.trim() : ''}\n\n✅ Bot prompt automatisch ingesteld\n👉 botmatic.be/admin/clients?section=clients&tab=settings&client=${clientId}`;
     axios.post(
       `https://graph.facebook.com/v19.0/${WA_PHONE_ID}/messages`,
       {
@@ -3004,7 +3039,7 @@ app.get('/auth/instagram/login', (req, res) => {
     return renderErrorPage(res, {
       title: 'Instagram not configured',
       description: `Missing Instagram app credentials for auth mode: ${igAuth.mode}.`,
-      actionHref: `/auth/connect?botId=${encodeURIComponent(bot.id)}`,
+      actionHref: buildAdminClientsUrl({ tab: 'channels' }),
       actionLabel: 'Back to channels',
     });
   }
@@ -3055,8 +3090,8 @@ app.get('/auth/instagram/callback', async (req, res) => {
   const igAuth = getInstagramAuthConfig(authMode);
   const bot = getBotOrDefault(botId);
   const actionHref = clientId
-    ? `/admin/client?id=${clientId}`
-    : `/auth/connect?botId=${encodeURIComponent(bot.id)}`;
+    ? buildAdminClientsUrl({ clientId, tab: 'channels' })
+    : buildAdminClientsUrl({ tab: 'channels' });
 
   if (error) {
     return renderErrorPage(res, {
@@ -3171,9 +3206,7 @@ app.get('/auth/instagram/callback', async (req, res) => {
         `Instagram Login channel connected: bot=${bot.id}, igId=${igBusinessId}, username=${igProfile.username || 'N/A'}`
       );
 
-      if (clientId) {
-        return res.redirect(`/admin/client?id=${clientId}`);
-      }
+      if (clientId) return res.redirect(buildAdminClientsUrl({ clientId, tab: 'channels' }));
 
       return res.send(renderConnectionResultPage({
         title: 'Instagram Connected',
@@ -3410,9 +3443,7 @@ app.get('/auth/instagram/callback', async (req, res) => {
     );
 
     // Redirect back to admin client card if came from there
-    if (clientId) {
-      return res.redirect(`/admin/client?id=${clientId}`);
-    }
+    if (clientId) return res.redirect(buildAdminClientsUrl({ clientId, tab: 'channels' }));
 
     res.send(renderConnectionResultPage({
       title: 'Instagram Connected',
@@ -3445,7 +3476,7 @@ app.get('/auth/messenger/login', (req, res) => {
     return renderErrorPage(res, {
       title: 'Messenger not configured',
       description: 'Please fill in MESSENGER_APP_ID and MESSENGER_APP_SECRET first.',
-      actionHref: `/auth/connect?botId=${encodeURIComponent(bot.id)}`,
+      actionHref: buildAdminClientsUrl({ tab: 'channels' }),
       actionLabel: 'Back to channels',
     });
   }
@@ -3483,8 +3514,8 @@ app.get('/auth/messenger/callback', async (req, res) => {
   const bot = getBotOrDefault(oauthData?.botId || req.query.botId);
   const msClientId = oauthData?.clientId || null;
   const actionHref = msClientId
-    ? `/admin/client?id=${msClientId}`
-    : `/auth/connect?botId=${encodeURIComponent(bot.id)}`;
+    ? buildAdminClientsUrl({ clientId: msClientId, tab: 'channels' })
+    : buildAdminClientsUrl({ tab: 'channels' });
 
   if (error || errorCode || errorMessage) {
     const parts = [errorDescription || errorMessage || error];
@@ -3544,7 +3575,7 @@ app.get('/auth/messenger/callback', async (req, res) => {
     if (pages.length === 1) {
       const channel = await finalizeMessengerConnection(bot.id, pages[0]);
       saveChannelToDb(msClientId, bot.id, 'messenger', channel);
-      if (msClientId) return res.redirect(`/admin/client?id=${msClientId}`);
+      if (msClientId) return res.redirect(buildAdminClientsUrl({ clientId: msClientId, tab: 'channels' }));
       return res.send(renderConnectionResultPage({
         title: 'Messenger Connected',
         subtitle: 'Your Facebook Page is subscribed to webhooks and ready for replies.',
@@ -3589,7 +3620,7 @@ app.get('/auth/messenger/select', async (req, res) => {
     return renderErrorPage(res, {
       title: 'Messenger Page Selection Error',
       description: 'The page selection link is missing or expired.',
-      actionHref: '/auth/connect',
+      actionHref: buildAdminClientsUrl({ tab: 'channels' }),
       actionLabel: 'Back to Channels',
     });
   }
@@ -3601,7 +3632,7 @@ app.get('/auth/messenger/select', async (req, res) => {
     return renderErrorPage(res, {
       title: 'Messenger Page Selection Error',
       description: 'The selected page is no longer available.',
-      actionHref: `/auth/connect?botId=${encodeURIComponent(pending.botId || getDefaultBot().id)}`,
+      actionHref: buildAdminClientsUrl({ clientId: pending.clientId || null, tab: 'channels' }),
       actionLabel: 'Back to Channels',
     });
   }
@@ -3611,7 +3642,7 @@ app.get('/auth/messenger/select', async (req, res) => {
     const channel = await finalizeMessengerConnection(bot.id, page);
     saveChannelToDb(pending.clientId || null, bot.id, 'messenger', channel);
 
-    if (pending.clientId) return res.redirect(`/admin/client?id=${pending.clientId}`);
+    if (pending.clientId) return res.redirect(buildAdminClientsUrl({ clientId: pending.clientId, tab: 'channels' }));
 
     res.send(renderConnectionResultPage({
       title: 'Messenger Connected',
@@ -3621,7 +3652,7 @@ app.get('/auth/messenger/select', async (req, res) => {
         `Page: ${escapeHtml(channel.pageName)}`,
         `Page ID: ${escapeHtml(channel.pageId)}`,
       ],
-      actionHref: `/auth/connect?botId=${encodeURIComponent(bot.id)}`,
+      actionHref: buildAdminClientsUrl({ clientId: pending.clientId || null, tab: 'channels' }),
       actionLabel: 'Open Channels',
     }));
   } catch (err) {
@@ -3630,7 +3661,7 @@ app.get('/auth/messenger/select', async (req, res) => {
     renderErrorPage(res, {
       title: 'Messenger Connection Failed',
       description: JSON.stringify(err.response?.data || err.message),
-      actionHref: `/auth/connect?botId=${encodeURIComponent(pending.botId || getDefaultBot().id)}`,
+      actionHref: buildAdminClientsUrl({ clientId: pending.clientId || null, tab: 'channels' }),
       actionLabel: 'Back to Channels',
     });
   }

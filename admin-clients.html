@@ -7,22 +7,22 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --sb-bg: #111118;
+      --sb-bg: #18181b;
       --sb-hover: rgba(255,255,255,0.05);
-      --sb-active: rgba(108,92,231,0.15);
-      --sb-active-border: #6c5ce7;
-      --sb-text: #c8c8d8;
-      --sb-muted: #4a4a68;
+      --sb-active: rgba(255,255,255,0.08);
+      --sb-active-border: #fafaf9;
+      --sb-text: #f4f4f5;
+      --sb-muted: #a1a1aa;
       --sb-border: rgba(255,255,255,0.07);
-      --bg: #f4f5f9;
+      --bg: #f5f5f4;
       --surface: #ffffff;
-      --surface2: #f0f1f6;
-      --surface3: #e8eaf2;
-      --border: #e2e4ed;
-      --text: #1a1b2e;
-      --muted: #8b90a7;
-      --accent: #6c5ce7;
-      --accent-soft: rgba(108,92,231,0.1);
+      --surface2: #fafaf9;
+      --surface3: #ececeb;
+      --border: #e4e4e7;
+      --text: #18181b;
+      --muted: #71717a;
+      --accent: #18181b;
+      --accent-soft: rgba(24,24,27,0.06);
       --green: #10b981;
       --red: #ef4444;
       --yellow: #f59e0b;
@@ -46,7 +46,7 @@
     }
     .sb-logo-icon {
       width: 27px; height: 27px; border-radius: 7px;
-      background: linear-gradient(135deg, #6c5ce7, #a855f7);
+      background: #27272a;
       display: flex; align-items: center; justify-content: center; font-size: 13px;
     }
     .sb-search {
@@ -75,14 +75,14 @@
 
     .client-avatar {
       width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
-      background: linear-gradient(135deg, #6c5ce7, #a855f7);
+      background: #27272a;
       display: flex; align-items: center; justify-content: center;
       font-weight: 700; font-size: 11px; color: #fff;
     }
-    .client-avatar.c1 { background: linear-gradient(135deg,#3b82f6,#06b6d4); }
-    .client-avatar.c2 { background: linear-gradient(135deg,#059669,#10b981); }
-    .client-avatar.c3 { background: linear-gradient(135deg,#d97706,#f59e0b); }
-    .client-avatar.c4 { background: linear-gradient(135deg,#dc2626,#f87171); }
+    .client-avatar.c1,
+    .client-avatar.c2,
+    .client-avatar.c3,
+    .client-avatar.c4 { background: #3f3f46; }
 
     .client-info { flex: 1; min-width: 0; }
     .client-name { font-size: 12.5px; font-weight: 500; color: var(--sb-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -110,7 +110,7 @@
       transition: all .15s; background: none; font-family: inherit; width: calc(100% - 16px);
       flex-shrink: 0;
     }
-    .sb-add:hover { border-color: var(--accent); color: #a899ff; background: rgba(108,92,231,0.08); }
+    .sb-add:hover { border-color: rgba(255,255,255,0.18); color: #fff; background: rgba(255,255,255,0.05); }
 
     /* ── MAIN ── */
     .main { flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; min-height: 0; }
@@ -130,7 +130,7 @@
     }
     .cl-header-avatar {
       width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
-      background: linear-gradient(135deg, #6c5ce7, #a855f7);
+      background: #27272a;
       display: flex; align-items: center; justify-content: center;
       font-weight: 700; font-size: 14px; color: #fff;
     }
@@ -291,7 +291,7 @@
       font-family: inherit; transition: background .15s; flex-shrink: 0;
       display: flex; align-items: center; gap: 6px;
     }
-    .send-btn:hover { background: #5a4bd1; }
+    .send-btn:hover { background: #27272a; }
     .send-btn:disabled { opacity: .5; cursor: not-allowed; }
 
     /* ── CHANNELS TAB ── */
@@ -1393,9 +1393,275 @@
       .signal-grid,
       .coverage-grid { grid-template-columns: 1fr; }
     }
+
+    /* Simple inbox-style layout */
+    body.admin-workspace-list {
+      background: #efefee;
+      color: #18181b;
+      font-family: 'Inter', sans-serif;
+    }
+    body.admin-workspace-list .sidebar-summary,
+    body.admin-workspace-list .sb-divider {
+      display: none;
+    }
+    body.admin-workspace-list .sidebar {
+      width: 280px;
+      background: #f5f5f4;
+      border-right: 1px solid #e7e5e4;
+      box-shadow: none;
+    }
+    body.admin-workspace-list .sb-logo {
+      padding: 22px 20px 18px;
+      color: #18181b;
+      font-size: 15px;
+      font-weight: 700;
+      border-bottom: none;
+    }
+    body.admin-workspace-list .sb-logo-icon {
+      display: none;
+    }
+    body.admin-workspace-list .sb-nav {
+      padding: 0 12px 10px;
+    }
+    body.admin-workspace-list .sb-nav-item {
+      min-height: 44px;
+      padding: 0 14px;
+      border-radius: 12px;
+      border-left: none;
+      color: #3f3f46;
+      font-size: 14px;
+    }
+    body.admin-workspace-list .sb-nav-item.active {
+      background: #e7e5e4;
+      color: #18181b;
+    }
+    body.admin-workspace-list .sb-section-label {
+      padding: 12px 20px 8px;
+      color: #71717a;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+    body.admin-workspace-list .sb-search {
+      padding: 0 16px 12px;
+      border-bottom: none;
+    }
+    body.admin-workspace-list .sb-search input {
+      background: #ffffff;
+      border: 1px solid #e7e5e4;
+      border-radius: 12px;
+      color: #18181b;
+      padding: 10px 12px;
+    }
+    body.admin-workspace-list .client-list {
+      padding: 0 12px 12px;
+    }
+    body.admin-workspace-list .client-card {
+      min-height: 52px;
+      padding: 10px 12px;
+      border-left: none;
+      border-radius: 14px;
+      margin-bottom: 4px;
+    }
+    body.admin-workspace-list .client-card.active {
+      background: #ffffff;
+      box-shadow: inset 0 0 0 1px #e7e5e4;
+    }
+    body.admin-workspace-list .client-card:hover {
+      background: #fafaf9;
+    }
+    body.admin-workspace-list .client-avatar,
+    body.admin-workspace-list .client-avatar.c1,
+    body.admin-workspace-list .client-avatar.c2,
+    body.admin-workspace-list .client-avatar.c3,
+    body.admin-workspace-list .client-avatar.c4 {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: #27272a;
+      box-shadow: none;
+    }
+    body.admin-workspace-list .client-name {
+      color: #18181b;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    body.admin-workspace-list .client-tags {
+      margin-top: 4px;
+    }
+    body.admin-workspace-list .sb-add {
+      margin: 8px 12px 14px;
+      border: 1px solid #e7e5e4;
+      background: #ffffff;
+      color: #18181b;
+      border-radius: 12px;
+      justify-content: center;
+      font-weight: 600;
+    }
+    body.admin-workspace-list .main {
+      margin: 16px 16px 16px 0;
+      background: #ffffff;
+      border: 1px solid #e7e5e4;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: none;
+    }
+    body.admin-workspace-list .cl-header {
+      padding: 20px 24px 14px;
+      background: #ffffff;
+      border-bottom: 1px solid #efefee;
+    }
+    body.admin-workspace-list .cl-header-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: #27272a;
+    }
+    body.admin-workspace-list .cl-header-name {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+    body.admin-workspace-list .cl-header-sub {
+      font-size: 13px;
+      color: #71717a;
+      margin-top: 4px;
+    }
+    body.admin-workspace-list .cl-header-pills {
+      display: none;
+    }
+    body.admin-workspace-list .tabs {
+      padding: 0 24px;
+      background: #ffffff;
+      border-bottom: 1px solid #efefee;
+      gap: 4px;
+    }
+    body.admin-workspace-list .tab {
+      min-height: 44px;
+      padding: 0 12px;
+      color: #71717a;
+      font-size: 14px;
+      font-weight: 600;
+      border-bottom: 2px solid transparent;
+    }
+    body.admin-workspace-list .tab.active {
+      color: #18181b;
+      border-bottom-color: #18181b;
+    }
+    body.admin-workspace-list .tab-panel.active,
+    body.admin-workspace-list .chat-list,
+    body.admin-workspace-list .msgs-area,
+    body.admin-workspace-list .input-area,
+    body.admin-workspace-list .msgs-header {
+      background: #ffffff;
+    }
+    body.admin-workspace-list .inbox-wrap {
+      min-height: calc(100vh - 180px);
+    }
+    body.admin-workspace-list .chat-list {
+      width: 360px;
+      border-right: 1px solid #efefee;
+    }
+    body.admin-workspace-list .chat-item {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f4f4f5;
+    }
+    body.admin-workspace-list .chat-item:hover {
+      background: #fafaf9;
+    }
+    body.admin-workspace-list .chat-item.active {
+      background: #f5f5f4;
+    }
+    body.admin-workspace-list .chat-av {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: #f4f4f5;
+      color: #18181b;
+      border: none;
+    }
+    body.admin-workspace-list .chat-name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    body.admin-workspace-list .chat-preview,
+    body.admin-workspace-list .chat-id-line,
+    body.admin-workspace-list .chat-time,
+    body.admin-workspace-list .msgs-header-sub,
+    body.admin-workspace-list .mode-label {
+      color: #71717a;
+    }
+    body.admin-workspace-list .msgs-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid #efefee;
+    }
+    body.admin-workspace-list .msgs-list {
+      padding: 24px;
+      background: #ffffff;
+    }
+    body.admin-workspace-list .msg-bubble {
+      border-radius: 14px;
+      border: 1px solid #ececeb;
+      background: #fafaf9;
+      color: #18181b;
+    }
+    body.admin-workspace-list .msg.out .msg-bubble {
+      background: #18181b;
+      border-color: #18181b;
+      color: #ffffff;
+    }
+    body.admin-workspace-list .chat-quick-flag,
+    body.admin-workspace-list .chat-unread,
+    body.admin-workspace-list .tab-badge {
+      background: #18181b;
+      color: #ffffff;
+      border: none;
+    }
+    body.admin-workspace-list .input-area {
+      padding: 14px 20px 20px;
+      border-top: 1px solid #efefee;
+    }
+    body.admin-workspace-list .msg-input {
+      background: #fafaf9;
+      border: 1px solid #e7e5e4;
+      border-radius: 14px;
+      padding: 12px 14px;
+    }
+    body.admin-workspace-list .msg-input:focus {
+      border-color: #d4d4d8;
+      background: #ffffff;
+    }
+    body.admin-workspace-list .send-btn,
+    body.admin-workspace-list .btn-primary {
+      background: #18181b;
+      border-radius: 14px;
+      box-shadow: none;
+    }
+    body.admin-workspace-list .send-btn:hover,
+    body.admin-workspace-list .btn-primary:hover {
+      background: #27272a;
+    }
+    body.admin-workspace-list .btn-secondary,
+    body.admin-workspace-list .btn-danger {
+      border-radius: 12px;
+      background: #fafaf9;
+    }
+    body.admin-workspace-list .settings-wrap,
+    body.admin-workspace-list .channels-wrap,
+    body.admin-workspace-list .bot-wrap {
+      padding: 20px 24px 28px;
+    }
+    body.admin-workspace-list .info-card,
+    body.admin-workspace-list .ch-card,
+    body.admin-workspace-list .bot-section {
+      border-radius: 18px;
+      box-shadow: none;
+    }
   </style>
+  <link rel="stylesheet" href="/css/admin-shell.css" />
 </head>
-<body>
+<body class="admin-shell admin-workspace-list">
 
 <!-- SIDEBAR -->
 <div class="sidebar">
@@ -1406,54 +1672,37 @@
 
   <!-- Global Nav -->
   <div class="sb-nav">
-    <button class="sb-nav-item" id="nav-dashboard" onclick="switchSection('dashboard')">
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 13h8V3H3zM13 21h8v-6h-8zM13 11h8V3h-8zM3 21h8v-6H3z"/></svg>
-      Overview
-    </button>
     <button class="sb-nav-item active" id="nav-clients" onclick="switchSection('clients')">
       <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
-      Clients
+      Workspaces
       <span class="sb-nav-badge" id="clientsNavBadge">0</span>
-    </button>
-    <button class="sb-nav-item" id="nav-bots" onclick="switchSection('bots')">
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4M8 16h.01M16 16h.01"/></svg>
-      Bots
-      <span class="sb-nav-badge" id="botsNavBadge">0</span>
     </button>
   </div>
 
   <div class="sb-divider"></div>
 
   <div class="sidebar-summary" id="sidebarSummary">
-    <div class="summary-eyebrow">Control Center</div>
-    <div class="summary-title">Loading data...</div>
-    <div class="summary-copy">Collecting workspace, channel, and bot status.</div>
+    <div class="summary-eyebrow">Быстрый обзор</div>
+    <div class="summary-title">Загрузка...</div>
+    <div class="summary-copy">Список workspaces и их статус подключения.</div>
     <div class="summary-metrics">
-      <div class="summary-metric"><strong>0</strong><span>Clients</span></div>
+      <div class="summary-metric"><strong>0</strong><span>Workspaces</span></div>
       <div class="summary-metric"><strong>0</strong><span>Channels</span></div>
     </div>
   </div>
 
   <!-- Client list (visible when section=clients or client selected) -->
   <div id="clientsPanel" style="display:flex;flex:1;overflow:hidden;flex-direction:column;">
-    <div class="sb-section-label">Clients</div>
+    <div class="sb-section-label">Workspaces</div>
     <div class="sb-search">
-      <input type="text" placeholder="Search clients..." id="searchInput" oninput="filterClients(this.value)" />
+      <input type="text" placeholder="Найти workspace..." id="searchInput" oninput="filterClients(this.value)" />
     </div>
     <div class="client-list" id="clientList">
       <div class="loading" style="color:rgba(255,255,255,.2);font-size:12px">loading...</div>
     </div>
     <button class="sb-add" onclick="openAddModal()">
       <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-      New client
-    </button>
-  </div>
-
-  <!-- Bottom nav -->
-  <div class="sb-bottom">
-    <button class="sb-nav-item" id="nav-platform" onclick="switchSection('platform')">
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-      Platform settings
+      Новый workspace
     </button>
   </div>
 </div>
@@ -1462,25 +1711,25 @@
 <div class="main" id="mainArea">
   <div class="empty-state">
     <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.3" viewBox="0 0 24 24" style="opacity:.2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-    <h3>Select a client</h3>
-    <p style="font-size:12px">Choose a client from the left sidebar</p>
+    <h3>Выбери workspace</h3>
+    <p style="font-size:12px">Слева список клиентов</p>
   </div>
 </div>
 
 <!-- ADD MODAL -->
 <div class="modal-overlay" id="addModal">
   <div class="modal">
-    <div class="modal-title">New client</div>
+    <div class="modal-title">Новый workspace</div>
     <div class="form-group">
-      <div class="form-label">Company name</div>
+      <div class="form-label">Компания</div>
       <input class="form-input" id="newName" placeholder="Dock KZ" />
     </div>
     <div class="form-group">
-      <div class="form-label">Niche</div>
-      <input class="form-input" id="newNiche" placeholder="Notary, restaurant, store..." />
+      <div class="form-label">Ниша</div>
+      <input class="form-input" id="newNiche" placeholder="Нотариус, ресторан, магазин..." />
     </div>
     <div class="form-group">
-      <div class="form-label">Contact</div>
+      <div class="form-label">Контакт</div>
       <input class="form-input" id="newContact" placeholder="+7 777 123 45 67" />
     </div>
     <div class="modal-actions">
@@ -1495,12 +1744,12 @@
 <script>
   const API = '/api/admin';
   let clients = [], activeClient = null, activeTab = 'inbox';
-  let chats = [], activeChat = null;
+  let chats = [], activeChat = null, inboxFilter = 'all';
   let botsOverview = [];
   let botsFilter = 'all';
   let botsSearch = '';
   let searchQ = '';
-  let currentSection = 'dashboard';
+  let currentSection = 'clients';
 
   function updateAdminUrl(extra = {}) {
     const params = new URLSearchParams(location.search);
@@ -1523,32 +1772,19 @@
 
   // ── SECTION NAVIGATION ──
   function switchSection(section) {
-    if (!['dashboard', 'clients', 'bots', 'platform'].includes(section)) section = 'clients';
-    currentSection = section;
+    currentSection = 'clients';
     // Update nav items
     document.querySelectorAll('.sb-nav-item').forEach(el => el.classList.remove('active'));
-    const navEl = document.getElementById('nav-' + section);
+    const navEl = document.getElementById('nav-clients');
     if (navEl) navEl.classList.add('active');
     // Show/hide client list panel
     const cp = document.getElementById('clientsPanel');
-    cp.style.display = section === 'clients' ? 'flex' : 'none';
-    updateAdminUrl({ section, clientId: section === 'clients' ? activeClient?.id : '', tab: section === 'clients' ? activeTab : '' });
+    cp.style.display = 'flex';
+    updateAdminUrl({ section: 'clients', clientId: activeClient?.id || '', tab: activeTab });
     renderCurrentSection();
   }
 
   function renderCurrentSection() {
-    if (currentSection === 'dashboard') {
-      renderDashboard();
-      return;
-    }
-    if (currentSection === 'bots') {
-      renderBotsSection();
-      return;
-    }
-    if (currentSection === 'platform') {
-      renderPlatformSettings();
-      return;
-    }
     if (activeClient) renderMain();
     else renderClientEmpty();
   }
@@ -1563,24 +1799,25 @@
     const liveBots = botsOverview.filter(bot => bot.state === 'live').length;
     const needsSetup = Math.max(0, totalClients - liveBots);
     el.innerHTML = `
-      <div class="summary-eyebrow">Control Center</div>
-      <div class="summary-title">${totalClients ? 'Operations are under control' : 'Connect the first workspace'}</div>
-      <div class="summary-copy">${totalClients ? 'Open the overview, monitor bots, and jump quickly into the inbox or client settings.' : 'Once clients appear, this area will show a live overview of channels, bots, and launch readiness.'}</div>
+      <div class="summary-eyebrow">Быстрый обзор</div>
+      <div class="summary-title">${totalClients ? 'Все workspaces под рукой' : 'Создай первый workspace'}</div>
+      <div class="summary-copy">${totalClients ? 'Слева список клиентов, справа их сообщения, каналы и настройки.' : 'После создания workspace здесь появится короткая сводка.'}</div>
       <div class="summary-metrics">
-        <div class="summary-metric"><strong>${totalClients}</strong><span>Clients</span></div>
+        <div class="summary-metric"><strong>${totalClients}</strong><span>Workspaces</span></div>
         <div class="summary-metric"><strong>${totalConnectedChannels}</strong><span>Channels</span></div>
         <div class="summary-metric"><strong>${liveBots}</strong><span>Live bots</span></div>
-        <div class="summary-metric"><strong>${needsSetup}</strong><span>Need setup</span></div>
+        <div class="summary-metric"><strong>${needsSetup}</strong><span>Нужно проверить</span></div>
       </div>
     `;
   }
 
   function renderClientEmpty() {
+    document.getElementById('mainArea')?.classList.remove('inbox-mode');
     document.getElementById('mainArea').innerHTML = `
       <div class="empty-state">
         <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.3" viewBox="0 0 24 24" style="opacity:.2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-        <h3>Select a workspace</h3>
-        <p style="font-size:12px">Use the client list on the left. Overview and bots are available at the top.</p>
+        <h3>Выбери workspace</h3>
+        <p style="font-size:12px">Слева список клиентов. После выбора откроются сообщения, каналы и настройки.</p>
       </div>`;
   }
 
@@ -2119,6 +2356,7 @@
 
   // ── RENDER MAIN ──
   function renderMain() {
+    syncMainMode();
     const c = activeClient;
     const chs = clientChannels(c);
     const hasWa = chs.find(ch => ch.type === 'whatsapp' && isConnected(ch));
@@ -2127,9 +2365,7 @@
     const hasMs = chs.find(ch => ch.type === 'messenger' && isConnected(ch));
     const totalConnected = [hasWa, hasMs, hasTg, hasIg].filter(Boolean).length;
     const botCount = activeClient?._bots?.length || 0;
-    const healthLabel = totalConnected >= 2 && botCount ? 'Launch-ready' : totalConnected ? 'Needs polish' : 'Connect channels';
-    const createdLabel = c.created_at ? new Date(c.created_at).toLocaleDateString('ru-RU') : '—';
-    const showWorkspaceStrip = activeTab === 'inbox';
+    const healthLabel = totalConnected >= 2 && botCount ? 'Готов к запуску' : totalConnected ? 'Нужно допилить' : 'Подключи каналы';
     const connectedPills = [
       hasMs ? `<div class="ch-pill ms"><div class="ch-pill-dot"></div>Messenger</div>` : '',
       hasWa ? `<div class="ch-pill wa"><div class="ch-pill-dot"></div>WhatsApp</div>` : '',
@@ -2137,49 +2373,27 @@
       hasIg ? `<div class="ch-pill ig"><div class="ch-pill-dot"></div>Instagram</div>` : ''
     ].filter(Boolean).join('');
 
-    document.getElementById('mainArea').innerHTML = `
+    const content = `
       <div class="cl-header">
         <div class="cl-header-avatar">${initials(clientName(c))}</div>
         <div class="cl-header-info">
           <div class="cl-header-name">${clientName(c)}</div>
-          <div class="cl-header-sub">${c.niche || ''}${c.contact_name ? ' · ' + c.contact_name : ''}</div>
+          <div class="cl-header-sub">${c.niche || 'Ниша не указана'}${c.contact_name ? ' · ' + c.contact_name : ''}</div>
         </div>
         <div class="cl-header-pills">
-          ${connectedPills || '<div class="ch-pill off"><div class="ch-pill-dot"></div>No channels connected</div>'}
-          <div class="ch-pill off"><div class="ch-pill-dot"></div>${totalConnected} channels · ${botCount} bot</div>
+          ${connectedPills || '<div class="ch-pill off"><div class="ch-pill-dot"></div>Каналы не подключены</div>'}
+          <div class="ch-pill off"><div class="ch-pill-dot"></div>${healthLabel}</div>
         </div>
       </div>
-      ${showWorkspaceStrip ? `
-        <div class="workspace-strip" id="workspaceStrip">
-          <div class="workspace-panel">
-            <div class="workspace-kicker">Workspace Snapshot</div>
-            <div class="workspace-title">${clientName(c)}</div>
-            <div class="workspace-copy">${c.niche ? `${esc(c.niche)}.` : 'Niche is not filled in yet.'} ${c.contact_name ? `Primary contact: ${esc(c.contact_name)}.` : 'Add a contact so the team can navigate this workspace faster.'} ${totalConnected ? 'Channels are already connected from this workspace card.' : 'Connect at least one channel first.'}</div>
-            <div class="workspace-actions">
-              <button class="hero-btn" onclick="switchTab('inbox')">Open inbox</button>
-              <button class="hero-ghost" onclick="switchTab('bot')">Configure bot</button>
-              <button class="hero-ghost" onclick="switchTab('channels')">Connect channels</button>
-            </div>
-          </div>
-          <div class="workspace-panel">
-            <div class="workspace-stats">
-              <div class="workspace-stat"><strong>${totalConnected}</strong><span>Connected channels</span><small>${healthLabel}</small></div>
-              <div class="workspace-stat"><strong>${botCount}</strong><span>Configured bots</span><small>${botCount ? 'The bot can already be edited from this workspace card.' : 'Create the first bot in the “Bot” tab.'}</small></div>
-              <div class="workspace-stat"><strong>${c.contact_phone ? '1' : '0'}</strong><span>Primary contact</span><small>${c.contact_phone ? esc(c.contact_phone) : 'Phone number is not set.'}</small></div>
-              <div class="workspace-stat"><strong>${createdLabel}</strong><span>Created</span><small>Client ID: ${esc(c.id)}</small></div>
-            </div>
-          </div>
-        </div>
-      ` : ''}
       <div class="tabs">
         <div class="tab ${activeTab==='inbox'?'active':''}" data-tab="inbox" onclick="switchTab('inbox')">
           <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
-          Inbox
+          Сообщения
           <span id="inboxBadge" style="display:none" class="tab-badge">0</span>
         </div>
         <div class="tab ${activeTab==='channels'?'active':''}" data-tab="channels" onclick="switchTab('channels')">
           <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/></svg>
-          Channels
+          Каналы
         </div>
         <div class="tab ${activeTab==='bot'?'active':''}" data-tab="bot" onclick="switchTab('bot')">
           <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
@@ -2187,7 +2401,7 @@
         </div>
         <div class="tab ${activeTab==='settings'?'active':''}" data-tab="settings" onclick="switchTab('settings')">
           <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-          Settings
+          Данные
         </div>
       </div>
       <div class="tab-panel ${activeTab==='inbox'?'active':''}" id="tab-inbox"></div>
@@ -2195,6 +2409,8 @@
       <div class="tab-panel ${activeTab==='bot'?'active':''}" id="tab-bot"></div>
       <div class="tab-panel ${activeTab==='settings'?'active':''}" id="tab-settings"></div>
     `;
+
+    document.getElementById('mainArea').innerHTML = content;
 
     if (activeTab === 'channels') loadChannels();
     if (activeTab === 'bot') loadBot();
@@ -2204,14 +2420,28 @@
   function updateWorkspaceStripVisibility(tab) {
     const strip = document.getElementById('workspaceStrip');
     if (!strip) return;
-    strip.style.display = tab === 'inbox' ? '' : 'none';
+    strip.style.display = 'none';
+  }
+
+  function syncMainMode() {
+    const main = document.getElementById('mainArea');
+    if (!main) return;
+    main.classList.toggle('inbox-mode', activeTab === 'inbox');
   }
 
   function switchTab(tab) {
+    const prevTab = activeTab;
     activeTab = tab;
     updateAdminUrl({ section: 'clients', clientId: activeClient?.id || '', tab });
     activeChat = null;
     updateWorkspaceStripVisibility(tab);
+    syncMainMode();
+    const layoutChanged = (prevTab === 'inbox') !== (tab === 'inbox');
+    if (layoutChanged) {
+      renderMain();
+      if (tab === 'inbox') loadInbox();
+      return;
+    }
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.tab-panel').forEach(t => t.classList.remove('active'));
     document.querySelector(`.tab[data-tab="${tab}"]`)?.classList.add('active');
@@ -2222,17 +2452,78 @@
     if (tab === 'settings') renderSettings();
   }
 
+  function renderInboxEmptyState(title = 'Выбери диалог', text = 'Слева откроется список сообщений, справа сам чат.') {
+    return `<div class="no-chat-sel">
+      <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+      <strong>${title}</strong>
+      <span>${text}</span>
+    </div>`;
+  }
+
+  function getFilteredChats() {
+    if (inboxFilter === 'unread') return chats.filter(ch => Number(ch.unread_count || 0) > 0);
+    if (inboxFilter === 'buttons') return chats.filter(ch => chatHasButtons(ch));
+    return chats;
+  }
+
+  function getInboxFilterCount(filter) {
+    if (filter === 'unread') return chats.filter(ch => Number(ch.unread_count || 0) > 0).length;
+    if (filter === 'buttons') return chats.filter(ch => chatHasButtons(ch)).length;
+    return chats.length;
+  }
+
+  function setInboxFilter(filter) {
+    inboxFilter = filter;
+    const visibleChatIds = new Set(getFilteredChats().map(ch => ch.id));
+    if (activeChat && !visibleChatIds.has(activeChat.id)) {
+      activeChat = null;
+      const area = document.getElementById('msgsArea');
+      if (area) area.innerHTML = renderInboxEmptyState();
+    }
+    document.querySelectorAll('.inbox-filter-item').forEach(el => {
+      el.classList.toggle('active', el.dataset.filter === filter);
+    });
+    renderChatList();
+  }
+
   // ── INBOX ──
   async function loadInbox() {
     const el = document.getElementById('tab-inbox');
     if (!el) return;
+    inboxFilter = 'all';
     el.innerHTML = `<div class="inbox-wrap">
-      <div class="chat-list" id="chatList"><div class="loading" style="font-size:12px">loading...</div></div>
-      <div class="msgs-area" id="msgsArea">
-        <div class="no-chat-sel">
-          <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
-          <span style="font-size:12px">Select a chat</span>
+      <aside class="inbox-rail">
+        <div class="inbox-rail-head">
+          <div class="inbox-rail-title">Inbox</div>
+          <div class="inbox-rail-sub">${clientName(activeClient)}</div>
         </div>
+        <div class="inbox-rail-label">Папки</div>
+        <div class="inbox-filter-list">
+          <button class="inbox-filter-item active" data-filter="all" type="button" onclick="setInboxFilter('all')">
+            <span>Все диалоги</span>
+            <strong id="filterCountAll">0</strong>
+          </button>
+          <button class="inbox-filter-item" data-filter="unread" type="button" onclick="setInboxFilter('unread')">
+            <span>Непрочитанные</span>
+            <strong id="filterCountUnread">0</strong>
+          </button>
+          <button class="inbox-filter-item" data-filter="buttons" type="button" onclick="setInboxFilter('buttons')">
+            <span>С кнопками</span>
+            <strong id="filterCountButtons">0</strong>
+          </button>
+        </div>
+      </aside>
+      <div class="chat-list-pane">
+        <div class="chat-list-head">
+          <div>
+            <div class="chat-list-title">Диалоги</div>
+            <div class="chat-list-sub" id="chatListMeta">Загрузка...</div>
+          </div>
+        </div>
+        <div class="chat-list" id="chatList"><div class="loading" style="font-size:12px">loading...</div></div>
+      </div>
+      <div class="msgs-area" id="msgsArea">
+        ${renderInboxEmptyState()}
       </div>
     </div>`;
     const r = await fetch(`${API}/chats?client_id=${activeClient.id}`);
@@ -2248,7 +2539,7 @@
   function chatDisplayName(chat) {
     const name = String(chat?.sender_name || '').trim();
     const id = String(chat?.sender_id || '').trim();
-    return name && name !== id ? name : (id || 'User');
+    return name && name !== id ? name : (id || 'Клиент');
   }
 
   function chatDisplayId(chat) {
@@ -2293,8 +2584,20 @@
   function renderChatList() {
     const el = document.getElementById('chatList');
     if (!el) return;
-    if (!chats.length) { el.innerHTML = '<div class="no-chats">No conversations</div>'; return; }
-    el.innerHTML = chats.map(ch => {
+    const filteredChats = getFilteredChats();
+    const allCount = getInboxFilterCount('all');
+    const unreadCount = getInboxFilterCount('unread');
+    const buttonCount = getInboxFilterCount('buttons');
+    document.getElementById('filterCountAll')?.replaceChildren(document.createTextNode(String(allCount)));
+    document.getElementById('filterCountUnread')?.replaceChildren(document.createTextNode(String(unreadCount)));
+    document.getElementById('filterCountButtons')?.replaceChildren(document.createTextNode(String(buttonCount)));
+    const meta = document.getElementById('chatListMeta');
+    if (meta) {
+      const titles = { all: 'Все сообщения', unread: 'Только новые', buttons: 'Диалоги с кнопками' };
+      meta.textContent = `${titles[inboxFilter] || 'Все сообщения'} · ${filteredChats.length}`;
+    }
+    if (!filteredChats.length) { el.innerHTML = '<div class="no-chats">Здесь пока пусто</div>'; return; }
+    el.innerHTML = filteredChats.map(ch => {
       const cls = chClass[ch.channel] || 'wa';
       const lbl = chLabels[ch.channel] || (ch.channel||'').toUpperCase();
       const name = chatDisplayName(ch);
@@ -2308,7 +2611,7 @@
           <div class="chat-name">${name}</div>
           ${senderIdLine ? `<div class="chat-id-line">${senderIdLine}</div>` : ''}
           <div class="chat-preview-row">
-            ${hasButtons ? `<span class="chat-quick-flag">Buttons</span>` : ''}
+            ${hasButtons ? `<span class="chat-quick-flag">Кнопки</span>` : ''}
             <div class="chat-preview">${preview}</div>
           </div>
         </div>
@@ -2345,14 +2648,14 @@
         <div class="chat-av" style="width:30px;height:30px;font-size:11px">${name[0]?.toUpperCase() || '?'}</div>
         <div>
           <div class="msgs-header-name">${name}</div>
-          <div class="msgs-header-sub">${lbl} · ${senderIdLine}</div>
+          <div class="msgs-header-sub">${lbl}${senderIdLine ? ' · ' + senderIdLine : ''}</div>
         </div>
         <div class="chat-head-tools">
-          <button class="btn-secondary" onclick="renameActiveChat()">Rename</button>
-          <button class="btn-danger" onclick="deleteActiveChat()">Delete chat</button>
+          <button class="btn-secondary" onclick="renameActiveChat()">Переименовать</button>
+          <button class="btn-danger" onclick="deleteActiveChat()">Удалить чат</button>
           <div class="mode-toggle">
-            <span class="mode-label" id="modeLabel">${isBot ? '🤖 Bot' : '👤 Human'}</span>
-            <div class="toggle-btn ${isBot ? '' : 'on'}" id="modeToggle" onclick="toggleMode()" title="Switch bot/human mode"></div>
+            <span class="mode-label" id="modeLabel">${isBot ? '🤖 Бот' : '👤 Оператор'}</span>
+            <div class="toggle-btn ${isBot ? '' : 'on'}" id="modeToggle" onclick="toggleMode()" title="Переключить режим"></div>
           </div>
         </div>
       </div>
@@ -2370,12 +2673,12 @@
         }).join('') : '<div style="text-align:center;color:var(--muted);font-size:12px;padding:20px">Нет сообщений</div>'}
       </div>
       <div class="input-area">
-        <textarea class="msg-input" id="msgInput" rows="1" placeholder="Type a reply as the operator..."
+        <textarea class="msg-input" id="msgInput" rows="1" placeholder="Напиши ответ от имени оператора..."
           oninput="autoResize(this)"
           onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"></textarea>
         <button class="send-btn" onclick="sendMsg()">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-          Send
+          Отправить
         </button>
       </div>`;
     const list = document.getElementById('msgsList');
@@ -2385,7 +2688,7 @@
   async function renameActiveChat() {
     if (!activeChat?.id) return;
     const current = chatDisplayName(activeChat);
-    const next = prompt('Client name', current);
+    const next = prompt('Имя клиента', current);
     if (!next || !next.trim()) return;
     const r = await fetch(`${API}/chats/${activeChat.id}/name`, {
       method: 'PATCH',
@@ -2409,7 +2712,7 @@
     const r = await fetch(`${API}/chats/${chatId}`, { method: 'DELETE' });
     const d = await r.json().catch(() => ({}));
     if (!r.ok || d.ok === false) return toast(d.error || 'Не удалось удалить чат', 'error');
-    toast('Chat deleted');
+    toast('Чат удалён');
     activeChat = null;
     await loadInbox();
   }
@@ -2427,7 +2730,7 @@
     const newMode = isNowBot ? 'human' : 'bot';
     await fetch(`${API}/chats/${activeChat.id}/${newMode === 'human' ? 'takeover' : 'release'}`, { method: 'POST' });
     toggle.classList.toggle('on', newMode === 'human');
-    label.textContent = newMode === 'human' ? '👤 Human' : '🤖 Bot';
+    label.textContent = newMode === 'human' ? '👤 Оператор' : '🤖 Бот';
     activeChat.mode = newMode;
   }
 
@@ -2498,6 +2801,10 @@
     ];
 
     el.innerHTML = `<div class="channels-wrap">
+      <div class="workspace-view-head">
+        <div class="workspace-view-title">Каналы</div>
+        <div class="workspace-view-copy">Подключай источники сообщений для этого workspace. Всё, что здесь активно, попадает в общий inbox.</div>
+      </div>
       ${types.map(t => {
         const ch = chs.find(c => c.type === t.type);
         const on = ch && isConnected(ch);
@@ -2509,7 +2816,7 @@
           else if (ch.phone_number) detail = ch.phone_number;
           else if (ch.username) detail = '@' + ch.username;
         }
-        const stateText = on ? 'Connected and ready' : 'Not connected yet';
+      const stateText = on ? 'Подключено и готово' : 'Пока не подключено';
         const tags = [];
         if (ch?.page_name) tags.push(`<span class="ch-meta-tag">Page: ${esc(ch.page_name)}</span>`);
         if (ch?.username) tags.push(`<span class="ch-meta-tag">@${esc(String(ch.username).replace(/^@+/, ''))}</span>`);
@@ -2518,12 +2825,12 @@
         let actionBtn = '';
         if (t.type === 'whatsapp') {
           actionBtn = on
-            ? `<button onclick="connectWhatsApp()" style="padding:5px 12px;border-radius:7px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">Переподключить</button>`
-            : `<button onclick="connectWhatsApp()" style="padding:5px 12px;border-radius:7px;border:none;background:var(--accent);color:#fff;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">Подключить</button>`;
+            ? `<button class="channel-connect-btn is-secondary" onclick="connectWhatsApp()">Переподключить</button>`
+            : `<button class="channel-connect-btn is-primary" onclick="connectWhatsApp()">Подключить</button>`;
         } else if (t.type === 'messenger') {
-          actionBtn = `<button onclick="connectMessenger()" style="padding:5px 12px;border-radius:7px;border:${on ? '1px solid var(--border)' : 'none'};background:${on ? 'var(--surface2)' : 'var(--accent)'};color:${on ? 'var(--muted)' : '#fff'};font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">${on ? 'Переподключить' : 'Подключить'}</button>`;
+          actionBtn = `<button class="channel-connect-btn ${on ? 'is-secondary' : 'is-primary'}" onclick="connectMessenger()">${on ? 'Переподключить' : 'Подключить'}</button>`;
         } else if (t.type === 'telegram') {
-          actionBtn = `<button onclick="showTgConnect()" style="padding:5px 12px;border-radius:7px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">${on ? 'Переподключить' : 'Подключить'}</button>`;
+          actionBtn = `<button class="channel-connect-btn ${on ? 'is-secondary' : 'is-primary'}" onclick="showTgConnect()">${on ? 'Переподключить' : 'Подключить'}</button>`;
         }
         return `<div class="ch-card">
           <div class="ch-icon ${cls}">${CH_ICONS[t.type] || ''}</div>
@@ -2553,9 +2860,9 @@
 
     if (!bot) {
       el.innerHTML = `<div class="bot-wrap">
-        <div>
-          <div class="dash-title" style="margin-bottom:4px">Бота ещё нет</div>
-          <div class="dash-sub" style="margin-bottom:0">Сначала создай бота, потом заполни его текст.</div>
+        <div class="workspace-view-head">
+          <div class="workspace-view-title">Bot</div>
+          <div class="workspace-view-copy">У этого workspace ещё нет бота. Сначала создаём основу, потом уже сценарии, media и тесты.</div>
         </div>
         <div class="bot-actions">
           <button class="btn-primary" onclick="createBotForClient()">Создать бота</button>
@@ -2565,9 +2872,9 @@
     }
 
     el.innerHTML = `<div class="bot-wrap">
-      <div>
-        <div class="dash-title" style="margin-bottom:4px">Настройка бота</div>
-        <div class="dash-sub" style="margin-bottom:0">Сначала заполни основу бота, потом уже FAQ, media и flow.</div>
+      <div class="workspace-view-head">
+        <div class="workspace-view-title">Bot</div>
+        <div class="workspace-view-copy">Сначала заполни основу бота, потом уже FAQ, media, flow и проверку ответов.</div>
       </div>
 
       <div class="bot-subnav">
@@ -3571,46 +3878,50 @@
     const statusCls = ['live','new','test','setup'].includes(status) ? status : 'new';
 
     el.innerHTML = `<div class="settings-wrap">
+      <div class="workspace-view-head">
+        <div class="workspace-view-title">Данные</div>
+        <div class="workspace-view-copy">Основные данные workspace, техническая информация и опасные действия собраны в одном месте.</div>
+      </div>
       <div class="info-card">
-        <div class="info-card-head">Client</div>
+        <div class="info-card-head">Workspace</div>
         <div class="info-row">
-          <div class="info-label">Company</div>
+          <div class="info-label">Компания</div>
           <div class="info-value">${clientName(c)}</div>
         </div>
         <div class="info-row">
-          <div class="info-label">Niche</div>
+          <div class="info-label">Ниша</div>
           <div class="info-value">${c.niche || '—'}</div>
         </div>
         <div class="info-row">
-          <div class="info-label">Contact</div>
+          <div class="info-label">Контакт</div>
           <div class="info-value">${c.contact_name || '—'}</div>
         </div>
         <div class="info-row">
-          <div class="info-label">Status</div>
+          <div class="info-label">Статус</div>
           <div class="info-value"><span class="status-badge ${statusCls}">${status}</span></div>
         </div>
       </div>
       <div class="info-card">
-        <div class="info-card-head">Technical details</div>
+        <div class="info-card-head">Технические данные</div>
         <div class="info-row">
-          <div class="info-label">Client ID</div>
+          <div class="info-label">ID клиента</div>
           <div class="info-value"><span class="id-code">${c.id}</span></div>
         </div>
         ${c.portal_login ? `<div class="info-row">
-          <div class="info-label">Client login</div>
+          <div class="info-label">Логин клиента</div>
           <div class="info-value">${c.portal_login}</div>
         </div>` : ''}
         <div class="info-row">
-          <div class="info-label">Created</div>
+          <div class="info-label">Создан</div>
           <div class="info-value">${c.created_at ? new Date(c.created_at).toLocaleDateString('ru') : '—'}</div>
         </div>
       </div>
       <div class="info-card">
-        <div class="info-card-head">Delete</div>
+        <div class="info-card-head">Удаление</div>
         <div style="padding:16px; display:flex; flex-direction:column; gap:12px;">
-          <div class="danger-note">Deleting the client removes this workspace card from the panel. Use this only if the client is no longer needed.</div>
+          <div class="danger-note">Удаление уберёт этот workspace из панели. Используй только если клиент больше не нужен.</div>
           <div>
-            <button class="btn-danger" onclick="deleteClientFromPanel()">Delete client</button>
+            <button class="btn-danger" onclick="deleteClientFromPanel()">Удалить клиента</button>
           </div>
         </div>
       </div>
@@ -3621,18 +3932,18 @@
     if (!activeClient) return;
     const clientId = activeClient.id;
     const name = clientName(activeClient);
-    if (!confirm(`Delete client "${name}"?`)) return;
+    if (!confirm(`Удалить клиента "${name}"?`)) return;
     const r = await fetch(`${API}/clients/${clientId}`, { method: 'DELETE' });
     const d = await r.json().catch(() => ({}));
-    if (!r.ok || d.ok === false) return toast(d.error || 'Failed to delete client', 'error');
-    toast('Client deleted');
+    if (!r.ok || d.ok === false) return toast(d.error || 'Не удалось удалить клиента', 'error');
+    toast('Клиент удалён');
     activeClient = null;
     activeChat = null;
     await loadClients();
     if (clients.length > 0) {
       await selectClient(clients[0].id);
     } else {
-      document.getElementById('mainArea').innerHTML = '<div class="loading" style="color:var(--muted)">No clients yet</div>';
+      document.getElementById('mainArea').innerHTML = '<div class="loading" style="color:var(--muted)">Пока нет клиентов</div>';
       renderClientList();
     }
   }
@@ -3747,16 +4058,15 @@
   // ── INIT ──
   async function initAdmin() {
     const params = new URLSearchParams(location.search);
-    const section = params.get('section') || (params.get('client') ? 'clients' : 'dashboard');
     const clientId = params.get('client');
     const tab = params.get('tab');
 
-    switchSection(['dashboard','clients','bots','platform'].includes(section) ? section : 'dashboard');
+    switchSection('clients');
     await loadClients();
 
     if (clientId) {
       await selectClient(clientId, tab).catch(() => {});
-    } else if (section === 'clients' && clients.length > 0) {
+    } else if (clients.length > 0) {
       await selectClient(clients[0].id, tab).catch(() => {});
     }
   }
