@@ -2890,6 +2890,7 @@
         <button class="bot-subnav-btn" data-bot-panel="setup" onclick="switchBotSubtab('setup')">Основа</button>
         <button class="bot-subnav-btn" data-bot-panel="dialog" onclick="switchBotSubtab('dialog')">Диалог</button>
         <button class="bot-subnav-btn" data-bot-panel="media" onclick="switchBotSubtab('media')">Media / CTA</button>
+        <button class="bot-subnav-btn" data-bot-panel="flow" onclick="switchBotSubtab('flow')">Flow</button>
         <button class="bot-subnav-btn" data-bot-panel="test" onclick="switchBotSubtab('test')">Проверка</button>
       </div>
 
@@ -3035,9 +3036,15 @@
             <div class="bot-label">Flow JSON</div>
             <textarea id="botFlowJsonInput" class="bot-textarea kb" placeholder="Тут будет flow JSON">${esc(formatFlowJson(bot.flow))}</textarea>
           </div>
+          <div class="flow-builder-layout">
+            <div id="botFlowBlocks" class="flow-canvas-shell"></div>
+            <div id="botFlowEditor" class="flow-editor-shell"></div>
+          </div>
           <div class="bot-actions">
+            <button class="btn-secondary" onclick="importBotFlowJson()">Импортировать JSON</button>
             <button class="btn-secondary" onclick="insertBotMaticDemoFlow()">Вставить demo flow</button>
             <button class="btn-secondary" onclick="copyBotFlowJson()">Копировать JSON</button>
+            <button class="btn-secondary" onclick="addBotFlowBlock()">Добавить вопрос</button>
             <button class="btn-primary" onclick="saveBotFlowConfig()">Сохранить flow</button>
           </div>
         </div>
@@ -3068,6 +3075,7 @@
       </div>
     </div>`;
     renderBotButtonPreview();
+    initBotFlowBuilder(bot.flow);
     switchBotSubtab(activeBotSubtab || 'setup');
   }
 
