@@ -2849,25 +2849,33 @@
   }
 
   // ── BOT ──
-  async function loadBot() {
-    const el = document.getElementById('tab-bot');
-    if (!el) return;
-    el.innerHTML = '<div class="loading">загрузка...</div>';
-    const r = await fetch(`${API}/clients/${activeClient.id}/bots`);
-    const d = await r.json();
-    const bots = d.bots || [];
-    const bot = bots[0];
+  function renderBotCreateState(el, copy = 'У этого workspace ещё нет бота. Сначала создаём основу, потом уже сценарии, media и тесты.') {
+    el.innerHTML = `<div class="bot-wrap">
+      <div class="workspace-view-head">
+        <div class="workspace-view-title">Bot</div>
+        <div class="workspace-view-copy">${copy}</div>
+      </div>
+      <div class="bot-actions">
+        <button class="btn-primary" onclick="createBotForClient()">Создать бота</button>
+      </div>
+    </div>`;
+  }
 
+  function renderBotErrorState(el, message = 'Не удалось загрузить настройки бота. Попробуй ещё раз.') {
+    el.innerHTML = `<div class="bot-wrap">
+      <div class="workspace-view-head">
+        <div class="workspace-view-title">Bot</div>
+        <div class="workspace-view-copy">${message}</div>
+      </div>
+      <div class="bot-actions">
+        <button class="btn-primary" onclick="loadBot()">Повторить</button>
+      </div>
+    </div>`;
+  }
+
+  function renderBotEditor(el, bot) {
     if (!bot) {
-      el.innerHTML = `<div class="bot-wrap">
-        <div class="workspace-view-head">
-          <div class="workspace-view-title">Bot</div>
-          <div class="workspace-view-copy">У этого workspace ещё нет бота. Сначала создаём основу, потом уже сценарии, media и тесты.</div>
-        </div>
-        <div class="bot-actions">
-          <button class="btn-primary" onclick="createBotForClient()">Создать бота</button>
-        </div>
-      </div>`;
+      renderBotCreateState(el);
       return;
     }
 
@@ -3061,6 +3069,52 @@
     </div>`;
     renderBotButtonPreview();
     switchBotSubtab(activeBotSubtab || 'setup');
+  }
+
+  async function loadBot() {
+    const el = document.getElementById('tab-bot');
+    if (!el || !activeClient?.id) return;
+
+    const cachedBots = Array.isArray(activeClient._bots) ? activeClient._bots : [];
+    let bots = cachedBots;
+
+    if (bots[0]) {
+      renderBotEditor(el, bots[0]);
+    } else {
+      el.innerHTML = '<div class="loading">загрузка...</div>';
+    }
+
+    let timeoutId = null;
+    try {
+      const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      if (controller) {
+        timeoutId = setTimeout(() => controller.abort(), 8000);
+      }
+
+      const r = await fetch(
+        `${API}/clients/${activeClient.id}/bots`,
+        controller ? { signal: controller.signal } : undefined
+      );
+
+      if (timeoutId) clearTimeout(timeoutId);
+
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok || d.ok === false) {
+        throw new Error(d.error || `Не удалось загрузить бота (${r.status})`);
+      }
+
+      bots = Array.isArray(d.bots) ? d.bots : [];
+      activeClient._bots = bots;
+    } catch (e) {
+      if (timeoutId) clearTimeout(timeoutId);
+      console.error('loadBot failed', e);
+      if (!bots[0]) {
+        renderBotErrorState(el);
+      }
+      return;
+    }
+
+    renderBotEditor(el, bots[0]);
   }
 
   function getActiveBotId() {
