@@ -2866,6 +2866,87 @@
     </div>`;
   }
 
+  function renderBotEditorLite(el, bot) {
+    if (!bot) {
+      renderBotCreateState(el);
+      return;
+    }
+
+    el.innerHTML = `<div class="bot-wrap">
+      <div class="workspace-view-head">
+        <div class="workspace-view-title">Bot</div>
+        <div class="workspace-view-copy">Упростил этот экран, чтобы он стабильно открывался и не ломался. Здесь только основа бота: имя, роль, знания и быстрые кнопки.</div>
+      </div>
+
+      <div class="bot-section">
+        <div class="bot-section-head">
+          <div class="bot-section-title">Основная настройка</div>
+        </div>
+        <div class="bot-section-body">
+          <div class="bot-setup-note">
+            <div class="bot-setup-title">Сейчас важнее рабочий экран, чем перегруженный editor</div>
+            <div class="bot-setup-copy">Сначала добиваем базовую настройку бота. Flow Studio остаётся отдельной страницей, чтобы не ломать весь `Bot` tab.</div>
+            <div class="bot-template-row">
+              <button class="bot-template-btn" onclick="applyBotPreset('universal')">Universal</button>
+              <button class="bot-template-btn" onclick="applyBotPreset('salon')">Salon</button>
+              <button class="bot-template-btn" onclick="applyBotPreset('restaurant')">Restaurant</button>
+              <button class="bot-template-btn" onclick="applyBotPreset('shop')">Shop</button>
+              <button class="bot-template-btn" onclick="applyBotPreset('legal')">Legal</button>
+            </div>
+          </div>
+
+          <div class="bot-field" style="margin-top:14px">
+            <div class="bot-label">Имя бота</div>
+            <input id="botNameInput" class="bot-input" value="${esc(bot.name || '')}" placeholder="Например: BotMatic Assistant" />
+          </div>
+
+          <div class="bot-field">
+            <div class="bot-label">Роль и поведение</div>
+            <textarea id="botPromptInput" class="bot-textarea prompt" placeholder="Опиши, как бот должен отвечать.">${esc(bot.prompt || '')}</textarea>
+          </div>
+
+          <div class="bot-field">
+            <div class="bot-label">Что бот должен знать</div>
+            <textarea id="botKnowledgeInput" class="bot-textarea kb" placeholder="Услуги, цены, адрес, график, контакты и всё важное.">${esc(bot.knowledge_base || '')}</textarea>
+          </div>
+
+          <div class="bot-field">
+            <div class="bot-label">Быстрые кнопки</div>
+            <textarea id="botButtonsInput" class="bot-textarea test" placeholder="Цены&#10;Адрес&#10;Контакты" oninput="renderBotButtonPreview()">${esc(bot.buttons || '')}</textarea>
+            <div class="bot-chip-row">
+              <button class="bot-chip" onclick="addBotButton('Цены')">+ Цены</button>
+              <button class="bot-chip" onclick="addBotButton('Адрес')">+ Адрес</button>
+              <button class="bot-chip" onclick="addBotButton('Контакты')">+ Контакты</button>
+              <button class="bot-chip" onclick="addBotButton('Записаться')">+ Записаться</button>
+            </div>
+            <div id="botButtonsPreview" class="bot-btn-preview"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bot-section">
+        <div class="bot-section-head">
+          <div class="bot-section-title">Дополнительно</div>
+        </div>
+        <div class="bot-section-body">
+          <div class="bot-actions">
+            <button class="btn-secondary" onclick="openBotConstructor()">Открыть Flow Studio</button>
+            <button class="btn-secondary" onclick="openBotConstructor(true)">Flow Studio в новой вкладке</button>
+            <button class="btn-secondary" onclick="switchTab('channels')">Каналы</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bot-actions">
+        <button class="btn-primary" onclick="saveBotConfig()">Сохранить</button>
+        <button class="btn-secondary" onclick="loadBot()">Обновить</button>
+        <button class="btn-danger" onclick="deleteBotFromPanel()">Удалить бота</button>
+      </div>
+    </div>`;
+
+    renderBotButtonPreview();
+  }
+
   function renderBotEditor(el, bot) {
     if (!bot) {
       renderBotCreateState(el);
@@ -3096,7 +3177,7 @@
     let bots = cachedBots;
 
     if (bots[0]) {
-      renderBotEditor(el, bots[0]);
+      renderBotEditorLite(el, bots[0]);
     } else {
       el.innerHTML = '<div class="loading">загрузка...</div>';
     }
@@ -3131,7 +3212,7 @@
       return;
     }
 
-    renderBotEditor(el, bots[0]);
+    renderBotEditorLite(el, bots[0]);
   }
 
   function getActiveBotId() {
