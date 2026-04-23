@@ -1309,7 +1309,24 @@ app.get('/client/inbox', requireClientAuth, (req, res) => res.sendFile(path.join
 // ── Client Portal API ──────────────────────────────────────────────────────────
 app.get('/api/client/me', requireClientAuth, (req, res) => {
   const c = req.clientSession;
-  res.json({ id: c.id, company: c.company, contact_name: c.contact_name });
+  const dbChannels = D.channels.byClient.all(c.id);
+  const instagramDb = dbChannels.find((ch) => ch.type === 'instagram');
+  const instagramStore = resolveStoreChannelForClient('instagram', c.id);
+  const instagramConnected = Boolean(instagramDb && instagramDb.status === 'connected');
+
+  res.json({
+    id: c.id,
+    company: c.company,
+    contact_name: c.contact_name,
+    instagram: {
+      connected: instagramConnected,
+      username: instagramDb?.username || '',
+      name: instagramDb?.page_name || '',
+      id: instagramDb?.page_id || '',
+      authMode: instagramStore?.mode || '',
+      connectUrl: `/auth/instagram/login?client_id=${encodeURIComponent(c.id)}&portal=client`,
+    },
+  });
 });
 
 app.get('/api/client/chats', requireClientAuth, (req, res) => {
@@ -3035,12 +3052,13 @@ app.get('/auth/instagram/login', (req, res) => {
   const bot = getBotOrDefault(req.query.botId);
   cleanupExpiredEntries(instagramOauthStates, 10 * 60 * 1000);
   const igAuth = getInstagramAuthConfig(req.query.mode);
+  const portal = String(req.query.portal || '').trim() === 'client' ? 'client' : '';
   if (!igAuth.appId || !igAuth.appSecret) {
     return renderErrorPage(res, {
       title: 'Instagram not configured',
       description: `Missing Instagram app credentials for auth mode: ${igAuth.mode}.`,
-      actionHref: buildAdminClientsUrl({ tab: 'channels' }),
-      actionLabel: 'Back to channels',
+      actionHref: portal === 'client' ? '/client/inbox?panel=instagram' : buildAdminClientsUrl({ tab: 'channels' }),
+      actionLabel: portal === 'client' ? 'Back to client portal' : 'Back to channels',
     });
   }
 
@@ -3050,6 +3068,7 @@ app.get('/auth/instagram/login', (req, res) => {
     botId: bot.id,
     clientId: req.query.client_id || null,
     authMode: igAuth.mode,
+    portal,
   });
 
   const url = igAuth.mode === 'instagram_login'
@@ -3080,25 +3099,28 @@ app.get('/auth/instagram/callback', async (req, res) => {
   let botId = req.query.botId || '';
   let clientId = null;
   let authMode = normalizeInstagramAuthMode(req.query.mode || CONFIG.IG_AUTH_MODE);
+  let portal = String(req.query.portal || '').trim() === 'client' ? 'client' : '';
   if (state && instagramOauthStates.has(state)) {
     const stateData = instagramOauthStates.get(state);
     botId = stateData.botId;
     clientId = stateData.clientId || null;
     authMode = normalizeInstagramAuthMode(stateData.authMode || authMode);
+    portal = stateData.portal || portal;
     instagramOauthStates.delete(state);
   }
   const igAuth = getInstagramAuthConfig(authMode);
   const bot = getBotOrDefault(botId);
-  const actionHref = clientId
-    ? buildAdminClientsUrl({ clientId, tab: 'channels' })
-    : buildAdminClientsUrl({ tab: 'channels' });
+  const actionHref = portal === 'client'
+    ? '/client/inbox?panel=instagram'
+    : (clientId ? buildAdminClientsUrl({ clientId, tab: 'channels' }) : buildAdminClientsUrl({ tab: 'channels' }));
+  const actionLabel = portal === 'client' ? 'Back to client portal' : 'Back to Channels';
 
   if (error) {
     return renderErrorPage(res, {
       title: 'Instagram Connection Failed',
       description: error,
       actionHref,
-      actionLabel: 'Back to Channels',
+      actionLabel,
     });
   }
 
@@ -3107,7 +3129,7 @@ app.get('/auth/instagram/callback', async (req, res) => {
       title: 'Instagram Connection Failed',
       description: 'Instagram did not provide an authorization code.',
       actionHref,
-      actionLabel: 'Back to Channels',
+      actionLabel,
     });
   }
 
@@ -3175,7 +3197,7 @@ app.get('/auth/instagram/callback', async (req, res) => {
           title: 'Could not connect Instagram',
           description: 'Instagram Login succeeded but no Instagram account ID was returned.',
           actionHref,
-          actionLabel: 'Back to channels',
+          actionLabel,
         });
       }
 
@@ -3206,6 +3228,7 @@ app.get('/auth/instagram/callback', async (req, res) => {
         `Instagram Login channel connected: bot=${bot.id}, igId=${igBusinessId}, username=${igProfile.username || 'N/A'}`
       );
 
+      if (portal === 'client') return res.redirect('/client/inbox?panel=instagram&connected=1');
       if (clientId) return res.redirect(buildAdminClientsUrl({ clientId, tab: 'channels' }));
 
       return res.send(renderConnectionResultPage({

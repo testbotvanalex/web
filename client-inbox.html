@@ -178,6 +178,49 @@
   }
   .send-btn:hover:not(:disabled) { opacity: .88; }
   .send-btn:disabled { opacity: .5; cursor: default; }
+
+  /* ── View: Setup ── */
+  #viewSetup { display: none; flex-direction: column; height: 100%; }
+  .setup-shell { flex: 1; overflow-y: auto; padding: 28px; }
+  .setup-card {
+    max-width: 760px; background: var(--white); border: 1px solid var(--border);
+    border-radius: 18px; padding: 24px; box-shadow: 0 10px 30px rgba(18,21,31,0.04);
+  }
+  .setup-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px; margin-bottom: 14px;
+    padding: 6px 10px; border-radius: 999px; background: #fce7f3; color: #be185d;
+    font-size: 12px; font-weight: 800; letter-spacing: .02em;
+  }
+  .setup-title { font-family: "Syne", sans-serif; font-size: 28px; font-weight: 800; margin-bottom: 10px; }
+  .setup-subtitle { font-size: 15px; line-height: 1.6; color: var(--muted); max-width: 620px; }
+  .setup-banner {
+    margin: 18px 0 0; padding: 14px 16px; border-radius: 12px; border: 1px solid #bbf7d0;
+    background: #f0fdf4; color: #166534; font-size: 14px; font-weight: 700;
+  }
+  .setup-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 24px 0; }
+  .setup-stat {
+    border: 1px solid var(--border); border-radius: 14px; background: var(--bg); padding: 16px;
+  }
+  .setup-stat-label { font-size: 12px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 8px; }
+  .setup-stat-value { font-size: 18px; font-weight: 800; }
+  .setup-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+  .setup-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px;
+    padding: 0 18px; border-radius: 12px; border: 1px solid transparent; text-decoration: none;
+    font-size: 14px; font-weight: 800; transition: all .15s;
+  }
+  .setup-btn.primary { background: var(--accent); color: #fff; }
+  .setup-btn.primary:hover { opacity: .9; }
+  .setup-btn.secondary { background: var(--white); color: var(--ink); border-color: var(--border); cursor: pointer; }
+  .setup-btn.secondary:hover { border-color: var(--accent); color: var(--accent); }
+  .setup-note {
+    margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border);
+    font-size: 14px; line-height: 1.7; color: var(--muted);
+  }
+
+  @media (max-width: 860px) {
+    .setup-grid { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -186,9 +229,13 @@
 <div class="sidebar">
   <div class="sidebar-logo">BotMatic</div>
   <div class="nav-section">
-    <a class="nav-item active" onclick="showList()">
+    <a class="nav-item active" data-nav="messages" onclick="showMessages()">
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
       Сообщения
+    </a>
+    <a class="nav-item" data-nav="instagram" onclick="showInstagramSetup()">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M16.5 7.5h.01"/><circle cx="12" cy="12" r="4"/></svg>
+      Instagram
     </a>
   </div>
   <div class="nav-bottom">
@@ -250,13 +297,95 @@
     </div>
   </div>
 
+  <!-- View: Instagram Setup -->
+  <div id="viewSetup">
+    <div class="main-header">
+      <div class="main-header-top">
+        <div class="main-title">Instagram</div>
+      </div>
+    </div>
+    <div class="setup-shell">
+      <div class="setup-card">
+        <div class="setup-eyebrow">Instagram Login</div>
+        <div class="setup-title">Подключить Instagram к боту</div>
+        <div class="setup-subtitle">
+          Здесь клиент сам подключает Instagram-аккаунт, чтобы входящие сообщения попадали в BotMatic и бот мог на них отвечать.
+        </div>
+        <div class="setup-banner" id="igSuccessBanner" style="display:none;">
+          Instagram подключён. Проверь входящие сообщения и отправь тестовый DM в аккаунт.
+        </div>
+        <div class="setup-grid">
+          <div class="setup-stat">
+            <div class="setup-stat-label">Статус</div>
+            <div class="setup-stat-value" id="igStatusValue">Не подключён</div>
+          </div>
+          <div class="setup-stat">
+            <div class="setup-stat-label">Аккаунт</div>
+            <div class="setup-stat-value" id="igAccountValue">—</div>
+          </div>
+          <div class="setup-stat">
+            <div class="setup-stat-label">Режим</div>
+            <div class="setup-stat-value" id="igModeValue">Instagram Login</div>
+          </div>
+        </div>
+        <div class="setup-actions">
+          <a class="setup-btn primary" id="igConnectBtn" href="/auth/instagram/login?portal=client">Подключить Instagram</a>
+          <button class="setup-btn secondary" type="button" onclick="showMessages()">Открыть сообщения</button>
+        </div>
+        <div class="setup-note">
+          После подключения BotMatic подпишет аккаунт на webhook и новые Instagram DM начнут появляться в разделе сообщений.
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script>
-const S = { chats: [], activeChat: null, channelFilter: 'all', q: '' };
+const S = { chats: [], activeChat: null, channelFilter: 'all', q: '', me: null };
+const Q = new URLSearchParams(location.search);
 
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function initials(n) { return (n||'?').trim().split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase(); }
+
+function setActiveNav(panel) {
+  document.querySelectorAll('[data-nav]').forEach((el) => {
+    el.classList.toggle('active', el.dataset.nav === panel);
+  });
+}
+
+function renderInstagramSetup() {
+  const ig = S.me?.instagram || {};
+  const connected = Boolean(ig.connected);
+  document.getElementById('igStatusValue').textContent = connected ? 'Подключён' : 'Не подключён';
+  document.getElementById('igAccountValue').textContent = ig.username ? `@${ig.username}` : (ig.name || '—');
+  document.getElementById('igModeValue').textContent = ig.authMode === 'facebook_login' ? 'Facebook Login' : 'Instagram Login';
+  const btn = document.getElementById('igConnectBtn');
+  btn.href = ig.connectUrl || '/auth/instagram/login?portal=client';
+  btn.textContent = connected ? 'Переподключить Instagram' : 'Подключить Instagram';
+  document.getElementById('igSuccessBanner').style.display = Q.get('connected') === '1' ? 'block' : 'none';
+}
+
+function showMessages() {
+  setActiveNav('messages');
+  document.getElementById('viewSetup').style.display = 'none';
+  if (S.activeChat) {
+    document.getElementById('viewList').style.display = 'none';
+    document.getElementById('viewChat').style.display = 'flex';
+  } else {
+    document.getElementById('viewList').style.display = 'flex';
+    document.getElementById('viewChat').style.display = 'none';
+    loadChats();
+  }
+}
+
+function showInstagramSetup() {
+  setActiveNav('instagram');
+  document.getElementById('viewList').style.display = 'none';
+  document.getElementById('viewChat').style.display = 'none';
+  document.getElementById('viewSetup').style.display = 'flex';
+  renderInstagramSetup();
+}
 
 function channelBadge(ch) {
   const map = { whatsapp:['badge-wa','WhatsApp'], telegram:['badge-tg','Telegram'], instagram:['badge-ig','Instagram'], messenger:['badge-ms','Messenger'] };
@@ -326,8 +455,10 @@ async function openChat(id) {
   document.getElementById('chatName').textContent = name;
   document.getElementById('chatSub').textContent = c.channel + ' · ' + (c.mode==='bot'?'🤖 Ассистент отвечает':'👤 Ручной режим');
   updateModeBtn(c.mode);
+  setActiveNav('messages');
 
   document.getElementById('viewList').style.display = 'none';
+  document.getElementById('viewSetup').style.display = 'none';
   document.getElementById('viewChat').style.display = 'flex';
 
   await loadMessages();
@@ -391,10 +522,8 @@ async function sendMessage() {
 }
 
 function showList() {
-  document.getElementById('viewList').style.display = 'flex';
-  document.getElementById('viewChat').style.display = 'none';
   S.activeChat = null;
-  loadChats();
+  showMessages();
 }
 
 // Events
@@ -418,12 +547,20 @@ document.querySelectorAll('.ch-tab').forEach(t => {
 
 // Init
 fetch('/api/client/me').then(r=>r.json()).then(d => {
+  S.me = d;
   document.getElementById('sidebarCompany').textContent = d.company || 'Клиент';
   document.title = `${d.company||'BotMatic'} — Сообщения`;
+  renderInstagramSetup();
+  if (Q.get('panel') === 'instagram') {
+    showInstagramSetup();
+    return;
+  }
+  showMessages();
 }).catch(()=>{});
 
 loadChats();
 setInterval(() => {
+  if (document.getElementById('viewSetup').style.display === 'flex') return;
   if (!S.activeChat) loadChats();
   else loadMessages();
 }, 5000);
