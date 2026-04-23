@@ -1485,7 +1485,7 @@ const instagramOauthStates = new Map();
 const store = loadStore();
 
 app.get('/', (req, res) => {
-  res.redirect('/admin/clients');
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get('/auth', (req, res) => {
