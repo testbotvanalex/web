@@ -12,6 +12,24 @@ const adminRouter = require('./routes/admin');
 const D = require('./db');
 
 // ── Save channel to SQLite (called after OAuth success) ───────────────────────
+function normalizeBotIdForClient(clientId, botId) {
+  const direct = String(botId || '').trim();
+  if (direct) {
+    try {
+      const existing = D.bots.byId.get(direct);
+      if (existing?.id) return String(existing.id);
+    } catch {}
+  }
+
+  if (!clientId) return null;
+  try {
+    const fallback = D.bots.byClient.all(String(clientId))[0];
+    return fallback?.id ? String(fallback.id) : null;
+  } catch {
+    return null;
+  }
+}
+
 function saveChannelToDb(clientId, botId, type, data) {
   if (!clientId) return;
   try {
@@ -27,8 +45,10 @@ function saveChannelToDb(clientId, botId, type, data) {
     // Skip update if nothing important changed (prevents activity log spam)
     if (!isNew && existing.page_id === newPageId) return;
 
+    const normalizedBotId = normalizeBotIdForClient(clientId, botId);
+
     D.channels.upsert.run({
-      id, client_id: clientId, bot_id: botId || null, type,
+      id, client_id: clientId, bot_id: normalizedBotId, type,
       status: 'connected',
       page_id:   newPageId,
       page_name: data.pageName || data.page_name || null,
@@ -3891,6 +3911,8 @@ app.post('/webhook/instagram', async (req, res) => {
       const igClientId = channel._clientId
         || findClientIdByChannel('instagram', entry.id)
         || findClientIdByChannel('instagram', channel.instagram?.pageId || '')
+        || findClientIdByChannel('instagram', channel.instagram?.username || '')
+        || findClientIdByChannel('instagram', channel.instagram?.name || '')
         || findClientAndBotIdByBot(channel.bot?.id)?.clientId
         || channel.bot?.id
         || null;
