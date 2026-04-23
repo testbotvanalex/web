@@ -1257,6 +1257,15 @@ app.post('/api/chats/:id/release', requireAdminAuth, (req, res) => {
 
 // ── Client Portal Auth ─────────────────────────────────────────────────────────
 const CLIENT_COOKIE = 'bm_client';
+const CLIENT_PORTAL_ENABLED = String(process.env.CLIENT_PORTAL_ENABLED || '').trim() === '1';
+
+function ensureClientPortalEnabled(req, res, next) {
+  if (CLIENT_PORTAL_ENABLED) return next();
+  if (req.originalUrl.startsWith('/api/client/')) {
+    return res.status(404).json({ error: 'Not found' });
+  }
+  return res.redirect('/');
+}
 
 function makeClientToken(clientId) {
   return crypto.createHmac('sha256', AUTH_SECRET).update('client:' + clientId).digest('hex');
@@ -1278,10 +1287,10 @@ function requireClientAuth(req, res, next) {
 }
 
 // Client login page
-app.get('/client/login', (req, res) => res.sendFile(path.join(__dirname, 'client-login.html')));
+app.get('/client/login', ensureClientPortalEnabled, (req, res) => res.sendFile(path.join(__dirname, 'client-login.html')));
 
 // Client login POST
-app.post('/client/login', (req, res) => {
+app.post('/client/login', ensureClientPortalEnabled, (req, res) => {
   const { login, password } = req.body || {};
   if (!login || !password) return res.status(400).json({ ok: false, error: 'Missing fields' });
 
@@ -1298,16 +1307,16 @@ app.post('/client/login', (req, res) => {
 });
 
 // Client logout
-app.get('/client/logout', (req, res) => {
+app.get('/client/logout', ensureClientPortalEnabled, (req, res) => {
   res.setHeader('Set-Cookie', `${CLIENT_COOKIE}=; Path=/; HttpOnly; Expires=Thu, 01 Jan 1970 00:00:00 GMT`);
   res.redirect('/client/login');
 });
 
 // Client inbox page
-app.get('/client/inbox', requireClientAuth, (req, res) => res.sendFile(path.join(__dirname, 'client-inbox.html')));
+app.get('/client/inbox', ensureClientPortalEnabled, requireClientAuth, (req, res) => res.sendFile(path.join(__dirname, 'client-inbox.html')));
 
 // ── Client Portal API ──────────────────────────────────────────────────────────
-app.get('/api/client/me', requireClientAuth, (req, res) => {
+app.get('/api/client/me', ensureClientPortalEnabled, requireClientAuth, (req, res) => {
   const c = req.clientSession;
   const dbChannels = D.channels.byClient.all(c.id);
   const instagramDb = dbChannels.find((ch) => ch.type === 'instagram');
@@ -1329,7 +1338,7 @@ app.get('/api/client/me', requireClientAuth, (req, res) => {
   });
 });
 
-app.get('/api/client/chats', requireClientAuth, (req, res) => {
+app.get('/api/client/chats', ensureClientPortalEnabled, requireClientAuth, (req, res) => {
   try {
     const clientId = req.clientSession.id;
     const mode   = req.query.mode   || 'all';
@@ -1355,7 +1364,7 @@ app.get('/api/client/chats', requireClientAuth, (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.get('/api/client/chats/:id/messages', requireClientAuth, (req, res) => {
+app.get('/api/client/chats/:id/messages', ensureClientPortalEnabled, requireClientAuth, (req, res) => {
   try {
     const clientId = req.clientSession.id;
     const chat = D.chats.byId.get(req.params.id);
@@ -1367,7 +1376,7 @@ app.get('/api/client/chats/:id/messages', requireClientAuth, (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.post('/api/client/send-message', requireClientAuth, (req, res) => {
+app.post('/api/client/send-message', ensureClientPortalEnabled, requireClientAuth, (req, res) => {
   const clientId = req.clientSession.id;
   const { chat_id, text } = req.body || {};
   if (!text?.trim() || !chat_id) return res.status(400).json({ error: 'Missing fields' });
@@ -3052,7 +3061,7 @@ app.get('/auth/instagram/login', (req, res) => {
   const bot = getBotOrDefault(req.query.botId);
   cleanupExpiredEntries(instagramOauthStates, 10 * 60 * 1000);
   const igAuth = getInstagramAuthConfig(req.query.mode);
-  const portal = String(req.query.portal || '').trim() === 'client' ? 'client' : '';
+  const portal = CLIENT_PORTAL_ENABLED && String(req.query.portal || '').trim() === 'client' ? 'client' : '';
   if (!igAuth.appId || !igAuth.appSecret) {
     return renderErrorPage(res, {
       title: 'Instagram not configured',
@@ -3099,13 +3108,13 @@ app.get('/auth/instagram/callback', async (req, res) => {
   let botId = req.query.botId || '';
   let clientId = null;
   let authMode = normalizeInstagramAuthMode(req.query.mode || CONFIG.IG_AUTH_MODE);
-  let portal = String(req.query.portal || '').trim() === 'client' ? 'client' : '';
+  let portal = CLIENT_PORTAL_ENABLED && String(req.query.portal || '').trim() === 'client' ? 'client' : '';
   if (state && instagramOauthStates.has(state)) {
     const stateData = instagramOauthStates.get(state);
     botId = stateData.botId;
     clientId = stateData.clientId || null;
     authMode = normalizeInstagramAuthMode(stateData.authMode || authMode);
-    portal = stateData.portal || portal;
+    portal = CLIENT_PORTAL_ENABLED ? (stateData.portal || portal) : '';
     instagramOauthStates.delete(state);
   }
   const igAuth = getInstagramAuthConfig(authMode);
