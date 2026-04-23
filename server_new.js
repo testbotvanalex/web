@@ -1502,9 +1502,14 @@ function inferInstagramAuthModeFromChannel(channel, entryId) {
   const candidateEntryId = String(entryId || '').trim();
   const pageId = String(channel?.pageId || '').trim();
   const userId = String(channel?.id || '').trim();
+  const profileUserId = String(channel?.userId || '').trim();
   const storedEntryId = String(channel?.entryId || '').trim();
 
-  if (candidateEntryId && (pageId === candidateEntryId || userId === candidateEntryId || storedEntryId === candidateEntryId) && pageId === candidateEntryId) {
+  if (
+    candidateEntryId &&
+    (pageId === candidateEntryId || userId === candidateEntryId || profileUserId === candidateEntryId || storedEntryId === candidateEntryId) &&
+    (pageId === candidateEntryId || profileUserId === candidateEntryId)
+  ) {
     return 'instagram_login';
   }
 
@@ -2343,6 +2348,7 @@ app.delete('/auth/api/channels/:channel', (req, res) => {
 function createEmptyInstagramChannel() {
   return {
     id: '',          // Instagram Business Account ID (ig_id)
+    userId: '',      // Instagram Login user_id fallback used in some webhook payloads
     entryId: '',     // alias/fallback for matching
     pageId: '',      // Facebook Page ID or Instagram User ID for Instagram Login
     pageToken: '',   // Facebook Page token or Instagram User token
@@ -4716,12 +4722,14 @@ function findInstagramChannelByEntryId(entryId) {
     });
 
     const instagramUserId = channels.instagram.id ? String(channels.instagram.id) : '';
+    const instagramProfileUserId = channels.instagram.userId ? String(channels.instagram.userId) : '';
     const instagramEntryId = channels.instagram.entryId ? String(channels.instagram.entryId) : '';
     const instagramPageId = channels.instagram.pageId ? String(channels.instagram.pageId) : '';
 
     if (candidateId && (
       instagramPageId === candidateId ||
       instagramUserId === candidateId ||
+      instagramProfileUserId === candidateId ||
       instagramEntryId === candidateId
     )) {
       return {
