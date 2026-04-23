@@ -1421,7 +1421,7 @@ const CONFIG = {
   ),
   IG_SUBSCRIBED_FIELDS: (
     process.env.IG_SUBSCRIBED_FIELDS ||
-    'messages,messaging_postbacks,message_reads,message_reactions'
+    'messages,messaging_postbacks,message_reactions'
   ),
   // ── Messenger ──
   MESSENGER_APP_ID: process.env.MESSENGER_APP_ID || process.env.META_APP_ID || '',
@@ -1489,6 +1489,42 @@ function inferInstagramAuthModeFromChannel(channel, entryId) {
   }
 
   return 'facebook_login';
+}
+
+function sanitizeInstagramSubscribedFields(rawFields) {
+  const allowed = new Set([
+    'target_messages',
+    'messages',
+    'messaging_postbacks',
+    'messaging_seen',
+    'messaging_handover',
+    'messaging_referral',
+    'messaging_optins',
+    'message_reactions',
+    'message_edits',
+    'standby',
+    'comments',
+    'live_comments',
+    'mentions',
+    'story_insights',
+    'creator_marketplace_projects',
+    'creator_marketplace_invited_creator_onboarding',
+    'delta',
+    'story_reactions',
+    'onboarding_welcome_message_series',
+    'follow',
+    'comment_poll_response',
+    'story_poll_response',
+    'share_to_story',
+  ]);
+
+  const requested = String(rawFields || '')
+    .split(',')
+    .map((field) => field.trim())
+    .filter(Boolean);
+
+  const filtered = [...new Set(requested.filter((field) => allowed.has(field)))];
+  return filtered.length ? filtered.join(',') : 'messages,messaging_postbacks,message_reactions';
 }
 const instagramOauthStates = new Map();
 const store = loadStore();
@@ -4061,19 +4097,22 @@ async function subscribeToInstagramWebhooks(targetId, accessToken, options = {})
     ? `https://graph.instagram.com/${CONFIG.API_VERSION}`
     : `https://graph.facebook.com/${CONFIG.API_VERSION}`;
   const subscribedId = String(targetId || '').trim() || 'me';
+  const subscribedFields = sanitizeInstagramSubscribedFields(
+    options.subscribedFields || CONFIG.IG_SUBSCRIBED_FIELDS
+  );
 
   await axios.post(
     `${endpointBase}/${subscribedId}/subscribed_apps`,
     null,
     {
       params: {
-        subscribed_fields: CONFIG.IG_SUBSCRIBED_FIELDS,
+        subscribed_fields: subscribedFields,
         access_token: accessToken,
       },
     }
   );
 
-  console.log(`Instagram webhook subscriptions enabled for ${subscribedId} (${mode}): ${CONFIG.IG_SUBSCRIBED_FIELDS}`);
+  console.log(`Instagram webhook subscriptions enabled for ${subscribedId} (${mode}): ${subscribedFields}`);
 }
 
 async function sendInstagramMessage(pageToken, recipientId, text, quickReplies, options = {}) {
