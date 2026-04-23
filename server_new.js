@@ -3236,8 +3236,9 @@ app.get('/auth/instagram/callback', async (req, res) => {
         }
       }
 
-      const igBusinessId = String(igProfile.user_id || igProfile.id || shortUserId || '').trim();
-      if (!igBusinessId) {
+      const igEntryId = String(igProfile.id || igProfile.user_id || shortUserId || '').trim();
+      const igUserId = String(igProfile.user_id || shortUserId || '').trim();
+      if (!igEntryId) {
         return renderErrorPage(res, {
           title: 'Could not connect Instagram',
           description: 'Instagram Login succeeded but no Instagram account ID was returned.',
@@ -3248,9 +3249,10 @@ app.get('/auth/instagram/callback', async (req, res) => {
 
       const channels = getChannelsByBotId(bot.id);
       channels.instagram = {
-        id: igBusinessId,
-        entryId: igBusinessId,
-        pageId: igBusinessId,
+        id: igEntryId,
+        userId: igUserId,
+        entryId: igEntryId,
+        pageId: igEntryId,
         pageToken: longToken,
         token: longToken,
         username: igProfile.username || '',
@@ -3261,16 +3263,16 @@ app.get('/auth/instagram/callback', async (req, res) => {
       setChannelsByBotId(bot.id, channels);
 
       saveChannelToDb(clientId, bot.id, 'instagram', {
-        pageId: igBusinessId,
+        pageId: igEntryId,
         pageName: igProfile.name || igProfile.username || 'Instagram',
         token: longToken,
         username: igProfile.username || '',
       });
 
-      await subscribeToInstagramWebhooks(igBusinessId, longToken, { mode: 'instagram_login' });
+      await subscribeToInstagramWebhooks(igEntryId, longToken, { mode: 'instagram_login' });
 
       console.log(
-        `Instagram Login channel connected: bot=${bot.id}, igId=${igBusinessId}, username=${igProfile.username || 'N/A'}`
+        `Instagram Login channel connected: bot=${bot.id}, igEntryId=${igEntryId}, igUserId=${igUserId || 'N/A'}, username=${igProfile.username || 'N/A'}`
       );
 
       if (portal === 'client') return res.redirect('/client/inbox?panel=instagram&connected=1');
